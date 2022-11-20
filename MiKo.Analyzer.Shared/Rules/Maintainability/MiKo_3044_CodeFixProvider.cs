@@ -54,9 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (identifier?.Parent is MemberAccessExpressionSyntax maes)
             {
-                var semanticModel = GetSemanticModel(context);
-
-                return maes.GetTypeSymbol(semanticModel);
+                return maes.GetTypeSymbol(GetSemanticModel(context));
             }
 
             // try to find type

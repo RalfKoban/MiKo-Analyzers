@@ -9,13 +9,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MaintainabilityCodeFixProvider : MiKoCodeFixProvider
     {
-        protected static ArgumentSyntax Argument(ExpressionSyntax expression) => SyntaxFactory.Argument(expression);
+        protected static ArgumentSyntax Argument(string identifier) => Argument(SyntaxFactory.IdentifierName(identifier));
 
         protected static ArgumentSyntax Argument(ParameterSyntax parameter) => Argument(SyntaxFactory.IdentifierName(parameter.GetName()));
 
-        protected static ArgumentSyntax Argument(string identifier) => Argument(SyntaxFactory.IdentifierName(identifier));
+        protected static ArgumentSyntax Argument(ExpressionSyntax expression) => SyntaxFactory.Argument(expression);
 
-        protected static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, ArgumentSyntax argument) => Argument(Invocation(expression, argument));
+        protected static ArgumentSyntax Argument(MemberAccessExpressionSyntax expression, params ArgumentSyntax[] arguments)
+        {
+            var syntax = arguments.Length == 0
+                         ? (ExpressionSyntax)expression // we do not want to have any empty argument list
+                         : Invocation(expression, arguments);
+
+            return Argument(syntax);
+        }
 
         protected static ArgumentSyntax ArgumentWithCast(SyntaxKind kind, ParameterSyntax parameter) => ArgumentWithCast(PredefinedType(kind), parameter);
 
@@ -86,6 +93,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
 
+        protected static LiteralExpressionSyntax Literal(char value) => Literal(SyntaxFactory.Literal(value));
+
+        protected static LiteralExpressionSyntax Literal(decimal value) => Literal(SyntaxFactory.Literal(value));
+
+        protected static LiteralExpressionSyntax Literal(int value) => Literal(SyntaxFactory.Literal(value));
+
         protected static LiteralExpressionSyntax Literal(SyntaxToken token) => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, token);
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
@@ -110,40 +123,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static TypeOfExpressionSyntax TypeOf(string typeName) => TypeOf(SyntaxFactory.ParseTypeName(typeName));
 
         protected static TypeOfExpressionSyntax TypeOf(TypeSyntax type) => SyntaxFactory.TypeOfExpression(type);
-
-        protected static SyntaxNode WithUsing(SyntaxNode root, string usingNamespace)
-        {
-            var usings = root.DescendantNodes<UsingDirectiveSyntax>().ToList();
-
-            if (usings.Any(_ => _.Name.ToFullString() == usingNamespace))
-            {
-                // already set
-                return root;
-            }
-
-            var directive = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(usingNamespace));
-
-            if (usings.Count == 0)
-            {
-                return root.InsertNodeBefore(root.FirstChild(), directive);
-            }
-
-            // add using at correct place inside the using block
-            var usingOrientation = usings.FirstOrDefault(_ => string.Compare(_.Name.ToFullString(), usingNamespace, StringComparison.OrdinalIgnoreCase) > 0);
-
-            return usingOrientation != null
-                       ? root.InsertNodeBefore(usingOrientation, directive)
-                       : root.InsertNodeAfter(usings.Last(), directive);
-        }
-
-        protected static SyntaxNode WithoutUsing(SyntaxNode node, string usingNamespace)
-        {
-            var root = node.SyntaxTree.GetRoot();
-
-            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name.ToFullString() == usingNamespace)
-                       .Select(root.Without)
-                       .FirstOrDefault();
-        }
 
         protected static InvocationExpressionSyntax NameOf(LiteralExpressionSyntax literal)
         {

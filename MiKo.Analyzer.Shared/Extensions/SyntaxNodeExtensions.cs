@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
-        internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.AncestorsAndSelf().OfType<T>();
+        internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
 
@@ -1310,7 +1310,7 @@ namespace MiKoSolutions.Analyzers
             return syntax.WithTextTokens(textTokens);
         }
 
-        internal static T WitTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
             return value
                     .WithLeadingTriviaFrom(node)
@@ -1669,6 +1669,57 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
+
+        internal static SyntaxNode WithUsing(this SyntaxNode root, string usingNamespace)
+        {
+            var usings = root.DescendantNodes<UsingDirectiveSyntax>().ToList();
+
+            if (usings.Any(_ => _.Name.ToFullString() == usingNamespace))
+            {
+                // already set
+                return root;
+            }
+
+            var directive = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(usingNamespace));
+
+            if (usings.Count == 0)
+            {
+                return root.InsertNodeBefore(root.FirstChild(), directive);
+            }
+
+            foreach (var usingDirective in usings)
+            {
+                var usingName = usingDirective.Name.ToFullString();
+                if (usingName == "System")
+                {
+                    // skip 'System' namespace
+                    continue;
+                }
+
+                if (usingName.StartsWith("System.", StringComparison.Ordinal))
+                {
+                    // skip all 'System' sub-namespaces
+                    continue;
+                }
+
+                if (string.Compare(usingName, usingNamespace, StringComparison.OrdinalIgnoreCase) > 0)
+                {
+                    // add using at correct place inside the using block
+                    return root.InsertNodeBefore(usingDirective, directive);
+                }
+            }
+
+            return root.InsertNodeAfter(usings.Last(), directive);
+        }
+
+        internal static SyntaxNode WithoutUsing(this SyntaxNode node, string usingNamespace)
+        {
+            var root = node.SyntaxTree.GetRoot();
+
+            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name.ToFullString() == usingNamespace)
+                       .Select(root.Without)
+                       .FirstOrDefault();
+        }
 
         internal static IEnumerable<string> GetAttributeNames(this ClassDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
 

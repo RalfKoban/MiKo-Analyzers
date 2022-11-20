@@ -69,7 +69,10 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                }
                                                            }
 
-                                                           InitializeCore(_);
+                                                           if (IsApplicable(_))
+                                                           {
+                                                               InitializeCore(_);
+                                                           }
                                                        });
         }
 
@@ -153,6 +156,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected static void ReportDiagnostics(SymbolAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
 
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
+
+        protected virtual bool IsApplicable(CompilationStartAnalysisContext context) => true;
 
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 

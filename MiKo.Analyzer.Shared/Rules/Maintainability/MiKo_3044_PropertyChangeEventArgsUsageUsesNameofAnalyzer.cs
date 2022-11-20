@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3044";
 
+        private static readonly SyntaxKind[] EqualsExpressions = { SyntaxKind.EqualsExpression, SyntaxKind.NotEqualsExpression };
+
         public MiKo_3044_PropertyChangeEventArgsUsageUsesNameofAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -20,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (literal.Parent)
             {
-                case BinaryExpressionSyntax binary when binary.IsAnyKind(SyntaxKind.EqualsExpression, SyntaxKind.NotEqualsExpression):
+                case BinaryExpressionSyntax binary when binary.IsAnyKind(EqualsExpressions):
                 {
                     return IsPropertyNameAccess(binary.Right == literal ? binary.Left : binary.Right);
                 }

@@ -1,7 +1,5 @@
 ﻿using System;
 
-using MiKoSolutions.Analyzers.Rules.Ordering;
-
 using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Extensions
@@ -126,10 +124,7 @@ namespace MiKoSolutions.Analyzers.Extensions
                                 });
         }
 
-        [Test, Timeout(250)]
-        public static void Words()
-        {
-            Assert.That("GetHashCode".Words(), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
-        }
+        [Test]
+        public static void Words() => Assert.That("GetHashCode".Words(), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
     }
 }

@@ -610,11 +610,17 @@ namespace Bla
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsAssignableFrom(typeof(object), new object()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.AssignableFrom<object>()); }")]
         [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsAssignableFrom(typeof(object), new object(), \"should be assignable\"); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.AssignableFrom<object>(), \"should be assignable\"); }")]
+        [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsAssignableFrom<object>(new object()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.AssignableFrom<object>()); }")]
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsNotAssignableFrom(typeof(object), new object()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>()); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsNotAssignableFrom(typeof(object), new object(), \"should be not assignable\"); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>(), \"should be not assignable\"); }")]
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.IsNotAssignableFrom<object>(new object()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>()); }")]
@@ -642,7 +648,14 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.IsFalse(type.IsNotAssignableFrom<object>()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>()); }")]
+        [TestCase(
+            @"using System; using NUnit.Framework; [TestFixture] public class TestMe { public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.IsTrue(expectedType.IsAssignableFrom(type), ""{0} should implement {1}."", type.FullName, expectedType.FullName); } }",
+            @"using System; using NUnit.Framework; [TestFixture] public class TestMe { public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.AssignableFrom(type), ""{0} should implement {1}."", type.FullName, expectedType.FullName); } }")]
+        [TestCase(
+             @"using System; using NUnit.Framework; [TestFixture] public class TestMe { public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.IsFalse(expectedType.IsAssignableFrom(type), ""{0} should not implement {1}."", type.FullName, expectedType.FullName); } }",
+             @"using System; using NUnit.Framework; [TestFixture] public class TestMe { public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.Not.AssignableFrom(type), ""{0} should not implement {1}."", type.FullName, expectedType.FullName); } }")]
 
+        // misc
         [TestCase(
              @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => StringAssert.IsMatch(""some pattern"", ""actual""); }",
              @"using System; using System.Text.RegularExpressions; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(""actual"", Does.Match(""some pattern"")); }")]
@@ -652,13 +665,8 @@ namespace Bla
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => CollectionAssert.AllItemsAreInstancesOfType(collection, typeof(string)); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do(IEnumerable collection) => Assert.That(collection, Is.All.InstanceOf<string>()); }")]
-        [TestCase(
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrow(() => throw new ArgumentException()); }",
-             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new ArgumentException(), Throws.Nothing); }")]
-        [TestCase(
-             "using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrowAsync(async () => await Task.CompletedTask); }",
-             "using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(async () => await Task.CompletedTask, Throws.Nothing); }")]
 
+        // Exists/DoesNotExist
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => FileAssert.Exists(@""c:\pagefile.sys""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\pagefile.sys"", Does.Exist); }")]
@@ -673,7 +681,7 @@ namespace Bla
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => DirectoryAssert.DoesNotExist(@""c:\Windows""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(@""c:\Windows"", Does.Not.Exist); }")]
 
-        // Throws
+        // Throws / DoesNotThrow
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws<ArgumentNullException>(() => throw new Exception()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.ArgumentNullException); }")]
@@ -710,6 +718,12 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception(), ""some message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>(), ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrow(() => throw new ArgumentException()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(() => throw new ArgumentException(), Throws.Nothing); }")]
+        [TestCase(
+             "using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.DoesNotThrowAsync(async () => await Task.CompletedTask); }",
+             "using System; using System.Threading.Tasks; using NUnit.Framework; [TestFixture] class TestMe { [Test] void Do() => Assert.That(async () => await Task.CompletedTask, Throws.Nothing); }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [Test]

@@ -2,7 +2,6 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -13,23 +12,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3093";
 
+        private static readonly SyntaxKind[] Invocations = { SyntaxKind.ConditionalAccessExpression, SyntaxKind.InvocationExpression };
+
         public MiKo_3093_StatementInsideLockTriggersActionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLockStatement, SyntaxKind.LockStatement);
 
-        private static bool IsInvocation(SyntaxNode identifier) => identifier.Parent?.IsAnyKind(SyntaxKind.ConditionalAccessExpression, SyntaxKind.InvocationExpression) is true;
+        private static bool IsInvocation(SyntaxNode identifier) => identifier.Parent?.IsAnyKind(Invocations) is true;
 
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
-            var lockStatement = (LockStatementSyntax)context.Node;
-            var issues = AnalyzeLockStatement(context, lockStatement);
+            var issues = AnalyzeLockStatement(context, context.Node);
 
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeLockStatement(SyntaxNodeAnalysisContext context, LockStatementSyntax lockStatement)
+        private IEnumerable<Diagnostic> AnalyzeLockStatement(SyntaxNodeAnalysisContext context, SyntaxNode lockStatement)
         {
             var semanticModel = context.SemanticModel;
 

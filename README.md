@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 336 rules that are currently provided by the analyzer.
+The following tables list all the 338 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -282,7 +282,7 @@ The following tables list all the 336 rules that are currently provided by the a
 |MiKo_3033|Use 'nameof' for names of properties for created 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs' instances|&#x2713;|&#x2713;|
 |MiKo_3034|PropertyChanged event raiser shall use [CallerMemberName] attribute|&#x2713;|&#x2713;|
 |MiKo_3035|Do not invoke 'WaitOne' methods without timeouts|&#x2713;|\-|
-|MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors|&#x2713;|\-|
+|MiKo_3036|Prefer to use 'TimeSpan' factory methods instead of constructors|&#x2713;|&#x2713;|
 |MiKo_3037|Do not use magic numbers for timeouts|&#x2713;|\-|
 |MiKo_3038|Do not use magic numbers|&#x2713;|\-|
 |MiKo_3039|Properties should not use Linq or yield|&#x2713;|\-|
@@ -312,9 +312,9 @@ The following tables list all the 336 rules that are currently provided by the a
 |MiKo_3076|Do not initialize static member with static member below or in other type part|&#x2713;|\-|
 |MiKo_3077|Properties that return an Enum should have a default value|&#x2713;|&#x2713;|
 |MiKo_3078|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
-|MiKo_3081|Pattern matching is preferred over a logical NOT condition|&#x2713;|&#x2713;|
-|MiKo_3082|Pattern matching is preferred over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
-|MiKo_3083|Pattern matching is preferred for null checks|&#x2713;|&#x2713;|
+|MiKo_3081|Prefer pattern matching over a logical NOT condition|&#x2713;|&#x2713;|
+|MiKo_3082|Prefer pattern matching over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
+|MiKo_3083|Prefer pattern matching for null checks|&#x2713;|&#x2713;|
 |MiKo_3084|Do not place constants on the left side for comparisons|&#x2713;|&#x2713;|
 |MiKo_3085|Conditional statements should be short|&#x2713;|\-|
 |MiKo_3086|Do not nest conditional statements|&#x2713;|\-|
@@ -335,6 +335,8 @@ The following tables list all the 336 rules that are currently provided by the a
 |MiKo_3110|Assertions should not use 'Count' or 'Length'|&#x2713;|&#x2713;|
 |MiKo_3111|Assertions should use 'Is.Zero' instead of 'Is.EqualTo(0)'|&#x2713;|&#x2713;|
 |MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
+|MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
+|MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
 |MiKo_3201|Log statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
 |MiKo_3202|Assertion statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
 |MiKo_3203|Local variable statements should be preceded by blank lines|&#x2713;|&#x2713;|

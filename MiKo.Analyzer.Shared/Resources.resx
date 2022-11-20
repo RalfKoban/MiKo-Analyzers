@@ -3129,6 +3129,9 @@ As that is not defined, there is no guarantee how it gets implemented, and - bec
   <data name="MiKo_3035_Title" xml:space="preserve">
     <value>Do not invoke 'WaitOne' methods without timeouts</value>
   </data>
+  <data name="MiKo_3036_CodeFixTitle" xml:space="preserve">
+    <value>Use factory method</value>
+  </data>
   <data name="MiKo_3036_Description" xml:space="preserve">
     <value>The 'TimeSpan' .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as 'FromMinutes' or 'FromDays', these should be preferred. They are much easier to read and more explicit.
 
@@ -3499,7 +3502,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Use pattern 'is false' instead of ' ! '</value>
   </data>
   <data name="MiKo_3081_Title" xml:space="preserve">
-    <value>Pattern matching is preferred over a logical NOT condition</value>
+    <value>Prefer pattern matching over a logical NOT condition</value>
   </data>
   <data name="MiKo_3082_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is' pattern</value>
@@ -3511,7 +3514,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Use 'is' instead of '=='</value>
   </data>
   <data name="MiKo_3082_Title" xml:space="preserve">
-    <value>Pattern matching is preferred over a logical comparison with 'true' or 'false'</value>
+    <value>Prefer pattern matching over a logical comparison with 'true' or 'false'</value>
   </data>
   <data name="MiKo_3083_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is null' pattern</value>
@@ -3523,7 +3526,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Use 'is' instead of '=='</value>
   </data>
   <data name="MiKo_3083_Title" xml:space="preserve">
-    <value>Pattern matching is preferred for null checks</value>
+    <value>Prefer pattern matching for null checks</value>
   </data>
   <data name="MiKo_3084_CodeFixTitle" xml:space="preserve">
     <value>Place constant value on right side</value>
@@ -3752,6 +3755,30 @@ In contrast, the failure would be much easier to understand if the test would im
   </data>
   <data name="MiKo_3112_Title" xml:space="preserve">
     <value>Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'</value>
+  </data>
+  <data name="MiKo_3113_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Assert.That'</value>
+  </data>
+  <data name="MiKo_3113_Description" xml:space="preserve">
+    <value>FluentAssertions uses an approach where you define a 'Should' method, followed by the assertion. That makes those assertions more difficult to read and spot. In contrast, NUnit's fluent assertion approach via 'Assert.That' is much easier to spot.</value>
+  </data>
+  <data name="MiKo_3113_MessageFormat" xml:space="preserve">
+    <value>Use 'Assert.That' instead of 'Should'</value>
+  </data>
+  <data name="MiKo_3113_Title" xml:space="preserve">
+    <value>Do not use FluentAssertions</value>
+  </data>
+  <data name="MiKo_3114_CodeFixTitle" xml:space="preserve">
+    <value>Use 'Mock.Of&lt;T&gt;()'</value>
+  </data>
+  <data name="MiKo_3114_Description" xml:space="preserve">
+    <value>To ease maintenance and increase readability,  'Mock.Of&lt;T&gt;()' is easier to identify as some necessary but unimportant mock than 'new Mock&lt;T&gt;().Object'.</value>
+  </data>
+  <data name="MiKo_3114_MessageFormat" xml:space="preserve">
+    <value>Use 'Mock.Of&lt;T&gt;()' instead</value>
+  </data>
+  <data name="MiKo_3114_Title" xml:space="preserve">
+    <value>Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

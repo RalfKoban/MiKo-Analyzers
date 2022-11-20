@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3078";
 
+        private static readonly SyntaxKind[] Declarations = { SyntaxKind.MethodDeclaration, SyntaxKind.IndexerDeclaration, SyntaxKind.ConstructorDeclaration };
+
         public MiKo_3078_SwitchReturnInsteadSwitchBreakAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -53,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static IEnumerable<string> GetVariableNamesUntilHere(SwitchStatementSyntax switchStatement)
         {
             return switchStatement.Ancestors()
-                                  .TakeWhile(_ => _.IsAnyKind(SyntaxKind.MethodDeclaration, SyntaxKind.IndexerDeclaration, SyntaxKind.ConstructorDeclaration) is false)
+                                  .TakeWhile(_ => _.IsAnyKind(Declarations) is false)
                                   .SelectMany(_ => GetVariableNames(_, switchStatement));
 
             IEnumerable<string> GetVariableNames(SyntaxNode node, SyntaxNode stopNode) => node.ChildNodes()

@@ -8837,6 +8837,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use factory method.
+        /// </summary>
+        public static string MiKo_3036_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3036_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;TimeSpan&apos; .NET struct contains a lot of constructors having different amounts of parameters. Those constructor invocations are hard to read. As the struct also provides static factory methods such as &apos;FromMinutes&apos; or &apos;FromDays&apos;, these should be preferred. They are much easier to read and more explicit.
         ///
         ///Please note:
@@ -9870,7 +9879,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred over a logical NOT condition.
+        ///   Looks up a localized string similar to Prefer pattern matching over a logical NOT condition.
         /// </summary>
         public static string MiKo_3081_Title {
             get {
@@ -9906,7 +9915,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred over a logical comparison with &apos;true&apos; or &apos;false&apos;.
+        ///   Looks up a localized string similar to Prefer pattern matching over a logical comparison with &apos;true&apos; or &apos;false&apos;.
         /// </summary>
         public static string MiKo_3082_Title {
             get {
@@ -9942,7 +9951,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pattern matching is preferred for null checks.
+        ///   Looks up a localized string similar to Prefer pattern matching for null checks.
         /// </summary>
         public static string MiKo_3083_Title {
             get {
@@ -10593,6 +10602,78 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3112_Title {
             get {
                 return ResourceManager.GetString("MiKo_3112_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Assert.That&apos;.
+        /// </summary>
+        public static string MiKo_3113_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3113_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FluentAssertions uses an approach where you define a &apos;Should&apos; method, followed by the assertion. That makes those assertions more difficult to read and spot. In contrast, NUnit&apos;s fluent assertion approach via &apos;Assert.That&apos; is much easier to spot..
+        /// </summary>
+        public static string MiKo_3113_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3113_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Assert.That&apos; instead of &apos;Should&apos;.
+        /// </summary>
+        public static string MiKo_3113_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3113_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use FluentAssertions.
+        /// </summary>
+        public static string MiKo_3113_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3113_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos;.
+        /// </summary>
+        public static string MiKo_3114_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3114_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance and increase readability,  &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
+        /// </summary>
+        public static string MiKo_3114_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3114_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos; instead.
+        /// </summary>
+        public static string MiKo_3114_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3114_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;.
+        /// </summary>
+        public static string MiKo_3114_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3114_Title", resourceCulture);
             }
         }
         
