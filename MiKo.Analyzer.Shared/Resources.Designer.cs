@@ -8601,6 +8601,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you register for an event but forget to unregister, a memory leak may occur. This especially happens in case the event (which is registered on) is static or belongs to an object having a long lifetime..
+        /// </summary>
+        public static string MiKo_3029_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3029_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment causes potential memory leak.
+        /// </summary>
+        public static string MiKo_3029_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3029_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event registrations should not cause memory leaks.
+        /// </summary>
+        public static string MiKo_3029_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3029_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services..
         /// </summary>
         public static string MiKo_3030_Description {

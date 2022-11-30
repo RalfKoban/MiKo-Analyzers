@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 338 rules that are currently provided by the analyzer.
+The following tables list all the 339 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -275,6 +275,7 @@ The following tables list all the 338 rules that are currently provided by the a
 |MiKo_3026|Unused parameters should be removed|&#x2713;|\-|
 |MiKo_3027|Parameters should not be marked to be reserved for future usage|&#x2713;|\-|
 |MiKo_3028|Do not assign null to lambda parameters|&#x2713;|\-|
+|MiKo_3029|Event registrations should not cause memory leaks|&#x2713;|\-|
 |MiKo_3030|Methods should follow the Law of Demeter|\-|\-|
 |MiKo_3031|ICloneable.Clone() should not be implemented|&#x2713;|\-|
 |MiKo_3032|Use 'nameof' instead of Cinch for names of properties for created 'PropertyChangedEventArgs' instances|&#x2713;|&#x2713;|
