@@ -48,15 +48,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeSetAccessorDeclaration(SyntaxNodeAnalysisContext context) => AnalyzeAssignmentExpressions(context);
 
-        private void AnalyzeAssignmentExpressions(SyntaxNodeAnalysisContext context)
-        {
-            foreach (var issue in AnalyzeAssignments(context.Node, context.SemanticModel))
-            {
-                context.ReportDiagnostic(issue);
-            }
-        }
+        private void AnalyzeAssignmentExpressions(SyntaxNodeAnalysisContext context) => ReportDiagnostics(context, AnalyzeAssignments(context.Node));
 
-        private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node)
         {
             var assignments = node.DescendantNodes<AssignmentExpressionSyntax>().ToList();
             if (assignments.Count > 0)
