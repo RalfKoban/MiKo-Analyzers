@@ -71,12 +71,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var token in text.TextTokens)
                 {
-                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
+                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
 
                     if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
                     {
                         var startText = GetCorrectStartText(summary);
-                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether");
+                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether").ToString();
 
                         var newText = " " + startText + " " + remainingText;
 

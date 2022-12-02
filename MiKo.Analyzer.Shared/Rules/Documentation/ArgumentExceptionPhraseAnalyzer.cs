@@ -55,12 +55,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var parameterIndicatorPhrase = parameterIndicators[parameter];
                     var phrases = m_exceptionPhrases.Select(_ => _.FormatWith(parameter.Name)).ToArray();
 
-                    results.AddRange(parts
-                                     .Where(_ => _.Contains(parameterIndicatorPhrase))
-                                     .Select(_ => _.Trim())
-                                     .Where(_ => _.StartsWithAny(phrases, Comparison) is false)
-                                     .Where(_ => _.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
-                                     .Select(_ => ExceptionIssue(exceptionComment, proposal)));
+                    foreach (var part in parts)
+                    {
+                        if (part.Contains(parameterIndicatorPhrase))
+                        {
+                            var trimmed = part.AsSpan().Trim();
+                            if (trimmed.StartsWithAny(phrases, Comparison) is false && trimmed.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
+                            {
+                                results.Add(ExceptionIssue(exceptionComment, proposal));
+                            }
+                        }
+                    }
                 }
             }
             else

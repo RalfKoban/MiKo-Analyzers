@@ -20,9 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
-            return summaries.Any(_ => _.TrimStart().StartsWith(Constants.Comments.EnumStartingPhrase, StringComparison.Ordinal))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, Constants.Comments.EnumStartingPhrase) };
+            if (summaries.None(_ => _.AsSpan().TrimStart().StartsWith(Constants.Comments.EnumStartingPhrase, StringComparison.Ordinal)))
+            {
+                yield return Issue(symbol, Constants.Comments.EnumStartingPhrase);
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetSummaryPhrases(symbol);
 
-            if (summaries.Any(_ => _.Trim().EqualsAny(phrases)))
+            if (summaries.Any(_ => _.AsSpan().Trim().EqualsAny(phrases)))
             {
                 yield break;
             }
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = GetReturnsPhrases(symbol);
             var comments = CommentExtensions.GetReturns(commentXml);
 
-            if (comments.Any(_ => _.Trim().EqualsAny(phrases)))
+            if (comments.Any(_ => _.AsSpan().Trim().EqualsAny(phrases)))
             {
                 yield break;
             }

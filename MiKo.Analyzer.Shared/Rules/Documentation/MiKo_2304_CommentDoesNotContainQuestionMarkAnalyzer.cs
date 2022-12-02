@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel)
         {
             if (comment.Contains("?") is false)
             {
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            var questionMarkWithoutHyperlink = comment.Split(Constants.WhiteSpaces, StringSplitOptions.RemoveEmptyEntries)
+            var questionMarkWithoutHyperlink = comment.SplitBy(Constants.WhiteSpaces)
                                                       .Where(_ => _.Contains("?"))
                                                       .Any(_ => _.Contains("://") is false);
 

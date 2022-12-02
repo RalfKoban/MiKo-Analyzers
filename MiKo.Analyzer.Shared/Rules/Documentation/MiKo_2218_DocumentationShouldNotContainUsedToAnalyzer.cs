@@ -212,7 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     break;
                 }
 
-                var nextWord = result.Substring(index + phrase.Length).FirstWord();
+                var nextWord = result.AsSpan(index + phrase.Length).FirstWord().ToString();
                 var nextWordEnd = result.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length;
 
                 var replaceText = result.Substring(index, nextWordEnd - index);

@@ -166,13 +166,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var valueText = lastToken.ValueText.TrimEnd();
-
                     // in case there is any, get rid of last dot
-                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
-                    {
-                        valueText = valueText.WithoutSuffix(".");
-                    }
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
 
                     return comment.ReplaceToken(lastToken, lastToken.WithText(valueText + ending));
                 }
@@ -204,13 +199,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var valueText = lastToken.ValueText.TrimEnd();
-
                     // in case there is any, get rid of last dot
-                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
-                    {
-                        valueText = valueText.WithoutSuffix(".");
-                    }
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
 
                     text = valueText + commentStart;
                 }
@@ -548,7 +538,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 textTokens.RemoveRange(0, removals + 1);
 
-                var replacementText = commentEnd + textToken.ValueText.TrimStart().ToLowerCaseAt(0);
+                var replacementText = commentEnd + textToken.ValueText.AsSpan().TrimStart().ToLowerCaseAt(0);
                 var replacement = replacementText.ToSyntaxToken();
                 textTokens.Insert(0, replacement);
 

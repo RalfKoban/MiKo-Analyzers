@@ -1332,7 +1332,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var token = newTokens[0];
 
-                    newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
+                    newTokens = newTokens.Replace(token, token.WithText(token.Text.AsSpan().TrimStart()));
                 }
 
                 return XmlText(newTokens);
@@ -1548,7 +1548,7 @@ namespace MiKoSolutions.Analyzers
                 // ignore trivia such as " /// "
                 if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                 {
-                    var originalText = token.Text.TrimStart();
+                    var originalText = token.Text.AsSpan().TrimStart();
 
                     if (originalText.IsNullOrWhiteSpace())
                     {
@@ -1559,7 +1559,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         if (originalText.StartsWith(startText, StringComparison.Ordinal))
                         {
-                            var modifiedText = originalText.Substring(startText.Length);
+                            var modifiedText = originalText.Slice(startText.Length);
 
                             textTokens[i] = token.WithText(modifiedText);
 
@@ -1782,9 +1782,9 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is XmlElementSyntax syntax && string.Equals(tagName, syntax.GetName(), StringComparison.OrdinalIgnoreCase))
             {
-                var content = syntax.Content.ToString().Trim();
+                var content = syntax.Content.ToString().AsSpan().Trim();
 
-                return contents.Any(expected => expected.Equals(content, StringComparison.OrdinalIgnoreCase));
+                return content.EqualsAny(contents);
             }
 
             return false;

@@ -15,11 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static bool CommentHasIssue(string comment) => comment.EndsWith(".", StringComparison.OrdinalIgnoreCase)
-                                                      && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false
-                                                      && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
+        internal static bool CommentHasIssue(ReadOnlySpan<char> comment) => comment.EndsWith('.')
+                                                                         && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false
+                                                                         && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
 
         protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
         {

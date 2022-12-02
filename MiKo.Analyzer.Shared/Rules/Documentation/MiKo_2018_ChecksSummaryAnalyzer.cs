@@ -26,13 +26,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
-            foreach (var summary in summaries.Select(_ => _.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim()))
+            List<Diagnostic> issues = null;
+
+            foreach (var summary in summaries)
             {
-                foreach (var wrongPhrase in WrongPhrases.Where(_ => summary.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
+                var trimmedSummary = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
+
+                foreach (var wrongPhrase in WrongPhrases)
                 {
-                    yield return Issue(symbol, wrongPhrase, StartingPhrase);
+                    if (trimmedSummary.StartsWith(wrongPhrase, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (issues is null)
+                        {
+                            issues = new List<Diagnostic>();
+                        }
+
+                        issues.Add(Issue(symbol, wrongPhrase, StartingPhrase));
+                    }
                 }
             }
+
+            return issues ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

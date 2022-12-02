@@ -257,7 +257,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (value.StartsWith(phrase, StringComparison.Ordinal))
                 {
-                    var remaining = value.Substring(phrase.Length);
+                    var remaining = value.AsSpan(phrase.Length);
 
                     if (remaining.Length == 0 || remaining[0].IsUpperCase())
                     {
