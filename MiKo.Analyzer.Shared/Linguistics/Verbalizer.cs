@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
@@ -161,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word;
                 }
 
-                return (word + "ing").Replace("ping", "pping").Replace("eing", "ing");
+                return new StringBuilder(word + "ing").Replace("ping", "pping").Replace("eing", "ing").ToString();
             }
         }
 

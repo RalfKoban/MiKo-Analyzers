@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -46,7 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
+                        var replacedText = new StringBuilder(originalText);
+                        foreach (var pair in replacementMap)
+                        {
+                            replacedText.Replace(pair.Key, pair.Value);
+                        }
 
                         var newToken = token.WithText(replacedText);
 

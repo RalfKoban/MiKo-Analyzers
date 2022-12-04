@@ -151,8 +151,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 pluralName = proposedName.WithoutSuffix("ToConvert");
             }
-
-            if (proposedName.EndsWith("ToModel", comparison))
+            else if (proposedName.EndsWith("ToModel", comparison))
             {
                 pluralName = proposedName.WithoutSuffix("ToModel");
             }

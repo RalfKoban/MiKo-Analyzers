@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using MiKoSolutions.Analyzers;
@@ -363,37 +364,36 @@ namespace System
             return words;
         }
 
-        public static string GetNameOnlyPart(this string fullName)
+        public static string GetNameOnlyPart(this string fullName) => GetNameOnlyPart(fullName.AsSpan());
+
+        public static string GetNameOnlyPart(this ReadOnlySpan<char> fullName)
         {
             var genericIndexStart = fullName.IndexOf('<');
             var genericIndexEnd = fullName.LastIndexOf('>');
             if (genericIndexStart > 0 && genericIndexEnd > 0)
             {
-                var namePart = fullName.Substring(0, genericIndexStart).GetPartAfterLastDot();
+                var namePart = fullName.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
 
                 var indexAfterGenericStart = genericIndexStart + 1;
-                var genericArguments = fullName.Substring(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart);
+                var genericArguments = fullName.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart).ToString();
                 var genericNameParts = genericArguments.Split(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.GetPartAfterLastDot());
                 var genericPart = string.Concat(genericNameParts);
 
                 return string.Concat(namePart, "<", genericPart, ">");
             }
 
-            return fullName.GetPartAfterLastDot();
+            return fullName.GetPartAfterLastDot().ToString();
         }
 
-        public static string GetNameOnlyPartWithoutGeneric(this string fullName)
+        public static string GetNameOnlyPartWithoutGeneric(this ReadOnlySpan<char> fullName)
         {
             var genericIndexStart = fullName.IndexOf('<');
 
-            if (genericIndexStart > 0)
-            {
-                var name = fullName.AsSpan(0, genericIndexStart);
+            var name = genericIndexStart > 0
+                           ? fullName.Slice(0, genericIndexStart)
+                           : fullName;
 
-                return name.GetPartAfterLastDot().ToString();
-            }
-
-            return fullName.GetPartAfterLastDot();
+            return name.GetPartAfterLastDot().ToString();
         }
 
         public static string GetPartAfterLastDot(this string value)
@@ -764,7 +764,19 @@ namespace System
 
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] values) => values.Aggregate(value, (current, s) => current.Without(s));
+        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).ToString();
+
+        public static StringBuilder Without(this StringBuilder value, string phrase) => value.Replace(phrase, string.Empty);
+
+        public static StringBuilder Without(this StringBuilder value, string[] phrases)
+        {
+            foreach (var phrase in phrases)
+            {
+                value.Without(phrase);
+            }
+
+            return value;
+        }
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -827,9 +839,11 @@ namespace System
 
         public static string WithoutQuotes(this string value) => value.Without(@"""");
 
-        public static string WithoutParaTags(this string value) => value.Without(Constants.ParaTags);
+        public static ReadOnlySpan<char> WithoutParaTagsAsSpan(this StringBuilder value) => value.WithoutParaTags().ToString().AsSpan();
 
-        public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(WithoutParaTags);
+        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
+
+        public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags().ToString());
 
         public static string WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
         {

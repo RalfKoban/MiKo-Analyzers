@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -32,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (ContainsPhrase(methodName) && ContainsPhrase(methodName.Without("Performance").Without("Performed")))
+            if (ContainsPhrase(methodName) && ContainsPhrase(new StringBuilder(methodName).Without("Performance").Without("Performed").ToString()))
             {
                 yield return Issue(symbol);
             }

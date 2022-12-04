@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -56,7 +57,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var result = Phrases.Aggregate(text, (current, phrase) => current.Replace(phrase, Replacement));
+                var sb = new StringBuilder(text);
+                foreach (var phrase in Phrases)
+                {
+                    sb.Replace(phrase, Replacement);
+                }
+
+                // TODO RKN: Use stringBuilder for replacement
+                var result = sb.ToString();
 
                 result = ReplaceSpecialPhrase(IsUsedToPhrase, result, Verbalizer.MakeThirdPersonSingularVerb);
                 result = ReplaceSpecialPhrase(AreUsedToPhrase, result, _ => _);
@@ -81,8 +89,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                result = result.Replace(CanPhrase, CanReplacement);
-                result = result.Replace(UsedToPhrase, Replacement);
+                sb = new StringBuilder(result);
+                sb.Replace(CanPhrase, CanReplacement);
+                sb.Replace(UsedToPhrase, Replacement);
+
+                result = sb.ToString();
 
                 textSoFar += result;
 

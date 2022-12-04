@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ISymbol symbol)
         {
-            var symbolName = symbol.Name;
+            var symbolName = new StringBuilder(symbol.Name);
 
             foreach (var term in Constants.Markers.Requirements)
             {
@@ -40,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                        .Replace("_" + lowerTerm +"_", "_does_");
             }
 
-            return symbolName;
+            return symbolName.ToString();
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
@@ -61,9 +62,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            var symbolName = symbol.Name
-                                   .Replace("efresh", "#")  // filter 'refresh' and 'Refresh'
-                                   .Replace("hallow", "#"); // filter 'shallow' and 'Shallow'
+            var symbolName = new StringBuilder(symbol.Name).Replace("efresh", "#") // filter 'refresh' and 'Refresh'
+                                                           .Replace("hallow", "#") // filter 'shallow' and 'Shallow'
+                                                           .ToString();
 
             return Constants.Markers.Requirements
                             .Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))

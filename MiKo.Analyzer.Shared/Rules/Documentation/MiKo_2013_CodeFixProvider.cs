@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textTokens.Any())
             {
                 // fix starting text
-                var existingText = textTokens[0].WithoutTrivia().Text;
+                var existingText = textTokens[0].WithoutTrivia().Text.AsSpan();
                 var firstWord = existingText.FirstWord();
 
                 if (firstWord.EqualsAny(StartingPhrases))
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 textTokens.RemoveAt(0);
-                textTokens.Insert(0, XmlTextToken(text + existingText.Trim()));
+                textTokens.Insert(0, XmlTextToken(text + existingText.Trim().ToString()));
             }
             else
             {

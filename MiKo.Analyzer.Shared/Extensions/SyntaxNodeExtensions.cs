@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -301,7 +302,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.LocalName.ValueText;
 
-        internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
+        internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
 
         internal static string GetNameOnlyPartWithoutGeneric(this TypeSyntax value)
         {
@@ -309,13 +310,16 @@ namespace MiKoSolutions.Analyzers
 
             return type.GetNameOnlyPart();
 
-            string GetNameLocal()
+            ReadOnlySpan<char> GetNameLocal()
             {
                 switch (value)
                 {
-                    case GenericNameSyntax generic: return generic.GetName();
-                    case SimpleNameSyntax simple: return simple.GetName();
-                    default: return value?.ToString();
+                    case GenericNameSyntax generic: return generic.GetName().AsSpan();
+                    case SimpleNameSyntax simple: return simple.GetName().AsSpan();
+                    default:
+                        return value is null
+                                   ? ReadOnlySpan<char>.Empty
+                                   : value.ToString().AsSpan();
                 }
             }
         }
@@ -529,7 +533,7 @@ namespace MiKoSolutions.Analyzers
                        : null;
         }
 
-        internal static string GetTextWithoutTrivia(this XmlElementSyntax element) => element.Content.ToString().WithoutXmlCommentExterior();
+        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
 
         internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
 
@@ -1146,14 +1150,18 @@ namespace MiKoSolutions.Analyzers
             {
                 var text = token.ValueText;
 
+                bool replaced = false;
+                var result = new StringBuilder(text);
+
                 foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
                 {
-                    text = text.Replace(phrase, replacement);
+                    replaced = true;
+                    result.Replace(phrase, replacement);
                 }
 
-                if (ReferenceEquals(token.ValueText, text) is false)
+                if (replaced)
                 {
-                    map[token] = token.WithText(text);
+                    map[token] = token.WithText(result);
                 }
             }
 
@@ -1363,7 +1371,7 @@ namespace MiKoSolutions.Analyzers
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = token.Text.Without(text).Replace("  ", " ");
+                            var modifiedText = new StringBuilder(token.Text).Without(text).Replace("  ", " ").ToString();
                             if (modifiedText.IsNullOrWhiteSpace())
                             {
                                 textTokens.Remove(token);
@@ -1516,9 +1524,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string WithoutXmlCommentExterior(this string value) => value.Without("///").Trim();
+        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => value.ToString().WithoutXmlCommentExterior();
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder(value.ToString()).WithoutXmlCommentExterior().ToString().Trim();
 
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
 
@@ -1610,7 +1618,7 @@ namespace MiKoSolutions.Analyzers
                 // ignore trivia such as " /// "
                 if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                 {
-                    var originalText = token.Text;
+                    var originalText = token.Text.AsSpan();
 
                     if (originalText.IsNullOrWhiteSpace())
                     {
