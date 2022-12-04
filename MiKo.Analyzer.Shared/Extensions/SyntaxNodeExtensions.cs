@@ -706,9 +706,10 @@ namespace MiKoSolutions.Analyzers
         {
             var valueKind = value.Kind();
 
-            foreach (var kind in kinds)
+            // ReSharper disable once LoopCanBeConvertedToQuery: For performance reasons we use indexing instead of an enumerator
+            for (var index = 0; index < kinds.Length; index++)
             {
-                if (kind == valueKind)
+                if (kinds[index] == valueKind)
                 {
                     return true;
                 }
