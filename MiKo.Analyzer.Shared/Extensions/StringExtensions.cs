@@ -14,19 +14,19 @@ namespace System
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        public static IEnumerable<int> AllIndexesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IEnumerable<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {
-                return Array.Empty<int>();
+                return Enumerable.Empty<int>();
             }
 
             if (finding.Length > value.Length)
             {
-                return Array.Empty<int>();
+                return Enumerable.Empty<int>();
             }
 
-            var indexes = new List<int>();
+            List<int> indices = null;
 
             for (var index = 0; ; index += finding.Length)
             {
@@ -35,11 +35,18 @@ namespace System
                 if (index == -1)
                 {
                     // nothing more to find
-                    return indexes;
+                    break;
                 }
 
-                indexes.Add(index);
+                if (indices is null)
+                {
+                    indices = new List<int>();
+                }
+
+                indices.Add(index);
             }
+
+            return indices ?? Enumerable.Empty<int>();
         }
 
         public static IEnumerable<int> AllIndicesOf(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
@@ -54,7 +61,7 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            var indexes = new List<int>();
+            List<int> indices = null;
 
             for (var index = 0; ; index += finding.Length)
             {
@@ -63,13 +70,20 @@ namespace System
                 if (newIndex == -1)
                 {
                     // nothing more to find
-                    return indexes;
+                    break;
                 }
 
                 index += newIndex;
 
-                indexes.Add(index);
+                if (indices is null)
+                {
+                    indices = new List<int>();
+                }
+
+                indices.Add(index);
             }
+
+            return indices ?? Enumerable.Empty<int>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -477,7 +491,7 @@ namespace System
                        : value.Substring(0, index) + "...";
         }
 
-        public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.All(_ => _.IsLowerCaseLetter() is false);
+        public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 

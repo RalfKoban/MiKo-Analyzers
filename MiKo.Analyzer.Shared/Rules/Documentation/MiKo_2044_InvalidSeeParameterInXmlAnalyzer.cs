@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,34 +21,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var method = (IMethodSymbol)symbol;
 
-            if (method.Parameters.Length == 0)
+            if (method.Parameters.Length > 0)
             {
-                return Enumerable.Empty<Diagnostic>();
-            }
+                var comment = commentXml.Without(Constants.Markers.Symbols);
 
-            var comment = commentXml.Without(Constants.Markers.Symbols);
-
-            List<Diagnostic> findings = null;
-            foreach (var parameter in method.Parameters)
-            {
-                InspectPhrase("<see cref", parameter, comment, ref findings);
-                InspectPhrase("<seealso cref", parameter, comment, ref findings);
-            }
-
-            return findings ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private void InspectPhrase(string xmlTag, IParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
-        {
-            var phrase = xmlTag + "=\"" + parameter.Name + "\"";
-            if (commentXml.Contains(phrase, Comparison))
-            {
-                if (findings is null)
+                foreach (var parameter in method.Parameters)
                 {
-                    findings = new List<Diagnostic>(1);
-                }
+                    var seePhrase = string.Concat("<see cref=\"", parameter.Name, "\"");
 
-                findings.Add(Issue(parameter, phrase + Constants.Comments.XmlElementEndingTag));
+                    if (comment.Contains(seePhrase, Comparison))
+                    {
+                        yield return Issue(parameter, seePhrase + Constants.Comments.XmlElementEndingTag);
+                    }
+
+                    var seeAlsoPhrase = string.Concat("<seealso cref=\"", parameter.Name, "\"");
+
+                    if (comment.Contains(seeAlsoPhrase, Comparison))
+                    {
+                        yield return Issue(parameter, seeAlsoPhrase + Constants.Comments.XmlElementEndingTag);
+                    }
+                }
             }
         }
     }

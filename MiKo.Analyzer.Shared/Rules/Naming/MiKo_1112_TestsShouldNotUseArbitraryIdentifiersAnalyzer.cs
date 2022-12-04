@@ -29,12 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return betterName;
             }
 
-            var characters = betterName.Without(Phrase).ToCharArray();
-            if (characters.Length != 0)
+            var characters = betterName.Without(Phrase);
+            if (characters.Length > 0)
             {
-                characters[index] = characters[index].ToLowerCase();
-
-                return string.Intern(new string(characters));
+                return characters.ToLowerCaseAt(index);
             }
 
             // we cannot find a better name

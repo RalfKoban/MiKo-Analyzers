@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
 
-            foreach (var position in text.AllIndexesOf(value, comparison))
+            foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
                 if (location != null)
@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                foreach (var position in text.AllIndexesOf(value, comparison))
+                foreach (var position in text.AllIndicesOf(value, comparison))
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
                     if (location != null)
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
 
-            foreach (var position in text.AllIndexesOf(value, comparison))
+            foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
                 if (location != null)
@@ -162,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                foreach (var position in text.AllIndexesOf(value, comparison))
+                foreach (var position in text.AllIndicesOf(value, comparison))
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
                     if (location != null)

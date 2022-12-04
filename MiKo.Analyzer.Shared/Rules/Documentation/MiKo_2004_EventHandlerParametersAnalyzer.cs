@@ -28,49 +28,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                           ? Enumerable.Empty<Diagnostic>()
                                                                                                                                           : VerifyParameterComments(symbol, commentXml);
 
-        private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
+        private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
         {
-            List<Diagnostic> diagnostics = null;
-            VerifyParameterComment(ref diagnostics, method, xml, true, Constants.Comments.EventSourcePhrase);
+            var type = method.Parameters[1].Type;
+            var typeName = type.Name;
 
-            var eventArgs = method.Parameters[1].Type;
-            var defaultStart = GetEventArgsStartingPhrase(eventArgs.Name);
+            var defaultStart = GetEventArgsStartingPhrase(typeName);
             var defaultEnding = GetEventArgsEndingPhrase();
-            var phrases = new[]
-                              {
-                                  $"{defaultStart}<see cref=\"{eventArgs.Name}\" />{defaultEnding}.", // just used for the proposal
-                                  $"{defaultStart}<see cref=\"{eventArgs}\" />{defaultEnding}.",
-                                  $"{defaultStart}<see cref=\"{eventArgs}\" />{defaultEnding}",
-                                  $"{defaultStart}<see cref=\"{eventArgs}\"/>{defaultEnding}.",
-                                  $"{defaultStart}<see cref=\"{eventArgs}\"/>{defaultEnding}",
-                              }.Concat(Constants.Comments.UnusedPhrase).ToList();
 
-            VerifyParameterComment(ref diagnostics, method, xml, false, phrases);
-
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
+            return new[]
+                       {
+                           $"{defaultStart}<see cref=\"{typeName}\" />{defaultEnding}.", // just used for the proposal
+                           $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}.",
+                           $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}",
+                           $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}.",
+                           $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}",
+                       };
         }
 
-        private void VerifyParameterComment(ref List<Diagnostic> diagnostics, IMethodSymbol method, string commentXml, bool isSender, IEnumerable<string> allExpected)
+        private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
         {
-            var parameterIndex = isSender ? 0 : 1;
-            var parameter = method.Parameters[parameterIndex];
-            var comment = parameter.GetComment(commentXml);
-            var proposal = allExpected.ElementAt(0);
+            var sender = method.Parameters[0];
+            var senderComment = sender.GetComment(xml);
 
-            if (allExpected.All(_ => _ != comment))
+            if (Constants.Comments.EventSourcePhrase.None(_ => _ == senderComment))
             {
-                if (diagnostics is null)
-                {
-                    diagnostics = new List<Diagnostic>(1);
-                }
+                yield return Issue(sender, sender.Name, Constants.Comments.EventSourcePhrase.ElementAt(0), new Dictionary<string, string> { { IsSender, string.Empty } });
+            }
 
-                var properties = new Dictionary<string, string>();
-                if (isSender)
-                {
-                    properties.Add(IsSender, string.Empty);
-                }
+            var phrases = CreatePhrases(method).Concat(Constants.Comments.UnusedPhrase);
 
-                diagnostics.Add(Issue(parameter, parameter.Name, proposal, properties));
+            var eventArgs = method.Parameters[1];
+            var eventArgsComment = eventArgs.GetComment(xml);
+
+            if (phrases.None(_ => _ == eventArgsComment))
+            {
+                yield return Issue(eventArgs, eventArgs.Name, phrases.ElementAt(0), new Dictionary<string, string>());
             }
         }
     }
