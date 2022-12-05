@@ -39,8 +39,8 @@ namespace MiKoSolutions.Analyzers
         private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
             {
                 SyntaxKind.MethodDeclaration,
-                SyntaxKind.ConstructorDeclaration,
                 SyntaxKind.Block,
+                SyntaxKind.ConstructorDeclaration,
                 SyntaxKind.LocalFunctionStatement,
             };
 
