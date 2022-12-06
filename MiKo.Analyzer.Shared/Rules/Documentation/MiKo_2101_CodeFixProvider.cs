@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var valueText = token.ValueText.Trim();
+                var valueText = token.ValueText.AsSpan().Trim();
 
                 if (CodeDetector.IsCommentedOutCodeLine(valueText))
                 {

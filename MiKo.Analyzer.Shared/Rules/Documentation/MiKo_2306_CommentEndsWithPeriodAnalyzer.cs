@@ -18,6 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsEnabledByDefault { get; } = EnabledPerDefault;
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => comment.EndsWith(".", StringComparison.OrdinalIgnoreCase) is false;
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => comment.EndsWith('.') is false;
     }
 }

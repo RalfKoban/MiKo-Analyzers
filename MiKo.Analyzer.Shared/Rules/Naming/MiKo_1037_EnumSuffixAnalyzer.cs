@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,9 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            var betterName = symbolName
-                             .Replace("TypeEnum", "Kind")
-                             .Without(WrongNames);
+            var betterName = new StringBuilder(symbolName).Replace("TypeEnum", "Kind")
+                                                          .Without(WrongNames)
+                                                          .ToString();
 
             if (betterName.IsNullOrWhiteSpace() is false)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -52,17 +53,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return symbolName;
             }
 
-            var correctedSymbolName = symbolName
-                                            .Replace("MustBe", "Is")
-                                            .Replace("MustNotBe", "IsNot")
-                                            .Replace("ShallBe", "Is")
-                                            .Replace("ShallNotBe", "IsNot")
-                                            .Replace("ShouldBe", "Is")
-                                            .Replace("ShouldNotBe", "IsNot")
-                                            .Replace("ShouldFail", "Fails")
-                                            .Replace("ShouldReturn", "Returns")
-                                            .Replace("ShouldThrow", "Throws")
-                                            .Replace("IsExceptional", "ThrowsException");
+            var correctedSymbolName = new StringBuilder(symbolName).Replace("MustBe", "Is")
+                                                                   .Replace("MustNotBe", "IsNot")
+                                                                   .Replace("ShallBe", "Is")
+                                                                   .Replace("ShallNotBe", "IsNot")
+                                                                   .Replace("ShouldBe", "Is")
+                                                                   .Replace("ShouldNotBe", "IsNot")
+                                                                   .Replace("ShouldFail", "Fails")
+                                                                   .Replace("ShouldReturn", "Returns")
+                                                                   .Replace("ShouldThrow", "Throws")
+                                                                   .Replace("IsExceptional", "ThrowsException")
+                                                                   .ToString();
 
             var multipleUpperCases = false;
 
@@ -139,17 +140,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // fix some corrections, such as for known exceptions
-            var result = new string(characters.ToArray())
-                         .Replace("argument_null_exception", nameof(ArgumentNullException))
-                         .Replace("argument_exception", nameof(ArgumentException))
-                         .Replace("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
-                         .Replace("invalid_operation_exception", nameof(InvalidOperationException))
-                         .Replace("object_disposed_exception", nameof(ObjectDisposedException))
-                         .Replace("not_supported_exception", nameof(NotSupportedException))
-                         .Replace("not_implemented_exception", nameof(NotImplementedException))
-                         .Replace("task_canceled_exception", nameof(TaskCanceledException))
-                         .Replace("operation_canceled_exception", nameof(OperationCanceledException))
-                         .Replace("_return_", "_returns_");
+            var result = new StringBuilder().Append(characters.ToArray())
+                                            .Replace("argument_null_exception", nameof(ArgumentNullException))
+                                            .Replace("argument_exception", nameof(ArgumentException))
+                                            .Replace("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
+                                            .Replace("invalid_operation_exception", nameof(InvalidOperationException))
+                                            .Replace("object_disposed_exception", nameof(ObjectDisposedException))
+                                            .Replace("not_supported_exception", nameof(NotSupportedException))
+                                            .Replace("not_implemented_exception", nameof(NotImplementedException))
+                                            .Replace("task_canceled_exception", nameof(TaskCanceledException))
+                                            .Replace("operation_canceled_exception", nameof(OperationCanceledException))
+                                            .Replace("_return_", "_returns_")
+                                            .ToString();
 
             return string.Intern(result);
         }

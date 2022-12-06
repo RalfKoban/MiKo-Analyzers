@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -46,7 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
+                        var replacedText = new StringBuilder(originalText);
+                        foreach (var pair in replacementMap)
+                        {
+                            replacedText.Replace(pair.Key, pair.Value);
+                        }
 
                         var newToken = token.WithText(replacedText);
 
@@ -166,13 +171,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var valueText = lastToken.ValueText.TrimEnd();
-
                     // in case there is any, get rid of last dot
-                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
-                    {
-                        valueText = valueText.WithoutSuffix(".");
-                    }
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
 
                     return comment.ReplaceToken(lastToken, lastToken.WithText(valueText + ending));
                 }
@@ -204,13 +204,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var valueText = lastToken.ValueText.TrimEnd();
-
                     // in case there is any, get rid of last dot
-                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
-                    {
-                        valueText = valueText.WithoutSuffix(".");
-                    }
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
 
                     text = valueText + commentStart;
                 }
@@ -548,7 +543,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 textTokens.RemoveRange(0, removals + 1);
 
-                var replacementText = commentEnd + textToken.ValueText.TrimStart().ToLowerCaseAt(0);
+                var replacementText = commentEnd + textToken.ValueText.AsSpan().TrimStart().ToLowerCaseAt(0);
                 var replacement = replacementText.ToSyntaxToken();
                 textTokens.Insert(0, replacement);
 

@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,12 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten)
         {
-            var comment = original.ToString().TrimEnd();
+            var comment = original.ToString().AsSpan().TrimEnd();
 
             if (MiKo_2303_CommentDoesNotEndWithPeriodAnalyzer.CommentHasIssue(comment))
             {
                 // ensure that there is no empty space at the end, after removing trailing dots
-                return SyntaxFactory.Comment(comment.TrimEnd('.').TrimEnd());
+                return SyntaxFactory.Comment(comment.TrimEnd('.').TrimEnd().ToString());
             }
 
             return original;

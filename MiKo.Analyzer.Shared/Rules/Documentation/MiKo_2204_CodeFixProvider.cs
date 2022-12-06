@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var list = syntax.DescendantNodes<XmlTextSyntax>(_ => _.TextTokens.Any(__ => __.ValueText.TrimStart().StartsWithAny(Markers))).ToList();
+            var list = syntax.DescendantNodes<XmlTextSyntax>(_ => _.TextTokens.Any(__ => __.ValueText.AsSpan().TrimStart().StartsWithAny(Markers))).ToList();
 
             return syntax.ReplaceNodes(list, GetReplacements);
         }
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var token in text.TextTokens)
             {
-                var valueText = token.ValueText.Trim();
+                var valueText = token.ValueText.AsSpan().Trim();
 
                 if (valueText.IsNullOrWhiteSpace())
                 {
@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var items = new List<XmlElementSyntax>();
             foreach (var listItem in listItems)
             {
-                var comment = XmlText(listItem.ValueText.WithoutFirstWord().Trim());
+                var comment = XmlText(listItem.ValueText.AsSpan().WithoutFirstWord().Trim().ToString());
                 var description = XmlElement(Constants.XmlTag.Description, comment);
                 var item = XmlElement(Constants.XmlTag.Item, description);
 

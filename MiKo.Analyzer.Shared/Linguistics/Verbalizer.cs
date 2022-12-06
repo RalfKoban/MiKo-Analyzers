@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     public static class Verbalizer
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
+
+        private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
+
+        private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
+
+        private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
 
         private static readonly KeyValuePair<string, string>[] Endings =
             {
@@ -116,70 +124,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                 .ThenBy(_ => _)
                                                                 .ToArray();
 
-        public static string MakeInfiniteVerb(string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                return value;
-            }
-
-            if (value.EndsWith('s'))
-            {
-                if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
-                {
-                    return value.WithoutSuffix("es");
-                }
-
-                return value.WithoutSuffix("s");
-            }
-
-            return value;
-        }
-
-        public static string MakeThirdPersonSingularVerb(string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                return value;
-            }
-
-            if (value.EndsWith('y'))
-            {
-                if (value.EndsWith("ay", StringComparison.Ordinal) || value.EndsWith("ey", StringComparison.Ordinal))
-                {
-                    return value + 's';
-                }
-
-                return value.Substring(0, value.Length - 1) + "ies";
-            }
-
-            if (value.EndsWith('s'))
-            {
-                if (value.EndsWith("ss", StringComparison.Ordinal))
-                {
-                    return value + "es";
-                }
-
-                if (value.EndsWith("oes", StringComparison.Ordinal) || value.EndsWith("shes", StringComparison.Ordinal))
-                {
-                    return value;
-                }
-
-                if (IsThirdPersonSingularVerb(value))
-                {
-                    return value;
-                }
-            }
-
-            var result = value + 's';
-            if (IsTwoCharacterEndingsWithS(result))
-            {
-                return value + "es";
-            }
-
-            return result;
-        }
-
         public static bool IsThirdPersonSingularVerb(string value)
         {
             var length = value?.Length;
@@ -209,12 +153,91 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (value.EndsWith("ing", StringComparison.Ordinal))
+            return GerundVerbs.GetOrAdd(value, CreateGerundVerb);
+
+            string CreateGerundVerb(string word)
+            {
+                if (word.EndsWith("ing", StringComparison.Ordinal))
+                {
+                    return word;
+                }
+
+                return new StringBuilder(word + "ing").Replace("ping", "pping").Replace("eing", "ing").ToString();
+            }
+        }
+
+        public static string MakeInfiniteVerb(string value)
+        {
+            if (value.IsNullOrWhiteSpace())
             {
                 return value;
             }
 
-            return (value + "ing").Replace("ping", "pping").Replace("eing", "ing");
+            return InfiniteVerbs.GetOrAdd(value, CreateInfiniteVerb);
+
+            string CreateInfiniteVerb(string word)
+            {
+                if (word.EndsWith('s'))
+                {
+                    if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
+                    {
+                        return word.WithoutSuffix("es");
+                    }
+
+                    return word.WithoutSuffix("s");
+                }
+
+                return word;
+            }
+        }
+
+        public static string MakeThirdPersonSingularVerb(string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
+
+            return ThirdPersonSingularVerbs.GetOrAdd(value, CreateThirdPersonSingularVerb);
+
+            string CreateThirdPersonSingularVerb(string word)
+            {
+                if (word.EndsWith('y'))
+                {
+                    if (word.EndsWith("ay", StringComparison.Ordinal) || word.EndsWith("ey", StringComparison.Ordinal))
+                    {
+                        return word + 's';
+                    }
+
+                    return word.Substring(0, word.Length - 1) + "ies";
+                }
+
+                if (word.EndsWith('s'))
+                {
+                    if (word.EndsWith("ss", StringComparison.Ordinal))
+                    {
+                        return word + "es";
+                    }
+
+                    if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
+                    {
+                        return word;
+                    }
+
+                    if (IsThirdPersonSingularVerb(word))
+                    {
+                        return word;
+                    }
+                }
+
+                var result = word + 's';
+                if (IsTwoCharacterEndingsWithS(result))
+                {
+                    return word + "es";
+                }
+
+                return result;
+            }
         }
 
         public static bool TryMakeVerb(string value, out string result)
@@ -226,12 +249,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            if (HasAcceptableStartingPhrase(value))
+            var word = value.AsSpan();
+
+            if (HasAcceptableStartingPhrase(word))
             {
                 return false;
             }
 
-            if (HasAcceptableMiddlePhrase(value))
+            if (HasAcceptableMiddlePhrase(word))
             {
                 return false;
             }
@@ -239,9 +264,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var pair in Endings)
             {
-                if (value.EndsWith(pair.Key, StringComparison.Ordinal))
+                if (word.EndsWith(pair.Key, StringComparison.Ordinal))
                 {
-                    result = value.Substring(0, value.Length - pair.Key.Length) + pair.Value;
+                    result = word.Slice(0, word.Length - pair.Key.Length).ToString() + pair.Value;
 
                     return string.Equals(result, value, StringComparison.Ordinal) is false;
                 }
@@ -250,14 +275,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableStartingPhrase(string value)
+        private static bool HasAcceptableStartingPhrase(ReadOnlySpan<char> value)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var phrase in StartingPhrases)
             {
                 if (value.StartsWith(phrase, StringComparison.Ordinal))
                 {
-                    var remaining = value.Substring(phrase.Length);
+                    var remaining = value.Slice(phrase.Length);
 
                     if (remaining.Length == 0 || remaining[0].IsUpperCase())
                     {
@@ -269,7 +294,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(string value)
+        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value)
         {
             return value.ContainsAny(MiddlePhrases);
         }

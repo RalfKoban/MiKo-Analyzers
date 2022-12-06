@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -26,9 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                         (original, rewritten) => original.WithText(ReplaceText(original.Text)));
         }
 
-        private static string ReplaceText(string originalText)
+        private static StringBuilder ReplaceText(string originalText)
         {
-            var result = ReplacementMap.Aggregate(originalText, (current, pair) => current.Replace(pair.Key, pair.Value));
+            var result = new StringBuilder(originalText);
+
+            foreach (var pair in ReplacementMap)
+            {
+                result.Replace(pair.Key, pair.Value);
+            }
 
             return result;
         }

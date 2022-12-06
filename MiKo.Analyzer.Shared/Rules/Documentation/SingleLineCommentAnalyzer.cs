@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -20,12 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
         }
 
-        protected abstract bool CommentHasIssue(string comment, SemanticModel semanticModel);
+        protected abstract bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel);
 
         protected virtual bool CommentHasIssue(SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             var comment = trivia.ToFullString()
-                                .Substring(2) // removes the leading '//'
+                                .AsSpan()
+                                .Slice(2) // removes the leading '//'
                                 .Trim(); // gets rid of all (leading or trailing) whitespaces to ease comment comparisons
 
             return CommentHasIssue(comment, semanticModel);

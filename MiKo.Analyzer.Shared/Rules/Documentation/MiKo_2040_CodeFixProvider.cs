@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var text = textToken.ValueText;
+                var text = textToken.ValueText.AsSpan();
 
                 // get rid of leading whitespace characters caused by '/// '
                 if (newLineTokenJustSkipped)

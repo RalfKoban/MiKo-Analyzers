@@ -61,7 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = args.Arguments;
             var text = GetText(arguments[0].Expression);
 
-            var finalText = text.Words()
+            var finalText = text.AsSpan()
+                                .Words()
                                 .Select(_ => _.ToLowerCaseAt(0))
                                 .Select(_ =>
                                             {

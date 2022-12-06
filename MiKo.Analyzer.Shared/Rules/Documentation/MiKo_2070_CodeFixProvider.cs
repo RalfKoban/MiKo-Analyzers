@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Composition;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -71,12 +72,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var token in text.TextTokens)
                 {
-                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).Trim();
+                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
 
                     if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
                     {
                         var startText = GetCorrectStartText(summary);
-                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether");
+                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether").ToString();
 
                         var newText = " " + startText + " " + remainingText;
 
@@ -176,7 +177,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var newText = valueText.Without("otherwise").Without("false").Replace("; , .", ".");
+                    var newText = new StringBuilder(valueText).Without("otherwise").Without("false").Replace("; , .", ".");
                     if (valueText.Length > newText.Length)
                     {
                         foreach (var marker in Constants.TrailingSentenceMarkers)
@@ -185,7 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              .Replace($"{marker} .", ".");
                         }
 
-                        summary = summary.ReplaceToken(token, token.WithText(newText));
+                        summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));
                     }
                 }
             }
