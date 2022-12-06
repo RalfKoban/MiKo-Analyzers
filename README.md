@@ -346,8 +346,8 @@ The following tables list all the 339 rules that are currently provided by the a
 |MiKo_3207|Test statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3208|Using directives should be preceded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3209|Try statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3210|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
-|MiKo_3211|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
+|MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
+|MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 
 ### Ordering

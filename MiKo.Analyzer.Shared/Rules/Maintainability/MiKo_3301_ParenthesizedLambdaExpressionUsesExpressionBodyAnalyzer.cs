@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3210";
+        public const string Id = "MiKo_3301";
 
-        public MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer() : base(Id)
+        public MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer() : base(Id)
         {
         }
 

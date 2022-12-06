@@ -9,12 +9,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3211_CodeFixProvider)), Shared]
-    public sealed class MiKo_3211_CodeFixProvider : MaintainabilityCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3302_CodeFixProvider)), Shared]
+    public sealed class MiKo_3302_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3211_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.Id;
 
-        protected override string Title => Resources.MiKo_3211_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3302_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParenthesizedLambdaExpressionSyntax>().FirstOrDefault();
 

@@ -10995,72 +10995,72 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
-        public static string MiKo_3210_CodeFixTitle {
+        public static string MiKo_3301_CodeFixTitle {
             get {
-                return ResourceManager.GetString("MiKo_3210_CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("MiKo_3301_CodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead..
         /// </summary>
-        public static string MiKo_3210_Description {
+        public static string MiKo_3301_Description {
             get {
-                return ResourceManager.GetString("MiKo_3210_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3301_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body instead.
         /// </summary>
-        public static string MiKo_3210_MessageFormat {
+        public static string MiKo_3301_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3210_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3301_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements.
         /// </summary>
-        public static string MiKo_3210_Title {
+        public static string MiKo_3301_Title {
             get {
-                return ResourceManager.GetString("MiKo_3210_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3301_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Remove braces around parameter.
         /// </summary>
-        public static string MiKo_3211_CodeFixTitle {
+        public static string MiKo_3302_CodeFixTitle {
             get {
-                return ResourceManager.GetString("MiKo_3211_CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("MiKo_3302_CodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead..
         /// </summary>
-        public static string MiKo_3211_Description {
+        public static string MiKo_3302_Description {
             get {
-                return ResourceManager.GetString("MiKo_3211_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3302_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Use simple lambda expression body instead.
         /// </summary>
-        public static string MiKo_3211_MessageFormat {
+        public static string MiKo_3302_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3211_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3302_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters.
         /// </summary>
-        public static string MiKo_3211_Title {
+        public static string MiKo_3302_Title {
             get {
-                return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3302_Title", resourceCulture);
             }
         }
         
