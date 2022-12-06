@@ -11029,6 +11029,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3211_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3211_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3211_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround lock statement with a blank line.
+        /// </summary>
+        public static string MiKo_3211_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3211_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lock statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3211_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

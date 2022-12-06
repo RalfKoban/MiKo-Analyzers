@@ -3897,6 +3897,18 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3210_Title" xml:space="preserve">
     <value>If statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_3211_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3211_Description" xml:space="preserve">
+    <value>To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3211_MessageFormat" xml:space="preserve">
+    <value>Surround lock statement with a blank line</value>
+  </data>
+  <data name="MiKo_3211_Title" xml:space="preserve">
+    <value>Lock statements should be surrounded by blank lines</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
