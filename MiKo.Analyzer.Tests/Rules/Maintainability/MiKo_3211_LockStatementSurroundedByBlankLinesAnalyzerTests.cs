@@ -101,6 +101,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_lock_block_as_statement_in_switch_section() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+
+                    lock (sync)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_lock_block_as_statement_after_variable_assignment_in_method() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -138,7 +162,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_nested_lock_block_as_statement_after_variable_assignment_side_lock_block_in_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_nested_lock_block_as_statement_after_variable_assignment_lock_block_in_method() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -151,6 +175,52 @@ namespace Bla
                 lock (sync)
                 {
                 }
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_lock_block_as_statement_after_variable_assignment_in_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+                    lock (sync)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_lock_block_as_statement_without_blank_line_after_block_in_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+
+                    lock (sync)
+                    {
+                    }
+                    break;
             }
         }
     }
@@ -279,6 +349,108 @@ namespace Bla
                 lock (sync)
                 {
                 }
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_lock_block_as_statement_after_variable_assignment_in_switch_section()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+                    lock (sync)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+
+                    lock (sync)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_lock_block_as_statement_without_blank_line_after_block_in_switch_section()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+
+                    lock (sync)
+                    {
+                    }
+                    break;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var sync = new object();
+
+                    lock (sync)
+                    {
+                    }
+
+                    break;
             }
         }
     }

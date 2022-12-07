@@ -116,6 +116,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_if_block_as_statement_with_blank_line_after_variable_assignment_in_switch_section() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+
+                    if (condition)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_if_block_as_statement_after_variable_assignment_in_method() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -152,7 +176,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_nested_if_block_as_statement_after_variable_assignment_side_if_block_in_method() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_nested_if_block_as_statement_after_variable_assignment_if_block_in_method() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -165,6 +189,52 @@ namespace Bla
                 if (condition)
                 {
                 }
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_block_as_statement_with_blank_line_after_variable_assignment_in_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+                    if (condition)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_block_as_statement_with_blank_line_after_block_in_switch_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+
+                    if (condition)
+                    {
+                    }
+                    break;
             }
         }
     }
@@ -254,7 +324,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_nested_if_block_as_statement_after_variable_assignment_side_if_block_in_method()
+        public void Code_gets_fixed_for_nested_if_block_as_statement_after_variable_assignment_if_block_in_method()
         {
             const string OriginalCode = @"
 namespace Bla
@@ -289,6 +359,108 @@ namespace Bla
                 if (condition)
                 {
                 }
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_if_block_as_statement_with_blank_line_after_variable_assignment_in_switch_section()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+                    if (condition)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+
+                    if (condition)
+                    {
+                    }
+
+                    break;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_if_block_as_statement_with_blank_line_after_block_in_switch_section()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+
+                    if (condition)
+                    {
+                    }
+                    break;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(int i)
+        {
+            switch (i)
+            {
+                case 1:
+                    var condition = true;
+
+                    if (condition)
+                    {
+                    }
+
+                    break;
             }
         }
     }

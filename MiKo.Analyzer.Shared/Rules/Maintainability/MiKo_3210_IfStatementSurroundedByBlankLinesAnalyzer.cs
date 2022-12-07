@@ -44,7 +44,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case BlockSyntax block:
                         return AnalyzeIfStatement(block.Statements, node);
 
-                    case SwitchSectionSyntax _:
+                    case SwitchSectionSyntax section:
+                        return AnalyzeIfStatement(section.Statements, node);
+
                     case MethodDeclarationSyntax _:
                     case ClassDeclarationSyntax _:
                         return null; // stop lookup as there is no valid ancestor anymore
