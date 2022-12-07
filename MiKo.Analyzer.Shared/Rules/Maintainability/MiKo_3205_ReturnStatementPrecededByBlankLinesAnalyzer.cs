@@ -42,8 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case IfStatementSyntax _:
                     case ElseClauseSyntax _:
-                        return null; // no issue
+                        return null; // no issue as the statement is not surrounded by brackets that follow a block
 
+                    case LocalFunctionStatementSyntax _:
                     case MethodDeclarationSyntax _:
                     case ClassDeclarationSyntax _:
                         return null; // stop lookup as there is no valid ancestor anymore
@@ -56,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private Diagnostic AnalyzeStatements(SyntaxList<StatementSyntax> statements, SyntaxNode returnStatement)
         {
             var callLineSpan = returnStatement.GetLocation().GetLineSpan();
+
             var noBlankLinesBefore = statements.Where(_ => _.IsKind(SyntaxKind.YieldReturnStatement) is false)
                                                .Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
 
@@ -63,9 +65,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (returnStatement)
                 {
-                    case ReturnStatementSyntax s when s.Expression is null:
-                        return null; // no issue
-
                     case ReturnStatementSyntax s:
                         return Issue(s.ReturnKeyword, true, false);
 

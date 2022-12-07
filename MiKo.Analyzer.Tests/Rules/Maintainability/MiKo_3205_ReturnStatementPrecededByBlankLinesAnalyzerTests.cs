@@ -146,13 +146,33 @@ namespace Bla
     {
         public int DoSomething(bool something)
         {
-            var x = 0;
             if (something)
             {
                 return 1;
             }
 
             return 2;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_inside_else_block_with_brackets() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            if (something)
+            {
+                return 1;
+            }
+            else
+            {
+                return 2;
+            }
         }
     }
 }
@@ -226,7 +246,73 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_return_void_statement_as_last_statement_in_if_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_return_statement_in_static_property_after_lock_with_blank_line_in_between() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public static TestMe Instance
+        {
+            get
+            {
+                lock(new object())
+                {
+                    _instance = new TestMe();
+                }
+
+                return _instance;
+            }
+        }
+
+        private static TestMe _instance;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_in_property_after_lock_with_blank_line_in_between() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty
+        {
+            get
+            {
+                lock(this)
+                {
+                }
+
+                return 42;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_return_statement_after_variable_assignment_inside_local_function_with_blank_line_in_between() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            return DoSomethingCore(something);
+
+            int DoSomethingCore(bool something)
+            {
+                var x = 0;
+
+                return x;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_void_statement_as_last_statement_in_if_block() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -246,7 +332,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_return_statement_preceded_by_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_return_statement_after_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -264,7 +350,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_return_statement_preceded_by_variable_assignment_inside_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_if_block_without_separate_blank_line() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -284,7 +370,29 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_return_statement_preceded_by_variable_assignment_inside_parenthesized_lambda_assignment_without_separate_blank_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_else_block_without_separate_blank_line() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            if (something)
+            {
+                return 1;
+            }
+            else
+            {
+                var x = 0;
+                return x;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_parenthesized_lambda_assignment_without_separate_blank_line() => An_issue_is_reported_for(@"
 namespace Bla
 {
     public class TestMe
@@ -364,6 +472,69 @@ namespace Bla
         {
             var x = 0;
             yield return x;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_static_return_statement_in_property_after_lock_without_blank_line_in_between() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int SomeProperty
+        {
+            get
+            {
+                lock(new object())
+                {
+                }
+                return 42;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_statement_in_property_after_lock_without_blank_line_in_between() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public static TestMe Instance
+        {
+            get
+            {
+                lock(new object())
+                {
+                    _instance = new TestMe();
+                }
+                return _instance;
+            }
+        }
+
+        private static TestMe _instance;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_return_statement_after_variable_assignment_inside_local_function_without_separate_blank_line() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool something)
+        {
+            return DoSomethingCore(something);
+
+            int DoSomethingCore(bool something)
+            {
+                var x = 0;
+                return x;
+            }
         }
     }
 }
