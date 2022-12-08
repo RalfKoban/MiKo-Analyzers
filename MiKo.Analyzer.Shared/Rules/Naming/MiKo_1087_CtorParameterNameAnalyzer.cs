@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -52,29 +51,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // symbol parameters
-            var baseCtor = baseCall.GetSymbol(compilation) as IMethodSymbol;
-            if (baseCtor is null)
+            if (baseCall.GetSymbol(compilation) is IMethodSymbol baseCtor)
             {
-                // seems like invalid code, so do not inspect further
-                yield break;
-            }
-
-            // check for each parameter whether the base parameter has the same name as any of the own parameters or whether it has a different one
-            foreach (var parameter in symbol.Parameters)
-            {
-                var parameterName = parameter.Name;
-
-                if (mapping.TryGetValue(parameterName, out var argumentPosition))
+                foreach (var parameter in symbol.Parameters)
                 {
-                    // we found a parameter, hence we check the name on the base ctor
-                    var baseParameter = baseCtor.Parameters[argumentPosition];
-                    var baseParameterName = baseParameter.Name;
+                    var parameterName = parameter.Name;
 
-                    if (baseParameterName != parameterName)
+                    if (mapping.TryGetValue(parameterName, out var argumentPosition))
                     {
-                        yield return Issue(parameter, baseParameterName, new Dictionary<string, string> { { BetterName, baseParameterName } });
+                        // we found a parameter, hence we check the name on the base ctor
+                        var baseParameter = baseCtor.Parameters[argumentPosition];
+                        var baseParameterName = baseParameter.Name;
+
+                        if (baseParameterName != parameterName)
+                        {
+                            yield return Issue(parameter, baseParameterName, new Dictionary<string, string> { { BetterName, baseParameterName } });
+                        }
                     }
                 }
+
+                // check for each parameter whether the base parameter has the same name as any of the own parameters or whether it has a different one
             }
         }
     }
