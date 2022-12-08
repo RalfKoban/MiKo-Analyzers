@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (betterName.IsNullOrWhiteSpace() is false)
             {
                 if (symbol.IsEnum() && symbol.GetAttributeNames().Any(_ => _ == nameof(FlagsAttribute))
-                                    && betterName.EndsWith("s", StringComparison.OrdinalIgnoreCase) is false)
+                                    && betterName.EndsWith('s') is false)
                 {
                     betterName = Pluralizer.GetPluralName(symbolName, betterName);
                 }

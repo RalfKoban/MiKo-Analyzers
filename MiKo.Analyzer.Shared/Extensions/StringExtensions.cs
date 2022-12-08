@@ -618,6 +618,8 @@ namespace System
             return results;
         }
 
+        public static bool StartsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[0] == character;
+
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => string.IsNullOrEmpty(characters) is false && value.StartsWith(characters.AsSpan());
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => string.IsNullOrEmpty(characters) is false && value.StartsWith(characters.AsSpan(), comparison);

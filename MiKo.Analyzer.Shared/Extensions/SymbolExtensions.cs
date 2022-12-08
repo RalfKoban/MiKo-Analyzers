@@ -1158,7 +1158,7 @@ namespace MiKoSolutions.Analyzers
         {
             var typeName = value.Name;
 
-            return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith("I", StringComparison.Ordinal)
+            return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I')
                        ? typeName.Substring(1)
                        : typeName;
         }

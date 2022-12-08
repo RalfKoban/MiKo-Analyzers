@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                               case "b":
                                                                               case Constants.XmlTag.C:
                                                                               case Constants.XmlTag.Code:
-                                                                                  return false; // don't dig deeper
+                                                                                  return false; // do not dig deeper
 
                                                                               default:
                                                                                   return true;

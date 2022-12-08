@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsFactory(); // do not call base.ShallAnalyze() here to avoid that we don't inspect the methods of the type
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsFactory(); // do not call base.ShallAnalyze() here to avoid that we do not inspect the methods of the type
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && base.ShallAnalyze(symbol);
 

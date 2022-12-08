@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
 
-                    var firstIndexOfNextSpace = followUpText.StartsWith("<", StringComparison.Ordinal) // seems like the comment finished
+                    var firstIndexOfNextSpace = followUpText.StartsWith('<') // seems like the comment finished
                                                     ? 0
                                                     : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
 
