@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var otherMethods = ordinaryMethods.Except(ordinaryDisposeMethods).Concat(interfaceImplementations.Except(interfaceDisposeMethods)).Select(_ => _.GetStartingLine()).ToList();
 
             var disposeMethods = ordinaryDisposeMethods.Concat(interfaceDisposeMethods);
+
             foreach (var disposeMethod in disposeMethods)
             {
                 var startingLine = disposeMethod.GetStartingLine();

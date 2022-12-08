@@ -9,6 +9,7 @@ namespace MiKoSolutions.Analyzers
         public static bool IsSpanningMultipleLines(this SyntaxTrivia value)
         {
             var count = 0;
+
             foreach (var syntaxTrivia in value.Token.LeadingTrivia)
             {
                 if (syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))

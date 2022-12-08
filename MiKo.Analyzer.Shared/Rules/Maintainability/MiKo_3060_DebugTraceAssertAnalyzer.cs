@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodCalls = symbol.GetSyntax().DescendantNodes<MemberAccessExpressionSyntax>();
 
             List<Diagnostic> diagnostics = null;
+
             foreach (var methodCall in methodCalls)
             {
                 var call = methodCall.ToCleanedUpString();

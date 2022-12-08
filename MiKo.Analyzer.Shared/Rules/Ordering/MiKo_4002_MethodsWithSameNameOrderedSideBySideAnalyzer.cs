@@ -51,6 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 var indices = new HashSet<int>(methodsWithSameName.Select(allMethods.IndexOf));
 
                 var startIndex = indices.First();
+
                 foreach (var index in indices)
                 {
                     if (Math.Abs(index - startIndex) > 1)

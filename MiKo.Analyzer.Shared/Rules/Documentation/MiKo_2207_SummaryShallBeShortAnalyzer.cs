@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            .Replace(" langword=", "langword=")
                                                            .ToString()
                                                            .Trim();
+
             foreach (var c in clearedSummary)
             {
                 if (c.IsWhiteSpace())

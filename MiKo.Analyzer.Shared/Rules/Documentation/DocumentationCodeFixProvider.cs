@@ -48,6 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (originalText.ContainsAny(terms))
                     {
                         var replacedText = new StringBuilder(originalText);
+
                         foreach (var pair in replacementMap)
                         {
                             replacedText.Replace(pair.Key, pair.Value);

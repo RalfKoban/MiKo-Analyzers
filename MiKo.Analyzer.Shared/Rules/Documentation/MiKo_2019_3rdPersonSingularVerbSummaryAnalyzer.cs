@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private Diagnostic FindIssue(ISymbol symbol, SyntaxNode summaryXml)
         {
             var descendantNodes = summaryXml.DescendantNodes();
+
             foreach (var node in descendantNodes)
             {
                 switch (node)

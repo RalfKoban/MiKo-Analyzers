@@ -451,6 +451,7 @@ namespace System
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit)
         {
             var count = 0;
+
             for (var index = 0; index < value.Length; index++)
             {
                 if (value[index].IsUpperCase())
@@ -589,6 +590,7 @@ namespace System
             }
 
             var tuples = new List<Tuple<int, string>>();
+
             foreach (var finding in findings)
             {
                 var indices = value.AllIndicesOf(finding.AsSpan(), comparison);
@@ -841,6 +843,7 @@ namespace System
             }
 
             var end = value.Length - 1;
+
             while (end >= 0)
             {
                 if (value[end].IsNumber())

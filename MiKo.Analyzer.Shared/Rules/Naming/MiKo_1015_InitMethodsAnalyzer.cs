@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string GetExpectedName(string methodName)
         {
             var i = 1;
+
             for (; i < methodName.Length; i++)
             {
                 var character = methodName[i];

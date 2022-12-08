@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var methodNames = methods.ToHashSet(_ => _.Name);
 
             List<Diagnostic> results = null;
+
             foreach (var methodName in methodNames)
             {
                 // pre-order for accessibility (public first, private last), then ensure that static methods are first and params methods are at the end

@@ -68,6 +68,7 @@ public class TestMe
         private static string[] CreateWrongNames(string[] names)
         {
             var allNames = new HashSet<string>(names);
+
             foreach (var s in names)
             {
                 var lower = s.ToLowerInvariant();

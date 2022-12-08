@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     const int Offset = 1; // we do not want to underline the first and last char
+
                     foreach (var location in GetAllLocations(token, Triggers, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                     {
                         yield return Issue(symbol.Name, location);

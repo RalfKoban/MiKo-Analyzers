@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var map = new Dictionary<XmlEmptyElementSyntax, string>();
 
             var tags = syntax.GetEmptyXmlSyntax(TagNames);
+
             foreach (var tag in tags)
             {
                 foreach (var parameterName in tag.Attributes

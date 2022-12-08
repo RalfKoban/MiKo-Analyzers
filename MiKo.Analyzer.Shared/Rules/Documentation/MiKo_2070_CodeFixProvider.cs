@@ -129,6 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // combine texts that have been created due to the removal of the '<see langword="xyz"/>'
                 contents = summary.Content;
+
                 for (var i = 0; i < contents.Count - 1; i++)
                 {
                     if (contents[i] is XmlTextSyntax t1 && contents[i + 1] is XmlTextSyntax t2)

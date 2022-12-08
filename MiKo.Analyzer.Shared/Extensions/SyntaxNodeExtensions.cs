@@ -1125,6 +1125,7 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string phrase, string replacement)
         {
             var result = source.ToList();
+
             for (var index = 0; index < result.Count; index++)
             {
                 var value = result[index];
@@ -1141,6 +1142,7 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
         {
             var result = source.ToList();
+
             for (var index = 0; index < result.Count; index++)
             {
                 var value = result[index];

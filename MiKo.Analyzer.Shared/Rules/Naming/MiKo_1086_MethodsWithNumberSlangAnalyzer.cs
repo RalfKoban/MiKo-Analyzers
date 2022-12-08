@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool HasSlangNumber(string symbolName)
         {
             var name = symbolName;
+
             while (true)
             {
                 var index = name.IndexOfAny(SlangNumbers);

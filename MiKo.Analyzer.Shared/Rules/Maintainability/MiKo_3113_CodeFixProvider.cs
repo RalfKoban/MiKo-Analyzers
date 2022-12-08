@@ -265,6 +265,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))
                     {
                         var types = new TypeSyntax[genericArgumentsCount];
+
                         for (var i = 0; i < genericArgumentsCount; i++)
                         {
                             if (type.TryGetGenericArgumentType(out var genericType, i))

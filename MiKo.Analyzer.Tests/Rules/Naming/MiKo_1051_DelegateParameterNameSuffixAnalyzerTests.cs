@@ -94,6 +94,7 @@ public class TestMe
             var names = new[] { "@delegate", "action", "func" };
 
             var allNames = new HashSet<string>(names);
+
             foreach (var name in names)
             {
                 allNames.Add(name.ToLowerInvariant());

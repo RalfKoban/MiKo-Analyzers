@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var depth = -1;
 
             var s = symbol;
+
             while (s != null)
             {
                 depth++;

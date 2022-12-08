@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 
                 var types = AnalyzeTestCreationMethod(methodDeclaration, semanticModel);
+
                 foreach (var type in types)
                 {
                     typesUnderTest.Add(type);
@@ -61,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 
                 var types = AnalyzeTestMethod(methodDeclaration, semanticModel);
+
                 foreach (var type in types)
                 {
                     typesUnderTest.Add(type);

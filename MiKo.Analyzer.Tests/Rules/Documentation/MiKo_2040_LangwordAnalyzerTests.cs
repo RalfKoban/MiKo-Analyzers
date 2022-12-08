@@ -379,6 +379,7 @@ public sealed class TestMe
         private static IEnumerable<string> CreateWrongItems(bool withCode, params string[] tokens)
         {
             var words = new List<string>();
+
             foreach (var token in tokens)
             {
                 words.Add(token);
