@@ -25,11 +25,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (original.Expression is InvocationExpressionSyntax invocation && invocation.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
             {
                 var typeName = type.GetName();
+
                 if (typeName == "Assert")
                 {
                     var args = invocation.ArgumentList.Arguments;
 
                     var fixedInvocation = UpdatedSyntax(maes, args);
+
                     if (fixedInvocation != null)
                     {
                         // ensure that we keep leading trivia, such as comments

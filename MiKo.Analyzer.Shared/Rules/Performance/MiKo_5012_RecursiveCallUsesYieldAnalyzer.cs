@@ -54,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         foreach (var invocation in loop.DescendantNodes<InvocationExpressionSyntax>())
                         {
                             var calledMethod = DetectCalledMethod(semanticModel, invocation, methodName);
+
                             if (calledMethod is null)
                             {
                                 continue;

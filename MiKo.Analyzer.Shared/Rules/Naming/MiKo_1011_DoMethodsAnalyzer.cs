@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var escapedMethod = new StringBuilder(methodName);
 
             var found = ContainsPhrase(methodName);
+
             if (found)
             {
                 // special case "Does"

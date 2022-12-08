@@ -60,6 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (part.Contains(parameterIndicatorPhrase))
                         {
                             var trimmed = part.AsSpan().Trim();
+
                             if (trimmed.StartsWithAny(phrases, Comparison) is false && trimmed.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
                             {
                                 results.Add(ExceptionIssue(exceptionComment, proposal));

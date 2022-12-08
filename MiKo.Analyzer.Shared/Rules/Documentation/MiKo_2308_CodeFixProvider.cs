@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var newBlock = block.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
 
                     var statement = newBlock.Statements.LastOrDefault();
+
                     if (statement != null)
                     {
                         newBlock = newBlock.ReplaceNode(statement, statement.WithAdditionalLeadingTrivia(trivia, SyntaxFactory.ElasticCarriageReturnLineFeed));

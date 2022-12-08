@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var typesUnderTest = symbol.GetTypeUnderTestTypes().ToList();
+
             if (typesUnderTest.Any())
             {
                 var typeUnderTestNames = typesUnderTest.Select(_ => GetTypeUnderTestName(symbol, _))
@@ -80,6 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var type in types)
             {
                 var typeName = type.GetNameOnlyPart();
+
                 if (typeName is null)
                 {
                     continue;
@@ -103,6 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 // inspect associated test method
                 var method = context.GetEnclosingMethod();
+
                 if (method.IsTestMethod())
                 {
                     var testClass = method.ContainingType;

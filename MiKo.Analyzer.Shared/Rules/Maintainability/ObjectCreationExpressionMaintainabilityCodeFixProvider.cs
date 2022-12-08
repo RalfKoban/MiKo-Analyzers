@@ -55,12 +55,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private SyntaxNode GetUpdatedSyntax(ObjectCreationExpressionSyntax syntax)
         {
             var originalArguments = syntax.ArgumentList;
+
             if (originalArguments is null)
             {
                 return syntax;
             }
 
             var arguments = GetUpdatedArgumentListSyntax(syntax);
+
             if (arguments != originalArguments)
             {
                 var type = GetUpdatedSyntaxType(syntax);

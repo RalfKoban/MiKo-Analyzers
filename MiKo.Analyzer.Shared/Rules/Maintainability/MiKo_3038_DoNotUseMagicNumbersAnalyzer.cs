@@ -203,6 +203,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var containingType = symbol.ContainingType;
+
             if (containingType != null)
             {
                 if (containingType.IsTestClass())
@@ -219,6 +220,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var number = node.Token.Text;
+
             if (IsWellKnownNumber(number))
             {
                 yield break;

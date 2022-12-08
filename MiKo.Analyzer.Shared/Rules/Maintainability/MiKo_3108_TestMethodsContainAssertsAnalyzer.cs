@@ -48,6 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case "Verify" when node.Parent is InvocationExpressionSyntax i:
                     {
                         var argumentsCount = i.ArgumentList.Arguments.Count;
+
                         if (argumentsCount > 0)
                         {
                             return true;

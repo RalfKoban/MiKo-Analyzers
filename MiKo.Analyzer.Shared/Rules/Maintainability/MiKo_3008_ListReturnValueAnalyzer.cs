@@ -57,6 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private Diagnostic AnalyzeReturnType(IMethodSymbol method, ITypeSymbol returnType)
         {
             var returnTypeString = returnType.ToString();
+
             if (returnTypeString == "byte[]")
             {
                 return null;

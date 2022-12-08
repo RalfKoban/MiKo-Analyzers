@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
             var assertThat = ConvertToAssertThat(context, shouldNode);
+
             if (assertThat is null)
             {
                 return statement;
@@ -32,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // find lambda
             var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
+
             if (lambda != null && lambda.Ancestors().Any(_ => _ == statement))
             {
                 // we have a lambda expression, so replace that one
@@ -64,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var semanticModel = GetSemanticModel(context);
                     var type = originalExpression.GetTypeSymbol(semanticModel);
+
                     if (type != null)
                     {
                         if (type.IsGuid())
@@ -79,6 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var semanticModel = GetSemanticModel(context);
                     var type = originalExpression.GetTypeSymbol(semanticModel);
+
                     if (type != null)
                     {
                         if (type.IsGuid())
@@ -98,6 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "BeEquivalentTo":
                 {
                     var count = arguments.Count;
+
                     if (count > 0)
                     {
                         var argument = arguments[0];
@@ -130,6 +135,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotBeEquivalentTo":
                 {
                     var count = arguments.Count;
+
                     if (count > 0)
                     {
                         var argument = arguments[0];
@@ -255,6 +261,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // we need to find out the type
                     var semanticModel = GetSemanticModel(context);
                     var type = originalExpression.GetTypeSymbol(semanticModel);
+
                     if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))
                     {
                         var types = new TypeSyntax[genericArgumentsCount];

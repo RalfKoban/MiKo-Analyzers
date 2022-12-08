@@ -127,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         public static bool IsThirdPersonSingularVerb(string value)
         {
             var length = value?.Length;
+
             if (length >= 2)
             {
                 return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]) is false;
@@ -138,6 +139,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         public static bool IsTwoCharacterEndingsWithS(string value)
         {
             var length = value?.Length;
+
             if (length >= 2)
             {
                 return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]);
@@ -231,6 +233,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
 
                 var result = word + 's';
+
                 if (IsTwoCharacterEndingsWithS(result))
                 {
                     return word + "es";

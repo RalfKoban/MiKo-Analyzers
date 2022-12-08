@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var arguments = symbol.GetInvocationArgumentsFrom(m_invocation);
+
             if (arguments.Count < 3)
             {
                 return Enumerable.Empty<Diagnostic>();
@@ -57,6 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var owningType = symbol.ContainingType;
                 var property = owningType.GetProperties().FirstOrDefault(_ => _.Name == name);
+
                 if (property is null)
                 {
                     // wrong name
@@ -89,6 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var owningType = symbol.ContainingType;
                 var containingTypeName = owningType.Name;
+
                 if (containingTypeName != syntax.Type.ToString())
                 {
                     yield return ReportIssue(symbol, ownerType, containingTypeName);

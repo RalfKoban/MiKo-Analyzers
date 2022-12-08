@@ -49,18 +49,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var method = (MethodDeclarationSyntax)context.Node;
 
             var parameters = method.ParameterList.Parameters;
+
             if (parameters.Count == 0)
             {
                 return;
             }
 
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
+
             if (methodBody is null)
             {
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
             }
 
             var methodSymbol = context.GetEnclosingMethod();
+
             if (methodSymbol is null)
             {
                 return;
@@ -75,18 +78,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var method = (ConstructorDeclarationSyntax)context.Node;
 
             var parameters = method.ParameterList.Parameters;
+
             if (parameters.Count == 0)
             {
                 return;
             }
 
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
+
             if (methodBody is null)
             {
                 return; // unfinished code or code that has no body (such as interface methods or abstract methods)
             }
 
             var methodSymbol = context.GetEnclosingMethod();
+
             if (methodSymbol is null)
             {
                 return;

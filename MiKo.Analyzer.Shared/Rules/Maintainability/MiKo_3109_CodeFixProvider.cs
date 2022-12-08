@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var args = original.ArgumentList;
                     var fixedArgs = UpdatedSyntax(maes, args);
+
                     if (fixedArgs != args)
                     {
                         return original.ReplaceNode(args, fixedArgs);

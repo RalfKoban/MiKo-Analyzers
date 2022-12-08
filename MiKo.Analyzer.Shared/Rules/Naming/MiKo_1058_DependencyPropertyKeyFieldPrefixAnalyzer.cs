@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var propertyNames = FindPropertyNames(symbol);
+
             if (propertyNames.Any())
             {
                 yield return Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated());

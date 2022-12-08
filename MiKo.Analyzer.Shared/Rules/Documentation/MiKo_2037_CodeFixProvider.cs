@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string[] GetCommentParts(PropertyDeclarationSyntax property)
         {
             var isArrowGetterOnly = property.ChildNodes<ArrowExpressionClauseSyntax>().Any();
+
             if (isArrowGetterOnly)
             {
                 return GetOnly;
@@ -40,12 +41,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // try to find a getter
             var getter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
+
             if (getter is null || getter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
                 return SetOnly;
             }
 
             var setter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
+
             if (setter is null || setter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
             {
                 return GetOnly;

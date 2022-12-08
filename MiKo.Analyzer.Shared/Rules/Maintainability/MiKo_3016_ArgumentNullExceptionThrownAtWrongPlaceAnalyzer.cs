@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var condition = node.GetRelatedCondition();
+
             if (condition is null)
             {
                 // nothing there
@@ -40,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var parameter = node.GetUsedParameter();
+
             if (parameter != null)
             {
                 switch (condition)

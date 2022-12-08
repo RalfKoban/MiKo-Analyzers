@@ -166,6 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules
             foreach (var symbolKind in symbolKinds)
             {
                 var action = GetAnalyzeMethod(symbolKind);
+
                 if (action != null)
                 {
                     context.RegisterSymbolAction(action, symbolKind);

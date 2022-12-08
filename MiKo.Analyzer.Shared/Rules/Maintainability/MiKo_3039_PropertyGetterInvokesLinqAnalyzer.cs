@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> Analyze(AccessorDeclarationSyntax node, SemanticModel semanticModel)
         {
             var property = node.GetEnclosing<PropertyDeclarationSyntax>();
+
             if (property is null)
             {
                 yield break;
@@ -49,12 +50,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var linq in node.LinqExtensionMethods(semanticModel))
             {
                 var name = FindNameSyntax(linq);
+
                 if (name is null)
                 {
                     continue;
                 }
 
                 var linqCall = name.GetName();
+
                 if (linqCall == nameof(Enumerable.Empty))
                 {
                     // Do not report 'Empty' as violation as the field behind never changes

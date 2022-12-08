@@ -55,9 +55,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> Analyze(ExpressionStatementSyntax node)
         {
             var problematicNode = GetIssue(node);
+
             if (problematicNode != null)
             {
                 var root = problematicNode.FirstAncestor<SyntaxNode>(_ => _.IsAnyKind(Ancestors));
+
                 if (root is ExpressionStatementSyntax statement)
                 {
                     yield return Issue(statement.Expression);

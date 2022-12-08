@@ -139,6 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (c.IsLowerCaseLetter())
             {
                 var next = i + Gap;
+
                 if (next < last && comment[i + 1] == '.')
                 {
                     i = next;

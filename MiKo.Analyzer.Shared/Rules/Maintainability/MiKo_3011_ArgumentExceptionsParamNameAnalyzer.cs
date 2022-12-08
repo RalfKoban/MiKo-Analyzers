@@ -54,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var inspector = Mappings[type];
 
             var location = inspector(node.ArgumentList, method, semanticModel);
+
             if (location != Location.None)
             {
                 var parameters = GetParameterNames(node, method);
@@ -169,10 +170,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameters = method.Parameters.Select(_ => AsNameof(_.Name)).HumanizedConcatenated();
 
             var ifStatement = node.GetRelatedIfStatement();
+
             if (ifStatement != null)
             {
                 var identifiers = ifStatement.Condition.DescendantNodes<IdentifierNameSyntax>().ToHashSet(_ => _.GetName());
                 var parameter = method.Parameters.FirstOrDefault(_ => identifiers.Contains(_.Name));
+
                 if (parameter != null)
                 {
                     parameters = AsNameof(parameter.Name).SurroundedWithApostrophe();

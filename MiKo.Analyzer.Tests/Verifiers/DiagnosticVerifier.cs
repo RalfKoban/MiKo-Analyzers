@@ -101,6 +101,7 @@ namespace TestHelper
             foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
             {
                 var results = GetDiagnostics(File.ReadAllText(file));
+
                 if (results.Any())
                 {
                     yield return file;

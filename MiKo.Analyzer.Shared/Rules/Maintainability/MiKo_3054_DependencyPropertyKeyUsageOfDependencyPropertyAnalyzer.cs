@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var dependencyProperties = owingType.GetFields().Where(_ => _.Type.IsDependencyProperty());
             var noneAssigned = dependencyProperties.None(_ => _.GetAssignmentsVia(invocation).Any());
+
             if (noneAssigned)
             {
                 yield return Issue(symbol);

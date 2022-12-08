@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parenthesized = (ParenthesizedLambdaExpressionSyntax)syntax;
 
             var body = GetBody(parenthesized);
+
             if (body is null)
             {
                 // we cannot fix it
@@ -31,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var parameterList = parenthesized.ParameterList;
             var parameters = parameterList.Parameters;
+
             if (parameters.Count == 1)
             {
                 return SyntaxFactory.SimpleLambdaExpression(parameters.First(), body);

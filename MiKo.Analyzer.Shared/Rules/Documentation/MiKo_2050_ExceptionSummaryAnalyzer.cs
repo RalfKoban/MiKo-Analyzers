@@ -100,6 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => _.FormatWith(symbol.ContainingType)).ToArray();
 
             var findings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
+
             if (findings.Any())
             {
                 return findings;

@@ -24,12 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var betterName = symbol.Name.Without("Arbitrary");
             var index = betterName.IndexOf(Phrase, StringComparison.Ordinal);
+
             if (index < 0)
             {
                 return betterName;
             }
 
             var characters = betterName.Without(Phrase);
+
             if (characters.Length > 0)
             {
                 return characters.ToLowerCaseAt(index);

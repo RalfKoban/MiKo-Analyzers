@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
         {
             var method = (IMethodSymbol)symbol;
+
             if (method.ReturnsVoid)
             {
                 return Enumerable.Empty<Diagnostic>();
@@ -68,6 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var comment in CommentExtensions.GetComments(commentXml, xmlTag).Where(_ => _ != null))
             {
                 var findings = AnalyzeReturnType(owningSymbol, returnType, comment, xmlTag);
+
                 if (findings.Any())
                 {
                     if (results is null)

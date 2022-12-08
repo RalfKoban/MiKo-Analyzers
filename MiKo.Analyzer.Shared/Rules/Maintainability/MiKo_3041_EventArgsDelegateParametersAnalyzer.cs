@@ -40,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
         {
             var returnType = symbol.GetReturnType();
+
             if (returnType?.TypeKind == TypeKind.Delegate)
             {
                 yield return Issue(returnType);

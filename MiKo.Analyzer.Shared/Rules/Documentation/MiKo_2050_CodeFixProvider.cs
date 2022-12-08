@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var ctor = syntax.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
+
             if (ctor != null)
             {
                 return FixCtorComment(ctor);
@@ -33,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string Phrase = Constants.Comments.ExceptionTypeSummaryStartingPhrase;
 
             var summary = comment.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
+
             if (summary is null)
             {
                 var newSummary = Comment(SyntaxFactory.XmlSummaryElement(), Phrase).WithTrailingXmlComment();

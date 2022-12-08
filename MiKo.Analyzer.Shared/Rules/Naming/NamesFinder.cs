@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // analyze correct name (must match string literal or nameof)
             var registeredName = GetRegisteredName(symbol, invocation);
+
             if (registeredName.IsNullOrWhiteSpace())
             {
                 if (propertyNames.Contains(symbolName))
@@ -108,6 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var nextC = c.ToLowerCase();
 
                     var nextIndex = index + 1;
+
                     if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()) && isSpecialCharA is false)
                     {
                         // multiple upper cases in a line, so do not flip
@@ -159,6 +161,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string GetRegisteredName(IFieldSymbol symbol, string invocation)
         {
             var arguments = symbol.GetInvocationArgumentsFrom(invocation);
+
             if (arguments.Count > 0)
             {
                 return arguments[0].Expression.GetName();

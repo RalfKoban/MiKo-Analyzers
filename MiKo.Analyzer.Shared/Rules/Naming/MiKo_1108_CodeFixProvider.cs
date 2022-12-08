@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
         {
             var syntax = base.GetSyntax(syntaxNodes);
+
             if (syntax == null)
             {
                 foreach (var syntaxNode in syntaxNodes)

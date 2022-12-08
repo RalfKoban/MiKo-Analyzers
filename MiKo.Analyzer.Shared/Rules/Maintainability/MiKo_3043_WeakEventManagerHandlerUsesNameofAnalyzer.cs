@@ -29,12 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (node.Parent is InvocationExpressionSyntax i)
                     {
                         var typeName = i.GetName();
+
                         if (typeName == "WeakEventManager")
                         {
                             var arguments = i.ArgumentList.Arguments;
+
                             if (arguments.Count >= 2)
                             {
                                 var argument = arguments[1];
+
                                 if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
                                 {
                                     yield return Issue(method.Name, argument);
@@ -53,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = (MemberAccessExpressionSyntax)context.Node;
 
             var methodSymbol = context.GetEnclosingMethod();
+
             if (methodSymbol is null)
             {
                 // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown

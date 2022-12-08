@@ -29,12 +29,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         private void AnalyzeCodeBlock(CodeBlockAnalysisContext context)
         {
             var body = GetBody(context);
-            if (body is null)
-            {
-                return;
-            }
 
-            ReportDiagnostics(context, AnalyzeBody(body, context.OwningSymbol));
+            if (body != null)
+            {
+                ReportDiagnostics(context, AnalyzeBody(body, context.OwningSymbol));
+            }
         }
     }
 }

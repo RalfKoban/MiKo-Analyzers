@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
             var parameterCount = symbol.Parameters.Length;
+
             if (parameterCount > MaxParametersCount)
             {
                 if (symbol.IsExtern is false && symbol.IsInterfaceImplementation() is false)

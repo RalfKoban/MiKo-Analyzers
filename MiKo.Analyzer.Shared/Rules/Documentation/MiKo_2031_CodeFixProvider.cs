@@ -86,6 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (text.StartsWithAny(ContinueTextParts))
                         {
                             var newText = text.Without(ContinueTextParts).Trim();
+
                             if (newText.EndsWith('.') is false)
                             {
                                 newText += " "; // add extra space so that next XML syntax node is placed well

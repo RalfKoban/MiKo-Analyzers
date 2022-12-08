@@ -63,6 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private IEnumerable<Diagnostic> AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
         {
             var documentation = symbol.GetDocumentationCommentTriviaSyntax();
+
             if (documentation != null)
             {
                 var texts = documentation.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Select(_ => _.ValueText);

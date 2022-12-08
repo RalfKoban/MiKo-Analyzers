@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (methodName.Length > 20) // consider only long names
             {
                 var hasIssue = methodName.StartsWith("Given", StringComparison.Ordinal) && methodName.Contains("When", StringComparison.OrdinalIgnoreCase) && methodName.Contains("Then", StringComparison.OrdinalIgnoreCase);
+
                 if (hasIssue)
                 {
                     yield return Issue(symbol);

@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (index > 0)
                 {
                     var previousChild = children[index - 1];
+
                     if (previousChild.IsWhiteSpaceOnlyText())
                     {
                         nodesToRemove.Add(previousChild);

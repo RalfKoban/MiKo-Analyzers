@@ -50,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var descendantNodes = node.DescendantNodes().ToList();
 
             var lambda = descendantNodes.OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault();
+
             if (lambda?.Body is MemberAccessExpressionSyntax property)
             {
                 if (context.CancellationToken.IsCancellationRequested)

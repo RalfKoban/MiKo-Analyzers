@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (parameterType.IsString() || parameterType.IsEnumerable())
                 {
                     var diagnostic = AnalyzeCollectionSuffix(parameter);
+
                     if (diagnostic != null)
                     {
                         yield return diagnostic;

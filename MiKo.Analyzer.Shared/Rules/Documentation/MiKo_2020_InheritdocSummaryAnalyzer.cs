@@ -48,6 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var commentTriviaSyntax = symbol.GetDocumentationCommentTriviaSyntax();
             var xmlTag = commentTriviaSyntax.GetSummaryXmls(Tags).FirstOrDefault();
+
             if (xmlTag is null)
             {
                 return false;
@@ -63,9 +64,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case ITypeSymbol typeSymbol:
                 {
                     var linkedTypeSyntax = xmlTag.GetCref().GetCrefType();
-                    var linkedTypeSymbol = linkedTypeSyntax?.GetSymbol(compilation) as ITypeSymbol;
 
-                    return linkedTypeSymbol != null && typeSymbol.IsRelated(linkedTypeSymbol);
+                    return linkedTypeSyntax?.GetSymbol(compilation) is ITypeSymbol linkedTypeSymbol && typeSymbol.IsRelated(linkedTypeSymbol);
                 }
 
                 default:

@@ -61,6 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private Diagnostic AnalyzeQueryExpression(QueryExpressionSyntax query, SemanticModel semanticModel)
         {
             var foundNode = TryFindInspectionTarget(query, out var syntaxNode, out var identifier);
+
             if (foundNode is false)
             {
                 return null;

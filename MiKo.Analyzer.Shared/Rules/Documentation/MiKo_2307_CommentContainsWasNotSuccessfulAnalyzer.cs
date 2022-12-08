@@ -21,12 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
 
             var index = comment.IndexOf(Phrase.AsSpan(), StringComparison.Ordinal);
+
             if (index < 0)
             {
                 return false;
             }
 
             var indexAfterPhrase = index + Phrase.Length;
+
             if (indexAfterPhrase == comment.Length)
             {
                 // that's the last phrase

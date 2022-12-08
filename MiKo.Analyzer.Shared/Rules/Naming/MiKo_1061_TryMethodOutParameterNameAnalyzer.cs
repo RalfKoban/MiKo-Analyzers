@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (methodName.StartsWith("TryGet", StringComparison.Ordinal))
             {
                 var parameterName = methodName.Substring(6);
+
                 if (parameterName.Length == 0)
                 {
                     return "value";
@@ -55,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var parameterName = FindBetterName(method);
 
             var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
+
             if (outParameter != null && outParameter.Name != parameterName)
             {
                 return Issue(outParameter, parameterName);

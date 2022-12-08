@@ -42,6 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var type = declaration.GetTypeSymbol(semanticModel) as INamedTypeSymbol;
 
             var typeName = type?.Name;
+
             if (typeName is null)
             {
                 return null; // ignore unknown type
@@ -50,6 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
 
             var eventName = identifier.ValueText;
+
             if (eventName == nameof(ICommand.CanExecuteChanged) && typeName == nameof(EventHandler))
             {
                 return null; // ignore event that we cannot change anymore

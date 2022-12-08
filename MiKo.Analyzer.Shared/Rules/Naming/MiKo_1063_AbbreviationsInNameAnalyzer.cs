@@ -168,6 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
 
                 var positionAfterCharacter = index + keyLength;
+
                 if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
                 {
                     if (keyStartsUpperCase)
@@ -176,6 +177,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     }
 
                     var positionBeforeText = index - 1;
+
                     if (positionBeforeText >= 0 && symbolName[positionBeforeText].IsUpperCase())
                     {
                         return true;

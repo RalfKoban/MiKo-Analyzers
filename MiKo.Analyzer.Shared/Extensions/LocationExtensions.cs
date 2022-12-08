@@ -23,12 +23,14 @@ namespace MiKoSolutions.Analyzers
         internal static string GetSurroundingWord(this Location value)
         {
             var tree = value.SourceTree;
+
             if (tree != null)
             {
                 var sourceText = tree.GetText();
                 var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
 
                 var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
+
                 if (lastIndexOfFirstSpace != -1)
                 {
                     var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();

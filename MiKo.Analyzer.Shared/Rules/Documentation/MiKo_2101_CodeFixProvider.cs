@@ -111,6 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // remove last new line token so that we do not have empty lines
                 var last = text.Last();
+
                 if (last.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     text.Remove(last);

@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parenthesized = (ParenthesizedLambdaExpressionSyntax)syntax;
 
             var body = parenthesized.ExpressionBody;
+
             if (body is null)
             {
                 // we cannot fix it

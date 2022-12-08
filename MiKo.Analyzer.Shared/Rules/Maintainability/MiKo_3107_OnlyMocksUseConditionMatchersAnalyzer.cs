@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
+
             if (argumentList is null)
             {
                 return Enumerable.Empty<Diagnostic>();

@@ -85,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var content1 = preparedComment.Content[0];
                 var content2 = preparedComment.Content[1];
+
                 if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.IsWhiteSpaceOnlyText())
                 {
                     return preparedComment.Without(content1, content2);

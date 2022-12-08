@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
 
                     var diff = underlinesNr - upperCasesNr;
+
                     if (diff >= 0)
                     {
                         yield break;

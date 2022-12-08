@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var variableNames = GetVariableNamesUntilHere(switchStatement).ToHashSet();
 
             var usedVariables = switchStatement.Sections.Select(_ => _.Statements.SelectMany(GetAssignmentIdentifierCandidates).ToHashSet()).ToList();
+
             if (usedVariables.Count == 0)
             {
                 // for whatever reason we do not have any variables
@@ -37,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // keep those that are used on multiple cases
             var variableUsages = usedVariables[0];
+
             if (usedVariables.Count > 1)
             {
                 // we have to collect all other variables together as otherwise, an intersect for each single block would ignore (get rid of) the variables in the other blocks

@@ -122,12 +122,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = syntax.ToString();
 
             var falseIndex = comment.IndexOf("false", StringComparison.OrdinalIgnoreCase);
+
             if (falseIndex == -1)
             {
                 return true;
             }
 
             var trueIndex = comment.IndexOf("true", StringComparison.OrdinalIgnoreCase);
+
             if (trueIndex == -1)
             {
                 // cannot fix currently (false case comes as only case)
@@ -156,6 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // handle situation that comment starts with <para>
             var firstNode = contents.FirstOrDefault();
+
             if (firstNode.IsPara())
             {
                 // get rid of first node (and any empty comment if the 1st node was the only one)
@@ -240,6 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var textWithoutTrailingXml = replacement.WithoutTrailingXmlComment().ToString();
                     var untouchedText = replacement.ToString();
+
                     if (textWithoutTrailingXml.Length != untouchedText.Length)
                     {
                         // seems like there was an '///' at the very end of the text, so move trailing text on same line

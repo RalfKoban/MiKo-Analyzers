@@ -73,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
                 if (location != null)
                 {
                     yield return location;
@@ -104,6 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var position in text.AllIndicesOf(value, comparison))
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
                     if (location != null)
                     {
                         yield return location;
@@ -134,6 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
                 if (location != null)
                 {
                     yield return location;
@@ -165,6 +168,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var position in text.AllIndicesOf(value, comparison))
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
                     if (location != null)
                     {
                         yield return location;
@@ -178,12 +182,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var returnType = symbolReturnType.ToString();
 
             var returnTypeFullyQualified = symbolReturnType.FullyQualifiedName();
+
             if (returnTypeFullyQualified.Contains('.') is false)
             {
                 returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
             }
 
             symbolReturnType.TryGetGenericArgumentCount(out var count);
+
             if (count <= 0)
             {
                 return Enumerable.Empty<string>()

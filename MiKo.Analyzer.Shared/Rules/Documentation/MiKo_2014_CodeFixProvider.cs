@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var summary = Comment(SyntaxFactory.XmlSummaryElement(), MiKo_2014_DisposeDefaultPhraseAnalyzer.SummaryPhrase).WithTrailingXmlComment();
 
             var parameters = method.ParameterList.Parameters;
+
             if (parameters.Count == 0)
             {
                 return SyntaxFactory.DocumentationComment(summary.WithEndOfLine());

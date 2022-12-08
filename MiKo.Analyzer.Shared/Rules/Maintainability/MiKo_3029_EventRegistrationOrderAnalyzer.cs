@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> AnalyzeAssignments(SyntaxNode node)
         {
             var assignments = node.DescendantNodes<AssignmentExpressionSyntax>().ToList();
+
             if (assignments.Count > 0)
             {
                 var addAssignments = assignments.Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression)).ToList();
@@ -95,6 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                                 // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
                                 var handler = subtractAssignmentsForInvestigation.FirstOrDefault(_ => _.Right is IdentifierNameSyntax removedHandler && removedHandler.GetName() == addedIdentifier);
+
                                 if (handler is null)
                                 {
                                     // we found an add but no remove, so that's an issue

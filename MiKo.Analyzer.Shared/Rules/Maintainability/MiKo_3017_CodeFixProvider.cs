@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var problematicNode = MiKo_3017_DoNotSwallowExceptionAnalyzer.FindProblematicSyntaxNode(o, GetSemanticModel(context));
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
+
             if (replacements.Any())
             {
                 return root.ReplaceNodes(replacements.Keys, (original, rewritten) => replacements[original]);
@@ -47,9 +48,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var newArgumentList = ArgumentList(errorMessage, Argument(Constants.ExceptionIdentifier));
 
                 var declaration = catchClause.Declaration;
+
                 if (declaration != null)
                 {
                     var identifier = declaration.Identifier.ValueText;
+
                     if (identifier.IsNullOrWhiteSpace())
                     {
                         // seems like a missing exception identifier, so we have to add the missing ones

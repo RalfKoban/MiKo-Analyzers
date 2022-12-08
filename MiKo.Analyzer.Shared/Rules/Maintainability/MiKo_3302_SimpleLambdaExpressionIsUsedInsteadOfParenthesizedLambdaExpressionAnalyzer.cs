@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // simplification works only if it is a single parameter that has no type information
                 var parameterList = node.ParameterList;
                 var parameters = parameterList.Parameters;
+
                 if (parameters.Count == 1 && parameters.First().Type is null)
                 {
                     ReportDiagnostics(context, Issue(parameterList));

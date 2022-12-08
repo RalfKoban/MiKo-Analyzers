@@ -61,6 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var fixedComment = CommentStartingWith(preparedComment, Constants.Comments.EventSummaryStartingPhrase);
 
             var text = fixedComment.Content[0].WithoutXmlCommentExterior();
+
             if (text.StartsWith(SpecialTerm, StringComparison.Ordinal))
             {
                 return Comment(fixedComment, SpecialTerms, SpecialTermReplacementMap);

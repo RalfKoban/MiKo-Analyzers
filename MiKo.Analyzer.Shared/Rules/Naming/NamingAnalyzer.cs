@@ -141,6 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (LocalDeclarationStatementSyntax)context.Node;
+
             if (node.IsConst)
             {
                 return;
@@ -228,6 +229,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
             var localFunctions = symbol.GetLocalFunctions().ToList();
+
             if (localFunctions.Count == 0)
             {
                 return Enumerable.Empty<Diagnostic>();

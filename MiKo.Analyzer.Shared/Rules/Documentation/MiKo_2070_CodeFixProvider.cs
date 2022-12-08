@@ -38,12 +38,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = syntax.ToString();
 
             var falseIndex = comment.IndexOf("false", StringComparison.OrdinalIgnoreCase);
+
             if (falseIndex == -1)
             {
                 return true;
             }
 
             var trueIndex = comment.IndexOf("true", StringComparison.OrdinalIgnoreCase);
+
             if (trueIndex == -1)
             {
                 // cannot fix currently (false case comes as only case)
@@ -99,6 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             SyntaxList<XmlNodeSyntax> contents;
             contents = summary.Content;
+
             if (contents.Count > 1)
             {
                 // we might have some '<see langword="xyz"/>' in the summary
@@ -172,12 +175,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var token in sentenceEnding.TextTokens)
                 {
                     var valueText = token.WithoutTrivia().ValueText;
+
                     if (valueText.IsNullOrWhiteSpace())
                     {
                         continue;
                     }
 
                     var newText = new StringBuilder(valueText).Without("otherwise").Without("false").Replace("; , .", ".");
+
                     if (valueText.Length > newText.Length)
                     {
                         foreach (var marker in Constants.TrailingSentenceMarkers)
@@ -223,6 +228,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var startText = isBool ? "Gets a value indicating whether" : "Gets";
+
             if (isAsync)
             {
                 return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);
@@ -243,6 +249,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var startText = isBool ? Constants.Comments.DeterminesWhetherPhrase : "Gets";
+
             if (isAsync)
             {
                 return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);

@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var assertions = GetAllAssertions(symbol.GetSyntax());
+
             if (assertions.Count > 1)
             {
                 foreach (var assertion in assertions.Where(_ => HasMessageParameter(_, compilation) is false))
@@ -64,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var expectedParameterIndex = expectedParameterIndices[0];
 
                 var index = count - 1;
+
                 if (expectedParameterIndex == index)
                 {
                     // we have a message
@@ -90,6 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 var argument = arguments[expectedParameterIndex];
+
                 if (argument.IsStringLiteral())
                 {
                     return true;

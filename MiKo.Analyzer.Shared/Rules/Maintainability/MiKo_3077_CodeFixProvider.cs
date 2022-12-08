@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // fix auto getter and setter
             var accessors = propertySyntax.AccessorList?.Accessors;
+
             if (accessors?.Count == 2 && accessors.Value[0].Body is null && accessors.Value[0].ExpressionBody is null && accessors.Value[1].Body is null && accessors.Value[1].ExpressionBody is null)
             {
                 // append a semicolon to the end
@@ -37,9 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // fix backing fields (such as arrow clause or normal return statements)
             var identifierName = MiKo_3077_EnumPropertyHasDefaultValueAnalyzer.GetIdentifierNameFromPropertyExpression(propertySyntax);
+
             if (identifierName != null)
             {
                 var classDeclarationSyntax = syntax.FirstAncestorOrSelf<ClassDeclarationSyntax>();
+
                 if (classDeclarationSyntax != null)
                 {
                     foreach (var field in classDeclarationSyntax.DescendantNodes<FieldDeclarationSyntax>())

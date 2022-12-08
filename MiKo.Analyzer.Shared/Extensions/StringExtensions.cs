@@ -143,12 +143,14 @@ namespace System
                 index += newIndex;
 
                 var positionAfterCharacter = index + findingLength;
+
                 if (positionAfterCharacter >= valueLength)
                 {
                     return true;
                 }
 
                 var nextChar = value[positionAfterCharacter];
+
                 if (nextCharValidationCallback(nextChar))
                 {
                     return true;
@@ -314,6 +316,7 @@ namespace System
             var text = value.TrimStart();
 
             var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+
             if (firstSpace != -1)
             {
                 // we found a whitespace
@@ -384,6 +387,7 @@ namespace System
         {
             var genericIndexStart = fullName.IndexOf('<');
             var genericIndexEnd = fullName.LastIndexOf('>');
+
             if (genericIndexStart > 0 && genericIndexEnd > 0)
             {
                 var namePart = fullName.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
@@ -427,6 +431,7 @@ namespace System
         public static bool HasEntityMarker(this string symbolName)
         {
             var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
+
             if (hasMarker)
             {
                 if (symbolName.ContainsAny(Constants.Markers.ViewModels))
@@ -801,6 +806,7 @@ namespace System
             var text = value.TrimStart();
 
             var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
+
             if (firstSpace < 0)
             {
                 // might happen if the text contains a <see> or some other XML element as second word; therefore we only return a space

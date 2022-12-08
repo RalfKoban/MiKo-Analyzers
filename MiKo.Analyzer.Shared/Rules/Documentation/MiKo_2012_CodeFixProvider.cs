@@ -71,6 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var content = comment.Content;
 
             var inheritdoc = GetUpdatedSyntaxWithInheritdoc(content);
+
             if (inheritdoc != null)
             {
                 return inheritdoc;
@@ -94,6 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (text.StartsWithAny(Constants.Comments.FieldStartingPhrase, StringComparison.Ordinal))
                 {
                     var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
+
                     if (property != null)
                     {
                         var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
@@ -111,6 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlEmptyElementSyntax GetUpdatedSyntaxWithInheritdoc(SyntaxList<XmlNodeSyntax> content)
         {
             var inheritdoc = content.OfType<XmlEmptyElementSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Inheritdoc);
+
             if (inheritdoc != null)
             {
                 // special case: its an inherit documentation, so mark it so

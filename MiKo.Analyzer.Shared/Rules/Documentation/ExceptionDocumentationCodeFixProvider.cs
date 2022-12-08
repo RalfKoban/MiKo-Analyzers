@@ -86,6 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentException(XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
+
             if (parameters.Length == 0)
             {
                 return exceptionComment;
@@ -95,6 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
             var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTrivia().ContainsAny(parametersAsTextReferences)).ToList();
+
             if (textNodes.Any())
             {
                 // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between

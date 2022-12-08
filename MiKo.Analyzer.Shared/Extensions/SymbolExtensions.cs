@@ -115,6 +115,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<MemberAccessExpressionSyntax> GetAssignmentsVia(this IFieldSymbol value, string invocation)
         {
             var field = value.GetSyntax<FieldDeclarationSyntax>();
+
             if (field is null)
             {
                 return Enumerable.Empty<MemberAccessExpressionSyntax>();
@@ -184,6 +185,8 @@ namespace MiKoSolutions.Analyzers
                 case 3: return "T1,T2,T3";
                 case 4: return "T1,T2,T3,T4";
                 case 5: return "T1,T2,T3,T4,T5";
+                case 6: return "T1,T2,T3,T4,T5,T6";
+                case 7: return "T1,T2,T3,T4,T5,T6,T7";
                 default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
             }
         }
@@ -246,6 +249,7 @@ namespace MiKoSolutions.Analyzers
                 case IFieldSymbol field:
                 {
                     var fieldNode = GetSyntax<FieldDeclarationSyntax>(field);
+
                     if (fieldNode != null)
                     {
                         return fieldNode;
@@ -258,6 +262,7 @@ namespace MiKoSolutions.Analyzers
                 case IEventSymbol @event:
                 {
                     var eventField = GetSyntax<EventFieldDeclarationSyntax>(@event);
+
                     if (eventField != null)
                     {
                         return eventField;
@@ -412,6 +417,7 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var baseType = symbol.BaseType;
+
                 if (baseType is null)
                 {
                     break;
@@ -428,11 +434,20 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
         {
             var types = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
-            types.Enqueue(value);
 
-            CollectAllNestedTypes(value, types);
+            CollectAllNestedTypes(value);
 
             return types;
+
+            void CollectAllNestedTypes(ITypeSymbol symbol)
+            {
+                types.Enqueue(symbol);
+
+                foreach (var nestedType in symbol.GetTypeMembers())
+                {
+                    CollectAllNestedTypes(nestedType);
+                }
+            }
         }
 
         // ReSharper disable once AssignNullToNotNullAttribute
@@ -470,13 +485,13 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            var symbol = value;
-
-            switch (symbol.TypeKind)
+            switch (value.TypeKind)
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                     {
+                        var symbol = value;
+
                         while (true)
                         {
                             var fullName = string.Intern(symbol.ToString());
@@ -487,6 +502,7 @@ namespace MiKoSolutions.Analyzers
                             }
 
                             var baseType = symbol.BaseType;
+
                             if (baseType is null)
                             {
                                 return false;
@@ -527,13 +543,13 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            var symbol = value;
-
-            switch (symbol.TypeKind)
+            switch (value.TypeKind)
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                     {
+                        var symbol = value;
+
                         while (true)
                         {
                             var fullName = string.Intern(symbol.ToString());
@@ -549,6 +565,7 @@ namespace MiKoSolutions.Analyzers
                             }
 
                             var baseType = symbol.BaseType;
+
                             if (baseType is null)
                             {
                                 return false;
@@ -735,8 +752,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
-                                                                  && value.SpecialType == SpecialType.None
-                                                                  && value.InheritsFrom<EventArgs>();
+                                                                 && value.SpecialType == SpecialType.None
+                                                                 && value.InheritsFrom<EventArgs>();
 
         internal static bool IsEventHandler(this IMethodSymbol value)
         {
@@ -911,6 +928,7 @@ namespace MiKoSolutions.Analyzers
             var interfaceTypeName = string.Intern(typeof(T).FullName);
 
             var typeSymbol = value.ContainingType;
+
             if (typeSymbol.Implements(interfaceTypeName))
             {
                 var methodName = value.Name;
@@ -963,7 +981,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsRoutedEvent(this ITypeSymbol value) => value.Name == "RoutedEvent" || value.Name == "System.Windows.RoutedEvent";
+        internal static bool IsRoutedEvent(this ITypeSymbol value)
+        {
+            switch (value.Name)
+            {
+                case "RoutedEvent":
+                case "System.Windows.RoutedEvent":
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
 
         internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
 
@@ -1028,8 +1057,6 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool MatchesField(this IParameterSymbol value)
         {
-            var parameterName = value.Name;
-
             IEnumerable<string> fieldNames = null;
 
             foreach (var field in value.ContainingType.GetMembersIncludingInherited<IFieldSymbol>())
@@ -1037,11 +1064,14 @@ namespace MiKoSolutions.Analyzers
                 if (fieldNames is null)
                 {
                     // performance optimization as it is likely that there is more than a single field(s)
+                    var parameterName = value.Name;
+
                     fieldNames = Constants.Markers.FieldPrefixes.Select(__ => __ + parameterName).ToList();
                 }
 
                 var fieldName = field.Name;
-                if (fieldNames.Any(__ => string.Equals(fieldName, __, StringComparison.OrdinalIgnoreCase)))
+
+                if (fieldNames.Any(__ => string.Equals(__, fieldName, StringComparison.OrdinalIgnoreCase)))
                 {
                     return true;
                 }
@@ -1088,6 +1118,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool TryGetGenericArgumentCount(this ITypeSymbol value, out int result)
         {
             result = 0;
+
             if (value is INamedTypeSymbol namedType)
             {
                 result = namedType.TypeArguments.Length;
@@ -1108,16 +1139,6 @@ namespace MiKoSolutions.Analyzers
             return result != null;
         }
 
-        private static void CollectAllNestedTypes(this ITypeSymbol value, Queue<ITypeSymbol> types)
-        {
-            types.Enqueue(value);
-
-            foreach (var nestedType in value.GetTypeMembers())
-            {
-                CollectAllNestedTypes(nestedType, types);
-            }
-        }
-
         private static string GetMethodNameForKind(IMethodSymbol method)
         {
             switch (method.MethodKind)
@@ -1130,11 +1151,14 @@ namespace MiKoSolutions.Analyzers
                     {
                         var returnType = method.ReturnType.MinimalTypeName();
 
-                        var suffix = method.IsGenericMethod
-                                     ? string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">")
-                                     : string.Empty;
+                        if (method.IsGenericMethod)
+                        {
+                            var suffix = string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">");
 
-                        return string.Concat(returnType, " ", method.Name, suffix);
+                            return string.Concat(returnType, " ", method.Name, suffix);
+                        }
+
+                        return string.Concat(returnType, " ", method.Name);
                     }
             }
         }

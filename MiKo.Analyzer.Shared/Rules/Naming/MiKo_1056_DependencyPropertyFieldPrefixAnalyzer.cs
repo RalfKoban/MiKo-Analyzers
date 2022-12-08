@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             // ignore attached properties
             var attachedProperties = symbol.GetAssignmentsVia(Constants.DependencyProperty.RegisterAttached).Any();
+
             if (attachedProperties)
             {
                 return false;
@@ -59,6 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var propertyNames = FindPropertyNames(symbol);
+
             if (propertyNames.Any())
             {
                 yield return Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated());

@@ -97,6 +97,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 return false;
             }
 
+            if (line.Equals("do", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
             if (line.Equals("else", StringComparison.Ordinal))
             {
                 return true;
@@ -180,6 +185,7 @@ var type = semanticModel.GetTypeInfo(node).Type;
 var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
                     */
                     var type = semanticModel.Compilation.GetTypeByMetadataName(firstWord);
+
                     if (type != null)
                     {
                         return true;

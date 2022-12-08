@@ -49,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string FindProperNameSuffix(IMethodSymbol method)
         {
             var name = FindProperNameInClass(method);
+
             if (name is null)
             {
                 name = method.Name.StartsWith(Prefix, StringComparison.Ordinal)
@@ -64,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var methodName = method.Name;
 
             var owningClass = method.GetSyntax().GetEnclosing<ClassDeclarationSyntax>();
+
             if (owningClass is null)
             {
                 // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket)
@@ -73,6 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var assignment in owningClass.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.AddAssignmentExpression))
             {
                 var rightIdentifier = (assignment.Right as IdentifierNameSyntax).GetName();
+
                 if (rightIdentifier == methodName)
                 {
                     switch (assignment.Left)

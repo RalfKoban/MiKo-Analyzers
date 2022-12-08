@@ -27,12 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var propertyName = symbolName.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
 
                 var containingType = symbol.ContainingType;
+
                 if (containingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => _.Name == propertyName))
                 {
                     var containingTypeFullName = containingType.ToString();
 
                     // loop over phrases for summaries and values
                     var summaries = CommentExtensions.GetSummaries(commentXml);
+
                     if (summaries.Any())
                     {
                         var summaryPhrases = Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName);
@@ -47,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     var values = CommentExtensions.GetValue(commentXml);
+
                     if (values.Any())
                     {
                         var valuePhrases = Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName);

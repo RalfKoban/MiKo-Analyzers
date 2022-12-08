@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(disposeMethod);
 
             var syntaxNode = FindLastCtorOrFinalizer(modifiedType);
+
             if (syntaxNode is null)
             {
                 // none found, so insert method before first method

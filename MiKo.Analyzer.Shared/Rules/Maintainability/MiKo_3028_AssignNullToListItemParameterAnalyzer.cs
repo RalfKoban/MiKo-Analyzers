@@ -32,11 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node.Right?.IsKind(SyntaxKind.NullLiteralExpression) is true)
             {
                 var method = node.GetEnclosingMethod(semanticModel);
+
                 if (method?.Parameters.Length > 0)
                 {
                     var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).ToHashSet(_ => _.Name);
 
                     var name = node.Left.ToCleanedUpString();
+
                     if (names.Contains(name))
                     {
                         // TODO RKN: Check for ForEach

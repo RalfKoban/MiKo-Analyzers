@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 foreach (var member in symbol.GetFields())
                 {
                     var diagnostic = AnalyzeName(member);
+
                     if (diagnostic != null)
                     {
                         yield return diagnostic;
@@ -33,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             else
             {
                 var diagnostic = AnalyzeName(symbol);
+
                 if (diagnostic != null)
                 {
                     yield return diagnostic;

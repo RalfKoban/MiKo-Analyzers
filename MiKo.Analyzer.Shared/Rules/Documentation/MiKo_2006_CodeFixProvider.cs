@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var fieldDeclaration = syntax.FirstAncestorOrSelf<FieldDeclarationSyntax>();
+
             if (fieldDeclaration is null)
             {
                 return syntax;
@@ -33,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var type = SyntaxFactory.ParseName(name);
 
             var readOnlyMarker = string.Empty;
+
             if (fieldDeclaration.Modifiers.Any(_ => _.IsKind(SyntaxKind.ReadOnlyKeyword)))
             {
                 readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;

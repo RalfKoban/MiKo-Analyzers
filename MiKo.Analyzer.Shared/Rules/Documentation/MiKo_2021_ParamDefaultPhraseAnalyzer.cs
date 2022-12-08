@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var parameterType = parameter.Type;
+
             if (parameterType.IsEnum())
             {
                 return false; // MiKo 2023

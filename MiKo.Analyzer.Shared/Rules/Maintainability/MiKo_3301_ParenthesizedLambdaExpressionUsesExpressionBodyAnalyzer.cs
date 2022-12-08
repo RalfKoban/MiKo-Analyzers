@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeParenthesizedLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (ParenthesizedLambdaExpressionSyntax)context.Node;
+
             if (node.ExpressionBody != null)
             {
                 // it's already an expression body, so no need to report

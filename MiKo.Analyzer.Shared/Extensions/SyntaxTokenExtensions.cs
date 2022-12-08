@@ -50,9 +50,11 @@ namespace MiKoSolutions.Analyzers
 
             // try to find the node as that may be faster than to look them up
             var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
+
             if (symbol is null)
             {
                 var symbols = semanticModel.LookupSymbols(position, name: name);
+
                 if (symbols.Length > 0)
                 {
                     return symbols[0];

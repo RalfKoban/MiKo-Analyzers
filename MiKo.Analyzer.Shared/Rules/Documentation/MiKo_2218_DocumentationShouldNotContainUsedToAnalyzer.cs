@@ -74,13 +74,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // special situation for <param> texts
                 var belowParam = node.Ancestors<XmlElementSyntax>().Any(_ => _.GetName() == Constants.XmlTag.Param);
+
                 if (belowParam)
                 {
                     // let's find out if we have the first sentence
                     var canIndex = result.IndexOf(CanPhrase, StringComparison.Ordinal);
+
                     if (canIndex != -1)
                     {
                         var firstSentence = textSoFar.LastIndexOf('.') == -1 && canIndex < result.IndexOf('.');
+
                         if (firstSentence)
                         {
                             // we seem to be in the first sentence
@@ -194,6 +197,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var finalLocation = CreateLocation(token, start, end);
 
                 var replacement = replacementCallback(nextWord);
+
                 if (makeUpper)
                 {
                     replacement = replacement.ToUpperCaseAt(0);

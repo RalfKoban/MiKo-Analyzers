@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             for (; i < methodName.Length; i++)
             {
                 var character = methodName[i];
+
                 if (character.IsUpperCase())
                 {
                     break;

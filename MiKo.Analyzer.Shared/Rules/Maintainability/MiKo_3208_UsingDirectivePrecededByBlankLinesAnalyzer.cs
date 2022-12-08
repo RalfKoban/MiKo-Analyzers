@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var otherUsings = node.Siblings<UsingDirectiveSyntax>();
 
             var nodeIndex = otherUsings.IndexOf(node);
+
             if (nodeIndex > 0)
             {
                 var previous = otherUsings[nodeIndex - 1];

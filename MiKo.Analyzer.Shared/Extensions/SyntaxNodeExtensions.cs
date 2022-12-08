@@ -48,6 +48,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool EnclosingMethodHasParameter(this SyntaxNode value, string parameterName, SemanticModel semanticModel)
         {
             var method = value.GetEnclosingMethod(semanticModel);
+
             if (method is null)
             {
                 return false;
@@ -81,10 +82,12 @@ namespace MiKoSolutions.Analyzers
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
             var ifStatement = value.FirstAncestorOrSelf<IfStatementSyntax>();
+
             if (ifStatement is null)
             {
                 // maybe part of a block outside the if statement
                 var block = value.FirstAncestorOrSelf<BlockSyntax>();
+
                 if (block != null)
                 {
                     // try to find the corresponding if statement
@@ -98,6 +101,7 @@ namespace MiKoSolutions.Analyzers
         internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode syntax)
         {
             var coalesceExpression = syntax.FirstAncestorOrSelf<BinaryExpressionSyntax>(_ => _.IsKind(SyntaxKind.CoalesceExpression));
+
             if (coalesceExpression != null)
             {
                 return coalesceExpression;
@@ -112,6 +116,7 @@ namespace MiKoSolutions.Analyzers
         internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax syntax)
         {
             var parameters = CollectParameters(syntax);
+
             if (parameters.Any())
             {
                 // there might be multiple parameters, so we have to find out which parameter is meant
@@ -254,6 +259,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         // nameof
                         var arguments = value.ArgumentList.Arguments;
+
                         if (arguments.Count > 0)
                         {
                             return arguments[0].ToString();
@@ -446,6 +452,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var commentOnNode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+
             if (commentOnNode != null)
             {
                 return commentOnNode;
@@ -457,6 +464,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         // inspect for attributes
                         var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
@@ -468,6 +476,7 @@ namespace MiKoSolutions.Analyzers
                 case BaseMethodDeclarationSyntax method:
                     {
                         var attributeListSyntax = method.AttributeLists.FirstOrDefault();
+
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
@@ -484,6 +493,7 @@ namespace MiKoSolutions.Analyzers
                 case BasePropertyDeclarationSyntax property:
                     {
                         var attributeListSyntax = property.AttributeLists.FirstOrDefault();
+
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
@@ -805,6 +815,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
                 var isExpression = convertedType?.InheritsFrom<Expression>() is true;
+
                 if (isExpression)
                 {
                     return true;
@@ -819,6 +830,7 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var ifStatement = value.GetEnclosingIfStatement();
+
                 if (ifStatement != null)
                 {
                     if (ifStatement.IsCallTo(methodName))
@@ -833,6 +845,7 @@ namespace MiKoSolutions.Analyzers
 
                 // maybe an else block
                 var elseStatement = value.GetEnclosingElseStatement();
+
                 if (elseStatement != null)
                 {
                     value = elseStatement.Parent;
@@ -1092,6 +1105,7 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var oldNode = result.GetAnnotatedNodes(annotation).OfType<TNode>().FirstOrDefault();
+
                 if (oldNode is null)
                 {
                     // nothing left
@@ -1114,6 +1128,7 @@ namespace MiKoSolutions.Analyzers
             for (var index = 0; index < result.Count; index++)
             {
                 var value = result[index];
+
                 if (value is XmlTextSyntax text)
                 {
                     result[index] = text.ReplaceText(phrase, replacement);
@@ -1129,6 +1144,7 @@ namespace MiKoSolutions.Analyzers
             for (var index = 0; index < result.Count; index++)
             {
                 var value = result[index];
+
                 if (value is XmlTextSyntax text)
                 {
                     result[index] = text.ReplaceText(phrases, replacement);
@@ -1333,6 +1349,7 @@ namespace MiKoSolutions.Analyzers
         internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
         {
             var tokens = value.TextTokens;
+
             if (tokens.Count >= 2)
             {
                 var newTokens = tokens.WithoutFirstXmlNewLine();
@@ -1373,6 +1390,7 @@ namespace MiKoSolutions.Analyzers
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
                             var modifiedText = new StringBuilder(token.Text).Without(text).Replace("  ", " ").ToString();
+
                             if (modifiedText.IsNullOrWhiteSpace())
                             {
                                 textTokens.Remove(token);
@@ -1687,6 +1705,7 @@ namespace MiKoSolutions.Analyzers
             foreach (var usingDirective in usings)
             {
                 var usingName = usingDirective.Name.ToFullString();
+
                 if (usingName == "System")
                 {
                     // skip 'System' namespace
@@ -1725,12 +1744,14 @@ namespace MiKoSolutions.Analyzers
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
             var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
+
             if (method != null)
             {
                 return method.ParameterList.Parameters;
             }
 
             var indexer = syntax.GetEnclosing<IndexerDeclarationSyntax>();
+
             if (indexer != null)
             {
                 var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
@@ -1742,6 +1763,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var property = syntax.GetEnclosing<PropertyDeclarationSyntax>();
+
             if (property != null)
             {
                 // 'value' is a special parameter that is not part of the parameter list
@@ -1758,6 +1780,7 @@ namespace MiKoSolutions.Analyzers
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
         {
             var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.ElseClause);
+
             if (enclosingNode is BlockSyntax)
             {
                 enclosingNode = enclosingNode.Parent;
@@ -1779,6 +1802,7 @@ namespace MiKoSolutions.Analyzers
             //                      xyz();
             // ...
             var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.IfStatement);
+
             if (enclosingNode is BlockSyntax)
             {
                 enclosingNode = enclosingNode.Parent;
@@ -1839,6 +1863,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var binaryExpression = ifStatement.FirstChild<BinaryExpressionSyntax>();
+
             if (binaryExpression.IsBinaryCallTo(methodName))
             {
                 return true;
