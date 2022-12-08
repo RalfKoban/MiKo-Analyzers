@@ -130,8 +130,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                         @"class TestMe { void DoSomething() { try { } catch (System.Exception e) { System.Diagnostics.Trace.Write(e.Message); } } }",
-                         @"class TestMe { void DoSomething() { try { } catch (System.Exception ex) { System.Diagnostics.Trace.Write(ex.Message); } } }");
+                         "class TestMe { void DoSomething() { try { } catch (System.Exception e) { System.Diagnostics.Trace.Write(e.Message); } } }",
+                         "class TestMe { void DoSomething() { try { } catch (System.Exception ex) { System.Diagnostics.Trace.Write(ex.Message); } } }");
 
         protected override string GetDiagnosticId() => MiKo_1200_ExceptionCatchBlockAnalyzer.Id;
 

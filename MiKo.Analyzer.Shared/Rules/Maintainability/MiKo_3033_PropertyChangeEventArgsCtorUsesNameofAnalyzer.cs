@@ -33,18 +33,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
+
             if (argumentList is null)
             {
                 yield break;
             }
 
             var arguments = argumentList.Arguments;
+
             if (arguments.Count != 1)
             {
                 yield break;
             }
 
             var argument = arguments[0];
+
             if (HasIssue(node, argument.Expression, semanticModel))
             {
                 yield return Issue(node.Type.ToString(), argument);
@@ -71,6 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // it might happen that the code is currently being written so there might not yet exist a specific property name
             var a = arguments.Select(_ => _.Expression).OfType<IdentifierNameSyntax>().FirstOrDefault();
             var propertyName = a.GetName();
+
             if (propertyName is null)
             {
                 return false;
@@ -78,6 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var symbol = node.GetEnclosingSymbol(semanticModel);
             var containingType = symbol?.ContainingType;
+
             if (containingType is null)
             {
                 return false;
@@ -85,6 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // verify that nameof uses a property if the type
             var propertySymbols = containingType.GetMembersIncludingInherited<IPropertySymbol>();
+
             if (propertySymbols.Any(_ => _.Name == propertyName))
             {
                 return false;

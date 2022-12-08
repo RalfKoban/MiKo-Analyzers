@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var method = symbol.GetEnclosingMethod();
             var parameters = method.Parameters;
+
             if (parameters.Length != 2)
             {
                 return "value";

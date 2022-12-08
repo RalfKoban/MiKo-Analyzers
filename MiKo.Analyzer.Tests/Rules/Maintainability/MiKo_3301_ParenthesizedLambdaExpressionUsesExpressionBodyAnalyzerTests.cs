@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_returns_a_value() => No_issue_is_reported_for(@"
@@ -454,10 +454,10 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3210_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3210_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3301_CodeFixProvider();
     }
 }

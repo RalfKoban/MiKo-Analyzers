@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyze(IPropertySymbol symbol)
         {
             var returnType = symbol.GetReturnType();
+
             if (returnType is null)
             {
                 return false;

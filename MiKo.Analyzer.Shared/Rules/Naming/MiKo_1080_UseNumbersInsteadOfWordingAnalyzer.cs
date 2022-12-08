@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -152,9 +153,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleKnownParts(string name)
         {
-            var finalName = KnownParts.Aggregate(name, (current, part) => current.Replace(part, "#"));
+            var finalName = new StringBuilder(name);
 
-            return finalName;
+            foreach (var part in KnownParts)
+            {
+                finalName.Replace(part, "#");
+            }
+
+            return finalName.ToString();
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)

@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException(); // do not call base.ShallAnalyze() here to avoid that we don't inspect the methods of the type
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException(); // do not call base.ShallAnalyze() here to avoid that we do not inspect the methods of the type
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
@@ -100,6 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var defaultPhrases = Constants.Comments.ExceptionCtorSummaryStartingPhrase.Select(_ => _.FormatWith(symbol.ContainingType)).ToArray();
 
             var findings = AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases);
+
             if (findings.Any())
             {
                 return findings;

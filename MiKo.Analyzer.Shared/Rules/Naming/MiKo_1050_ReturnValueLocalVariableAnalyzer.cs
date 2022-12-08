@@ -67,6 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 else
                 {
                     var nextCharacter = identifier[wrongName.Length];
+
                     if (nextCharacter.IsLowerCaseLetter())
                     {
                         continue;
@@ -89,6 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var name = identifier.ValueText;
 
                 var isWrong = ContainsWrongName(name, WrongNames);
+
                 if (isWrong)
                 {
                     var symbol = identifier.GetSymbol(semanticModel);

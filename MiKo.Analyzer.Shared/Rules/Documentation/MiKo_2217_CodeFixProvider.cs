@@ -93,6 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // it's either a <term> or a <description>, so first sub item should be a term, second a description
                     var nodes = node.ChildNodes<XmlElementSyntax>().ToList();
+
                     if (nodes.Count == 2)
                     {
                         return syntax.ReplaceNodes(nodes, (original, rewritten) =>

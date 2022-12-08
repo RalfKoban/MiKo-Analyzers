@@ -24,17 +24,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var betterName = symbol.Name.Without("Arbitrary");
             var index = betterName.IndexOf(Phrase, StringComparison.Ordinal);
+
             if (index < 0)
             {
                 return betterName;
             }
 
-            var characters = betterName.Without(Phrase).ToCharArray();
-            if (characters.Length != 0)
-            {
-                characters[index] = characters[index].ToLowerCase();
+            var characters = betterName.Without(Phrase);
 
-                return string.Intern(new string(characters));
+            if (characters.Length > 0)
+            {
+                return characters.ToLowerCaseAt(index);
             }
 
             // we cannot find a better name

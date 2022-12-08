@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -23,27 +24,32 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static string FindBetterName(IMethodSymbol symbol)
         {
             var methodName = symbol.Name;
-            var escapedMethod = methodName;
+            var escapedMethod = new StringBuilder(methodName);
 
             var found = ContainsPhrase(methodName);
+
             if (found)
             {
                 // special case "Does"
                 if (ContainsPhrase(methodName, DoesPhrase))
                 {
-                    escapedMethod = EscapeValidPhrases(methodName.Without(DoesPhrase));
+                    EscapeValidPhrases(escapedMethod.Without(DoesPhrase));
+
                     found = symbol.IsTestMethod() is false; // ignore tests
                 }
                 else
                 {
-                    escapedMethod = EscapeValidPhrases(methodName);
-                    found = ContainsPhrase(escapedMethod);
+                    EscapeValidPhrases(escapedMethod);
+
+                    found = ContainsPhrase(escapedMethod.ToString());
                 }
             }
 
             if (found)
             {
-                var proposal = UnescapeValidPhrases(escapedMethod.Without(DoPhrase));
+                UnescapeValidPhrases(escapedMethod.Without(DoPhrase));
+
+                var proposal = escapedMethod.ToString();
                 switch (proposal)
                 {
                     case "": // special case 'Do'
@@ -63,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsTestMethod() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod()
-                                                                                                                               ? Enumerable.Empty<Diagnostic>() // don't consider local functions inside tests
+                                                                                                                               ? Enumerable.Empty<Diagnostic>() // do not consider local functions inside tests
                                                                                                                                : base.AnalyzeLocalFunctions(symbol, compilation);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -78,22 +84,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool ContainsPhrase(string methodName, string phrase = DoPhrase) => methodName.Contains(phrase, StringComparison.Ordinal);
 
-        private static string EscapeValidPhrases(string methodName)
+        private static void EscapeValidPhrases(StringBuilder methodName)
         {
-            var escapedMethod = methodName
-                                .Replace("Doc", EscapedPhrase + "c")
-                                .Replace("Dog", EscapedPhrase + "g")
-                                .Replace("Dot", EscapedPhrase + "t")
-                                .Replace("Done", EscapedPhrase + "ne")
-                                .Replace("DoEvents", EscapedPhrase + "Events")
-                                .Replace("Domain", EscapedPhrase + "main")
-                                .Replace("Double", EscapedPhrase + "uble")
-                                .Replace("Doubt", EscapedPhrase + "ubt")
-                                .Replace("Down", EscapedPhrase + "wn");
-
-            return escapedMethod;
+            methodName.Replace("Doc", EscapedPhrase + "c")
+                      .Replace("Dog", EscapedPhrase + "g")
+                      .Replace("Dot", EscapedPhrase + "t")
+                      .Replace("Done", EscapedPhrase + "ne")
+                      .Replace("DoEvents", EscapedPhrase + "Events")
+                      .Replace("Domain", EscapedPhrase + "main")
+                      .Replace("Double", EscapedPhrase + "uble")
+                      .Replace("Doubt", EscapedPhrase + "ubt")
+                      .Replace("Down", EscapedPhrase + "wn");
         }
 
-        private static string UnescapeValidPhrases(string methodName) => methodName.Replace(EscapedPhrase, DoPhrase);
+        private static void UnescapeValidPhrases(StringBuilder methodName) => methodName.Replace(EscapedPhrase, DoPhrase);
     }
 }

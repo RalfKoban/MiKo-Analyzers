@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -46,7 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = replacementMap.Aggregate(originalText, (current, term) => current.Replace(term.Key, term.Value));
+                        var replacedText = new StringBuilder(originalText);
+                        foreach (var pair in replacementMap)
+                        {
+                            replacedText.Replace(pair.Key, pair.Value);
+                        }
 
                         var newToken = token.WithText(replacedText);
 
@@ -145,6 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string ending)
         {
             var lastNode = comment.Content.LastOrDefault();
+
             if (lastNode is null)
             {
                 // we have an empty comment
@@ -166,13 +172,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var valueText = lastToken.ValueText.TrimEnd();
-
                     // in case there is any, get rid of last dot
-                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
-                    {
-                        valueText = valueText.WithoutSuffix(".");
-                    }
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
 
                     return comment.ReplaceToken(lastToken, lastToken.WithText(valueText + ending));
                 }
@@ -185,6 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
             var lastNode = comment.Content.LastOrDefault();
+
             if (lastNode is null)
             {
                 // we have an empty comment
@@ -204,13 +206,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var valueText = lastToken.ValueText.TrimEnd();
-
                     // in case there is any, get rid of last dot
-                    if (valueText.EndsWith(".", StringComparison.OrdinalIgnoreCase))
-                    {
-                        valueText = valueText.WithoutSuffix(".");
-                    }
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
 
                     text = valueText + commentStart;
                 }
@@ -237,6 +234,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one
             var index = GetIndex(content);
+
             if (index < 0)
             {
                 return content.Add(XmlText(phrase));
@@ -272,6 +270,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             XmlTextSyntax continueText;
             var syntax = content[index];
+
             if (syntax is XmlTextSyntax text)
             {
                 // we have to remove the element as otherwise we duplicate the comment
@@ -279,6 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // remove first "\r\n" token and remove '  /// ' trivia of second token
                 var textTokens = text.TextTokens;
+
                 if (textTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     var newTokens = textTokens.RemoveAt(0);
@@ -548,7 +548,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 textTokens.RemoveRange(0, removals + 1);
 
-                var replacementText = commentEnd + textToken.ValueText.TrimStart().ToLowerCaseAt(0);
+                var replacementText = commentEnd + textToken.ValueText.AsSpan().TrimStart().ToLowerCaseAt(0);
                 var replacement = replacementText.ToSyntaxToken();
                 textTokens.Insert(0, replacement);
 

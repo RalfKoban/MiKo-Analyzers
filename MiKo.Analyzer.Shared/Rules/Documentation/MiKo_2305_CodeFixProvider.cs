@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -17,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (MiKo_2305_CommentDoesNotContainDoublePeriodAnalyzer.CommentHasIssue(comment.TrimEnd()))
+            if (MiKo_2305_CommentDoesNotContainDoublePeriodAnalyzer.CommentHasIssue(comment.AsSpan().TrimEnd()))
             {
                 return SyntaxFactory.Comment(comment.Replace("..", "."));
             }

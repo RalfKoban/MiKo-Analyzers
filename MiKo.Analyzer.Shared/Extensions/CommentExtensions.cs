@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -87,7 +88,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var comment = commentXml.Without(Constants.Markers.Symbols);
+            var comment = new StringBuilder(commentXml).Without(Constants.Markers.Symbols).ToString();
             var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
 
             return commentElements;
@@ -145,13 +146,13 @@ namespace MiKoSolutions.Analyzers
                 return string.Empty;
             }
 
-            return value
-                   .WithoutParaTags()
-                   .Without(Constants.Markers.SymbolsAndLineBreaks)
-                   .Replace("    ", " ")
-                   .Replace("   ", " ")
-                   .Replace("  ", " ")
-                   .Trim();
+            return new StringBuilder(value).WithoutParaTags()
+                                           .Without(Constants.Markers.SymbolsAndLineBreaks)
+                                           .Replace("    ", " ")
+                                           .Replace("   ", " ")
+                                           .Replace("  ", " ")
+                                           .ToString()
+                                           .Trim();
         }
     }
 }

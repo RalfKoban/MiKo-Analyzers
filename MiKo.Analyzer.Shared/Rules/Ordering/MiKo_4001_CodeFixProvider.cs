@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             foreach (var nodes in methodsOrderedByParameters.GroupBy(_ => _.DeclaredAccessibility))
             {
                 var methodNodes = nodes.Select(_ => _.GetSyntax()).ToList();
+
                 if (methodNodes.Count == 1)
                 {
                     // ignore those that have only one occurrence

@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var method = symbol.GetEnclosingMethod();
 
             var applicableParameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
+
             if (applicableParameters.Count == 1)
             {
                 return method.Name == nameof(Equals) ? "other" : "e";

@@ -55,6 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             // prepare additional data so that code fix can benefit from information
             var dictionary = new Dictionary<string, string>();
+
             if (noBlankLinesBefore)
             {
                 dictionary.Add(NoLineBefore, string.Empty);

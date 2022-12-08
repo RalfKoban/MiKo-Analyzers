@@ -29,7 +29,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        for(var " + name + @" = 0; " + name + " < 1; " + name + @"++)
+        for(var " + name + " = 0; " + name + " < 1; " + name + @"++)
         {
         }
     }
@@ -55,7 +55,7 @@ public class TestMe
 {
     public void DoSomething()
     {
-        for(var " + name + @" = 0; " + name + " < 1; " + name + @"++)
+        for(var " + name + " = 0; " + name + " < 1; " + name + @"++)
         {
         }
 

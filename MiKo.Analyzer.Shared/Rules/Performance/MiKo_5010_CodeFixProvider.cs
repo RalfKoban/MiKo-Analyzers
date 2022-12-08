@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var invocation = GetInvocationExpressionSyntax(syntax, out var kind);
+
             if (invocation is null)
             {
                 return syntax;
@@ -51,6 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     var left = maes.Expression;
                     var right = arguments[0].Expression;
+
                     if (right is CastExpressionSyntax cast)
                     {
                         right = cast.Expression;
@@ -102,6 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case SyntaxKind.EqualsExpression:
                 {
                     var b = (BinaryExpressionSyntax)syntax;
+
                     if (b.Right.IsKind(SyntaxKind.FalseLiteralExpression))
                     {
                         kind = SyntaxKind.NotEqualsExpression;
@@ -113,6 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case SyntaxKind.NotEqualsExpression:
                 {
                     var b = (BinaryExpressionSyntax)syntax;
+
                     if (b.Right.IsKind(SyntaxKind.TrueLiteralExpression))
                     {
                         kind = SyntaxKind.NotEqualsExpression;

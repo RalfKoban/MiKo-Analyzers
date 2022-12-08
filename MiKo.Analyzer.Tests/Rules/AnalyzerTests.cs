@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
         [Ignore("Just for now")]
-        [TestCase(@"TODO"), Explicit, Timeout(1 * 60 * 60 * 1000)]
+        [TestCase("TODO"), Explicit, Timeout(1 * 60 * 60 * 1000)]
         public static void Performance(string path)
         {
             // ncrunch: no coverage start
@@ -233,6 +233,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
 
             var parts = StringExtensions.FormatWith(expectedTitle, '|').Split('|');
+
             if (parts.Length <= 1)
             {
                 Assert.That(codeFixTitle, Is.EqualTo(expectedTitle), "No codefix title found at all");

@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var names = method.Parameters.Where(_ => _.RefKind == RefKind.None).ToHashSet(_ => _.Name);
 
                 var name = node.Left.ToCleanedUpString();
+
                 if (names.Contains(name))
                 {
                     return Issue(name, node.Left);

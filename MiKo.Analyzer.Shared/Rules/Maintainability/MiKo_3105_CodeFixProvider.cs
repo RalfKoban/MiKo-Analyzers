@@ -47,6 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var args = original.ArgumentList.Arguments;
 
                         var fixedSyntax = UpdatedSyntax(context, maes, args, typeName);
+
                         if (fixedSyntax != null)
                         {
                             // ensure that we keep leading trivia, such as comments
@@ -284,12 +285,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax nameSyntax:
                 {
                     var typeSyntaxes = GetTypeSyntaxes(i, name);
+
                     if (typeSyntaxes.Length > 0)
                     {
                         return AssertThat(Argument(nameSyntax.Identifier.Text), Is(methodName, typeSyntaxes), args);
                     }
 
                     var argument = i.ArgumentList.Arguments.FirstOrDefault();
+
                     if (argument != null)
                     {
                         return AssertThat(Argument(nameSyntax.Identifier.Text), Is(methodName, argument), args, 1);
@@ -322,12 +325,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax nameSyntax:
                 {
                     var typeSyntaxes = GetTypeSyntaxes(i, name);
+
                     if (typeSyntaxes.Length > 0)
                     {
                         return AssertThat(Argument(nameSyntax.Identifier.Text), Is(propertyName, methodName, typeSyntaxes), args);
                     }
 
                     var argument = i.ArgumentList.Arguments.FirstOrDefault();
+
                     if (argument != null)
                     {
                         return AssertThat(Argument(nameSyntax.Identifier.Text), Is(propertyName, methodName, argument), args, 1);
@@ -506,6 +511,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (name is GenericNameSyntax generic)
             {
                 var genericArguments = generic.TypeArgumentList.Arguments;
+
                 if (genericArguments.Count == 1)
                 {
                     return AssertThat(args[0], GetExceptionArgument(genericArguments[0]), args, 1);

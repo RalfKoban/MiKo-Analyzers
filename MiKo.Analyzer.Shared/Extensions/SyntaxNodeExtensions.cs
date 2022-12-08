@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -47,6 +48,7 @@ namespace MiKoSolutions.Analyzers
         internal static bool EnclosingMethodHasParameter(this SyntaxNode value, string parameterName, SemanticModel semanticModel)
         {
             var method = value.GetEnclosingMethod(semanticModel);
+
             if (method is null)
             {
                 return false;
@@ -80,10 +82,12 @@ namespace MiKoSolutions.Analyzers
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
             var ifStatement = value.FirstAncestorOrSelf<IfStatementSyntax>();
+
             if (ifStatement is null)
             {
                 // maybe part of a block outside the if statement
                 var block = value.FirstAncestorOrSelf<BlockSyntax>();
+
                 if (block != null)
                 {
                     // try to find the corresponding if statement
@@ -97,6 +101,7 @@ namespace MiKoSolutions.Analyzers
         internal static ExpressionSyntax GetRelatedCondition(this SyntaxNode syntax)
         {
             var coalesceExpression = syntax.FirstAncestorOrSelf<BinaryExpressionSyntax>(_ => _.IsKind(SyntaxKind.CoalesceExpression));
+
             if (coalesceExpression != null)
             {
                 return coalesceExpression;
@@ -111,6 +116,7 @@ namespace MiKoSolutions.Analyzers
         internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax syntax)
         {
             var parameters = CollectParameters(syntax);
+
             if (parameters.Any())
             {
                 // there might be multiple parameters, so we have to find out which parameter is meant
@@ -253,6 +259,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         // nameof
                         var arguments = value.ArgumentList.Arguments;
+
                         if (arguments.Count > 0)
                         {
                             return arguments[0].ToString();
@@ -301,7 +308,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.LocalName.ValueText;
 
-        internal static string GetNameOnlyPart(this TypeSyntax value) => value.ToString().GetNameOnlyPart();
+        internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
 
         internal static string GetNameOnlyPartWithoutGeneric(this TypeSyntax value)
         {
@@ -309,13 +316,16 @@ namespace MiKoSolutions.Analyzers
 
             return type.GetNameOnlyPart();
 
-            string GetNameLocal()
+            ReadOnlySpan<char> GetNameLocal()
             {
                 switch (value)
                 {
-                    case GenericNameSyntax generic: return generic.GetName();
-                    case SimpleNameSyntax simple: return simple.GetName();
-                    default: return value?.ToString();
+                    case GenericNameSyntax generic: return generic.GetName().AsSpan();
+                    case SimpleNameSyntax simple: return simple.GetName().AsSpan();
+                    default:
+                        return value is null
+                                   ? ReadOnlySpan<char>.Empty
+                                   : value.ToString().AsSpan();
                 }
             }
         }
@@ -454,6 +464,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var commentOnNode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+
             if (commentOnNode != null)
             {
                 return commentOnNode;
@@ -465,6 +476,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         // inspect for attributes
                         var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
@@ -476,6 +488,7 @@ namespace MiKoSolutions.Analyzers
                 case BaseMethodDeclarationSyntax method:
                     {
                         var attributeListSyntax = method.AttributeLists.FirstOrDefault();
+
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
@@ -492,6 +505,7 @@ namespace MiKoSolutions.Analyzers
                 case BasePropertyDeclarationSyntax property:
                     {
                         var attributeListSyntax = property.AttributeLists.FirstOrDefault();
+
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
@@ -541,7 +555,7 @@ namespace MiKoSolutions.Analyzers
                        : null;
         }
 
-        internal static string GetTextWithoutTrivia(this XmlElementSyntax element) => element.Content.ToString().WithoutXmlCommentExterior();
+        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
 
         internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
 
@@ -714,9 +728,10 @@ namespace MiKoSolutions.Analyzers
         {
             var valueKind = value.Kind();
 
-            foreach (var kind in kinds)
+            // ReSharper disable once LoopCanBeConvertedToQuery: For performance reasons we use indexing instead of an enumerator
+            for (var index = 0; index < kinds.Length; index++)
             {
-                if (kind == valueKind)
+                if (kinds[index] == valueKind)
                 {
                     return true;
                 }
@@ -812,6 +827,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
                 var isExpression = convertedType?.InheritsFrom<Expression>() is true;
+
                 if (isExpression)
                 {
                     return true;
@@ -826,6 +842,7 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var ifStatement = value.GetEnclosingIfStatement();
+
                 if (ifStatement != null)
                 {
                     if (ifStatement.IsCallTo(methodName))
@@ -840,6 +857,7 @@ namespace MiKoSolutions.Analyzers
 
                 // maybe an else block
                 var elseStatement = value.GetEnclosingElseStatement();
+
                 if (elseStatement != null)
                 {
                     value = elseStatement.Parent;
@@ -1099,6 +1117,7 @@ namespace MiKoSolutions.Analyzers
             while (true)
             {
                 var oldNode = result.GetAnnotatedNodes(annotation).OfType<TNode>().FirstOrDefault();
+
                 if (oldNode is null)
                 {
                     // nothing left
@@ -1121,6 +1140,7 @@ namespace MiKoSolutions.Analyzers
             for (var index = 0; index < result.Count; index++)
             {
                 var value = result[index];
+
                 if (value is XmlTextSyntax text)
                 {
                     result[index] = text.ReplaceText(phrase, replacement);
@@ -1136,6 +1156,7 @@ namespace MiKoSolutions.Analyzers
             for (var index = 0; index < result.Count; index++)
             {
                 var value = result[index];
+
                 if (value is XmlTextSyntax text)
                 {
                     result[index] = text.ReplaceText(phrases, replacement);
@@ -1158,14 +1179,18 @@ namespace MiKoSolutions.Analyzers
             {
                 var text = token.ValueText;
 
+                bool replaced = false;
+                var result = new StringBuilder(text);
+
                 foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
                 {
-                    text = text.Replace(phrase, replacement);
+                    replaced = true;
+                    result.Replace(phrase, replacement);
                 }
 
-                if (ReferenceEquals(token.ValueText, text) is false)
+                if (replaced)
                 {
-                    map[token] = token.WithText(text);
+                    map[token] = token.WithText(result);
                 }
             }
 
@@ -1336,6 +1361,7 @@ namespace MiKoSolutions.Analyzers
         internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
         {
             var tokens = value.TextTokens;
+
             if (tokens.Count >= 2)
             {
                 var newTokens = tokens.WithoutFirstXmlNewLine();
@@ -1344,7 +1370,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var token = newTokens[0];
 
-                    newTokens = newTokens.Replace(token, token.WithText(token.Text.TrimStart()));
+                    newTokens = newTokens.Replace(token, token.WithText(token.Text.AsSpan().TrimStart()));
                 }
 
                 return XmlText(newTokens);
@@ -1375,7 +1401,8 @@ namespace MiKoSolutions.Analyzers
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = token.Text.Without(text).Replace("  ", " ");
+                            var modifiedText = new StringBuilder(token.Text).Without(text).Replace("  ", " ").ToString();
+
                             if (modifiedText.IsNullOrWhiteSpace())
                             {
                                 textTokens.Remove(token);
@@ -1528,9 +1555,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string WithoutXmlCommentExterior(this string value) => value.Without("///").Trim();
+        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => value.ToString().WithoutXmlCommentExterior();
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder(value.ToString()).WithoutXmlCommentExterior().ToString().Trim();
 
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
 
@@ -1560,7 +1587,7 @@ namespace MiKoSolutions.Analyzers
                 // ignore trivia such as " /// "
                 if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                 {
-                    var originalText = token.Text.TrimStart();
+                    var originalText = token.Text.AsSpan().TrimStart();
 
                     if (originalText.IsNullOrWhiteSpace())
                     {
@@ -1571,7 +1598,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         if (originalText.StartsWith(startText, StringComparison.Ordinal))
                         {
-                            var modifiedText = originalText.Substring(startText.Length);
+                            var modifiedText = originalText.Slice(startText.Length);
 
                             textTokens[i] = token.WithText(modifiedText);
 
@@ -1622,7 +1649,7 @@ namespace MiKoSolutions.Analyzers
                 // ignore trivia such as " /// "
                 if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                 {
-                    var originalText = token.Text;
+                    var originalText = token.Text.AsSpan();
 
                     if (originalText.IsNullOrWhiteSpace())
                     {
@@ -1690,6 +1717,7 @@ namespace MiKoSolutions.Analyzers
             foreach (var usingDirective in usings)
             {
                 var usingName = usingDirective.Name.ToFullString();
+
                 if (usingName == "System")
                 {
                     // skip 'System' namespace
@@ -1728,12 +1756,14 @@ namespace MiKoSolutions.Analyzers
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
             var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
+
             if (method != null)
             {
                 return method.ParameterList.Parameters;
             }
 
             var indexer = syntax.GetEnclosing<IndexerDeclarationSyntax>();
+
             if (indexer != null)
             {
                 var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
@@ -1745,6 +1775,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var property = syntax.GetEnclosing<PropertyDeclarationSyntax>();
+
             if (property != null)
             {
                 // 'value' is a special parameter that is not part of the parameter list
@@ -1761,6 +1792,7 @@ namespace MiKoSolutions.Analyzers
         private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
         {
             var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.ElseClause);
+
             if (enclosingNode is BlockSyntax)
             {
                 enclosingNode = enclosingNode.Parent;
@@ -1782,6 +1814,7 @@ namespace MiKoSolutions.Analyzers
             //                      xyz();
             // ...
             var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.IfStatement);
+
             if (enclosingNode is BlockSyntax)
             {
                 enclosingNode = enclosingNode.Parent;
@@ -1794,9 +1827,9 @@ namespace MiKoSolutions.Analyzers
         {
             if (value is XmlElementSyntax syntax && string.Equals(tagName, syntax.GetName(), StringComparison.OrdinalIgnoreCase))
             {
-                var content = syntax.Content.ToString().Trim();
+                var content = syntax.Content.ToString().AsSpan().Trim();
 
-                return contents.Any(expected => expected.Equals(content, StringComparison.OrdinalIgnoreCase));
+                return content.EqualsAny(contents);
             }
 
             return false;
@@ -1842,6 +1875,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var binaryExpression = ifStatement.FirstChild<BinaryExpressionSyntax>();
+
             if (binaryExpression.IsBinaryCallTo(methodName))
             {
                 return true;

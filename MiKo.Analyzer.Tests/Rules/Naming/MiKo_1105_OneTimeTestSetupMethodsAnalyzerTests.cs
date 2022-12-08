@@ -112,8 +112,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_([ValueSource(nameof(TestOneTimeSetUps))] string test) => VerifyCSharpFix(
-                                                                 @"using System; class TestMe { [" + test + @"] void Setup()  { } }",
-                                                                 @"using System; class TestMe { [" + test + @"] void PrepareTestEnvironment()  { } }");
+                                                                 "using System; class TestMe { [" + test + "] void Setup()  { } }",
+                                                                 "using System; class TestMe { [" + test + "] void PrepareTestEnvironment()  { } }");
 
         protected override string GetDiagnosticId() => MiKo_1105_OneTimeTestSetupMethodsAnalyzer.Id;
 

@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // we might have an almost complete string
                 if (contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
                 {
-                    if (startText.TextTokens.Any(_ => _.ValueText.TrimStart() == commentStart))
+                    if (startText.TextTokens.Any(_ => _.ValueText.AsSpan().TrimStart().Equals(commentStart, StringComparison.Ordinal)))
                     {
                         var newComment = ReplaceText(comment, continueText, TextParts, "that contains");
 

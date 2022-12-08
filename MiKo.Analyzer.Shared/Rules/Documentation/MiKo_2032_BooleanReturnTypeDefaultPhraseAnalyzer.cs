@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var documentation = owningSymbol.GetDocumentationCommentTriviaSyntax();
 
                 var syntaxNode = documentation.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+
                 if (syntaxNode is null)
                 {
                     // seems like returns is inside the summary tag

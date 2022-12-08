@@ -240,13 +240,13 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> if some condition; otherwise <see langword=""false""/>.")]
         [TestCase(@"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langref=""true""/> if some condition")]
-        [TestCase(@"<b>true</b> if some condition; <b>false</b> otherwise.")]
-        [TestCase(@"<c>true</c> if some condition; <c>false</c> otherwise.")]
-        [TestCase(@"<value>true</value> if some condition; <value>false</value> otherwise.")]
-        [TestCase(@"Determines whether some condition.")]
-        [TestCase(@"Indicates whether some condition.")]
-        [TestCase(@"If set to true if some condition.")]
-        [TestCase(@"True if some condition. Otherwise false.")]
+        [TestCase("<b>true</b> if some condition; <b>false</b> otherwise.")]
+        [TestCase("<c>true</c> if some condition; <c>false</c> otherwise.")]
+        [TestCase("<value>true</value> if some condition; <value>false</value> otherwise.")]
+        [TestCase("Determines whether some condition.")]
+        [TestCase("Indicates whether some condition.")]
+        [TestCase("If set to true if some condition.")]
+        [TestCase("True if some condition. Otherwise false.")]
         public void Code_gets_fixed_on_same_line_For_special_phrase_(string phrase)
         {
             var originalCode = @"

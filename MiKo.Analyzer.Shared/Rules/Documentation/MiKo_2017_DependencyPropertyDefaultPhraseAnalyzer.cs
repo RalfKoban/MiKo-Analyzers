@@ -21,28 +21,53 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
         {
             var symbolName = symbol.Name;
-            if (symbolName.EndsWith(Constants.DependencyProperty.FieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
+
+            if (symbolName.EndsWith(Constants.DependencyProperty.FieldSuffix, StringComparison.OrdinalIgnoreCase))
             {
-                return Enumerable.Empty<Diagnostic>();
+                var propertyName = symbolName.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
+
+                var containingType = symbol.ContainingType;
+
+                if (containingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => _.Name == propertyName))
+                {
+                    var containingTypeFullName = containingType.ToString();
+
+                    // loop over phrases for summaries and values
+                    var summaries = CommentExtensions.GetSummaries(commentXml);
+
+                    if (summaries.Any())
+                    {
+                        var summaryPhrases = Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName);
+
+                        foreach (var comment in summaries)
+                        {
+                            if (summaryPhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal)))
+                            {
+                                yield return Issue(symbol, Constants.XmlTag.Summary, summaryPhrases[0]);
+                            }
+                        }
+                    }
+
+                    var values = CommentExtensions.GetValue(commentXml);
+
+                    if (values.Any())
+                    {
+                        var valuePhrases = Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName);
+
+                        foreach (var comment in values)
+                        {
+                            if (valuePhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal)))
+                            {
+                                yield return Issue(symbol, Constants.XmlTag.Value, valuePhrases[0]);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // it's an unknown dependency property
+                }
             }
-
-            var propertyName = symbolName.WithoutSuffix(Constants.DependencyProperty.FieldSuffix);
-            var containingType = symbol.ContainingType;
-            if (containingType.GetMembersIncludingInherited<IPropertySymbol>().All(_ => _.Name != propertyName))
-            {
-                // it's an unknown dependency property
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            List<Diagnostic> results = null;
-
-            var containingTypeFullName = containingType.ToString();
-
-            // loop over phrases for summaries and values
-            ValidatePhrases(symbol, CommentExtensions.GetSummaries(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName), Constants.XmlTag.Summary, ref results);
-            ValidatePhrases(symbol, CommentExtensions.GetValue(commentXml), () => Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName), Constants.XmlTag.Value, ref results);
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
 
         private static List<string> Phrases(string[] phrases, string typeName, string propertyName)
@@ -52,25 +77,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             results.AddRange(phrases.Select(_ => _.FormatWith(typeName + "." + propertyName)));
 
             return results;
-        }
-
-        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<string> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
-        {
-            var phrases = phrasesProvider();
-            foreach (var comment in comments)
-            {
-                if (phrases.Any(_ => comment.StartsWith(_, StringComparison.Ordinal)))
-                {
-                    return;
-                }
-
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
-                results.Add(Issue(symbol, xmlElement, phrases[0]));
-            }
         }
     }
 }

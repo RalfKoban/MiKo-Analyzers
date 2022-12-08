@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             foreach (var localFunction in symbol.GetLocalFunctions())
             {
                 var parameterCount = localFunction.ParameterList?.Parameters.Count;
+
                 if (parameterCount > MaxParametersCount)
                 {
                     yield return Issue(symbol, parameterCount, MaxParametersCount);

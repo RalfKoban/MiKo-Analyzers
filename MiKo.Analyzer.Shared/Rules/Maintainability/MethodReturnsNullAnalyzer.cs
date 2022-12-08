@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case VariableDeclaratorSyntax variable:
                 {
                     var initializer = variable.Initializer;
+
                     if (initializer != null && names.Contains(variable.GetName()))
                     {
                         return new[] { initializer.Value };
@@ -199,6 +200,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
 
             var candidates = GetCandidates(method, localVariableNames).ToHashSet();
+
             if (candidates.Any())
             {
                 AnalyzeAssignments(context, candidates);

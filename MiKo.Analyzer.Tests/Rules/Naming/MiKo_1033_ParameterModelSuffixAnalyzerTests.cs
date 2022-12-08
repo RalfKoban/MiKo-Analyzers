@@ -40,7 +40,7 @@ public class TestMe
         public void An_issue_is_reported_for_invalid_index_parameter_(string name) => An_issue_is_reported_for(@"
 public class TestMe
 {
-    public int this[int " + name + @"] => " + name + @"
+    public int this[int " + name + "] => " + name + @"
 }
 ");
 

@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (parameter != null)
             {
                 var arguments = GetUpdatedArgumentListSyntaxForParameter(syntax, parameter);
+
                 if (arguments != null)
                 {
                     return arguments;
@@ -34,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (syntax.GetEnclosing<SwitchStatementSyntax>()?.Expression is IdentifierNameSyntax identifier)
             {
                 var arguments = GetUpdatedArgumentListSyntaxForIdentifier(syntax, identifier);
+
                 if (arguments != null)
                 {
                     return arguments;

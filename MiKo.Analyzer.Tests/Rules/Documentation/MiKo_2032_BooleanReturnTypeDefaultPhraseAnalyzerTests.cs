@@ -85,7 +85,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + trueValue + @" if something happens; otherwise, " + falseValue + @".
+    /// " + trueValue + " if something happens; otherwise, " + falseValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }
@@ -108,7 +108,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + trueValue + @" if something happens; otherwise, " + falseValue + ". The default is " + defaultValue + @".
+    /// " + trueValue + " if something happens; otherwise, " + falseValue + ". The default is " + defaultValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }
@@ -153,7 +153,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A task that will complete with a result of " + trueValue + @" if something happens, otherwise with a result of " + falseValue + @".
+    /// A task that will complete with a result of " + trueValue + " if something happens, otherwise with a result of " + falseValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }
@@ -308,24 +308,24 @@ public class TestMe
         [TestCase(@"<see langword=""true""/>, if something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/>; if something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/>: if something; <see langword=""false""/> otherwise.")]
-        [TestCase(@"true if something. Otherwise false.")]
-        [TestCase(@"<b>true</b> if something. Otherwise <b>false</b>.")]
-        [TestCase(@"<c>true</c> if something. Otherwise <c>false</c>.")]
-        [TestCase(@"<c>true</c> if something; otherwise, <c>false</c>.")]
-        [TestCase(@"<code>true</code> if something; otherwise, <code>false</code>.")]
-        [TestCase(@"True if something. False otherwise.")]
-        [TestCase(@"True if something, otherwise False.")]
-        [TestCase(@"True if something, False otherwise.")]
-        [TestCase(@"true if something, false otherwise.")]
-        [TestCase(@"True if something, otherwise returns False.")]
-        [TestCase(@"TRUE if something, otherwise returns FALSE.")]
-        [TestCase(@"TRUE: if something, otherwise returns FALSE.")]
-        [TestCase(@"Returns True if something, otherwise returns False.")]
-        [TestCase(@"Returns True if something, returns otherwise False.")]
+        [TestCase("true if something. Otherwise false.")]
+        [TestCase("<b>true</b> if something. Otherwise <b>false</b>.")]
+        [TestCase("<c>true</c> if something. Otherwise <c>false</c>.")]
+        [TestCase("<c>true</c> if something; otherwise, <c>false</c>.")]
+        [TestCase("<code>true</code> if something; otherwise, <code>false</code>.")]
+        [TestCase("True if something. False otherwise.")]
+        [TestCase("True if something, otherwise False.")]
+        [TestCase("True if something, False otherwise.")]
+        [TestCase("true if something, false otherwise.")]
+        [TestCase("True if something, otherwise returns False.")]
+        [TestCase("TRUE if something, otherwise returns FALSE.")]
+        [TestCase("TRUE: if something, otherwise returns FALSE.")]
+        [TestCase("Returns True if something, otherwise returns False.")]
+        [TestCase("Returns True if something, returns otherwise False.")]
         [TestCase(@"Returns <see langword=""true""/> if something.")]
         [TestCase(@"Returns <see langref=""true""/> if something.")]
         [TestCase(@"Returns <see langref=""true""/> if something, otherwise returns <see langref=""false""/>.")]
-        [TestCase(@"true: if something, false: otherwise.")]
+        [TestCase("true: if something, false: otherwise.")]
         [TestCase("true: if something,\r\n/// false: otherwise.")]
         [TestCase("true: if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
@@ -542,21 +542,21 @@ public class TestMe
         [TestCase(@"<see langword=""false""/> if something, <see langword=""true""/> otherwise.")]
         [TestCase(@"<see langword=""false""/> if something; otherwise <see langword=""true""/>.")]
         [TestCase(@"<see langword=""false""/> if something, otherwise <see langword=""true""/>.")]
-        [TestCase(@"false if something. Otherwise true.")]
-        [TestCase(@"<b>false</b> if something. Otherwise <b>true</b>.")]
-        [TestCase(@"<c>false</c> if something. Otherwise <c>true</c>.")]
-        [TestCase(@"<value>false</value> if something. Otherwise <value>true</value>.")]
-        [TestCase(@"False if something, otherwise True.")]
-        [TestCase(@"False if something, True otherwise.")]
-        [TestCase(@"false if something, true otherwise.")]
-        [TestCase(@"False if something, otherwise returns True.")]
-        [TestCase(@"FALSE if something, otherwise returns TRUE.")]
-        [TestCase(@"FALSE: if something, otherwise returns TRUE.")]
-        [TestCase(@"Returns False if something, otherwise returns True.")]
-        [TestCase(@"Returns False if something, returns otherwise True.")]
+        [TestCase("false if something. Otherwise true.")]
+        [TestCase("<b>false</b> if something. Otherwise <b>true</b>.")]
+        [TestCase("<c>false</c> if something. Otherwise <c>true</c>.")]
+        [TestCase("<value>false</value> if something. Otherwise <value>true</value>.")]
+        [TestCase("False if something, otherwise True.")]
+        [TestCase("False if something, True otherwise.")]
+        [TestCase("false if something, true otherwise.")]
+        [TestCase("False if something, otherwise returns True.")]
+        [TestCase("FALSE if something, otherwise returns TRUE.")]
+        [TestCase("FALSE: if something, otherwise returns TRUE.")]
+        [TestCase("Returns False if something, otherwise returns True.")]
+        [TestCase("Returns False if something, returns otherwise True.")]
         [TestCase(@"Returns <see langref=""false""/> if something.")]
         [TestCase(@"Returns <see langword=""false""/> if something.")]
-        [TestCase(@"false: if something, true: otherwise.")]
+        [TestCase("false: if something, true: otherwise.")]
         public void Code_gets_not_fixed_for_almost_correct_comment_on_non_generic_method_if_starting_with_false_(string comment)
         {
             var originalCode = @"

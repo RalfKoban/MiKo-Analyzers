@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         private static bool HasIssue(ArrayCreationExpressionSyntax node)
         {
             var rankSpecifiers = node.Type.RankSpecifiers;
+
             if (rankSpecifiers.Count != 1)
             {
                 // seems to be a multi-dimensional array
@@ -34,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             var sizes = rankSpecifiers[0].Sizes;
+
             if (sizes.Count != 1)
             {
                 // seems to have different sizes

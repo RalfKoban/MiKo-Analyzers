@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -49,9 +50,11 @@ namespace MiKoSolutions.Analyzers
 
             // try to find the node as that may be faster than to look them up
             var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
+
             if (symbol is null)
             {
                 var symbols = semanticModel.LookupSymbols(position, name: name);
+
                 if (symbols.Length > 0)
                 {
                     return symbols[0];
@@ -129,6 +132,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SyntaxToken WithText(this SyntaxToken token, string text) => SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), text, text, token.TrailingTrivia);
+
+        internal static SyntaxToken WithText(this SyntaxToken token, StringBuilder text) => WithText(token, text.ToString());
+
+        internal static SyntaxToken WithText(this SyntaxToken token, ReadOnlySpan<char> text) => token.WithText(text.ToString());
 
         internal static SyntaxToken WithTrailingEmptyLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 

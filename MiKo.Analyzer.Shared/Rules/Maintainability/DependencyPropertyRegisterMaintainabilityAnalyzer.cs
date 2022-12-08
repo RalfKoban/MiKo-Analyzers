@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation)
         {
             var arguments = symbol.GetInvocationArgumentsFrom(m_invocation);
+
             if (arguments.Count < 3)
             {
                 return Enumerable.Empty<Diagnostic>();
@@ -30,27 +31,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var propertyType = arguments[1];
             var ownerType = arguments[2];
 
-            List<Diagnostic> diagnostics = null;
-
-            AnalyzeParameterName(symbol, nameArgument, ref diagnostics);
-            AnalyzeParameterPropertyType(symbol, propertyType, nameArgument, ref diagnostics);
-            AnalyzeParameterOwningType(symbol, ownerType, ref diagnostics);
-
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
+            return Enumerable.Empty<Diagnostic>()
+                             .Concat(AnalyzeParameterName(symbol, nameArgument))
+                             .Concat(AnalyzeParameterPropertyType(symbol, propertyType, nameArgument))
+                             .Concat(AnalyzeParameterOwningType(symbol, ownerType));
         }
 
-        private void AnalyzeParameterName(IFieldSymbol symbol, ArgumentSyntax nameArgument, ref List<Diagnostic> diagnostics)
+        private IEnumerable<Diagnostic> AnalyzeParameterName(IFieldSymbol symbol, ArgumentSyntax nameArgument)
         {
             var expression = nameArgument.Expression;
 
             if (expression.IsKind(SyntaxKind.StringLiteralExpression))
             {
                 var name = ((LiteralExpressionSyntax)expression).GetName();
-                ReportIssue(symbol, nameArgument, "'nameof(" + name + ")'", ref diagnostics);
+
+                yield return ReportIssue(symbol, nameArgument, "'nameof(" + name + ")'");
             }
         }
 
-        private void AnalyzeParameterPropertyType(IFieldSymbol symbol, ArgumentSyntax propertyType, ArgumentSyntax nameArgument, ref List<Diagnostic> diagnostics)
+        private IEnumerable<Diagnostic> AnalyzeParameterPropertyType(IFieldSymbol symbol, ArgumentSyntax propertyType, ArgumentSyntax nameArgument)
         {
             if (propertyType.Expression is TypeOfExpressionSyntax syntax)
             {
@@ -59,60 +58,50 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 var owningType = symbol.ContainingType;
                 var property = owningType.GetProperties().FirstOrDefault(_ => _.Name == name);
+
                 if (property is null)
                 {
                     // wrong name
-                    ReportIssue(symbol, nameArgument, "the name of an existing property", ref diagnostics);
+                    yield return ReportIssue(symbol, nameArgument, "the name of an existing property");
                 }
                 else
                 {
                     var returnType = property.GetReturnType()?.FullyQualifiedName();
                     var syntaxType = syntax.Type.ToString();
 
-                    // it might be that the syntax type is the same but the return type is fully qualified
-                    // so check again for only the name part
-                    if (returnType == syntaxType)
+                    if (returnType != syntaxType)
                     {
-                        return;
-                    }
+                        // it might be that the syntax type is the same but the return type is fully qualified
+                        // so check again for only the name part
+                        var returnTypeNameOnlyPart = returnType?.GetNameOnlyPart();
+                        var syntaxTypeNameOnlyPart = syntax.Type.GetNameOnlyPart();
 
-                    var returnTypeNameOnlyPart = returnType?.GetNameOnlyPart();
-                    var syntaxTypeNameOnlyPart = syntax.Type.GetNameOnlyPart();
-
-                    if (returnTypeNameOnlyPart != syntaxTypeNameOnlyPart)
-                    {
-                        ReportIssue(symbol, propertyType, returnType, ref diagnostics);
+                        if (returnTypeNameOnlyPart != syntaxTypeNameOnlyPart)
+                        {
+                            yield return ReportIssue(symbol, propertyType, returnType);
+                        }
                     }
                 }
             }
         }
 
-        private void AnalyzeParameterOwningType(IFieldSymbol symbol, ArgumentSyntax ownerType, ref List<Diagnostic> results)
+        private IEnumerable<Diagnostic> AnalyzeParameterOwningType(IFieldSymbol symbol, ArgumentSyntax ownerType)
         {
             if (ownerType.Expression is TypeOfExpressionSyntax syntax)
             {
                 var owningType = symbol.ContainingType;
                 var containingTypeName = owningType.Name;
+
                 if (containingTypeName != syntax.Type.ToString())
                 {
-                    ReportIssue(symbol, ownerType, containingTypeName, ref results);
+                    yield return ReportIssue(symbol, ownerType, containingTypeName);
                 }
             }
         }
 
-        private void ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter, ref List<Diagnostic> results)
+        private Diagnostic ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter)
         {
-            if (results is null)
-            {
-                results = new List<Diagnostic>(1);
-            }
-
-            var properties = new Dictionary<string, string>
-                                 {
-                                     { Value, parameter },
-                                 };
-
-            results.Add(Issue(symbol.Name, argument, parameter, properties));
+            return Issue(symbol.Name, argument, parameter, new Dictionary<string, string> { { Value, parameter } });
         }
     }
 }

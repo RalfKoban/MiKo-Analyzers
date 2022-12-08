@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         internal static SyntaxNode FindProblematicSyntaxNode(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var catchClause = node.FirstAncestorOrSelf<CatchClauseSyntax>();
+
             if (catchClause != null)
             {
                 // we found an exception inside a catch block that does not get the caught exception as inner exception
@@ -28,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // inspect any 'if' or 'switch' or 'else if' to see if there is an exception involved
             var expression = node.GetRelatedCondition()?.FirstDescendant<ExpressionSyntax>(_ => _.GetTypeSymbol(semanticModel)?.IsException() is true);
+
             if (expression != null)
             {
                 return expression;
@@ -35,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // inspect method arguments
             var parameter = node.GetEnclosing<MethodDeclarationSyntax>()?.ParameterList.Parameters.FirstOrDefault(_ => _.Type.IsException());
+
             if (parameter != null)
             {
                 return parameter;
@@ -50,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (typeSymbol.IsException())
             {
                 var argumentList = node.ArgumentList;
+
                 if (argumentList != null)
                 {
                     if (argumentList.Arguments.Any(_ => _.GetTypeSymbol(semanticModel)?.IsException() is true))

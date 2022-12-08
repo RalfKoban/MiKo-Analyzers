@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol)
         {
             var symbolName = symbol.Name;
+
             if (diagnostic.Properties.TryGetValue(MiKo_1059_ImplClassNameAnalyzer.WrongSuffixIndicator, out var wrongSuffix))
             {
                 return symbolName.WithoutSuffix(wrongSuffix);

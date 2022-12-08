@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeFinallyClause(SyntaxNodeAnalysisContext context)
         {
             var finallyBlock = ((FinallyClauseSyntax)context.Node).Block;
+
             if (finallyBlock is null)
             {
                 return;

@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
             var name = symbol.Name;
+
             if (name.Length <= 5)
             {
                 // skip all short names (such as isIP)

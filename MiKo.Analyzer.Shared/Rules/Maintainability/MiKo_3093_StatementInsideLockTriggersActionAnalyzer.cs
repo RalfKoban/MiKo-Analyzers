@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var identifier = token.Parent;
 
                 var type = identifier.GetTypeSymbol(semanticModel);
+
                 if (type?.TypeKind == TypeKind.Delegate)
                 {
                     if (token.GetSymbol(semanticModel) is IEventSymbol)

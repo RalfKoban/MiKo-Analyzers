@@ -21,28 +21,46 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
         {
             var symbolName = symbol.Name;
-            if (symbolName.EndsWith(Constants.RoutedEventFieldSuffix, StringComparison.OrdinalIgnoreCase) is false)
+
+            if (symbolName.EndsWith(Constants.RoutedEventFieldSuffix, StringComparison.OrdinalIgnoreCase))
             {
-                return Enumerable.Empty<Diagnostic>();
+                var eventName = symbolName.WithoutSuffix(Constants.RoutedEventFieldSuffix);
+                var containingType = symbol.ContainingType;
+
+                if (containingType.GetMembersIncludingInherited<IEventSymbol>().Any(_ => _.Name == eventName))
+                {
+                    var containingTypeFullName = containingType.ToString();
+
+                    // loop over phrases for summaries and values
+                    var summaries = CommentExtensions.GetSummaries(commentXml);
+
+                    if (summaries.Any())
+                    {
+                        var summaryPhrases = Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName);
+
+                        if (summaries.Any(comment => summaryPhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal))))
+                        {
+                            yield return Issue(symbol, Constants.XmlTag.Summary, summaryPhrases[0]);
+                        }
+                    }
+
+                    var values = CommentExtensions.GetValue(commentXml);
+
+                    if (values.Any())
+                    {
+                        var valuePhrases = Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName);
+
+                        if (values.Any(comment => valuePhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal))))
+                        {
+                            yield return Issue(symbol, Constants.XmlTag.Value, valuePhrases[0]);
+                        }
+                    }
+                }
+                else
+                {
+                    // it's an unknown event
+                }
             }
-
-            var eventName = symbolName.WithoutSuffix(Constants.RoutedEventFieldSuffix);
-            var containingType = symbol.ContainingType;
-            if (containingType.GetMembersIncludingInherited<IEventSymbol>().All(_ => _.Name != eventName))
-            {
-                // it's an unknown event
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            List<Diagnostic> results = null;
-
-            var containingTypeFullName = containingType.ToString();
-
-            // loop over phrases for summaries and values
-            ValidatePhrases(symbol, CommentExtensions.GetSummaries(commentXml), () => Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName), Constants.XmlTag.Summary, ref results);
-            ValidatePhrases(symbol, CommentExtensions.GetValue(commentXml), () => Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName), Constants.XmlTag.Value, ref results);
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
 
         private static List<string> Phrases(string[] phrases, string typeName, string eventName)
@@ -52,25 +70,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             results.AddRange(phrases.Select(_ => _.FormatWith(typeName + "." + eventName)));
 
             return results;
-        }
-
-        private void ValidatePhrases(IFieldSymbol symbol, IEnumerable<string> comments, Func<IList<string>> phrasesProvider, string xmlElement, ref List<Diagnostic> results)
-        {
-            var phrases = phrasesProvider();
-            foreach (var comment in comments)
-            {
-                if (phrases.Any(_ => comment.StartsWith(_, StringComparison.Ordinal)))
-                {
-                    return;
-                }
-
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
-                results.Add(Issue(symbol, xmlElement, phrases[0]));
-            }
         }
     }
 }

@@ -22,9 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static bool CommentHasIssue(string comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.OrdinalIgnoreCase)
-                                                             && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false;
+        internal static bool CommentHasIssue(ReadOnlySpan<char> comment) => comment.Contains("..", _ => AllowedChars.Contains(_) is false, StringComparison.OrdinalIgnoreCase)
+                                                                         && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false;
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CommentHasIssue(comment);
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
     }
 }

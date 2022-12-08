@@ -48,6 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ArgumentSyntax argument when argument.Parent?.Parent is InvocationExpressionSyntax invocation && IsEqualsCall(invocation.Expression):
                 {
                     var arguments = invocation.ArgumentList.Arguments;
+
                     if (arguments.Count == 1)
                     {
                         // seems like a normal Equals() method

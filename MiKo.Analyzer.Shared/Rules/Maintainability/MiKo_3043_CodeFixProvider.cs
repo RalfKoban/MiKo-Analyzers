@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var invocation = (InvocationExpressionSyntax)syntax;
+
             if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Expression is GenericNameSyntax generic)
             {
                 var type = generic.TypeArgumentList.Arguments[0];

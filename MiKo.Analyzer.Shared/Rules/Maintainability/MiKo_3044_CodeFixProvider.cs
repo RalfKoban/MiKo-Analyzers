@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var identifierName = syntax.Token.ValueText;
 
             var ifStatement = syntax.GetEnclosing<IfStatementSyntax>();
+
             if (ifStatement != null)
             {
                 // search if block
@@ -39,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var switchStatement = syntax.GetEnclosing<SwitchStatementSyntax>();
+
             if (switchStatement != null)
             {
                 // search switch block

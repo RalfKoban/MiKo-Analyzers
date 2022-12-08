@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                               case "b":
                                                                               case Constants.XmlTag.C:
                                                                               case Constants.XmlTag.Code:
-                                                                                  return false; // don't dig deeper
+                                                                                  return false; // do not dig deeper
 
                                                                               default:
                                                                                   return true;
@@ -210,6 +210,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 const int EndOffset = 1; // we do not want to underline the last char
 
                                 var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+
                                 if (location != null)
                                 {
                                     yield return Issue(symbolName, location, wrongText, proposal);
@@ -226,6 +227,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 const int EndOffset = 0;
 
                                 var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+
                                 if (location != null)
                                 {
                                     yield return Issue(symbolName, location, wrongText, proposal);

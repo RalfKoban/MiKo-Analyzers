@@ -40,12 +40,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private IEnumerable<Diagnostic> AnalyzeCommandCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
+
             if (argumentList is null)
             {
                 yield break;
             }
 
             var arguments = argumentList.Arguments;
+
             if (arguments.Count == 0)
             {
                 yield break;
@@ -60,10 +62,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private Diagnostic AnalyzeSuffix(ArgumentSyntax argument, SemanticModel semanticModel)
         {
             var argumentName = argument.ToString();
+
             if (argumentName.EndsWith(Suffix, StringComparison.Ordinal))
             {
                 var location = argument.GetLocation();
                 var symbol = semanticModel.LookupSymbols(location.SourceSpan.Start, name: argumentName).FirstOrDefault();
+
                 if (symbol != null)
                 {
                     return Issue(symbol, argumentName.WithoutSuffix(Suffix));

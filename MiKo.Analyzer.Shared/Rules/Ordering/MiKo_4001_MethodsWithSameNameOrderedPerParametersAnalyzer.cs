@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             {
                 // pre-order for accessibility (public first, private last), then ensure that static methods are first and params methods are at the end
                 var methodsOrderedByParameters = GetMethodsOrderedByParameters(methods, methodName);
+
                 if (methodsOrderedByParameters.Count <= 1)
                 {
                     continue;
@@ -64,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     foreach (var method in similarMethods)
                     {
                         var nextLine = method.GetStartingLine();
+
                         if (lastLine > nextLine)
                         {
                             if (results is null)

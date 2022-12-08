@@ -99,6 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case ReturnStatementSyntax s:
                         CountLinesOfCode(s.GetLocation().GetLineSpan().StartLinePosition, lines);
+
                         if (s.Expression != null)
                         {
                             node = s.Expression;

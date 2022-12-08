@@ -35,6 +35,7 @@ namespace TestHelper
                                         var oldSource = File.ReadAllText(file);
 
                                         var issues = GetDiagnostics(oldSource);
+
                                         if (issues.Any())
                                         {
                                             try

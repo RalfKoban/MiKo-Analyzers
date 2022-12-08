@@ -86,14 +86,23 @@ namespace MiKoSolutions.Analyzers.Rules
 
         public static bool IsCommentedOutCodeLine(string line) => IsCommentedOutCodeLine(line, null);
 
-        public static bool IsCommentedOutCodeLine(string line, SemanticModel semanticModel)
+        public static bool IsCommentedOutCodeLine(ReadOnlySpan<char> line) => IsCommentedOutCodeLine(line, null);
+
+        public static bool IsCommentedOutCodeLine(string line, SemanticModel semanticModel) => line != null && IsCommentedOutCodeLine(line.AsSpan(), semanticModel);
+
+        public static bool IsCommentedOutCodeLine(ReadOnlySpan<char> line, SemanticModel semanticModel)
         {
             if (line.IsNullOrWhiteSpace())
             {
                 return false;
             }
 
-            if (line == "else")
+            if (line.Equals("do", StringComparison.Ordinal))
+            {
+                return true;
+            }
+
+            if (line.Equals("else", StringComparison.Ordinal))
             {
                 return true;
             }
@@ -169,13 +178,14 @@ namespace MiKoSolutions.Analyzers.Rules
                 // attempt to find a type because it's likely commented out code if we find some
                 if (semanticModel != null)
                 {
-                    var firstWord = line.FirstWord();
+                    var firstWord = line.FirstWord().ToString();
 
                     /*
 var type = semanticModel.GetTypeInfo(node).Type;
 var convertedType = semanticModel.GetTypeInfo(node).ConvertedType;
                     */
                     var type = semanticModel.Compilation.GetTypeByMetadataName(firstWord);
+
                     if (type != null)
                     {
                         return true;

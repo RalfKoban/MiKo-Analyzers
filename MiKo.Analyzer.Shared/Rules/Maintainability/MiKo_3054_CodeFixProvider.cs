@@ -48,12 +48,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (declarator.Initializer?.Value is InvocationExpressionSyntax ies)
             {
                 var arguments = ies.ArgumentList.Arguments;
+
                 if (arguments.Count > 1)
                 {
                     // first argument is nameof or string
                     if (arguments[0].Expression is InvocationExpressionSyntax nameofExpressionSyntax)
                     {
                         var args = nameofExpressionSyntax.ArgumentList.Arguments;
+
                         if (args.Count == 1 && args[0].Expression is IdentifierNameSyntax ins)
                         {
                             return ins.GetName();

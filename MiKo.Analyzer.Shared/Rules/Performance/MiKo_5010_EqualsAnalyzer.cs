@@ -77,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             if (symbol is IMethodSymbol method)
             {
                 var isEquals = (IsObjectEqualsStaticMethod(method) && IsStruct(semanticModel, arguments)) || IsObjectEqualsOnStructMethod(method);
+
                 if (isEquals)
                 {
                     // let's see who this method is that invokes Equals

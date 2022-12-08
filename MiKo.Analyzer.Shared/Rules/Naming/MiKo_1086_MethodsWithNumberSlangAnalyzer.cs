@@ -36,10 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 // ignore first character as that is never a number
                 var hasSlangNumber = index > 0 && index < (name.Length - 1) && name[index + 1].IsLetter();
+
                 if (hasSlangNumber)
                 {
                     // we have to ignore "2nd" and "4th"
                     var withoutNumbers = name.Without(AllowedNumbers);
+
                     if (withoutNumbers != name)
                     {
                         name = withoutNumbers;

@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel)
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel)
         {
             if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
             {
@@ -116,7 +116,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
             }
 
-            var spaces = comment.Count(_ => _.IsWhiteSpace());
+            var spaces = 0;
+
+            foreach (var c in comment)
+            {
+                if (c.IsWhiteSpace())
+                {
+                    spaces++;
+                }
+            }
+
             if (spaces < 3)
             {
                 // 3 or less words

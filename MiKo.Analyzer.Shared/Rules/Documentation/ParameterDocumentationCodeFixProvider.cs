@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var fittingSyntaxNodes = FittingSyntaxNodes(syntaxNodes);
 
             var parameterSyntax = GetXmlSyntax(Constants.XmlTag.Param, fittingSyntaxNodes).FirstOrDefault(_ => GetParameterName(_) == parameterName);
+
             if (parameterSyntax != null)
             {
                 return parameterSyntax;
@@ -41,6 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             for (var index = 0; index < parameters.Length; index++)
             {
                 var parameter = parameters[index];
+
                 if (parameter.GetName() == parameterName)
                 {
                     return Comment(context, parameterCommentSyntax, parameter, index);

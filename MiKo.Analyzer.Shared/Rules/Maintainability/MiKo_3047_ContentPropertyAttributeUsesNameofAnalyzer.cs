@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "ContentPropertyAttribute":
                 {
                     var argumentList = node.ArgumentList;
+
                     if (argumentList != null)
                     {
                         var issues = argumentList.Arguments

@@ -63,6 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 var method = context.GetEnclosingMethod();
+
                 if (method is null)
                 {
                     // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown

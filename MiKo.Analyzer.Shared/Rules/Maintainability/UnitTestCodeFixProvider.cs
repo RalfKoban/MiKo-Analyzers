@@ -151,6 +151,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var arguments = i.ArgumentList.Arguments;
+
             if (arguments.Count == 1 && arguments[0].Expression is TypeOfExpressionSyntax t)
             {
                 return new[] { t.Type };

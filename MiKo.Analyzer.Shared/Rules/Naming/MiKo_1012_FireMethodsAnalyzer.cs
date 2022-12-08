@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -18,10 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => method.Name.Replace("Fire", "Raise")
-                                                                                  .Replace("_fire", "_raise")
-                                                                                  .Replace("Firing", "Raising")
-                                                                                  .Replace("_firing", "_raising");
+        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).Replace("Fire", "Raise")
+                                                                                                     .Replace("_fire", "_raise")
+                                                                                                     .Replace("Firing", "Raising")
+                                                                                                     .Replace("_firing", "_raising")
+                                                                                                     .ToString();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 

@@ -32,18 +32,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var argumentList = node.ArgumentList;
+
             if (argumentList is null)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
             var arguments = argumentList.Arguments;
+
             if (arguments.Count != 1)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
 
             var method = node.GetEnclosingMethod(semanticModel);
+
             if (method is null)
             {
                 return Enumerable.Empty<Diagnostic>();
@@ -74,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // v - at least one has to be a string -> should be provided as argument for the creation expression
             // v - that one has to have the attribute applied --> if not, report
             var parameter = parameters.FirstOrDefault(_ => _.Name == propertyName);
+
             if (parameter is null)
             {
                 return Enumerable.Empty<Diagnostic>();

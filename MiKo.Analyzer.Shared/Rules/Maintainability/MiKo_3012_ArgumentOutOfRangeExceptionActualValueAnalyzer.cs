@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)
         {
             var list = node.ArgumentList;
+
             if (list is null)
             {
                 // incomplete, so no issue

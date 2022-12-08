@@ -147,12 +147,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             var pluralName = proposedName;
+
             if (proposedName.EndsWith("ToConvert", comparison))
             {
                 pluralName = proposedName.WithoutSuffix("ToConvert");
             }
-
-            if (proposedName.EndsWith("ToModel", comparison))
+            else if (proposedName.EndsWith("ToModel", comparison))
             {
                 pluralName = proposedName.WithoutSuffix("ToModel");
             }
@@ -195,6 +195,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
 
             var firstWord = pluralName.FirstWord();
+
             if (firstWord.EndsWith("s", comparison))
             {
                 // TODO: RKN check MiKo_1070 for spelling mistakes

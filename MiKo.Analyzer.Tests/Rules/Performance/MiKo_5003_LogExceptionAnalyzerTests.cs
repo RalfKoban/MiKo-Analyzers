@@ -130,7 +130,7 @@ namespace Bla
 
         public void DoSomething(Exception ex)
         {
-            Log." + method + @"(" + call + @");
+            Log." + method + "(" + call + @");
         }
     }
 }
@@ -177,7 +177,7 @@ namespace Bla
     {
         private static ILog Log = null;
 
-        public void DoSomething(Exception ex) => Log." + method + @"(" + call + @");
+        public void DoSomething(Exception ex) => Log." + method + "(" + call + @");
     }
 }
 ");
@@ -202,7 +202,7 @@ namespace Bla
 
         public TestMe(Exception ex)
         {
-            Log." + method + @"(" + call + @");
+            Log." + method + "(" + call + @");
         }
     }
 }
@@ -226,7 +226,7 @@ namespace Bla
     {
         private static ILog Log = null;
 
-        public TestMe(Exception ex) => Log." + method + @"(" + call + @");
+        public TestMe(Exception ex) => Log." + method + "(" + call + @");
     }
 }
 ");

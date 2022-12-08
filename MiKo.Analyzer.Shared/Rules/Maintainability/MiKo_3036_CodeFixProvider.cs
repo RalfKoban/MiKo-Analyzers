@@ -65,7 +65,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroSeconds = IsZero(seconds);
 
             if (zeroMinutes && zeroSeconds) return FromHours(hours);
+
             if (zeroHours && zeroSeconds) return FromMinutes(minutes);
+
             if (zeroHours && zeroMinutes) return FromSeconds(seconds);
 
             return null;
@@ -79,8 +81,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroSeconds = IsZero(seconds);
 
             if (zeroHours && zeroMinutes && zeroSeconds) return FromDays(days);
+
             if (zeroDays && zeroMinutes && zeroSeconds) return FromHours(hours);
+
             if (zeroDays && zeroHours && zeroSeconds) return FromMinutes(minutes);
+
             if (zeroDays && zeroHours && zeroMinutes) return FromSeconds(seconds);
 
             return null;
@@ -95,9 +100,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroMilliseconds = IsZero(milliseconds);
 
             if (zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds) return FromDays(days);
+
             if (zeroDays && zeroMinutes && zeroSeconds && zeroMilliseconds) return FromHours(hours);
+
             if (zeroDays && zeroHours && zeroSeconds && zeroMilliseconds) return FromMinutes(minutes);
+
             if (zeroDays && zeroHours && zeroMinutes && zeroMilliseconds) return FromSeconds(seconds);
+
             if (zeroDays && zeroHours && zeroMinutes && zeroSeconds) return FromMilliseconds(milliseconds);
 
             return null;
@@ -113,10 +122,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroMicroseconds = IsZero(microseconds);
 
             if (zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds && zeroMicroseconds) return FromDays(days);
+
             if (zeroDays && zeroMinutes && zeroSeconds && zeroMilliseconds && zeroMicroseconds) return FromHours(hours);
+
             if (zeroDays && zeroHours && zeroSeconds && zeroMilliseconds && zeroMicroseconds) return FromMinutes(minutes);
+
             if (zeroDays && zeroHours && zeroMinutes && zeroMilliseconds && zeroMicroseconds) return FromSeconds(seconds);
+
             if (zeroDays && zeroHours && zeroMinutes && zeroSeconds && zeroMicroseconds) return FromMilliseconds(milliseconds);
+
             if (zeroDays && zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds) return FromMicroseconds(microseconds);
 
             return null;

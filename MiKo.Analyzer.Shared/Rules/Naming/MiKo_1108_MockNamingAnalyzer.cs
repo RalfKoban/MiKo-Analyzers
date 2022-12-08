@@ -80,6 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
         {
             var type = context.FindContainingType();
+
             if (type is null)
             {
                 return false;
@@ -91,6 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var assemblyName = type.ContainingAssembly.Name;
+
             if (assemblyName.Contains("Test"))
             {
                 return assemblyName.Contains("MiKoSolutions.Analyzers") is false;

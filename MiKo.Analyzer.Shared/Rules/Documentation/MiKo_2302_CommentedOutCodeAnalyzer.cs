@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -14,6 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CanRunConcurrently => true;
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => CodeDetector.IsCommentedOutCodeLine(comment, semanticModel);
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CodeDetector.IsCommentedOutCodeLine(comment, semanticModel);
     }
 }

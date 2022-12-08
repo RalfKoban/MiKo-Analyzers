@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var parameter in symbol.Parameters.Where(ShallAnalyzeParameter))
             {
                 var comment = parameter.GetComment(commentXml);
+
                 if (comment is null)
                 {
                     continue;

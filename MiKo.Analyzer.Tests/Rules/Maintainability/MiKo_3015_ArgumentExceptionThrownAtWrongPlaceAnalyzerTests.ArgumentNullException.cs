@@ -59,7 +59,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", @"ArgumentNullException(nameof(TestMe))"), Template.Replace("###", @"InvalidOperationException(""TODO"")"));
+            VerifyCSharpFix(Template.Replace("###", "ArgumentNullException(nameof(TestMe))"), Template.Replace("###", @"InvalidOperationException(""TODO"")"));
         }
 
         [Test]

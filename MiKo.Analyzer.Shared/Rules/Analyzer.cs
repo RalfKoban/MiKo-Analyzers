@@ -82,6 +82,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(SyntaxTree syntaxTree, int start, int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
 
+        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+
         protected static void ReportDiagnostics(CodeBlockAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             if (context.CancellationToken.IsCancellationRequested)
@@ -104,6 +106,8 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
         }
+
+        protected static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
 
         protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -128,6 +132,8 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
+        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
             if (context.CancellationToken.IsCancellationRequested)
@@ -151,12 +157,6 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
-
-        protected static void ReportDiagnostics(SymbolAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
-
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, params Diagnostic[] issues) => ReportDiagnostics(context, (IEnumerable<Diagnostic>)issues);
-
         protected virtual bool IsApplicable(CompilationStartAnalysisContext context) => true;
 
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
@@ -166,6 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules
             foreach (var symbolKind in symbolKinds)
             {
                 var action = GetAnalyzeMethod(symbolKind);
+
                 if (action != null)
                 {
                     context.RegisterSymbolAction(action, symbolKind);

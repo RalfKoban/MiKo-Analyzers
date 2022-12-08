@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var isTask = returnType.IsTask();
+
             if (isTask is false)
             {
                 return "Run";

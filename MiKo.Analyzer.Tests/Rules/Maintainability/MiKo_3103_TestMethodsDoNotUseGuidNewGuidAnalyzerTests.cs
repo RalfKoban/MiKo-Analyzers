@@ -132,7 +132,7 @@ public class TestMe
         [Test]
         public void Code_gets_fixed()
         {
-            const string Template = @"using NUnit.Framework; public class TestMe { [Test] public void Test() { var x = ###; } }";
+            const string Template = "using NUnit.Framework; public class TestMe { [Test] public void Test() { var x = ###; } }";
 
             VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid()"), Template.Replace("###", @"Guid.Parse(""111e32b2-0b54-44e2-958b-06ff2bc2b353"")"));
         }
@@ -140,7 +140,7 @@ public class TestMe
         [Test]
         public void Code_with_ToString_gets_fixed_and_simplified()
         {
-            const string Template = @"using NUnit.Framework; public class TestMe { [Test] public string Test() => ###; }";
+            const string Template = "using NUnit.Framework; public class TestMe { [Test] public string Test() => ###; }";
 
             VerifyCSharpFix(Template.Replace("###", @"Guid.NewGuid().ToString(""B"")"), Template.Replace("###", @"""{111e32b2-0b54-44e2-958b-06ff2bc2b353}"""));
         }
@@ -168,13 +168,13 @@ public class TestMe
     }
 }";
 
-            VerifyCSharpFix(Template.Replace("###", @"Guid.NewGuid"), Template.Replace("###", @"() => Guid.Parse(""111e32b2-0b54-44e2-958b-06ff2bc2b353"")"));
+            VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid"), Template.Replace("###", @"() => Guid.Parse(""111e32b2-0b54-44e2-958b-06ff2bc2b353"")"));
         }
 
         [Test]
         public void Code_with_static_readonly_field_gets_fixed()
         {
-            const string Template = @"using NUnit.Framework; [TestFixture] public class TestMe { private static readonly Guid Id = ###; [Test] public void Test() { } }";
+            const string Template = "using NUnit.Framework; [TestFixture] public class TestMe { private static readonly Guid Id = ###; [Test] public void Test() { } }";
 
             VerifyCSharpFix(Template.Replace("###", "Guid.NewGuid()"), Template.Replace("###", @"Guid.Parse(""111e32b2-0b54-44e2-958b-06ff2bc2b353"")"));
         }

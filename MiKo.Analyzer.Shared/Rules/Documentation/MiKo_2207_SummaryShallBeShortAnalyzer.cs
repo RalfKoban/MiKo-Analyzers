@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -28,15 +29,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var whitespaces = 0;
 
-            var clearedSummary = summary.Replace(" - ", " ")
-                                        .Replace(" />", "/>")
-                                        .Replace(" </", "</")
-                                        .Replace("> <", "><")
-                                        .Replace(" cref=", "cref=")
-                                        .Replace(" href=", "href=")
-                                        .Replace(" type=", "type=")
-                                        .Replace(" langword=", "langword=")
-                                        .Trim();
+            var clearedSummary = new StringBuilder(summary).Replace(" - ", " ")
+                                                           .Replace(" />", "/>")
+                                                           .Replace(" </", "</")
+                                                           .Replace("> <", "><")
+                                                           .Replace(" cref=", "cref=")
+                                                           .Replace(" href=", "href=")
+                                                           .Replace(" type=", "type=")
+                                                           .Replace(" langword=", "langword=")
+                                                           .ToString()
+                                                           .Trim();
             foreach (var c in clearedSummary)
             {
                 if (c.IsWhiteSpace())

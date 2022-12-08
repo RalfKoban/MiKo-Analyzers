@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             // comment is missing, so add one
             var method = comment.FirstAncestorOrSelf<MethodDeclarationSyntax>();
+
             if (method != null)
             {
                 // find parameter
@@ -33,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (isSender)
                 {
                     var summary = comment.GetXmlSyntax(Constants.XmlTag.Summary).FirstOrDefault();
+
                     if (summary != null)
                     {
                         comment = comment.InsertNodeAfter(summary, content);

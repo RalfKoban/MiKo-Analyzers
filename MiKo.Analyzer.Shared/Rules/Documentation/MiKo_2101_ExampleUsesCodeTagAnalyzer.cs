@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var comment in comments)
             {
                 var index = comment.IndexOf("=", StringComparison.OrdinalIgnoreCase);
+
                 if (index < 0)
                 {
                     // nothing found
@@ -31,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // determine if a '<code>' block is before and a '</code>' block is after the example
                 var codeTagStartIndex = comment.IndexOf("<code>", StringComparison.OrdinalIgnoreCase);
                 var codeTagEndIndex = comment.IndexOf("</code>", StringComparison.OrdinalIgnoreCase);
+
                 if (codeTagStartIndex < 0)
                 {
                     // we have an issue

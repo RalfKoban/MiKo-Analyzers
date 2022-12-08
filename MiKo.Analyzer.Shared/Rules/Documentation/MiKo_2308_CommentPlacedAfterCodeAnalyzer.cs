@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(string comment, SemanticModel semanticModel) => false;
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => false;
 
         protected override bool CommentHasIssue(SyntaxTrivia trivia, SemanticModel semanticModel)
         {
@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false;
                 }
 
-                var comment = trivia.ToString().Trim();
+                var comment = trivia.ToString().AsSpan().Trim();
 
                 if (comment.StartsWith("////", StringComparison.OrdinalIgnoreCase))
                 {

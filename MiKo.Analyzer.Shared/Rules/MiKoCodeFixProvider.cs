@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 var diagnostic = diagnostics.First();
 
                 var codeFix = CreateCodeFix(context, root, diagnostic);
+
                 if (codeFix != null)
                 {
                     context.RegisterCodeFix(codeFix, diagnostic);
@@ -101,6 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var type = method.FindContainingType();
 
             var isConst = type.GetMembers(identifierName).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+
             if (isConst)
             {
                 // const value inside class
@@ -140,6 +142,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var updatedSyntax = GetUpdatedSyntax(context, syntax, diagnostic);
 
             var newRoot = root;
+
             if (ReferenceEquals(updatedSyntax, syntax) is false)
             {
                 newRoot = updatedSyntax is null
@@ -213,6 +216,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var syntaxNodes = root.FindToken(startPosition).Parent.AncestorsAndSelf();
 
             var syntax = GetSyntax(syntaxNodes.ToList());
+
             if (syntax is null)
             {
                 return null;

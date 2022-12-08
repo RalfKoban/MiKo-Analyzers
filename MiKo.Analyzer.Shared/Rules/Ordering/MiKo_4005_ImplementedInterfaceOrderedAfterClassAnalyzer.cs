@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         private static bool IsAtFirstPosition(INamedTypeSymbol symbol, string defaultInterfaceName)
         {
             var bases = GetBaseListSyntax(symbol);
+
             if (bases is null)
             {
                 return true;
@@ -46,6 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var types = bases.Types;
 
             var index = types.IndexOf(_ => _.Type.GetNameOnlyPart() == defaultInterfaceName);
+
             if (index <= 0)
             {
                 return true;

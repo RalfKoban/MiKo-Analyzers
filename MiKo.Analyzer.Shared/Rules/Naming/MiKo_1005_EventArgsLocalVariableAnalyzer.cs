@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var identifier in identifiers)
             {
                 var name = identifier.ValueText;
+
                 if (name == E || name == Args)
                 {
                     continue;

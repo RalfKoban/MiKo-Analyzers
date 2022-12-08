@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
 
                 var pluralName = GetPluralName(originalName, out var name);
+
                 if (pluralName is null)
                 {
                     continue;
@@ -103,6 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (originalName.EndsWith("Hash", StringComparison.OrdinalIgnoreCase))
             {
                 var v = identifier.GetEnclosing<VariableDeclarationSyntax>();
+
                 if (v != null)
                 {
                     var type = semanticModel.GetTypeInfo(v.Type).Type;
@@ -123,6 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "grouping":
                 {
                     var v = identifier.GetEnclosing<VariableDeclarationSyntax>();
+
                     if (v != null)
                     {
                         var type = semanticModel.GetTypeInfo(v.Type).Type;

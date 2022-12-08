@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -56,7 +57,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var result = Phrases.Aggregate(text, (current, phrase) => current.Replace(phrase, Replacement));
+                var sb = new StringBuilder(text);
+                foreach (var phrase in Phrases)
+                {
+                    sb.Replace(phrase, Replacement);
+                }
+
+                // TODO RKN: Use stringBuilder for replacement
+                var result = sb.ToString();
 
                 result = ReplaceSpecialPhrase(IsUsedToPhrase, result, Verbalizer.MakeThirdPersonSingularVerb);
                 result = ReplaceSpecialPhrase(AreUsedToPhrase, result, _ => _);
@@ -66,13 +74,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // special situation for <param> texts
                 var belowParam = node.Ancestors<XmlElementSyntax>().Any(_ => _.GetName() == Constants.XmlTag.Param);
+
                 if (belowParam)
                 {
                     // let's find out if we have the first sentence
                     var canIndex = result.IndexOf(CanPhrase, StringComparison.Ordinal);
+
                     if (canIndex != -1)
                     {
                         var firstSentence = textSoFar.LastIndexOf('.') == -1 && canIndex < result.IndexOf('.');
+
                         if (firstSentence)
                         {
                             // we seem to be in the first sentence
@@ -81,8 +92,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                result = result.Replace(CanPhrase, CanReplacement);
-                result = result.Replace(UsedToPhrase, Replacement);
+                sb = new StringBuilder(result);
+                sb.Replace(CanPhrase, CanReplacement);
+                sb.Replace(UsedToPhrase, Replacement);
+
+                result = sb.ToString();
 
                 textSoFar += result;
 
@@ -183,6 +197,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var finalLocation = CreateLocation(token, start, end);
 
                 var replacement = replacementCallback(nextWord);
+
                 if (makeUpper)
                 {
                     replacement = replacement.ToUpperCaseAt(0);
@@ -212,7 +227,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     break;
                 }
 
-                var nextWord = result.Substring(index + phrase.Length).FirstWord();
+                var nextWord = result.AsSpan(index + phrase.Length).FirstWord().ToString();
                 var nextWordEnd = result.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length;
 
                 var replaceText = result.Substring(index, nextWordEnd - index);

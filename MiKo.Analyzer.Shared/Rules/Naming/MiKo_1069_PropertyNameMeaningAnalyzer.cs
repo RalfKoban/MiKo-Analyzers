@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation)
         {
             var returnType = symbol.GetReturnType();
+
             if (returnType is null)
             {
                 // may happen during typing

@@ -683,7 +683,7 @@ public class TestMeCommand
 
         [TestCase("Used to create something", "Provides support for creating something")]
         [TestCase(@"Used to create <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
-        [TestCase(@"Used for creating something", @"Provides support for creating something")]
+        [TestCase("Used for creating something", "Provides support for creating something")]
         [TestCase(@"Used for creating <see cref=""string""/> instances", @"Provides support for creating <see cref=""string""/> instances")]
         public void Code_gets_fixed_for_factory_types_(string originalComment, string fixedComment)
         {

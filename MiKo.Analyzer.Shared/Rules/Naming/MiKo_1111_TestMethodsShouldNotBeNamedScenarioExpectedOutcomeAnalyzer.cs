@@ -60,6 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var parts = methodName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
 
                 var hasIssue = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase()) && parts.Last().ContainsAny(ExpectedOutcomeMarkers);
+
                 if (hasIssue)
                 {
                     yield return Issue(symbol);

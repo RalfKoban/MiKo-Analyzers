@@ -47,6 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
 
             var eventName = identifier.ValueText;
+
             if (eventName == nameof(ICommand.CanExecuteChanged) && type.Name == nameof(EventHandler))
             {
                 return null; // ignore event that we cannot change anymore
@@ -59,6 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var eventArgsType = type.TypeArguments[0];
+
             if (eventArgsType.IsEventArgs() is false)
             {
                 return null;

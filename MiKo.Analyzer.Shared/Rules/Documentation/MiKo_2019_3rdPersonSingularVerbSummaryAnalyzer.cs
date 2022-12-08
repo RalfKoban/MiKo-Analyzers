@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -73,11 +74,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             }
 
                             // we found some text
-                            var firstWord = summary
-                                                .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                                                .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                                                .Without(",") // skip over first comma
-                                                .FirstWord();
+                            var firstWord = new StringBuilder(summary)
+                                            .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                            .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                            .Without(",") // skip over first comma
+                                            .ToString()
+                                            .FirstWord();
 
                             if (Verbalizer.IsThirdPersonSingularVerb(firstWord))
                             {

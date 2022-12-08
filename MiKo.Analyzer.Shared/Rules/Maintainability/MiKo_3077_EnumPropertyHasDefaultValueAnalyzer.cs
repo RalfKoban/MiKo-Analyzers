@@ -154,6 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var accessorList = syntax.AccessorList;
+
             if (accessorList != null)
             {
                 var getter = accessorList.Accessors[0];

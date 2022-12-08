@@ -56,7 +56,7 @@ using System;
 
 public class TestMe
 {
-    public void DoSomething(" + type + @" " + name + @")
+    public void DoSomething(" + type + " " + name + @")
     {
     }
 }
@@ -71,7 +71,7 @@ using System;
 
 public class TestMe
 {
-    public void DoSomething(" + type + @" " + name + @")
+    public void DoSomething(" + type + " " + name + @")
     {
     }
 }

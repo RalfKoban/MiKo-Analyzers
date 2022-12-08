@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "return null ?? 42;",
                 "i++;",
                 "e.Handled = true;",
+                "do",
                 "else",
                 "return true || false;",
                 "return true && false;",

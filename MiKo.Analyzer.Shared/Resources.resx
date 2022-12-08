@@ -3061,6 +3061,15 @@ In most cases this is not wanted. The object reference shall be the same, only t
   <data name="MiKo_3028_Title" xml:space="preserve">
     <value>Do not assign null to lambda parameters</value>
   </data>
+  <data name="MiKo_3029_Description" xml:space="preserve">
+    <value>If you register for an event but forget to unregister, a memory leak may occur. This especially happens in case the event (which is registered on) is static or belongs to an object having a long lifetime.</value>
+  </data>
+  <data name="MiKo_3029_MessageFormat" xml:space="preserve">
+    <value>Assignment causes potential memory leak</value>
+  </data>
+  <data name="MiKo_3029_Title" xml:space="preserve">
+    <value>Event registrations should not cause memory leaks</value>
+  </data>
   <data name="MiKo_3030_Description" xml:space="preserve">
     <value>To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services.</value>
   </data>
@@ -3889,27 +3898,51 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Try statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_3210_CodeFixTitle" xml:space="preserve">
-    <value>Use lambda expression body</value>
+    <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_3210_Description" xml:space="preserve">
-    <value>Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+    <value>To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
   </data>
   <data name="MiKo_3210_MessageFormat" xml:space="preserve">
-    <value>Use lambda expression body instead</value>
+    <value>Surround if statement with a blank line</value>
   </data>
   <data name="MiKo_3210_Title" xml:space="preserve">
-    <value>Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements</value>
+    <value>If statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_3211_CodeFixTitle" xml:space="preserve">
-    <value>Remove braces around parameter</value>
+    <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_3211_Description" xml:space="preserve">
-    <value>Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+    <value>To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
   </data>
   <data name="MiKo_3211_MessageFormat" xml:space="preserve">
-    <value>Use simple lambda expression body instead</value>
+    <value>Surround lock statement with a blank line</value>
   </data>
   <data name="MiKo_3211_Title" xml:space="preserve">
+    <value>Lock statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
+    <value>Use lambda expression body</value>
+  </data>
+  <data name="MiKo_3301_Description" xml:space="preserve">
+    <value>Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+  </data>
+  <data name="MiKo_3301_MessageFormat" xml:space="preserve">
+    <value>Use lambda expression body instead</value>
+  </data>
+  <data name="MiKo_3301_Title" xml:space="preserve">
+    <value>Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements</value>
+  </data>
+  <data name="MiKo_3302_CodeFixTitle" xml:space="preserve">
+    <value>Remove braces around parameter</value>
+  </data>
+  <data name="MiKo_3302_Description" xml:space="preserve">
+    <value>Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead.</value>
+  </data>
+  <data name="MiKo_3302_MessageFormat" xml:space="preserve">
+    <value>Use simple lambda expression body instead</value>
+  </data>
+  <data name="MiKo_3302_Title" xml:space="preserve">
     <value>Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters</value>
   </data>
   <data name="MiKo_3401_Description" xml:space="preserve">

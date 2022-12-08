@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -25,10 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return original;
         }
 
-        private static string GetFixedText(string text) => text
-                                                           .Replace("an't", "annot")
-                                                           .Replace("won't", "will not")
-                                                           .Replace("Won't", "Will not")
-                                                           .Replace("n't", " not");
+        private static string GetFixedText(string text) => new StringBuilder(text).Replace("an't", "annot")
+                                                                                  .Replace("won't", "will not")
+                                                                                  .Replace("Won't", "Will not")
+                                                                                  .Replace("n't", " not")
+                                                                                  .ToString();
     }
 }

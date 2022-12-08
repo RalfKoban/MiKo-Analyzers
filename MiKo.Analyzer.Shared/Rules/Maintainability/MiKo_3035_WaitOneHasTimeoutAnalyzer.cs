@@ -47,6 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (NodeHasIssue(node, context.SemanticModel))
             {
                 var methodSymbol = context.GetEnclosingMethod();
+
                 if (methodSymbol is null)
                 {
                     // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown

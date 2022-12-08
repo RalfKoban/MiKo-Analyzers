@@ -56,7 +56,7 @@ public static class TestMeExtensions
             => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
-    public static int " + prefix + methodName + @"(this int " + name + @") => 42;
+    public static int " + prefix + methodName + "(this int " + name + @") => 42;
 }
 ");
 
@@ -76,7 +76,7 @@ public static class TestMeExtensions
             => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
-    public static int " + prefix + methodName + @"Something(this int " + name + @") => 42;
+    public static int " + prefix + methodName + "Something(this int " + name + @") => 42;
 }
 ");
 

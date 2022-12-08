@@ -8637,6 +8637,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you register for an event but forget to unregister, a memory leak may occur. This especially happens in case the event (which is registered on) is static or belongs to an object having a long lifetime..
+        /// </summary>
+        public static string MiKo_3029_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3029_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment causes potential memory leak.
+        /// </summary>
+        public static string MiKo_3029_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3029_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event registrations should not cause memory leaks.
+        /// </summary>
+        public static string MiKo_3029_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3029_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, methods assume as little as possible about the structure or properties of objects they use. They should only work with objects they get directly, but they should not reach through them to access other objects and their services..
         /// </summary>
         public static string MiKo_3030_Description {
@@ -11002,7 +11029,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use lambda expression body.
+        ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3210_CodeFixTitle {
             get {
@@ -11011,7 +11038,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        ///   Looks up a localized string similar to To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
         /// </summary>
         public static string MiKo_3210_Description {
             get {
@@ -11020,7 +11047,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use lambda expression body instead.
+        ///   Looks up a localized string similar to Surround if statement with a blank line.
         /// </summary>
         public static string MiKo_3210_MessageFormat {
             get {
@@ -11029,7 +11056,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements.
+        ///   Looks up a localized string similar to If statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_3210_Title {
             get {
@@ -11038,7 +11065,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove braces around parameter.
+        ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_3211_CodeFixTitle {
             get {
@@ -11047,7 +11074,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        ///   Looks up a localized string similar to To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
         /// </summary>
         public static string MiKo_3211_Description {
             get {
@@ -11056,7 +11083,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use simple lambda expression body instead.
+        ///   Looks up a localized string similar to Surround lock statement with a blank line.
         /// </summary>
         public static string MiKo_3211_MessageFormat {
             get {
@@ -11065,11 +11092,83 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters.
+        ///   Looks up a localized string similar to Lock statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_3211_Title {
             get {
                 return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use lambda expression body.
+        /// </summary>
+        public static string MiKo_3301_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3301_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using parenthesized lambda expressions with blocks that contain a single statement leads to some noise caused by the braces. Lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        /// </summary>
+        public static string MiKo_3301_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3301_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use lambda expression body instead.
+        /// </summary>
+        public static string MiKo_3301_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3301_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements.
+        /// </summary>
+        public static string MiKo_3301_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3301_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove braces around parameter.
+        /// </summary>
+        public static string MiKo_3302_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3302_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using parenthesized lambda expressions with a single parameter leads to some noise caused by the braces. Simple lambda expressions with expression bodies avoid that noise. So they should be used instead..
+        /// </summary>
+        public static string MiKo_3302_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3302_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use simple lambda expression body instead.
+        /// </summary>
+        public static string MiKo_3302_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3302_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters.
+        /// </summary>
+        public static string MiKo_3302_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3302_Title", resourceCulture);
             }
         }
         

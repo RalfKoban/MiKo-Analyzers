@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
-            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTags().Trim();
+            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim().ToString();
 
             // remove -or- separators and split comment into parts to inspect individually
             var parts = comment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
@@ -55,12 +55,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var parameterIndicatorPhrase = parameterIndicators[parameter];
                     var phrases = m_exceptionPhrases.Select(_ => _.FormatWith(parameter.Name)).ToArray();
 
-                    results.AddRange(parts
-                                     .Where(_ => _.Contains(parameterIndicatorPhrase))
-                                     .Select(_ => _.Trim())
-                                     .Where(_ => _.StartsWithAny(phrases, Comparison) is false)
-                                     .Where(_ => _.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
-                                     .Select(_ => ExceptionIssue(exceptionComment, proposal)));
+                    foreach (var part in parts)
+                    {
+                        if (part.Contains(parameterIndicatorPhrase))
+                        {
+                            var trimmed = part.AsSpan().Trim();
+
+                            if (trimmed.StartsWithAny(phrases, Comparison) is false && trimmed.StartsWithAny(allParameterIndicatorPhrases, Comparison) is false)
+                            {
+                                results.Add(ExceptionIssue(exceptionComment, proposal));
+                            }
+                        }
+                    }
                 }
             }
             else

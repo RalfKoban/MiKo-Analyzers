@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         case "CombinatorialAttribute":
                         {
                             var listWithoutAttribute = attributeList.Without(attribute);
+
                             if (listWithoutAttribute.Attributes.Count == 0)
                             {
                                 // we do not need an empty list

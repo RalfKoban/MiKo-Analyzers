@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var entry in map)
             {
                 var duplicates = new Queue<XmlElementSyntax>(entry);
+
                 if (duplicates.Count <= 1)
                 {
                     continue;
@@ -48,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // find the remaining ' /// ' text nodes and mark them as obsolete as they are not part of the elements
                     var exceptionIndex = siblings.IndexOf(duplicate);
                     var previousSibling = siblings[exceptionIndex - 1];
+
                     if (previousSibling is XmlTextSyntax)
                     {
                         obsoleteNodes.Add(previousSibling);

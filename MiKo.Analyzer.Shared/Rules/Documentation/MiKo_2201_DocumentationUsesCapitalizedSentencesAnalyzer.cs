@@ -58,8 +58,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool CommentHasIssue(XNode node)
         {
-            string comment;
-
             if (node is XElement e)
             {
                 // skip <c> and <code>
@@ -77,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             return e.Descendants().Any(CommentHasIssue);
                         }
 
-                        comment = e.Value.TrimStart();
+                        var comment = e.Value.AsSpan().TrimStart();
 
                         // sentence starts lower case
                         if (name == Constants.XmlTag.Para && comment.Length > 0 && comment[0].IsLowerCaseLetter())
@@ -85,16 +83,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             return true;
                         }
 
-                        break;
+                        return CommentHasIssue(comment.ToString());
                     }
                 }
             }
-            else
-            {
-                comment = node.ToString();
-            }
 
-            return CommentHasIssue(comment);
+            return CommentHasIssue(node.ToString());
         }
 
         private static bool CommentHasIssue(string comment)
@@ -145,6 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (c.IsLowerCaseLetter())
             {
                 var next = i + Gap;
+
                 if (next < last && comment[i + 1] == '.')
                 {
                     i = next;

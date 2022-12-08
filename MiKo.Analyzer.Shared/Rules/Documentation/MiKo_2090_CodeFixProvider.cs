@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var method = syntax.FirstAncestorOrSelf<OperatorDeclarationSyntax>();
+
             if (method is null)
             {
                 return syntax;

@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             // there might be multiple parameters, so we have to find out which parameter is meant
             var parameter = syntax.GetUsedParameter();
+
             if (parameter != null)
             {
                 switch (argumentList.Arguments.Count)

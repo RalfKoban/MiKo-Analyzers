@@ -34,7 +34,7 @@ public class TestMe
     public void DoSomething()
     {
         var items = new List<string>();
-        if (items.Where(" + identifier + @" => " + identifier + @" == null)
+        if (items.Where(" + identifier + " => " + identifier + @" == null)
         {
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -67,13 +68,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "for",
                                   };
 
-            foreach (var start in CommandStartingPhrases.Select(_ => _.Trim()))
+            var results = new List<KeyValuePair<string, string>>();
+
+            foreach (var phrase in CommandStartingPhrases)
             {
+                var start = phrase.AsSpan().Trim();
+
                 foreach (var middle in middleParts)
                 {
-                    yield return new KeyValuePair<string, string>($"{start} {middle} ", string.Empty);
+                    results.Add(new KeyValuePair<string, string>(string.Concat(start.ToString(), " ", middle, " "), string.Empty));
                 }
             }
+
+            return results;
         }
     }
 }

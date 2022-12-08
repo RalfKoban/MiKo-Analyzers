@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             // contains #region  and #endregion directive trivia syntaxes
             var relatedDirectives = regionNode.GetRelatedDirectives();
+
             if (relatedDirectives.Count != 2)
             {
                 return false;
