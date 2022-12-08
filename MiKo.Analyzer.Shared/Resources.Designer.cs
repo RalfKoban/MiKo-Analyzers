@@ -11101,6 +11101,150 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3212_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3212_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3212_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3212_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround foreach loop with a blank line.
+        /// </summary>
+        public static string MiKo_3212_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3212_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to foreach loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3212_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3212_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3213_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3213_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3213_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3213_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround for loop with a blank line.
+        /// </summary>
+        public static string MiKo_3213_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3213_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3213_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3213_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3214_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3214_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3214_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3214_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround while loop with a blank line.
+        /// </summary>
+        public static string MiKo_3214_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3214_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to while loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3214_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3214_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3215_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3215_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3215_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3215_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround do/while loop with a blank line.
+        /// </summary>
+        public static string MiKo_3215_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3215_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to do/while loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3215_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3215_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
