@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var baseType = symbol.ContainingType.BaseType;
+
             if (baseType is null)
             {
                 yield break;
@@ -32,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var syntax = symbol.GetSyntax<ConstructorDeclarationSyntax>();
             var baseCall = syntax.FirstChild<ConstructorInitializerSyntax>(SyntaxKind.BaseConstructorInitializer);
+
             if (baseCall is null)
             {
                 yield break;
@@ -43,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             for (var i = 0; i < arguments.Count; i++)
             {
                 var argument = arguments[i];
+
                 if (argument.Expression is IdentifierNameSyntax identifier)
                 {
                     // if we have multiple arguments using the same value, then we overwrite them to only use the last one
