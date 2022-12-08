@@ -3909,6 +3909,54 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3211_Title" xml:space="preserve">
     <value>Lock statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_3212_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3212_Description" xml:space="preserve">
+    <value>To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3212_MessageFormat" xml:space="preserve">
+    <value>Surround foreach loop with a blank line</value>
+  </data>
+  <data name="MiKo_3212_Title" xml:space="preserve">
+    <value>foreach loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_3213_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3213_Description" xml:space="preserve">
+    <value>To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3213_MessageFormat" xml:space="preserve">
+    <value>Surround for loop with a blank line</value>
+  </data>
+  <data name="MiKo_3213_Title" xml:space="preserve">
+    <value>for loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_3214_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3214_Description" xml:space="preserve">
+    <value>To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3214_MessageFormat" xml:space="preserve">
+    <value>Surround while loop with a blank line</value>
+  </data>
+  <data name="MiKo_3214_Title" xml:space="preserve">
+    <value>while loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_3215_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3215_Description" xml:space="preserve">
+    <value>To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3215_MessageFormat" xml:space="preserve">
+    <value>Surround do/while loop with a blank line</value>
+  </data>
+  <data name="MiKo_3215_Title" xml:space="preserve">
+    <value>do/while loops should be surrounded by blank lines</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
