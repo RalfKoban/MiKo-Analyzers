@@ -238,7 +238,7 @@ public class TestMe
 {
     public int DoSomething()
     {
-        return Get(" + name + @" => " + name + @".Data);
+        return Get(" + name + " => " + name + @".Data);
     }
 }
 ");

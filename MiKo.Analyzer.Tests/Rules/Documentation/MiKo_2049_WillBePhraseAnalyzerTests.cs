@@ -59,7 +59,7 @@ public class TestMe
         public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
-/// <" + tag + @">" + phrase + "</" + tag + @">
+/// <" + tag + ">" + phrase + "</" + tag + @">
 public class TestMe
 {
 }
@@ -71,7 +71,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + "</" + tag + @">
+    /// <" + tag + ">" + phrase + "</" + tag + @">
     public void DoSomething() { }
 }
 ");
@@ -82,7 +82,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + "</" + tag + @">
+    /// <" + tag + ">" + phrase + "</" + tag + @">
     public int Age { get; set; }
 }
 ");
@@ -93,7 +93,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + "</" + tag + @">
+    /// <" + tag + ">" + phrase + "</" + tag + @">
     public event EventHandler<T> MyEvent;
 }
 ");
@@ -104,7 +104,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">" + phrase + "</" + tag + @">
+    /// <" + tag + ">" + phrase + "</" + tag + @">
     private bool m_field;
 }
 ");
@@ -115,7 +115,7 @@ using System;
 
 public interface ITestMe
 {
-    /// <" + tag + @">" + phrase + "</" + tag + @">
+    /// <" + tag + ">" + phrase + "</" + tag + @">
     int Age { get; set; }
 }
 ");
@@ -126,7 +126,7 @@ using System;
 
 public interface ITestMe
 {
-    /// <" + tag + @">" + phrase + "</" + tag + @">
+    /// <" + tag + ">" + phrase + "</" + tag + @">
     int this[int key] { get; set; }
 }
 ");

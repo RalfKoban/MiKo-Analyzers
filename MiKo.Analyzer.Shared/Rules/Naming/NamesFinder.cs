@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     var nextIndex = index + 1;
 
-                    if (nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase()) && isSpecialCharA is false)
+                    if ((nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase())) && isSpecialCharA is false)
                     {
                         // multiple upper cases in a line, so do not flip
                         nextC = c;
@@ -142,7 +142,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // fix some corrections, such as for known exceptions
-            var result = new StringBuilder().Append(characters.ToArray())
+            var result = new StringBuilder(characters.Count).Append(characters.ToArray())
                                             .Replace("argument_null_exception", nameof(ArgumentNullException))
                                             .Replace("argument_exception", nameof(ArgumentException))
                                             .Replace("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))

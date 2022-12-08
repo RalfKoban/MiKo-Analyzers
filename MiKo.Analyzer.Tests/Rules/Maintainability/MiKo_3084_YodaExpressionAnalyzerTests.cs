@@ -37,7 +37,7 @@ using System;
 
 public class TestMe
 {
-    public bool DoSomething(" + type + @" a, " + type + @" b)
+    public bool DoSomething(" + type + " a, " + type + @" b)
     {
         if (a " + @operator + @" b)
             return true;

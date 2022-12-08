@@ -59,7 +59,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", @"ArgumentOutOfRangeException(nameof(TestMe))"), Template.Replace("###", @"InvalidOperationException(""TODO"")"));
+            VerifyCSharpFix(Template.Replace("###", "ArgumentOutOfRangeException(nameof(TestMe))"), Template.Replace("###", @"InvalidOperationException(""TODO"")"));
         }
 
         [Test]

@@ -58,7 +58,7 @@ public class TestMe
         public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
-/// <" + tag + @">Does fire.</" + tag + @">
+/// <" + tag + ">Does fire.</" + tag + @">
 public class TestMe
 {
 }
@@ -70,7 +70,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + ">Does fire.</" + tag + @">
     public void DoSomething() { }
 }
 ");
@@ -81,7 +81,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + ">Does fire.</" + tag + @">
     public int Age { get; set; }
 }
 ");
@@ -92,7 +92,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + ">Does fire.</" + tag + @">
     public event EventHandler<T> MyEvent;
 }
 ");
@@ -103,7 +103,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @">Does fire.</" + tag + @">
+    /// <" + tag + ">Does fire.</" + tag + @">
     private bool m_field;
 }
 ");

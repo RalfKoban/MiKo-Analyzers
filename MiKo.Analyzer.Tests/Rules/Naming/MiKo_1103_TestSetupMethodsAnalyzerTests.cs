@@ -86,8 +86,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_([ValueSource(nameof(TestSetUps))] string test) => VerifyCSharpFix(
-                                                              @"using System; class TestMe { [" + test + @"] void Setup()  { } }",
-                                                              @"using System; class TestMe { [" + test + @"] void PrepareTest()  { } }");
+                                                              "using System; class TestMe { [" + test + "] void Setup()  { } }",
+                                                              "using System; class TestMe { [" + test + "] void PrepareTest()  { } }");
 
         protected override string GetDiagnosticId() => MiKo_1103_TestSetupMethodsAnalyzer.Id;
 

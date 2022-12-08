@@ -88,7 +88,7 @@ namespace Bla
     {
         public int Something { get; set; }
 
-        private " + typeName + @" e = new " + typeName + @"(nameof(Something));
+        private " + typeName + " e = new " + typeName + @"(nameof(Something));
     }
 }
 ");
@@ -108,7 +108,7 @@ namespace Bla
 
     public class TestMe : TestMeBase
     {
-        private " + typeName + @" e = new " + typeName + @"(nameof(Something));
+        private " + typeName + " e = new " + typeName + @"(nameof(Something));
     }
 }
 ");
@@ -151,7 +151,7 @@ namespace Bla
 {
     public class TestMe
     {
-        private " + typeName + @" e = new " + typeName + @"(nameof(TestMe));
+        private " + typeName + " e = new " + typeName + @"(nameof(TestMe));
     }
 }
 ");
@@ -168,7 +168,7 @@ namespace Bla
     {
         public string Something { get; set; }
 
-        private " + typeName + @" e = new " + typeName + @"(() => Something);
+        private " + typeName + " e = new " + typeName + @"(() => Something);
     }
 }
 ");
@@ -183,7 +183,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public " + typeName + @" DoSomething(string paramName) => new " + typeName + @"(paramName);
+        public " + typeName + " DoSomething(string paramName) => new " + typeName + @"(paramName);
     }
 }
 ");
@@ -198,7 +198,7 @@ namespace Bla
 {
     public class TestMe
     {
-        private " + typeName + @" e = new " + typeName + @"(null);
+        private " + typeName + " e = new " + typeName + @"(null);
     }
 }
 ");
@@ -216,7 +216,7 @@ namespace Bla
     {
         public int Something { get; set; }
 
-        private " + typeName + @" e = new " + typeName + @"(""Something"");
+        private " + typeName + " e = new " + typeName + @"(""Something"");
     }
 }
 ";
@@ -231,7 +231,7 @@ namespace Bla
     {
         public int Something { get; set; }
 
-        private " + typeName + @" e = new " + typeName + @"(nameof(Something));
+        private " + typeName + " e = new " + typeName + @"(nameof(Something));
     }
 }
 ";

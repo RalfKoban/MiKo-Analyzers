@@ -280,7 +280,7 @@ public class TestMe
         [TestCase("==", @"ArgumentNullException(""o"")", @"ArgumentException(""TODO"", nameof(o))")]
         [TestCase("==", @"ArgumentNullException(nameof(o), ""some message"")", @"ArgumentException(""some message"", nameof(o))")]
         [TestCase("is", "ArgumentNullException()", @"ArgumentException(""TODO"", nameof(o))")]
-        [TestCase("is", @"ArgumentNullException(nameof(o))", @"ArgumentException(""TODO"", nameof(o))")]
+        [TestCase("is", "ArgumentNullException(nameof(o))", @"ArgumentException(""TODO"", nameof(o))")]
         [TestCase("is", @"ArgumentNullException(""o"", ""some message"")", @"ArgumentException(""some message"", nameof(o))")]
         public void Code_gets_fixed_for_parameter_property_comparison_for_thrown_ArgumentNullException(string comparison, string originalCode, string fixedCode)
         {
@@ -308,7 +308,7 @@ public class TestMe
         [TestCase("is", @"ArgumentNullException(""SomeData"")", @"InvalidOperationException(""TODO"")")]
         [TestCase("==", @"ArgumentNullException(nameof(SomeData), ""some message"")", @"InvalidOperationException(""some message"")")]
         [TestCase("is", "ArgumentNullException()", @"InvalidOperationException(""TODO"")")]
-        [TestCase("is", @"ArgumentNullException(nameof(SomeData))", @"InvalidOperationException(""TODO"")")]
+        [TestCase("is", "ArgumentNullException(nameof(SomeData))", @"InvalidOperationException(""TODO"")")]
         [TestCase("is", @"ArgumentNullException(""SomeData"", ""some message"")", @"InvalidOperationException(""some message"")")]
         public void Code_gets_fixed_for_local_property_comparison_for_thrown_ArgumentNullException(string comparison, string originalCode, string fixedCode)
         {
@@ -333,7 +333,7 @@ public class TestMe
         [TestCase("==", @"ArgumentNullException(""o"")", @"InvalidOperationException(""TODO"")")]
         [TestCase("==", @"ArgumentNullException(nameof(o), ""some message"")", @"InvalidOperationException(""some message"")")]
         [TestCase("is", "ArgumentNullException()", @"InvalidOperationException(""TODO"")")]
-        [TestCase("is", @"ArgumentNullException(nameof(o))", @"InvalidOperationException(""TODO"")")]
+        [TestCase("is", "ArgumentNullException(nameof(o))", @"InvalidOperationException(""TODO"")")]
         [TestCase("is", @"ArgumentNullException(""o"", ""some message"")", @"InvalidOperationException(""some message"")")]
         public void Code_gets_fixed_for_method_with_some_arguments_but_local_property_comparison_for_thrown_ArgumentNullException(string comparison, string originalCode, string fixedCode)
         {

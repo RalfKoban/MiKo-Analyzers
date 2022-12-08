@@ -49,8 +49,8 @@ public class TestMe : " + interfaceName + @"
 
         [Test]
         public void Code_gets_fixed_() => VerifyCSharpFix(
-                                                      @"using System; class TestMe : System.Windows.Data.IValueConverter { }",
-                                                      @"using System; class TestMeConverter : System.Windows.Data.IValueConverter { }");
+                                                      "using System; class TestMe : System.Windows.Data.IValueConverter { }",
+                                                      "using System; class TestMeConverter : System.Windows.Data.IValueConverter { }");
 
         protected override string GetDiagnosticId() => MiKo_1048_ValueConverterSuffixAnalyzer.Id;
 

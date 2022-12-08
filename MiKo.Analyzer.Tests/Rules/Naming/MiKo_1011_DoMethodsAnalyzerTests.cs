@@ -168,8 +168,8 @@ public class TestMe
         [TestCase("DoDock", "Dock")]
         [TestCase("CanDoDock", "CanDock")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
-                                                                                      @"using System; class TestMe { void " + method + "() { } }",
-                                                                                      @"using System; class TestMe { void " + wanted + "() { } }");
+                                                                                      "using System; class TestMe { void " + method + "() { } }",
+                                                                                      "using System; class TestMe { void " + wanted + "() { } }");
 
         [TestCase("Do", "Execute")]
         [TestCase("CanDo", "CanExecute")]
@@ -178,8 +178,8 @@ public class TestMe
         [TestCase("DoDock", "Dock")]
         [TestCase("CanDoDock", "CanDock")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
-                                                                                      @"using System; class TestMe { void Something() { void " + method + "() { } } }",
-                                                                                      @"using System; class TestMe { void Something() { void " + wanted + "() { } } }");
+                                                                                      "using System; class TestMe { void Something() { void " + method + "() { } } }",
+                                                                                      "using System; class TestMe { void Something() { void " + wanted + "() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1011_DoMethodsAnalyzer.Id;
 

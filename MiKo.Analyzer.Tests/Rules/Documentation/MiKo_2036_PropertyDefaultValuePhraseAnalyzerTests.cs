@@ -76,7 +76,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + trueValue + @" if something happens; otherwise, " + falseValue + @".
+    /// " + trueValue + " if something happens; otherwise, " + falseValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething { get; set; }
 }
@@ -99,7 +99,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + trueValue + @" if something happens; otherwise, " + falseValue + ". The default is " + defaultValue + @".
+    /// " + trueValue + " if something happens; otherwise, " + falseValue + ". The default is " + defaultValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething { get; set; }
 }
@@ -122,7 +122,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// " + trueValue + @" if something happens; otherwise, " + falseValue + @"
+    /// " + trueValue + " if something happens; otherwise, " + falseValue + @"
     /// The default is " + defaultValue + @".
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;

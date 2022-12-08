@@ -111,7 +111,7 @@ public class TestMe
         [TestCase(nameof(Exception), @"Is thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase(nameof(Exception), @"Thrown if any error ", @"Any error ")]
+        [TestCase(nameof(Exception), "Thrown if any error ", "Any error ")]
         [TestCase(nameof(Exception), @"Thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
@@ -120,7 +120,7 @@ public class TestMe
         [TestCase(nameof(Exception), @"Throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"Throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"thrown if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase(nameof(Exception), @"thrown if any error ", @"Any error ")]
+        [TestCase(nameof(Exception), "thrown if any error ", "Any error ")]
         [TestCase(nameof(Exception), @"thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"thrown when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
@@ -128,7 +128,7 @@ public class TestMe
         [TestCase(nameof(Exception), @"throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase(nameof(InvalidOperationException), @"Thrown in case that the file cannot be converted to ", @"The file cannot be converted to ")]
+        [TestCase(nameof(InvalidOperationException), "Thrown in case that the file cannot be converted to ", "The file cannot be converted to ")]
         public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
         {
             var originalCode = @"
@@ -165,13 +165,13 @@ public class TestMe
         }
 
         [TestCase("If the ")]
-        [TestCase(@"Gets thrown when the")]
-        [TestCase(@"In case the")]
-        [TestCase(@"Is thrown when the")]
-        [TestCase(@"Thrown if the")]
-        [TestCase(@"Thrown when the")]
-        [TestCase(@"Throws if the")]
-        [TestCase(@"Throws when the")]
+        [TestCase("Gets thrown when the")]
+        [TestCase("In case the")]
+        [TestCase("Is thrown when the")]
+        [TestCase("Thrown if the")]
+        [TestCase("Thrown when the")]
+        [TestCase("Throws if the")]
+        [TestCase("Throws when the")]
         public void Code_gets_fixed_for_ObjectDisposedException_(string startingPhrase)
         {
             var originalCode = @"
