@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 345 rules that are currently provided by the analyzer.
+The following tables list all the 346 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -91,6 +91,7 @@ The following tables list all the 345 rules that are currently provided by the a
 |MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type|&#x2713;|\-|
 |MiKo_1065|Operator parameters should be named according the .NET Framework Guidelines for operator overloads|&#x2713;|&#x2713;|
+|MiKo_1066|Constructor parameters that are assigned to a property should be named after the property|&#x2713;|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names|&#x2713;|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'|&#x2713;|\-|
 |MiKo_1069|Property names reflect their meaning and not their type|&#x2713;|\-|
