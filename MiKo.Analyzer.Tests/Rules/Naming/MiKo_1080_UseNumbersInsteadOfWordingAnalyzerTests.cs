@@ -68,6 +68,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "Zone",
                 "Exponent",
                 "exponential",
+                "GetDissimilarityForType",
+                "GetDissimilaritiesForType",
             };
 
         private static readonly string[] WrongNames =
