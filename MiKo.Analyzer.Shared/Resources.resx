@@ -957,6 +957,18 @@ For binary operator overloads use the names 'left' and 'right', for unary operat
   <data name="MiKo_1065_Title" xml:space="preserve">
     <value>Operator parameters should be named according the .NET Framework Guidelines for operator overloads</value>
   </data>
+  <data name="MiKo_1066_CodeFixTitle" xml:space="preserve">
+    <value>Rename parameter to match its property</value>
+  </data>
+  <data name="MiKo_1066_Description" xml:space="preserve">
+    <value>To ease usage of a class, constructor parameters that get assigned directly to properties should have the same name as the property. So a client of the class easily knows what the parameter is used for.</value>
+  </data>
+  <data name="MiKo_1066_MessageFormat" xml:space="preserve">
+    <value>Name parameter according to the assigned property</value>
+  </data>
+  <data name="MiKo_1066_Title" xml:space="preserve">
+    <value>Constructor parameters that are assigned to a property should be named after the property</value>
+  </data>
   <data name="MiKo_1067_CodeFixTitle" xml:space="preserve">
     <value>Remove 'Perform' from name</value>
   </data>

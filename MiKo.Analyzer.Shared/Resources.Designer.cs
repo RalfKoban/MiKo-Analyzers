@@ -2533,6 +2533,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename parameter to match its property.
+        /// </summary>
+        public static string MiKo_1066_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1066_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease usage of a class, constructor parameters that get assigned directly to properties should have the same name as the property. So a client of the class easily knows what the parameter is used for..
+        /// </summary>
+        public static string MiKo_1066_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1066_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name parameter according to the assigned property.
+        /// </summary>
+        public static string MiKo_1066_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1066_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constructor parameters that are assigned to a property should be named after the property.
+        /// </summary>
+        public static string MiKo_1066_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1066_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove &apos;Perform&apos; from name.
         /// </summary>
         public static string MiKo_1067_CodeFixTitle {
