@@ -10,13 +10,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2202_CodeFixProvider)), Shared]
     public sealed class MiKo_2202_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        private const string Replacement = "identifier";
-
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
         public override string FixableDiagnosticId => MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Id;
 
-        protected override string Title => "Change '" + MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Term + "' into '" + Replacement + "'";
+        protected override string Title => Resources.MiKo_2202_CodeFixTitle;
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
@@ -29,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Terms)
             {
-                var replacement = term.Replace(MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Term, Replacement);
+                var replacement = term.Replace(MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Term, "identifier");
                 dictionary.Add(term, replacement);
 
                 var alternative = term.Replace('i', 'I');
