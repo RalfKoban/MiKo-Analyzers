@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,9 +16,63 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic)
+        {
+            // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
+            var count = CountArgumentSyntaxes(symbol.GetSyntax());
+            switch (count)
+            {
+                case 0:
+                case 1:
+                    return Constants.LambdaIdentifiers.Default;
+
+                case 2:
+                    return Constants.LambdaIdentifiers.Fallback;
+
+                case 3:
+                    return Constants.LambdaIdentifiers.Fallback2;
+
+                case 4:
+                    return Constants.LambdaIdentifiers.Fallback3;
+
+                default:
+                    return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, count));
+            }
+        }
+
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSimpleLambdaExpression, SyntaxKind.SimpleLambdaExpression);
+        }
+
+        private static int CountArgumentSyntaxes(ParameterSyntax parameter)
+        {
+            var count = 0;
+
+            foreach (var ancestor in parameter.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case ArgumentSyntax a:
+                    {
+                        if (a.ChildNodes<SimpleLambdaExpressionSyntax>().Any())
+                        {
+                            count++;
+                        }
+
+                        break;
+                    }
+
+                    case ExpressionStatementSyntax _:
+                    case MethodDeclarationSyntax _:
+                    {
+                        // we do not need to look up further, so we can speed up search when done project- or solution-wide
+                        break;
+                    }
+                }
+            }
+
+            return count;
         }
 
         private void AnalyzeSimpleLambdaExpression(SyntaxNodeAnalysisContext context)

@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1002_CodeFixTitle;
 
-        protected override string FindBetterName(IParameterSymbol symbol) => MiKo_1002_EventHandlingMethodParametersAnalyzer.FindBetterName(symbol);
+        protected override string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => MiKo_1002_EventHandlingMethodParametersAnalyzer.FindBetterName(symbol);
     }
 }

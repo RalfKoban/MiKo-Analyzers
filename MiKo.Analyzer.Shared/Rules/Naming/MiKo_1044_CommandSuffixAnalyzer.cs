@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1044";
 
-        internal const string Suffix = "Command";
+        private const string Suffix = "Command";
         private const string CreatePrefix = MiKo_1016_FactoryMethodsAnalyzer.Prefix;
 
         private static readonly string[] SingleSuffix = { Suffix };
@@ -21,6 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public MiKo_1044_CommandSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
+
+        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => symbol.Name + Suffix;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -16,19 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1054_CodeFixTitle;
 
-        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol)
-        {
-            if (diagnostic.Properties.TryGetValue(MiKo_1054_HelperClassNameAnalyzer.WrongSuffixIndicator, out var wrongSuffix))
-            {
-                return symbol.Name.WithoutSuffix(wrongSuffix);
-            }
+        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1054_HelperClassNameAnalyzer.FindBetterName(symbol, diagnostic);
 
-            return symbol.Name;
-        }
-
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
-        {
-            return syntaxNodes.OfType<BaseTypeDeclarationSyntax>().FirstOrDefault();
-        }
+        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BaseTypeDeclarationSyntax>().FirstOrDefault();
     }
 }

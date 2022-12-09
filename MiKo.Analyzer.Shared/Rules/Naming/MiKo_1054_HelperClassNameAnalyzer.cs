@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1054";
 
-        internal const string WrongSuffixIndicator = "Indicator";
+        private const string WrongSuffixIndicator = "Indicator";
 
         private static readonly string[] WrongNames = { "Helper", "Util" };
 
@@ -21,6 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         public MiKo_1054_HelperClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {
+        }
+
+        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic)
+        {
+            if (diagnostic.Properties.TryGetValue(WrongSuffixIndicator, out var wrongSuffix))
+            {
+                return symbol.Name.WithoutSuffix(wrongSuffix);
+            }
+
+            return symbol.Name;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)

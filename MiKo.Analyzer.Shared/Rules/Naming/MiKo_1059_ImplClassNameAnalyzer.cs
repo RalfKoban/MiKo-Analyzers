@@ -12,12 +12,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1059";
 
-        internal const string WrongSuffixIndicator = "Indicator";
+        private const string WrongSuffixIndicator = "Indicator";
+
         private static readonly string[] WrongSuffixes = { "Impl", "Implementation", };
 
         public MiKo_1059_ImplClassNameAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
+
+        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic)
+        {
+            var symbolName = symbol.Name;
+
+            if (diagnostic.Properties.TryGetValue(WrongSuffixIndicator, out var wrongSuffix))
+            {
+                return symbolName.WithoutSuffix(wrongSuffix);
+            }
+
+            return symbolName;
+        }
+
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
