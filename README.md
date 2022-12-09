@@ -90,7 +90,7 @@ The following tables list all the 345 rules that are currently provided by the a
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
 |MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type|&#x2713;|\-|
-|MiKo_1065|Parameter names do not follow .NET Framework Guidelines for operator overloads|&#x2713;|&#x2713;|
+|MiKo_1065|Operator parameters should be named according the .NET Framework Guidelines for operator overloads|&#x2713;|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names|&#x2713;|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'|&#x2713;|\-|
 |MiKo_1069|Property names reflect their meaning and not their type|&#x2713;|\-|
@@ -146,7 +146,7 @@ The following tables list all the 345 rules that are currently provided by the a
 |MiKo_2001|Events should be documented properly|&#x2713;|&#x2713;|
 |MiKo_2002|EventArgs should be documented properly|&#x2713;|&#x2713;|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase|&#x2713;|&#x2713;|
-|MiKo_2004|Documentation of parameter name does not follow .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
+|MiKo_2004|Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly|&#x2713;|\-|
 |MiKo_2006|Routed events should be documented as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2010|Sealed classes should document being sealed|&#x2713;|&#x2713;|

@@ -955,7 +955,7 @@ For binary operator overloads use the names 'left' and 'right', for unary operat
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1065_Title" xml:space="preserve">
-    <value>Parameter names do not follow .NET Framework Guidelines for operator overloads</value>
+    <value>Operator parameters should be named according the .NET Framework Guidelines for operator overloads</value>
   </data>
   <data name="MiKo_1067_CodeFixTitle" xml:space="preserve">
     <value>Remove 'Perform' from name</value>
@@ -1568,7 +1568,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Set Documentation to: '{2}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
-    <value>Documentation of parameter name does not follow .NET Framework Guidelines for event handlers</value>
+    <value>Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers</value>
   </data>
   <data name="MiKo_2005_Description" xml:space="preserve">
     <value>Documentation should not contain the term 'event arg'. Instead, it should contain the reference to the specific class, such as '&lt;see cref="XyzEventArgs" /&gt;'.</value>

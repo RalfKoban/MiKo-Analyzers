@@ -2524,7 +2524,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for operator overloads.
+        ///   Looks up a localized string similar to Operator parameters should be named according the .NET Framework Guidelines for operator overloads.
         /// </summary>
         public static string MiKo_1065_Title {
             get {
@@ -4265,7 +4265,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.
+        ///   Looks up a localized string similar to Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers.
         /// </summary>
         public static string MiKo_2004_Title {
             get {
