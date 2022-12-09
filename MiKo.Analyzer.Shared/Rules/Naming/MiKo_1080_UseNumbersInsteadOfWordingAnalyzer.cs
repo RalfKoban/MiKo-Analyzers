@@ -43,8 +43,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "_first_",
                                                                          "_second_",
                                                                          "_third_",
-                                                                         "anyone", // 'anyone'
-                                                                         "Anyone", // 'anyone'
+                                                                         "anyone",
+                                                                         "Anyone",
                                                                          "bone",
                                                                          "Bone",
                                                                          "omponent", // 'component'
@@ -55,8 +55,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Done",
                                                                          "etwork", // 'network'
                                                                          "ETWORK",
-                                                                         "everyone", // 'everyone'
-                                                                         "Everyone", // 'everyone'
+                                                                         "everyone",
+                                                                         "Everyone",
+                                                                         "forType",
+                                                                         "ForType",
                                                                          "gone",
                                                                          "Gone",
                                                                          "height",
