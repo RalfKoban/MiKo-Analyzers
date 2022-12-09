@@ -10,13 +10,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2203_CodeFixProvider)), Shared]
     public sealed class MiKo_2203_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        private const string Replacement = "unique identifier";
-
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
         public override string FixableDiagnosticId => MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Id;
 
-        protected override string Title => "Change 'GUID' into '" + Replacement + "'";
+        protected override string Title => Resources.MiKo_2203_CodeFixTitle;
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
@@ -29,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Phrases)
             {
-                var replacement = term.ToUpperInvariant().Replace("GUID", Replacement);
+                var replacement = term.ToUpperInvariant().Replace("GUID", "unique identifier");
                 dictionary.Add(term, replacement);
             }
 

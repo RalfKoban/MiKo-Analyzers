@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             var commentXml = symbol.GetComment();
+
             foreach (var parameter in symbol.Parameters)
             {
                 var comment = parameter.GetComment(commentXml);

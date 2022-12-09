@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static string FindBetterName(ISymbol symbol)
         {
             var newName = symbol.Name;
+
             foreach (var suffix in WrongSuffixes.Where(_ => newName.EndsWith(_, StringComparison.OrdinalIgnoreCase)))
             {
                 newName = newName.WithoutSuffix(suffix);

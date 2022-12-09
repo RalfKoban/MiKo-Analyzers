@@ -158,8 +158,8 @@ namespace MiKoSolutions.Analyzers.Rules
         public static void Analyzers_have_unique_Ids()
         {
             var findings = new List<string>();
-
             var ids = new Dictionary<string, string>();
+
             foreach (var analyzer in AllAnalyzers)
             {
                 var name = analyzer.DiagnosticId + ": " + analyzer.GetType().Name;

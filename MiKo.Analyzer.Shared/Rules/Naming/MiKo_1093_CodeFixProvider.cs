@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -13,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => MiKo_1093_ObjectSuffixAnalyzer.Id;
 
-        protected override string Title => "Remove suffix " + MiKo_1093_ObjectSuffixAnalyzer.WrongSuffixes.HumanizedConcatenated();
+        protected override string Title => Resources.MiKo_1093_CodeFixTitle;
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1093_ObjectSuffixAnalyzer.FindBetterName(symbol);
 

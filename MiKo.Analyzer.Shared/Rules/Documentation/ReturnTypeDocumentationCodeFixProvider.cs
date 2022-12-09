@@ -65,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
+
             foreach (var ancestor in comment.Ancestors())
             {
                 switch (ancestor)

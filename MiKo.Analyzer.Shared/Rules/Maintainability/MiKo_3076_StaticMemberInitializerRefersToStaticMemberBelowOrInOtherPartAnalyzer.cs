@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
 
                 var wrongReferences = new List<string>();
+
                 foreach (var identifier in identifierNames)
                 {
                     var name = identifier.GetName();

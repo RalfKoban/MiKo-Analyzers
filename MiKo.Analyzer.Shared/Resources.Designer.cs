@@ -2524,11 +2524,47 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter names do not follow .NET Framework Guidelines for operator overloads.
+        ///   Looks up a localized string similar to Operator parameters should be named according the .NET Framework Guidelines for operator overloads.
         /// </summary>
         public static string MiKo_1065_Title {
             get {
                 return ResourceManager.GetString("MiKo_1065_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename parameter to match its property.
+        /// </summary>
+        public static string MiKo_1066_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1066_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease usage of a class, constructor parameters that get assigned directly to properties should have the same name as the property. So a client of the class easily knows what the parameter is used for..
+        /// </summary>
+        public static string MiKo_1066_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1066_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name parameter according to the assigned property.
+        /// </summary>
+        public static string MiKo_1066_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1066_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constructor parameters that are assigned to a property should be named after the property.
+        /// </summary>
+        public static string MiKo_1066_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1066_Title", resourceCulture);
             }
         }
         
@@ -4301,7 +4337,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of parameter name does not follow .NET Framework Guidelines for event handlers.
+        ///   Looks up a localized string similar to Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers.
         /// </summary>
         public static string MiKo_2004_Title {
             get {

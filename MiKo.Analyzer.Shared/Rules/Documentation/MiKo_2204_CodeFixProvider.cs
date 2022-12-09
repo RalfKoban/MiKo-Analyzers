@@ -103,6 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax GetAsList(IEnumerable<SyntaxToken> listItems)
         {
             var items = new List<XmlElementSyntax>();
+
             foreach (var listItem in listItems)
             {
                 var comment = XmlText(listItem.ValueText.AsSpan().WithoutFirstWord().Trim().ToString());

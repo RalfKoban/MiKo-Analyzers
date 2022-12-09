@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodParameters = symbol.Parameters;
             var last = methodParameters.Length - 1;
+
             for (var i = 0; i < methodParameters.Length; i++)
             {
                 var parameter = methodParameters[i];

@@ -71,6 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             const int CharacterToStartWith = 1;
 
             var characters = new List<char>(correctedSymbolName);
+
             for (var index = CharacterToStartWith; index < characters.Count; index++)
             {
                 var c = characters[index];

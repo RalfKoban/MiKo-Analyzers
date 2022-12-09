@@ -100,6 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var result = new List<SyntaxNode>(textTokens.Count * 2);
 
             var newLineTokenJustSkipped = false;
+
             foreach (var textToken in textTokens)
             {
                 // special handling of new lines
@@ -124,6 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 newLineTokenJustSkipped = false;
 
                 var parts = text.SplitBy(Phrases);
+
                 foreach (var part in parts)
                 {
                     if (Phrases.Any(_ => _.Equals(part, StringComparison.OrdinalIgnoreCase)))

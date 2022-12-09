@@ -129,6 +129,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
             var method = (MethodDeclarationSyntax)value.GetSyntax();
+
             foreach (var createdObject in method.DescendantNodes<ObjectCreationExpressionSyntax>())
             {
                 switch (createdObject.Parent)

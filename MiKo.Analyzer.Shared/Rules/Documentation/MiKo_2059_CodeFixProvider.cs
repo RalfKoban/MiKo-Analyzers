@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // 4. remove duplicates as we need a new document
             // 5. find exception type again and replace the found instance with the new created instance
             var map = exceptionComments.ToLookup(GetReferencedExceptionName);
+
             foreach (var entry in map)
             {
                 var duplicates = new Queue<XmlElementSyntax>(entry);
@@ -42,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // combine all remaining nodes into first one
                 var siblings = exception.Siblings();
+
                 foreach (var duplicate in duplicates)
                 {
                     obsoleteNodes.Add(duplicate);

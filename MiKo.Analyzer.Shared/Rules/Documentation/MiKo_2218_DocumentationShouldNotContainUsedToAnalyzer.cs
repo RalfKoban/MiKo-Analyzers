@@ -58,6 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 var sb = new StringBuilder(text);
+
                 foreach (var phrase in Phrases)
                 {
                     sb.Replace(phrase, Replacement);

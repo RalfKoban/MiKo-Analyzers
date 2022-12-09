@@ -76,6 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             InvocationExpressionSyntax firstCall = null;
 
             var calls = 0;
+
             foreach (var call in syntaxNode.LinqExtensionMethods(semanticModel))
             {
                 calls++;

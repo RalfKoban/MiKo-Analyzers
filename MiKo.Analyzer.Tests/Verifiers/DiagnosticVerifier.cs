@@ -92,6 +92,7 @@ namespace TestHelper
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
                 var results = Collect_files_having_issues_in_folder_(directory);
+
                 foreach (var result in results)
                 {
                     yield return result;
@@ -114,6 +115,7 @@ namespace TestHelper
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
                 var results = Collect_messages_of_issues_in_folder_(directory);
+
                 foreach (var result in results)
                 {
                     yield return result;
@@ -123,6 +125,7 @@ namespace TestHelper
             foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
             {
                 var results = GetDiagnostics(File.ReadAllText(file));
+
                 foreach (var result in results)
                 {
                     yield return result.GetMessage() + "[" + file + "]";
@@ -135,6 +138,7 @@ namespace TestHelper
             foreach (var directory in Directory.EnumerateDirectories(path))
             {
                 var issues = Collect_issues_in_folder_(directory);
+
                 foreach (var issue in issues)
                 {
                     yield return issue;
@@ -144,6 +148,7 @@ namespace TestHelper
             foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
             {
                 var issues = GetDiagnostics(File.ReadAllText(file));
+
                 foreach (var issue in issues)
                 {
                     yield return issue;

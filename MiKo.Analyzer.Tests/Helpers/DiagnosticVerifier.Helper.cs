@@ -78,16 +78,19 @@ namespace TestHelper
         protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(DiagnosticAnalyzer[] analyzers, Document[] documents)
         {
             var projects = new HashSet<Project>();
+
             foreach (var document in documents)
             {
                 projects.Add(document.Project);
             }
 
             var diagnostics = new List<Diagnostic>();
+
             foreach (var project in projects)
             {
                 var compilationWithAnalyzers = project.GetCompilationAsync().Result.WithAnalyzers(ImmutableArray.Create(analyzers));
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+
                 foreach (var diag in diags)
                 {
                     if (diag.Location == Location.None || diag.Location.IsInMetadata)
@@ -208,6 +211,7 @@ namespace TestHelper
                                                .AddMetadataReference(projectId, SystemTextReference);
 
             var count = 0;
+
             foreach (var source in sources)
             {
                 var newFileName = fileNamePrefix + count + "." + fileExt;

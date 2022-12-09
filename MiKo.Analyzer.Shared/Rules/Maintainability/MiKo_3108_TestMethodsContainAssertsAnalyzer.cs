@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var syntax = symbol.GetSyntax();
 
             var nodes = syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+
             foreach (var node in nodes)
             {
                 switch (node.GetName())
