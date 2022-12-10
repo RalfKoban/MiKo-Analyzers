@@ -3981,6 +3981,18 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3216_Title" xml:space="preserve">
     <value>using statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_3217_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_3217_Description" xml:space="preserve">
+    <value>To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_3217_MessageFormat" xml:space="preserve">
+    <value>Surround switch with a blank line</value>
+  </data>
+  <data name="MiKo_3217_Title" xml:space="preserve">
+    <value>switch statements should be surrounded by blank lines</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

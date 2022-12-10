@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 347 rules that are currently provided by the analyzer.
+The following tables list all the 348 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -354,6 +354,7 @@ The following tables list all the 347 rules that are currently provided by the a
 |MiKo_3214|while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3215|do/while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3216|using statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_3217|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

@@ -11281,6 +11281,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_3217_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3217_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_3217_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3217_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround switch with a blank line.
+        /// </summary>
+        public static string MiKo_3217_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3217_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to switch statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_3217_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3217_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
