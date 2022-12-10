@@ -3799,7 +3799,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Surround log statement(s) with blank lines</value>
   </data>
   <data name="MiKo_3201_Title" xml:space="preserve">
-    <value>Log statements should be preceded and followed by blank lines</value>
+    <value>Log statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_3202_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
@@ -3811,7 +3811,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Surround assertion statement(s) with blank lines</value>
   </data>
   <data name="MiKo_3202_Title" xml:space="preserve">
-    <value>Assertion statements should be preceded and followed by blank lines</value>
+    <value>Assertion statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_3203_CodeFixTitle" xml:space="preserve">
     <value>Precede with blank line</value>

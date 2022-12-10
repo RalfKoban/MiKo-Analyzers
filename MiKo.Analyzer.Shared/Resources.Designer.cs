@@ -10732,7 +10732,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log statements should be preceded and followed by blank lines.
+        ///   Looks up a localized string similar to Log statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_3201_Title {
             get {
@@ -10768,7 +10768,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assertion statements should be preceded and followed by blank lines.
+        ///   Looks up a localized string similar to Assertion statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_3202_Title {
             get {

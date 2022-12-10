@@ -338,8 +338,8 @@ The following tables list all the 348 rules that are currently provided by the a
 |MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
 |MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
 |MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
-|MiKo_3201|Log statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
-|MiKo_3202|Assertion statements should be preceded and followed by blank lines|&#x2713;|&#x2713;|
+|MiKo_3201|Log statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_3202|Assertion statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3203|Local variable statements should be preceded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3204|Variable assignment statements should be preceded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3205|Return statements should be preceded by blank lines|&#x2713;|&#x2713;|
