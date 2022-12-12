@@ -10705,618 +10705,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3201_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3201_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
-        /// </summary>
-        public static string MiKo_3201_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3201_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround log statement(s) with blank lines.
-        /// </summary>
-        public static string MiKo_3201_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3201_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Log statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3201_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3201_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3202_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3202_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
-        /// </summary>
-        public static string MiKo_3202_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3202_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround assertion statement(s) with blank lines.
-        /// </summary>
-        public static string MiKo_3202_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3202_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Assertion statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3202_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3202_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede with blank line.
-        /// </summary>
-        public static string MiKo_3203_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3203_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3203_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3203_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede local variable with a blank line.
-        /// </summary>
-        public static string MiKo_3203_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3203_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Local variable statements should be preceded by blank lines.
-        /// </summary>
-        public static string MiKo_3203_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3203_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede with blank line.
-        /// </summary>
-        public static string MiKo_3204_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3204_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3204_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3204_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede variable assignment with a blank line.
-        /// </summary>
-        public static string MiKo_3204_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3204_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Variable assignment statements should be preceded by blank lines.
-        /// </summary>
-        public static string MiKo_3204_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3204_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede with blank line.
-        /// </summary>
-        public static string MiKo_3205_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3205_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3205_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3205_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede return statement with a blank line.
-        /// </summary>
-        public static string MiKo_3205_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3205_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Return statements should be preceded by blank lines.
-        /// </summary>
-        public static string MiKo_3205_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3205_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3206_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3206_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3206_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3206_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround awaited statement with a blank line.
-        /// </summary>
-        public static string MiKo_3206_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3206_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Awaited statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3206_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3206_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3207_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3207_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3207_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3207_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround test statement with a blank line.
-        /// </summary>
-        public static string MiKo_3207_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3207_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Test statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3207_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3207_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede with blank line.
-        /// </summary>
-        public static string MiKo_3208_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3208_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3208_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3208_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Precede using directive with a blank line.
-        /// </summary>
-        public static string MiKo_3208_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3208_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Using directives should be preceded by blank lines.
-        /// </summary>
-        public static string MiKo_3208_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3208_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3209_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3209_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3209_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3209_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround try statement with a blank line.
-        /// </summary>
-        public static string MiKo_3209_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3209_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Try statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3209_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3209_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3210_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3210_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3210_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3210_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround if statement with a blank line.
-        /// </summary>
-        public static string MiKo_3210_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3210_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3210_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3210_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3211_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3211_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3211_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3211_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround lock statement with a blank line.
-        /// </summary>
-        public static string MiKo_3211_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3211_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Lock statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3211_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3212_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3212_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3212_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3212_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround foreach loop with a blank line.
-        /// </summary>
-        public static string MiKo_3212_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3212_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to foreach loops should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3212_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3212_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3213_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3213_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3213_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3213_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround for loop with a blank line.
-        /// </summary>
-        public static string MiKo_3213_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3213_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to for loops should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3213_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3213_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3214_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3214_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3214_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3214_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround while loop with a blank line.
-        /// </summary>
-        public static string MiKo_3214_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3214_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to while loops should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3214_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3214_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3215_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3215_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3215_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3215_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround do/while loop with a blank line.
-        /// </summary>
-        public static string MiKo_3215_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3215_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to do/while loops should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3215_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3215_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3216_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3216_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate using statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3216_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3216_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround using with a blank line.
-        /// </summary>
-        public static string MiKo_3216_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3216_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to using statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3216_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3216_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround with blank lines.
-        /// </summary>
-        public static string MiKo_3217_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3217_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
-        /// </summary>
-        public static string MiKo_3217_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3217_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Surround switch with a blank line.
-        /// </summary>
-        public static string MiKo_3217_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3217_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to switch statements should be surrounded by blank lines.
-        /// </summary>
-        public static string MiKo_3217_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3217_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
@@ -12014,6 +11402,618 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_5014_Title {
             get {
                 return ResourceManager.GetString("MiKo_5014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6001_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6001_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
+        /// </summary>
+        public static string MiKo_6001_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6001_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround log statement(s) with blank lines.
+        /// </summary>
+        public static string MiKo_6001_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6001_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6001_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6001_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6002_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6002_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore..
+        /// </summary>
+        public static string MiKo_6002_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6002_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround assertion statement(s) with blank lines.
+        /// </summary>
+        public static string MiKo_6002_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6002_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assertion statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6002_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6002_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_6003_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6003_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6003_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6003_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede local variable with a blank line.
+        /// </summary>
+        public static string MiKo_6003_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6003_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local variable statements should be preceded by blank lines.
+        /// </summary>
+        public static string MiKo_6003_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6003_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_6004_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6004_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6004_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6004_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede variable assignment with a blank line.
+        /// </summary>
+        public static string MiKo_6004_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6004_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable assignment statements should be preceded by blank lines.
+        /// </summary>
+        public static string MiKo_6004_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6004_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_6005_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6005_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6005_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6005_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede return statement with a blank line.
+        /// </summary>
+        public static string MiKo_6005_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6005_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return statements should be preceded by blank lines.
+        /// </summary>
+        public static string MiKo_6005_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6005_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6006_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6006_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround awaited statement with a blank line.
+        /// </summary>
+        public static string MiKo_6006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Awaited statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6007_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6007_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6007_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6007_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround test statement with a blank line.
+        /// </summary>
+        public static string MiKo_6007_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6007_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6007_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6007_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        public static string MiKo_6008_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6008_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6008_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6008_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede using directive with a blank line.
+        /// </summary>
+        public static string MiKo_6008_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6008_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using directives should be preceded by blank lines.
+        /// </summary>
+        public static string MiKo_6008_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6008_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6009_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6009_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6009_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6009_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;try&apos; statement with a blank line.
+        /// </summary>
+        public static string MiKo_6009_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6009_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6009_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6009_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6010_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6010_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6010_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6010_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;if&apos; statement with a blank line.
+        /// </summary>
+        public static string MiKo_6010_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6010_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6010_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6010_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6011_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6011_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6011_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6011_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;lock&apos; statement with a blank line.
+        /// </summary>
+        public static string MiKo_6011_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6011_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lock statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6011_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6011_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6012_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6012_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6012_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6012_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;foreach&apos; loop with a blank line.
+        /// </summary>
+        public static string MiKo_6012_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6012_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to foreach loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6012_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6012_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6013_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6013_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6013_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6013_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;for&apos; loop with a blank line.
+        /// </summary>
+        public static string MiKo_6013_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6013_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6013_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6013_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6014_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6014_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6014_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6014_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;while&apos; loop with a blank line.
+        /// </summary>
+        public static string MiKo_6014_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6014_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to while loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6014_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6015_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6015_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6015_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6015_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;do/while&apos; loop with a blank line.
+        /// </summary>
+        public static string MiKo_6015_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6015_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to do/while loops should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6015_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6015_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6016_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6016_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate using statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6016_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6016_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;using&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6016_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6016_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to using statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6016_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6016_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6017_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6017_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6017_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6017_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;switch&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6017_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6017_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to switch statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6017_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6017_Title", resourceCulture);
             }
         }
     }

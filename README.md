@@ -338,23 +338,6 @@ The following tables list all the 348 rules that are currently provided by the a
 |MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
 |MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
 |MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
-|MiKo_3201|Log statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3202|Assertion statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3203|Local variable statements should be preceded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3204|Variable assignment statements should be preceded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3205|Return statements should be preceded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3206|Awaited statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3207|Test statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3208|Using directives should be preceded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3209|Try statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3210|If statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3211|Lock statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3212|foreach loops should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3213|for loops should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3214|while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3215|do/while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3216|using statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_3217|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -383,3 +366,24 @@ The following tables list all the 348 rules that are currently provided by the a
 |MiKo_5012|Do not use 'yield return' for recursively defined structures|&#x2713;|\-|
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
 |MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
+
+### Spacing
+|ID|Title|Enabled by default|CodeFix available|
+|:-|:----|:----------------:|:---------------:|
+|MiKo_6001|Log statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6002|Assertion statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6003|Local variable statements should be preceded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6004|Variable assignment statements should be preceded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6005|Return statements should be preceded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6006|Awaited statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6007|Test statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6008|Using directives should be preceded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6009|Try statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6010|If statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6011|Lock statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6012|foreach loops should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6013|for loops should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6014|while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6015|do/while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6016|using statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6017|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
