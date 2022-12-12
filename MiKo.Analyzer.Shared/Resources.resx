@@ -3801,186 +3801,6 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3114_Title" xml:space="preserve">
     <value>Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'</value>
   </data>
-  <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3201_Description" xml:space="preserve">
-    <value>To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
-  </data>
-  <data name="MiKo_3201_MessageFormat" xml:space="preserve">
-    <value>Surround log statement(s) with blank lines</value>
-  </data>
-  <data name="MiKo_3201_Title" xml:space="preserve">
-    <value>Log statements should be preceded and followed by blank lines</value>
-  </data>
-  <data name="MiKo_3202_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3202_Description" xml:space="preserve">
-    <value>To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
-  </data>
-  <data name="MiKo_3202_MessageFormat" xml:space="preserve">
-    <value>Surround assertion statement(s) with blank lines</value>
-  </data>
-  <data name="MiKo_3202_Title" xml:space="preserve">
-    <value>Assertion statements should be preceded and followed by blank lines</value>
-  </data>
-  <data name="MiKo_3203_CodeFixTitle" xml:space="preserve">
-    <value>Precede with blank line</value>
-  </data>
-  <data name="MiKo_3203_Description" xml:space="preserve">
-    <value>To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3203_MessageFormat" xml:space="preserve">
-    <value>Precede local variable with a blank line</value>
-  </data>
-  <data name="MiKo_3203_Title" xml:space="preserve">
-    <value>Local variable statements should be preceded by blank lines</value>
-  </data>
-  <data name="MiKo_3204_CodeFixTitle" xml:space="preserve">
-    <value>Precede with blank line</value>
-  </data>
-  <data name="MiKo_3204_Description" xml:space="preserve">
-    <value>To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3204_MessageFormat" xml:space="preserve">
-    <value>Precede variable assignment with a blank line</value>
-  </data>
-  <data name="MiKo_3204_Title" xml:space="preserve">
-    <value>Variable assignment statements should be preceded by blank lines</value>
-  </data>
-  <data name="MiKo_3205_CodeFixTitle" xml:space="preserve">
-    <value>Precede with blank line</value>
-  </data>
-  <data name="MiKo_3205_Description" xml:space="preserve">
-    <value>To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3205_MessageFormat" xml:space="preserve">
-    <value>Precede return statement with a blank line</value>
-  </data>
-  <data name="MiKo_3205_Title" xml:space="preserve">
-    <value>Return statements should be preceded by blank lines</value>
-  </data>
-  <data name="MiKo_3206_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3206_Description" xml:space="preserve">
-    <value>To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3206_MessageFormat" xml:space="preserve">
-    <value>Surround awaited statement with a blank line</value>
-  </data>
-  <data name="MiKo_3206_Title" xml:space="preserve">
-    <value>Awaited statements should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3207_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3207_Description" xml:space="preserve">
-    <value>To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3207_MessageFormat" xml:space="preserve">
-    <value>Surround test statement with a blank line</value>
-  </data>
-  <data name="MiKo_3207_Title" xml:space="preserve">
-    <value>Test statements should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3208_CodeFixTitle" xml:space="preserve">
-    <value>Precede with blank line</value>
-  </data>
-  <data name="MiKo_3208_Description" xml:space="preserve">
-    <value>To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3208_MessageFormat" xml:space="preserve">
-    <value>Precede using directive with a blank line</value>
-  </data>
-  <data name="MiKo_3208_Title" xml:space="preserve">
-    <value>Using directives should be preceded by blank lines</value>
-  </data>
-  <data name="MiKo_3209_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3209_Description" xml:space="preserve">
-    <value>To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3209_MessageFormat" xml:space="preserve">
-    <value>Surround try statement with a blank line</value>
-  </data>
-  <data name="MiKo_3209_Title" xml:space="preserve">
-    <value>Try statements should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3210_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3210_Description" xml:space="preserve">
-    <value>To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3210_MessageFormat" xml:space="preserve">
-    <value>Surround if statement with a blank line</value>
-  </data>
-  <data name="MiKo_3210_Title" xml:space="preserve">
-    <value>If statements should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3211_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3211_Description" xml:space="preserve">
-    <value>To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3211_MessageFormat" xml:space="preserve">
-    <value>Surround lock statement with a blank line</value>
-  </data>
-  <data name="MiKo_3211_Title" xml:space="preserve">
-    <value>Lock statements should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3212_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3212_Description" xml:space="preserve">
-    <value>To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3212_MessageFormat" xml:space="preserve">
-    <value>Surround foreach loop with a blank line</value>
-  </data>
-  <data name="MiKo_3212_Title" xml:space="preserve">
-    <value>foreach loops should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3213_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3213_Description" xml:space="preserve">
-    <value>To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3213_MessageFormat" xml:space="preserve">
-    <value>Surround for loop with a blank line</value>
-  </data>
-  <data name="MiKo_3213_Title" xml:space="preserve">
-    <value>for loops should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3214_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3214_Description" xml:space="preserve">
-    <value>To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3214_MessageFormat" xml:space="preserve">
-    <value>Surround while loop with a blank line</value>
-  </data>
-  <data name="MiKo_3214_Title" xml:space="preserve">
-    <value>while loops should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_3215_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_3215_Description" xml:space="preserve">
-    <value>To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_3215_MessageFormat" xml:space="preserve">
-    <value>Surround do/while loop with a blank line</value>
-  </data>
-  <data name="MiKo_3215_Title" xml:space="preserve">
-    <value>do/while loops should be surrounded by blank lines</value>
-  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
@@ -4219,5 +4039,233 @@ Instead the equality operator should be used to compare value types.</value>
   </data>
   <data name="MiKo_5014_Title" xml:space="preserve">
     <value>Do not create empty lists if the return value is read-only</value>
+  </data>
+  <data name="MiKo_6001_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6001_Description" xml:space="preserve">
+    <value>To separate Logging visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+  </data>
+  <data name="MiKo_6001_MessageFormat" xml:space="preserve">
+    <value>Surround log statement(s) with blank lines</value>
+  </data>
+  <data name="MiKo_6001_Title" xml:space="preserve">
+    <value>Log statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6002_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6002_Description" xml:space="preserve">
+    <value>To separate Assertions visually from the test code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+  </data>
+  <data name="MiKo_6002_MessageFormat" xml:space="preserve">
+    <value>Surround assertion statement(s) with blank lines</value>
+  </data>
+  <data name="MiKo_6002_Title" xml:space="preserve">
+    <value>Assertion statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6003_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_6003_Description" xml:space="preserve">
+    <value>To separate local variables visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6003_MessageFormat" xml:space="preserve">
+    <value>Precede local variable with a blank line</value>
+  </data>
+  <data name="MiKo_6003_Title" xml:space="preserve">
+    <value>Local variable statements should be preceded by blank lines</value>
+  </data>
+  <data name="MiKo_6004_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_6004_Description" xml:space="preserve">
+    <value>To separate variable assignments visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6004_MessageFormat" xml:space="preserve">
+    <value>Precede variable assignment with a blank line</value>
+  </data>
+  <data name="MiKo_6004_Title" xml:space="preserve">
+    <value>Variable assignment statements should be preceded by blank lines</value>
+  </data>
+  <data name="MiKo_6005_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_6005_Description" xml:space="preserve">
+    <value>To separate method returns visually from executing code, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6005_MessageFormat" xml:space="preserve">
+    <value>Precede return statement with a blank line</value>
+  </data>
+  <data name="MiKo_6005_Title" xml:space="preserve">
+    <value>Return statements should be preceded by blank lines</value>
+  </data>
+  <data name="MiKo_6006_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6006_Description" xml:space="preserve">
+    <value>To separate awaited statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6006_MessageFormat" xml:space="preserve">
+    <value>Surround awaited statement with a blank line</value>
+  </data>
+  <data name="MiKo_6006_Title" xml:space="preserve">
+    <value>Awaited statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6007_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6007_Description" xml:space="preserve">
+    <value>To separate test statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6007_MessageFormat" xml:space="preserve">
+    <value>Surround test statement with a blank line</value>
+  </data>
+  <data name="MiKo_6007_Title" xml:space="preserve">
+    <value>Test statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6008_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_6008_Description" xml:space="preserve">
+    <value>To separate using directives for a specific namespace visually from other using directives for other namespaces, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6008_MessageFormat" xml:space="preserve">
+    <value>Precede using directive with a blank line</value>
+  </data>
+  <data name="MiKo_6008_Title" xml:space="preserve">
+    <value>Using directives should be preceded by blank lines</value>
+  </data>
+  <data name="MiKo_6009_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6009_Description" xml:space="preserve">
+    <value>To separate try statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6009_MessageFormat" xml:space="preserve">
+    <value>Surround 'try' statement with a blank line</value>
+  </data>
+  <data name="MiKo_6009_Title" xml:space="preserve">
+    <value>Try statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6010_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6010_Description" xml:space="preserve">
+    <value>To separate if statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6010_MessageFormat" xml:space="preserve">
+    <value>Surround 'if' statement with a blank line</value>
+  </data>
+  <data name="MiKo_6010_Title" xml:space="preserve">
+    <value>If statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6011_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6011_Description" xml:space="preserve">
+    <value>To separate lock statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6011_MessageFormat" xml:space="preserve">
+    <value>Surround 'lock' statement with a blank line</value>
+  </data>
+  <data name="MiKo_6011_Title" xml:space="preserve">
+    <value>Lock statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6012_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6012_Description" xml:space="preserve">
+    <value>To separate foreach loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6012_MessageFormat" xml:space="preserve">
+    <value>Surround 'foreach' loop with a blank line</value>
+  </data>
+  <data name="MiKo_6012_Title" xml:space="preserve">
+    <value>foreach loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6013_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6013_Description" xml:space="preserve">
+    <value>To separate for loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6013_MessageFormat" xml:space="preserve">
+    <value>Surround 'for' loop with a blank line</value>
+  </data>
+  <data name="MiKo_6013_Title" xml:space="preserve">
+    <value>for loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6014_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6014_Description" xml:space="preserve">
+    <value>To separate while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6014_MessageFormat" xml:space="preserve">
+    <value>Surround 'while' loop with a blank line</value>
+  </data>
+  <data name="MiKo_6014_Title" xml:space="preserve">
+    <value>while loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6015_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6015_Description" xml:space="preserve">
+    <value>To separate do/while loops visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6015_MessageFormat" xml:space="preserve">
+    <value>Surround 'do/while' loop with a blank line</value>
+  </data>
+  <data name="MiKo_6015_Title" xml:space="preserve">
+    <value>do/while loops should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6016_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6016_Description" xml:space="preserve">
+    <value>To separate using statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6016_MessageFormat" xml:space="preserve">
+    <value>Surround 'using' with a blank line</value>
+  </data>
+  <data name="MiKo_6016_Title" xml:space="preserve">
+    <value>using statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6017_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6017_Description" xml:space="preserve">
+    <value>To separate switch statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6017_MessageFormat" xml:space="preserve">
+    <value>Surround 'switch' with a blank line</value>
+  </data>
+  <data name="MiKo_6017_Title" xml:space="preserve">
+    <value>switch statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6019_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6019_Description" xml:space="preserve">
+    <value>To separate continue statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6019_MessageFormat" xml:space="preserve">
+    <value>Surround 'continue' with a blank line</value>
+  </data>
+  <data name="MiKo_6019_Title" xml:space="preserve">
+    <value>continue statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6020_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6020_Description" xml:space="preserve">
+    <value>To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6020_MessageFormat" xml:space="preserve">
+    <value>Surround 'break' with a blank line</value>
+  </data>
+  <data name="MiKo_6020_Title" xml:space="preserve">
+    <value>break statements should be surrounded by blank lines</value>
   </data>
 </root>

@@ -334,6 +334,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                                                         "MiKoSolutions.Analyzers.Rules.Naming" => 1,
                                                                                                                         "MiKoSolutions.Analyzers.Rules.Ordering" => 4,
                                                                                                                         "MiKoSolutions.Analyzers.Rules.Performance" => 5,
+                                                                                                                        "MiKoSolutions.Analyzers.Rules.Spacing" => 6,
                                                                                                                         _ => -1,
                                                                                                                     };
 
