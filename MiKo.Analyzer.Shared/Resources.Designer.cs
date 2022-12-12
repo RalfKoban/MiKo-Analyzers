@@ -12016,5 +12016,77 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6017_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6019_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6019_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate continue statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6019_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6019_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;continue&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6019_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6019_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to continue statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6019_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6019_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6020_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6020_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6020_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6020_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;break&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6020_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6020_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to break statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6020_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6020_Title", resourceCulture);
+            }
+        }
     }
 }
