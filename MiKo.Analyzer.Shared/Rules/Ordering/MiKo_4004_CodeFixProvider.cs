@@ -63,8 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var methodSymbol = (IMethodSymbol)GetSymbol(context, disposeMethod);
             var typeSymbol = (INamedTypeSymbol)GetSymbol(context, typeSyntax);
 
-            var methods = typeSymbol.GetMethods().Except(new[] { methodSymbol }).ToList();
-
+            var methods = typeSymbol.GetMethods().Except(methodSymbol);
             var method = methods.FirstOrDefault(_ => _.DeclaredAccessibility == methodSymbol.DeclaredAccessibility && _.IsStatic is false);
 
             if (method != null)

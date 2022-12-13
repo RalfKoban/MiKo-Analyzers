@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override string Title => Resources.MiKo_5010_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             var invocation = syntaxNodes.OfType<InvocationExpressionSyntax>().First();
 

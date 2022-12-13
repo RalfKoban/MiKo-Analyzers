@@ -7,6 +7,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ExampleDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Example, syntaxNodes).First();
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => GetXmlSyntax(Constants.XmlTag.Example, syntaxNodes).First();
     }
 }

@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1000_EventArgsTypeAnalyzer.FindBetterName(symbol);
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ClassDeclarationSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ClassDeclarationSyntax>().FirstOrDefault();
     }
 }

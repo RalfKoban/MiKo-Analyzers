@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer.FindBetterName((IParameterSymbol)symbol, diagnostic);
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().First().Parameter;
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().First().Parameter;
     }
 }

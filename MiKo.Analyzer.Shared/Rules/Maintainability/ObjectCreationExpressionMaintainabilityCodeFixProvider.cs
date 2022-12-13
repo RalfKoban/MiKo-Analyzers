@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return ToDo();
         }
 
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ObjectCreationExpressionSyntax>().FirstOrDefault();
 
         protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax((ObjectCreationExpressionSyntax)syntax);
 

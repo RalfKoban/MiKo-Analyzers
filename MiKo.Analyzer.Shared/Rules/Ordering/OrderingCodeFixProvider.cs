@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     public abstract class OrderingCodeFixProvider : MiKoCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First();
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First();
 
         protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => syntax;
 

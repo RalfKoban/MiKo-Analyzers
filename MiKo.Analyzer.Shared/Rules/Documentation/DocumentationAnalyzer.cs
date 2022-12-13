@@ -201,8 +201,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var length = returnType.IndexOf('<'); // just until the first one
 
-            var returnTypeWithTs = returnType.Substring(0, length) + "{" + ts + "}";
-            var returnTypeWithGenericCount = returnType.Substring(0, length) + '`' + count;
+            var firstPart = returnType.Substring(0, length);
+
+            var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
+            var returnTypeWithGenericCount = string.Concat(firstPart, '`', count);
 
             return Enumerable.Empty<string>()
                              .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user

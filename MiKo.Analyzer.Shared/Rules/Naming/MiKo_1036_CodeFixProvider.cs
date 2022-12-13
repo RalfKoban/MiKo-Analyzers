@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1036_EventModelSuffixAnalyzer.FindBetterName((IEventSymbol)symbol);
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault(); // events are variable declarators
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<VariableDeclaratorSyntax>().FirstOrDefault(); // events are variable declarators
     }
 }

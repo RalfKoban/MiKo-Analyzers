@@ -73,12 +73,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var callLineSpan = call.GetLocation().GetLineSpan();
 
-            var noBlankLinesBefore = statements
-                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                     .Any(_ => IsCall(_, semanticModel) is false);
-            var noBlankLinesAfter = statements
-                                    .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
-                                    .Any(_ => IsCall(_, semanticModel) is false);
+            var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                               .Any(_ => IsCall(_, semanticModel) is false);
+
+            var noBlankLinesAfter = statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
+                                              .Any(_ => IsCall(_, semanticModel) is false);
 
             if (noBlankLinesBefore || noBlankLinesAfter)
             {

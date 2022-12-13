@@ -42,5 +42,18 @@ namespace System.Linq
         public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
 
         public static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
+
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> source, T value) where T : class
+        {
+            foreach (var item in source)
+            {
+                if (ReferenceEquals(item, value) || Equals(item, value))
+                {
+                    continue;
+                }
+
+                yield return item;
+            }
+        }
     }
 }

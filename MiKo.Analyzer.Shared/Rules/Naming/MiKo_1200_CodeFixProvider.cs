@@ -17,6 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1200_ExceptionCatchBlockAnalyzer.FindBetterName(symbol, diagnostic);
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CatchDeclarationSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CatchDeclarationSyntax>().FirstOrDefault();
     }
 }

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UsePatternMatchingCodeFixProvider : MaintainabilityCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.EqualsExpression));
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.EqualsExpression));
 
         protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {

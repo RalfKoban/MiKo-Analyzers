@@ -14,14 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private static readonly HashSet<string> EnumerableMethods = typeof(Enumerable).GetMethods().Select(_ => _.Name)
                                                                                       .Except(typeof(object).GetMethods().Select(_ => _.Name)) // get rid of GetHashCode() or Equals()
-                                                                                      .Except(new[] { "Contains" }) // special handling
+                                                                                      .Except("Contains") // special handling
                                                                                       .ToHashSet();
 
         public override string FixableDiagnosticId => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3109_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
