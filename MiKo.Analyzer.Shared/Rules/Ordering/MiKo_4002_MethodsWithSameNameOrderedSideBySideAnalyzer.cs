@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     {
                         var method = allMethods[index];
 
-                        var signatures = methodsWithSameName.Except(new[] { method })
+                        var signatures = methodsWithSameName.Except(method)
                                                             .Select(_ => "   " + _.GetMethodSignature())
                                                             .ConcatenatedWith(Environment.NewLine);
 
