@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsApplicable(diagnostics))
             {
-                var diagnostic = diagnostics.First();
+                var diagnostic = diagnostics[0];
 
                 var codeFix = CreateCodeFix(context, root, diagnostic);
 
@@ -203,8 +203,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)
         {
-            var diagnosticSpan = issue.Location.SourceSpan;
-            var startPosition = diagnosticSpan.Start;
+            var issueSpan = issue.Location.SourceSpan;
+            var startPosition = issueSpan.Start;
 
             if (IsTrivia)
             {

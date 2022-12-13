@@ -35,10 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (ancestor)
                 {
                     case BlockSyntax block:
-                        return AnalyzeStatement(block.Statements, node);
+                        return AnalyzeStatement(block, node);
 
                     case SwitchSectionSyntax section:
-                        return AnalyzeStatement(section.Statements, node);
+                        return AnalyzeStatement(section, node);
 
                     case MethodDeclarationSyntax _:
                     case ClassDeclarationSyntax _:
@@ -49,12 +49,50 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic AnalyzeStatement(SyntaxList<StatementSyntax> statements, T node)
+        private Diagnostic AnalyzeStatement(BlockSyntax block, T node)
         {
-            var callLineSpan = node.GetLocation().GetLineSpan();
+            var nodeLineSpan = node.GetLocation().GetLineSpan();
 
-            var noBlankLinesBefore = statements.Any(_ => HasNoBlankLinesBefore(callLineSpan, _));
-            var noBlankLinesAfter = statements.Any(_ => HasNoBlankLinesAfter(callLineSpan, _));
+            var otherStatements = block.Statements.Except(node);
+
+            var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(nodeLineSpan, _));
+            var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(nodeLineSpan, _));
+
+            if (noBlankLinesBefore || noBlankLinesAfter)
+            {
+                return Issue(GetKeyword(node), noBlankLinesBefore, noBlankLinesAfter);
+            }
+
+            return null;
+        }
+
+        private Diagnostic AnalyzeStatement(SwitchSectionSyntax section, T node)
+        {
+            var nodeLineSpan = node.GetLocation().GetLineSpan();
+
+            var statements = section.Statements;
+
+            var noBlankLinesBefore = statements.Except(node).Any(_ => HasNoBlankLinesBefore(nodeLineSpan, _));
+            var noBlankLinesAfter = statements.Except(node).Any(_ => HasNoBlankLinesAfter(nodeLineSpan, _));
+
+            if (noBlankLinesAfter is false)
+            {
+                // inspect the switch section to see if another switch section directly comes after our node, as in such case we also need some blank lines
+                if (section.Parent is SwitchStatementSyntax switchStatement)
+                {
+                    var sections = switchStatement.Sections;
+                    var index = sections.IndexOf(section);
+
+                    var isNotLastSection = index < sections.Count - 1;
+                    var isLastNodeInsideSection = statements.Last() == node;
+
+                    if (isNotLastSection && isLastNodeInsideSection)
+                    {
+                        // determine whether the next section has no blank line between itself and our node
+                        noBlankLinesAfter = HasNoBlankLinesAfter(nodeLineSpan, sections[index + 1]);
+                    }
+                }
+            }
 
             if (noBlankLinesBefore || noBlankLinesAfter)
             {

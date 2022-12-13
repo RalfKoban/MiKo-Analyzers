@@ -191,6 +191,77 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_continue_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(GCCollectionMode mode)
+        {
+            int value = 0;
+
+            switch (mode)
+            {
+                case GCCollectionMode.Default:
+                    value = 1;
+                    continue;
+                case GCCollectionMode.Forced:
+                    value = 2;
+                    continue;
+                case GCCollectionMode.Optimized:
+                    value = 3;
+                    continue;
+                default:
+                    value = 4;
+                    continue;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(GCCollectionMode mode)
+        {
+            int value = 0;
+
+            switch (mode)
+            {
+                case GCCollectionMode.Default:
+                    value = 1;
+
+                    continue;
+
+                case GCCollectionMode.Forced:
+                    value = 2;
+
+                    continue;
+
+                case GCCollectionMode.Optimized:
+                    value = 3;
+
+                    continue;
+
+                default:
+                    value = 4;
+
+                    continue;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6019_ContinueStatementSurroundedByBlankLinesAnalyzer();
 
         protected override string GetDiagnosticId() => MiKo_6019_ContinueStatementSurroundedByBlankLinesAnalyzer.Id;

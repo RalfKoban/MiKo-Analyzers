@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -106,6 +108,36 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(GCCollectionMode mode)
+        {
+            int value = 0;
+
+            switch (mode)
+            {
+                case GCCollectionMode.Default:
+                    value = 1;
+                    break;
+                case GCCollectionMode.Forced:
+                    value = 2;
+                    break;
+                case GCCollectionMode.Optimized:
+                    value = 3;
+                    break;
+                default:
+                    value = 4;
+                    break;
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_method()
         {
             const string OriginalCode = @"
@@ -187,6 +219,77 @@ namespace Bla
         }
     }
 }";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(GCCollectionMode mode)
+        {
+            int value = 0;
+
+            switch (mode)
+            {
+                case GCCollectionMode.Default:
+                    value = 1;
+                    break;
+                case GCCollectionMode.Forced:
+                    value = 2;
+                    break;
+                case GCCollectionMode.Optimized:
+                    value = 3;
+                    break;
+                default:
+                    value = 4;
+                    break;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(GCCollectionMode mode)
+        {
+            int value = 0;
+
+            switch (mode)
+            {
+                case GCCollectionMode.Default:
+                    value = 1;
+
+                    break;
+
+                case GCCollectionMode.Forced:
+                    value = 2;
+
+                    break;
+
+                case GCCollectionMode.Optimized:
+                    value = 3;
+
+                    break;
+
+                default:
+                    value = 4;
+
+                    break;
+            }
+        }
+    }
+}
+";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
