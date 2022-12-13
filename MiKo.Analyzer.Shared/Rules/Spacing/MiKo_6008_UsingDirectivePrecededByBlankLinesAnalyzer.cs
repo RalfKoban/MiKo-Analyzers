@@ -25,14 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static bool HasIssue(UsingDirectiveSyntax node)
         {
-            var otherUsings = node.Siblings<UsingDirectiveSyntax>();
-
-            var nodeIndex = otherUsings.IndexOf(node);
-
-            if (nodeIndex > 0)
+            if (node.PreviousSibling() is UsingDirectiveSyntax previous)
             {
-                var previous = otherUsings[nodeIndex - 1];
-
                 var nodeName = GetName(node);
                 var previousName = GetName(previous);
 
