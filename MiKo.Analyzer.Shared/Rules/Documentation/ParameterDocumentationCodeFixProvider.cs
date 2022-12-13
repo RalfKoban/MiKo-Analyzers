@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ParameterDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().GetName();
 

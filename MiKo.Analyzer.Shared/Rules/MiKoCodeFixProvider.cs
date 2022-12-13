@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return false;
         }
 
-        protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => true;
+        protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any();
 
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(context.Document.Project.Solution);
 
@@ -189,7 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return Task.FromResult(newDocument);
         }
 
-        protected virtual SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes) => null;
+        protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
 
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
 
@@ -213,9 +213,10 @@ namespace MiKoSolutions.Analyzers.Rules
                 return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(context, root, trivia, issue), GetType().Name);
             }
 
-            var syntaxNodes = root.FindToken(startPosition).Parent.AncestorsAndSelf();
+            var token = root.FindToken(startPosition);
+            var syntaxNodes = token.Parent.AncestorsAndSelf();
 
-            var syntax = GetSyntax(syntaxNodes.ToList());
+            var syntax = GetSyntax(syntaxNodes);
 
             if (syntax is null)
             {

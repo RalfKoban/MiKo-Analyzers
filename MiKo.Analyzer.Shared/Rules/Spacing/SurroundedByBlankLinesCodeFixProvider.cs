@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SurroundedByBlankLinesCodeFixProvider : SpacingCodeFixProvider
     {
-        protected override SyntaxNode GetSyntax(IReadOnlyCollection<SyntaxNode> syntaxNodes)
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             foreach (var node in syntaxNodes)
             {
