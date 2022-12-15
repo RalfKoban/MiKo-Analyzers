@@ -34,6 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var args = argumentList.Arguments;
+
             switch (args.Count)
             {
                 case 1: // public TimeSpan (long ticks);

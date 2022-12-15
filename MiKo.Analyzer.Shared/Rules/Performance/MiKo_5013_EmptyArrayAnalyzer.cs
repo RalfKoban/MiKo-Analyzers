@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             var size = sizes[0];
+
             switch (size)
             {
                 case LiteralExpressionSyntax literal when literal.Token.ValueText == "0":

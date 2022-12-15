@@ -117,6 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case ObjectCreationExpressionSyntax o:
                     {
                         var name = o.Type.GetNameOnlyPart();
+
                         switch (name)
                         {
                             case nameof(DateTime):
@@ -151,6 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             if (name.StartsWith("From", StringComparison.Ordinal))
                             {
                                 var typeName = i.GetName();
+
                                 switch (typeName)
                                 {
                                     case "Color": // ignore all Color.FromXyz calls

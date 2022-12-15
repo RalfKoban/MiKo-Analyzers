@@ -25,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (typeArguments.Length == 1 && typeArguments[0] is INamedTypeSymbol typeArgument)
             {
                 var specialType = typeArgument.SpecialType;
+
                 switch (specialType)
                 {
                     case SpecialType.System_Collections_IEnumerable:

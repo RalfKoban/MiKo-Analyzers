@@ -477,6 +477,7 @@ namespace System
             var separatorForLast = string.Intern(" " + lastSeparator + " ");
 
             var count = items.Count;
+
             switch (count)
             {
                 case 0: return string.Empty;
@@ -853,6 +854,7 @@ namespace System
                 else
                 {
                     end++; // fix last character
+
                     break;
                 }
             }

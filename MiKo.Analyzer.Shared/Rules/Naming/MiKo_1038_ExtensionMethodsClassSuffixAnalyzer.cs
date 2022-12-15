@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (symbolName.EndsWith(wrongSuffix, StringComparison.OrdinalIgnoreCase))
                 {
                     symbolName = symbolName.WithoutSuffix(wrongSuffix);
+
                     break;
                 }
             }

@@ -102,6 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             {
                                 // we found a property assignment, so we have to check for backing field assignments
                                 unassigned = false;
+
                                 break;
                             }
 
@@ -109,6 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             {
                                 // we found a backing field assignment
                                 unassigned = false;
+
                                 break;
                             }
                         }

@@ -79,6 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 // inspect the switch section to see if another switch section directly comes after our node, as in such case we also need some blank lines
                 var nextSection = section.NextSibling();
+
                 if (nextSection != null && statements.Last() == node)
                 {
                     // determine whether the next section has no blank line between itself and our node

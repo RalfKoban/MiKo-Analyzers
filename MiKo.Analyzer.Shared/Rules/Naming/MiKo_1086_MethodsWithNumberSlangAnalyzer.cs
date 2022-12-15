@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     if (withoutNumbers != name)
                     {
                         name = withoutNumbers;
+
                         continue;
                     }
                 }

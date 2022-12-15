@@ -32,14 +32,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (node.Expression is IdentifierNameSyntax i && i.GetName().EndsWith("ObservableHelper", StringComparison.Ordinal))
             {
                 var name = node.GetName();
+
                 switch (name)
                 {
                     case GetPropertyName:
                         ReportIssue(context, node.Parent, name, "nameof({0})");
+
                         break;
 
                     case CreateArgs:
                         ReportIssue(context, node.Parent, name, "new PropertyChangedEventArgs(nameof({0}))");
+
                         break;
                 }
             }

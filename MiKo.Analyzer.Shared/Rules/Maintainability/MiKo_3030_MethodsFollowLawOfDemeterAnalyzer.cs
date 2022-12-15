@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var symbol = context.SemanticModel.GetSymbolInfo(context.Node).Symbol;
+
             switch (symbol)
             {
                 case INamespaceOrTypeSymbol _:

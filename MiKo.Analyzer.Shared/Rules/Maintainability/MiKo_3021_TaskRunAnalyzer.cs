@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
                 var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
+
                 switch (node?.Kind())
                 {
                     case SyntaxKind.ReturnStatement:

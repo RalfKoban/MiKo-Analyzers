@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
             var symbolType = symbol.Type;
+
             switch (symbolType.TypeKind)
             {
                 case TypeKind.Delegate:

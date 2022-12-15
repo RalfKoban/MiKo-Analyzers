@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var invocation = syntaxNodes.OfType<InvocationExpressionSyntax>().First();
 
             var parent = invocation.Parent;
+
             switch (parent.Kind())
             {
                 case SyntaxKind.ParenthesizedExpression when parent.Parent.IsKind(SyntaxKind.LogicalNotExpression):
@@ -46,6 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             var arguments = invocation.ArgumentList.Arguments;
+
             switch (arguments.Count)
             {
                 case 1 when invocation.Expression is MemberAccessExpressionSyntax maes:
@@ -81,6 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             kind = SyntaxKind.EqualsExpression;
 
             var syntaxKind = syntax.Kind();
+
             switch (syntaxKind)
             {
                 case SyntaxKind.LogicalNotExpression:
@@ -88,6 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     kind = SyntaxKind.NotEqualsExpression;
 
                     var child = syntax.FirstChild();
+
                     switch (child)
                     {
                         case ParenthesizedExpressionSyntax p when p.Expression is InvocationExpressionSyntax pi:

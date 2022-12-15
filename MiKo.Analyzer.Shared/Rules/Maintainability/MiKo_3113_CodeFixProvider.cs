@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = invocation.ArgumentList.Arguments;
 
             var name = constraintNode.GetName();
+
             switch (name)
             {
                 case "BeTrue": return AssertThat(expression, Is("True"), arguments, 0, removeNameColon: true);
@@ -287,6 +288,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameters = SyntaxFactory.SeparatedList(arguments.Select(_ => _.Expression));
             var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ArrayInitializerExpression, parameters);
             var array = SyntaxFactory.ImplicitArrayCreationExpression(initializer);
+
             return array;
         }
     }

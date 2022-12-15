@@ -50,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 UnescapeValidPhrases(escapedMethod.Without(DoPhrase));
 
                 var proposal = escapedMethod.ToString();
+
                 switch (proposal)
                 {
                     case "": // special case 'Do'

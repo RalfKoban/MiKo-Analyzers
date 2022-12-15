@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 foreach (var attribute in attributeList.Attributes)
                 {
                     var name = attribute.Name.GetNameOnlyPart();
+
                     switch (name)
                     {
                         case "Combinatorial":

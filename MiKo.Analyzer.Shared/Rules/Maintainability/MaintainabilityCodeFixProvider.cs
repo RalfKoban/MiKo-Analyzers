@@ -113,6 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static TypeOfExpressionSyntax TypeOf(ParameterSyntax parameter)
         {
             var typeSyntax = parameter.Type;
+
             return typeSyntax is null
                        ? TypeOf(SyntaxKind.VoidKeyword)
                        : TypeOf(typeSyntax);

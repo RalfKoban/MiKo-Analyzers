@@ -62,6 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // skip <c> and <code>
                 var name = e.Name.ToString().ToLowerCase();
+
                 switch (name)
                 {
                     case Constants.XmlTag.C:

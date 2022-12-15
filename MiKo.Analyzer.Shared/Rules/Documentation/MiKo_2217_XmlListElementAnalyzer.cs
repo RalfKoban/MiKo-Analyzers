@@ -55,6 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list, XmlTextAttributeSyntax listType)
         {
             var type = GetListType(listType);
+
             switch (type.ToLowerCase())
             {
                 case null: // no list type specified

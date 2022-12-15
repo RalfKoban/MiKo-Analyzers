@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.ReturnType.ContainingNamespace.FullyQualifiedName() == "System.Collections.Generic")
             {
                 var name = symbol.ReturnType.Name;
+
                 switch (name)
                 {
                     case "List":

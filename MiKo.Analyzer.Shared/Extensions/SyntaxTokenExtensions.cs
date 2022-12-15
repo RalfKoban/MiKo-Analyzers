@@ -26,6 +26,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
+
             return value.GetSymbol(semanticModel);
         }
 

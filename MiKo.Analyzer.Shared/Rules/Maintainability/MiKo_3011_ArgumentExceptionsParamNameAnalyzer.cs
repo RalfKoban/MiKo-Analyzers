@@ -66,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static Location InspectArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
             var arguments = syntax.Arguments;
+
             switch (arguments.Count)
             {
                 case 2:
@@ -88,6 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static Location InspectArgumentNullException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
             var arguments = syntax.Arguments;
+
             switch (arguments.Count)
             {
                 case 1:
@@ -110,6 +112,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static Location InspectArgumentOutOfRangeException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
             var arguments = syntax.Arguments;
+
             switch (arguments.Count)
             {
                 case 2:
@@ -133,6 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static Location InspectInvalidEnumArgumentException(ArgumentListSyntax syntax, IMethodSymbol method, SemanticModel semanticModel)
         {
             var arguments = syntax.Arguments;
+
             switch (arguments.Count)
             {
                 case 2:

@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
             var count = CountArgumentSyntaxes(symbol.GetSyntax());
+
             switch (count)
             {
                 case 0:
@@ -94,6 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var identifier = parameter.Identifier;
             var parameterName = parameter.GetName();
+
             switch (parameterName)
             {
                 case null: // we do not have one
