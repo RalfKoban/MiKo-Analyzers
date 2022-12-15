@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             var node = syntaxNodes.First();
+
             switch (node)
             {
                 case InterpolationSyntax i when i.Parent is InterpolatedStringExpressionSyntax interpolated:

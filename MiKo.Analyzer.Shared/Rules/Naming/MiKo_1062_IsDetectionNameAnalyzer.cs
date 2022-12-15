@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var prefix in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0).Where(_ => symbolName.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
             {
                 symbolName = symbolName.Substring(prefix.Length);
+
                 break;
             }
 

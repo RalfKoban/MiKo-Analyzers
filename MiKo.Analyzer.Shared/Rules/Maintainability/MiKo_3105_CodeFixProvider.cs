@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
             {
                 var typeName = type.GetName();
+
                 switch (typeName)
                 {
                     case "Assert":

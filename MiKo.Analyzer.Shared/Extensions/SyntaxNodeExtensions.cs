@@ -210,6 +210,7 @@ namespace MiKoSolutions.Analyzers
         internal static string GetMethodName(this ParameterSyntax node)
         {
             var enclosingNode = node.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration);
+
             switch (enclosingNode)
             {
                 case MethodDeclarationSyntax m: return m.GetName();
@@ -852,6 +853,7 @@ namespace MiKoSolutions.Analyzers
 
                     // maybe a nested one, so check parent
                     value = ifStatement.Parent;
+
                     continue;
                 }
 
@@ -861,6 +863,7 @@ namespace MiKoSolutions.Analyzers
                 if (elseStatement != null)
                 {
                     value = elseStatement.Parent;
+
                     continue;
                 }
 
@@ -910,6 +913,7 @@ namespace MiKoSolutions.Analyzers
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
             {
                 var attribute = syntax.Attributes.FirstOrDefault();
+
                 switch (attribute?.GetName())
                 {
                     case Constants.XmlTag.Attribute.Langword:
@@ -928,6 +932,7 @@ namespace MiKoSolutions.Analyzers
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
             {
                 var attribute = syntax.Attributes.FirstOrDefault();
+
                 switch (attribute?.GetName())
                 {
                     case Constants.XmlTag.Attribute.Langword:
@@ -1199,6 +1204,57 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
+        internal static SyntaxNode PreviousSibling(this SyntaxNode node)
+        {
+            var parent = node?.Parent;
+
+            if (parent is null)
+            {
+                return default;
+            }
+
+            SyntaxNode previousChild = default;
+
+            foreach (var child in parent.ChildNodes())
+            {
+                if (child == node)
+                {
+                    return previousChild;
+                }
+
+                previousChild = child;
+            }
+
+            return default;
+        }
+
+        internal static SyntaxNode NextSibling(this SyntaxNode node)
+        {
+            var parent = node?.Parent;
+
+            if (parent is null)
+            {
+                return default;
+            }
+
+            using (var enumerator = parent.ChildNodes().GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    if (enumerator.Current == node)
+                    {
+                        var nextSibling = enumerator.MoveNext()
+                                              ? enumerator.Current
+                                              : default;
+
+                        return nextSibling;
+                    }
+                }
+            }
+
+            return default;
+        }
+
         internal static IList<SyntaxNode> Siblings(this SyntaxNode node) => Siblings<SyntaxNode>(node);
 
         internal static IList<T> Siblings<T>(this SyntaxNode node) where T : SyntaxNode
@@ -1463,6 +1519,7 @@ namespace MiKoSolutions.Analyzers
 
                         textTokens[i] = token.WithText(modifiedText);
                         replaced = true;
+
                         break;
                     }
                 }
@@ -1502,6 +1559,7 @@ namespace MiKoSolutions.Analyzers
 
                     textTokens[i] = token.WithText(modifiedText);
                     replaced = true;
+
                     break;
                 }
             }

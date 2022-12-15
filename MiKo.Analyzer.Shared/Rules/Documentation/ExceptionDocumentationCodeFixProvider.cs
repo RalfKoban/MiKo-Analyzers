@@ -61,6 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
         {
             var parameters = exceptionComment.GetParameterNames();
+
             switch (parameters.Length)
             {
                 case 0:

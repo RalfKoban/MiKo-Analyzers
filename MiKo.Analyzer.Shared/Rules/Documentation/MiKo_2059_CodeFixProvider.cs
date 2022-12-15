@@ -42,15 +42,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var newContent = exception.Content;
 
                 // combine all remaining nodes into first one
-                var siblings = exception.Siblings();
-
                 foreach (var duplicate in duplicates)
                 {
                     obsoleteNodes.Add(duplicate);
 
                     // find the remaining ' /// ' text nodes and mark them as obsolete as they are not part of the elements
-                    var exceptionIndex = siblings.IndexOf(duplicate);
-                    var previousSibling = siblings[exceptionIndex - 1];
+                    var previousSibling = duplicate.PreviousSibling();
 
                     if (previousSibling is XmlTextSyntax)
                     {

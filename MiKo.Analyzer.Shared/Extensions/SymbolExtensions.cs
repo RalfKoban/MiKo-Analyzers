@@ -166,6 +166,7 @@ namespace MiKoSolutions.Analyzers
 
                     default:
                         symbol = symbol.ContainingSymbol;
+
                         break;
                 }
             }
@@ -178,6 +179,7 @@ namespace MiKoSolutions.Analyzers
         internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol value)
         {
             var count = value.TypeArguments.Length;
+
             switch (count)
             {
                 case 0: return string.Empty;

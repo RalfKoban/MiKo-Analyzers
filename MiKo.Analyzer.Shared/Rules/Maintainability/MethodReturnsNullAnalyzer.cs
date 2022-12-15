@@ -97,6 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case SyntaxKind.CastExpression:
                         node = node.Parent;
+
                         continue;
 
                     default:
@@ -173,16 +174,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void AnalyzeMethodExpressionBody(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method)
         {
             var expression = method.ExpressionBody.Expression;
+
             switch (expression)
             {
                 case ConditionalExpressionSyntax conditional:
                     AnalyzeConditional(context, conditional);
+
                     break;
+
                 case BinaryExpressionSyntax b when b.IsKind(SyntaxKind.CoalesceExpression):
                     AnalyzeExpression(context, method, b.Right);
+
                     break;
+
                 default:
                     GetAndReportIssue(context, expression);
+
                     break;
             }
         }

@@ -152,6 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var accessors = accessorList.Accessors;
+
             switch (accessors.Count)
             {
                 case 1:

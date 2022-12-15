@@ -48,6 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, predicate);
 
             var lines = new HashSet<int>();
+
             CountLinesOfCode(nodes, lines);
 
             //// var all = string.Join(Environment.NewLine, lines.OrderBy(_ => _));
@@ -74,6 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case IfStatementSyntax s:
                         node = s.Condition;
+
                         continue;
 
                     case LocalDeclarationStatementSyntax s:
@@ -81,6 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                         // get normal initializers and object initializers
                         CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer?.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
+
                         break;
 
                     case ObjectCreationExpressionSyntax s:
@@ -103,6 +106,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         if (s.Expression != null)
                         {
                             node = s.Expression;
+
                             continue;
                         }
 
@@ -110,15 +114,18 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case ForEachStatementSyntax s:
                         node = s.Expression;
+
                         continue;
 
                     case SwitchStatementSyntax s:
                         CountLinesOfCode(s.Expression, lines);
                         CountLinesOfCode(s.Sections.SelectMany(_ => _.Labels), lines);
+
                         break;
 
                     default:
                         CountLinesOfCode(node.GetLocation(), lines);
+
                         break;
                 }
 

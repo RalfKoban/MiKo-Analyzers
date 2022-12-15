@@ -111,6 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     // we do not need to inspect further
                     newLineTokenJustSkipped = true;
+
                     continue;
                 }
 

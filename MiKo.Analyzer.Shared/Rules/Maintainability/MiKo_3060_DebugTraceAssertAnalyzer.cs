@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var methodCall in methodCalls)
             {
                 var call = methodCall.ToCleanedUpString();
+
                 switch (call)
                 {
                     case "System.Diagnostics." + DebugInvocation:
@@ -44,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         }
 
                         diagnostics.Add(Issue(symbol.Name, methodCall, call));
+
                         break;
                 }
             }

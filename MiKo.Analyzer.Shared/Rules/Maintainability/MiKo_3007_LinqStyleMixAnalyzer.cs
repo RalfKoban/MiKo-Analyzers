@@ -85,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case 1:
                         firstCall = call;
+
                         break;
 
                     case 2:

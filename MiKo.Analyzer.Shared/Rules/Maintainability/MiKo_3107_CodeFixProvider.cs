@@ -41,6 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static SyntaxNode ReplacementFor(PredefinedTypeSyntax type)
         {
             var kind = type.Keyword.Kind();
+
             switch (kind)
             {
                 case SyntaxKind.BoolKeyword: return Literal(SyntaxKind.FalseLiteralExpression);

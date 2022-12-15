@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var arguments = list.Arguments;
+
             switch (arguments.Count)
             {
                 case 2:

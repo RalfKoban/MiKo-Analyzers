@@ -245,6 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
             var name = symbolName.Without(Constants.Markers.Entities);
+
             switch (name.Length)
             {
                 case 0:

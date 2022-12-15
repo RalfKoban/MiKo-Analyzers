@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         internal static bool HasIssue(MemberAccessExpressionSyntax node)
         {
             var code = node.ToString();
+
             switch (code)
             {
                 case "Has.Count.Zero":

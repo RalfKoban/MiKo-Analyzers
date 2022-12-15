@@ -32,6 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var parameter in symbol.Parameters)
             {
                 var comment = parameter.GetComment(commentXml);
+
                 switch (comment)
                 {
                     case null:

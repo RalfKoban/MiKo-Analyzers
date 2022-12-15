@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             var parameter = parenthesized.ParameterList.Parameters.First();
+
             return SyntaxFactory.SimpleLambdaExpression(parameter, body);
         }
     }

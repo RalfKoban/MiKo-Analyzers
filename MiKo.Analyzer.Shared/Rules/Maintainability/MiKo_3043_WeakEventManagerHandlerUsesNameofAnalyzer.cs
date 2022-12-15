@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
         {
             var name = node.GetName();
+
             switch (name)
             {
                 case "AddHandler":

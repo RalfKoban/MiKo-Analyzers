@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlElementStartTagSyntax startTag:
                     {
                         var tagName = startTag.GetName();
+
                         switch (tagName)
                         {
                             case Constants.XmlTag.Summary:

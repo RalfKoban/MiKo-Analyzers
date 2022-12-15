@@ -29,9 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case IPropertySymbol property when property.IsImport():
                         dependencies++;
+
                         break;
+
                     case IMethodSymbol method when method.IsConstructor() && method.IsImportingConstructor():
                         dependencies += method.Parameters.Length;
+
                         break;
                 }
             }
