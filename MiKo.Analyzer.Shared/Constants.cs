@@ -696,10 +696,10 @@ namespace MiKoSolutions.Analyzers
             internal const string TypeName = "DependencyProperty";
             internal const string FullyQualifiedTypeName = "System.Windows." + TypeName;
 
-            internal const string Register = "DependencyProperty.Register";
-            internal const string RegisterAttached = "DependencyProperty.RegisterAttached";
-            internal const string RegisterReadOnly = "DependencyProperty.RegisterReadOnly";
-            internal const string RegisterAttachedReadOnly = "DependencyProperty.RegisterAttachedReadOnly";
+            internal const string Register = TypeName + ".Register";
+            internal const string RegisterAttached = TypeName + ".RegisterAttached";
+            internal const string RegisterReadOnly = TypeName + ".RegisterReadOnly";
+            internal const string RegisterAttachedReadOnly = TypeName + ".RegisterAttachedReadOnly";
         }
 
         internal static class DependencyPropertyKey
@@ -709,6 +709,15 @@ namespace MiKoSolutions.Analyzers
             internal const string FullyQualifiedTypeName = "System.Windows." + TypeName;
 
             internal const string DependencyProperty = "DependencyProperty";
+        }
+
+        internal static class EventManager
+        {
+            internal const string FieldSuffix = "Event";
+            internal const string TypeName = "EventManager";
+            internal const string FullyQualifiedTypeName = "System.Windows." + TypeName;
+
+            internal const string RegisterRoutedEvent = TypeName + ".RegisterRoutedEvent";
         }
 
         internal static class LambdaIdentifiers

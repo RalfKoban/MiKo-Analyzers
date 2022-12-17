@@ -9192,6 +9192,42 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Use &apos;nameof&apos;.
         /// </summary>
+        public static string MiKo_3045_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3045_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The names of events that are registered on the EventManager shall be provided via &apos;nameof&apos; operator. This prevents typos or non-existing invalid names and eases refactorings..
+        /// </summary>
+        public static string MiKo_3045_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3045_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3045_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3045_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for EventManager event registrations.
+        /// </summary>
+        public static string MiKo_3045_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3045_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
         public static string MiKo_3047_CodeFixTitle {
             get {
                 return ResourceManager.GetString("MiKo_3047_CodeFixTitle", resourceCulture);
