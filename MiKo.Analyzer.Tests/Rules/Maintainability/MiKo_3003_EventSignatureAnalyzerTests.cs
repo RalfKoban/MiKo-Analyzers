@@ -45,6 +45,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_WPFs_RoutedEventHandler() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe
+{
+    public event RoutedEventHandler MyEvent;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Action() => An_issue_is_reported_for(@"
 
 public class TestMe

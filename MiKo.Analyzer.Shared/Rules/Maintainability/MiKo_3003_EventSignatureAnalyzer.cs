@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case nameof(PropertyChangedEventHandler):
                 case nameof(PropertyChangingEventHandler):
                 case nameof(CancelEventHandler):
+                case "RoutedEventHandler": // System.Windows.RoutedEventHandler in assembly PresentationCore.dll
                     return Enumerable.Empty<Diagnostic>();
 
                 default:
