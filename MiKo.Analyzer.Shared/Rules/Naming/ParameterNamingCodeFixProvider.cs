@@ -8,9 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class ParameterNamingCodeFixProvider : NamingCodeFixProvider
     {
-        protected virtual string FindBetterName(IParameterSymbol symbol) => null;
-
-        protected virtual string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => FindBetterName(symbol);
+        protected abstract string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic);
 
         protected sealed override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => FindBetterName((IParameterSymbol)symbol, diagnostic);
 
