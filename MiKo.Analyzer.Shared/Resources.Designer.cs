@@ -3035,6 +3035,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename constructor parameter after counterpart in base class.
+        /// </summary>
+        public static string MiKo_1087_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1087_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease usage and avoid misunderstandings, the names of constructor parameters should be identical to the names of constructors of the base class..
+        /// </summary>
+        public static string MiKo_1087_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1087_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name constructor parameter &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1087_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1087_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name constructor parameters after their counterparts in the base class.
+        /// </summary>
+        public static string MiKo_1087_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1087_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename parameter.
         /// </summary>
         public static string MiKo_1090_CodeFixTitle {

@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 350 rules that are currently provided by the analyzer.
+The following tables list all the 351 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -106,6 +106,7 @@ The following tables list all the 350 rules that are currently provided by the a
 |MiKo_1084|Variables should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
 |MiKo_1085|Parameters should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1086|Methods should not be named using numbers as slang|&#x2713;|\-|
+|MiKo_1087|Name constructor parameters after their counterparts in the base class|&#x2713;|&#x2713;|
 |MiKo_1090|Parameters should not be suffixed with specific types|&#x2713;|&#x2713;|
 |MiKo_1091|Variables should not be suffixed with specific types|&#x2713;|&#x2713;|
 |MiKo_1092|'Ability' Types should not be suffixed with redundant information|&#x2713;|&#x2713;|

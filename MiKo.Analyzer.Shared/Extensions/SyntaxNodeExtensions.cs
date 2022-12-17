@@ -370,16 +370,28 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<string>();
         }
 
+        internal static ISymbol GetSymbol(this SyntaxNode value, SemanticModel semanticModel)
+        {
+            var symbolInfo = GetSymbolInfo();
+
+            return symbolInfo.Symbol;
+
+            SymbolInfo GetSymbolInfo()
+            {
+                switch (value)
+                {
+                    case ConstructorInitializerSyntax cis:
+                        return semanticModel.GetSymbolInfo(cis);
+
+                    default:
+                        return semanticModel.GetSymbolInfo(value);
+                }
+            }
+        }
+
         internal static ISymbol GetSymbol(this SyntaxNode value, Compilation compilation)
         {
             return value.GetSymbol(compilation.GetSemanticModel(value.SyntaxTree));
-        }
-
-        internal static ISymbol GetSymbol(this SyntaxNode value, SemanticModel semanticModel)
-        {
-            var symbolInfo = semanticModel.GetSymbolInfo(value);
-
-            return symbolInfo.Symbol;
         }
 
         internal static IMethodSymbol GetSymbol(this LocalFunctionStatementSyntax value, SemanticModel semanticModel)
