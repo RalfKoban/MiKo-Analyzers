@@ -3305,6 +3305,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove field prefix.
+        /// </summary>
+        public static string MiKo_1097_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1097_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters should not use the same prefixes as fields because that would be make them difficult to distinguish from fields. Reviewers probably are not aware of such and might come to wrong conclusions when reading the code..
+        /// </summary>
+        public static string MiKo_1097_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1097_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use field prefix &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_1097_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1097_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter names should not follow the naming scheme for fields.
+        /// </summary>
+        public static string MiKo_1097_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1097_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

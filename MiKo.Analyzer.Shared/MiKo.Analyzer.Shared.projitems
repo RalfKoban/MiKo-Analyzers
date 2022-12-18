@@ -531,6 +531,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1094_NamespaceAsClassSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1095_DeleteRemoveAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1096_NotSuccessfulAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1097_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1097_ParameterNameFollowsFieldNameSchemeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1100_TestClassesPrefixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1101_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1101_TestClassesSuffixAnalyzer.cs" />
