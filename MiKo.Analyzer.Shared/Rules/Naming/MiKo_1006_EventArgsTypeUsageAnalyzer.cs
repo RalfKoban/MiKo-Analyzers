@@ -29,6 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbol.IsInterfaceImplementation();
         }
 
+        private static bool SkipType(string typeName) => typeName is null // ignore unknown type
+                                                      || Constants.Names.KnownWindowsEventHandlers.Contains(typeName);
+
         private void AnalyzeEventFieldDeclaration(SyntaxNodeAnalysisContext context)
         {
             var node = (EventFieldDeclarationSyntax)context.Node;
@@ -43,9 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var typeName = type?.Name;
 
-            if (typeName is null)
+            if (SkipType(typeName))
             {
-                return null; // ignore unknown type
+                return null;
             }
 
             var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
@@ -58,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // we either nave no correct event handler or too few/less type arguments, so try to guess the EventArgs
-            var eventArgsType = type.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
+            var eventArgsType = type?.TypeArguments.Length == 1 ? type.TypeArguments[0] : null;
             var expectedName = eventName + nameof(EventArgs);
 
             if (IsProperlyNamed(eventArgsType, expectedName))
