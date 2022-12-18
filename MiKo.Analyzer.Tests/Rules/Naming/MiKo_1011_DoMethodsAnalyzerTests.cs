@@ -30,10 +30,71 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("Whatever")]
         [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
         [TestCase("Dogfood")]
+        [TestCase("DontShowAgainCheckBox")]
         public void No_issue_is_reported_for_correctly_named_method_(string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void " + methodName + @"() { }
+}
+");
+
+        [TestCase("CanDock")]
+        [TestCase("CanDocument")]
+        [TestCase("CanDouble")]
+        [TestCase("CanDown")]
+        [TestCase("CanDownload")]
+        [TestCase("Dock")]
+        [TestCase("Doctor")]
+        [TestCase("Document")]
+        [TestCase("Domain")]
+        [TestCase("Done")]
+        [TestCase("Dot")]
+        [TestCase("Double")]
+        [TestCase("Doubt")]
+        [TestCase("Down")]
+        [TestCase("Download")]
+        [TestCase("IsDown")]
+        [TestCase("IsInDoubt")]
+        [TestCase("Whatever")]
+        [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
+        [TestCase("Dogfood")]
+        [TestCase("DontShowAgainCheckBox")]
+        public void No_issue_is_reported_for_correctly_named_local_function_(string methodName) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void Something()
+    {
+        void " + methodName + @"() { }
+    }
+}
+");
+
+        [TestCase("Whatever_it_Does")]
+        [TestCase("Do_whatever_you_want_to_do")]
+        public void No_issue_is_reported_for_test_method_(string methodName) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void " + methodName + @"();
+}
+");
+
+        [TestCase("Whatever_it_Does")]
+        [TestCase("Do_whatever_you_want_to_do")]
+        public void No_issue_is_reported_for_local_function_inside_test_method_(string methodName) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    [Test]
+    public void Something()
+    {
+        void " + methodName + @"() { }
+    }
 }
 ");
 
@@ -61,36 +122,6 @@ public class TestMe
 public class TestMe
 {
     public void " + methodName + @"() { }
-}
-");
-
-        [TestCase("CanDock")]
-        [TestCase("CanDocument")]
-        [TestCase("CanDouble")]
-        [TestCase("CanDown")]
-        [TestCase("CanDownload")]
-        [TestCase("Dock")]
-        [TestCase("Doctor")]
-        [TestCase("Document")]
-        [TestCase("Domain")]
-        [TestCase("Done")]
-        [TestCase("Dot")]
-        [TestCase("Double")]
-        [TestCase("Doubt")]
-        [TestCase("Down")]
-        [TestCase("Download")]
-        [TestCase("IsDown")]
-        [TestCase("IsInDoubt")]
-        [TestCase("Whatever")]
-        [TestCase("CallsDownloadWorkflowForMultipleParameterDownloadDevices")]
-        [TestCase("Dogfood")]
-        public void No_issue_is_reported_for_correctly_named_local_function_(string methodName) => No_issue_is_reported_for(@"
-public class TestMe
-{
-    public void Something()
-    {
-        void " + methodName + @"() { }
-    }
 }
 ");
 
@@ -129,35 +160,6 @@ public class TestMe
 public interface TestMe
 {
     public bool " + methodName + @"();
-}
-");
-
-        [TestCase("Whatever_it_Does")]
-        [TestCase("Do_whatever_you_want_to_do")]
-        public void No_issue_is_reported_for_test_method_(string methodName) => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
-[TestFixture]
-public class TestMe
-{
-    [Test]
-    public void " + methodName + @"();
-}
-");
-
-        [TestCase("Whatever_it_Does")]
-        [TestCase("Do_whatever_you_want_to_do")]
-        public void No_issue_is_reported_for_local_function_inside_test_method_(string methodName) => No_issue_is_reported_for(@"
-using NUnit.Framework;
-
-[TestFixture]
-public class TestMe
-{
-    [Test]
-    public void Something()
-    {
-        void " + methodName + @"() { }
-    }
 }
 ");
 

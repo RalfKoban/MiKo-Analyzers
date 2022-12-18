@@ -91,6 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                       .Replace("Dog", EscapedPhrase + "g")
                       .Replace("Dot", EscapedPhrase + "t")
                       .Replace("Done", EscapedPhrase + "ne")
+                      .Replace("Dont", EscapedPhrase + "nt")
                       .Replace("DoEvents", EscapedPhrase + "Events")
                       .Replace("Domain", EscapedPhrase + "main")
                       .Replace("Double", EscapedPhrase + "uble")
