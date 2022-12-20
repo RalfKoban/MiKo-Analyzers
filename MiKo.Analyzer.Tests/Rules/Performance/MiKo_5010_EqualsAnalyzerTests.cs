@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             };
 
         [Test]
-        public void No_issue_is_reported_for_non_object_equals_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_object_Equals_method() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -52,7 +52,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_object_equals_method_on_classes() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_object_Equals_method_on_classes() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -65,7 +65,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_object_equals_method_on_dynamic() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_object_Equals_method_on_dynamic() => No_issue_is_reported_for(@"
 using System;
 using System.Windows;
 
@@ -80,7 +80,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        public void An_issue_is_reported_for_full_qualified_object_equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_full_qualified_object_Equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -97,7 +97,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        public void An_issue_is_reported_for_object_equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -132,7 +132,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_field_structs_([ValueSource(nameof(ValueTypes))] string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_field_structs_([ValueSource(nameof(ValueTypes))] string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -153,7 +153,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_Method_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_Method_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -173,7 +173,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_inlined_Func_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_inlined_Func_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -191,7 +191,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_object_equals_method_on_Func_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_Func_structs_([ValueSource(nameof(ValueTypes))]string returnType) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -205,6 +205,24 @@ public class TestMe
             if (Equals(something(), value))
                 return;
         }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Enum_Equals_to_avoid_Boxing() => An_issue_is_reported_for(@"
+using System;
+
+public enum MyEnum
+{
+    None,
+}
+
+public class TestMe
+{
+    public void DoSomething(MyEnum value)
+    {
+        if (value.Equals(MyEnum.None)) throw new NotSupportedException();
     }
 }
 ");
@@ -278,6 +296,9 @@ public class TestMe
              "using System; class TestMe { void Do(StringComparison x, bool b) { if (b && x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
         [TestCase(
              "using System; class TestMe { void Do(StringComparison x) { if (x.Equals((object)StringComparison.Ordinal)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (x.Equals(StringComparison.Ordinal)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(StringComparison x) { if (x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 

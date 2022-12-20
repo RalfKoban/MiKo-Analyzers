@@ -29,11 +29,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 var type = method.ContainingType;
 
-                return type.IsValueType || type.FullyQualifiedName() == "System.Enum";
+                return type.IsValueType;
             }
 
             return false;
         }
+
+        private static bool IsEnumEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Enum;
 
         private static bool IsStruct(SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
@@ -62,6 +64,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case 2:
                     return AnalyzeMethod(node, semanticModel, arguments);
 
+                case 1 when arguments[0].Expression.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                    return AnalyzeMethod(node, semanticModel, arguments);
+
                 case 1 when arguments[0].Expression is CastExpressionSyntax cast && cast.Type.IsObject():
                     return AnalyzeMethod(node, semanticModel, arguments);
 
@@ -76,9 +81,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             if (symbol is IMethodSymbol method)
             {
-                var isEquals = (IsObjectEqualsStaticMethod(method) && IsStruct(semanticModel, arguments)) || IsObjectEqualsOnStructMethod(method);
+                var problematicEquals = IsEnumEqualsMethod(method) || (IsObjectEqualsStaticMethod(method) && IsStruct(semanticModel, arguments)) || IsObjectEqualsOnStructMethod(method);
 
-                if (isEquals)
+                if (problematicEquals)
                 {
                     // let's see who this method is that invokes Equals
                     var enclosingMethod = node.GetEnclosingMethod(semanticModel);
