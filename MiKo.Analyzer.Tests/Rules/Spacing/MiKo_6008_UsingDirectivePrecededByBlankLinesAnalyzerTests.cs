@@ -62,9 +62,11 @@ using System.Windows;
         [TestCase("System.IO", "NUnit.Framework")]
         [TestCase("Bla.BlaBlubb", "Blablubb")]
         [TestCase("BlaBlubb.Bla", "Bla")]
-        public void An_issue_is_reported_for_multiple_usings_that_have_different_identifiers_(string namespace1, string namespace2) => An_issue_is_reported_for(@"
-using " + namespace1 + @";
-using " + namespace2 + @";
+        [TestCase("System", "File = System.IO.File")]
+        [TestCase("File = System.IO.File", "System")]
+        public void An_issue_is_reported_for_multiple_usings_that_have_different_identifiers_(string directive1, string directive2) => An_issue_is_reported_for(@"
+using " + directive1 + @";
+using " + directive2 + @";
 
 public class TestMe
 {
@@ -75,11 +77,13 @@ public class TestMe
         [TestCase("System.IO", "NUnit.Framework")]
         [TestCase("Bla.BlaBlubb", "Blablubb")]
         [TestCase("BlaBlubb.Bla", "Bla")]
-        public void Code_gets_fixed_for_multiple_usings_that_have_different_identifiers_(string namespace1, string namespace2)
+        [TestCase("System", "File = System.IO.File")]
+        [TestCase("File = System.IO.File", "System")]
+        public void Code_gets_fixed_for_multiple_usings_that_have_different_identifiers_(string directive1, string directive2)
         {
             var originalCode = @"
-using " + namespace1 + @";
-using " + namespace2 + @";
+using " + directive1 + @";
+using " + directive2 + @";
 
 public class TestMe
 {
@@ -87,9 +91,9 @@ public class TestMe
 ";
 
             var fixedCode = @"
-using " + namespace1 + @";
+using " + directive1 + @";
 
-using " + namespace2 + @";
+using " + directive2 + @";
 
 public class TestMe
 {

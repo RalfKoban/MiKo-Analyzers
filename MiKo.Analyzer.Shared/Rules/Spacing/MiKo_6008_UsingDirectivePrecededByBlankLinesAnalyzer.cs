@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -21,22 +19,44 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             context.RegisterSyntaxNodeAction(AnalyzeUsingDirectiveSyntax, SyntaxKind.UsingDirective);
         }
 
-        private static bool ShallAnalyze(UsingDirectiveSyntax node) => node.ChildNodes<NameEqualsSyntax>().None();
-
         private static bool HasIssue(UsingDirectiveSyntax node)
         {
-            if (node.PreviousSibling() is UsingDirectiveSyntax previous)
+            if (node.PreviousSibling() is UsingDirectiveSyntax previous && InvestigateForBlankLines(node, previous))
             {
-                var nodeName = GetName(node);
-                var previousName = GetName(previous);
-
-                if (nodeName != previousName)
-                {
-                    return HasNoBlankLinesBefore(node, previous);
-                }
+                return HasNoBlankLinesBefore(node, previous);
             }
 
             return false;
+        }
+
+        private static bool InvestigateForBlankLines(UsingDirectiveSyntax current, UsingDirectiveSyntax previous)
+        {
+            var currentNameEqualsSyntax = current.FirstChild<NameEqualsSyntax>();
+            var previousNameEqualsSyntax = previous.FirstChild<NameEqualsSyntax>();
+
+            if (currentNameEqualsSyntax != null && previousNameEqualsSyntax != null)
+            {
+                // do not inspect using aliases that are side by side
+                return false;
+            }
+
+            if (currentNameEqualsSyntax != null)
+            {
+                // inspect further as we have an alias but the previous node is no alias
+                return true;
+            }
+
+            if (previousNameEqualsSyntax != null)
+            {
+                // inspect further as the previous node is an alias but the current node is not
+                return true;
+            }
+
+            // we have both normal using directives
+            var currentName = GetName(current);
+            var previousName = GetName(previous);
+
+            return currentName != previousName;
         }
 
         private static string GetName(UsingDirectiveSyntax node) => GetName(node.Name);
@@ -60,14 +80,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var node = (UsingDirectiveSyntax)context.Node;
 
-            if (ShallAnalyze(node))
+            if (HasIssue(node))
             {
-                if (HasIssue(node))
-                {
-                    var issue = Issue(node, true, false);
+                var issue = Issue(node, true, false);
 
-                    ReportDiagnostics(context, issue);
-                }
+                ReportDiagnostics(context, issue);
             }
         }
     }
