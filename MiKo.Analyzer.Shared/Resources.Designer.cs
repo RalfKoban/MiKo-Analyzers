@@ -11361,7 +11361,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;object.Equals&apos;.
+        ///   Looks up a localized string similar to Use &apos;==&apos; operator instead of &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_5010_MessageFormat {
             get {

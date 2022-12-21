@@ -81,16 +81,37 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             if (symbol is IMethodSymbol method)
             {
-                var problematicEquals = IsEnumEqualsMethod(method) || (IsObjectEqualsStaticMethod(method) && IsStruct(semanticModel, arguments)) || IsObjectEqualsOnStructMethod(method);
+                var nodeToUnderline = node.Expression;
 
-                if (problematicEquals)
+                if (IsEnumEqualsMethod(method))
+                {
+                    if (node.Expression is MemberAccessExpressionSyntax syntax)
+                    {
+                        nodeToUnderline = syntax.Name;
+                    }
+
+                    return Issue(symbol.Name, nodeToUnderline, "Enum.Equals");
+                }
+
+                var isStaticObjectEquals = IsObjectEqualsStaticMethod(method) && IsStruct(semanticModel, arguments);
+                var isObjectEquals = IsObjectEqualsOnStructMethod(method);
+
+                if (isStaticObjectEquals || isObjectEquals)
                 {
                     // let's see who this method is that invokes Equals
                     var enclosingMethod = node.GetEnclosingMethod(semanticModel);
 
                     if (enclosingMethod.MethodKind != MethodKind.UserDefinedOperator)
                     {
-                        return Issue(node.Expression);
+                        if (isObjectEquals)
+                        {
+                            if (node.Expression is MemberAccessExpressionSyntax syntax)
+                            {
+                                nodeToUnderline = syntax.Name;
+                            }
+                        }
+
+                        return Issue(symbol.Name, nodeToUnderline, "object.Equals");
                     }
                 }
             }

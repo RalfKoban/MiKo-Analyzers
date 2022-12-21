@@ -80,6 +80,39 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
+        public void No_issue_is_reported_for_IEquatable_equals_method_on_structs_(string x, string y) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = " + x + @";
+        var y = " + y + @";
+
+        if (x.Equals(y)) throw new NotSupportedException();
+    }
+}
+");
+
+        [TestCase("==")]
+        [TestCase("!=")]
+        [TestCase(">=")]
+        [TestCase("<=")]
+        [TestCase("+")]
+        [TestCase("-")]
+        [TestCase("whatever")]
+        public void No_issue_is_reported_for_operator_(string operatorName) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static bool operator " + operatorName + @" (TestMe left, TestMe right) => Equals(left, right);
+}
+");
+
+        [TestCase("5", "4")]
+        [TestCase("Guid.Empty", "new Guid()")]
         public void An_issue_is_reported_for_full_qualified_object_Equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
@@ -114,9 +147,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        [TestCase("StringComparison.Ordinal", "StringComparison.OrdinalIgnoreCase")]
-        [TestCase("StringComparison.Ordinal", "(object)StringComparison.OrdinalIgnoreCase")] // with cast to object
-        public void No_issue_is_reported_for_IEquatable_equals_method_on_structs_(string x, string y) => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_structs_with_cast_to_object(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -126,7 +157,7 @@ public class TestMe
         var x = " + x + @";
         var y = " + y + @";
 
-        if (x.Equals(y)) throw new NotSupportedException();
+        if (x.Equals((object)y)) throw new NotSupportedException();
     }
 }
 ");
@@ -213,33 +244,25 @@ public class TestMe
         public void An_issue_is_reported_for_Enum_Equals_to_avoid_Boxing() => An_issue_is_reported_for(@"
 using System;
 
-public enum MyEnum
-{
-    None,
-}
-
 public class TestMe
 {
-    public void DoSomething(MyEnum value)
+    public void DoSomething(StringComparison value)
     {
-        if (value.Equals(MyEnum.None)) throw new NotSupportedException();
+        if (value.Equals(StringComparison.Ordinal)) throw new NotSupportedException();
     }
 }
 ");
 
-        [TestCase("==")]
-        [TestCase("!=")]
-        [TestCase(">=")]
-        [TestCase("<=")]
-        [TestCase("+")]
-        [TestCase("-")]
-        [TestCase("whatever")]
-        public void No_issue_is_reported_for_operator_(string operatorName) => No_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_Enum_Equals_with_cast_to_avoid_Boxing() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    public static bool operator " + operatorName + @" (TestMe left, TestMe right) => Equals(left, right);
+    public void DoSomething(StringComparison value)
+    {
+        if (value.Equals((object)StringComparison.OrdinalIgnoreCase)) throw new NotSupportedException();
+    }
 }
 ");
 
