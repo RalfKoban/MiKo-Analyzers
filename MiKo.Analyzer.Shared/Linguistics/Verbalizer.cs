@@ -271,7 +271,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     result = word.Slice(0, word.Length - pair.Key.Length).ToString() + pair.Value;
 
-                    return string.Equals(result, value, StringComparison.Ordinal) is false;
+                    return result.Equals(value, StringComparison.Ordinal) is false;
                 }
             }
 

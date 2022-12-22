@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (identifier.Length == wrongName.Length)
                 {
-                    if (string.Equals(identifier, wrongName, StringComparison.OrdinalIgnoreCase))
+                    if (identifier.Equals(wrongName, StringComparison.OrdinalIgnoreCase))
                     {
                         if (AllowedCompleteNames.Contains(identifier))
                         {

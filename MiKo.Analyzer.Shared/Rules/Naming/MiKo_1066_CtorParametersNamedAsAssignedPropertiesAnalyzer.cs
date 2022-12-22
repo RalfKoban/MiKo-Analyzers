@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                             if (parameterNames.TryGetValue(parameterName, out var parameter))
                             {
-                                if (string.Equals(propertyName, parameterName, StringComparison.OrdinalIgnoreCase) is false)
+                                if (propertyName.Equals(parameterName, StringComparison.OrdinalIgnoreCase) is false)
                                 {
                                     // we found a property that gets assigned by a parameter with a wrong name
                                     var betterName = propertyName.ToLowerCaseAt(0);

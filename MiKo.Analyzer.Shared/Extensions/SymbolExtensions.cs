@@ -1060,7 +1060,7 @@ namespace MiKoSolutions.Analyzers
         /// </returns>
         internal static bool MatchesField(this IParameterSymbol value)
         {
-            IEnumerable<string> fieldNames = null;
+            string[] fieldNames = null;
 
             foreach (var field in value.ContainingType.GetMembersIncludingInherited<IFieldSymbol>())
             {
@@ -1069,12 +1069,10 @@ namespace MiKoSolutions.Analyzers
                     // performance optimization as it is likely that there is more than a single field(s)
                     var parameterName = value.Name;
 
-                    fieldNames = Constants.Markers.FieldPrefixes.Select(__ => __ + parameterName).ToList();
+                    fieldNames = Constants.Markers.FieldPrefixes.Select(_ => _ + parameterName).ToArray();
                 }
 
-                var fieldName = field.Name;
-
-                if (fieldNames.Any(__ => string.Equals(__, fieldName, StringComparison.OrdinalIgnoreCase)))
+                if (field.Name.EqualsAny(fieldNames, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
@@ -1090,7 +1088,12 @@ namespace MiKoSolutions.Analyzers
         /// <returns>
         /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>
-        internal static bool MatchesProperty(this IParameterSymbol value) => value.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(value.Name, _.Name, StringComparison.OrdinalIgnoreCase));
+        internal static bool MatchesProperty(this IParameterSymbol value)
+        {
+            var valueName = value.Name;
+
+            return value.ContainingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => string.Equals(valueName, _.Name, StringComparison.OrdinalIgnoreCase));
+        }
 
         internal static string MinimalTypeName(this ITypeSymbol value) => value.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 

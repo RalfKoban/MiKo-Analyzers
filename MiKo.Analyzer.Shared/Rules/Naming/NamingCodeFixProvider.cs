@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var newName = GetNewName(diagnostic, symbol);
 
-            if (newName.IsNullOrWhiteSpace() || string.Equals(symbol.Name, newName, StringComparison.Ordinal))
+            if (newName.IsNullOrWhiteSpace() || newName.Equals(symbol.Name, StringComparison.Ordinal))
             {
                 // nothing changed
                 return originalSolution;
