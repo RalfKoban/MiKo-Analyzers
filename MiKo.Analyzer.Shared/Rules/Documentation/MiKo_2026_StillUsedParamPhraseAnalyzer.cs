@@ -55,6 +55,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
+            var commentTrivia = method.GetDocumentationCommentTriviaSyntax();
+
+            if (commentTrivia is null)
+            {
+                return; // no comment available
+            }
+
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
             if (methodBody is null)
@@ -70,6 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var issues = Analyze(context, methodBody, methodSymbol);
+
             ReportDiagnostics(context, issues);
         }
 
@@ -84,6 +92,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
+            var commentTrivia = method.GetDocumentationCommentTriviaSyntax();
+
+            if (commentTrivia is null)
+            {
+                return; // no comment available
+            }
+
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
             if (methodBody is null)
@@ -99,6 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var issues = Analyze(context, methodBody, methodSymbol);
+
             ReportDiagnostics(context, issues);
         }
 
@@ -106,12 +122,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
-            return from parameter in method.Parameters
-                   where used.Contains(parameter.Name)
-                   let commentXml = method.GetDocumentationCommentXml()
-                   let comment = parameter.GetComment(commentXml)
-                   where comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase)
-                   select Issue(parameter);
+            if (used.Any())
+            {
+                var commentXml = method.GetDocumentationCommentXml();
+
+                foreach (var parameter in method.Parameters.Where(_ => used.Contains(_.Name)))
+                {
+                    var comment = parameter.GetComment(commentXml);
+
+                    if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
+                    {
+                        yield return Issue(parameter);
+                    }
+                }
+            }
         }
     }
 }

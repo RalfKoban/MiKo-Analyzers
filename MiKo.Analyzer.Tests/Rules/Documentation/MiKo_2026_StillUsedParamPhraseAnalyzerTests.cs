@@ -88,6 +88,38 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_that_has_no_documentation() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(int i)
+        {
+            var j = 42;
+            return j;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_that_has_no_documentation() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe(int i)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_that_has_correctly_documented_unused_parameter_([ValueSource(nameof(UnusedPhrases))] string comment) => No_issue_is_reported_for(@"
 using System;
 
