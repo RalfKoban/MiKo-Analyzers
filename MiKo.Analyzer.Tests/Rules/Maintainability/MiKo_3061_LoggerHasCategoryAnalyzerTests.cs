@@ -53,7 +53,19 @@ public class TestMe
         public void No_issue_is_reported_for_Logger_with_string_usage_within_method() => No_issue_is_reported_for(@"
 using System;
 
-using log4net;
+namespace log4net
+{
+    public interface ILog
+    {
+    }
+
+    public static class LogManager
+    {
+        public static ILog GetLogger(string category) => null;
+
+        public static ILog GetLogger(Type category) => null;
+    }
+}
 
 public class TestMe
 {
@@ -69,7 +81,19 @@ public class TestMe
 using System;
 using System.Reflection;
 
-using log4net;
+namespace log4net
+{
+    public interface ILog
+    {
+    }
+
+    public static class LogManager
+    {
+        public static ILog GetLogger(string category) => null;
+
+        public static ILog GetLogger(Type category) => null;
+    }
+}
 
 public class TestMe
 {
@@ -85,7 +109,19 @@ public class TestMe
 using System;
 using System.Reflection;
 
-using log4net;
+namespace log4net
+{
+    public interface ILog
+    {
+    }
+
+    public static class LogManager
+    {
+        public static ILog GetLogger(string category) => null;
+
+        public static ILog GetLogger(Type category) => null;
+    }
+}
 
 public class TestMe
 {
@@ -102,7 +138,19 @@ public class TestMe
 using System;
 using System.Reflection;
 
-using log4net;
+namespace log4net
+{
+    public interface ILog
+    {
+    }
+
+    public static class LogManager
+    {
+        public static ILog GetLogger(string category) => null;
+
+        public static ILog GetLogger(Type category) => null;
+    }
+}
 
 public class TestMe
 {

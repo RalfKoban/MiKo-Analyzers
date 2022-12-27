@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.ILog.FullTypeName) != null;
+
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool IsLogManagerGetLoggerCall(MemberAccessExpressionSyntax node) => node.GetName() == "GetLogger"

@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
         }
 
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.ILog.FullTypeName) != null;
+
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)

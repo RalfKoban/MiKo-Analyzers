@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public class TestMe
     { }
@@ -23,7 +23,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public class TestMe
     {
@@ -35,7 +35,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -61,7 +61,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_method_in_block_in_if_statement_with_AND_condition_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -87,7 +87,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_method_in_block_in_deeply_nested_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -116,7 +116,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_method_in_else_block_in_deeply_nested_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -148,7 +148,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_method_without_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -172,7 +172,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_method_body_without_non_existing_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -195,7 +195,7 @@ namespace Bla
         public void No_issue_is_reported_for_call_in_method_in_block_in_complex_if_statement_with_interpolated_debug_message_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 using System;
 
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -222,7 +222,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_ctor_in_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -248,7 +248,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_call_in_ctor_without_block_in_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -272,7 +272,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_unrelated_call_in_ctor_expression_body() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public enum TraceLevel
     {
@@ -293,7 +293,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_unrelated_method_call() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public class TestMe
     {
@@ -310,7 +310,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -333,7 +333,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_call_in_method_expression_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -353,7 +353,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_call_in_ctor_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -376,7 +376,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_call_in_ctor_expression_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -396,7 +396,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_call_in_method_in_block_in_if_statement_with_OR_condition_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -424,7 +424,7 @@ namespace Bla
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -445,7 +445,7 @@ namespace Bla
 }
 ";
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -475,7 +475,7 @@ namespace Bla
         public void Code_gets_fixed_for_interpolated_string()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -496,7 +496,7 @@ namespace Bla
 }
 ";
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -526,7 +526,7 @@ namespace Bla
         public void Code_gets_fixed_for_interpolated_string_on_static_helper()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -550,7 +550,7 @@ namespace Bla
 }
 ";
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -583,7 +583,7 @@ namespace Bla
         public void Code_gets_fixed_for_interpolated_string_on_deep_static_helper()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -612,7 +612,7 @@ namespace Bla
 }
 ";
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {

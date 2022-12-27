@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         [Test]
         public void No_issue_is_reported_for_Log_call_followed_by_another_Log_call() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -35,7 +35,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_Log_call_inside_if_statement_followed_by_block_statement() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -59,7 +59,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_Log_call_followed_by_if_block_separated_by_blank_line() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -87,7 +87,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_Log_call_preceded_by_if_block_separated_by_blank_line() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -115,7 +115,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_Log_call_inside_else_block() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -143,7 +143,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_Log_call_followed_by_blank_line_in_switch_section() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -172,11 +172,11 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_Log_call_in_case_section() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public static class Constants
     {
-        public static class  ILog
+        public static class ILog
         {
             public const string IsDebugEnabled = ""Some text"";
         }
@@ -202,7 +202,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_Log_call_followed_by_if_block() => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -229,7 +229,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_Log_call_followed_by_code_in_switch_section() => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -257,7 +257,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_Log_call_preceded_by_if_block() => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -286,7 +286,7 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_line()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -312,7 +312,7 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -345,7 +345,7 @@ namespace Bla
         public void Code_gets_fixed_for_missing_following_line()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -371,7 +371,7 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -404,7 +404,7 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_and_following_line_for_block()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -436,7 +436,7 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -476,7 +476,7 @@ namespace Bla
         public void Code_gets_fixed_for_multiple_missing_preceding_and_following_line_for_block()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -510,7 +510,7 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -556,7 +556,7 @@ namespace Bla
         public void Code_gets_fixed_for_missing_preceding_line_for_if_DebugEnabled_block()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -582,7 +582,7 @@ namespace Bla
 ";
 
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {

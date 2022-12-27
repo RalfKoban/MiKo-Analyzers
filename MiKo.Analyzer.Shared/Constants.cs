@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static class ILog
         {
+            internal const string FullTypeName = "log4net.ILog";
             internal const string TypeName = "ILog";
 
             internal const string Debug = nameof(Debug);

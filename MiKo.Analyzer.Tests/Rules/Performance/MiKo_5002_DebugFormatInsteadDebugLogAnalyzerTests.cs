@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public class TestMe
     { }
@@ -23,7 +23,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public class TestMe
     {
@@ -35,7 +35,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_non_formatting_call_in_method_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -56,7 +56,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_non_formatting_call_in_method_expression_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -74,7 +74,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_non_formatting_call_in_ctor_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -95,7 +95,7 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_non_formatting_call_in_ctor_expression_body_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -113,7 +113,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_formatting_call_in_method_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -134,7 +134,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_formatting_call_in_method_expression_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -152,7 +152,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_formatting_call_in_ctor_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -173,7 +173,7 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_formatting_call_in_ctor_expression_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -193,7 +193,7 @@ namespace Bla
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
@@ -216,7 +216,7 @@ namespace Bla
 }
 ";
             const string FixedCode = @"
-namespace Bla
+namespace log4net
 {
     public interface ILog
     {
