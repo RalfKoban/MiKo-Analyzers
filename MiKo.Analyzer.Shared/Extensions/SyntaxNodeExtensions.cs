@@ -528,13 +528,17 @@ namespace MiKoSolutions.Analyzers
 
             DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
             {
-                var trivia = node.ChildTokens().SelectMany(_ => _.GetAllTrivia());
-
-                foreach (var t in trivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                foreach (var childToken in node.ChildTokens())
                 {
-                    if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    if (childToken.HasLeadingTrivia)
                     {
-                        return syntax;
+                        foreach (var t in childToken.LeadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                        {
+                            if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                            {
+                                return syntax;
+                            }
+                        }
                     }
                 }
 
