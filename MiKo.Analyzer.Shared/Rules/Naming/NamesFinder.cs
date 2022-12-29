@@ -153,7 +153,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                             .Replace("not_implemented_exception", nameof(NotImplementedException))
                                             .Replace("task_canceled_exception", nameof(TaskCanceledException))
                                             .Replace("operation_canceled_exception", nameof(OperationCanceledException))
+                                            .Replace("_in_return_", "<1>")
+                                            .Replace("_to_return_", "<2>")
+                                            .Replace("_not_throw_", "<3>")
                                             .Replace("_return_", "_returns_")
+                                            .Replace("_throw_", "_throws_")
+                                            .Replace("<1>", "_in_return_")
+                                            .Replace("<2>", "_to_return_")
+                                            .Replace("<3>", "_not_throw_")
                                             .ToString();
 
             return string.Intern(result);

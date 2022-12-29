@@ -105,6 +105,9 @@ public class TestMe
         [TestCase("ThrowsObjectDisposedExceptionForSomething", "Throws_ObjectDisposedException_for_something")]
         [TestCase("ThrowsOperationCanceledExceptionForSomething", "Throws_OperationCanceledException_for_something")]
         [TestCase("ThrowsTaskCanceledExceptionForSomething", "Throws_TaskCanceledException_for_something")]
+        [TestCase("DoSomethingDoesNotThrowException_but_return_something", "Do_something_does_not_throw_exception_but_returns_something")]
+        [TestCase("DoSomething_ThrowException_InsteadToReturnSomething", "Do_something_throws_exception_instead_to_return_something")]
+        [TestCase("DoSomething_ThrowException_InReturnSomething", "Do_something_throws_exception_in_return_something")]
         public void Code_gets_fixed_for_test_method_(string original, string fix)
         {
             const string Template = @"
