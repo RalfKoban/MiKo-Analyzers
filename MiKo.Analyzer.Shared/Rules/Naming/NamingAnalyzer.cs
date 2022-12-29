@@ -71,6 +71,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                     ? AnalyzeName(symbol, compilation)
                                                                                                                                     : Enumerable.Empty<Diagnostic>();
 
+        protected virtual IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
+        {
+            var localFunctions = symbol.GetLocalFunctions().ToList();
+
+            if (localFunctions.Count == 0)
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
+
+            return localFunctions.Select(_ => _.GetSymbol(semanticModel))
+                                 .Where(ShallAnalyzeLocalFunction)
+                                 .SelectMany(_ => AnalyzeName(_, compilation));
+        }
+
         protected virtual bool ShallAnalyze(INamespaceSymbol symbol) => symbol.IsGlobalNamespace is false;
 
         protected virtual bool ShallAnalyze(ITypeSymbol symbol) => true;
@@ -225,22 +241,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
-        {
-            var localFunctions = symbol.GetLocalFunctions().ToList();
-
-            if (localFunctions.Count == 0)
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            var semanticModel = compilation.GetSemanticModel(symbol.GetSyntax().SyntaxTree);
-
-            return localFunctions.Select(_ => _.GetSymbol(semanticModel))
-                                 .Where(ShallAnalyzeLocalFunction)
-                                 .SelectMany(_ => AnalyzeName(_, compilation));
-        }
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {

@@ -80,7 +80,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
-            return value.GetSyntaxNodes().SelectMany(_ => _.DescendantNodes(__ => __.IsAnyKind(LocalFunctionContainerSyntaxKinds)).OfType<LocalFunctionStatementSyntax>());
+            return value.GetSyntaxNodes()
+                        .SelectMany(_ => _.DescendantNodes(__ => __.IsAnyKind(LocalFunctionContainerSyntaxKinds)))
+                        .OfType<LocalFunctionStatementSyntax>();
         }
 
         internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetExtensionMethods().Any();
@@ -300,6 +302,8 @@ namespace MiKoSolutions.Analyzers
 
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
+
+        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this ISymbol value) => value.GetDocumentationCommentTriviaSyntax().GetXmlTextTokens();
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 

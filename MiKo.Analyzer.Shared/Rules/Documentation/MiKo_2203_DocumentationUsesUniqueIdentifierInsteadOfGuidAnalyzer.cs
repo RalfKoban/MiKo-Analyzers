@@ -14,7 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2203";
 
         internal static readonly string[] Guids = { "guid", " Guid", "GUID" };
+
         internal static readonly string[] Phrases = GetWithDelimiters(Guids);
+
         internal static readonly string[] CodeTags = { Constants.XmlTag.C, Constants.XmlTag.Code };
 
         public MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer() : base(Id)
@@ -26,8 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol)
         {
             foreach (var token in symbol.GetDocumentationCommentTriviaSyntax()
-                                        .DescendantNodes<XmlElementSyntax>()
-                                        .Where(_ => CodeTags.Contains(_.GetName()) is false)
+                                        .DescendantNodes<XmlElementSyntax>(_ => CodeTags.Contains(_.GetName()) is false)
                                         .SelectMany(_ => _.ChildNodes<XmlTextSyntax>())
                                         .SelectMany(_ => _.TextTokens))
             {

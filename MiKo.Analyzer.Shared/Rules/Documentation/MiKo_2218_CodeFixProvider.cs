@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var affectedNodes = syntax.DescendantNodes<XmlTextSyntax>().Where(_ => _.GetLocation().Contains(diagnostic.Location));
+            var affectedNodes = syntax.DescendantNodes<XmlTextSyntax>(_ => _.GetLocation().Contains(diagnostic.Location));
 
             return syntax.ReplaceNodes(affectedNodes, (original, rewritten) => MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer.GetBetterText(original));
         }

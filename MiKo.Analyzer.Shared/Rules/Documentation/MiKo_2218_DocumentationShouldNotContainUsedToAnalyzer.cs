@@ -135,7 +135,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeCommentXml(ISymbol symbol)
         {
-            foreach (var token in symbol.GetDocumentationCommentTriviaSyntax().DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens))
+            foreach (var token in symbol.GetXmlTextTokens())
             {
                 foreach (var location in GetAllLocations(token, Phrases))
                 {

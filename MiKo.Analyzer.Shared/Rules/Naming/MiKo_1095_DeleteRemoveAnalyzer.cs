@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
@@ -62,16 +61,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeDocumentation(ISymbol symbol, string forbiddenWord)
         {
-            var documentation = symbol.GetDocumentationCommentTriviaSyntax();
+            var texts = symbol.GetXmlTextTokens().Select(_ => _.ValueText);
 
-            if (documentation != null)
+            if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
             {
-                var texts = documentation.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Select(_ => _.ValueText);
-
-                if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
-                {
-                    yield return Issue(symbol);
-                }
+                yield return Issue(symbol);
             }
         }
     }
