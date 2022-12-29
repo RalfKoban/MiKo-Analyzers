@@ -12,6 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => FindBetterName((IParameterSymbol)symbol, diagnostic);
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().First();
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().FirstOrDefault();
     }
 }

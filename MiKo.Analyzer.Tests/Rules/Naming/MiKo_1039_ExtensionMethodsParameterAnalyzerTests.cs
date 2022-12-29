@@ -168,6 +168,24 @@ public static class TestMeExtensions
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void CodeFixProvider_does_not_crash_with_InvalidOperationException_due_to_incomplete_code()
+        {
+            const string UncompilableCode = @"
+using System.Collections.Generic;
+
+public static class TestMeExtensions
+{
+    public static void Bla(this Docu)
+    {
+        .DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens)
+    }
+}
+";
+
+            VerifyCSharpFix(UncompilableCode, UncompilableCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_1039_ExtensionMethodsParameterAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1039_ExtensionMethodsParameterAnalyzer();
