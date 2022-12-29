@@ -159,6 +159,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return string.Intern(result);
         }
 
+        internal static string FindDescribingWord(char c, string defaultValue = null)
+        {
+            switch (c)
+            {
+                case '[': return "OPENING_BRACKET";
+                case ']': return "CLOSING_BRACKET";
+                case '(': return "OPENING_PARENTHESIS";
+                case ')': return "CLOSING_PARENTHESIS";
+                case '}': return "OPENING_BRACE";
+                case '{': return "CLOSING_BRACE";
+                case '<': return "OPENING_CHEVRON";
+                case '>': return "CLOSING_CHEVRON";
+                case ' ': return "SPACE";
+                case '.': return "DOT";
+                case '?': return "QUESTION_MARK";
+                case '!': return "EXCLAMATION_MARK";
+                case ',': return "COMMA";
+                case ':': return "COLON";
+                case ';': return "SEMICOLON";
+                case '/': return "SLASH";
+                case '\\': return "BACKSLASH";
+                case '_': return "UNDERLINE";
+                case '+': return "PLUS";
+                case '-': return "MINUS";
+                case '*': return "ASTERIX";
+                case '=': return "EQUALS";
+                case '&': return "AMPERSAND";
+                case '%': return "PERCENT";
+                case '$': return "DOLLAR";
+                case '€': return "EURO";
+                case '§': return "PARAGRAPH";
+                case '~': return "TILDE";
+                case '#': return "HASH";
+                case '@': return "AT";
+                case '"': return "QUOTATION_MARK";
+                case '\'': return "APOSTROPHE";
+
+                default:
+                    return defaultValue;
+            }
+        }
+
         private static string GetRegisteredName(IFieldSymbol symbol, string invocation)
         {
             var arguments = symbol.GetInvocationArgumentsFrom(invocation);
