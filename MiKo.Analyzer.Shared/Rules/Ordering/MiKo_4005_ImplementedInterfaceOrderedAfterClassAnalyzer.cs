@@ -70,6 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             switch (symbol.GetSyntax())
             {
                 case ClassDeclarationSyntax c: return c.BaseList;
+                case RecordDeclarationSyntax r: return r.BaseList;
                 case StructDeclarationSyntax s: return s.BaseList;
                 default: return null;
             }

@@ -119,6 +119,44 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_reported_for_record_with_correctly_ordered_interfaces() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    public record TestMe : ITestMe, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_reported_for_record_with_incorrectly_ordered_interfaces() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    public record TestMe : IDisposable, ITestMe
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_uncommented_type_with_base_class()
         {
             const string OriginalCode = @"
@@ -303,6 +341,48 @@ namespace Bla
     /// Some comment.
     /// </summary>
     public class TestMe : ITestMe, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_uncommented_record_without_base_class()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    public record TestMe : IDisposable, ITestMe
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+    }
+
+    public record TestMe : ITestMe, IDisposable
     {
         public void Dispose()
         {

@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             switch (typeSyntax)
             {
                 case ClassDeclarationSyntax c: return c.WithBaseList(UpdatedBaseList(context, c.BaseList, c.Identifier));
+                case RecordDeclarationSyntax r: return r.WithBaseList(UpdatedBaseList(context, r.BaseList, r.Identifier));
                 case StructDeclarationSyntax s: return s.WithBaseList(UpdatedBaseList(context, s.BaseList, s.Identifier));
 
                 default:

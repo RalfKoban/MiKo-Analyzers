@@ -74,6 +74,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_record_with_primary_constructor_and_an_additional_constructor() => No_issue_is_reported_for(@"
+public record TestMe(int a, int b)
+{
+    public int A = a;
+    public int B = b;
+    public int C;
+
+    public TestME(int a, int b, int c)
+    : this(a, b)
+    {
+        C = c;
+    }
+
+    public string ToString() => ""something"";
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_private_static_methods_sharing_same_name_and_1_method_in_between() => An_issue_is_reported_for(@"
 public class TestMe
 {

@@ -16,19 +16,47 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => Resources.MiKo_3075_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ClassDeclarationSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var syntaxNode in syntaxNodes)
+            {
+                switch (syntaxNode)
+                {
+                    case ClassDeclarationSyntax c: return c;
+                    case RecordDeclarationSyntax r: return r;
+                    default:
+                        return null;
+                }
+            }
+
+            return null;
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
-            var declaration = (ClassDeclarationSyntax)syntax;
+            switch (syntax)
+            {
+                case ClassDeclarationSyntax classDeclaration:
+                {
+                    var keyword = MakeStatic(context, classDeclaration)
+                                      ? SyntaxKind.StaticKeyword
+                                      : SyntaxKind.SealedKeyword;
 
-            var keyword = MakeStatic(context, declaration)
-                            ? SyntaxKind.StaticKeyword
-                            : SyntaxKind.SealedKeyword;
+                    var modifiers = CreateModifiers(classDeclaration, keyword);
 
-            var modifiers = CreateModifiers(declaration, keyword);
+                    return classDeclaration.WithModifiers(modifiers);
+                }
+                case RecordDeclarationSyntax recordDeclaration:
+                {
+                    var modifiers = CreateModifiers(recordDeclaration, SyntaxKind.SealedKeyword);
 
-            return declaration.WithModifiers(modifiers);
+                    return recordDeclaration.WithModifiers(modifiers);
+                }
+                default:
+                {
+                    return syntax;
+                }
+            }
         }
 
         private static bool MakeStatic(CodeFixContext context, ClassDeclarationSyntax syntax)

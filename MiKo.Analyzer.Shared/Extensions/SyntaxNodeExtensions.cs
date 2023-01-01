@@ -449,6 +449,12 @@ namespace MiKoSolutions.Analyzers
 
             return symbol as ITypeSymbol;
         }
+        internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, SemanticModel semanticModel)
+        {
+            var symbol = value.Identifier.GetSymbol(semanticModel);
+
+            return symbol as ITypeSymbol;
+        }
 
         internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, SemanticModel semanticModel) => value.Type.GetTypeSymbol(semanticModel);
 
@@ -717,6 +723,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
+
+        internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
 
         internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
         {

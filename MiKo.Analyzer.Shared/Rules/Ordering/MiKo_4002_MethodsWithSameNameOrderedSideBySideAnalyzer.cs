@@ -25,6 +25,13 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
+
+            if (symbol.IsRecord)
+            {
+                // filter primary ctors (as we cannot re-align those)
+                ctors = ctors.Where(_ => _.IsPrimaryConstructor() is false);
+            }
+
             var methods = GetMethodsOrderedByLocation(symbol);
             var methodsAndCtors = ctors.Concat(methods).ToList();
 

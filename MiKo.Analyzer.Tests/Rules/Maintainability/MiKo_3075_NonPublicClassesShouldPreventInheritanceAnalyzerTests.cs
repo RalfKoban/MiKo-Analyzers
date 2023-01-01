@@ -59,6 +59,18 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_unsealed_non_static_record_with_accessibility_([Values("public", "protected")] string accessibility) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    " + accessibility + @" record TestMe
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_struct_with_accessibility_([Values("public", "internal", "protected", "private")] string accessibility) => No_issue_is_reported_for(@"
 using System;
 
@@ -96,6 +108,18 @@ using System;
 namespace Bla
 {
     internal class TestMe
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_unsealed_non_static_internal_record() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    internal record TestMe
     {
     }
 }
@@ -199,6 +223,42 @@ namespace Bla
     public class TestMe
     {
         private sealed class Unsealed
+        {
+            public Unsealed() { }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_unsealed_private_record_that_becomes_sealed()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private record Unsealed
+        {
+            public Unsealed() { }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private sealed record Unsealed
         {
             public Unsealed() { }
         }
