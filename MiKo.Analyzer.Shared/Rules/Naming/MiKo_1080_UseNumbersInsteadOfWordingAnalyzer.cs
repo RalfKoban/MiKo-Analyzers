@@ -69,6 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "ione",
                                                                          "ionE",
                                                                          "IonE",
+                                                                         "late", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
                                                                          "lone",
                                                                          "Lone",
                                                                          "mone",

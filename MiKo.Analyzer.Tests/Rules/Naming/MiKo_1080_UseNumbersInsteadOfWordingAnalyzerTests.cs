@@ -354,6 +354,17 @@ public class TestMe
 }
 ");
 
+        [TestCase("CalculateLevenshteinDistanceOnly")]
+        [TestCase("CalculateLevensteinDistanceOnly")]
+        public void No_issue_is_reported_for_method_(string name) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int  " + name + @"() => 42;
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_1080_UseNumbersInsteadOfWordingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1080_UseNumbersInsteadOfWordingAnalyzer();
