@@ -195,7 +195,7 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_well_known_abbreviation_in_XML_documentation_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("i.e.", "e.g.")] string abbreviation) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_in_XML_documentation_([ValueSource(nameof(XmlTags))] string xmlTag, [Values("i.e.", "e.g.", "a.k.a.")] string abbreviation) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// Something " + abbreviation + @" whatever.
 /// </" + xmlTag + @">

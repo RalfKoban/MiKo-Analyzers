@@ -84,15 +84,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             return true;
                         }
 
-                        return CommentHasIssue(comment.ToString());
+                        return CommentHasIssue(comment);
                     }
                 }
             }
 
-            return CommentHasIssue(node.ToString());
+            return CommentHasIssue(node.ToString().AsSpan());
         }
 
-        private static bool CommentHasIssue(string comment)
+        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
         {
             var commentLength = comment.Length;
             var last = commentLength - 1;
@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static void SkipWhiteSpaces(string comment, int last, ref char c, ref int i)
+        private static void SkipWhiteSpaces(ReadOnlySpan<char> comment, int last, ref char c, ref int i)
         {
             while (c.IsWhiteSpace() && i < last)
             {
@@ -132,12 +132,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static void SkipAbbreviations(string comment, int last, ref char c, ref int i)
+        private static void SkipAbbreviations(ReadOnlySpan<char> comment, int last, ref char c, ref int i)
         {
             // for example in string "e.g.": c is already 'g', as well as i
             const int Gap = 2;
 
-            if (c.IsLowerCaseLetter())
+            while (c.IsLowerCaseLetter())
             {
                 var next = i + Gap;
 
@@ -146,9 +146,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     i = next;
                     c = comment[i];
                 }
+                else
+                {
+                    return;
+                }
             }
         }
 
-        private static bool IsWellknownFileExtension(string comment, int startIndex) => comment.Substring(startIndex).StartsWithAny(WellknownFileExtensions);
+        private static bool IsWellknownFileExtension(ReadOnlySpan<char> comment, int startIndex) => comment.Slice(startIndex).StartsWithAny(WellknownFileExtensions);
     }
 }
