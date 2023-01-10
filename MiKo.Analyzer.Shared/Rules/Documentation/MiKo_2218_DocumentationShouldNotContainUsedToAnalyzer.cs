@@ -188,7 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var start = location.SourceSpan.Start;
                 var index = start - token.SpanStart + startingPhrase.Length;
 
-                var textAfterStartingPhrase = token.ValueText.Substring(index);
+                var textAfterStartingPhrase = token.ValueText.AsSpan(index);
                 var nextWord = textAfterStartingPhrase.FirstWord();
 
                 // let's find the end of the next word in the source code (but keep in mind the offset of the starting phrase)
@@ -197,7 +197,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var finalLocation = CreateLocation(token, start, end);
 
-                var replacement = replacementCallback(nextWord);
+                var replacement = replacementCallback(nextWord.ToString());
 
                 if (makeUpper)
                 {
