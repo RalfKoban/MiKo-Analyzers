@@ -76,28 +76,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))
                 {
-                    return ReportIssueStartingPhrase(symbol, phrase);
+                    return ReportIssueStartingPhrase(symbol, phrase.AsSpan());
                 }
 
                 if (summary.StartsWith(Constants.Comments.XmlElementStartingTag, Comparison))
                 {
                     var index = summary.IndexOf(Constants.Comments.XmlElementEndingTag, Comparison);
-                    var phrase = index > 0 ? summary.Substring(0, index + 2) : Constants.Comments.XmlElementStartingTag;
+                    var phrase = index > 0 ? summary.AsSpan(0, index + 2) : Constants.Comments.XmlElementStartingTag.AsSpan();
 
                     return ReportIssueStartingPhrase(symbol, phrase);
                 }
 
                 foreach (var phrase in Constants.Comments.MeaninglessPhrase.Where(_ => summary.Contains(_, Comparison)))
                 {
-                    return ReportIssueContainsPhrase(symbol, phrase);
+                    return ReportIssueContainsPhrase(symbol, phrase.AsSpan());
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, string phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
+        private IEnumerable<Diagnostic> ReportIssueContainsPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "contain", phrase.HumanizedTakeFirst(200)) };
 
-        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, string phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
+        private IEnumerable<Diagnostic> ReportIssueStartingPhrase(ISymbol symbol, ReadOnlySpan<char> phrase) => new[] { Issue(symbol, "start with", phrase.HumanizedTakeFirst(200)) };
     }
 }

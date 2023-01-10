@@ -470,13 +470,13 @@ namespace System
 
         public static string HumanizedConcatenated(this IEnumerable<string> values, string lastSeparator = "or")
         {
-            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToList();
+            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToArray();
 
             const string Separator = ", ";
 
             var separatorForLast = string.Intern(" " + lastSeparator + " ");
 
-            var count = items.Count;
+            var count = items.Length;
 
             switch (count)
             {
@@ -489,13 +489,22 @@ namespace System
             }
         }
 
-        public static string HumanizedTakeFirst(this string value, int max)
+        public static string HumanizedTakeFirst(this ReadOnlySpan<char> value, int max)
         {
-            var index = Math.Min(max, value.Length);
+            var length = Math.Min(max, value.Length);
 
-            return index <= 0 || index == value.Length
-                       ? value
-                       : value.Substring(0, index) + "...";
+            if (length <= 0 || length == value.Length)
+            {
+                return value.ToString();
+            }
+
+            var chars = new char[length + 3];
+            chars[length] = '.';
+            chars[length + 1] = '.';
+            chars[length + 2] = '.';
+            value.Slice(0, length).CopyTo(chars);
+
+            return new string(chars);
         }
 
         public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.None(_ => _.IsLowerCaseLetter());
