@@ -103,6 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "ires",
                 "ixtures",
                 "kept",
+                "Kept",
                 "mpt", // prompt
                 "mpts", // attempts
                 "cript", // script

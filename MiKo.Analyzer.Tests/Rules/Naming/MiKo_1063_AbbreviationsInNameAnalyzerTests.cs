@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -128,6 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "firstNumber",
                 "fixtures",
                 "kept",
+                "isKept",
                 "measures",
                 "mixtures",
                 "number",
@@ -162,6 +164,34 @@ namespace Bla
         {
             var x = 42;
             return x;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static extern int " + part + @"DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_properly_named_method_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int " + methodName.ToUpperCaseAt(0) + @"()
+        {
+            return 42;
         }
     }
 }
@@ -216,18 +246,6 @@ namespace Bla
                 return @" + variableName + @";
             }
         }
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int " + part + @"DoSomething();
     }
 }");
 
