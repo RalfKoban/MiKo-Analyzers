@@ -21,6 +21,13 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_on_record_with_primary_ctor() => No_issue_is_reported_for(@"
+using System;
+
+public record TestMe(StringComparison Comparison);
+");
+
+        [Test]
         public void No_issue_is_reported_for_only_nonEnum_properties() => No_issue_is_reported_for(@"
 using System;
 

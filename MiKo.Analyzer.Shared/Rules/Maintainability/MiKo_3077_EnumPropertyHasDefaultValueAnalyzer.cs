@@ -38,9 +38,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(IPropertySymbol property)
         {
-            var propertySyntax = property.GetSyntax<PropertyDeclarationSyntax>();
+            var syntax = property.GetSyntax<PropertyDeclarationSyntax>();
 
-            if (propertySyntax.Initializer != null)
+            if (syntax is null)
+            {
+                // seems that we have a record
+                return false;
+            }
+
+            if (syntax.Initializer != null)
             {
                 // ignore initializers
                 return false;
@@ -48,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (property.IsReadOnly)
             {
-                var expression = GetPropertyExpression(propertySyntax);
+                var expression = GetPropertyExpression(syntax);
 
                 switch (expression)
                 {
@@ -59,10 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // try to find an assignment in the ctor(s)
-            return IsNotAssignedInConstructor(property);
+            return IsNotAssignedInConstructor(property, syntax);
         }
 
-        private static bool IsNotAssignedInConstructor(IPropertySymbol symbol)
+        private static bool IsNotAssignedInConstructor(IPropertySymbol symbol, PropertyDeclarationSyntax syntax)
         {
             var ctors = symbol.ContainingType.Constructors.Where(IsApplicableConstructor).ToList();
 
@@ -72,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
-            var backingField = GetBackingField(symbol);
+            var backingField = GetBackingField(symbol, syntax);
 
             foreach (var ctor in ctors)
             {
@@ -135,9 +141,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsApplicableConstructor(IMethodSymbol symbol) => symbol.IsConstructor() && symbol.IsSerializationConstructor() is false;
 
-        private static IFieldSymbol GetBackingField(IPropertySymbol symbol)
+        private static IFieldSymbol GetBackingField(IPropertySymbol symbol, PropertyDeclarationSyntax syntax)
         {
-            var syntax = symbol.GetSyntax<PropertyDeclarationSyntax>();
             var name = GetIdentifierNameFromPropertyExpression(syntax);
 
             if (name != null)
