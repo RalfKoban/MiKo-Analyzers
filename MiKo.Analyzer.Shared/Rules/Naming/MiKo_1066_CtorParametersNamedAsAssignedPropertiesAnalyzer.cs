@@ -22,37 +22,42 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => diagnostic.Properties[BetterName];
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Constructor && symbol.Parameters.Any();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor() && symbol.Parameters.Any();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var propertyNames = symbol.ContainingType.GetProperties().ToHashSet(_ => _.Name);
+            var syntax = symbol.GetSyntax<ConstructorDeclarationSyntax>();
 
-            if (propertyNames.Any())
+            // having 'null' as syntax may happen if we have a primary constructor on a record
+            if (syntax != null)
             {
-                var parameterNames = symbol.Parameters.ToDictionary(_ => _.Name, _ => _);
+                var propertyNames = symbol.ContainingType.GetProperties().ToHashSet(_ => _.Name);
 
-                var syntax = symbol.GetSyntax<ConstructorDeclarationSyntax>();
-                var assignments = syntax.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression);
-
-                foreach (var assignment in assignments)
+                if (propertyNames.Any())
                 {
-                    if (assignment.Left is IdentifierNameSyntax left && assignment.Right is IdentifierNameSyntax right)
+                    var parameterNames = symbol.Parameters.ToDictionary(_ => _.Name, _ => _);
+
+                    var assignments = syntax.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression);
+
+                    foreach (var assignment in assignments)
                     {
-                        var propertyName = left.GetName();
-
-                        if (propertyNames.Contains(propertyName))
+                        if (assignment.Left is IdentifierNameSyntax left && assignment.Right is IdentifierNameSyntax right)
                         {
-                            var parameterName = right.GetName();
+                            var propertyName = left.GetName();
 
-                            if (parameterNames.TryGetValue(parameterName, out var parameter))
+                            if (propertyNames.Contains(propertyName))
                             {
-                                if (propertyName.Equals(parameterName, StringComparison.OrdinalIgnoreCase) is false)
-                                {
-                                    // we found a property that gets assigned by a parameter with a wrong name
-                                    var betterName = propertyName.ToLowerCaseAt(0);
+                                var parameterName = right.GetName();
 
-                                    yield return Issue(parameter, new Dictionary<string, string> { { BetterName, betterName } });
+                                if (parameterNames.TryGetValue(parameterName, out var parameter))
+                                {
+                                    if (propertyName.Equals(parameterName, StringComparison.OrdinalIgnoreCase) is false)
+                                    {
+                                        // we found a property that gets assigned by a parameter with a wrong name
+                                        var betterName = propertyName.ToLowerCaseAt(0);
+
+                                        yield return Issue(parameter, new Dictionary<string, string> { { BetterName, betterName } });
+                                    }
                                 }
                             }
                         }

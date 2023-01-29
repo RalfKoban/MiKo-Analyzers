@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // only investigate into more deep analysis if the name matches
             var method = symbol.GetEnclosingMethod();
 
-            if (method.MethodKind == MethodKind.Constructor)
+            if (method.IsConstructor())
             {
                 if (symbol.MatchesProperty() || symbol.MatchesField())
                 {

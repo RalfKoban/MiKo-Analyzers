@@ -11,6 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public class MiKo_1087_CtorParameterNameAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_primary_constructor_on_record() => No_issue_is_reported_for(@"
+public sealed record TestMe(int X, int Y, double Distance);
+");
+
+        [Test]
         public void Issue_For_ctor_is_reported() => An_issue_is_reported_for(@"
 using System;
 

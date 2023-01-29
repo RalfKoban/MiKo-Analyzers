@@ -278,9 +278,13 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             if (symbol is IMethodSymbol m)
             {
-                if (m.MethodKind == MethodKind.Constructor || m.MethodKind == MethodKind.StaticConstructor)
+                switch (m.MethodKind)
                 {
-                    return symbol.ContainingSymbol.Name + symbol.Name;
+                    case MethodKind.Constructor:
+                    case MethodKind.StaticConstructor:
+                    {
+                        return symbol.ContainingSymbol.Name + symbol.Name;
+                    }
                 }
             }
 

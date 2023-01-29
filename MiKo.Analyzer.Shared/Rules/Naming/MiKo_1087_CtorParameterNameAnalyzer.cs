@@ -32,6 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var syntax = symbol.GetSyntax<ConstructorDeclarationSyntax>();
+
+            if (syntax is null)
+            {
+                // may happen if we have a primary constructor on a record
+                yield break;
+            }
+
             var baseCall = syntax.FirstChild<ConstructorInitializerSyntax>(SyntaxKind.BaseConstructorInitializer);
 
             if (baseCall is null)
