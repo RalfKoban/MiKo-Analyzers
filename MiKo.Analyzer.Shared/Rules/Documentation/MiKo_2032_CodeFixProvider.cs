@@ -59,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] SimpleTrailingPhrases =
             {
                 " otherwise",
+                " otherwise not",
                 " otherwise with a result of",
                 " otherwise the task has the result",
                 " else it",

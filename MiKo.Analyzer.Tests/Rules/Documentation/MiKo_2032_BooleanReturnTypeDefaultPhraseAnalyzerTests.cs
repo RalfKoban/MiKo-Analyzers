@@ -235,6 +235,7 @@ public class TestMe
         [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
         [TestCase("When the stuff is done, True; False else.", "the stuff is done")]
         [TestCase("In case the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("If <see langword=\"true\"/> calling method should return, otherwise not", "calling method should return")]
         public void Code_gets_fixed_for_non_generic_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
