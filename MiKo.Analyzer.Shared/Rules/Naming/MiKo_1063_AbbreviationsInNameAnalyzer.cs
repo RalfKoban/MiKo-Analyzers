@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
                                                                                        { "cmd", "command" },
+                                                                                       { "ctx", "context" },
                                                                                        { "ddl", "dropDownList" },
                                                                                        { "decl", "declaration" },
                                                                                        { "desc", "description" },
@@ -53,6 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Btn", "Button" },
                                                                                        { "Cb", "CheckBox" },
                                                                                        { "Cmd", "Command" },
+                                                                                       { "Ctx", "Context" },
                                                                                        { "Ddl", "DropDownList" },
                                                                                        { "Decl", "Declaration" },
                                                                                        { "Desc", "Description" },
@@ -152,7 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                         ? Enumerable.Empty<Diagnostic>()
                                                                                                                         : AnalyzeName(symbol);
 
-        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.StartsWith(key, StringComparison.Ordinal) && symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase();
+        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase() && symbolName.StartsWith(key, StringComparison.Ordinal);
 
         private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
