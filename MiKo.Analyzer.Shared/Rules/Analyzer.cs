@@ -261,11 +261,6 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true;
             }
 
-            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestCaseAttribute") != null)
-            {
-                return true;
-            }
-
             if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod") != null)
             {
                 return true;
