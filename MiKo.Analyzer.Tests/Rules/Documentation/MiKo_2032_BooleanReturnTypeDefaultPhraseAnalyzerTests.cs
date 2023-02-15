@@ -321,6 +321,7 @@ public class TestMe
         [TestCase("True if something, otherwise returns False.")]
         [TestCase("TRUE if something, otherwise returns FALSE.")]
         [TestCase("TRUE: if something, otherwise returns FALSE.")]
+        [TestCase("TRUE, if something, otherwise returns FALSE.")]
         [TestCase("Returns True if something, otherwise returns False.")]
         [TestCase("Returns True if something, returns otherwise False.")]
         [TestCase(@"Returns <see langword=""true""/> if something.")]
@@ -329,6 +330,7 @@ public class TestMe
         [TestCase("true: if something, false: otherwise.")]
         [TestCase("true: if something,\r\n/// false: otherwise.")]
         [TestCase("true: if something, else it returns false.")]
+        [TestCase("true, if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
         [TestCase("true if something else will return with false.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
