@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "innerException":
                     return false;
 
-                case "inner":
+                case Constants.InnerExceptionIdentifier:
                     return symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException()
                                ? false
                                : true;

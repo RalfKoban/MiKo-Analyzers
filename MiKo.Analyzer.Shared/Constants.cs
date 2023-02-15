@@ -12,6 +12,7 @@ namespace MiKoSolutions.Analyzers
         internal const string TestsSuffix = "Tests";
 
         internal const string ExceptionIdentifier = "ex";
+        internal const string InnerExceptionIdentifier = "inner";
 
         internal const string Entity = "Entity";
         internal const string Entities = "Entities";

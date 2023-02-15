@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -10,11 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1200";
 
+        private const string ExceptionIdentifier = "IDENTIFIER";
+
         public MiKo_1200_ExceptionCatchBlockAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => Constants.ExceptionIdentifier;
+        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => diagnostic.Properties[ExceptionIdentifier];
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
@@ -49,7 +54,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null;
 
                 default:
-                    return Issue(name, identifier, Constants.ExceptionIdentifier);
+
+                    var expectedIdentifier = Constants.ExceptionIdentifier;
+
+                    if (node.Parent.Ancestors<CatchClauseSyntax>().Any(_ => _.Declaration?.Identifier.ValueText == Constants.ExceptionIdentifier))
+                    {
+                        if (name == Constants.InnerExceptionIdentifier)
+                        {
+                            return null;
+                        }
+
+                        expectedIdentifier = Constants.InnerExceptionIdentifier;
+                    }
+
+                    return Issue(name, identifier, expectedIdentifier, new Dictionary<string, string> { { ExceptionIdentifier, expectedIdentifier } });
             }
         }
     }

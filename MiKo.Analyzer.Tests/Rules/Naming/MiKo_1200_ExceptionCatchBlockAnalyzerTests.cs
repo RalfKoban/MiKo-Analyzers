@@ -93,6 +93,30 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_named_nested_exception_in_catch_block() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+            }
+            catch (Exception exception)
+            {
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_incomplete_catch_block() => No_issue_is_reported_for(@"
 using System;
 
@@ -129,9 +153,84 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_nested_exception_in_catch_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+            }
+            catch (Exception inner)
+            {
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
                          "class TestMe { void DoSomething() { try { } catch (System.Exception e) { System.Diagnostics.Trace.Write(e.Message); } } }",
                          "class TestMe { void DoSomething() { try { } catch (System.Exception ex) { System.Diagnostics.Trace.Write(ex.Message); } } }");
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_named_nested_exception_in_catch_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+            }
+            catch (Exception exception)
+            {
+            }
+        }
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+            }
+            catch (Exception inner)
+            {
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_1200_ExceptionCatchBlockAnalyzer.Id;
 
