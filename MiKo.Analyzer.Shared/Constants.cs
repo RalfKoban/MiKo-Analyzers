@@ -301,6 +301,7 @@ namespace MiKoSolutions.Analyzers
                 };
 
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
+            internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "A {0} containing ";
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
@@ -316,6 +317,10 @@ namespace MiKoSolutions.Analyzers
                     StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "represents"),
                     StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "represents"),
                     StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "represents"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />"),
                 };
 
             internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The {0} property on the task object returns a {1} that {2} ";

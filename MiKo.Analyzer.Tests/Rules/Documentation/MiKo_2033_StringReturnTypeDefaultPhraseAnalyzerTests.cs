@@ -401,7 +401,7 @@ public class TestMe
     /// Gets something.
     /// </summary>
     /// <value>
-    /// A <see cref=""string""/> containing ###<c>Foo</c>.
+    /// A <see cref=""string""/> returning ###<c>Foo</c>.
     /// <see cref=""TestMe"" /> for more details.
     /// </value>
     public string Foo => ""Foo"";
@@ -540,7 +540,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_([Values("that returns", "which returns", "returning", "which contains", "containing")] string text)
+        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_([Values("that returns", "which returns", "returning", "which contains")] string text)
         {
             var originalCode = @"
 using System;
