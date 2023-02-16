@@ -24,9 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml)
         {
             var summaries = CommentExtensions.GetSummaries(commentXml);
-            var results = summaries.Any() && summaries.All(_ => _ != SummaryPhrase)
-                          ? new List<Diagnostic>(1) { Issue(symbol, SummaryPhrase) }
-                          : null;
+
+            if (summaries.Any() && summaries.All(_ => _ != SummaryPhrase))
+            {
+                yield return Issue(symbol, SummaryPhrase);
+            }
 
             // check for parameter
             foreach (var parameter in symbol.Parameters)
@@ -40,15 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                 }
 
-                if (results is null)
-                {
-                    results = new List<Diagnostic>(1);
-                }
-
-                results.Add(Issue(parameter, ParameterPhrase));
+                yield return Issue(parameter, ParameterPhrase);
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

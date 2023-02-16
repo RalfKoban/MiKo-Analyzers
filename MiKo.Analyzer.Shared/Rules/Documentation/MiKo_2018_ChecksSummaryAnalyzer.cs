@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -26,27 +25,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
         {
-            List<Diagnostic> issues = null;
-
             foreach (var summary in summaries)
             {
-                var trimmedSummary = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
-
-                foreach (var wrongPhrase in WrongPhrases)
+                var issue = AnalyzeSummary(symbol, summary);
+                if (issue != null)
                 {
-                    if (trimmedSummary.StartsWith(wrongPhrase, StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (issues is null)
-                        {
-                            issues = new List<Diagnostic>();
-                        }
+                    yield return issue;
+                }
+            }
+        }
 
-                        issues.Add(Issue(symbol, wrongPhrase, StartingPhrase));
-                    }
+        private Diagnostic AnalyzeSummary(ISymbol symbol, string summary)
+        {
+            var trimmedSummary = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
+
+            foreach (var wrongPhrase in WrongPhrases)
+            {
+                if (trimmedSummary.StartsWith(wrongPhrase, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Issue(symbol, wrongPhrase, StartingPhrase);
                 }
             }
 
-            return issues ?? Enumerable.Empty<Diagnostic>();
+            return null;
         }
     }
 }

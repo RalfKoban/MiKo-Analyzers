@@ -34,8 +34,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = symbol.Name;
 
-            var conditions = new List<Diagnostic>();
-
             foreach (var token in symbol.GetSyntax().DescendantTokens().Where(_ => ConditionTokens.Contains(_.RawKind)))
             {
                 if (token.IsKind(SyntaxKind.QuestionToken) && token.Parent is NullableTypeSyntax)
@@ -43,10 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                conditions.Add(Issue(methodName, token));
+                yield return Issue(methodName, token);
             }
-
-            return conditions;
         }
     }
 }

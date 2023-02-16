@@ -38,8 +38,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var methodNames = methods.ToHashSet(_ => _.Name);
 
-            List<Diagnostic> results = null;
-
             foreach (var methodName in methodNames)
             {
                 // pre-order for accessibility (public first, private last), then ensure that static methods are first and params methods are at the end
@@ -69,20 +67,13 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
                         if (lastLine > nextLine)
                         {
-                            if (results is null)
-                            {
-                                results = new List<Diagnostic>(1);
-                            }
-
-                            results.Add(Issue(method, order));
+                            yield return Issue(method, order);
                         }
 
                         lastLine = nextLine;
                     }
                 }
             }
-
-            return results ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

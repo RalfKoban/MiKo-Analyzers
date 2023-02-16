@@ -27,8 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodCalls = symbol.GetSyntax().DescendantNodes<MemberAccessExpressionSyntax>();
 
-            List<Diagnostic> diagnostics = null;
-
             foreach (var methodCall in methodCalls)
             {
                 var call = methodCall.ToCleanedUpString();
@@ -39,18 +37,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case "System.Diagnostics." + TraceInvocation:
                     case DebugInvocation:
                     case TraceInvocation:
-                        if (diagnostics is null)
-                        {
-                            diagnostics = new List<Diagnostic>(1);
-                        }
 
-                        diagnostics.Add(Issue(symbol.Name, methodCall, call));
+                        yield return Issue(symbol.Name, methodCall, call);
 
                         break;
                 }
             }
-
-            return diagnostics ?? Enumerable.Empty<Diagnostic>();
         }
     }
 }

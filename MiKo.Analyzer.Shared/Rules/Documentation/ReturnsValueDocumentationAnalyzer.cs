@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using static MiKoSolutions.Analyzers.Constants;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnsValueDocumentationAnalyzer : DocumentationAnalyzer
@@ -52,36 +54,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml)
         {
-            if (ShallAnalyzeReturnType(returnType) is false)
+            if (ShallAnalyzeReturnType(returnType))
             {
-                return Enumerable.Empty<Diagnostic>();
-            }
+                var foundIssues = false;
 
-            return TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Returns)
-                   ?? TryAnalyzeReturnType(owningSymbol, returnType, commentXml, Constants.XmlTag.Value)
-                   ?? Enumerable.Empty<Diagnostic>();
-        }
-
-        private IEnumerable<Diagnostic> TryAnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag)
-        {
-            List<Diagnostic> results = null;
-
-            foreach (var comment in CommentExtensions.GetComments(commentXml, xmlTag).Where(_ => _ != null))
-            {
-                var findings = AnalyzeReturnType(owningSymbol, returnType, comment, xmlTag);
-
-                if (findings.Any())
+                foreach (var comment in CommentExtensions.GetComments(commentXml, XmlTag.Returns).Where(_ => _ != null))
                 {
-                    if (results is null)
+                    foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, comment, XmlTag.Returns))
                     {
-                        results = new List<Diagnostic>(findings.Count());
-                    }
+                        foundIssues = true;
 
-                    results.AddRange(findings);
+                        yield return finding;
+                    }
+                }
+
+                if (foundIssues is false)
+                {
+                    foreach (var comment in CommentExtensions.GetComments(commentXml, XmlTag.Value).Where(_ => _ != null))
+                    {
+                        foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, comment, XmlTag.Value))
+                        {
+                            yield return finding;
+                        }
+                    }
                 }
             }
-
-            return results;
         }
     }
 }
