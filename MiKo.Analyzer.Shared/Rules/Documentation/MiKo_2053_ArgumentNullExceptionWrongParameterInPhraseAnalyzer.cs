@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (issues is null)
                     {
-                        issues = new List<Diagnostic>();
+                        issues = new List<Diagnostic>(1);
                     }
 
                     issues.Add(Issue(owningSymbol, indicator.Key.Type.Name, indicator.Value + Constants.Comments.XmlElementEndingTag));
