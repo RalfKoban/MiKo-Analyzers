@@ -737,6 +737,21 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Names
         {
+            internal const string DefaultPropertyParameterName = "value";
+
+            internal static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
+
+            internal static readonly HashSet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
+                                                                                         .Select(_ => _.Name)
+                                                                                         .Except(new[]
+                                                                                                     {
+                                                                                                         nameof(Equals),
+                                                                                                         nameof(ToString),
+                                                                                                         nameof(GetHashCode),
+                                                                                                         nameof(GetType)
+                                                                                                     })
+                                                                                         .ToHashSet();
+
             internal static readonly IEnumerable<string> GeneratedAttributeNames = new HashSet<string>
                                                                                        {
                                                                                            "CompilerGenerated",

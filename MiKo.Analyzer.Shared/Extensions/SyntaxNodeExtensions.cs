@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeExtensions
     {
-        private const string DefaultPropertyParameterName = "value";
-
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
@@ -30,8 +28,6 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
-
-        private static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
@@ -364,7 +360,7 @@ namespace MiKoSolutions.Analyzers
 
                     case BasePropertyDeclarationSyntax property:
                         return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
-                                   ? DefaultPropertyParameterNames
+                                   ? Constants.Names.DefaultPropertyParameterNames
                                    : Array.Empty<string>();
                 }
             }
@@ -1089,7 +1085,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
-        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(semanticModel.GetSymbolInfo(_)));
+        internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
         internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, SyntaxNode node)
         {
@@ -1858,7 +1854,7 @@ namespace MiKoSolutions.Analyzers
 
             return Enumerable.Empty<ParameterSyntax>();
 
-            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(DefaultPropertyParameterName), default);
+            ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(Constants.Names.DefaultPropertyParameterName), default);
         }
 
         private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
@@ -1984,7 +1980,19 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        private static bool IsLinqExtensionMethod(SymbolInfo info) => info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+        private static bool IsLinqExtensionMethod(InvocationExpressionSyntax node, SemanticModel semanticModel)
+        {
+            var name = node.Expression.GetName();
+
+            if (Constants.Names.LinqMethodNames.Contains(name))
+            {
+                var info = semanticModel.GetSymbolInfo(node);
+
+                return info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+            }
+
+            return false;
+        }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
