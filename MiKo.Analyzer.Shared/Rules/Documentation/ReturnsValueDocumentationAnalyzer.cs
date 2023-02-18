@@ -50,9 +50,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                                                                     ? Enumerable.Empty<Diagnostic>()
                                                                                                                                                                                     : new[] { Issue(symbol, xmlTag, phrase[0]) };
 
-        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, params string[] phrase) => phrase.Any(_ => _.Equals(comment, StringComparison.Ordinal))
-                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                    : new[] { Issue(symbol, xmlTag, phrase[0]) };
+        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, params string[] phrase)
+        {
+            if (phrase.None(_ => _.Equals(comment, StringComparison.Ordinal)))
+            {
+                return new[] { Issue(symbol, xmlTag, phrase[0]) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
 

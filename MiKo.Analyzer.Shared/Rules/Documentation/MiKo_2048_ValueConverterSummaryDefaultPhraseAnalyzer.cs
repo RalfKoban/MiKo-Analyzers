@@ -21,8 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => (symbol.IsValueConverter() || symbol.IsMultiValueConverter()) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(_ => _.StartsWith(StartingPhrase, StringComparison.Ordinal))
-                                                                                                                                                                                           ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                           : new[] { Issue(symbol, StartingPhrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        {
+            if (summaries.None(_ => _.StartsWith(StartingPhrase, StringComparison.Ordinal)))
+            {
+                return new[] { Issue(symbol, StartingPhrase) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

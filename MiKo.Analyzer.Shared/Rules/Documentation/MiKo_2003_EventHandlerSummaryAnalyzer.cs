@@ -21,9 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
-            return summaries.Any(_ => _.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, StringComparison.Ordinal))
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, Constants.Comments.EventHandlerSummaryStartingPhrase) };
+            if (summaries.None(_ => _.StartsWith(Constants.Comments.EventHandlerSummaryStartingPhrase, StringComparison.Ordinal)))
+            {
+                return new[] { Issue(symbol, Constants.Comments.EventHandlerSummaryStartingPhrase) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

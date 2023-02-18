@@ -34,8 +34,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, Comparison))
-                                                                                                                                                                                           ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                           : new[] { Issue(symbol, Constants.Comments.FieldIsReadOnly) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        {
+            if (summaries.None(_ => _.EndsWith(Constants.Comments.FieldIsReadOnly, Comparison)))
+            {
+                return new[] { Issue(symbol, Constants.Comments.FieldIsReadOnly) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }
