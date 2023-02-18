@@ -212,6 +212,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T>(ISymbol symbol, T arg, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg.ToString());
 
+        protected Diagnostic Issue<T>(Location location, T arg, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText(), arg.ToString());
+
         protected Diagnostic Issue(string name, ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, name);
 
         protected Diagnostic Issue(string name, SyntaxNode node, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, name);
