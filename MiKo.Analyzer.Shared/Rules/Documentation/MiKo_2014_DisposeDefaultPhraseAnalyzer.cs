@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -21,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name == nameof(IDisposable.Dispose) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var summaries = CommentExtensions.GetSummaries(commentXml);
 
@@ -33,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // check for parameter
             foreach (var parameter in symbol.Parameters)
             {
-                var comment = parameter.GetComment(commentXml);
+                var parameterComment = parameter.GetComment(commentXml);
 
-                switch (comment)
+                switch (parameterComment)
                 {
                     case null:
                     case ParameterPhrase:

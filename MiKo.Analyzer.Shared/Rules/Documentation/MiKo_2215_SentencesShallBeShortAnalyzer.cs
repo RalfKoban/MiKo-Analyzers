@@ -21,24 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            if (HasIssue(symbol))
+            if (HasIssue(comment))
             {
                 yield return Issue(symbol);
             }
         }
 
-        private static bool HasIssue(ISymbol symbol)
+        private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
-            var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-            if (comment is null)
-            {
-                // it might be that there is no documentation comment available (while the comment XML contains something like " <member name='xyz' ...> ")
-                return false;
-            }
-
             var elements = comment.DescendantNodes<XmlElementSyntax>().ToList();
 
             var hasIssue = Analyze(elements, Constants.XmlTag.Summary)

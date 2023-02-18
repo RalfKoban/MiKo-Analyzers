@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -20,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                                                 ? new[] { Issue(symbol, StartingPhrase) }
-                                                                                                                                                 : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(StartsWithPhrase)
+                                                                                                                                                                                           ? new[] { Issue(symbol, StartingPhrase) }
+                                                                                                                                                                                           : Enumerable.Empty<Diagnostic>();
 
         private static bool StartsWithPhrase(string summary)
         {

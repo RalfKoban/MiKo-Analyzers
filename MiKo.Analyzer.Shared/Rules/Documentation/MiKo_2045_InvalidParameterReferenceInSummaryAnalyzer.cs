@@ -26,15 +26,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                     ? documentation.GetSummaryXmls(InvalidTags)
                                                                                                                     : Enumerable.Empty<XmlNodeSyntax>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
 
             if (method.Parameters.Length != 0)
             {
-                var documentation = method.GetDocumentationCommentTriviaSyntax();
-
-                foreach (var node in GetIssues(documentation))
+                foreach (var node in GetIssues(comment))
                 {
                     yield return Issue(node);
                 }

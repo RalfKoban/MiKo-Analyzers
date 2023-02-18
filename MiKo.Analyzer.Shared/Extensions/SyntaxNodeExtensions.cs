@@ -50,7 +50,9 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            return method.Parameters.Any(_ => _.Name == parameterName);
+            var parameters = method.Parameters;
+
+            return parameters.Length > 0 && parameters.Any(_ => _.Name == parameterName);
         }
 
         internal static T FirstAncestor<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault();
@@ -468,13 +470,6 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            var commentOnNode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
-
-            if (commentOnNode != null)
-            {
-                return commentOnNode;
-            }
-
             switch (syntaxNode)
             {
                 case BaseTypeDeclarationSyntax type:
@@ -487,7 +482,7 @@ namespace MiKoSolutions.Analyzers
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                         }
 
-                        return null;
+                        return FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
                     }
 
                 case BaseMethodDeclarationSyntax method:
@@ -497,6 +492,12 @@ namespace MiKoSolutions.Analyzers
                         if (attributeListSyntax != null)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+                        }
+
+                        var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+                        if (commentOnCode != null)
+                        {
+                            return commentOnCode;
                         }
 
                         if (method.FirstChild() is SyntaxNode child)
@@ -516,6 +517,12 @@ namespace MiKoSolutions.Analyzers
                             return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                         }
 
+                        var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+                        if (commentOnCode != null)
+                        {
+                            return commentOnCode;
+                        }
+
                         if (property.FirstChild() is SyntaxNode child)
                         {
                             return FindDocumentationCommentTriviaSyntaxForNode(child);
@@ -526,21 +533,30 @@ namespace MiKoSolutions.Analyzers
 
                 default:
                     {
-                        return null;
+                        return FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
                     }
             }
 
             DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
             {
-                foreach (var childToken in node.ChildTokens())
+                if (node.HasStructuredTrivia)
                 {
-                    if (childToken.HasLeadingTrivia)
+                    foreach (var childToken in node.ChildTokens())
                     {
-                        foreach (var t in childToken.LeadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                        if (childToken.HasStructuredTrivia)
                         {
-                            if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                            // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
+                            // so we can save some time and memory by doing it by ourselves
+                            var leadingTrivia = childToken.LeadingTrivia;
+                            if (leadingTrivia.Count > 0)
                             {
-                                return syntax;
+                                foreach (var t in leadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                                {
+                                    if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                                    {
+                                        return syntax;
+                                    }
+                                }
                             }
                         }
                     }

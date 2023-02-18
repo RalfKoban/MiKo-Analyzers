@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -12,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml) => AnalyzeParameters(symbol, commentXml);
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeParameters(symbol, commentXml, comment);
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase)
         {
@@ -31,23 +32,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => Enumerable.Empty<Diagnostic>();
 
-        protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml)
+        protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             foreach (var parameter in symbol.Parameters.Where(ShallAnalyzeParameter))
             {
-                var comment = parameter.GetComment(commentXml);
+                var parameterComment = parameter.GetComment(commentXml);
 
-                if (comment is null)
+                if (parameterComment is null)
                 {
                     continue;
                 }
 
-                if (comment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal))
+                if (parameterComment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal))
                 {
                     continue;
                 }
 
-                foreach (var issue in AnalyzeParameter(parameter, comment))
+                foreach (var issue in AnalyzeParameter(parameter, parameterComment))
                 {
                     yield return issue;
                 }

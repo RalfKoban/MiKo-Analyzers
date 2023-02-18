@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsException(); // do not call base.ShallAnalyze() here to avoid that we do not inspect the methods of the type
-
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
             if (symbol.IsConstructor() is false)
@@ -25,30 +24,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (IsParameterlessCtor(symbol)
-             || IsMessageCtor(symbol)
-             || IsMessageExceptionCtor(symbol)
-             || symbol.IsSerializationConstructor())
+            return IsParameterlessCtor(symbol)
+                || IsMessageCtor(symbol)
+                || IsMessageExceptionCtor(symbol)
+                || symbol.IsSerializationConstructor();
+        }
+
+        // overridden because we want to inspect the methods of the type as well
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            if (symbol.IsNamespace is false && symbol.IsException())
             {
-                return base.ShallAnalyze(symbol);
+                // let's see if the type contains a documentation XML
+                var typeIssues = base.AnalyzeType(symbol, compilation);
+
+                return typeIssues.Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation)));
             }
 
-            return false; // unknown ctor
+            return Enumerable.Empty<Diagnostic>();
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml)
-        {
-            // let's see if the type contains a documentation XML
-            var typeIssues = base.ShallAnalyze(symbol)
-                                 ? base.AnalyzeType(symbol, compilation, commentXml)
-                                 : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => base.AnalyzeMethod(symbol, compilation, commentXml, comment).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
 
-            return typeIssues.Concat(symbol.GetMethods(MethodKind.Constructor).SelectMany(_ => AnalyzeMethod(_, compilation)));
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml) => base.AnalyzeMethod(symbol, compilation, commentXml).Concat(symbol.Parameters.SelectMany(_ => AnalyzeParameter(_, commentXml))).ToList();
-
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             switch (symbol)
             {

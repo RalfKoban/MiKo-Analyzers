@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -18,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var symbolName = symbol.Name;
 
@@ -39,9 +40,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var summaryPhrases = Phrases(Constants.Comments.DependencyPropertyFieldSummaryPhrase, containingTypeFullName, propertyName);
 
-                        foreach (var comment in summaries)
+                        foreach (var summary in summaries)
                         {
-                            if (summaryPhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal)))
+                            if (summaryPhrases.None(_ => summary.StartsWith(_, StringComparison.Ordinal)))
                             {
                                 yield return Issue(symbol, Constants.XmlTag.Summary, summaryPhrases[0]);
                             }
@@ -54,9 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var valuePhrases = Phrases(Constants.Comments.DependencyPropertyFieldValuePhrase, containingTypeFullName, propertyName);
 
-                        foreach (var comment in values)
+                        foreach (var value in values)
                         {
-                            if (valuePhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal)))
+                            if (valuePhrases.None(_ => value.StartsWith(_, StringComparison.Ordinal)))
                             {
                                 yield return Issue(symbol, Constants.XmlTag.Value, valuePhrases[0]);
                             }

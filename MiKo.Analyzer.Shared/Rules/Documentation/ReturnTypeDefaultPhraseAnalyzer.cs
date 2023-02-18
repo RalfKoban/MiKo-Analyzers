@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -26,11 +27,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
         {
             var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
 
-            return AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, startingPhrases);
+            return AnalyzeStartingPhrase(owningSymbol, commentXml, xmlTag, startingPhrases, comment);
         }
 
         protected abstract bool IsAcceptedType(ITypeSymbol returnType);

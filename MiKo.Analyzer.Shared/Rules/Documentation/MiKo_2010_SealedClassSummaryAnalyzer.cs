@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -18,8 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsReferenceType && symbol.DeclaredAccessibility == Accessibility.Public && symbol.IsTestClass() is false && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => symbol.IsSealed is false || summaries.Any(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal))
-                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                 : new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        {
+            return symbol.IsSealed && summaries.None(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal))
+                       ? new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) }
+                       : Enumerable.Empty<Diagnostic>();
+        }
     }
 }

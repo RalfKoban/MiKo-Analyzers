@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -17,14 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var comment = commentXml.Without(Constants.Markers.Symbols);
+            var commentWithoutSymbols = commentXml.Without(Constants.Markers.Symbols);
 
             var name = symbol.FullyQualifiedName();
 
-            if (comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref=\"{name}\"")
-             || comment.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref='{name}'"))
+            if (commentWithoutSymbols.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref=\"{name}\"")
+             || commentWithoutSymbols.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref='{name}'"))
             {
                 yield return Issue(symbol);
             }

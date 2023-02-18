@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -19,8 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(_ => _.Contains(Phrase))
-                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                 : new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        {
+            if (summaries.None(_ => _.Contains(Phrase)))
+            {
+                return new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

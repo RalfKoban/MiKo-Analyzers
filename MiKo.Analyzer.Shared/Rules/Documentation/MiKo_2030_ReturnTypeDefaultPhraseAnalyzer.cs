@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -44,6 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag) => AnalyzeStartingPhrase(owningSymbol, comment, xmlTag, Constants.Comments.ReturnTypeStartingPhrase);
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
+        {
+            return AnalyzeStartingPhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.ReturnTypeStartingPhrase, comment);
+        }
     }
 }
