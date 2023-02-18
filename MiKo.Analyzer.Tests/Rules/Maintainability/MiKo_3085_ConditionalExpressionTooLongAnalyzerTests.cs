@@ -19,6 +19,24 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_conditional_expression_with_Is_expression() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeWithSomeVeryLongNameThatCannotBeShortedAnymore
+{
+    public bool DoSomething(object o) => obj is TestMeWithSomeVeryLongNameThatCannotBeShortedAnymore ? true : false;
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_conditional_expression_with_Is_pattern_expression() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeWithSomeVeryLongNameThatCannotBeShortedAnymore
+{
+    public TestMeWithSomeVeryLongNameThatCannotBeShortedAnymore DoSomething(object o) => o is TestMeWithSomeVeryLongNameThatCannotBeShortedAnymore name ? name : null;
+}");
+
+        [Test]
         public void No_issue_is_reported_for_conditional_expression_with_simple_member_access() => No_issue_is_reported_for(@"
 using System;
 

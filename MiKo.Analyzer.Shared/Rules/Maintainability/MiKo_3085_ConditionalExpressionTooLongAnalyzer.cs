@@ -15,6 +15,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private const int MaxExpressionLength = 35;
 
+        private static readonly SyntaxKind[] IsExpressions =
+            {
+                SyntaxKind.IsPatternExpression,
+                SyntaxKind.IsExpression,
+            };
+
         public MiKo_3085_ConditionalExpressionTooLongAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -148,7 +154,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (ConditionalExpressionSyntax)context.Node;
 
-            AnalyzeLength(context, node.Condition);
+            if (node.Condition.IsAnyKind(IsExpressions))
+            {
+                // ignore
+            }
+            else
+            {
+                AnalyzeLength(context, node.Condition);
+            }
+
             AnalyzeLength(context, node.WhenTrue);
             AnalyzeLength(context, node.WhenFalse);
         }
