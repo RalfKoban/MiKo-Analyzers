@@ -16,27 +16,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string comment, string xmlTag)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
         {
             var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
             var endingPhrases = GetEndingPhrases(returnType);
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (comment.StartsWithAny(startingPhrases, Comparison) && comment.ContainsAny(endingPhrases, Comparison))
+            if (commentXml.StartsWithAny(startingPhrases, Comparison) && commentXml.ContainsAny(endingPhrases, Comparison))
             {
                 // nothing to do here
             }
             else
             {
-                var documentation = owningSymbol.GetDocumentationCommentTriviaSyntax();
-
-                var syntaxNode = documentation.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+                var syntaxNode = comment.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
 
                 if (syntaxNode is null)
                 {
                     // seems like returns is inside the summary tag
-                    syntaxNode = documentation.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+                    syntaxNode = comment.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == xmlTag);
                 }
 
                 yield return Issue(owningSymbol.Name, syntaxNode, xmlTag, startingPhrases[0], endingPhrases[0]);

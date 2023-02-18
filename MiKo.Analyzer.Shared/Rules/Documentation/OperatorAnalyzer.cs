@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
@@ -30,18 +31,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
 
-            var violationsInSummaries = AnalyzeSummaries(method, compilation, commentXml);
-            var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml);
-            var violationsInReturns = AnalyzeReturns(method, commentXml);
+            var violationsInSummaries = AnalyzeSummaries(method, compilation, commentXml, comment);
+            var violationsInParameters = AnalyzeParameters(method.Parameters, commentXml, comment);
+            var violationsInReturns = AnalyzeReturns(method, commentXml, comment);
 
             return violationsInSummaries.Concat(violationsInParameters).Concat(violationsInReturns);
         }
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             var phrases = GetSummaryPhrases(symbol);
 
@@ -53,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var phrases = GetReturnsPhrases(symbol);
             var comments = CommentExtensions.GetReturns(commentXml);
@@ -66,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return Issue(symbol, Constants.XmlTag.Returns, phrases[0]);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             if (parameters.Length == 2)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -27,9 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => from summary in summaries
-                                                                                                                                             from phrase in BooleanPhrases
-                                                                                                                                             where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
-                                                                                                                                             select Issue(symbol, phrase.Trim());
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => from summary in summaries
+                                                                                                                                                                                       from phrase in BooleanPhrases
+                                                                                                                                                                                       where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
+                                                                                                                                                                                       select Issue(symbol, phrase.Trim());
     }
 }

@@ -23,14 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => AnalyzeComment(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, comment);
 
-        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol)
+        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in symbol.GetDocumentationCommentTriviaSyntax()
-                                        .DescendantNodes<XmlElementSyntax>(_ => CodeTags.Contains(_.GetName()) is false)
-                                        .SelectMany(_ => _.ChildNodes<XmlTextSyntax>())
-                                        .SelectMany(_ => _.TextTokens))
+            foreach (var token in comment.DescendantNodes<XmlElementSyntax>(_ => CodeTags.Contains(_.GetName()) is false)
+                                         .SelectMany(_ => _.ChildNodes<XmlTextSyntax>())
+                                         .SelectMany(_ => _.TextTokens))
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 

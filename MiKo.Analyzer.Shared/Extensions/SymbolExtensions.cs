@@ -303,8 +303,6 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
         }
 
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this ISymbol value) => value.GetDocumentationCommentTriviaSyntax().GetXmlTextTokens();
-
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());

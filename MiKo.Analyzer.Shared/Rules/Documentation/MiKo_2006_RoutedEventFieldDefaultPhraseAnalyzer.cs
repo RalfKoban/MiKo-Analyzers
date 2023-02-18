@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -18,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsRoutedEvent() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var symbolName = symbol.Name;
 
@@ -38,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var summaryPhrases = Phrases(Constants.Comments.RoutedEventFieldSummaryPhrase, containingTypeFullName, eventName);
 
-                        if (summaries.Any(comment => summaryPhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal))))
+                        if (summaries.Any(summary => summaryPhrases.None(_ => summary.StartsWith(_, StringComparison.Ordinal))))
                         {
                             yield return Issue(symbol, Constants.XmlTag.Summary, summaryPhrases[0]);
                         }
@@ -50,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var valuePhrases = Phrases(Constants.Comments.RoutedEventFieldValuePhrase, containingTypeFullName, eventName);
 
-                        if (values.Any(comment => valuePhrases.None(_ => comment.StartsWith(_, StringComparison.Ordinal))))
+                        if (values.Any(value => valuePhrases.None(_ => value.StartsWith(_, StringComparison.Ordinal))))
                         {
                             yield return Issue(symbol, Constants.XmlTag.Value, valuePhrases[0]);
                         }

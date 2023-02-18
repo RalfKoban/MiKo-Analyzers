@@ -20,11 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment) => Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var documentation = symbol.GetDocumentationCommentTriviaSyntax();
-
-            foreach (var commentElement in GetExceptionComments(documentation))
+            foreach (var commentElement in GetExceptionComments(comment))
             {
                 foreach (var issue in AnalyzeException(symbol, commentElement))
                 {

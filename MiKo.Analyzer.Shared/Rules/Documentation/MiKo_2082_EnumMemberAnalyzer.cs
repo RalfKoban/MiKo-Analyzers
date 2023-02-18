@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -23,12 +24,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum();
+        // overridden because we want to inspect the fields of the type as well
+        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            if (symbol.IsEnum())
+            {
+                return symbol.GetFields()
+                             .Where(ShallAnalyze)
+                             .SelectMany(_ => AnalyzeSummaries(_, compilation, _.GetDocumentationCommentXml(), _.GetDocumentationCommentTriviaSyntax()));
+            }
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml) => symbol.GetFields().Where(ShallAnalyze).SelectMany(_ => AnalyzeSummaries(_, compilation, _.GetDocumentationCommentXml()));
+            return Enumerable.Empty<Diagnostic>();
+        }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => from summary in summaries
-                                                                                                                                             where summary.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase)
-                                                                                                                                             select Issue(symbol, summary.FirstWord());
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => from summary in summaries
+                                                                                                                                                                                       where summary.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase)
+                                                                                                                                                                                       select Issue(symbol, summary.FirstWord());
     }
 }

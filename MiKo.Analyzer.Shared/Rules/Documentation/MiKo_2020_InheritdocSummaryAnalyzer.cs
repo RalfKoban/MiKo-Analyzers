@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -29,9 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries)
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
-            if (summaries.Any(IsSeeCrefLink) && HasIssue(symbol, compilation))
+            if (summaries.Any(IsSeeCrefLink) && HasIssue(symbol, compilation, comment))
             {
                 yield return Issue(symbol);
             }
@@ -39,15 +40,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(SeeStartingPhrase) && summary.EndsWithAny(SeeEndingPhrase);
 
-        private static bool HasIssue(ISymbol symbol, Compilation compilation)
+        private static bool HasIssue(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
         {
             if (symbol.IsOverride)
             {
                 return true;
             }
 
-            var commentTriviaSyntax = symbol.GetDocumentationCommentTriviaSyntax();
-            var xmlTag = commentTriviaSyntax.GetSummaryXmls(Tags).FirstOrDefault();
+            var xmlTag = comment.GetSummaryXmls(Tags).FirstOrDefault();
 
             if (xmlTag is null)
             {

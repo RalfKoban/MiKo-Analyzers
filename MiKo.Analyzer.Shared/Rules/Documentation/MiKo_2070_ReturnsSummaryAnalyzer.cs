@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -21,9 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(StartsWithPhrase)
-                                                                                                                                                 ? new[] { Issue(symbol, GetProposal(symbol)) }
-                                                                                                                                                 : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(StartsWithPhrase)
+                                                                                                                                                                                           ? new[] { Issue(symbol, GetProposal(symbol)) }
+                                                                                                                                                                                           : Enumerable.Empty<Diagnostic>();
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {

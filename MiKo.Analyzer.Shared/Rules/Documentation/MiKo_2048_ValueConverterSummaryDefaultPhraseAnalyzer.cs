@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -20,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => (symbol.IsValueConverter() || symbol.IsMultiValueConverter()) && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries) => summaries.Any(_ => _.StartsWith(StartingPhrase, StringComparison.Ordinal))
-                                                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                 : new[] { Issue(symbol, StartingPhrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(_ => _.StartsWith(StartingPhrase, StringComparison.Ordinal))
+                                                                                                                                                                                           ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                                                           : new[] { Issue(symbol, StartingPhrase) };
     }
 }

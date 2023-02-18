@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -28,8 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml) => commentXml.ContainsAny(ForbiddenPhrases, Comparison)
-                                                                                                                                     ? new[] { Issue(symbol, AllowedWordsForRule, ForbiddenWordsForRule) }
-                                                                                                                                     : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.ContainsAny(ForbiddenPhrases, Comparison)
+                                                                                                                                                                               ? new[] { Issue(symbol, AllowedWordsForRule, ForbiddenWordsForRule) }
+                                                                                                                                                                               : Enumerable.Empty<Diagnostic>();
     }
 }
