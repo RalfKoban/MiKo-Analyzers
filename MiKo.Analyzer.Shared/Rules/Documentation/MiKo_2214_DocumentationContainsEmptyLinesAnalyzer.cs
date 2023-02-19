@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,26 +13,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2214";
 
-        private static readonly char[] LineEndings = { '\n' };
-
         public MiKo_2214_DocumentationContainsEmptyLinesAnalyzer() : base(Id)
         {
         }
 
-        internal static bool CommentHasIssue(string comment)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            if (comment.IsNullOrWhiteSpace())
+            foreach (var text in comment.DescendantNodes<XmlTextSyntax>())
             {
-                return false;
+                var tokens = text.TextTokens;
+
+                for (var i = 0; i < tokens.Count - 1; i++)
+                {
+                    var currentToken = tokens[i];
+
+                    if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.ValueText.IsNullOrWhiteSpace())
+                    {
+                        var nextToken = tokens[i + 1];
+
+                        if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                        {
+                            yield return Issue(symbol.Name, nextToken);
+                        }
+                    }
+                }
             }
-
-            var allLines = comment.Split(LineEndings, StringSplitOptions.None);
-
-            return allLines.Any(_ => _.IsNullOrWhiteSpace());
         }
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => CommentHasIssue(commentXml?.Trim())
-                                                                                                                                                                               ? new[] { Issue(symbol) }
-                                                                                                                                                                               : Enumerable.Empty<Diagnostic>();
     }
 }
