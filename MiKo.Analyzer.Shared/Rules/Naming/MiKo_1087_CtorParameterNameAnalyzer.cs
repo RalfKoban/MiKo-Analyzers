@@ -49,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var mapping = new Dictionary<string, int>();
 
             var arguments = baseCall.ArgumentList.Arguments;
+
             for (var i = 0; i < arguments.Count; i++)
             {
                 var argument = arguments[i];
