@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -57,15 +56,43 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (methodName.Length > 10)
             {
-                var parts = methodName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
-
-                var hasIssue = parts.Length >= 1 && parts.All(_ => _[0].IsUpperCase()) && parts.Last().ContainsAny(ExpectedOutcomeMarkers);
-
-                if (hasIssue)
+                if (HasIssue(methodName))
                 {
                     yield return Issue(symbol);
                 }
             }
+        }
+
+        private static bool HasIssue(string methodName)
+        {
+            var parts = methodName.SplitBy(Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var count = parts.Count();
+
+            if (count >= 1)
+            {
+                var last = count - 1;
+                var index = 0;
+
+                foreach (ReadOnlySpan<char> part in parts)
+                {
+                    if (part[0].IsUpperCase() is false)
+                    {
+                        return false;
+                    }
+
+                    if (index == last)
+                    {
+                        if (part.ContainsAny(ExpectedOutcomeMarkers))
+                        {
+                            return true;
+                        }
+                    }
+
+                    index++;
+                }
+            }
+
+            return false;
         }
 
         private static bool TryGetReversed(string[] parts, out string reversed)
@@ -74,33 +101,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case 2:
                 {
-                    var addIf = parts[0].StartsWith("If", StringComparison.Ordinal) is false;
+                    reversed = parts[0].StartsWith("If", StringComparison.Ordinal)
+                               ? string.Concat(parts[1], parts[0])
+                               : string.Concat(parts[1], "If", parts[0]); // add if
 
-                    reversed = addIf
-                                   ? parts[1] + "If" + parts[0]
-                                   : parts[1] + parts[0];
-
-                    return true;
+                        return true;
                 }
 
                 case 3:
                 {
-                    var addIf = parts[1].StartsWith("If", StringComparison.Ordinal) is false;
+                    reversed = parts[1].StartsWith("If", StringComparison.Ordinal)
+                               ? string.Concat(parts[0], parts[2], parts[1])
+                               : string.Concat(parts[0], parts[2], "If", parts[1]); // add if
 
-                    reversed = addIf
-                                   ? parts[0] + parts[2] + "If" + parts[1]
-                                   : parts[0] + parts[2] + parts[1];
-
-                    return true;
+                        return true;
                 }
 
                 case 4:
                 {
-                    var addIf = parts[2].StartsWith("If", StringComparison.Ordinal) is false;
-
-                    reversed = addIf
-                                   ? parts[0] + parts[1] + parts[3] + "If" + parts[2]
-                                   : parts[0] + parts[1] + parts[3] + parts[2];
+                    reversed = parts[2].StartsWith("If", StringComparison.Ordinal)
+                               ? string.Concat(parts[0], parts[1], parts[3], parts[2])
+                               : string.Concat(parts[0], parts[1], parts[3], "If", parts[2]); // add if
 
                     return true;
                 }
