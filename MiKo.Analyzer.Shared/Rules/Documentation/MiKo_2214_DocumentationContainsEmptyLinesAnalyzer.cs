@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -19,10 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var text in comment.DescendantNodes<XmlTextSyntax>())
+            foreach (var tokens in comment.DescendantNodes<XmlTextSyntax>().Select(_ => _.TextTokens))
             {
-                var tokens = text.TextTokens;
-
                 for (var i = 0; i < tokens.Count - 1; i++)
                 {
                     var currentToken = tokens[i];

@@ -1,10 +1,64 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 // ReSharper disable once CheckNamespace
 namespace System
 {
     public static class StringSplitExtensions
     {
+        public static IEnumerable<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            return SplitBy(value.AsSpan(), findings, comparison);
+        }
+
+        public static IEnumerable<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return Array.Empty<string>();
+            }
+
+            var tuples = new List<Tuple<int, string>>();
+
+            foreach (var finding in findings)
+            {
+                var indices = value.AllIndicesOf(finding.AsSpan(), comparison);
+
+                foreach (var index in indices)
+                {
+                    tuples.Add(new Tuple<int, string>(index, finding));
+                }
+            }
+
+            var results = new List<string>((tuples.Count * 2) + 1);
+
+            var remainingString = value;
+
+            // get substrings by tuple indices and remember all parts (in reverse order)
+            foreach (var (index, finding) in tuples.OrderByDescending(_ => _.Item1))
+            {
+                var lastPart = remainingString.Slice(index + finding.Length).ToString();
+
+                results.Add(lastPart);
+                results.Add(finding);
+
+                remainingString = remainingString.Slice(0, index);
+            }
+
+            // add first part of string as it would miss otherwise
+            results.Add(remainingString.ToString());
+
+            // ensure the correct order as the substrings were added in reverse order
+            results.Reverse();
+
+            return results;
+        }
+
         public static SplitEnumerator SplitBy(this string text, params char[] separatorChars) => SplitBy(text.AsSpan(), separatorChars, StringSplitOptions.None);
 
         public static SplitEnumerator SplitBy(this ReadOnlySpan<char> text, params char[] separatorChars) => SplitBy(text, separatorChars, StringSplitOptions.None);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -30,11 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            var questionMarkWithoutHyperlink = comment.SplitBy(Constants.WhiteSpaces)
-                                                      .Where(_ => _.Contains("?"))
-                                                      .Any(_ => _.Contains("://") is false);
+            foreach (ReadOnlySpan<char> word in comment.SplitBy(Constants.WhiteSpaceCharacters))
+            {
+                if (word.Contains("?") && word.Contains("://") is false)
+                {
+                    return true;
+                }
+            }
 
-            return questionMarkWithoutHyperlink;
+            return false;
         }
     }
 }

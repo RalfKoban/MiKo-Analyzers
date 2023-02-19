@@ -31,6 +31,16 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlElementSyntax> value)
+        {
+            return value?.SelectMany(_ => _.ChildNodes<XmlTextSyntax>()).SelectMany(_ => _.TextTokens) ?? Enumerable.Empty<SyntaxToken>();
+        }
+
+        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
+        {
+            return value?.SelectMany(_ => _.TextTokens) ?? Enumerable.Empty<SyntaxToken>();
+        }
+
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
             return value?.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens) ?? Enumerable.Empty<SyntaxToken>();
@@ -39,6 +49,11 @@ namespace MiKoSolutions.Analyzers
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlTextSyntax, bool> descendantNodesFilter)
         {
             return value?.DescendantNodes(descendantNodesFilter).SelectMany(_ => _.TextTokens) ?? Enumerable.Empty<SyntaxToken>();
+        }
+
+        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
+        {
+            return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
         }
     }
 }

@@ -27,9 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.DescendantNodes<XmlElementSyntax>(_ => CodeTags.Contains(_.GetName()) is false)
-                                         .SelectMany(_ => _.ChildNodes<XmlTextSyntax>())
-                                         .SelectMany(_ => _.TextTokens))
+            foreach (var token in comment.GetXmlTextTokens(_ => CodeTags.Contains(_.GetName()) is false))
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
