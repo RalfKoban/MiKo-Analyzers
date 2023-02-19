@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,26 +23,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var summaries = CommentExtensions.GetSummaries(commentXml);
+            var summaries = comment.GetSummaryXmls();
 
-            if (summaries.Any() && summaries.All(_ => _ != SummaryPhrase))
+            foreach (var summary in summaries)
             {
-                yield return Issue(symbol, SummaryPhrase);
-            }
+                var textWithoutTrivia = summary.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
 
-            // check for parameter
-            foreach (var parameter in symbol.Parameters)
-            {
-                var parameterComment = parameter.GetComment(commentXml);
-
-                switch (parameterComment)
+                if (textWithoutTrivia.SequenceEqual(SummaryPhrase.AsSpan()) is false)
                 {
-                    case null:
-                    case ParameterPhrase:
-                        continue;
+                    yield return Issue(symbol, SummaryPhrase);
                 }
 
-                yield return Issue(parameter, ParameterPhrase);
+                // check for parameter
+                foreach (var parameter in symbol.Parameters)
+                {
+                    var parameterComment = comment.GetParameterComment(parameter.Name);
+
+                    if (parameterComment != null)
+                    {
+                        var text = parameterComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+
+                        if (text.SequenceEqual(ParameterPhrase.AsSpan()) is false)
+                        {
+                            yield return Issue(parameter, ParameterPhrase);
+                        }
+                    }
+                }
             }
         }
     }
