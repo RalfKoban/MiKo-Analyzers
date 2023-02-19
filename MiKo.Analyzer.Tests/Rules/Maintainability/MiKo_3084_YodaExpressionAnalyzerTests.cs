@@ -287,6 +287,7 @@ public class TestMe
         [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A < a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a > A; } }")]
         [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A >= a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a <= A; } }")]
         [TestCase("class TestMe { const int A = 42; bool Do(object a) { return A > a; } }", "class TestMe { const int A = 42; bool Do(object a) { return a < A; } }")]
+        [TestCase("class TestMe { const int A = -42; bool Do(object a) { return A > a; } }", "class TestMe { const int A = -42; bool Do(object a) { return a < A; } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_3084_YodaExpressionAnalyzer.Id;
