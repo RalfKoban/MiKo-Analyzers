@@ -17,6 +17,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const int MediumSentenceWords = 15; // 15-20 words are considered medium sentence length
         private const int LongSentenceWords = 30; // 30 and more words are considered long sentence length
 
+        private static readonly IEnumerable<string> XmlTags = new HashSet<string>
+                                                                  {
+                                                                      Constants.XmlTag.Summary,
+                                                                      Constants.XmlTag.Remarks,
+                                                                      Constants.XmlTag.Param,
+                                                                      Constants.XmlTag.Returns,
+                                                                      Constants.XmlTag.Value,
+                                                                      Constants.XmlTag.Exception,
+                                                                      Constants.XmlTag.TypeParam,
+                                                                      Constants.XmlTag.Example,
+                                                                      Constants.XmlTag.Note,
+                                                                      Constants.XmlTag.Overloads,
+                                                                      Constants.XmlTag.Para,
+                                                                      Constants.XmlTag.Permission,
+                                                                  };
+
         public MiKo_2215_SentencesShallBeShortAnalyzer() : base(Id)
         {
         }
@@ -31,16 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
-            var elements = comment.DescendantNodes<XmlElementSyntax>().ToList();
-
-            var hasIssue = Analyze(elements, Constants.XmlTag.Summary)
-                        || Analyze(elements, Constants.XmlTag.Remarks)
-                        || Analyze(elements, Constants.XmlTag.Param)
-                        || Analyze(elements, Constants.XmlTag.Returns)
-                        || Analyze(elements, Constants.XmlTag.Value)
-                        || Analyze(elements, Constants.XmlTag.Exception)
-                        || Analyze(elements, Constants.XmlTag.TypeParam)
-                        || Analyze(elements, Constants.XmlTag.Example);
+            var elements = comment.DescendantNodes<XmlElementSyntax>();
+            var hasIssue = Analyze(elements, XmlTags);
 
             return hasIssue;
         }
@@ -52,7 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return sentences.Any(SentenceHasIssue);
         }
 
-        private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, string tagName) => nodes.Where(_ => _.GetName() == tagName).Select(ConstructComment).Any(HasIssue);
+        // TODO RKN: rewerite this to avoid all the constructions of the strings, arrays and the other stuff
+        private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, IEnumerable<string> tagNames) => nodes.Where(_ => tagNames.Contains(_.GetName())).Select(ConstructComment).Any(HasIssue);
 
         private static string ConstructComment(SyntaxNode comment)
         {
