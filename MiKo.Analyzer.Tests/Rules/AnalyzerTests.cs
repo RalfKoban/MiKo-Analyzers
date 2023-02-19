@@ -228,7 +228,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var resourceKey = CreateResourceKey(provider);
 
-            var expectedTitle = Resources.ResourceManager.GetString(resourceKey);
+            var expectedTitle = Resources.ResourceManager.GetString(resourceKey) ?? "< - missing title - >";
 
             var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
 
