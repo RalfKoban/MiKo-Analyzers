@@ -96,6 +96,16 @@ namespace System
 
         public static bool Contains(this ReadOnlySpan<char> value, char c) => value.Length > 0 && value.IndexOf(c) >= 0;
 
+        public static bool Contains(this ReadOnlySpan<char> value, string finding)
+        {
+            if (finding.Length > value.Length)
+            {
+                return false;
+            }
+
+            return value.IndexOf(finding.AsSpan()) >= 0;
+        }
+
         public static bool Contains(this string value, string finding, StringComparison comparison)
         {
             if (finding.Length > value.Length)
@@ -110,6 +120,22 @@ namespace System
             }
 
             return value.IndexOf(finding, comparison) >= 0;
+        }
+
+        public static bool Contains(this ReadOnlySpan<char> value, string finding, StringComparison comparison)
+        {
+            if (finding.Length > value.Length)
+            {
+                switch (comparison)
+                {
+                    case StringComparison.Ordinal:
+                    case StringComparison.OrdinalIgnoreCase:
+                        // cannot be contained as the item is longer than the string to search in
+                        return false;
+                }
+            }
+
+            return value.IndexOf(finding.AsSpan(), comparison) >= 0;
         }
 
         public static bool Contains(this ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
@@ -160,32 +186,6 @@ namespace System
             }
         }
 
-        public static bool Contains(this ReadOnlySpan<char> value, string finding)
-        {
-            if (finding.Length > value.Length)
-            {
-                return false;
-            }
-
-            return value.IndexOf(finding.AsSpan()) >= 0;
-        }
-
-        public static bool Contains(this ReadOnlySpan<char> value, string finding, StringComparison comparison)
-        {
-            if (finding.Length > value.Length)
-            {
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                    case StringComparison.OrdinalIgnoreCase:
-                        // cannot be contained as the item is longer than the string to search in
-                        return false;
-                }
-            }
-
-            return value.IndexOf(finding.AsSpan(), comparison) >= 0;
-        }
-
         public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, char[] characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
@@ -232,8 +232,6 @@ namespace System
 
         public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
-
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string suffixCharacters)
         {
             if (value.Length > 0)
@@ -251,6 +249,8 @@ namespace System
         }
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
+
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes, StringComparison comparison)
         {

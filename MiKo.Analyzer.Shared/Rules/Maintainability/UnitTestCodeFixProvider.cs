@@ -42,17 +42,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument) => Argument(InvocationIs(name, argument));
 
-        protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, ArgumentSyntax argument1) => Argument(InvocationIs(name, argument, argument1));
-
         protected static ArgumentSyntax Is(string name, ExpressionSyntax expression) => Is(name, Argument(expression));
 
         protected static ArgumentSyntax Is(string name, TypeSyntax[] items) => Argument(Invocation("Is", name, items));
 
+        protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, ArgumentSyntax argument1) => Argument(InvocationIs(name, argument, argument1));
+
         protected static ArgumentSyntax Is(string name, string name1, TypeSyntax[] items) => Argument(Invocation("Is", name, name1, items));
 
         protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument) => Argument(MemberIs(name, name1), argument);
-
-        protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, ArgumentSyntax argument1) => Argument(MemberIs(name, name1), argument, argument1);
 
         protected static ArgumentSyntax Is(string name, ArgumentSyntax argument, string name1)
         {
@@ -62,6 +60,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected static ArgumentSyntax Is(string name, string name1, ExpressionSyntax expression) => Is(name, name1, Argument(expression));
+
+        protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, ArgumentSyntax argument1) => Argument(MemberIs(name, name1), argument, argument1);
 
         protected static ArgumentSyntax Is(string name, string name1, ArgumentSyntax argument, string name2)
         {

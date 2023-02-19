@@ -28,16 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return ReplacementFor(context, invocation).WithTriviaFrom(invocation);
         }
 
-        private static SyntaxNode ReplacementFor(CodeFixContext context, InvocationExpressionSyntax invocation)
-        {
-            if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Name is GenericNameSyntax generic)
-            {
-                return ReplacementFor(context, generic.TypeArgumentList.Arguments.First());
-            }
-
-            return Literal(SyntaxKind.NullLiteralExpression);
-        }
-
         private static SyntaxNode ReplacementFor(PredefinedTypeSyntax type)
         {
             var kind = type.Keyword.Kind();
@@ -53,6 +43,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.StringKeyword: return Literal(SyntaxKind.NullLiteralExpression);
                 default: return Literal(0);
             }
+        }
+
+        private static SyntaxNode ReplacementFor(CodeFixContext context, InvocationExpressionSyntax invocation)
+        {
+            if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Name is GenericNameSyntax generic)
+            {
+                return ReplacementFor(context, generic.TypeArgumentList.Arguments.First());
+            }
+
+            return Literal(SyntaxKind.NullLiteralExpression);
         }
 
         private static SyntaxNode ReplacementFor(CodeFixContext context, TypeSyntax typeSyntax)

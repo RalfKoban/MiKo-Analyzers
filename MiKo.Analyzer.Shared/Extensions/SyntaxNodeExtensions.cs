@@ -57,15 +57,15 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault();
 
-        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
-
         internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
+
+        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
         internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
 
-        internal static SyntaxNode FirstChild(this SyntaxNode value, Func<SyntaxNode, bool> predicate) => value.ChildNodes().FirstOrDefault(predicate);
-
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
+
+        internal static SyntaxNode FirstChild(this SyntaxNode value, Func<SyntaxNode, bool> predicate) => value.ChildNodes().FirstOrDefault(predicate);
 
         internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.FirstChild<T>(_ => _.IsKind(kind));
 
@@ -301,13 +301,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
-        internal static string GetName(this XmlAttributeSyntax value) => value?.Name.LocalName.ValueText;
+        internal static string GetName(this XmlAttributeSyntax value) => value?.Name.GetName();
 
-        internal static string GetName(this XmlElementSyntax value) => value?.StartTag.Name.LocalName.ValueText;
+        internal static string GetName(this XmlElementSyntax value) => value?.StartTag.GetName();
 
-        internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.LocalName.ValueText;
+        internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.GetName();
 
-        internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.LocalName.ValueText;
+        internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.GetName();
+
+        internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
+
+        internal static string GetXmlTagName(this SyntaxNode node)
+        {
+            switch (node)
+            {
+                case XmlNameSyntax n: return n.GetName();
+                case XmlEmptyElementSyntax ee: return ee.GetName();
+                case XmlElementSyntax e: return e.GetName();
+                default: return string.Empty;
+            }
+        }
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
 
