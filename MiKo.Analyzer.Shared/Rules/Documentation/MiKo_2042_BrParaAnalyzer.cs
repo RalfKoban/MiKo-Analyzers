@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,28 +12,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2042";
 
-        private static readonly string[] ParagraphTags =
-            {
-                "<p>",
-                "</p>",
-            };
-
         public MiKo_2042_BrParaAnalyzer() : base(Id)
         {
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var c = symbol.GetComment();
-
-            if (c.Contains("<br", StringComparison.OrdinalIgnoreCase))
+            foreach (var node in comment.DescendantNodes(_ => CodeTags.Contains(_.GetXmlTagName()) is false, true))
             {
-                yield return Issue(symbol, "<br/>");
-            }
+                if (node is XmlElementStartTagSyntax || node is XmlEmptyElementSyntax)
+                {
+                    var tag = node.GetXmlTagName().ToLowerInvariant();
 
-            if (c.ContainsAny(ParagraphTags, StringComparison.OrdinalIgnoreCase))
-            {
-                yield return Issue(symbol, "<p>...</p>");
+                    switch (tag)
+                    {
+                        case "br":
+                            yield return Issue(symbol.Name, node, "<br/>");
+
+                            break;
+
+                        case "p":
+                            yield return Issue(symbol.Name, node, "<p>...</p>");
+
+                            break;
+                    }
+                }
             }
         }
     }

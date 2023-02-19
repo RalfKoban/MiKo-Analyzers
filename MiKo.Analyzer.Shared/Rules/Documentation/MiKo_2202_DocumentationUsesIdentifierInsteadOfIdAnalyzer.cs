@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static readonly string[] Terms = GetWithDelimiters(Term);
 
-        internal static readonly string[] CodeTags = { Constants.XmlTag.C, Constants.XmlTag.Code };
-
         public MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer() : base(Id)
         {
         }

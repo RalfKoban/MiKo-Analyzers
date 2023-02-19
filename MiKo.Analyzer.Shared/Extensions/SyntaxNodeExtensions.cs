@@ -315,9 +315,10 @@ namespace MiKoSolutions.Analyzers
         {
             switch (node)
             {
-                case XmlNameSyntax n: return n.GetName();
                 case XmlEmptyElementSyntax ee: return ee.GetName();
                 case XmlElementSyntax e: return e.GetName();
+                case XmlElementStartTagSyntax est: return est.GetName();
+                case XmlNameSyntax n: return n.GetName();
                 default: return string.Empty;
             }
         }

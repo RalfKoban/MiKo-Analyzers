@@ -288,6 +288,44 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_combined_BR_and_P_tags_on_method()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <p>
+    /// Something more.
+    /// </p>
+    /// Something even more.
+    /// <br />
+    /// Something even more, too.
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// <para>
+    /// Something more.
+    /// </para>
+    /// Something even more.
+    /// <para/>
+    /// Something even more, too.
+    /// </summary>
+    void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2042_BrParaAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2042_BrParaAnalyzer();

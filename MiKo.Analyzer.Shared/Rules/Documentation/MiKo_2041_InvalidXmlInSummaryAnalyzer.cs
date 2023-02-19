@@ -26,19 +26,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var node in GetIssues(comment))
             {
-                var name = GetName(node);
+                var name = node.GetXmlTagName();
 
                 yield return Issue(name, node);
-            }
-        }
-
-        private static string GetName(SyntaxNode node)
-        {
-            switch (node)
-            {
-                case XmlElementSyntax e: return e.GetName();
-                case XmlEmptyElementSyntax ee: return ee.GetName();
-                default: return string.Empty;
             }
         }
     }

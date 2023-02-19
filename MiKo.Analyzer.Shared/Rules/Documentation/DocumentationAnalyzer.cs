@@ -9,6 +9,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class DocumentationAnalyzer : Analyzer
     {
+        protected static readonly string[] CodeTags = { Constants.XmlTag.Code, Constants.XmlTag.C };
+
         protected DocumentationAnalyzer(string diagnosticId, SymbolKind symbolKind) : base(nameof(Documentation), diagnosticId, symbolKind)
         {
         }
