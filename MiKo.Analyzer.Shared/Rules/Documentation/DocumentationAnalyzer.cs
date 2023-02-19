@@ -117,6 +117,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+        protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
+        {
+            var text = textToken.ValueText;
+
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
+            if (text.Length < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                yield break;
+            }
+
+            var syntaxTree = textToken.SyntaxTree;
+            var spanStart = textToken.SpanStart;
+
+            var lastPosition = text.Length - 1;
+
+            foreach (var position in text.AllIndicesOf(value, comparison))
+            {
+                var afterPosition = position + value.Length;
+                if (afterPosition <= lastPosition)
+                {
+                    if (nextCharValidationCallback(text[afterPosition]) is false)
+                    {
+                        continue;
+                    }
+                }
+
+                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
+                if (location != null)
+                {
+                    yield return location;
+                }
+            }
+        }
+
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
             var text = trivia.ToFullString();
