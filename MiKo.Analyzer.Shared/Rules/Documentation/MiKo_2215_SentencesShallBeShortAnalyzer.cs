@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const int MediumSentenceWords = 15; // 15-20 words are considered medium sentence length
         private const int LongSentenceWords = 30; // 30 and more words are considered long sentence length
 
+        private static readonly char[] WordSeparators = ("/" + string.Concat(Constants.WhiteSpaces)).ToCharArray();
+
         private static readonly IEnumerable<string> XmlTags = new HashSet<string>
                                                                   {
                                                                       Constants.XmlTag.Summary,
@@ -47,39 +49,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasIssue(DocumentationCommentTriviaSyntax comment)
         {
-            var elements = comment.DescendantNodes<XmlElementSyntax>();
-            var hasIssue = Analyze(elements, XmlTags);
-
-            return hasIssue;
-        }
-
-        private static bool HasIssue(string text)
-        {
-            var sentences = text.Split(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries);
-
-            return sentences.Any(SentenceHasIssue);
-        }
-
-        // TODO RKN: rewerite this to avoid all the constructions of the strings, arrays and the other stuff
-        private static bool Analyze(IEnumerable<XmlElementSyntax> nodes, IEnumerable<string> tagNames) => nodes.Where(_ => tagNames.Contains(_.GetName())).Select(ConstructComment).Any(HasIssue);
-
-        private static string ConstructComment(SyntaxNode comment)
-        {
-            var builder = new StringBuilder();
-
-            foreach (var text in comment.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
+            foreach (var node in comment.DescendantNodes<XmlElementSyntax>().Where(_ => XmlTags.Contains(_.GetName())))
             {
-                builder.Append(' ').Append(text.WithoutXmlCommentExterior()).Append(' ');
+                var commentBuilder = new StringBuilder();
+
+                foreach (var syntax in node.DescendantNodes(_ => _.IsCode() is false, true).OfType<XmlTextSyntax>())
+                {
+                    commentBuilder.Append(' ').WithoutXmlCommentExterior(syntax).Append(' ');
+                }
+
+                var specificComment = commentBuilder.ToString();
+
+                if (HasIssue(specificComment.AsSpan().Trim()))
+                {
+                    return true;
+                }
             }
 
-            return builder.ToString().Trim();
+            return false;
         }
 
-        private static bool SentenceHasIssue(string sentence)
+        private static bool HasIssue(ReadOnlySpan<char> text)
         {
-            var words = sentence.Replace("/", " ").Split(Constants.WhiteSpaceCharacters, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var sentence in text.SplitBy(Constants.SentenceMarkers, StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (SentenceHasIssue(sentence))
+                {
+                    return true;
+                }
+            }
 
-            if (words.Length > MediumSentenceWords)
+            return false;
+        }
+
+        private static bool SentenceHasIssue(ReadOnlySpan<char> sentence)
+        {
+            var words = sentence.SplitBy(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
+            var wordsLength = words.Count();
+
+            if (wordsLength > MediumSentenceWords)
             {
                 // maybe we have sentence clauses split by comma, so inspect each of them
                 if (SentenceClauseHasIssue(sentence))
@@ -87,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return true;
                 }
 
-                if (words.Length >= LongSentenceWords)
+                if (wordsLength >= LongSentenceWords)
                 {
                     // sentence is too long
                     return true;
@@ -97,13 +105,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool SentenceClauseHasIssue(string sentence)
+        private static bool SentenceClauseHasIssue(ReadOnlySpan<char> sentence)
         {
-            var clauses = sentence.Split(Constants.SentenceClauseMarkers, StringSplitOptions.RemoveEmptyEntries);
+            var clauses = sentence.SplitBy(Constants.SentenceClauseMarkers, StringSplitOptions.RemoveEmptyEntries);
+            var count = clauses.Count();
 
-            if (clauses.Length > 1)
+            if (count > 1)
             {
-                return clauses.Any(SentenceHasIssue);
+                foreach (var clause in clauses)
+                {
+                    if (SentenceHasIssue(clause))
+                    {
+                        return true;
+                    }
+                }
             }
 
             // just a single sentence
