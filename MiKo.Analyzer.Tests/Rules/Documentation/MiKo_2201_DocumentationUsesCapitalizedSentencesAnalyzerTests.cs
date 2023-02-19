@@ -42,6 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ".dll",
                 ".resx",
                 ".eds",
+                ".config",
+                ".txt",
             };
 
         private static readonly char[] LowerCaseLetters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();

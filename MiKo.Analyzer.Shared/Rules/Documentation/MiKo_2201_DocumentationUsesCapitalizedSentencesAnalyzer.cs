@@ -33,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] WellknownFileExtensions =
             {
                 ".bmp",
+                ".config",
                 ".cs",
                 ".dll",
                 ".eds",
@@ -42,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ".jpg",
                 ".png",
                 ".resx",
+                ".txt",
                 ".xaml",
                 ".xml",
             };
