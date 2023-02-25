@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,31 +26,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsNamespace is false && symbol.IsEnum() is false && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), StartingPhrase);
+
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
+
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var summary in summaries)
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
             {
-                var issue = AnalyzeSummary(symbol, summary);
-                if (issue != null)
-                {
-                    yield return issue;
-                }
+                yield return AnalyzeTextStart(symbol, summaryXml);
             }
         }
 
-        private Diagnostic AnalyzeSummary(ISymbol symbol, string summary)
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText)
         {
-            var trimmedSummary = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
+            var trimmedSummary = new StringBuilder(valueText)
+                                 .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                 .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                 .Without(",") // skip over first comma
+                                 .ToString()
+                                 .Trim();
 
-            foreach (var wrongPhrase in WrongPhrases)
+            foreach (var wrongPhrase in WrongPhrases.Where(_ => trimmedSummary.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
             {
-                if (trimmedSummary.StartsWith(wrongPhrase, StringComparison.OrdinalIgnoreCase))
-                {
-                    return Issue(symbol, wrongPhrase, StartingPhrase);
-                }
+                problematicText = wrongPhrase;
+
+                return true;
             }
 
-            return null;
+            problematicText = null;
+
+            return false;
         }
     }
 }
