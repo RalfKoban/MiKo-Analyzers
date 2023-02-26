@@ -336,6 +336,21 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
+            switch (value.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Dynamic:
+                case TypeKind.Enum:
+                case TypeKind.Module:
+                case TypeKind.Pointer:
+                case TypeKind.TypeParameter:
+                case TypeKind.Submission:
+                case TypeKind.FunctionPointer:
+                {
+                    return false;
+                }
+            }
+
             var fullName = string.Intern(value.ToString());
 
             if (fullName == interfaceType)
@@ -382,6 +397,21 @@ namespace MiKoSolutions.Analyzers
                 case SpecialType.System_IntPtr:
                 case SpecialType.System_UIntPtr:
                 case SpecialType.System_DateTime:
+                {
+                    return false;
+                }
+            }
+
+            switch (value.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Dynamic:
+                case TypeKind.Enum:
+                case TypeKind.Module:
+                case TypeKind.Pointer:
+                case TypeKind.TypeParameter:
+                case TypeKind.Submission:
+                case TypeKind.FunctionPointer:
                 {
                     return false;
                 }
@@ -848,64 +878,97 @@ namespace MiKoSolutions.Analyzers
             {
                 case IFieldSymbol _:
                 case ITypeSymbol _:
-                    {
-                        return false;
-                    }
+                    return false;
 
                 case IMethodSymbol method:
-                    {
-                        return method.IsInterfaceImplementation();
-                    }
+                    return method.IsInterfaceImplementation();
 
                 case IPropertySymbol p when p.ExplicitInterfaceImplementations.Any():
                 case IEventSymbol e when e.ExplicitInterfaceImplementations.Any():
-                    {
-                        return true;
-                    }
-
-                default:
-                    {
-                        var typeSymbol = value.ContainingType;
-
-                        var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
-
-                        return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
-                    }
+                    return true;
             }
+
+            var typeSymbol = value.ContainingType;
+
+            switch (typeSymbol.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Enum:
+                case TypeKind.Interface:
+                case TypeKind.Pointer:
+                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
+                case TypeKind.Submission:
+                case TypeKind.Module:
+                    return false;
+            }
+
+            if (value.CanBeReferencedByName is false)
+            {
+                // cannot be an interface method as those have names
+                return false;
+            }
+
+            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+
+            return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
         }
 
         internal static bool IsInterfaceImplementation(this IMethodSymbol value)
         {
+            if (value.IsStatic)
+            {
+                return false;
+            }
+
             switch (value.MethodKind)
             {
+                case MethodKind.AnonymousFunction:
                 case MethodKind.Constructor:
                 case MethodKind.SharedConstructor:
+                case MethodKind.Destructor:
+                case MethodKind.BuiltinOperator:
                 case MethodKind.UserDefinedOperator:
-                    {
-                        return false;
-                    }
+                case MethodKind.LocalFunction:
+                case MethodKind.FunctionPointerSignature:
+                    return false;
 
-                default:
-                    {
-                        if (value.IsStatic)
-                        {
-                            return false;
-                        }
-
-                        if (value.ExplicitInterfaceImplementations.Any())
-                        {
-                            return true;
-                        }
-
-                        var typeSymbol = value.ContainingType;
-                        var methodName = value.Name;
-
-                        var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                        var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
-
-                        return result;
-                    }
+                case MethodKind.ExplicitInterfaceImplementation:
+                    return true;
             }
+
+            var typeSymbol = value.ContainingType;
+
+            switch (typeSymbol.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Enum:
+                case TypeKind.Interface:
+                case TypeKind.Pointer:
+                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
+                case TypeKind.Submission:
+                case TypeKind.Module:
+                    return false;
+            }
+
+            if (value.ExplicitInterfaceImplementations.Any())
+            {
+                return true;
+            }
+
+            if (value.CanBeReferencedByName is false)
+            {
+                // cannot be an interface method as those have names
+                return false;
+            }
+
+            var methodName = value.Name;
+
+            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
+            var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+
+            return result;
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)
@@ -917,24 +980,44 @@ namespace MiKoSolutions.Analyzers
 
             switch (value.MethodKind)
             {
+                case MethodKind.AnonymousFunction:
                 case MethodKind.Constructor:
                 case MethodKind.StaticConstructor:
+                case MethodKind.Destructor:
                 case MethodKind.EventAdd:
                 case MethodKind.EventRemove:
                 case MethodKind.PropertyGet:
                 case MethodKind.PropertySet:
-
                 case MethodKind.BuiltinOperator:
                 case MethodKind.UserDefinedOperator:
-                {
+                case MethodKind.LocalFunction:
+                case MethodKind.FunctionPointerSignature:
                     return false;
-                }
+            }
+
+            if (value.CanBeReferencedByName is false)
+            {
+                // cannot be an interface method as those have names
+                return false;
+            }
+
+            var typeSymbol = value.ContainingType;
+
+            switch (typeSymbol.TypeKind)
+            {
+                case TypeKind.Delegate:
+                case TypeKind.Enum:
+                case TypeKind.Interface:
+                case TypeKind.Pointer:
+                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
+                case TypeKind.Submission:
+                case TypeKind.Module:
+                    return false;
             }
 
             // ReSharper disable once AssignNullToNotNullAttribute
             var interfaceTypeName = string.Intern(typeof(T).FullName);
-
-            var typeSymbol = value.ContainingType;
 
             if (typeSymbol.Implements(interfaceTypeName))
             {
