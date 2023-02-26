@@ -37,7 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(string valueText, out string problematicText)
         {
-            var startsWith = valueText.AsSpan().TrimStart().StartsWith(Phrase, StringComparison.Ordinal);
+            var text = valueText.AsSpan().TrimStart();
+
+            var startsWith = text.StartsWith(Phrase, StringComparison.Ordinal);
 
             problematicText = valueText.FirstWord();
 
