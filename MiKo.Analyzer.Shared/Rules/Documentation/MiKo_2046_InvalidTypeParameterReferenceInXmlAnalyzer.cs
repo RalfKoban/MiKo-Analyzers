@@ -26,10 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             switch (symbol)
             {
                 case IMethodSymbol method:
-                    return AnalyzeComment(method, commentXml);
+                    return AnalyzeComment(method, commentXml, comment);
 
                 case INamedTypeSymbol type:
-                    return AnalyzeComment(type, commentXml);
+                    return AnalyzeComment(type, commentXml, comment);
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
@@ -46,42 +46,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string GetReplacement(ITypeParameterSymbol parameter) => string.Intern(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.TypeParamRef + " name=\"" + parameter.Name + "\"" + Constants.Comments.XmlElementEndingTag);
 
-        private IEnumerable<Diagnostic> AnalyzeComment(INamedTypeSymbol type, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeComment(INamedTypeSymbol type, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             List<Diagnostic> findings = null;
 
             if (type.IsGenericType)
             {
-                var comment = commentXml.Without(Constants.Markers.Symbols);
+                var commentWithoutSymbols = commentXml.Without(Constants.Markers.Symbols);
 
                 foreach (var parameter in type.TypeParameters)
                 {
-                    InspectPhrases(parameter, comment, ref findings);
+                    InspectPhrases(parameter, commentWithoutSymbols, comment, ref findings);
                 }
             }
 
             return findings ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeComment(IMethodSymbol method, string commentXml)
+        private IEnumerable<Diagnostic> AnalyzeComment(IMethodSymbol method, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             List<Diagnostic> findings = null;
 
             if (method.IsGenericMethod || method.ContainingType.IsGenericType)
             {
-                var comment = commentXml.Without(Constants.Markers.Symbols);
+                var commentWithoutSymbols = commentXml.Without(Constants.Markers.Symbols);
 
                 foreach (var parameter in method.TypeParameters.Concat(method.ContainingType.TypeParameters))
                 {
-                    InspectPhrases(parameter, comment, ref findings);
+                    InspectPhrases(parameter, commentWithoutSymbols, comment, ref findings);
                 }
             }
 
             return findings ?? Enumerable.Empty<Diagnostic>();
         }
 
-        private void InspectPhrases(ITypeParameterSymbol parameter, string commentXml, ref List<Diagnostic> findings)
+        private void InspectPhrases(ITypeParameterSymbol parameter, string commentXml, DocumentationCommentTriviaSyntax comment, ref List<Diagnostic> findings)
         {
+            // TODO RKN: Use comment instead of commentXml
             var phrases = CreatePhrases(parameter.Name);
 
             foreach (var phrase in phrases
