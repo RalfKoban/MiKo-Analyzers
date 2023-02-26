@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2015_FireMethodsAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2015";
-
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
         private static readonly string[] AllowedWords = { "raise", "throw" };
         private static readonly string[] ForbiddenWords = { "fire", "fired", "fires", "firing" };
@@ -29,8 +26,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.ContainsAny(ForbiddenPhrases, Comparison)
-                                                                                                                                                                               ? new[] { Issue(symbol, AllowedWordsForRule, ForbiddenWordsForRule) }
-                                                                                                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            foreach (var token in comment.GetXmlTextTokens())
+            {
+                foreach (var location in GetAllLocations(token, ForbiddenPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(symbol.Name, location, AllowedWordsForRule, ForbiddenWordsForRule);
+                }
+            }
+        }
     }
 }
