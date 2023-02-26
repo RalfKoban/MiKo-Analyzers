@@ -26,16 +26,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
 
+        protected virtual Diagnostic StartIssue(SyntaxNode node) => Issue(node);
+
+        protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
+
         protected virtual bool AnalyzeTextStart(string valueText, out string problematicText)
         {
             problematicText = null;
 
             return false;
         }
-
-        protected virtual Diagnostic StartIssue(SyntaxNode node) => Issue(node);
-
-        protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
 
         protected Diagnostic AnalyzeTextStart(ISymbol symbol, SyntaxNode summaryXml)
         {
