@@ -12196,5 +12196,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6020_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6021_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6021_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate ThrowIfNull statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6021_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6021_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;ThrowIfNull&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6021_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6021_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ThrowIfNull statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6021_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6021_Title", resourceCulture);
+            }
+        }
     }
 }

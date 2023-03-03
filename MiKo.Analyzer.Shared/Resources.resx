@@ -4292,4 +4292,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_6020_Title" xml:space="preserve">
     <value>break statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_6021_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6021_Description" xml:space="preserve">
+    <value>To separate ThrowIfNull statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6021_MessageFormat" xml:space="preserve">
+    <value>Surround 'ThrowIfNull' with a blank line</value>
+  </data>
+  <data name="MiKo_6021_Title" xml:space="preserve">
+    <value>ThrowIfNull statements should be surrounded by blank lines</value>
+  </data>
 </root>
