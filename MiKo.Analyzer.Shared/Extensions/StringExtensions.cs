@@ -40,7 +40,7 @@ namespace System
 
                 if (indices is null)
                 {
-                    indices = new List<int>();
+                    indices = new List<int>(1);
                 }
 
                 indices.Add(index);
@@ -49,7 +49,7 @@ namespace System
             return indices ?? Enumerable.Empty<int>();
         }
 
-        public static IEnumerable<int> AllIndicesOf(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -77,13 +77,13 @@ namespace System
 
                 if (indices is null)
                 {
-                    indices = new List<int>();
+                    indices = new List<int>(1);
                 }
 
                 indices.Add(index);
             }
 
-            return indices ?? Enumerable.Empty<int>();
+            return (IReadOnlyList<int>)indices ?? Array.Empty<int>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -684,6 +684,26 @@ namespace System
 
             var characters = value.ToArray();
             characters[index] = value[index].ToLowerCase();
+
+            return string.Intern(new string(characters));
+        }
+
+        /// <summary>
+        /// Gets an interned copy of the <see cref="string"/> where the characters are lower-case.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// An interned copy of the <see cref="string"/> where the character are lower-case.
+        /// </returns>
+        public static string ToLowerCase(this ReadOnlySpan<char> value)
+        {
+            var characters = value.ToArray();
+            for (var index = 0; index < characters.Length; index++)
+            {
+                characters[index] = value[index].ToLowerCase();
+            }
 
             return string.Intern(new string(characters));
         }
