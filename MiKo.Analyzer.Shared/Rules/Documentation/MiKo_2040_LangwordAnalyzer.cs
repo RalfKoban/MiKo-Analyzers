@@ -50,8 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var proposal = Proposal(phrase);
 
                 results.Add($"{phrase}.", $"{proposal}.");
-                results.Add($"{phrase}?", $"{proposal}.");
-                results.Add($"{phrase}!", $"{proposal}.");
+                results.Add($"{phrase}?", $"{proposal}?");
+                results.Add($"{phrase}!", $"{proposal}!");
                 results.Add($"{phrase},", $"{proposal},");
                 results.Add($"{phrase};", $"{proposal};");
                 results.Add($"{phrase}:", $"{proposal}:");
@@ -73,8 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($" {phrase})", $" {proposal})");
                 results.Add($" {phrase} ", $" {proposal} ");
                 results.Add($" {phrase}.", $" {proposal}.");
-                results.Add($" {phrase}?", $" {proposal}.");
-                results.Add($" {phrase}!", $" {proposal}.");
+                results.Add($" {phrase}?", $" {proposal}?");
+                results.Add($" {phrase}!", $" {proposal}!");
                 results.Add($" {phrase},", $" {proposal},");
                 results.Add($" {phrase};", $" {proposal};");
                 results.Add($" {phrase}:", $" {proposal}:");
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results.ToArray();
         }
 
-        private static string Proposal(string phrase) => string.Intern($"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.Trim().ToLowerCase()}\"/>");
+        private static string Proposal(string phrase) => string.Intern($"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>");
 
         private static string GetWrongText(SyntaxList<XmlAttributeSyntax> attributes)
         {
@@ -180,6 +180,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (text.IsNullOrWhiteSpace())
                             {
+                                continue;
+                            }
+
+                            // loop over text to see if we have to report at all
+                            // (might be done a second time in case of report, but in case of no report we do not need to do all the other loops)
+                            if (text.ContainsAny(Phrases) is false)
+                            {
+                                // no need to loop further
                                 continue;
                             }
 
