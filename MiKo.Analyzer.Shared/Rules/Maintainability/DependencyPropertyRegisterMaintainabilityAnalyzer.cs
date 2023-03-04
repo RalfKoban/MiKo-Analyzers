@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var name = ((LiteralExpressionSyntax)expression).GetName();
 
-                yield return ReportIssue(symbol, nameArgument, "'nameof(" + name + ")'");
+                yield return ReportIssue(symbol, nameArgument, "nameof(" + name + ")");
             }
         }
 
