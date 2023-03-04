@@ -43,12 +43,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(string valueText, out string problematicText)
         {
-            var trimmedSummary = new StringBuilder(valueText)
-                                 .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                                 .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                                 .Without(",") // skip over first comma
-                                 .ToString()
-                                 .Trim();
+            var trimmedSummary = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                                             .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                                             .Without(",") // skip over first comma
+                                                             .ToString()
+                                                             .TrimStart();
 
             foreach (var wrongPhrase in WrongPhrases.Where(_ => trimmedSummary.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
             {

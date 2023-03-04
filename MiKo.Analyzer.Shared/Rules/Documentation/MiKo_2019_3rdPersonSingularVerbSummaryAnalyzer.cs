@@ -37,12 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool AnalyzeTextStart(string valueText, out string problematicText)
         {
-            problematicText = new StringBuilder(valueText)
-                        .Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                        .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
-                        .Without(",") // skip over first comma
-                        .ToString()
-                        .FirstWord();
+            problematicText = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                                          .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
+                                                          .Without(",") // skip over first comma
+                                                          .ToString()
+                                                          .FirstWord();
 
             return Verbalizer.IsThirdPersonSingularVerb(problematicText) is false;
         }
