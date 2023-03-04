@@ -20,18 +20,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected abstract bool IsCall(ITypeSymbol type);
 
-        private bool IsCall(StatementSyntax statement, SemanticModel semanticModel) => statement is ExpressionStatementSyntax e && IsCall(e, semanticModel);
-
-        private bool IsCall(ExpressionStatementSyntax statement, SemanticModel semanticModel) => statement.Expression is InvocationExpressionSyntax i && IsCall(i, semanticModel);
-
-        private bool IsCall(InvocationExpressionSyntax invocation, SemanticModel semanticModel) => invocation.Expression is MemberAccessExpressionSyntax call && IsCall(call, semanticModel);
-
-        private bool IsCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel)
+        protected virtual bool IsCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel)
         {
             var type = call.GetTypeSymbol(semanticModel);
 
             return type != null && IsCall(type);
         }
+
+        private bool IsCall(StatementSyntax statement, SemanticModel semanticModel) => statement is ExpressionStatementSyntax e && IsCall(e, semanticModel);
+
+        private bool IsCall(ExpressionStatementSyntax statement, SemanticModel semanticModel) => statement.Expression is InvocationExpressionSyntax i && IsCall(i, semanticModel);
+
+        private bool IsCall(InvocationExpressionSyntax invocation, SemanticModel semanticModel) => invocation.Expression is MemberAccessExpressionSyntax call && IsCall(call, semanticModel);
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {

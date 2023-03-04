@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 353 rules that are currently provided by the analyzer.
+The following tables list all the 354 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -392,3 +392,4 @@ The following tables list all the 353 rules that are currently provided by the a
 |MiKo_6017|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6019|continue statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6020|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6021|ThrowIfNull statements should be surrounded by blank lines|&#x2713;|&#x2713;|

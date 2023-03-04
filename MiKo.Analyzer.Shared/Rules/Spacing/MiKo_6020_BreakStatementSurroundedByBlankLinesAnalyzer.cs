@@ -15,36 +15,5 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         protected override SyntaxToken GetKeyword(BreakStatementSyntax node) => node.BreakKeyword;
-        //
-        // protected override bool SpecialCareNoBlankLinesAfter(SyntaxList<StatementSyntax> statements, BreakStatementSyntax node, out bool result)
-        // {
-        //     if (node.Parent is SwitchSectionSyntax section && section.Parent is SwitchStatementSyntax switchStatement)
-        //     {
-        //         var sections = switchStatement.Sections;
-        //         var index = sections.IndexOf(section);
-        //
-        //         var isNotLastSection = index < sections.Count - 1;
-        //         if (isNotLastSection)
-        //         {
-        //             var isLastNodeInsideSection = statements.Last() == node;
-        //             if (isLastNodeInsideSection)
-        //             {
-        //                 // determine whether the next section has no blank line between itself and our node
-        //                 var nextSection = sections[index + 1];
-        //
-        //                 if (HasNoBlankLinesBefore(nextSection, node))
-        //                 {
-        //                     result = true;
-        //
-        //                     return true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //
-        //     result = false;
-        //
-        //     return false;
-        // }
     }
 }
