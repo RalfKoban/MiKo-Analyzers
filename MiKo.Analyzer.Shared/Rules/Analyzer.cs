@@ -208,11 +208,11 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue(SyntaxToken token, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, token.ValueText);
 
-        protected Diagnostic Issue(Location location, Dictionary<string, string> properties = null) => CreateIssue(location, properties);
+        protected Diagnostic Issue(Location location, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText());
 
-        protected Diagnostic Issue<T>(ISymbol symbol, T arg, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg.ToString());
+        protected Diagnostic Issue<T>(ISymbol symbol, T arg1, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString());
 
-        protected Diagnostic Issue<T>(Location location, T arg, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText(), arg.ToString());
+        protected Diagnostic Issue<T>(Location location, T arg1, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText(), arg1.ToString());
 
         protected Diagnostic Issue(string name, ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, name);
 
@@ -231,6 +231,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected Diagnostic Issue<T>(string name, Location location, T arg1, Dictionary<string, string> properties = null) => CreateIssue(location, properties, name, arg1.ToString());
 
         protected Diagnostic Issue<T1, T2>(ISymbol symbol, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString(), arg2.ToString());
+
+        protected Diagnostic Issue<T1, T2>(Location location, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText(), arg1.ToString(), arg2.ToString());
 
         protected Diagnostic Issue<T1, T2>(string name, ISymbol symbol, T1 arg1, T2 arg2, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, name, arg1.ToString(), arg2.ToString());
 

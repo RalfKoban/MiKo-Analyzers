@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var location in GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset))
                 {
-                    yield return Issue(symbol.Name, location, location.GetText());
+                    yield return Issue(location);
                 }
             }
         }

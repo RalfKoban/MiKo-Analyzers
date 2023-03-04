@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2043";
 
-        private const string Phrase = Constants.Comments.DelegateSummaryStartingPhrase;
+        private const string StartingPhrase = Constants.Comments.DelegateSummaryStartingPhrase;
 
         public MiKo_2043_DelegateSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -20,14 +20,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Delegate && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
-        {
-            if (summaries.None(_ => _.Contains(Phrase)))
-            {
-                return new[] { Issue(symbol, Constants.XmlTag.Summary, Phrase) };
-            }
+        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), Constants.XmlTag.Summary, StartingPhrase);
 
-            return Enumerable.Empty<Diagnostic>();
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.XmlTag.Summary, StartingPhrase);
+
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
+        }
+
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText)
+        {
+            var text = valueText.AsSpan().TrimStart();
+
+            var startsWith = text.StartsWith(StartingPhrase, StringComparison.Ordinal);
+
+            problematicText = valueText.FirstWord();
+
+            return startsWith is false;
         }
     }
 }

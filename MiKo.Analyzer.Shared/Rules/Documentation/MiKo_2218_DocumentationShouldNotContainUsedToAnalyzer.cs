@@ -139,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var location in GetAllLocations(token, Phrases))
                 {
-                    yield return Issue(symbol.Name, location, location.GetText(), Replacement);
+                    yield return Issue(location, Replacement);
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
@@ -159,12 +159,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var location in GetAllLocations(token, CanPhrase.ToUpperCaseAt(0)))
                 {
-                    yield return Issue(symbol.Name, location, location.GetText(), CanReplacement.ToUpperCaseAt(0));
+                    yield return Issue(location, CanReplacement.ToUpperCaseAt(0));
                 }
 
                 foreach (var location in GetAllLocations(token, CanPhrase))
                 {
-                    yield return Issue(symbol.Name, location, location.GetText(), CanReplacement);
+                    yield return Issue(location, CanReplacement);
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
@@ -174,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var location in GetAllLocations(token, UsedToPhrase))
                 {
-                    yield return Issue(symbol.Name, location, location.GetText(), Replacement);
+                    yield return Issue(location, Replacement);
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     replacement = replacement.ToUpperCaseAt(0);
                 }
 
-                yield return Issue(symbol.Name, finalLocation, finalLocation.GetText(), replacement);
+                yield return Issue(finalLocation, replacement);
             }
         }
 

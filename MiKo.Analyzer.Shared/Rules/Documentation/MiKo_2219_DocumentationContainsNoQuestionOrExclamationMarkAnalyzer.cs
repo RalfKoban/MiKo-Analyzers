@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    yield return Issue(symbol.Name, location, location.GetText());
+                    yield return Issue(location);
                 }
             }
         }

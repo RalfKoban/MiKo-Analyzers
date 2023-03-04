@@ -2238,7 +2238,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase 'indicates whether').</value>
   </data>
   <data name="MiKo_2071_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in &lt;summary&gt;</value>
+    <value>Do not use '{0}' in &lt;summary&gt;</value>
   </data>
   <data name="MiKo_2071_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type</value>
@@ -2288,7 +2288,7 @@ Instead, the documentation should describe what the method is intended to do.</v
 Instead, they should be mentioned as 'callback' because - as delegates represent references to methods with a particular parameter list and return type - they actually act as callbacks to those methods when used within code.</value>
   </data>
   <data name="MiKo_2075_MessageFormat" xml:space="preserve">
-    <value>Replace '{1}' with '{2}'</value>
+    <value>Replace '{0}' with '{1}'</value>
   </data>
   <data name="MiKo_2075_Title" xml:space="preserve">
     <value>Documentation should use the term 'callback' instead of 'action', 'func' or 'function'</value>
@@ -2322,7 +2322,7 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
 Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the Enum member summary should describe the meaning of the member itself.</value>
   </data>
   <data name="MiKo_2082_MessageFormat" xml:space="preserve">
-    <value>Do not start &lt;summary&gt; with: '{1}'</value>
+    <value>Do not start &lt;summary&gt; with: '{0}'</value>
   </data>
   <data name="MiKo_2082_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation</value>
@@ -2447,7 +2447,7 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
     <value>The documentation should not use the term 'flag' which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary.</value>
   </data>
   <data name="MiKo_2206_MessageFormat" xml:space="preserve">
-    <value>Remove '{1}' from documentation</value>
+    <value>Remove '{0}' from documentation</value>
   </data>
   <data name="MiKo_2206_Title" xml:space="preserve">
     <value>Documentation should not use the term 'flag'</value>
@@ -2470,7 +2470,7 @@ More detailed information should be placed inside a &lt;remarks&gt; section.</va
 By having a more concrete description it makes it easier for a developer to understand the meaning.</value>
   </data>
   <data name="MiKo_2208_MessageFormat" xml:space="preserve">
-    <value>Use a better description than '{1}'</value>
+    <value>Use a better description than '{0}'</value>
   </data>
   <data name="MiKo_2208_Title" xml:space="preserve">
     <value>Documentation should not use the term 'an instance of'</value>
@@ -2622,7 +2622,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>
   </data>
   <data name="MiKo_2218_MessageFormat" xml:space="preserve">
-    <value>Replace '{1}' with '{2}'</value>
+    <value>Replace '{0}' with '{1}'</value>
   </data>
   <data name="MiKo_2218_Title" xml:space="preserve">
     <value>Documentation should use shorter term 'to' instead of longer term '... used to'</value>
@@ -2635,7 +2635,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
    However, documention should state and not question things - so question marks should be avoided as well.</value>
   </data>
   <data name="MiKo_2219_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in documentation</value>
+    <value>Do not use '{0}' in documentation</value>
   </data>
   <data name="MiKo_2219_Title" xml:space="preserve">
     <value>Do not use question or explamation marks in documentation</value>

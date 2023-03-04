@@ -4734,7 +4734,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2018_CodeFixTitle {
             get {
@@ -4752,7 +4752,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2018_MessageFormat {
             get {
@@ -6261,7 +6261,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in &lt;summary&gt;.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in &lt;summary&gt;.
         /// </summary>
         public static string MiKo_2071_MessageFormat {
             get {
@@ -6407,7 +6407,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2075_MessageFormat {
             get {
@@ -6507,7 +6507,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not start &lt;summary&gt; with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Do not start &lt;summary&gt; with: &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2082_MessageFormat {
             get {
@@ -6878,7 +6878,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from documentation.
+        ///   Looks up a localized string similar to Remove &apos;{0}&apos; from documentation.
         /// </summary>
         public static string MiKo_2206_MessageFormat {
             get {
@@ -6943,7 +6943,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a better description than &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use a better description than &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2208_MessageFormat {
             get {
@@ -7369,7 +7369,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2218_MessageFormat {
             get {
@@ -7400,7 +7400,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in documentation.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in documentation.
         /// </summary>
         public static string MiKo_2219_MessageFormat {
             get {

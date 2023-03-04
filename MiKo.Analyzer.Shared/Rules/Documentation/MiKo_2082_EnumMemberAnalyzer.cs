@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var location = node.GetLocation();
 
-            return Issue(location, location.GetText());
+            return Issue(location);
         }
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, location.GetText());
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(location);
 
         // overridden because we want to inspect the fields of the type as well
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
