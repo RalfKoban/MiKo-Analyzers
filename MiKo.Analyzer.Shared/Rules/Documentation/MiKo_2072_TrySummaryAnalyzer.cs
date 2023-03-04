@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,16 +21,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(StartsWithPhrase)
-                                                                                                                                                                                           ? new[] { Issue(symbol, StartingPhrase) }
-                                                                                                                                                                                           : Enumerable.Empty<Diagnostic>();
+        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), StartingPhrase);
 
-        private static bool StartsWithPhrase(string summary)
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
+
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var firstWord = summary.Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
-                                   .FirstWord();
+            var summaryXmls = comment.GetSummaryXmls();
 
-            return firstWord.EqualsAny(Words);
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
+        }
+
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText)
+        {
+            var firstWord = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+                                                        .ToString()
+                                                        .FirstWord();
+
+            if (firstWord.EqualsAny(Words))
+            {
+                problematicText = firstWord;
+
+                return true;
+            }
+
+            problematicText = null;
+
+            return false;
         }
     }
 }
