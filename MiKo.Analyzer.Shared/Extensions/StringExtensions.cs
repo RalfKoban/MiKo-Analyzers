@@ -495,14 +495,17 @@ namespace System
 
             if (length <= 0 || length == value.Length)
             {
-                return value.ToString();
+                return value.TrimEnd().ToString();
             }
+
+            var span = value.Slice(0, length).TrimEnd();
+            length = span.Length;
 
             var chars = new char[length + 3];
             chars[length] = '.';
             chars[length + 1] = '.';
             chars[length + 2] = '.';
-            value.Slice(0, length).CopyTo(chars);
+            span.CopyTo(chars);
 
             return new string(chars);
         }
