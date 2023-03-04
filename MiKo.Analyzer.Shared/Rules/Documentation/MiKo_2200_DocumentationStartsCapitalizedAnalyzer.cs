@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -35,19 +34,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var element = commentXml.GetCommentElement();
-
-            foreach (var xmlTag in XmlTags)
+            foreach (var xml in comment.GetXmlSyntax(XmlTags))
             {
-                foreach (var unused in element.GetCommentElements(xmlTag)
-                                              .Select(_ => _.Nodes().ConcatenatedWith().TrimStart())
-                                              .Select(_ => _.Without(Constants.Comments.SpecialOrPhrase))
-                                              .Where(_ => _.Length > 0)
-                                              .Where(_ => _[0].IsUpperCase() is false && _[0] != Constants.Comments.XmlElementStartingTag[0]))
+                if (xml.Content.FirstOrDefault() is XmlTextSyntax text)
                 {
-                    yield return Issue(symbol, xmlTag);
+                    yield return AnalyzeText(text, xml.GetName());
                 }
             }
+        }
+
+        private Diagnostic AnalyzeText(XmlTextSyntax syntax, string xmlTag)
+        {
+            foreach (var token in syntax.TextTokens)
+            {
+                var text = token.ValueText.Without(Constants.Comments.SpecialOrPhrase).TrimStart();
+
+                if (text.Length > 0)
+                {
+                    if (text[0].IsUpperCase())
+                    {
+                        // break out of inner foreach as this is a correct upper case
+                        return null;
+                    }
+
+                    return Issue(token, xmlTag);
+                }
+            }
+
+            return null;
         }
     }
 }

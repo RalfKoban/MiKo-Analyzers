@@ -6678,7 +6678,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start &lt;{1}&gt; with capitalized letter.
+        ///   Looks up a localized string similar to Start &lt;{0}&gt; with capitalized letter.
         /// </summary>
         public static string MiKo_2200_MessageFormat {
             get {
