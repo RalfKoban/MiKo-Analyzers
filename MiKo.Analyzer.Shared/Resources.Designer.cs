@@ -5049,7 +5049,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2027_MessageFormat {
             get {
@@ -6333,7 +6333,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;Determines whether&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;Determines whether&apos;.
         /// </summary>
         public static string MiKo_2073_MessageFormat {
             get {
