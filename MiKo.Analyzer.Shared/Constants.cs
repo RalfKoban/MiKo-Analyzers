@@ -31,8 +31,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static class ILog
         {
-            internal const string FullTypeName = "log4net.ILog";
+            internal const string NamespaceName = "log4net";
             internal const string TypeName = "ILog";
+            internal const string FullTypeName = NamespaceName + "." + TypeName;
 
             internal const string Debug = nameof(Debug);
             internal const string Info = nameof(Info);
@@ -47,6 +48,20 @@ namespace MiKoSolutions.Analyzers
             internal const string FatalFormat = nameof(FatalFormat);
 
             internal const string IsDebugEnabled = nameof(IsDebugEnabled);
+        }
+
+        internal static class SeriLog
+        {
+            internal const string NamespaceName = "Serilog";
+            internal const string TypeName = "Log";
+            internal const string FullTypeName = NamespaceName + "." + TypeName;
+
+            internal const string Verbose = nameof(Verbose);
+            internal const string Debug = nameof(Debug);
+            internal const string Information = nameof(Information);
+            internal const string Warning = nameof(Warning);
+            internal const string Error = nameof(Error);
+            internal const string Fatal = nameof(Fatal);
         }
 
         internal static class MaxNamingLengths

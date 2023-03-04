@@ -283,6 +283,54 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Serilog_call_followed_by_another_Serilog_call() => No_issue_is_reported_for(@"
+namespace Serilog
+{
+    public static class Log
+    {
+        public static void Verbose();
+        public static void Information();
+        public static void Warning();
+    }
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            Log.Verbose();
+            Log.Warning();
+            Log.Information();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Serilog_call_followed_by_if_block() => An_issue_is_reported_for(@"
+namespace Serilog
+{
+    public static class Log
+    {
+        public static void Verbose();
+        public static void Information();
+        public static void Warning();
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            Log.Verbose();
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_missing_preceding_line()
         {
             const string OriginalCode = @"
@@ -603,6 +651,61 @@ namespace log4net
             {
                 Log.Debug();
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_preceding_line_before_Serilog()
+        {
+            const string OriginalCode = @"
+namespace Serilog
+{
+    public static class Log
+    {
+        public static void Verbose();
+        public static void Information();
+        public static void Warning();
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            Log.Verbose();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Serilog
+{
+    public static class Log
+    {
+        public static void Verbose();
+        public static void Information();
+        public static void Warning();
+    }
+
+    public class TestMe
+    {
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            Log.Verbose();
         }
     }
 }
