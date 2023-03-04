@@ -174,74 +174,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     case XmlTextSyntax textNode:
                     {
-                        foreach (var textToken in textNode.TextTokens)
+                        foreach (var issue in AnalyzeTextTokens(symbolName, textNode))
                         {
-                            var text = textToken.ValueText;
-
-                            if (text.IsNullOrWhiteSpace())
-                            {
-                                continue;
-                            }
-
-                            // loop over text to see if we have to report at all
-                            // (might be done a second time in case of report, but in case of no report we do not need to do all the other loops)
-                            if (text.ContainsAny(Phrases) is false)
-                            {
-                                // no need to loop further
-                                continue;
-                            }
-
-                            // middle parts
-                            foreach (var item in MiddleParts)
-                            {
-                                var wrongText = item.Key;
-                                var proposal = item.Value;
-
-                                const int StartOffset = 1; // we do not want to underline the first char
-                                const int EndOffset = 1; // we do not want to underline the last char
-
-                                foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
-                                {
-                                    yield return Issue(symbolName, location, wrongText, proposal);
-                                }
-                            }
-
-                            // start
-                            foreach (var item in StartParts)
-                            {
-                                var wrongText = item.Key;
-                                var proposal = item.Value;
-
-                                const int StartOffset = 0;
-                                const int EndOffset = 1; // we do not want to underline the last char
-
-                                var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
-
-                                if (location != null)
-                                {
-                                    yield return Issue(symbolName, location, wrongText, proposal);
-                                }
-                            }
-
-                            // end
-                            foreach (var item in EndParts)
-                            {
-                                var wrongText = item.Key;
-                                var proposal = item.Value;
-
-                                const int StartOffset = 1; // we do not want to underline the first char
-                                const int EndOffset = 0;
-
-                                var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
-
-                                if (location != null)
-                                {
-                                    yield return Issue(symbolName, location, wrongText, proposal);
-                                }
-                            }
+                            yield return issue;
                         }
 
                         break;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeTextTokens(string symbolName, XmlTextSyntax textNode)
+        {
+            foreach (var textToken in textNode.TextTokens)
+            {
+                var text = textToken.ValueText;
+
+                if (text.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                // loop over text to see if we have to report at all
+                // (might be done a second time in case of report, but in case of no report we do not need to do all the other loops)
+                if (text.ContainsAny(Phrases) is false)
+                {
+                    // no need to loop further
+                    continue;
+                }
+
+                // middle parts
+                foreach (var item in MiddleParts)
+                {
+                    var wrongText = item.Key;
+                    var proposal = item.Value;
+
+                    const int StartOffset = 1; // we do not want to underline the first char
+                    const int EndOffset = 1; // we do not want to underline the last char
+
+                    foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
+                    {
+                        yield return Issue(symbolName, location, wrongText, proposal);
+                    }
+                }
+
+                // start
+                foreach (var item in StartParts)
+                {
+                    var wrongText = item.Key;
+                    var proposal = item.Value;
+
+                    const int StartOffset = 0;
+                    const int EndOffset = 1; // we do not want to underline the last char
+
+                    var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+
+                    if (location != null)
+                    {
+                        yield return Issue(symbolName, location, wrongText, proposal);
+                    }
+                }
+
+                // end
+                foreach (var item in EndParts)
+                {
+                    var wrongText = item.Key;
+                    var proposal = item.Value;
+
+                    const int StartOffset = 1; // we do not want to underline the first char
+                    const int EndOffset = 0;
+
+                    var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
+
+                    if (location != null)
+                    {
+                        yield return Issue(symbolName, location, wrongText, proposal);
                     }
                 }
             }
