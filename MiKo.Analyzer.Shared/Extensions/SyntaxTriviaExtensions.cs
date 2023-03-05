@@ -13,18 +13,18 @@ namespace MiKoSolutions.Analyzers
     {
         public static bool IsSpanningMultipleLines(this SyntaxTrivia value)
         {
-            var count = 0;
+            var foundLine = false;
 
             foreach (var syntaxTrivia in value.Token.LeadingTrivia)
             {
                 if (syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
                 {
-                    if (count == 1)
+                    if (foundLine)
                     {
                         return true;
                     }
 
-                    count++;
+                    foundLine = true;
                 }
             }
 
@@ -48,12 +48,7 @@ namespace MiKoSolutions.Analyzers
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
-            return value?.DescendantNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)) ?? Enumerable.Empty<SyntaxToken>();
-        }
-
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlTextSyntax, bool> descendantNodesFilter)
-        {
-            return value?.DescendantNodes(descendantNodesFilter).SelectMany(_ => _.TextTokens).Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)) ?? Enumerable.Empty<SyntaxToken>();
+            return GetXmlTextTokens(value, node => node.IsCode() is false); // skip code
         }
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)

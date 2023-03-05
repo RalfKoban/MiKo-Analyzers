@@ -81,6 +81,16 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
+        public void No_issue_is_reported_for_code_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
+using System;
+
+/// <" + tag + "><code>" + phrase + "something.</code></" + tag + @">
+public class TestMe
+{
+}
+");
+
+        [Test, Combinatorial]
         public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
 
