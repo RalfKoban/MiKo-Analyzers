@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -70,8 +71,66 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_documentation_starting_with_lower_case_and_white_spaces()
+        {
+            const string OriginalText = @"
+/// <summary>
+/// some text.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            const string FixedText = @"
+/// <summary>
+/// Some text.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_starting_with_lower_case_and_no_white_spaces()
+        {
+            const string OriginalText = @"
+/// <summary>
+///some text.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            const string FixedText = @"
+/// <summary>
+///Some text.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documentation_starting_with_lower_case_all_on_same_line()
+        {
+            const string OriginalText = @"
+/// <summary>some text.</summary>
+public sealed class TestMe { }
+";
+
+            const string FixedText = @"
+/// <summary>Some text.</summary>
+public sealed class TestMe { }
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2200_DocumentationStartsCapitalizedAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2200_DocumentationStartsCapitalizedAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2200_CodeFixProvider();
     }
 }

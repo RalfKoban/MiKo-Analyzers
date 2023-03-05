@@ -6669,6 +6669,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use capitalized letter.
+        /// </summary>
+        public static string MiKo_2200_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2200_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Documentation should start with a capitalized letter to have a full sentence..
         /// </summary>
         public static string MiKo_2200_Description {

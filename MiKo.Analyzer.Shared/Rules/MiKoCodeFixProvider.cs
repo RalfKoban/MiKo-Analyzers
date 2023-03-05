@@ -173,7 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return Task.FromResult(context.Document);
             }
 
-            var oldToken = GetToken(trivia);
+            var oldToken = GetToken(trivia, diagnostic);
             var updatedToken = GetUpdatedToken(oldToken, diagnostic);
 
             var newRoot = oldToken == updatedToken ? root : root.ReplaceToken(oldToken, updatedToken);
@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
 
-        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
+        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
 
         protected virtual SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => null;
 
