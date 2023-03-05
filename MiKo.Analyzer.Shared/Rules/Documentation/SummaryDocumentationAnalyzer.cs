@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -68,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlTextSyntax text:
                         {
                             // report the location of the first word(s) via the corresponding text token
-                            foreach (var textToken in text.TextTokens)
+                            foreach (var textToken in text.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
                             {
                                 var valueText = textToken.ValueText;
 

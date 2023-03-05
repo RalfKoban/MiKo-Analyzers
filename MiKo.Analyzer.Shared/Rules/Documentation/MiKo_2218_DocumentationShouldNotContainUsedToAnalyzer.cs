@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -41,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static XmlTextSyntax GetBetterText(XmlTextSyntax node)
         {
-            var tokens = node.TextTokens;
+            var tokens = node.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
 
             var textSoFar = string.Empty;
 

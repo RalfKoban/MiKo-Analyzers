@@ -187,7 +187,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeTextTokens(string symbolName, XmlTextSyntax textNode)
         {
-            foreach (var textToken in textNode.TextTokens)
+            foreach (var textToken in textNode.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
             {
                 var text = textToken.ValueText;
 
