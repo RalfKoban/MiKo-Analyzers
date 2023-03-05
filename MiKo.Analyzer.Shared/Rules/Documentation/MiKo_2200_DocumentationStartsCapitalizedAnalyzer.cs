@@ -47,17 +47,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in syntax.TextTokens)
             {
-                var text = token.ValueText.Without(Constants.Comments.SpecialOrPhrase).TrimStart();
+                var text = token.ValueText.Without(Constants.Comments.SpecialOrPhrase);
+                var trimmedText = text.TrimStart();
 
-                if (text.Length > 0)
+                if (trimmedText.Length > 0)
                 {
-                    if (text[0].IsUpperCase())
+                    if (trimmedText[0].IsUpperCase())
                     {
                         // break out of inner foreach as this is a correct upper case
                         return null;
                     }
 
-                    return Issue(token, xmlTag);
+                    // find the starting character, but ignore white-spaces
+                    var start = token.SpanStart + (text.Length - trimmedText.Length);
+
+                    // we want to underline only the first character
+                    var end = start + 1;
+
+                    var location = CreateLocation(token, start, end);
+
+                    return Issue(location, xmlTag);
                 }
             }
 
