@@ -22,11 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var comments = CommentExtensions.GetExamples(commentXml).ToArray();
+            var examples = comment.GetExampleXmls();
 
-            return AnalyzeExample(symbol, comments);
+            return AnalyzeExample(symbol, examples);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, params string[] exampleComments) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeExample(ISymbol owningSymbol, IEnumerable<XmlElementSyntax> examples) => Enumerable.Empty<Diagnostic>();
     }
 }
