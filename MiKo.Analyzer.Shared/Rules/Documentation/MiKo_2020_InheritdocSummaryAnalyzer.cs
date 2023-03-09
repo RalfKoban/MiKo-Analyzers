@@ -47,9 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             switch (symbol)
             {
-                case IMethodSymbol methodSymbol:
+                case IPropertySymbol _:
+                case IEventSymbol _:
+                case IMethodSymbol _:
                 {
-                    return methodSymbol.IsInterfaceImplementation();
+                    return symbol.IsInterfaceImplementation();
                 }
 
                 case ITypeSymbol typeSymbol:
@@ -61,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 default:
                 {
-                    return true;
+                    return false;
                 }
             }
         }

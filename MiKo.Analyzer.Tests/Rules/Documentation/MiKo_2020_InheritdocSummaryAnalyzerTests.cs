@@ -33,6 +33,32 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_non_inheritable_link_in_XML_summary_of_property_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + phrase.Replace(Marker, "<see cref=\"\"string.Format(string,object)\"\"/>") + @"
+    /// </summary>
+    public int DoSomething { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_non_inheritable_link_in_XML_summary_of_event_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + phrase.Replace(Marker, "<see cref=\"\"string.Format(string,object)\"\"/>") + @"
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+");
+
         [Test] // fields cannot be inherited and defined a second time
         public void No_issue_is_reported_for_XML_summary_of_field_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
 public class TestMe
@@ -99,7 +125,12 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_XML_summary_of_property_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
-public class TestMe
+public interface ITestMe
+{
+    int DoSomething { get; set; }
+}
+
+public class TestMe : ITestMe
 {
     /// <summary>
     /// " + phrase.Replace(Marker, "bla") + @"
@@ -110,7 +141,12 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_XML_summary_of_event_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
-public class TestMe
+public interface ITestMe
+{
+    void event EventHandler MyEvent;
+}
+
+public class TestMe : ITestMe
 {
     /// <summary>
     /// " + phrase.Replace(Marker, "bla") + @"
