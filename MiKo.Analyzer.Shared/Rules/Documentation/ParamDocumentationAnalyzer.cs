@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeParameters(symbol, commentXml, comment);
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase)
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase, StringComparison comparison = StringComparison.Ordinal)
         {
-            if (comment.StartsWithAny(phrase, StringComparison.Ordinal) is false)
+            if (comment.StartsWithAny(phrase, comparison) is false)
             {
                 var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
                 var proposal = useAllPhrases
@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                if (parameterComment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal))
+                if (parameterComment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
