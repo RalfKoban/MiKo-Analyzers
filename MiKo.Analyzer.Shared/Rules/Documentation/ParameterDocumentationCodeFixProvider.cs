@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return parameterCommentSyntax;
         }
 
-        protected virtual IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MethodDeclarationSyntax>();
+        protected virtual IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BaseMethodDeclarationSyntax>(); // use base methods here to include ctors and other declarations s well
 
         protected abstract DocumentationCommentTriviaSyntax Comment(CodeFixContext context, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic);
 
