@@ -27,6 +27,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_imported_property() => No_issue_is_reported_for(@"
+using System.Composition;
+
+public interface ISomeInterfaceExtended
+
+public class TestMe
+{
+    [Import]
+    public ISomeInterfaceExtended SomeInterfaceExtended { get; set; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_property_with_exact_same_name_as_interface() => An_issue_is_reported_for(@"
 
 public interface ISomeInterface

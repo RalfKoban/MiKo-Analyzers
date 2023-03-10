@@ -21,6 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation)
         {
+            if (symbol.IsImport())
+            {
+                // ignore imports
+                return Enumerable.Empty<Diagnostic>();
+            }
+
             var returnType = symbol.GetReturnType();
 
             if (returnType is null)
@@ -29,9 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return symbol.NameMatchesTypeName(returnType, 2)
-                       ? new[] { Issue(symbol) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (symbol.NameMatchesTypeName(returnType, 2))
+            {
+                return new[] { Issue(symbol) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }
