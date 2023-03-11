@@ -19,18 +19,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeReturnType(ITypeSymbol returnType) => returnType.IsTask();
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             switch (owningSymbol?.Name)
             {
-                case nameof(Task.FromCanceled): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.FromCanceledTaskReturnTypeStartingPhrase);
-                case nameof(Task.FromException): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.FromExceptionTaskReturnTypeStartingPhrase);
-                case nameof(Task.FromResult): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.FromResultTaskReturnTypeStartingPhrase);
-                case nameof(Task.ContinueWith): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.ContinueWithTaskReturnTypeStartingPhrase);
-                case nameof(Task.Run): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.RunTaskReturnTypeStartingPhrase);
-                case nameof(Task.WhenAll): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.WhenAllTaskReturnTypeStartingPhrase);
-                case nameof(Task.WhenAny): return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.WhenAnyTaskReturnTypeStartingPhrase);
-                default: return AnalyzeDefaultReturnType(owningSymbol, returnType, commentXml, xmlTag, comment);
+                case nameof(Task.FromCanceled): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.FromCanceledTaskReturnTypeStartingPhrase);
+                case nameof(Task.FromException): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.FromExceptionTaskReturnTypeStartingPhrase);
+                case nameof(Task.FromResult): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.FromResultTaskReturnTypeStartingPhrase);
+                case nameof(Task.ContinueWith): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.ContinueWithTaskReturnTypeStartingPhrase);
+                case nameof(Task.Run): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.RunTaskReturnTypeStartingPhrase);
+                case nameof(Task.WhenAll): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.WhenAllTaskReturnTypeStartingPhrase);
+                case nameof(Task.WhenAny): return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.WhenAnyTaskReturnTypeStartingPhrase);
+                default: return AnalyzeDefaultReturnType(owningSymbol, returnType, comment, commentXml, xmlTag);
             }
         }
 
@@ -59,17 +59,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        private IEnumerable<Diagnostic> AnalyzeDefaultReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
+        private IEnumerable<Diagnostic> AnalyzeDefaultReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             if (returnType.TryGetGenericArgumentType(out var argumentType))
             {
                 // we have a generic task
-                return GenericTypeAccepted(argumentType)
-                           ? AnalyzeStartingPhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase, comment)
-                           : Enumerable.Empty<Diagnostic>();
+                if (GenericTypeAccepted(argumentType))
+                {
+                    return AnalyzeStartingPhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.GenericTaskReturnTypeStartingPhrase);
+                }
+
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            return AnalyzePhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);
+            return AnalyzePhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.NonGenericTaskReturnTypePhrase);
         }
     }
 }

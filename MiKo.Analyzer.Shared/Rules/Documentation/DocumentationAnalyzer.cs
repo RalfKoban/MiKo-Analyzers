@@ -341,14 +341,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment != null)
                 {
-                    return AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    return AnalyzeProperty(symbol, compilation, comment, symbol.GetDocumentationCommentXml());
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment, string commentXml) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
 

@@ -18,20 +18,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment, string commentXml)
         {
-            return AnalyzeComment(symbol, symbol.GetDocumentationCommentXml(), comment);
+            return AnalyzeComment(symbol, comment, symbol.GetDocumentationCommentXml());
         }
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
 
-        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml)
         {
             var returnType = symbol.GetReturnType();
 
-            return returnType != null
-                       ? AnalyzeReturnType(symbol, returnType, commentXml, comment)
-                       : Enumerable.Empty<Diagnostic>();
+            if (returnType != null)
+            {
+                return AnalyzeReturnType(symbol, returnType, comment, commentXml);
+            }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
@@ -43,26 +46,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return AnalyzeReturnType(method, method.ReturnType, commentXml, comment);
+            return AnalyzeReturnType(method, method.ReturnType, comment, commentXml);
         }
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string commentXml, string xmlTag, string[] phrase, DocumentationCommentTriviaSyntax comment) => commentXml.StartsWithAny(phrase, StringComparison.Ordinal)
-                                                                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                    : new[] { Issue(symbol, xmlTag, phrase[0]) };
-
-        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, string comment, string xmlTag, params string[] phrase)
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, string[] phrase)
         {
-            if (phrase.None(_ => _.Equals(comment, StringComparison.Ordinal)))
+            if (commentXml.StartsWithAny(phrase, StringComparison.Ordinal) is false)
             {
-                return new[] { Issue(symbol, xmlTag, phrase[0]) };
+                foreach (var node in comment.GetXmlSyntax(xmlTag))
+                {
+                    yield return Issue(symbol.Name, node.StartTag, xmlTag, phrase[0]);
+                }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+        protected IEnumerable<Diagnostic> AnalyzePhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, params string[] phrase)
+        {
+            if (phrase.None(_ => _.Equals(commentXml, StringComparison.Ordinal)))
+            {
+                foreach (var node in comment.GetXmlSyntax(xmlTag))
+                {
+                    yield return Issue(symbol.Name, node.StartTag, xmlTag, phrase[0]);
+                }
+            }
+        }
 
-        private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, DocumentationCommentTriviaSyntax comment)
+        protected virtual IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag) => Enumerable.Empty<Diagnostic>();
+
+        private IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml)
         {
             if (ShallAnalyzeReturnType(returnType))
             {
@@ -70,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var returnComment in CommentExtensions.GetComments(commentXml, XmlTag.Returns).Where(_ => _ != null))
                 {
-                    foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, returnComment, XmlTag.Returns, comment))
+                    foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, comment, returnComment, XmlTag.Returns))
                     {
                         foundIssues = true;
 
@@ -82,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var valueComment in CommentExtensions.GetComments(commentXml, XmlTag.Value).Where(_ => _ != null))
                     {
-                        foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, valueComment, XmlTag.Value, comment))
+                        foreach (var finding in AnalyzeReturnType(owningSymbol, returnType, comment, valueComment, XmlTag.Value))
                         {
                             yield return finding;
                         }
