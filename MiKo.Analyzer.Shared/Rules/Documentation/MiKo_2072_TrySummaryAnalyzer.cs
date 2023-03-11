@@ -36,8 +36,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText)
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
         {
+            comparison = StringComparison.Ordinal;
+
             var firstWord = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
                                                         .ToString()
                                                         .FirstWord();

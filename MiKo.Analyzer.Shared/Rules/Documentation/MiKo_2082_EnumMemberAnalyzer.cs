@@ -58,11 +58,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText)
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
         {
+            comparison = StringComparison.OrdinalIgnoreCase;
+
             var text = valueText.AsSpan().TrimStart();
 
-            var startsWith = text.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase);
+            var startsWith = text.StartsWithAny(StartingPhrases, comparison);
 
             problematicText = text.FirstWord().ToString();
 

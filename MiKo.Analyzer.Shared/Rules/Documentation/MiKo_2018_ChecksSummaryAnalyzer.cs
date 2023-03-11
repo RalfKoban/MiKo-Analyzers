@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -41,19 +40,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText)
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
         {
+            comparison = StringComparison.OrdinalIgnoreCase;
+
             var trimmedSummary = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
                                                              .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                                                              .Without(",") // skip over first comma
                                                              .ToString()
                                                              .TrimStart();
 
-            foreach (var wrongPhrase in WrongPhrases.Where(_ => trimmedSummary.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
+            foreach (var wrongPhrase in WrongPhrases)
             {
-                problematicText = wrongPhrase;
+                if (trimmedSummary.StartsWith(wrongPhrase, comparison))
+                {
+                    problematicText = wrongPhrase;
 
-                return true;
+                    return true;
+                }
             }
 
             problematicText = null;

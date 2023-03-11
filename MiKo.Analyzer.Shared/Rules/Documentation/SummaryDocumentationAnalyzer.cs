@@ -31,9 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
 
-        protected virtual bool AnalyzeTextStart(string valueText, out string problematicText)
+        protected virtual bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
         {
             problematicText = null;
+            comparison = StringComparison.Ordinal;
 
             return false;
         }
@@ -80,10 +81,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 }
 
                                 // we found some text
-                                if (AnalyzeTextStart(valueText, out var problematicText))
+                                if (AnalyzeTextStart(valueText, out var problematicText, out var comparison))
                                 {
                                     // it's no valid text, so we have an issue
-                                    var position = valueText.IndexOf(problematicText, StringComparison.Ordinal);
+                                    var position = valueText.IndexOf(problematicText, comparison);
 
                                     var start = textToken.SpanStart + position; // find start position for underlining
                                     var end = start + problematicText.Length; // find end position for underlining
