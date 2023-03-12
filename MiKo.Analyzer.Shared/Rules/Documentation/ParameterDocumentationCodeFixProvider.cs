@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,29 +10,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
-            var parameterName = syntaxNodes.OfType<ParameterSyntax>().First().GetName();
-
-            // we are called for each parameter, so we have to find out the correct XML element
-            var fittingSyntaxNodes = FittingSyntaxNodes(syntaxNodes);
-
-            var parameterSyntax = GetXmlSyntax(Constants.XmlTag.Param, fittingSyntaxNodes).FirstOrDefault(_ => GetParameterName(_) == parameterName);
-
-            if (parameterSyntax != null)
+            foreach (var node in syntaxNodes)
             {
-                return parameterSyntax;
+                switch (node)
+                {
+                    case XmlElementStartTagSyntax start: return start.Parent;
+                    case XmlElementSyntax element when element.GetName() == Constants.XmlTag.Param: return element;
+                    default: return null;
+                }
             }
 
-            // we did not find the parameter documentation, hence we have to return the parent documentation to be able to add a value
-            return GetXmlSyntax(fittingSyntaxNodes);
+            return null;
         }
 
         protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is DocumentationCommentTriviaSyntax d)
-            {
-                return Comment(context, d, issue);
-            }
-
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
             var parameterName = GetParameterName(parameterCommentSyntax);
 
@@ -51,10 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return parameterCommentSyntax;
         }
-
-        protected virtual IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BaseMethodDeclarationSyntax>(); // use base methods here to include ctors and other declarations s well
-
-        protected abstract DocumentationCommentTriviaSyntax Comment(CodeFixContext context, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic);
 
         protected abstract XmlElementSyntax Comment(CodeFixContext context, XmlElementSyntax comment, ParameterSyntax parameter, int index);
     }

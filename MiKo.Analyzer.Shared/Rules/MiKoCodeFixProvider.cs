@@ -213,8 +213,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(context, root, trivia, issue), GetType().Name);
             }
 
-            var token = root.FindToken(startPosition);
-            var syntaxNodes = token.Parent.AncestorsAndSelf();
+            // TODO RKN
+            // var token = root.FindToken(startPosition);
+            // var syntaxNodes = token.Parent.AncestorsAndSelf();
+            var node = root.FindNode(issueSpan, true, true);
+            var syntaxNodes = node.AncestorsAndSelf();
 
             var syntax = GetSyntax(syntaxNodes);
 

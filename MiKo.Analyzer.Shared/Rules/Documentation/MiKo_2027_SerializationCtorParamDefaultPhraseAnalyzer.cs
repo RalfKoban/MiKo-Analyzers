@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -19,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.IsSerializationInfoParameter() || parameter.IsStreamingContextParameter();
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             if (parameter.IsSerializationInfoParameter())
             {
@@ -27,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(phrases) is false)
                 {
-                    yield return Issue(parameter, phrases[0]);
+                    yield return Issue(parameter.Name, parameterComment, phrases[0]);
                 }
             }
             else if (parameter.IsStreamingContextParameter())
@@ -36,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(phrases) is false)
                 {
-                    yield return Issue(parameter, phrases[0]);
+                    yield return Issue(parameter.Name, parameterComment, phrases[0]);
                 }
             }
         }

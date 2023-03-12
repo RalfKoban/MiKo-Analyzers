@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var summary in summaries)
             {
-                var textWithoutTrivia = summary.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+                var textWithoutTrivia = summary.GetTextTrimmed();
 
                 if (textWithoutTrivia.SequenceEqual(SummaryPhrase.AsSpan()) is false)
                 {
@@ -41,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (parameterComment != null)
                     {
-                        var text = parameterComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+                        var parameterText = parameterComment.GetTextTrimmed();
 
-                        if (text.SequenceEqual(ParameterPhrase.AsSpan()) is false)
+                        if (parameterText.SequenceEqual(ParameterPhrase.AsSpan()) is false)
                         {
                             yield return Issue(parameter, ParameterPhrase);
                         }

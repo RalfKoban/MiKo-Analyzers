@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -37,6 +38,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return parameterType.IsBoolean() is false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => AnalyzeStartingPhrase(parameter, comment, Constants.Comments.ParameterStartingPhrase, StringComparison.OrdinalIgnoreCase);
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        {
+            return AnalyzePlainTextStartingPhrase(parameter, parameterComment, Constants.Comments.ParameterStartingPhrase, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

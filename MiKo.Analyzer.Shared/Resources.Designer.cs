@@ -4364,7 +4364,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Documentation to: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2004_MessageFormat {
             get {

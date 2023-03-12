@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Composition;
-using System.Linq;
+﻿using System.Composition;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -14,10 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public override string FixableDiagnosticId => MiKo_2027_SerializationCtorParamDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2027_CodeFixTitle;
-
-        protected override IEnumerable<SyntaxNode> FittingSyntaxNodes(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ConstructorDeclarationSyntax>();
-
-        protected override DocumentationCommentTriviaSyntax Comment(CodeFixContext context, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic) => comment; // TODO RKN: fix
 
         protected override XmlElementSyntax Comment(CodeFixContext context, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -584,6 +585,16 @@ namespace MiKoSolutions.Analyzers
 
                 return null;
             }
+        }
+
+        internal static ReadOnlySpan<char> GetTextTrimmed(this XmlElementSyntax element)
+        {
+            if (element is null)
+            {
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            return element.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
