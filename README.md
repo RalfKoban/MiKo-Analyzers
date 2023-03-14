@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 354 rules that are currently provided by the analyzer.
+The following tables list all the 355 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -236,6 +236,7 @@ The following tables list all the 354 rules that are currently provided by the a
 |MiKo_2218|Documentation should use shorter term 'to' instead of longer term '... used to'|&#x2713;|&#x2713;|
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
+|MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
