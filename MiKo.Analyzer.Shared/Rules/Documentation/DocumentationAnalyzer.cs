@@ -256,15 +256,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
         }
 
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
