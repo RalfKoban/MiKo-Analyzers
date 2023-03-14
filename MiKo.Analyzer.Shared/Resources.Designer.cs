@@ -7463,7 +7463,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide a documentation for &lt;&apos;{1}&apos;/&gt;.
+        ///   Looks up a localized string similar to Provide a documentation for &lt;{1}/&gt;.
         /// </summary>
         public static string MiKo_2221_MessageFormat {
             get {

@@ -2656,7 +2656,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>An empty documentation is a code smell. The developer created the empty XML documentation tag by intent but did not provide any documentation at all.</value>
   </data>
   <data name="MiKo_2221_MessageFormat" xml:space="preserve">
-    <value>Provide a documentation for &lt;'{1}'/&gt;</value>
+    <value>Provide a documentation for &lt;{1}/&gt;</value>
   </data>
   <data name="MiKo_2221_Title" xml:space="preserve">
     <value>Documentation should not use empty XML tags</value>
