@@ -2652,6 +2652,15 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2220_Title" xml:space="preserve">
     <value>Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'</value>
   </data>
+  <data name="MiKo_2221_Description" xml:space="preserve">
+    <value>An empty documentation is a code smell. The developer created the empty XML documentation tag by intent but did not provide any documentation at all.</value>
+  </data>
+  <data name="MiKo_2221_MessageFormat" xml:space="preserve">
+    <value>Provide a documentation for &lt;'{1}'/&gt;</value>
+  </data>
+  <data name="MiKo_2221_Title" xml:space="preserve">
+    <value>Documentation should not use empty XML tags</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>

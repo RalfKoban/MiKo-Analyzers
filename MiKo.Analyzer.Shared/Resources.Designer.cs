@@ -7454,6 +7454,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An empty documentation is a code smell. The developer created the empty XML documentation tag by intent but did not provide any documentation at all..
+        /// </summary>
+        public static string MiKo_2221_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2221_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide a documentation for &lt;&apos;{1}&apos;/&gt;.
+        /// </summary>
+        public static string MiKo_2221_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2221_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not use empty XML tags.
+        /// </summary>
+        public static string MiKo_2221_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2221_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
