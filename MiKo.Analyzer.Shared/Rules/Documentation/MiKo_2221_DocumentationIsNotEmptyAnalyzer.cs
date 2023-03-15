@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                    Constants.XmlTag.Example,
                                                                    Constants.XmlTag.Exception,
                                                                    Constants.XmlTag.Code,
+                                                                   Constants.XmlTag.Note,
                                                                };
 
         public MiKo_2221_DocumentationIsNotEmptyAnalyzer() : base(Id)
@@ -29,7 +30,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            return comment.GetEmptyXmlSyntax(Tags).Select(xml => Issue(symbol.Name, xml, xml.GetName()));
+            foreach (var xml in comment.GetEmptyXmlSyntax(Tags))
+            {
+                var tagName = xml.GetName();
+
+                if (tagName == Constants.XmlTag.Code && xml.Attributes.Any(_ => _.GetName() == "source"))
+                {
+                    // ignore <code> tags with a 'source' attribute as that attribute refers to the coding snippet
+                    continue;
+                }
+
+                yield return Issue(symbol.Name, xml, tagName);
+            }
         }
     }
 }

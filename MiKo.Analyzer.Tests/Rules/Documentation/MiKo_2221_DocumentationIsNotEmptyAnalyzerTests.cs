@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Constants.XmlTag.Code,
                 Constants.XmlTag.Example,
                 Constants.XmlTag.Exception,
+                Constants.XmlTag.Note,
                 Constants.XmlTag.Overloads,
                 Constants.XmlTag.Remarks,
                 Constants.XmlTag.Returns,
@@ -31,6 +32,13 @@ public class TestMe
 /// <" + tag + @">
 /// Some summary.
 /// </" + tag + @">
+public class TestMe
+{
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_code_tag_with_source() => No_issue_is_reported_for(@"
+/// <code source=""some reference to file ""/>
 public class TestMe
 {
 }");
