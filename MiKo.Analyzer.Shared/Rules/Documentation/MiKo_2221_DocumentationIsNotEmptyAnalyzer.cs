@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                    Constants.XmlTag.Exception,
                                                                    Constants.XmlTag.Code,
                                                                    Constants.XmlTag.Note,
+                                                                   Constants.XmlTag.Value,
                                                                };
 
         public MiKo_2221_DocumentationIsNotEmptyAnalyzer() : base(Id)

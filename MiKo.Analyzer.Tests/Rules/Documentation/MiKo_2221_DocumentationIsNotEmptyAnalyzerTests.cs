@@ -19,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 Constants.XmlTag.Remarks,
                 Constants.XmlTag.Returns,
                 Constants.XmlTag.Summary,
+                Constants.XmlTag.Value,
             };
 
         [Test]
