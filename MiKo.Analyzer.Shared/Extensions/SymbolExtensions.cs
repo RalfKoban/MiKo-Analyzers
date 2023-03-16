@@ -546,31 +546,15 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
-                    {
-                        var symbol = value;
+                {
+                    return value.AnyBaseType(_ => baseClass == string.Intern(_.ToString()));
+                }
 
-                        while (true)
-                        {
-                            var fullName = string.Intern(symbol.ToString());
-
-                            if (baseClass == fullName)
-                            {
-                                return true;
-                            }
-
-                            var baseType = symbol.BaseType;
-
-                            if (baseType is null)
-                            {
-                                return false;
-                            }
-
-                            symbol = baseType;
-                        }
-                    }
+                default:
+                {
+                    return false;
+                }
             }
-
-            return false;
         }
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName, string baseClassFullQualifiedName)
@@ -604,36 +588,18 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
-                    {
-                        var symbol = value;
+                {
+                    return value.AnyBaseType(_ =>
+                                                 {
+                                                     var fullName = string.Intern(_.ToString());
 
-                        while (true)
-                        {
-                            var fullName = string.Intern(symbol.ToString());
+                                                     return baseClassName == fullName || baseClassFullQualifiedName == fullName;
+                                                 });
+                }
 
-                            if (baseClassName == fullName)
-                            {
-                                return true;
-                            }
-
-                            if (baseClassFullQualifiedName == fullName)
-                            {
-                                return true;
-                            }
-
-                            var baseType = symbol.BaseType;
-
-                            if (baseType is null)
-                            {
-                                return false;
-                            }
-
-                            symbol = baseType;
-                        }
-                    }
+                default:
+                    return false;
             }
-
-            return false;
         }
 
         internal static bool IsRelated(this ITypeSymbol value, ITypeSymbol type)
@@ -1097,15 +1063,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsRoutedEvent(this ITypeSymbol value)
         {
-            switch (value.Name)
+            if (value.TypeKind == TypeKind.Class && value.IsSealed)
             {
-                case "RoutedEvent":
-                case "System.Windows.RoutedEvent":
-                    return true;
-
-                default:
-                    return false;
+                switch (value.Name)
+                {
+                    case "RoutedEvent":
+                    case "System.Windows.RoutedEvent":
+                        return true;
+                }
             }
+
+            return false;
         }
 
         internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
