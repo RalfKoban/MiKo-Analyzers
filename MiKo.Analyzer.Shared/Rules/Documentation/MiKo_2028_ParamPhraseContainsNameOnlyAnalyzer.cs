@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetPhrases(parameter.Name);
 
-            if (comment.EqualsAny(phrases, StringComparison.OrdinalIgnoreCase))
+            if (comment.EqualsAny(phrases))
             {
                yield return Issue(parameter);
             }

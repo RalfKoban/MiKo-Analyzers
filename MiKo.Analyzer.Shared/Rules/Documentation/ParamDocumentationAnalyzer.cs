@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var parameterCommentXml = parameter.GetComment(commentXml);
 
-                if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.OrdinalIgnoreCase))
+                if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase))
                 {
                     continue;
                 }

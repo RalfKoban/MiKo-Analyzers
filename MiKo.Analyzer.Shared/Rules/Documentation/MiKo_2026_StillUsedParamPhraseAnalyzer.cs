@@ -130,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var comment = parameter.GetComment(commentXml);
 
-                    if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
+                    if (comment.EqualsAny(Phrases))
                     {
                         yield return Issue(parameter);
                     }
