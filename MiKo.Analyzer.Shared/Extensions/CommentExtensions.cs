@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetComments(string commentXml, string xmlTag, string xmlSubElement) => Cleaned(GetCommentElements(commentXml, xmlTag).Descendants(xmlSubElement));
 
-        internal static IEnumerable<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
+        internal static IReadOnlyCollection<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
 
         internal static IEnumerable<string> GetOverloadSummaries(this IMethodSymbol symbol) => GetOverloadSummaries(symbol.GetDocumentationCommentXml());
 
@@ -106,7 +106,7 @@ namespace MiKoSolutions.Analyzers
             return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).Where(_ => _ != null);
         }
 
-        internal static IEnumerable<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.Trim());
+        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.Trim());
 
         internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
