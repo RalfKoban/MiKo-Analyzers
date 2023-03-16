@@ -81,6 +81,81 @@ public enum TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_XML_summary_on_inherited_method_if_see_refers_to_a_type() => No_issue_is_reported_for(@"
+using System.Runtime.Serialization;
+
+public class TestMe : ISerializable
+{
+    /// <summary>
+    /// Populates a <see cref=""SerializationInfo""/> with the data needed to serialize the target object.
+    /// </summary>
+    /// <param name=""info"">
+    /// The <see cref=""SerializationInfo""/> to populate with data.
+    /// </param>
+    /// <param name=""context"">
+    /// The destination (see <see cref=""StreamingContext""/>) for this serialization.
+    /// </param>
+    /// <exception cref=""SecurityException"">
+    /// The caller does not have the required permission.
+    /// </exception>
+    [SecurityCritical]
+    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_XML_summary_on_inherited_method_if_see_refers_to_another_method() => No_issue_is_reported_for(@"
+using System.Runtime.Serialization;
+
+public class TestMe : ISerializable
+{
+    /// <summary>
+    /// Populates a <see cref=""SerializationInfo""/> with the data needed to serialize the target object, such as <see cref=""object.ToString()""/>.
+    /// </summary>
+    /// <param name=""info"">
+    /// The <see cref=""SerializationInfo""/> to populate with data.
+    /// </param>
+    /// <param name=""context"">
+    /// The destination (see <see cref=""StreamingContext""/>) for this serialization.
+    /// </param>
+    /// <exception cref=""SecurityException"">
+    /// The caller does not have the required permission.
+    /// </exception>
+    [SecurityCritical]
+    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_XML_summary_on_inherited_method_if_see_refers_to_same_method() => An_issue_is_reported_for(@"
+using System.Runtime.Serialization;
+
+public class TestMe : ISerializable
+{
+    /// <summary>
+    /// Populates a <see cref=""SerializationInfo""/> with the data needed to serialize the target object (see <see cref=""ISerializable.GetObjectData""/>).
+    /// </summary>
+    /// <param name=""info"">
+    /// The <see cref=""SerializationInfo""/> to populate with data.
+    /// </param>
+    /// <param name=""context"">
+    /// The destination (see <see cref=""StreamingContext""/>) for this serialization.
+    /// </param>
+    /// <exception cref=""SecurityException"">
+    /// The caller does not have the required permission.
+    /// </exception>
+    [SecurityCritical]
+    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_XML_summary_of_named_type_([Values("interface", "class")] string type, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -127,15 +202,15 @@ public class TestMe
         public void An_issue_is_reported_for_XML_summary_of_property_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
-    int DoSomething { get; set; }
+    int Something { get; set; }
 }
 
 public class TestMe : ITestMe
 {
     /// <summary>
-    /// " + phrase.Replace(Marker, "bla") + @"
+    /// " + phrase.Replace(Marker, "ITestMe.Something") + @"
     /// </summary>
-    public int DoSomething { get; set; }
+    public int Something { get; set; }
 }
 ");
 
@@ -149,7 +224,7 @@ public interface ITestMe
 public class TestMe : ITestMe
 {
     /// <summary>
-    /// " + phrase.Replace(Marker, "bla") + @"
+    /// " + phrase.Replace(Marker, "ITestMe.MyEvent") + @"
     /// </summary>
     public event EventHandler MyEvent;
 }

@@ -45,20 +45,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return true;
             }
 
+            var type = cref.GetCrefType();
+            var linkedSymbol = type?.GetSymbol(compilation);
+
             switch (symbol)
             {
                 case IPropertySymbol _:
+                {
+                    return linkedSymbol is IPropertySymbol linked && linked.Name == symbol.Name && symbol.IsInterfaceImplementation();
+                }
+
                 case IEventSymbol _:
+                {
+                    return linkedSymbol is IEventSymbol linked && linked.Name == symbol.Name && symbol.IsInterfaceImplementation();
+                }
+
                 case IMethodSymbol _:
                 {
-                    return symbol.IsInterfaceImplementation();
+                    return linkedSymbol is IMethodSymbol linked && linked.Name == symbol.Name && symbol.IsInterfaceImplementation();
                 }
 
                 case ITypeSymbol typeSymbol:
                 {
-                    var type = cref.GetCrefType();
-
-                    return type?.GetSymbol(compilation) is ITypeSymbol linked && typeSymbol.IsRelated(linked);
+                    return linkedSymbol is ITypeSymbol linked && typeSymbol.IsRelated(linked);
                 }
 
                 default:

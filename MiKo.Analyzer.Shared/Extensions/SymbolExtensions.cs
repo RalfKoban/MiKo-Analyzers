@@ -442,6 +442,28 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool AnyBaseType(this ITypeSymbol value, Predicate<ITypeSymbol> callback)
+        {
+            var symbol = value;
+
+            while (true)
+            {
+                if (callback(symbol))
+                {
+                    return true;
+                }
+
+                var baseType = symbol.BaseType;
+
+                if (baseType is null)
+                {
+                    return false;
+                }
+
+                symbol = baseType;
+            }
+        }
+
         internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
             var symbol = value;
@@ -616,24 +638,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsRelated(this ITypeSymbol value, ITypeSymbol type)
         {
-            if (type.TypeKind == TypeKind.Interface)
+            switch (type.TypeKind)
             {
-                if (value.AllInterfaces.Contains(type))
+                case TypeKind.Interface:
                 {
                     // its an interface implementation, so we do not need an extra type
-                    return true;
+                    return value.AllInterfaces.Contains(type, SymbolEqualityComparer.Default);
                 }
-            }
-            else
-            {
-                if (value.IncludingAllBaseTypes().Contains(type))
+
+                case TypeKind.Class:
+                case TypeKind.Struct:
                 {
                     // its a base type, so we do not need an extra type
-                    return true;
+                    return value.AnyBaseType(_ => _.Equals(type, SymbolEqualityComparer.Default));
+                }
+
+                default:
+                {
+                    return false;
                 }
             }
-
-            return false;
         }
 
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
@@ -1159,7 +1183,7 @@ namespace MiKoSolutions.Analyzers
                     fieldNames = Constants.Markers.FieldPrefixes.Select(_ => _ + parameterName).ToArray();
                 }
 
-                if (field.Name.EqualsAny(fieldNames, StringComparison.OrdinalIgnoreCase))
+                if (field.Name.EqualsAny(fieldNames))
                 {
                     return true;
                 }
