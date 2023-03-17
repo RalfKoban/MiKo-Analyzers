@@ -19,14 +19,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var affectedTokens = syntax.GetXmlTextTokens()
                                        .Where(_ => _.GetLocation().Contains(diagnostic.Location))
-                                       .Where(_ => _.ValueText.Contains("n't"));
+                                       .Where(_ => _.ValueText.Contains("n't") || _.ValueText.Contains("nt"));
 
             return syntax.ReplaceTokens(affectedTokens, (original, rewritten) => original.WithText(GetFixedText(original.Text)));
         }
 
-        private static StringBuilder GetFixedText(string text) => new StringBuilder(text).Replace("an't", "annot")
+        private static StringBuilder GetFixedText(string text) => new StringBuilder(text).Replace("adnt", "ad not")
+                                                                                         .Replace("an't", "annot")
+                                                                                         .Replace("arent", "are not")
+                                                                                         .Replace("Arent", "Are not")
+                                                                                         .Replace("asnt", "as not")
+                                                                                         .Replace("avent", "ave not")
+                                                                                         .Replace("cant", "cannot")
+                                                                                         .Replace("Cant", "Cannot")
+                                                                                         .Replace("dont", "do not")
+                                                                                         .Replace("Dont", "Do not")
+                                                                                         .Replace("eednt", "eed not")
+                                                                                         .Replace("erent", "ere not")
+                                                                                         .Replace("idnt", "id not")
+                                                                                         .Replace("oesnt", "oes not")
+                                                                                         .Replace("ouldnt", "ould not")
+                                                                                         .Replace("snt", "s not")
+                                                                                         .Replace("wont", "will not")
                                                                                          .Replace("won't", "will not")
+                                                                                         .Replace("Wont", "Will not")
                                                                                          .Replace("Won't", "Will not")
                                                                                          .Replace("n't", " not");
+
     }
 }

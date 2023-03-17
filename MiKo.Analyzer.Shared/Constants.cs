@@ -659,6 +659,25 @@ namespace MiKoSolutions.Analyzers
                     "weren't",
                     "daren't",
                     "needn't",
+
+                    // without apostrophes
+                    "cant",
+                    "dont",
+                    "wont",
+                    "couldnt",
+                    "shouldnt",
+                    "wouldnt",
+                    "doesnt",
+                    "didnt",
+                    "isnt",
+                    // "arent", // ignore this as it is also contained in something like 'parent'
+                    "hasnt",
+                    "havent",
+                    "hadnt",
+                    "wasnt",
+                    "werent",
+                    "darent",
+                    "neednt",
                 };
 
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
