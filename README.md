@@ -188,7 +188,7 @@ The following tables list all the 355 rules that are currently provided by the a
 |MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2044|Documentation references method parameters correctly|&#x2713;|&#x2713;|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters|&#x2713;|&#x2713;|
-|MiKo_2046|Documentation should reference type parameters correctly|&#x2713;|\-|
+|MiKo_2046|Documentation should reference type parameters correctly|&#x2713;|&#x2713;|
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a default starting phrase|&#x2713;|\-|
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'|&#x2713;|\-|

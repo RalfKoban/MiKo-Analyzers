@@ -720,6 +720,7 @@ namespace MiKoSolutions.Analyzers
                 internal const string Cref = "cref";
                 internal const string Langword = "langword";
                 internal const string Langref = "langref";
+                internal const string Name = "name";
                 internal const string Type = "type";
             }
 

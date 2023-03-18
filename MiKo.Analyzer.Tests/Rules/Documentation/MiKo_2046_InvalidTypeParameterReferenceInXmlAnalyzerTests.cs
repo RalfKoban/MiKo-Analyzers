@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -163,8 +164,29 @@ public class TestMe<T> where T: class
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_([ValueSource(nameof(WrongTags))] string tag)
+        {
+            const string Template = @"
+using System;
+
+/// <summary>
+/// Does something with <###""T""/>.
+/// </summary>
+public class TestMe<T> where T: class
+{
+    public void DoSomething(T t)
+    { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", tag), Template.Replace("###", "typeparamref name="));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2046_CodeFixProvider();
     }
 }

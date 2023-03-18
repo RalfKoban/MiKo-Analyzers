@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -79,6 +78,16 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
+        internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode syntax)
+        {
+            switch (syntax)
+            {
+                case XmlElementSyntax e: return e.GetAttributes<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Name);
+                case XmlEmptyElementSyntax ee: return ee.Attributes.OfType<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Name);
+                default: return null;
+            }
+        }
 
         internal static string GetParameterName(this XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
 

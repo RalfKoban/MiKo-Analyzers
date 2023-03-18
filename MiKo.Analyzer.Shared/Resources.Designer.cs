@@ -5743,6 +5743,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace invalid type parameter reference.
+        /// </summary>
+        public static string MiKo_2046_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2046_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should reference type parameters properly via &apos;&lt;typeparamref name=&quot;...&quot; /&gt;&apos;..
         /// </summary>
         public static string MiKo_2046_Description {
@@ -5752,7 +5761,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace invalid type parameter reference &apos;{1}&apos; by &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace invalid type parameter reference.
         /// </summary>
         public static string MiKo_2046_MessageFormat {
             get {
