@@ -21,14 +21,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.InheritsFrom<Attribute>() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
-        {
-            if (summaries.None(_ => _.StartsWithAny(Constants.Comments.AttributeSummaryStartingPhrase, StringComparison.Ordinal)))
-            {
-                return new[] { Issue(symbol, StartingPhrases) };
-            }
+        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), Constants.XmlTag.Summary, StartingPhrases);
 
-            return Enumerable.Empty<Diagnostic>();
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.XmlTag.Summary, StartingPhrases);
+
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
+        }
+
+        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
+        {
+            comparison = StringComparison.Ordinal;
+
+            var text = valueText.AsSpan().TrimStart();
+
+            var startsWith = text.StartsWithAny(Constants.Comments.AttributeSummaryStartingPhrase, comparison);
+
+            problematicText = valueText.FirstWord();
+
+            return startsWith is false;
         }
     }
 }
