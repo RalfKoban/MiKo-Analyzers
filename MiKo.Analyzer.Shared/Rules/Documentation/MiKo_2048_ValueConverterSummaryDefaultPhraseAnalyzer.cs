@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => (symbol.IsValueConverter() || symbol.IsMultiValueConverter()) && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), Constants.XmlTag.Summary, StartingPhrase);
+        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), StartingPhrase);
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.XmlTag.Summary, StartingPhrase);
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
 
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
