@@ -69,6 +69,23 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_summary_on_generic_method_with_see_tag() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething<T>(T t) where T : class
+    { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_summary_on_non_generic_method() => No_issue_is_reported_for(@"
 using System;
 

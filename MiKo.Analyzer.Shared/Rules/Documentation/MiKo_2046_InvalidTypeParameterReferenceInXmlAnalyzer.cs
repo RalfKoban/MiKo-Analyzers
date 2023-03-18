@@ -29,7 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (name.IsNullOrWhiteSpace())
             {
                 var nameAttribute = node.GetNameAttribute();
-                name = nameAttribute.TextTokens.First().ValueText;
+                if (nameAttribute != null)
+                {
+                    name = nameAttribute.TextTokens.First().ValueText;
+                }
             }
 
             return name;
