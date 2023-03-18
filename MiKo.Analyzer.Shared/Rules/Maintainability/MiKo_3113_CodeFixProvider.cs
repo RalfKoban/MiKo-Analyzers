@@ -40,10 +40,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return statement.ReplaceNode(lambda, lambda.WithExpressionBody(assertThat));
             }
 
-            return Microsoft.CodeAnalysis.SyntaxNodeExtensions.WithTriviaFrom(statement.WithExpression(assertThat), statement);
+            return statement.WithExpression(assertThat).WithTriviaFrom(statement);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => root.WithUsing("NUnit.Framework").WithoutUsing("FluentAssertions");
+        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        {
+            // only remove assertions if there are no more diagnostics
+            // return root.WithUsing("NUnit.Framework").WithoutUsing("FluentAssertions");
+            return root.WithUsing("NUnit.Framework");
+        }
 
         private static InvocationExpressionSyntax ConvertToAssertThat(CodeFixContext context, MemberAccessExpressionSyntax shouldNode)
         {
