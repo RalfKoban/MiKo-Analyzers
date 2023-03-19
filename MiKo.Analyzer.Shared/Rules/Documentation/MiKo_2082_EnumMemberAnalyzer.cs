@@ -23,13 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override Diagnostic StartIssue(SyntaxNode node)
-        {
-            var location = node.GetLocation();
-
-            return Issue(location);
-        }
-
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(location);
 
         // overridden because we want to inspect the fields of the type as well
@@ -58,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             comparison = StringComparison.OrdinalIgnoreCase;
 

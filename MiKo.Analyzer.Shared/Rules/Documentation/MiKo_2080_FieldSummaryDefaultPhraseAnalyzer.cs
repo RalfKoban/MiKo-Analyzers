@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -71,27 +70,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.ShallAnalyze(symbol);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
-        {
-            var fieldSymbol = (IFieldSymbol)symbol;
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, GetStartingPhrase((IFieldSymbol)symbol));
 
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
+        }
+
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
+        {
+            comparison = Comparison;
+
+            var comment = valueText.TrimStart();
+
+            var fieldSymbol = (IFieldSymbol)symbol;
             var phrase = GetStartingPhrase(fieldSymbol);
 
-            if (summaries.Any(_ => _.StartsWith(phrase, Comparison)))
+            if (comment.StartsWith(phrase, Comparison))
             {
-                yield break;
+                // no issue
+                problematicText = null;
+
+                return false;
             }
 
             // alternative check for enumerables
-            if (fieldSymbol.IsConst is false && fieldSymbol.Type.IsEnumerable())
+            if (fieldSymbol.IsConst is false && fieldSymbol.Type.IsEnumerable() && comment.StartsWith(StartingDefaultPhrase, Comparison))
             {
-                if (summaries.Any(_ => _.StartsWith(StartingDefaultPhrase, Comparison)))
-                {
-                    yield break;
-                }
+                // no issue
+                problematicText = null;
+
+                return false;
             }
 
-            yield return Issue(symbol, phrase);
+            problematicText = comment.FirstWord();
+
+            return true;
         }
     }
 }

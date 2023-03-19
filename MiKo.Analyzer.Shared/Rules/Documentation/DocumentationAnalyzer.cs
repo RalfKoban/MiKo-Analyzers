@@ -353,11 +353,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
 
-        protected virtual Diagnostic StartIssue(SyntaxNode node) => Issue(node);
+        protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
 
         protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
 
-        protected virtual bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
+        protected virtual bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             problematicText = null;
             comparison = StringComparison.Ordinal;
@@ -384,7 +384,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue; // skip over the start tag and name syntax
                         }
 
-                        return StartIssue(node); // it's no text, so it must be something different
+                        return StartIssue(symbol, node); // it's no text, so it must be something different
                     }
 
                     case XmlNameSyntax _:
@@ -406,7 +406,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 }
 
                                 // we found some text
-                                if (AnalyzeTextStart(valueText, out var problematicText, out var comparison))
+                                if (AnalyzeTextStart(symbol, valueText, out var problematicText, out var comparison))
                                 {
                                     // it's no valid text, so we have an issue
                                     var position = valueText.IndexOf(problematicText, comparison);
@@ -428,7 +428,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
 
                     default:
-                        return StartIssue(node); // it's no text, so it must be something different
+                        return StartIssue(symbol, node); // it's no text, so it must be something different
                 }
             }
 

@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             comparison = StringComparison.Ordinal;
 

@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override Diagnostic StartIssue(SyntaxNode node) => null; // this is no issue as we do not start with any word
+        protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => null; // this is no issue as we do not start with any word
 
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
 
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             comparison = StringComparison.Ordinal;
 

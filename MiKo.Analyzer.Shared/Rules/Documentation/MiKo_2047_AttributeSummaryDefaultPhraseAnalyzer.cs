@@ -21,8 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.InheritsFrom<Attribute>() && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic StartIssue(SyntaxNode node) => Issue(node.GetLocation(), Constants.XmlTag.Summary, StartingPhrases);
-
         protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.XmlTag.Summary, StartingPhrases);
 
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
@@ -36,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected override bool AnalyzeTextStart(string valueText, out string problematicText, out StringComparison comparison)
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
         {
             comparison = StringComparison.Ordinal;
 
