@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
-            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+            var comment = exceptionComment.GetTextTrimmed();
 
             if (comment.EndsWith(Constants.Comments.ObjectDisposedExceptionEndingPhrase, Comparison))
             {

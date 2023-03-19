@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             List<Diagnostic> issues = null;
 
             // get rid of the para tags as we are not interested into them
-            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+            var comment = exceptionComment.GetTextTrimmed();
 
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name));
 
