@@ -23,8 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Name.StartsWith("Contains", StringComparison.OrdinalIgnoreCase) && symbol.Parameters.Any() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => comment.EndsWithAny(Phrases, StringComparison.Ordinal)
-                                                                                                                                                          ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                          : new[] { Issue(parameter.Name, parameterComment.StartTag, Phrase) };
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
+        {
+            if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal) is false)
+            {
+                yield return Issue(parameter.Name, parameterComment.StartTag, Phrase);
+            }
+        }
     }
 }
