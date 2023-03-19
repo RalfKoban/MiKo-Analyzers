@@ -51,6 +51,13 @@ public class TestMe
     public bool DoSomethingDifferent()
     {
     }
+
+    /// <summary>
+    /// <see cref=""TestMe""/> something.
+    /// </summary>
+    public bool DoSomethingLinked()
+    {
+    }
 }
 ");
 
