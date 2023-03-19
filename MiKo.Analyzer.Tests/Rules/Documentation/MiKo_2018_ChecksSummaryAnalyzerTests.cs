@@ -34,6 +34,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_XML() => No_issue_is_reported_for(@"
+/// <summary>
+/// <see cref=""TestMe""/> documentation.
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
 /// <summary>
 /// <para>
