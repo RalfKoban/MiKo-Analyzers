@@ -82,7 +82,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static Location GetContentsLocation(this XmlElementSyntax value)
         {
-            var span = value.Content.Span;
+            var contents = value.Content;
+            var span = contents.Span;
+
+            if (contents.Count > 0)
+            {
+                var start = FindStart(contents);
+                var end = FindEnd(contents);
+
+                span = TextSpan.FromBounds(start, end);
+            }
 
             if (span.IsEmpty)
             {
@@ -93,6 +102,72 @@ namespace MiKoSolutions.Analyzers
             }
 
             return Location.Create(value.SyntaxTree, span);
+
+            int FindStart(SyntaxList<XmlNodeSyntax> list)
+            {
+                XmlNodeSyntax first = null;
+
+                // try to find the first syntax that is not only an XmlCommentExterior
+                for (var i = 0; i < list.Count; i++)
+                {
+                    first = list[i];
+
+                    if (first is XmlTextSyntax t && t.IsWhiteSpaceOnlyText())
+                    {
+                        continue;
+                    }
+
+                    break;
+                }
+
+                var start = first?.SpanStart ?? -1;
+
+                // try to get rid of white-spaces at the beginning
+                if (first is XmlTextSyntax firstText)
+                {
+                    var token = firstText.TextTokens.FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
+                    var text = token.Text;
+
+                    var offset = text.Length - text.TrimStart().Length;
+
+                    start = token.SpanStart + offset;
+                }
+
+                return start;
+            }
+
+            int FindEnd(SyntaxList<XmlNodeSyntax> list)
+            {
+                XmlNodeSyntax last = null;
+
+                // try to find the last syntax that is not only an XmlCommentExterior
+                for (var i = list.Count - 1; i > -1; i--)
+                {
+                    last = list[i];
+
+                    if (last is XmlTextSyntax t && t.IsWhiteSpaceOnlyText())
+                    {
+                        continue;
+                    }
+
+                    break;
+                }
+
+                var end = last?.Span.End ?? -1;
+
+                // try to get rid of white-spaces at the end
+                if (last is XmlTextSyntax lastText)
+                {
+                    var token = lastText.TextTokens.LastOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
+                    var text = token.Text;
+
+                    var offset = text.Length - text.TrimEnd().Length;
+
+                    end = token.Span.End - offset;
+                }
+
+                return end;
+            }
         }
 
         internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode syntax)
