@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 using MiKoSolutions.Analyzers.Linguistics;
 
@@ -79,7 +80,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
 
-        internal static Location GetContentsLocation(this XmlElementSyntax value) => Location.Create(value.SyntaxTree, value.Content.Span);
+        internal static Location GetContentsLocation(this XmlElementSyntax value)
+        {
+            var span = value.Content.Span;
+
+            if (span.IsEmpty)
+            {
+                var start = value.StartTag.GreaterThanToken.SpanStart;
+                var end = value.EndTag.LessThanSlashToken.SpanStart;
+
+                span = TextSpan.FromBounds(start, end);
+            }
+
+            return Location.Create(value.SyntaxTree, span);
+        }
 
         internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode syntax)
         {

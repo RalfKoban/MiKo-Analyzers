@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var node in comment.GetXmlSyntax(xmlTag))
                 {
-                    yield return Issue(symbol.Name, node.StartTag, xmlTag, phrase[0]);
+                    yield return Issue(symbol.Name, node.GetContentsLocation(), xmlTag, phrase[0]);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var node in comment.GetXmlSyntax(xmlTag))
                 {
-                    yield return Issue(symbol.Name, node.StartTag, xmlTag, phrase[0]);
+                    yield return Issue(symbol.Name, node.GetContentsLocation(), xmlTag, phrase[0]);
                 }
             }
         }

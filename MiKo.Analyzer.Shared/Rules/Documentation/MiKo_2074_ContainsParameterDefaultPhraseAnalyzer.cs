@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal) is false)
             {
-                yield return Issue(parameter.Name, parameterComment.StartTag, Phrase);
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase);
             }
         }
     }

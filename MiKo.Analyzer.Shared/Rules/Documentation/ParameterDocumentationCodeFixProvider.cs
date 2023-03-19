@@ -14,9 +14,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 switch (node)
                 {
-                    case XmlElementStartTagSyntax start: return start.Parent;
-                    case XmlElementSyntax element when element.GetName() == Constants.XmlTag.Param: return element;
-                    default: return null;
+                    case XmlElementStartTagSyntax start:
+                        return start.Parent;
+
+                    case XmlElementSyntax element when element.GetName() == Constants.XmlTag.Param:
+                        return element;
+
+                    case XmlTextSyntax _:
+                        continue; // we are part of an XML element, so we have to loop over it
+
+                    default:
+                        return null;
                 }
             }
 

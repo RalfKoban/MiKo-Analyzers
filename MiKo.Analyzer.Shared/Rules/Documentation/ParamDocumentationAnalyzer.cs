@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    ? phrase.HumanizedConcatenated()
                                    : phrase[0].SurroundedWithApostrophe();
 
-                yield return Issue(parameter.Name, parameterComment.StartTag, string.Intern(proposal));
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), string.Intern(proposal));
             }
         }
 
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                ? phrases.HumanizedConcatenated()
                                : phrases[0].SurroundedWithApostrophe();
 
-            return new[] { Issue(parameter.Name, parameterComment.StartTag, string.Intern(proposal)) };
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), string.Intern(proposal)) };
         }
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;

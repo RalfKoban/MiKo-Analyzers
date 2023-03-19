@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     syntaxNode = comment.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == xmlTag);
                 }
 
-                yield return Issue(owningSymbol.Name, syntaxNode.StartTag, xmlTag, startingPhrases[0], endingPhrases[0]);
+                yield return Issue(owningSymbol.Name, syntaxNode.GetContentsLocation(), xmlTag, startingPhrases[0], endingPhrases[0]);
             }
         }
 
