@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetPhrases(parameter.Name);
 
-            if (comment.EqualsAny(phrases))
+            if (parameterComment.GetTextTrimmed().EqualsAny(phrases))
             {
-               yield return Issue(parameter);
+               yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
             }
         }
 

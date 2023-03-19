@@ -79,6 +79,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
 
+        internal static Location GetContentsLocation(this XmlElementSyntax value) => Location.Create(value.SyntaxTree, value.Content.Span);
+
         internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode syntax)
         {
             switch (syntax)
