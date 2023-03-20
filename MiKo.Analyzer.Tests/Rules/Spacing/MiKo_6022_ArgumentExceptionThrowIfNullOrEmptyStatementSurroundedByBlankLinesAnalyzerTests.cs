@@ -94,6 +94,26 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_combined_ThrowIf_statements_as_first_statements_with_blank_line_after_all_of_them() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(object o1, object o2, object o3)
+        {
+            ArgumentNullException.ThrowIfNull(o1);
+            ArgumentException.ThrowIfNullOrEmpty(o2);
+            ObjectDisposedException.ThrowIf(true, o3);
+
+            DoSomething(new object(), new object(), new object());
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_ThrowIfNullOrEmpty_statement_as_first_statement_with_no_blank_line_after_it() => An_issue_is_reported_for(@"
 using System;
 

@@ -21,5 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         protected override bool IsCall(ITypeSymbol type) => type?.Name == nameof(ObjectDisposedException);
 
         protected override bool IsCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel) => call.GetName() == "ThrowIf" && base.IsCall(call, semanticModel);
+
+        protected override bool IsAlsoCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel) => call.GetName()?.StartsWith("ThrowIf", StringComparison.Ordinal) is true;
     }
 }
