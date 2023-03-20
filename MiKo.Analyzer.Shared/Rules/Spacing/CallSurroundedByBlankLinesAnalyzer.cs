@@ -27,11 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return type != null && IsCall(type);
         }
 
-        private bool IsCall(StatementSyntax statement, SemanticModel semanticModel) => statement is ExpressionStatementSyntax e && IsCall(e, semanticModel);
+        protected virtual bool IsAlsoCall(MemberAccessExpressionSyntax call, SemanticModel semanticModel) => IsCall(call, semanticModel);
 
-        private bool IsCall(ExpressionStatementSyntax statement, SemanticModel semanticModel) => statement.Expression is InvocationExpressionSyntax i && IsCall(i, semanticModel);
+        private bool IsAlsoCall(StatementSyntax statement, SemanticModel semanticModel) => statement is ExpressionStatementSyntax e && IsAlsoCall(e, semanticModel);
 
-        private bool IsCall(InvocationExpressionSyntax invocation, SemanticModel semanticModel) => invocation.Expression is MemberAccessExpressionSyntax call && IsCall(call, semanticModel);
+        private bool IsAlsoCall(ExpressionStatementSyntax statement, SemanticModel semanticModel) => statement.Expression is InvocationExpressionSyntax i && IsAlsoCall(i, semanticModel);
+
+        private bool IsAlsoCall(InvocationExpressionSyntax invocation, SemanticModel semanticModel) => invocation.Expression is MemberAccessExpressionSyntax call && IsAlsoCall(call, semanticModel);
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
         {
@@ -74,10 +76,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var callLineSpan = call.GetLocation().GetLineSpan();
 
             var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                               .Any(_ => IsCall(_, semanticModel) is false);
+                                               .Any(_ => IsAlsoCall(_, semanticModel) is false);
 
             var noBlankLinesAfter = statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
-                                              .Any(_ => IsCall(_, semanticModel) is false);
+                                              .Any(_ => IsAlsoCall(_, semanticModel) is false);
 
             if (noBlankLinesBefore || noBlankLinesAfter)
             {
