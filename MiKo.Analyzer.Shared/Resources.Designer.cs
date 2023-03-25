@@ -4102,7 +4102,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in namespace.
         /// </summary>
         public static string MiKo_1405_MessageFormat {
             get {

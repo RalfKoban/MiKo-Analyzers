@@ -1513,7 +1513,7 @@ Most times, a Lib suffix only signals that the assembly is a DLL (dynamic link l
 It does not matter if it is a library or an executable, what matters is the functionality it contains/provides.</value>
   </data>
   <data name="MiKo_1405_MessageFormat" xml:space="preserve">
-    <value>Do not use '{0}' in namespace</value>
+    <value>Do not use '{1}' in namespace</value>
   </data>
   <data name="MiKo_1405_Title" xml:space="preserve">
     <value>Namespaces should not contain 'Lib'</value>
