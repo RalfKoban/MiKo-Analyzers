@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -10,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1405";
 
-        private static readonly HashSet<string> LibraryNamespaces = new HashSet<string> { "Lib", "Library", "Libraries" };
+        private static readonly string[] LibraryNamespaces = { "Lib", "Library", "Libraries" };
 
         public MiKo_1405_LibraryNamespacesAnalyzer() : base(Id)
         {
@@ -20,9 +21,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var name in names)
             {
-                if (LibraryNamespaces.Contains(name.ValueText))
+                foreach (var libraryNamespace in LibraryNamespaces)
                 {
-                    yield return Issue(name);
+                    var namespaceName = name.ValueText;
+
+                    if (namespaceName.EndsWith(libraryNamespace, StringComparison.Ordinal))
+                    {
+                        yield return Issue(namespaceName, name, libraryNamespace);
+                    }
                 }
             }
         }
