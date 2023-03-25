@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1405";
 
-        private static readonly string[] LibraryNamespaces = { "Lib", "Library", "Libraries" };
+        private static readonly string[] LibraryNamespaces = { "Lib", "Libs", "Library", "Libraries" };
 
         public MiKo_1405_LibraryNamespacesAnalyzer() : base(Id)
         {
