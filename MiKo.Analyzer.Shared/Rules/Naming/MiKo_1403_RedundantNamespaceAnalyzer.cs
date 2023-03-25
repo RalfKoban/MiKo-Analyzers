@@ -15,14 +15,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
             var knownNamespaces = new HashSet<string>();
 
-            return qualifiedName.Split('.')
-                                .Where(_ => knownNamespaces.Add(_) is false)
-                                .Select(_ => Issue(_, location))
-                                .ToList();
+            foreach (var name in names.Where(_ => knownNamespaces.Add(_.ValueText) is false))
+            {
+                yield return Issue(name);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,12 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNamespaceDeclaration, SyntaxKind.NamespaceDeclaration);
 
-        protected abstract IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location);
+        protected abstract IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names);
 
         private void AnalyzeNamespaceDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var qualifiedName = ((NamespaceDeclarationSyntax)context.Node).Name;
-            var issues = AnalyzeNamespaceName(qualifiedName.ToString(), qualifiedName.GetLocation());
+            var node = (NamespaceDeclarationSyntax)context.Node;
+
+            // collect all names but start on namespace name to not include any attributes or else in the collection
+            var names = node.Name.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().Select(_ => _.Identifier);
+
+            var issues = AnalyzeNamespaceName(names);
 
             ReportDiagnostics(context, issues);
         }
