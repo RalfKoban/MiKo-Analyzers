@@ -1493,7 +1493,7 @@ Models are Entities. Commands, ViewModels and Views belong together and are UI s
     <value>To avoid redundancy and confused developers, namespaces should not be named after any parent namespace. Instead, it should be made more clear into which namespace a type belongs by choosing a proper name.</value>
   </data>
   <data name="MiKo_1403_MessageFormat" xml:space="preserve">
-    <value>Use another name for the namespace</value>
+    <value>Do not re-use '{0}' in namespace</value>
   </data>
   <data name="MiKo_1403_Title" xml:space="preserve">
     <value>Namespaces should not be named after any of their parent namespaces</value>

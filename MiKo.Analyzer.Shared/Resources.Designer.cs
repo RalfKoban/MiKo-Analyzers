@@ -4046,7 +4046,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use another name for the namespace.
+        ///   Looks up a localized string similar to Do not re-use &apos;{0}&apos; in namespace.
         /// </summary>
         public static string MiKo_1403_MessageFormat {
             get {
