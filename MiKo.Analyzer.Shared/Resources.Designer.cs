@@ -3991,7 +3991,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use technical name &apos;{1}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use technical name &apos;{0}&apos; in namespace.
         /// </summary>
         public static string MiKo_1401_MessageFormat {
             get {
@@ -4019,7 +4019,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use WPF design pattern name &apos;{1}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use WPF design pattern name &apos;{0}&apos; in namespace.
         /// </summary>
         public static string MiKo_1402_MessageFormat {
             get {
@@ -4073,7 +4073,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in namespace.
         /// </summary>
         public static string MiKo_1404_MessageFormat {
             get {
@@ -4102,7 +4102,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in namespace.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in namespace.
         /// </summary>
         public static string MiKo_1405_MessageFormat {
             get {

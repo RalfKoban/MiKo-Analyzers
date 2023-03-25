@@ -1474,7 +1474,7 @@ The audience of unit tests, however, are developers. Hence, such tests should no
     <value>Namespaces should not contain any language specific (technical) name, such as 'Interfaces', 'Exceptions' or 'Enums'.</value>
   </data>
   <data name="MiKo_1401_MessageFormat" xml:space="preserve">
-    <value>Do not use technical name '{1}' in namespace</value>
+    <value>Do not use technical name '{0}' in namespace</value>
   </data>
   <data name="MiKo_1401_Title" xml:space="preserve">
     <value>Namespaces should not contain technical language names</value>
@@ -1484,7 +1484,7 @@ The audience of unit tests, however, are developers. Hence, such tests should no
 Models are Entities. Commands, ViewModels and Views belong together and are UI specific parts.</value>
   </data>
   <data name="MiKo_1402_MessageFormat" xml:space="preserve">
-    <value>Do not use WPF design pattern name '{1}' in namespace</value>
+    <value>Do not use WPF design pattern name '{0}' in namespace</value>
   </data>
   <data name="MiKo_1402_Title" xml:space="preserve">
     <value>Namespaces should not be named after WPF specific design patterns</value>
@@ -1502,7 +1502,7 @@ Models are Entities. Commands, ViewModels and Views belong together and are UI s
     <value>Namespaces should not contain any unspecific name, such as 'Miscellaneous' or 'Utilities'.</value>
   </data>
   <data name="MiKo_1404_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in namespace</value>
+    <value>Do not use '{0}' in namespace</value>
   </data>
   <data name="MiKo_1404_Title" xml:space="preserve">
     <value>Namespaces should not contain unspecific names</value>
@@ -1513,7 +1513,7 @@ Most times, a Lib suffix only signals that the assembly is a DLL (dynamic link l
 It does not matter if it is a library or an executable, what matters is the functionality it contains/provides.</value>
   </data>
   <data name="MiKo_1405_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in namespace</value>
+    <value>Do not use '{0}' in namespace</value>
   </data>
   <data name="MiKo_1405_Title" xml:space="preserve">
     <value>Namespaces should not contain 'Lib'</value>

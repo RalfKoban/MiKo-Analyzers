@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -78,14 +79,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     : Pluralizer.GetPluralName(name);
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
-            var name = qualifiedName.GetNameOnlyPart();
+            var namePart = names.Last();
+
+            var name = namePart.ValueText;
             var betterName = FindBetterName(name);
 
             if (name != betterName)
             {
-                yield return Issue(qualifiedName, location, betterName);
+                yield return Issue(name, namePart, betterName);
             }
         }
     }

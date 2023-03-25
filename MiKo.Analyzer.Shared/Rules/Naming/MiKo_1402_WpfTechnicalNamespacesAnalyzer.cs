@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,22 +10,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1402";
 
-        private static readonly string[] TechnicalWPFNamespaces = { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
-        private static readonly string[] ModelNamespaces = { "ComponentModel", "ServiceModel" };
+        private static readonly HashSet<string> TechnicalWPFNamespaces = new HashSet<string> { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
+        private static readonly HashSet<string> ModelNamespaces = new HashSet<string> { "ComponentModel", "ServiceModel" };
 
         public MiKo_1402_WpfTechnicalNamespacesAnalyzer() : base(Id)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
-            var fullName = qualifiedName.Without(ModelNamespaces);
-
-            if (fullName.ContainsAny(TechnicalWPFNamespaces))
+            foreach (var name in names)
             {
-                var ns = TechnicalWPFNamespaces.Last(_ => fullName.Contains(_, StringComparison.OrdinalIgnoreCase));
+                var namespaceName = name.ValueText;
 
-                yield return Issue(qualifiedName, location, ns);
+                if (ModelNamespaces.Contains(namespaceName))
+                {
+                    continue;
+                }
+
+                if (TechnicalWPFNamespaces.Contains(namespaceName))
+                {
+                    yield return Issue(name);
+                }
             }
         }
     }

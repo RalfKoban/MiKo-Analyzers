@@ -17,11 +17,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(string qualifiedName, Location location)
+        protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
-            if (qualifiedName.Contains("Test", StringComparison.OrdinalIgnoreCase))
+            foreach (var name in names)
             {
-                yield return Issue(qualifiedName, location);
+                if (name.ValueText.Contains("Test", StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(name);
+                }
             }
         }
     }
