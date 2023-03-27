@@ -18,15 +18,13 @@ namespace System
         {
             if (value.IsNullOrWhiteSpace())
             {
-                return Enumerable.Empty<int>();
+                yield break;
             }
 
             if (finding.Length > value.Length)
             {
-                return Enumerable.Empty<int>();
+                yield break;
             }
-
-            List<int> indices = null;
 
             for (var index = 0; ; index += finding.Length)
             {
@@ -35,18 +33,11 @@ namespace System
                 if (index == -1)
                 {
                     // nothing more to find
-                    break;
+                    yield break;
                 }
 
-                if (indices is null)
-                {
-                    indices = new List<int>(1);
-                }
-
-                indices.Add(index);
+                yield return index;
             }
-
-            return indices ?? Enumerable.Empty<int>();
         }
 
         public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
