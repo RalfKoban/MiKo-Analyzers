@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -206,13 +207,104 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
-            var parameters = "(" + value.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
-            var staticPrefix = value.IsStatic ? "static " : string.Empty;
-            var asyncPrefix = value.IsAsync ? "async " : string.Empty;
+            var builder = new StringBuilder();
 
-            var methodName = GetMethodNameForKind(value);
+            if (value.IsStatic)
+            {
+                builder.Append("static ");
+            }
 
-            return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
+            if (value.IsAsync)
+            {
+                builder.Append("async ");
+            }
+
+            AppendMethodNameForKind(value, builder);
+            AppendParameters(value.Parameters, builder);
+
+            var signature = builder.ToString();
+
+            return signature;
+
+            void AppendMethodNameForKind(IMethodSymbol method, StringBuilder sb)
+            {
+                switch (method.MethodKind)
+                {
+                    case MethodKind.Constructor:
+                    case MethodKind.StaticConstructor:
+                        sb.Append(method.ContainingType.Name);
+                        break;
+
+                    default:
+                    {
+                        var returnType = method.ReturnType.MinimalTypeName();
+
+                        sb.Append(returnType).Append(" ").Append(method.Name);
+
+                        if (method.IsGenericMethod)
+                        {
+                            sb.Append("<");
+
+                            var typeParameters = method.TypeParameters;
+                            var count = typeParameters.Length - 1;
+
+                            for (var i = 0; i <= count; i++)
+                            {
+                                sb.Append(typeParameters[i].MinimalTypeName());
+
+                                if (i < count)
+                                {
+                                    sb.Append(",");
+                                }
+                            }
+
+                            sb.Append(">");
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            void AppendParameters(IReadOnlyList<IParameterSymbol> parameters, StringBuilder sb)
+            {
+                sb.Append("(");
+
+                var count = parameters.Count - 1;
+
+                for (var i = 0; i <= count; i++)
+                {
+                    AppendParameterSignature(parameters[i], sb);
+
+                    if (i < count)
+                    {
+                        sb.Append(",");
+                    }
+                }
+
+                sb.Append(")");
+            }
+
+            void AppendParameterSignature(IParameterSymbol parameter, StringBuilder sb)
+            {
+                sb.Append(GetModifierSignature(parameter));
+                sb.Append(parameter.Type.MinimalTypeName());
+            }
+
+            string GetModifierSignature(IParameterSymbol parameter)
+            {
+                if (parameter.IsParams)
+                {
+                    return "params ";
+                }
+
+                switch (parameter.RefKind)
+                {
+                    case RefKind.Ref: return "ref ";
+                    case RefKind.Out: return "out ";
+                    default: return string.Empty;
+                }
+            }
         }
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
@@ -300,7 +392,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>();
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
@@ -1224,45 +1316,6 @@ namespace MiKoSolutions.Analyzers
             return result != null;
         }
 
-        private static string GetMethodNameForKind(IMethodSymbol method)
-        {
-            switch (method.MethodKind)
-            {
-                case MethodKind.Constructor:
-                case MethodKind.StaticConstructor:
-                    return method.ContainingType.Name;
-
-                default:
-                    {
-                        var returnType = method.ReturnType.MinimalTypeName();
-
-                        if (method.IsGenericMethod)
-                        {
-                            var suffix = string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">");
-
-                            return string.Concat(returnType, " ", method.Name, suffix);
-                        }
-
-                        return string.Concat(returnType, " ", method.Name);
-                    }
-            }
-        }
-
-        private static string GetModifierSignature(IParameterSymbol parameter)
-        {
-            if (parameter.IsParams)
-            {
-                return "params ";
-            }
-
-            switch (parameter.RefKind)
-            {
-                case RefKind.Ref: return "ref ";
-                case RefKind.Out: return "out ";
-                default: return string.Empty;
-            }
-        }
-
         private static string GetNameWithoutInterfacePrefix(this ITypeSymbol value)
         {
             var typeName = value.Name;
@@ -1270,14 +1323,6 @@ namespace MiKoSolutions.Analyzers
             return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I')
                        ? typeName.Substring(1)
                        : typeName;
-        }
-
-        private static string GetParameterSignature(IParameterSymbol parameter)
-        {
-            var modifier = GetModifierSignature(parameter);
-            var parameterType = parameter.Type.MinimalTypeName();
-
-            return modifier + parameterType;
         }
     }
 }
