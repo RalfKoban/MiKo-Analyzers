@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "queue",
                 "result",
                 "results",
+                "set",
                 "source",
                 "stack",
                 "typesUnderTest",
@@ -220,8 +221,9 @@ using System.Xml;
 
 public class TestMe
 {
-    public void DoSomething(XmlDocument document)
+    public void DoSomething()
     {
+		XmlDocument document = null;
         XmlNode xmlNode = document.SelectSingleNode("""");
         XmlNode node = xmlNode.SelectSingleNode("""");
     }

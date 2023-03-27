@@ -81,6 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case Constants.LambdaIdentifiers.Fallback2:
                 case Constants.LambdaIdentifiers.Fallback3:
                 case "map":
+                case "set":
                 case "list":
                 case "array":
                 case "stack":
@@ -137,6 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             switch (type?.Name)
             {
+                case nameof(XmlDocument):
                 case nameof(XmlElement):
                 case nameof(XmlNode):
                 {
