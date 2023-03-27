@@ -200,6 +200,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return "m_source"; // special handling
             }
 
+            // it might be that the plural name consists of multiple words (such as 'TestMe'), so just pick up the first word
             var firstWord = pluralName.FirstWord();
 
             if (firstWord.EndsWith("s", comparison))
