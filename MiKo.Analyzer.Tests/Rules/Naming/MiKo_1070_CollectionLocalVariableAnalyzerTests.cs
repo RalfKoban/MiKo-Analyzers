@@ -214,6 +214,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_XML_node() => No_issue_is_reported_for(@"
+using System;
+using System.Xml;
+
+public class TestMe
+{
+    public void DoSomething(XmlDocument document)
+    {
+        XmlNode xmlNode = document.SelectSingleNode("""");
+        XmlNode node = xmlNode.SelectSingleNode("""");
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_variable()
         {
             const string OriginalCode = @"
