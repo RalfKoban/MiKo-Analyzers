@@ -55,7 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void AnalyzeDeclarationPattern(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyze(context))
+            var type = context.FindContainingType();
+
+            if (ShallAnalyze(type))
             {
                 base.AnalyzeDeclarationPattern(context);
             }
@@ -63,24 +65,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override void AnalyzeForEachStatement(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyze(context))
+            var type = context.FindContainingType();
+
+            if (ShallAnalyze(type))
             {
                 base.AnalyzeForEachStatement(context);
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                        let name = identifier.ValueText
-                                                                                                                                        where name.Length > 3 && name.ContainsAny(MockNames)
-                                                                                                                                        let symbol = identifier.GetSymbol(semanticModel)
-                                                                                                                                        select symbol is null
-                                                                                                                                                   ? Issue(identifier)
-                                                                                                                                                   : Issue(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
+                                                                                                                                                          let name = identifier.ValueText
+                                                                                                                                                          where name.Length > 3 && name.ContainsAny(MockNames)
+                                                                                                                                                          let symbol = identifier.GetSymbol(semanticModel)
+                                                                                                                                                          select symbol is null
+                                                                                                                                                                     ? Issue(identifier)
+                                                                                                                                                                     : Issue(symbol);
 
-        private static bool ShallAnalyze(SyntaxNodeAnalysisContext context)
+        private static bool ShallAnalyze(INamedTypeSymbol type)
         {
-            var type = context.FindContainingType();
-
             if (type is null)
             {
                 return false;
@@ -103,50 +105,58 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyze(context))
+            var type = context.FindContainingType();
+
+            if (ShallAnalyze(type))
             {
-                AnalyzeIdentifiers(context, (VariableDeclarationSyntax)context.Node);
+                AnalyzeIdentifiers(context, type, (VariableDeclarationSyntax)context.Node);
             }
         }
 
         private void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyze(context))
+            var type = context.FindContainingType();
+
+            if (ShallAnalyze(type))
             {
-                AnalyzeIdentifiers(context, ((PropertyDeclarationSyntax)context.Node).Identifier);
+                AnalyzeIdentifiers(context, type, ((PropertyDeclarationSyntax)context.Node).Identifier);
             }
         }
 
         private void AnalyzeFieldDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyze(context))
+            var type = context.FindContainingType();
+
+            if (ShallAnalyze(type))
             {
-                AnalyzeIdentifiers(context, ((FieldDeclarationSyntax)context.Node).Declaration);
+                AnalyzeIdentifiers(context, type, ((FieldDeclarationSyntax)context.Node).Declaration);
             }
         }
 
         private void AnalyzeParameter(SyntaxNodeAnalysisContext context)
         {
-            if (ShallAnalyze(context))
+            var type = context.FindContainingType();
+
+            if (ShallAnalyze(type))
             {
                 var syntax = (ParameterSyntax)context.Node;
 
                 // ignore invocations eg. in lambdas
                 if (syntax.GetEnclosing<InvocationExpressionSyntax>() is null)
                 {
-                    AnalyzeIdentifiers(context, syntax.Identifier);
+                    AnalyzeIdentifiers(context, type, syntax.Identifier);
                 }
             }
         }
 
-        private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, VariableDeclarationSyntax syntax)
+        private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, ITypeSymbol type, VariableDeclarationSyntax syntax)
         {
-            AnalyzeIdentifiers(context, syntax.Variables.Select(_ => _.Identifier).ToArray());
+            AnalyzeIdentifiers(context, type, syntax.Variables.Select(_ => _.Identifier).ToArray());
         }
 
-        private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, params SyntaxToken[] identifiers)
+        private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
-            var issues = AnalyzeIdentifiers(context.SemanticModel, identifiers);
+            var issues = AnalyzeIdentifiers(context.SemanticModel, type, identifiers);
 
             ReportDiagnostics(context, issues);
         }
