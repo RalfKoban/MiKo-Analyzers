@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MiKoSolutions.Analyzers.Linguistics;
@@ -21,9 +20,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ISymbol symbol) => GetPluralName(symbol.Name, out _);
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEnumerable() && symbol.Name != "AssemblyCatalog"; // ignore MEF aggregate catalog
+        protected override bool ShallAnalyze(ITypeSymbol symbol)
+        {
+            if (symbol.IsEnumerable())
+            {
+                if (IsXmlNode(symbol))
+                {
+                    return false;
+                }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers)
+                if (symbol.Name == "AssemblyCatalog")
+                {
+                    // ignore MEF aggregate catalog
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
             foreach (var identifier in identifiers)
             {
@@ -35,20 +53,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var variable = identifier.GetEnclosing<VariableDeclarationSyntax>();
-                var type = variable?.GetTypeSymbol(semanticModel);
-
                 if (IsHash(originalName, type))
                 {
                     continue;
                 }
 
                 if (IsGrouping(originalName, type))
-                {
-                    continue;
-                }
-
-                if (IsXmlNode(type))
                 {
                     continue;
                 }

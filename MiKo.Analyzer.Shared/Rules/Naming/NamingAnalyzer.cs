@@ -177,7 +177,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
 
             ReportDiagnostics(context, issues);
         }
@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = Analyze(semanticModel, node.Designation);
+            var issues = Analyze(semanticModel, type, node.Designation);
 
             ReportDiagnostics(context, issues);
         }
@@ -211,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, node.Identifier);
+            var issues = AnalyzeIdentifiers(semanticModel, type, node.Identifier);
 
             ReportDiagnostics(context, issues);
         }
@@ -235,12 +235,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
+            var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
 
             ReportDiagnostics(context, issues);
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => Enumerable.Empty<Diagnostic>();
 
         private static string HandleSpecialEntityMarkerSituations(string symbolName)
         {
@@ -295,15 +295,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, VariableDesignationSyntax node)
+        private IEnumerable<Diagnostic> Analyze(SemanticModel semanticModel, ITypeSymbol type, VariableDesignationSyntax node)
         {
             switch (node)
             {
                 case SingleVariableDesignationSyntax s:
-                    return AnalyzeIdentifiers(semanticModel, s.Identifier);
+                    return AnalyzeIdentifiers(semanticModel, type, s.Identifier);
 
                 case ParenthesizedVariableDesignationSyntax s:
-                    return s.Variables.SelectMany(_ => Analyze(semanticModel, _));
+                    return s.Variables.SelectMany(_ => Analyze(semanticModel, type, _));
 
                 default:
                     return Enumerable.Empty<Diagnostic>();

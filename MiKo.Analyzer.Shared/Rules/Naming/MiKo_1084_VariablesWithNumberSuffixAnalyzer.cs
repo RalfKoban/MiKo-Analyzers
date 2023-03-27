@@ -20,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithNumber();
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                        let name = identifier.ValueText
-                                                                                                                                        where name.EndsWithCommonNumber()
-                                                                                                                                        select Issue(name, identifier);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
+                                                                                                                                                          let name = identifier.ValueText
+                                                                                                                                                          where name.EndsWithCommonNumber()
+                                                                                                                                                          select Issue(name, identifier);
     }
 }
