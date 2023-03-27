@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using System.Xml;
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.CodeAnalysis;
@@ -41,6 +42,7 @@ namespace TestHelper
         private static readonly MetadataReference SystemRuntimeReference = MetadataReference.CreateFromFile(typeof(DataContractAttribute).Assembly.Location); // needed also for other attributes
         private static readonly MetadataReference SystemTextReference = MetadataReference.CreateFromFile(typeof(Regex).Assembly.Location);
         private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
+        private static readonly MetadataReference SystemXmlReference = MetadataReference.CreateFromFile(typeof(XmlNode).Assembly.Location);
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
@@ -208,7 +210,8 @@ namespace TestHelper
                                                .AddMetadataReference(projectId, NetStandardReference)
                                                .AddMetadataReference(projectId, SystemRuntimeNetStandardReference)
                                                .AddMetadataReference(projectId, SystemLinqReference)
-                                               .AddMetadataReference(projectId, SystemTextReference);
+                                               .AddMetadataReference(projectId, SystemTextReference)
+                                               .AddMetadataReference(projectId, SystemXmlReference);
 
             var count = 0;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -34,12 +35,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                if (IsHash(originalName, identifier, semanticModel))
+                var variable = identifier.GetEnclosing<VariableDeclarationSyntax>();
+                var type = variable?.GetTypeSymbol(semanticModel);
+
+                if (IsHash(originalName, type))
                 {
                     continue;
                 }
 
-                if (IsGrouping(originalName, identifier, semanticModel))
+                if (IsGrouping(originalName, type))
+                {
+                    continue;
+                }
+
+                if (IsXmlNode(type))
                 {
                     continue;
                 }
@@ -99,24 +108,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Pluralizer.GetPluralName(name);
         }
 
-        private static bool IsHash(string originalName, SyntaxToken identifier, SemanticModel semanticModel)
+        private static bool IsHash(string originalName, ITypeSymbol type)
         {
             if (originalName.EndsWith("Hash", StringComparison.OrdinalIgnoreCase))
             {
-                var v = identifier.GetEnclosing<VariableDeclarationSyntax>();
-
-                if (v != null)
-                {
-                    var type = semanticModel.GetTypeInfo(v.Type).Type;
-
-                    return type?.IsByteArray() is true;
-                }
+                return type?.IsByteArray() is true;
             }
 
             return false;
         }
 
-        private static bool IsGrouping(string originalName, SyntaxToken identifier, SemanticModel semanticModel)
+        private static bool IsGrouping(string originalName, ITypeSymbol type)
         {
             switch (originalName)
             {
@@ -124,20 +126,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "group":
                 case "grouping":
                 {
-                    var v = identifier.GetEnclosing<VariableDeclarationSyntax>();
-
-                    if (v != null)
-                    {
-                        var type = semanticModel.GetTypeInfo(v.Type).Type;
-
-                        return type?.IsIGrouping() is true;
-                    }
-
-                    break;
+                    return type?.IsIGrouping() is true;
                 }
             }
 
             return false;
+        }
+
+        private static bool IsXmlNode(ITypeSymbol type)
+        {
+            switch (type?.Name)
+            {
+                case nameof(XmlElement):
+                case nameof(XmlNode):
+                {
+                    return true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
         }
     }
 }
