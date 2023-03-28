@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             };
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongTerms))] string term) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Info_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongTerms))] string term) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The " + term + @" something.
 /// </" + xmlTag + @">
