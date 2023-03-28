@@ -25,10 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             };
 
         private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
+        private static readonly string[] CorrectNames = { "TestMe", "OnlineHelp", "SoftwareUtilization" };
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"
-public class TestMe
+        public void No_issue_is_reported_for_correctly_named_class_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+public class " + name + @"
 {
 }
 ");
