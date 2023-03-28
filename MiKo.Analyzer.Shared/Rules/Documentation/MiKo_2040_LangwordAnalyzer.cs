@@ -102,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string GetWrongText(SyntaxList<XmlAttributeSyntax> attributes)
         {
             var attribute = attributes.First(_ => WrongAttributes.Contains(_.GetName()));
-            var token = attribute.ChildTokens().First(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
+            var token = attribute.FirstChildToken(SyntaxKind.XmlTextLiteralToken);
 
             return token.ValueText;
         }

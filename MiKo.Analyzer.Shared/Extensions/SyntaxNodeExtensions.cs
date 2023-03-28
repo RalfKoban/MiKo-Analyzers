@@ -72,6 +72,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstChild<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault(predicate);
 
+        internal static SyntaxToken FirstChildToken(this SyntaxNode value) => value.ChildTokens().FirstOrDefault();
+
+        internal static SyntaxToken FirstChildToken(this SyntaxNode value, SyntaxKind kind) => value.ChildTokens().First(_ => _.IsKind(kind));
+
         internal static T FirstDescendant<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault();
 
         internal static T FirstDescendant<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.FirstDescendant<T>(_ => _.IsKind(kind));
@@ -662,21 +666,20 @@ namespace MiKoSolutions.Analyzers
             {
                 if (node.HasStructuredTrivia)
                 {
-                    foreach (var childToken in node.ChildTokens())
+                    var childToken = node.FirstChildToken();
+
+                    if (childToken.HasStructuredTrivia)
                     {
-                        if (childToken.HasStructuredTrivia)
+                        // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
+                        // so we can save some time and memory by doing it by ourselves
+                        var leadingTrivia = childToken.LeadingTrivia;
+                        if (leadingTrivia.Count > 0)
                         {
-                            // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
-                            // so we can save some time and memory by doing it by ourselves
-                            var leadingTrivia = childToken.LeadingTrivia;
-                            if (leadingTrivia.Count > 0)
+                            foreach (var trivia in leadingTrivia)
                             {
-                                foreach (var t in leadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                                 {
-                                    if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                                    {
-                                        return syntax;
-                                    }
+                                    return syntax;
                                 }
                             }
                         }
