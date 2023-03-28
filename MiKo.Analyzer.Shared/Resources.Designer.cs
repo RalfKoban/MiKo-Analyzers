@@ -7499,6 +7499,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change &apos;ident&apos; into identification&apos;.
+        /// </summary>
+        public static string MiKo_2222_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2222_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;ident&apos;. Instead, it should clearly document that this is an identification. Hence, it should use the term &apos;identification&apos; instead..
+        /// </summary>
+        public static string MiKo_2222_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2222_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;identification&apos; instead of &apos;ident&apos;.
+        /// </summary>
+        public static string MiKo_2222_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2222_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use the term &apos;identification&apos; instead of &apos;ident&apos;.
+        /// </summary>
+        public static string MiKo_2222_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2222_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

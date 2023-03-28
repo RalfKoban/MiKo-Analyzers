@@ -2667,6 +2667,18 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2221_Title" xml:space="preserve">
     <value>Documentation should not use empty XML tags</value>
   </data>
+  <data name="MiKo_2222_CodeFixTitle" xml:space="preserve">
+    <value>Change 'ident' into identification'</value>
+  </data>
+  <data name="MiKo_2222_Description" xml:space="preserve">
+    <value>The XML documentation should not use the abbreviation 'ident'. Instead, it should clearly document that this is an identification. Hence, it should use the term 'identification' instead.</value>
+  </data>
+  <data name="MiKo_2222_MessageFormat" xml:space="preserve">
+    <value>Use 'identification' instead of 'ident'</value>
+  </data>
+  <data name="MiKo_2222_Title" xml:space="preserve">
+    <value>Documentation should use the term 'identification' instead of 'ident'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
