@@ -12,6 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1054";
 
+        private const string CorrectName = "Utilization";
         private const string WrongSuffixIndicator = "Indicator";
 
         private static readonly string[] WrongNames = { "Helper", "Util" };
@@ -36,6 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
+
+            if (symbolName.Contains(CorrectName))
+            {
+                yield break;
+            }
 
             if (symbolName.ContainsAny(WrongNames))
             {
