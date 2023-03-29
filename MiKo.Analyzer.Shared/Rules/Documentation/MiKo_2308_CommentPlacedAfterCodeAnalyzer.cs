@@ -34,9 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            if (current.Parent is InitializerExpressionSyntax)
+            if (IsOnInitializer(current.Parent))
             {
-                // comment is on collection initializer, so it's no issue
+                // comment is on initializer, so it's no issue
                 return false;
             }
 
@@ -64,6 +64,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return false;
+        }
+
+        private static bool IsOnInitializer(SyntaxNode node)
+        {
+            if (node is InitializerExpressionSyntax)
+            {
+                return true;
+            }
+
+            switch (node?.Parent)
+            {
+                case InitializerExpressionSyntax _:
+                case AssignmentExpressionSyntax assignment when assignment.Parent is InitializerExpressionSyntax:
+                    return true;
+
+                default:
+                    return false;
+            }
         }
     }
 }

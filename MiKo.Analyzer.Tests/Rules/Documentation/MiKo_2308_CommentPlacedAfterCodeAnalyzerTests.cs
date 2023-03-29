@@ -72,7 +72,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_comment_as_last_statement_in_array_initializer() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_as_last_statement_in_array_initializer_with_colon() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -82,6 +82,35 @@ public class TestMe
                             ""something"",
                             ""something else"", // some comment
                         };
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_comment_as_last_statement_in_array_initializer_without_colon() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var array = new[]
+                        {
+                            ""something"",
+                            ""something else"" // some comment
+                        };
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_comment_in_object_initializer() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public string Name { get; set; }
+
+    public TestMe DoSomething()
+    {
+        return new TestMe
+                   {
+                       Name = ""something"" // some comment
+                   };
     }
 }");
 
