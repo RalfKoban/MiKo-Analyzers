@@ -3829,11 +3829,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name unit test methods BDD style.
+        ///   Looks up a localized string similar to Test methods should not be named according BDD style.
         /// </summary>
         public static string MiKo_1113_Title {
             get {
                 return ResourceManager.GetString("MiKo_1113_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named according to what scenario they test but not according to whether that is a so-called &apos;happy path&apos; or &apos;bad path&apos; inside the code..
+        /// </summary>
+        public static string MiKo_1114_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1114_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name &apos;{0}&apos; a happy or bad path.
+        /// </summary>
+        public static string MiKo_1114_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1114_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not be named &apos;HappyPath&apos; or &apos;BadPath&apos;.
+        /// </summary>
+        public static string MiKo_1114_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1114_Title", resourceCulture);
             }
         }
         

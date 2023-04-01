@@ -1420,7 +1420,16 @@ The audience of unit tests, however, are developers. Hence, such tests should no
     <value>Do not name BDD style</value>
   </data>
   <data name="MiKo_1113_Title" xml:space="preserve">
-    <value>Do not name unit test methods BDD style</value>
+    <value>Test methods should not be named according BDD style</value>
+  </data>
+  <data name="MiKo_1114_Description" xml:space="preserve">
+    <value>Test methods should be named according to what scenario they test but not according to whether that is a so-called 'happy path' or 'bad path' inside the code.</value>
+  </data>
+  <data name="MiKo_1114_MessageFormat" xml:space="preserve">
+    <value>Do not name '{0}' a happy or bad path</value>
+  </data>
+  <data name="MiKo_1114_Title" xml:space="preserve">
+    <value>Test methods should not be named 'HappyPath' or 'BadPath'</value>
   </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
