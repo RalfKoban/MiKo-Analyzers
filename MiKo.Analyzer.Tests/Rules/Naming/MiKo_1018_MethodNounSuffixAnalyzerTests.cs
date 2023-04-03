@@ -40,10 +40,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "GetDocumentation",
                                                                                "HandleSelection",
                                                                                "HasConnection",
-                                                                               "Install",
                                                                                "InformAboutSituation",
                                                                                "InformedAboutSituation",
                                                                                "InformsAboutSituation",
+                                                                               "Install",
                                                                                "InvertSelection",
                                                                                "ItemBelongsToApplication",
                                                                                "LoadConfiguration",
@@ -55,22 +55,36 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "PauseInstallation",
                                                                                "PopAnnotation",
                                                                                "PrepareConnection",
+                                                                               "PromptForAuthentication",
                                                                                "PushAnnotation",
                                                                                "QueryDocumentation",
                                                                                "ReadConfiguration",
+                                                                               "RecordConfiguration",
+                                                                               "RecoverInformation",
                                                                                "RedoInstallation",
                                                                                "RefreshDocumentation",
                                                                                "RegisterAction",
+                                                                               "ReleaseCommunication",
+                                                                               "ReloadConfiguration",
                                                                                "RemoveDocumentation",
+                                                                               "ReplaceConfiguration",
+                                                                               "ReportInformation",
                                                                                "RequestConfirmation",
                                                                                "ResetDocumentation",
+                                                                               "ResolveBindingInformation",
                                                                                "RestartSimulation",
                                                                                "RestoreConfiguration",
                                                                                "ResumeInstallation",
+                                                                               "RetrieveInformation",
                                                                                "RollbackTransaction",
                                                                                "SaveConfiguration",
                                                                                "SelectConnection",
+                                                                               "SendNotification",
                                                                                "SetDocumentation",
+                                                                               "SetupDocumentation",
+                                                                               "ShowConfirmationDialog",
+                                                                               "SimulateConnection",
+                                                                               "SortDocumentation",
                                                                                "StartSimulation",
                                                                                "StopSimulation",
                                                                                "StoreConfiguration",
@@ -81,6 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "TranslateDocumentation",
                                                                                "TryConnection",
                                                                                "UndoInstallation",
+                                                                               "UnlockConfiguration",
                                                                                "UnregisterAction",
                                                                                "UnsubscribeAction",
                                                                                "UpdateConfiguration",
@@ -89,6 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "WithInformation",
                                                                                "WrapConnection",
                                                                                "WriteInformation",
+                                                                               "ZoomToSelection",
                                                                            };
 
         private static readonly IEnumerable<string> InvalidMethodNames = new[]
@@ -100,6 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                  "Initialization",
                                                                                  "Installation",
                                                                                  "RunAdoption",
+                                                                                 "RunExecution",
                                                                              };
 
         [Test]
@@ -122,11 +139,13 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_method_with_name_(
-                                                                [ValueSource(nameof(Tests))] string test,
-                                                                [ValueSource(nameof(InvalidMethodNames))] string name)
-            => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_name_([ValueSource(nameof(InvalidMethodNames))] string name)
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var test in Tests)
+                                       {
+                                           No_issue_is_reported_for(@"
 public class TestMe
 {
     [" + test + @"]
@@ -135,6 +154,8 @@ public class TestMe
     }
 }
 ");
+                                       }
+                                   });
 
         [Test]
         public void No_issue_is_reported_for_local_function_with_name_([ValueSource(nameof(ValidMethodNames))] string name) => No_issue_is_reported_for(@"
@@ -163,10 +184,12 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_test_local_function_with_name_(
-                                                                        [ValueSource(nameof(Tests))] string test,
-                                                                        [ValueSource(nameof(InvalidMethodNames))] string name)
-            => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_local_function_with_name_([ValueSource(nameof(InvalidMethodNames))] string name)
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var test in Tests)
+                                       {
+                                           No_issue_is_reported_for(@"
 public class TestMe
 {
     [" + test + @"]
@@ -178,6 +201,8 @@ public class TestMe
     }
 }
 ");
+                                       }
+                                   });
 
         [Test]
         public void Code_gets_fixed()
