@@ -59,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "UserExperience",
                                                                                     "VisualBasic",
                                                                                     "Web",
+                                                                                    "SomeTrivia",
                                                                                 };
 
         private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]
