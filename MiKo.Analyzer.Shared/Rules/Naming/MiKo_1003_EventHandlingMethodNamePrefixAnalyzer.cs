@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                            : method.Name;
             }
 
-            return name.Without("_");
+            return name.Without("_").ToUpperCaseAt(0);
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)
