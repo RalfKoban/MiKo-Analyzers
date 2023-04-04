@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return null;
             }
 
-            var semanticModel = await context.Document.GetSemanticModelAsync(cancellationToken);
+            var semanticModel = await context.Document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
             if (syntax is TypeSyntax typeSyntax)
             {

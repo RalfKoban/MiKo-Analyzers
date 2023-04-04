@@ -673,6 +673,7 @@ namespace MiKoSolutions.Analyzers
                         // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
                         // so we can save some time and memory by doing it by ourselves
                         var leadingTrivia = childToken.LeadingTrivia;
+
                         if (leadingTrivia.Count > 0)
                         {
                             foreach (var trivia in leadingTrivia)
@@ -702,16 +703,50 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
         {
-            return text != null
-                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
-                       : null;
+            if (text is null)
+            {
+                return null;
+            }
+
+            var builder = new StringBuilder();
+
+            foreach (var token in text.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                builder.Append(token.WithoutTrivia().ValueText);
+            }
+
+            var result = builder.ToString();
+
+            return result.Trim();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextSyntax text)
         {
-            return text != null
-                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
-                       : null;
+            if (text is null)
+            {
+                return null;
+            }
+
+            var builder = new StringBuilder();
+
+            foreach (var token in text.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                builder.Append(token.WithoutTrivia().ValueText);
+            }
+
+            var result = builder.ToString();
+
+            return result.Trim();
         }
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();

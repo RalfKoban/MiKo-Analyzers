@@ -175,6 +175,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var token in sentenceEnding.TextTokens)
                 {
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
                     var valueText = token.WithoutTrivia().ValueText;
 
                     if (valueText.IsNullOrWhiteSpace())

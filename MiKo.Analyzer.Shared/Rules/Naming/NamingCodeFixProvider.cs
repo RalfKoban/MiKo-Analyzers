@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // Produce a new solution that has all references to that symbol renamed, including the declaration.
             var originalSolution = context.Document.Project.Solution;
 
-            var symbol = await GetSymbolAsync(context, syntax, cancellationToken);
+            var symbol = await GetSymbolAsync(context, syntax, cancellationToken).ConfigureAwait(false);
 
             var newName = GetNewName(diagnostic, symbol);
 
@@ -35,8 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             // Return the new solution with the new symbol name.
-            return await Renamer.RenameSymbolAsync(originalSolution, symbol, newName, originalSolution.Workspace.Options, cancellationToken)
-                                .ConfigureAwait(false);
+            return await Renamer.RenameSymbolAsync(originalSolution, symbol, newName, originalSolution.Workspace.Options, cancellationToken).ConfigureAwait(false);
         }
 
         protected abstract string GetNewName(Diagnostic diagnostic, ISymbol symbol);

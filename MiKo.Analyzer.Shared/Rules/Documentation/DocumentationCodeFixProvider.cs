@@ -43,6 +43,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // replace token in text
                 foreach (var token in text.TextTokens)
                 {
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
                     var originalText = token.Text;
 
                     if (originalText.ContainsAny(terms))
@@ -162,7 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 // we have a text at the end, so we have to find the text
                 var textTokens = t.TextTokens;
-                var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+                var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
 
                 if (lastToken.IsKind(SyntaxKind.None))
                 {
@@ -199,7 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var text = commentStart;
 
                 // we have a text at the end, so we have to find the text
-                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.ValueText.IsNullOrWhiteSpace() is false);
+                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
 
                 if (lastToken.IsKind(SyntaxKind.None))
                 {
@@ -639,6 +644,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in text.TextTokens)
             {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
                 var valueText = token.ValueText;
 
                 if (valueText.IsNullOrWhiteSpace())
