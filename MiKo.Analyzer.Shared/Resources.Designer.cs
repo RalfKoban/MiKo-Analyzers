@@ -3705,8 +3705,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For maintenance reasons, parameterized test methods should be easy to read.
-        ///Therefore, they should be suffixed with underscores..
+        ///   Looks up a localized string similar to For maintenance reasons, parameterized test methods should be easy to read and parameters easy to spot.
+        ///Therefore, the methods should be suffixed with underscores.
+        ///
+        ///Example:
+        ///   &quot;Do_something_for_value_(42)&quot; is easier to read than &quot;Do_something_for_value(42)&quot;.
         /// </summary>
         public static string MiKo_1110_Description {
             get {

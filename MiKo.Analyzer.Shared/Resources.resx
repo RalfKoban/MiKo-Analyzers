@@ -1374,8 +1374,11 @@ Those specifically introduced types should be named as the original type, but pr
     <value>Append underscore</value>
   </data>
   <data name="MiKo_1110_Description" xml:space="preserve">
-    <value>For maintenance reasons, parameterized test methods should be easy to read.
-Therefore, they should be suffixed with underscores.</value>
+    <value>For maintenance reasons, parameterized test methods should be easy to read and parameters easy to spot.
+Therefore, the methods should be suffixed with underscores.
+
+Example:
+   "Do_something_for_value_(42)" is easier to read than "Do_something_for_value(42)"</value>
   </data>
   <data name="MiKo_1110_MessageFormat" xml:space="preserve">
     <value>Suffix name with underscore</value>
