@@ -14,52 +14,52 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1400";
 
-        private static readonly string[] AllowedSuffixes =
-            {
-                "s",
-                "ing",
-                "ren",
-                "Build",
-                "ComponentModel",
-                "Composition",
-                "Core",
-                "Data",
-                "Design",
-                "Documentation",
-                "Framework",
-                "Generic",
-                "IO",
-                "Infrastructure",
-                "Interop",
-                "Lifetime",
-                "Linq",
-                "Maintainability",
-                "Performance",
-                "Runtime",
-                "Security",
-                "ServiceModel",
-                "Serialization",
-                "Shared",
-                "System",
-                "Threading",
-                "UserExperience",
-                "UI",
-                "Web",
+        private static readonly string[] AllowedSuffixes = new[]
+                                                               {
+                                                                   "s",
+                                                                   "ing",
+                                                                   "ren",
+                                                                   "Build",
+                                                                   "ComponentModel",
+                                                                   "Composition",
+                                                                   "Core",
+                                                                   "Data",
+                                                                   "Design",
+                                                                   "Documentation",
+                                                                   "Framework",
+                                                                   "Generic",
+                                                                   "IO",
+                                                                   "Infrastructure",
+                                                                   "Interop",
+                                                                   "Lifetime",
+                                                                   "Linq",
+                                                                   "Maintainability",
+                                                                   "Performance",
+                                                                   "Runtime",
+                                                                   "Security",
+                                                                   "ServiceModel",
+                                                                   "Serialization",
+                                                                   "Shared",
+                                                                   "Support",
+                                                                   "System",
+                                                                   "UserExperience",
+                                                                   "UI",
+                                                                   "Web",
 
-                // known company / framework names
-                "Microsoft",
-                "Office",
-                "PostSharp",
-                "NDepend",
+                                                                   // known company / framework names
+                                                                   "Microsoft",
+                                                                   "Office",
+                                                                   "PostSharp",
+                                                                   "NDepend",
 
-                // language names
-                "CSharp",
-                "VisualBasic",
-                "CPlusPlus",
-                "TypeScript",
-                "JavaScript",
-                "Perl",
-            };
+                                                                   // language names
+                                                                   "CSharp",
+                                                                   "VisualBasic",
+                                                                   "CPlusPlus",
+                                                                   "TypeScript",
+                                                                   "JavaScript",
+                                                                   "Perl",
+                                                               }.OrderBy(_ => _.Length).ToArray();
 
         public MiKo_1400_NamespacesInPluralAnalyzer() : base(Id)
         {
