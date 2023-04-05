@@ -3709,7 +3709,7 @@ namespace MiKoSolutions.Analyzers {
         ///Therefore, the methods should be suffixed with underscores.
         ///
         ///Example:
-        ///   &quot;Do_something_for_value_(42)&quot; is easier to read than &quot;Do_something_for_value(42)&quot;.
+        ///   &quot;Do_something_for_value_(42)&quot; is easier to read than &quot;Do_something_for_value(42)&quot; because of the additional space before the brace..
         /// </summary>
         public static string MiKo_1110_Description {
             get {

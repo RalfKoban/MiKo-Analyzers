@@ -1378,7 +1378,7 @@ Those specifically introduced types should be named as the original type, but pr
 Therefore, the methods should be suffixed with underscores.
 
 Example:
-   "Do_something_for_value_(42)" is easier to read than "Do_something_for_value(42)"</value>
+   "Do_something_for_value_(42)" is easier to read than "Do_something_for_value(42)" because of the additional space before the brace.</value>
   </data>
   <data name="MiKo_1110_MessageFormat" xml:space="preserve">
     <value>Suffix name with underscore</value>
