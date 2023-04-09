@@ -251,16 +251,26 @@ namespace MiKoSolutions.Analyzers
         {
             var dataFlow = semanticModel.AnalyzeDataFlow(statementOrExpression);
 
+            var result = new HashSet<string>();
+
             // do not use the declared ones as we are interested in parameters, not unused variables
-            // var variablesDeclared = dataFlow.VariablesDeclared;
-            var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
+            foreach (var variable in dataFlow.ReadInside)
+            {
+                result.Add(variable.Name);
+            }
+
+            foreach (var variable in dataFlow.ReadOutside)
+            {
+                result.Add(variable.Name);
+            }
 
             // do not include the ones that are written outside as those are the ones that are not used at all
-            var variablesWritten = dataFlow.WrittenInside;
+            foreach (var variable in dataFlow.WrittenInside)
+            {
+                result.Add(variable.Name);
+            }
 
-            var used = variablesRead.Union(variablesWritten).ToHashSet(_ => _.Name);
-
-            return used;
+            return result;
         }
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) => value?.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
