@@ -12,12 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2020";
 
         private static readonly HashSet<string> Tags = new HashSet<string>
-                                                                  {
-                                                                      Constants.XmlTag.See,
-                                                                      Constants.XmlTag.See.ToUpperInvariant(),
-                                                                      Constants.XmlTag.SeeAlso,
-                                                                      Constants.XmlTag.SeeAlso.ToUpperInvariant(),
-                                                                  };
+                                                           {
+                                                               Constants.XmlTag.See,
+                                                               Constants.XmlTag.See.ToUpperInvariant(),
+                                                               Constants.XmlTag.SeeAlso,
+                                                               Constants.XmlTag.SeeAlso.ToUpperInvariant(),
+                                                           };
 
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
