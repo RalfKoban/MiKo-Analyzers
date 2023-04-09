@@ -465,12 +465,6 @@ namespace MiKoSolutions.Analyzers
                     XmlTag.Value,
                 };
 
-            internal static readonly string[] InvalidSummaryCrefPhrases = Enumerable.Empty<string>()
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, " ")))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, "/")))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, ">")))
-                                                                                    .ToArray();
-
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
             internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";
