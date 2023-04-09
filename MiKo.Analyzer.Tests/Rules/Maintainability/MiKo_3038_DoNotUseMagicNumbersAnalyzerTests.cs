@@ -67,6 +67,19 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property_initializer() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Property { get; set; } = 1234;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_field_assigned_to_zero() => No_issue_is_reported_for(@"
 using System;
 

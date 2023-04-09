@@ -94,6 +94,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.RangeExpression:
                     return true;
 
+                case SyntaxKind.EqualsValueClause when parent.Parent is BasePropertyDeclarationSyntax:
+                    return true; // property initializers
+
                 case SyntaxKind.Argument:
                     return IgnoreBasedOnArgument(parent); // we want to know what those numbers mean
 
