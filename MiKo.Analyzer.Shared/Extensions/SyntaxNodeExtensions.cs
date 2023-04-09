@@ -1079,6 +1079,31 @@ namespace MiKoSolutions.Analyzers
             return found;
         }
 
+        internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
+        {
+            foreach (var modifier in value.Modifiers)
+            {
+                if (modifier.IsKind(SyntaxKind.AsyncKeyword))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        internal static bool IsAsync(this MethodDeclarationSyntax value)
+        {
+            foreach (var modifier in value.Modifiers)
+            {
+                if (modifier.IsKind(SyntaxKind.AsyncKeyword))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName)
         {
             return value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);

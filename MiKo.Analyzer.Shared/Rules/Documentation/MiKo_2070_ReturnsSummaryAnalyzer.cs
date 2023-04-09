@@ -63,9 +63,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string GetProposal(ISymbol symbol)
         {
-            if (symbol is IMethodSymbol m && m.ReturnType.IsBoolean())
+            if (symbol is IMethodSymbol m)
             {
-                return Constants.Comments.DeterminesWhetherPhrase;
+                var startText = m.ReturnType.IsBoolean()
+                                ? Constants.Comments.DeterminesWhetherPhrase
+                                : "Gets";
+                if (m.IsAsync)
+                {
+                    return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);
+                }
+
+                return startText;
             }
 
             return "Gets";
