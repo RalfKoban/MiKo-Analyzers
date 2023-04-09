@@ -38,11 +38,18 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                             yield break;
                         }
 
-                        var loc = symbol.GetNamedMethods()
-                                        .Where(_ => _.Locations.Any(__ => __.IsInSource))
-                                        .Select(_ => _.GetSyntax())
-                                        .SelectMany(_ => SyntaxNodeCollector.Collect<BlockSyntax>(_))
-                                        .Sum(_ => Counter.CountLinesOfCode(_));
+                        var methods = symbol.GetMethods()
+                                            .Where(_ => _.CanBeReferencedByName || _.IsConstructor())
+                                            .Where(_ => _.Locations.Any(__ => __.IsInSource))
+                                            .Select(_ => _.GetSyntax());
+
+                        var properties = symbol.GetProperties()
+                                               .Where(_ => _.Locations.Any(__ => __.IsInSource))
+                                               .Select(_ => _.GetSyntax());
+
+                        var loc = methods.Concat(properties)
+                                  .SelectMany(_ => SyntaxNodeCollector.Collect<BlockSyntax>(_))
+                                  .Sum(_ => Counter.CountLinesOfCode(_));
 
                         if (loc > MaxLinesOfCode)
                         {
