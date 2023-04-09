@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.ContainsExtensionMethods();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.ContainsExtensionMethods();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeNamespaceNames(symbol, symbol.ContainingNamespace.ToString());
 

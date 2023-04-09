@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers
                         .OfType<LocalFunctionStatementSyntax>();
         }
 
-        internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetExtensionMethods().Any();
+        internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
