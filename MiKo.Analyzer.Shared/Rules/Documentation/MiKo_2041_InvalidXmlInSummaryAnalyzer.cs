@@ -12,13 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2041";
 
+        private static readonly HashSet<string> Tags = Constants.Comments.InvalidSummaryCrefXmlTags.ToHashSet();
+
+
         public MiKo_2041_InvalidXmlInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        internal static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
-                                                                                                                    ? documentation.GetSummaryXmls(Constants.Comments.InvalidSummaryCrefXmlTags)
-                                                                                                                    : Enumerable.Empty<XmlNodeSyntax>();
+        internal static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation?.GetSummaryXmls(Tags) ?? Enumerable.Empty<XmlNodeSyntax>();
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
