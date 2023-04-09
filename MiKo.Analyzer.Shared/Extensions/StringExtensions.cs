@@ -52,7 +52,7 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            List<int> indices = null;
+            var indices = new List<int>();
 
             for (var index = 0; ; index += finding.Length)
             {
@@ -66,15 +66,10 @@ namespace System
 
                 index += newIndex;
 
-                if (indices is null)
-                {
-                    indices = new List<int>(1);
-                }
-
                 indices.Add(index);
             }
 
-            return (IReadOnlyList<int>)indices ?? Array.Empty<int>();
+            return indices;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -227,9 +222,9 @@ namespace System
         {
             if (value.Length > 0)
             {
-                foreach (var character in suffixCharacters)
+                for (var index = 0; index < suffixCharacters.Length; index++)
                 {
-                    if (value.EndsWith(character))
+                    if (value.EndsWith(suffixCharacters[index]))
                     {
                         return true;
                     }
@@ -247,9 +242,9 @@ namespace System
         {
             if (value.Length > 0)
             {
-                foreach (var suffix in suffixes)
+                for (var index = 0; index < suffixes.Length; index++)
                 {
-                    if (value.EndsWith(suffix, comparison))
+                    if (value.EndsWith(suffixes[index], comparison))
                     {
                         return true;
                     }
@@ -279,9 +274,9 @@ namespace System
         {
             if (value.Length > 0)
             {
-                foreach (var phrase in phrases)
+                for (var index = 0; index < phrases.Length; index++)
                 {
-                    if (value.Equals(phrase, comparison))
+                    if (value.Equals(phrases[index], comparison))
                     {
                         return true;
                     }
@@ -330,12 +325,16 @@ namespace System
             return text;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1) => string.Format(format, arg0, arg1);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2) => string.Format(format, arg0, arg1, arg2);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
         public static IEnumerable<string> Words(this string text) => Words(text.AsSpan());
@@ -463,19 +462,23 @@ namespace System
         {
             var items = values.Select(_ => _.SurroundedWithApostrophe()).ToArray();
 
-            const string Separator = ", ";
-
-            var separatorForLast = string.Intern(" " + lastSeparator + " ");
-
             var count = items.Length;
 
             switch (count)
             {
                 case 0: return string.Empty;
                 case 1: return items[0];
+            }
+
+            const string Separator = ", ";
+
+            var separatorForLast = string.Intern(" " + lastSeparator + " ");
+
+            switch (count)
+            {
                 case 2: return string.Concat(items[0], separatorForLast, items[1]);
-                case 3: return string.Concat(string.Concat(items[0], Separator, items[1]), separatorForLast, items[2]);
-                case 4: return string.Concat(string.Concat(items[0], Separator, items[1]), string.Concat(Separator, items[2], separatorForLast, items[3]));
+                case 3: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
+                case 4: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
                 default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
@@ -538,9 +541,9 @@ namespace System
         {
             if (value.Length > 0)
             {
-                foreach (var c in value)
+                for (var index = 0; index < value.Length; index++)
                 {
-                    if (c.IsWhiteSpace() is false)
+                    if (value[index].IsWhiteSpace() is false)
                     {
                         return false;
                     }
@@ -596,19 +599,19 @@ namespace System
         {
             if (value.Length > 0)
             {
-                foreach (var prefix in prefixes)
+                for (var index = 0; index < prefixes.Length; index++)
                 {
-                    if (value.StartsWith(prefix, comparison))
+                    if (value.StartsWith(prefixes[index], comparison))
                     {
                         return true;
                     }
                 }
-
             }
 
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[0].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -620,8 +623,10 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToLowerCase(this string value) => value?.ToLower(CultureInfo.InvariantCulture);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToLowerCase(this char value) => char.ToLowerInvariant(value);
 
         /// <summary>
@@ -691,6 +696,7 @@ namespace System
         public static string ToLowerCase(this ReadOnlySpan<char> value)
         {
             var characters = value.ToArray();
+
             for (var index = 0; index < characters.Length; index++)
             {
                 characters[index] = value[index].ToLowerCase();
@@ -699,6 +705,7 @@ namespace System
             return string.Intern(new string(characters));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToUpperCase(this char value) => char.ToUpperInvariant(value);
 
         /// <summary>
@@ -756,6 +763,7 @@ namespace System
             return string.Intern(new string(characters));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
         public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).ToString();
@@ -764,9 +772,9 @@ namespace System
 
         public static StringBuilder Without(this StringBuilder value, string[] phrases)
         {
-            foreach (var phrase in phrases)
+            for (var index = 0; index < phrases.Length; index++)
             {
-                value.Without(phrase);
+                value.Without(phrases[index]);
             }
 
             return value;
@@ -795,8 +803,10 @@ namespace System
         {
             var text = value.TrimStart();
 
-            foreach (var word in words)
+            for (var index = 0; index < words.Length; index++)
             {
+                var word = words[index];
+
                 if (text.FirstWord().Equals(word, StringComparison.OrdinalIgnoreCase))
                 {
                     text = text.WithoutFirstWord().TrimStart();
@@ -813,7 +823,8 @@ namespace System
                 return null;
             }
 
-            var end = value.Length - 1;
+            var totalLength = value.Length - 1;
+            var end = totalLength;
 
             while (end >= 0)
             {
@@ -829,15 +840,17 @@ namespace System
                 }
             }
 
-            return end >= 0 && end <= value.Length - 1
+            return end >= 0 && end <= totalLength
                        ? value.Substring(0, end)
                        : value;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
 
         public static ReadOnlySpan<char> WithoutParaTagsAsSpan(this StringBuilder value) => value.WithoutParaTags().ToString().AsSpan();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
 
         public static IEnumerable<string> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags().ToString());
