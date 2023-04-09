@@ -18,6 +18,17 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
+            if (symbol.IsDisposable())
+            {
+                foreach (var diagnostic in AnalyzeTypeCore(symbol))
+                {
+                    yield return diagnostic;
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeTypeCore(INamedTypeSymbol symbol)
+        {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor).Select(_ => _.GetStartingLine()).ToList();
             var finalizers = GetMethodsOrderedByLocation(symbol, MethodKind.Destructor).Select(_ => _.GetStartingLine()).ToList();
 

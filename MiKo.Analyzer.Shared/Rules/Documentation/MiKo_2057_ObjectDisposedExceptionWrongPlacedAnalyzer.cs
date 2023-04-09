@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,8 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment) => symbol.FindContainingType().Implements<IDisposable>()
-                                                                                                                              ? Enumerable.Empty<Diagnostic>()
-                                                                                                                              : new[] { ExceptionIssue(exceptionComment, string.Empty) };
+        protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
+        {
+            if (symbol.FindContainingType().IsDisposable() is false)
+            {
+                yield return ExceptionIssue(exceptionComment, string.Empty);
+            }
+        }
     }
 }

@@ -798,6 +798,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
+        internal static bool IsDisposable(this ITypeSymbol value) => value.AllInterfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
+
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
         internal static bool IsEnum(this ITypeSymbol value) => value?.TypeKind == TypeKind.Enum;
