@@ -194,6 +194,23 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_division_by_([Values("2", "2l", "2u", "2.0", "2.0d", "2.0f")] string number) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var i = 1 / " + number + @";
+            i /= " + number + @"
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_switch_case() => No_issue_is_reported_for(@"
 using System;
 

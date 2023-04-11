@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            "1.0f",
                                                                            "1.0d",
 
+                                                                           // ignore screen resolutions
                                                                            "320",
                                                                            "200",
                                                                            "640",
@@ -51,6 +52,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            "1600",
                                                                            "1200",
                                                                        };
+
+        private static readonly HashSet<string> Twos = new HashSet<string>
+                                                           {
+                                                               "2",
+                                                               "2l",
+                                                               "2u",
+                                                               "2.0",
+                                                               "2.0d",
+                                                               "2.0f",
+                                                           };
+
 
         public MiKo_3038_DoNotUseMagicNumbersAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -89,6 +101,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.SubtractExpression:
                 case SyntaxKind.SubtractAssignmentExpression:
                     return false;
+
+                case SyntaxKind.DivideAssignmentExpression when IsTwo(node):
+                    return true;
+
+                case SyntaxKind.DivideExpression when IsTwo(node):
+                    return true;
 
                 case SyntaxKind.CaseSwitchLabel:
                 case SyntaxKind.RangeExpression:
@@ -177,6 +195,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static bool IsWellKnownNumber(string number) => WellKnownNumbers.Contains(number.ToLowerCase());
+
+        private static bool IsTwo(LiteralExpressionSyntax syntax) => Twos.Contains(syntax.Token.Text.ToLowerCase());
 
         private void AnalyzeNumericLiteralExpression(SyntaxNodeAnalysisContext context)
         {
