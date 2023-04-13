@@ -385,7 +385,7 @@ namespace System
                 var indexAfterGenericStart = genericIndexStart + 1;
                 var genericArguments = fullName.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart).ToString();
                 var genericNameParts = genericArguments.Split(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.GetPartAfterLastDot());
-                var genericPart = string.Concat(genericNameParts);
+                var genericPart = string.Join(",", genericNameParts);
 
                 return string.Concat(namePart, "<", genericPart, ">");
             }

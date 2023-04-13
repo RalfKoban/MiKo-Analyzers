@@ -76,11 +76,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (ancestor)
                 {
+                    case AttributeArgumentSyntax _:
+                    case EnumMemberDeclarationSyntax _:
+                    case PragmaWarningDirectiveTriviaSyntax _:
                     case LocalDeclarationStatementSyntax variable when variable.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
                     case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
-                    case EnumMemberDeclarationSyntax _:
-                    case AttributeArgumentSyntax _:
-                    case PragmaWarningDirectiveTriviaSyntax _:
                         return true;
                 }
             }
@@ -90,17 +90,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IgnoreBasedOnParent(LiteralExpressionSyntax node)
         {
-            var parent = node.Parent;
+            var parent = FilterUnimportantParents(node);
+            var kind = parent?.Kind();
 
-            switch (parent?.Kind())
+            switch (kind)
             {
-                case SyntaxKind.UnaryMinusExpression:
-                case SyntaxKind.UnaryPlusExpression:
                 case SyntaxKind.AddExpression:
                 case SyntaxKind.AddAssignmentExpression:
                 case SyntaxKind.SubtractExpression:
                 case SyntaxKind.SubtractAssignmentExpression:
                     return false;
+
+                case SyntaxKind.ArrayRankSpecifier:
+                    return false; // arrays, such as new byte[123]
+
+                case SyntaxKind.SimpleAssignmentExpression:
+                    return true; // assignments to width and height (???)
+
+                case SyntaxKind.CaseSwitchLabel:
+                case SyntaxKind.RangeExpression:
+                    return true;
+
+                case SyntaxKind.Argument:
+                    return IgnoreBasedOnArgument(parent); // we want to know what those numbers mean
 
                 case SyntaxKind.DivideAssignmentExpression when IsTwo(node):
                     return true;
@@ -108,24 +120,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.DivideExpression when IsTwo(node):
                     return true;
 
-                case SyntaxKind.CaseSwitchLabel:
-                case SyntaxKind.RangeExpression:
+                case SyntaxKind.EqualsValueClause when parent.Parent is VariableDeclaratorSyntax:
                     return true;
 
+                // ignore enums
+                case SyntaxKind.EqualsValueClause when parent.Parent is EnumMemberDeclarationSyntax:
+                    return true;
+
+                // ignore property initializers
                 case SyntaxKind.EqualsValueClause when parent.Parent is BasePropertyDeclarationSyntax:
-                    return true; // property initializers
+                    return true;
 
-                case SyntaxKind.Argument:
-                    return IgnoreBasedOnArgument(parent); // we want to know what those numbers mean
+                // ignore getter properties that return only a value
+                case SyntaxKind.ReturnStatement when parent.Parent is BlockSyntax block && block.Parent is AccessorDeclarationSyntax accessor && accessor.IsKind(SyntaxKind.GetAccessorDeclaration):
+                    return true;
 
-                case SyntaxKind.SimpleAssignmentExpression:
-                    return false; // assignments to width and height (???)
+                // ignore expression body properties that directly return a value
+                case SyntaxKind.ArrowExpressionClause when parent.Parent is BasePropertyDeclarationSyntax:
+                    return true;
 
-                case SyntaxKind.ArrayRankSpecifier:
-                    return false; // arrays, such as new byte[123]
+                // ignore properties with expression body getter that directly return a value
+                case SyntaxKind.ArrowExpressionClause when parent.Parent is AccessorDeclarationSyntax accessor && accessor.IsKind(SyntaxKind.GetAccessorDeclaration):
+                    return true;
 
                 default:
                     return false;
+            }
+        }
+
+        private static SyntaxNode FilterUnimportantParents(LiteralExpressionSyntax node)
+        {
+            var parent = FilterUnimportantUnaryParents(node.Parent);
+
+            if (parent?.Kind() == SyntaxKind.ParenthesizedExpression)
+            {
+                parent = parent?.Parent;
+            }
+
+            return parent;
+        }
+
+        private static SyntaxNode FilterUnimportantUnaryParents(SyntaxNode parent)
+        {
+            switch (parent?.Kind())
+            {
+                case SyntaxKind.UnaryMinusExpression:
+                case SyntaxKind.UnaryPlusExpression:
+                    return parent?.Parent;
+
+                default:
+                    return parent;
             }
         }
 
@@ -137,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case ObjectCreationExpressionSyntax o:
                     {
-                        var name = o.Type.GetNameOnlyPart();
+                        var name = o.Type.GetName(); // .GetNameOnlyPart();
 
                         switch (name)
                         {
@@ -153,6 +197,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             case nameof(Version):
                             {
                                 // ignore version ctors
+                                return true;
+                            }
+
+                            case "ArrayList":
+                            case "List":
+                            case "Dictionary":
+                            case "HashSet":
+                            case "Stack":
+                            case "Queue":
+                            {
+                                // ignore list creations
                                 return true;
                             }
 
@@ -256,7 +311,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 yield break;
             }
 
-            yield return Issue(symbol.Name, node, number);
+            yield return node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.Kind() == SyntaxKind.UnaryMinusExpression
+                             ? Issue(symbol.Name, prefix, "-" + number)
+                             : Issue(symbol.Name, node, number);
         }
     }
 }
