@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (trimmedSummary.StartsWith(wrongPhrase, comparison))
                 {
-                    problematicText = wrongPhrase;
+                    problematicText = wrongPhrase.TrimEnd();
 
                     return true;
                 }
