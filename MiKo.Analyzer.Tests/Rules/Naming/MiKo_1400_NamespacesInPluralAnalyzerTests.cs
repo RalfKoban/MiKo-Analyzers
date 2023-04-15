@@ -52,6 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     "Serialization",
                                                                                     "ServiceModel",
                                                                                     "Shared",
+                                                                                    "SomeTrivia",
+                                                                                    "Support",
                                                                                     "System",
                                                                                     "Threading",
                                                                                     "TypeScript",
@@ -64,10 +66,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]
                                                                                             {
                                                                                                 "JetBrains",
-                                                                                                "MiKoSolutions",
                                                                                                 "Microsoft",
-                                                                                                "PostSharp",
+                                                                                                "MiKoSolutions",
                                                                                                 "NDepend",
+                                                                                                "PostSharp",
                                                                                             };
 
         private static readonly IEnumerable<string> Acronyms = new[]

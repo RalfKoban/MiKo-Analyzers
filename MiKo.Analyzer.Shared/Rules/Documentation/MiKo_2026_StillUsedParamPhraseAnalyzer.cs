@@ -55,9 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var commentTrivia = method.GetDocumentationCommentTriviaSyntax();
+            var comment = method.GetDocumentationCommentTriviaSyntax();
 
-            if (commentTrivia is null)
+            if (comment is null)
             {
                 return; // no comment available
             }
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var issues = Analyze(context, methodBody, methodSymbol);
+            var issues = Analyze(context, methodBody, methodSymbol, comment);
 
             ReportDiagnostics(context, issues);
         }
@@ -92,9 +92,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var commentTrivia = method.GetDocumentationCommentTriviaSyntax();
+            var comment = method.GetDocumentationCommentTriviaSyntax();
 
-            if (commentTrivia is null)
+            if (comment is null)
             {
                 return; // no comment available
             }
@@ -113,26 +113,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var issues = Analyze(context, methodBody, methodSymbol);
+            var issues = Analyze(context, methodBody, methodSymbol, comment);
 
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, IMethodSymbol method)
+        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, IMethodSymbol method, DocumentationCommentTriviaSyntax comment)
         {
             var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
             if (used.Any())
             {
-                var commentXml = method.GetDocumentationCommentXml();
-
                 foreach (var parameter in method.Parameters.Where(_ => used.Contains(_.Name)))
                 {
-                    var comment = parameter.GetComment(commentXml);
+                    var parameterComment = comment.GetParameterComment(parameter.Name);
 
-                    if (comment.EqualsAny(Phrases, StringComparison.OrdinalIgnoreCase))
+                    if (parameterComment is null)
                     {
-                        yield return Issue(parameter);
+                        continue;
+                    }
+
+                    if (parameterComment.GetTextTrimmed().EqualsAny(Phrases))
+                    {
+                        yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
                     }
                 }
             }

@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (textTokens.Any())
             {
                 // fix starting text
-                var existingText = textTokens[0].WithoutTrivia().Text.AsSpan();
+                var existingText = textTokens[0].WithoutTrivia().ValueText.AsSpan();
                 var firstWord = existingText.FirstWord();
 
                 if (firstWord.EqualsAny(StartingPhrases))

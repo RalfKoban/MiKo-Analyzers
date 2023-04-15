@@ -34,6 +34,19 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_XML_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe""/> something.
+    /// </summary>
+    public bool " + methodName + @"()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_async_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(@"
 public class TestMe
 {

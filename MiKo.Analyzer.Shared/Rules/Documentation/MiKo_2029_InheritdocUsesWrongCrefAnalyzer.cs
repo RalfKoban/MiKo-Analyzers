@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -20,14 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var commentWithoutSymbols = commentXml.Without(Constants.Markers.Symbols);
-
-            var name = symbol.FullyQualifiedName();
-
-            if (commentWithoutSymbols.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref=\"{name}\"")
-             || commentWithoutSymbols.Contains($"{Constants.Comments.XmlElementStartingTag}{Constants.XmlTag.Inheritdoc} cref='{name}'"))
+            foreach (var node in comment.DescendantNodes())
             {
-                yield return Issue(symbol);
+                var cref = node.GetCref(Constants.XmlTag.Inheritdoc);
+                var type = cref.GetCrefType();
+
+                if (type?.GetSymbol(compilation) is ISymbol linked && symbol.Equals(linked, SymbolEqualityComparer.Default))
+                {
+                    yield return Issue(cref);
+                }
             }
         }
     }

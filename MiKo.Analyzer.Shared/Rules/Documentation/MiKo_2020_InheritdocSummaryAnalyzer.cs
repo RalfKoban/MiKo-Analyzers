@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,16 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2020";
 
-        private static readonly string[] SeeStartingPhrase = { "<see cref=", "<seealso cref=", "see <see cref=", "see <seealso cref=", "seealso <see cref=", "seealso <seealso cref=" };
-        private static readonly string[] SeeEndingPhrase = { "/>", "/>.", "/see>", "/see>.", "/seealso>", "/seealso>." };
-
         private static readonly HashSet<string> Tags = new HashSet<string>
-                                                                  {
-                                                                      Constants.XmlTag.See,
-                                                                      Constants.XmlTag.See.ToUpperInvariant(),
-                                                                      Constants.XmlTag.SeeAlso,
-                                                                      Constants.XmlTag.SeeAlso.ToUpperInvariant(),
-                                                                  };
+                                                           {
+                                                               Constants.XmlTag.See,
+                                                               Constants.XmlTag.See.ToUpperInvariant(),
+                                                               Constants.XmlTag.SeeAlso,
+                                                               Constants.XmlTag.SeeAlso.ToUpperInvariant(),
+                                                           };
 
         public MiKo_2020_InheritdocSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -30,47 +25,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            if (summaries.Any(IsSeeCrefLink) && HasIssue(symbol, compilation, comment))
+            foreach (var xmlTag in comment.GetSummaryXmls(Tags))
             {
-                yield return Issue(symbol);
+                var cref = xmlTag.GetCref();
+
+                if (cref != null && HasIssue(symbol, compilation, cref))
+                {
+                    yield return Issue(xmlTag);
+                }
             }
         }
 
-        private static bool IsSeeCrefLink(string summary) => summary.StartsWithAny(SeeStartingPhrase) && summary.EndsWithAny(SeeEndingPhrase);
-
-        private static bool HasIssue(ISymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment)
+        private static bool HasIssue(ISymbol symbol, Compilation compilation, XmlCrefAttributeSyntax cref)
         {
             if (symbol.IsOverride)
             {
                 return true;
             }
 
-            var xmlTag = comment.GetSummaryXmls(Tags).FirstOrDefault();
-
-            if (xmlTag is null)
-            {
-                return false;
-            }
+            var type = cref.GetCrefType();
+            var linkedSymbol = type?.GetSymbol(compilation);
 
             switch (symbol)
             {
-                case IMethodSymbol methodSymbol:
+                case IPropertySymbol _:
                 {
-                    return methodSymbol.IsInterfaceImplementation();
+                    return linkedSymbol is IPropertySymbol linked && linked.Name == symbol.Name && symbol.IsInterfaceImplementation();
+                }
+
+                case IEventSymbol _:
+                {
+                    return linkedSymbol is IEventSymbol linked && linked.Name == symbol.Name && symbol.IsInterfaceImplementation();
+                }
+
+                case IMethodSymbol _:
+                {
+                    return linkedSymbol is IMethodSymbol linked && linked.Name == symbol.Name && symbol.IsInterfaceImplementation();
                 }
 
                 case ITypeSymbol typeSymbol:
                 {
-                    var linkedTypeSyntax = xmlTag.GetCref().GetCrefType();
-
-                    return linkedTypeSyntax?.GetSymbol(compilation) is ITypeSymbol linkedTypeSymbol && typeSymbol.IsRelated(linkedTypeSymbol);
+                    return linkedSymbol is ITypeSymbol linked && typeSymbol.IsRelated(linked);
                 }
 
                 default:
                 {
-                    return true;
+                    return false;
                 }
             }
         }

@@ -57,12 +57,15 @@ public class TestMe
 }
 ");
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_test_method_in_test_class_with_wrong_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
-
+        [Test]
+        public void An_issue_is_reported_for_test_method_in_test_class_with_wrong_name()
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var test in Tests)
+                                           {
+                                               An_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
 {
@@ -70,14 +73,34 @@ public class TestMe
     public void SomeArbitraryMethod() { }
 }
 ");
+                                           }
+                                       }
+                                   });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_parameter_of_test_method_in_test_class_with_wrong_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
-
+        [Test]
+        public void An_issue_is_reported_for_parameter_of_test_method_in_test_class_with_wrong_name()
+            => Assert.Multiple(
+                               () =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var test in Tests)
+                                           {
+                                               An_issue_is_reported_for(@"
 [" + testFixture + @"]
+public class TestMe
+{
+    [" + test + @"]
+    public void SomeTest(int arbitraryParameter) { }
+}
+");
+                                           }
+                                       }
+                                   });
+
+        [Test]
+        public void An_issue_is_reported_for_parameter_of_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+
 public class TestMe
 {
     [" + test + @"]
@@ -86,23 +109,31 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parameter_of_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_const_in_test_method_in_test_class_with_wrong_name()
+            => Assert.Multiple(() =>
+                                   {
+                                       foreach (var testFixture in TestFixtures)
+                                       {
+                                           foreach (var test in Tests)
+                                           {
+                                               An_issue_is_reported_for(@"
+[" + testFixture + @"]
 public class TestMe
 {
     [" + test + @"]
-    public void SomeTest(int arbitraryParameter) { }
+    public void SomeArbitraryMethod()
+    {
+        const int ArbitraryValue = 42;
+    }
 }
 ");
+                                           }
+                                       }
+                                   });
 
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_const_in_test_method_in_test_class_with_wrong_name_(
-                                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                [ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
+        [Test]
+        public void An_issue_is_reported_for_const_in_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 
-[" + testFixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -114,25 +145,14 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_const_in_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
-
-public class TestMe
-{
-    [" + test + @"]
-    public void SomeArbitraryMethod()
-    {
-        const int ArbitraryValue = 42;
-    }
-}
-");
-
-        [Test, Combinatorial]
-        public void An_issue_is_reported_for_local_variable_in_test_method_in_test_class_with_wrong_name_(
-                                                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                                    [ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
-
+        public void An_issue_is_reported_for_local_variable_in_test_method_in_test_class_with_wrong_name()
+            => Assert.Multiple(() =>
+            {
+            foreach (var testFixture in TestFixtures)
+            {
+                foreach (var test in Tests)
+                {
+                    An_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
 {
@@ -143,10 +163,12 @@ public class TestMe
     }
 }
 ");
+                }
+            }
+            });
 
         [Test]
-        public void An_issue_is_reported_for_local_variable_in_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test)
-            => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_local_variable_in_test_method_in_non_test_class_with_wrong_name_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
 
 public class TestMe
 {

@@ -175,7 +175,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method()
+        public void Code_gets_fixed_for_method([Values("TME_MyEvent", "myEvent")] string method)
         {
             const string Template = @"
 using System;
@@ -196,7 +196,7 @@ public class TestMe
     public void #(object sender, EventArgs e) { }
 }";
 
-            VerifyCSharpFix(Template.Replace("#", "TME_MyEvent"), Template.Replace("#", "OnMyEvent"));
+            VerifyCSharpFix(Template.Replace("#", method), Template.Replace("#", "OnMyEvent"));
         }
 
         [Test]

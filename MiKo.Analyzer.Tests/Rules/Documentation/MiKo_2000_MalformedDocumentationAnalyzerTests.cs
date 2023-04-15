@@ -21,6 +21,29 @@ public sealed class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correct_XML_on_class_with_escaped_XML_entities() => No_issue_is_reported_for(@"
+/// <summary>
+/// Something &amp; valid.
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correct_XML_on_class_inside_code_tag() => No_issue_is_reported_for(@"
+/// <summary>
+/// Something valid.
+/// <code>
+/// Test &amp; other stuff.
+/// </code>
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correct_XML_on_method() => No_issue_is_reported_for(@"
 public sealed class TestMe
 {

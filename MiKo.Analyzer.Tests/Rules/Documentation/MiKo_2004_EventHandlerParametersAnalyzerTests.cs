@@ -107,7 +107,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -121,7 +121,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_EventArgs() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_EventArgs() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -135,7 +135,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender_and_EventArgs() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_partly_documented_event_handling_method_with_missing_documentation_for_sender_and_EventArgs() => No_issue_is_reported_for(@"
 public class MyEventArgs : System.EventArgs { }
 
 public class TestMe
@@ -224,77 +224,6 @@ class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_sender_and_EventArgs_are_both_not_commented()
-        {
-            const string OriginalCode = @"
-using System;
-
-class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    void DoSomething(object sender, EventArgs e) { }
-}";
-
-            const string FixedCode = @"
-using System;
-
-class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""sender"">
-    /// The source of the event.
-    /// </param>
-    /// <param name=""e"">
-    /// An <see cref=""EventArgs""/> that contains the event data.
-    /// </param>
-    void DoSomething(object sender, EventArgs e) { }
-}";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_if_sender_is_not_commented_and_EventArgs_is_commented_correctly()
-        {
-            const string OriginalCode = @"
-using System;
-
-class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""e"">
-    /// An <see cref=""EventArgs""/> that contains the event data.
-    /// </param>
-    void DoSomething(object sender, EventArgs e) { }
-}";
-
-            const string FixedCode = @"
-using System;
-
-class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""sender"">
-    /// The source of the event.
-    /// </param>
-    /// <param name=""e"">
-    /// An <see cref=""EventArgs""/> that contains the event data.
-    /// </param>
-    void DoSomething(object sender, EventArgs e) { }
-}";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
         public void Code_gets_fixed_if_sender_is_not_commented_and_EventArgs_is_commented_incorrectly()
         {
             const string OriginalCode = @"
@@ -319,46 +248,6 @@ class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <param name=""sender"">
-    /// The source of the event.
-    /// </param>
-    /// <param name=""e"">
-    /// An <see cref=""EventArgs""/> that contains the event data.
-    /// </param>
-    void DoSomething(object sender, EventArgs e) { }
-}";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_if_EventArgs_is_not_commented_and_sender_is_commented_correctly()
-        {
-            const string OriginalCode = @"
-using System;
-
-class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""sender"">
-    /// The source of the event.
-    /// </param>
-    void DoSomething(object sender, EventArgs e) { }
-}";
-
-            const string FixedCode = @"
-using System;
-
-class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <param name=""sender"">
-    /// The source of the event.
-    /// </param>
     /// <param name=""e"">
     /// An <see cref=""EventArgs""/> that contains the event data.
     /// </param>
@@ -395,9 +284,6 @@ class TestMe
     /// </summary>
     /// <param name=""sender"">
     /// The source of the event.
-    /// </param>
-    /// <param name=""e"">
-    /// An <see cref=""EventArgs""/> that contains the event data.
     /// </param>
     void DoSomething(object sender, EventArgs e) { }
 }";

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
                                                                                                                                                                                     ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                    : VerifyParameterComments(symbol, commentXml);
+                                                                                                                                                                                    : VerifyParameterComments(symbol, commentXml, comment);
 
         private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
         {
@@ -47,24 +47,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        };
         }
 
-        private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml)
+        private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml, DocumentationCommentTriviaSyntax comment)
         {
             var sender = method.Parameters[0];
-            var senderComment = sender.GetComment(xml);
+            var senderComment = comment.GetParameterComment(sender.Name);
 
-            if (Constants.Comments.EventSourcePhrase.None(_ => _ == senderComment))
+            if (senderComment != null)
             {
-                yield return Issue(sender, sender.Name, Constants.Comments.EventSourcePhrase.ElementAt(0), new Dictionary<string, string> { { IsSender, string.Empty } });
+                var phrase = sender.GetComment(xml);
+
+                if (Constants.Comments.EventSourcePhrase.None(_ => _ == phrase))
+                {
+                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), Constants.Comments.EventSourcePhrase.ElementAt(0), new Dictionary<string, string> { { IsSender, string.Empty } });
+                }
             }
 
-            var phrases = CreatePhrases(method).Concat(Constants.Comments.UnusedPhrase);
-
             var eventArgs = method.Parameters[1];
-            var eventArgsComment = eventArgs.GetComment(xml);
+            var eventArgsComment = comment.GetParameterComment(eventArgs.Name);
 
-            if (phrases.None(_ => _ == eventArgsComment))
+            if (eventArgsComment != null)
             {
-                yield return Issue(eventArgs, eventArgs.Name, phrases.ElementAt(0), new Dictionary<string, string>());
+                var phrases = CreatePhrases(method).Concat(Constants.Comments.UnusedPhrase).ToList();
+
+                var phrase = eventArgs.GetComment(xml);
+                if (phrases.None(_ => _ == phrase))
+                {
+                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases.ElementAt(0), new Dictionary<string, string>());
+                }
             }
         }
     }

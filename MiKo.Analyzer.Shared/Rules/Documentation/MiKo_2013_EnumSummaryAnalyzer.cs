@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,18 +12,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2013";
 
+        private const string StartingPhrase = Constants.Comments.EnumStartingPhrase;
+
         public MiKo_2013_EnumSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
+
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            if (summaries.None(_ => _.AsSpan().TrimStart().StartsWith(Constants.Comments.EnumStartingPhrase, StringComparison.Ordinal)))
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
             {
-                yield return Issue(symbol, Constants.Comments.EnumStartingPhrase);
+                yield return AnalyzeTextStart(symbol, summaryXml);
             }
+        }
+
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
+        {
+            comparison = StringComparison.Ordinal;
+
+            var text = valueText.AsSpan().TrimStart();
+
+            var startsWith = text.StartsWith(StartingPhrase, comparison);
+
+            problematicText = text.FirstWord().ToString();
+
+            return startsWith is false;
         }
     }
 }

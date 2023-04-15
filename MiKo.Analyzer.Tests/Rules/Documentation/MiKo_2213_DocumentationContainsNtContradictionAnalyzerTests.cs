@@ -51,6 +51,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "Weren't", "Were not" },
                                                                          { "Won't", "Will not" },
                                                                          { "Wouldn't", "Would not" },
+
+                                                                         // without apostrophes
+                                                                         { "cant", "cannot" },
+                                                                         { "couldnt", "could not" },
+                                                                         { "darent", "dare not" },
+                                                                         { "didnt", "did not" },
+                                                                         { "doesnt", "does not" },
+                                                                         { "dont", "do not" },
+                                                                         { "hadnt", "had not" },
+                                                                         { "hasnt", "has not" },
+                                                                         { "havent", "have not" },
+                                                                         { "isnt", "is not" },
+                                                                         { "neednt", "need not" },
+                                                                         { "shouldnt", "should not" },
+                                                                         { "wasnt", "was not" },
+                                                                         { "werent", "were not" },
+                                                                         { "wont", "will not" },
+                                                                         { "wouldnt", "would not" },
+
+                                                                         // capitalized without apostrophes
+                                                                         { "Cant", "Cannot" },
+                                                                         { "Couldnt", "Could not" },
+                                                                         { "Darent", "Dare not" },
+                                                                         { "Didnt", "Did not" },
+                                                                         { "Doesnt", "Does not" },
+                                                                         { "Dont", "Do not" },
+                                                                         { "Hadnt", "Had not" },
+                                                                         { "Hasnt", "Has not" },
+                                                                         { "Havent", "Have not" },
+                                                                         { "Isnt", "Is not" },
+                                                                         { "Neednt", "Need not" },
+                                                                         { "Shouldnt", "Should not" },
+                                                                         { "Wasnt", "Was not" },
+                                                                         { "Werent", "Were not" },
+                                                                         { "Wont", "Will not" },
+                                                                         { "Wouldnt", "Would not" },
                                                                      };
 
         private static readonly string[] WrongPhrases = Map.Keys.ToArray();
@@ -61,10 +97,11 @@ public class TestMe
 {
 }");
 
-        [Test]
-        public void No_issue_is_reported_for_correct_comment() => No_issue_is_reported_for(@"
+        [TestCase("Some summary.")]
+        [TestCase("Some parent.")]
+        public void No_issue_is_reported_for_correct_comment_(string text) => No_issue_is_reported_for(@"
 /// <summary>
-/// Some summary.
+/// " + text + @"
 /// </summary>
 public class TestMe
 {

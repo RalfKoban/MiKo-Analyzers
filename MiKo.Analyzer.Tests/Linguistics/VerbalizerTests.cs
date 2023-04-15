@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Adoption", ExpectedResult = "Adopt")]
         [TestCase("Analysis", ExpectedResult = "Analyze")]
         [TestCase("Aquisition", ExpectedResult = "Aquire")]
+        [TestCase("Cancellation", ExpectedResult = "Cancel")]
         [TestCase("Caption", ExpectedResult = "Caption", Description = "There is no verb available")]
         [TestCase("Comparison", ExpectedResult = "Compare")]
         [TestCase("Configuration", ExpectedResult = "Configure")]

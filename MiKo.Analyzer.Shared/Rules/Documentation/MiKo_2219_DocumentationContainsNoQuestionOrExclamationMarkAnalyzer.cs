@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -27,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.Ancestors<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName()))).SelectMany(_ => _.TextTokens))
+            foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.Ancestors<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName()))).SelectMany(_ => _.TextTokens).Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
             {
                 foreach (var location in GetAllLocations(token, Terms))
                 {
@@ -38,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    yield return Issue(symbol.Name, location, location.GetText());
+                    yield return Issue(location);
                 }
             }
         }

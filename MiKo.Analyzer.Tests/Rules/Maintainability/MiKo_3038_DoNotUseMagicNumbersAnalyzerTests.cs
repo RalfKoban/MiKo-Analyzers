@@ -9,6 +9,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3038_DoNotUseMagicNumbersAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] CollectionTypes =
+            {
+                "ArrayList",
+                "HashSet<string>",
+                "List<string>",
+                "Dictionary<string, string>",
+                "Queue<string>",
+                "Stack<string>",
+            };
+
         [Test]
         public void No_issue_is_reported_for_const_field_([Values(-42, -1, 0, 1, 42)] int value) => No_issue_is_reported_for(@"
 using System;
@@ -48,7 +58,7 @@ namespace Bla
     {
         None = 0,
         Something = 1,
-        Anything = 42,
+        Anything = 42 + 0815,
     }
 }
 ");
@@ -67,20 +77,124 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_field_assigned_to_zero() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_capacity_argument_of_object_initializer_of_([ValueSource(nameof(CollectionTypes))] string type) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public " + type + @" DoSomething()
+        {
+            var result = new " + type + @"(2) { };
+
+            return result;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_capacity_argument_of_ctor_of_([ValueSource(nameof(CollectionTypes))] string type) => No_issue_is_reported_for(@"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public " + type + @" DoSomething()
+        {
+            var result = new " + type + @"(2);
+
+            return result;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
 {
     public class TestMe
     {
-        private int i = 0;
+        public int Property { get; set; } = 1234;
     }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_variable_assigned_to_([Values("0", "0L", "0u", "0.0", "0d", "0.0d", "0f", "0.0f", "1", "1L", "1u", "1.0", "1d", "1.0d", "1f", "1.0f", "-1", "-1L", "-1d", "-1f", "-1.0")] string value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_getter_return_value() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Something
+        {
+            get { return 42; }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_expression_body_getter_return_value() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Something
+        {
+            get => 42;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_expression_body_property_return_value() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int Something => 42;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_assigned_to_([Values("0", "1", "2", "42")] string value) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int i = " + value + @";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_assigned_to_([Values("0", "0L", "0u", "0.0", "0d", "0.0d", "0f", "0.0f", "1", "1L", "1u", "1.0", "1d", "1.0d", "1f", "1.0f", "-1", "-1L", "-1d", "-1f", "-1.0", "42")] string value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -175,6 +289,40 @@ namespace Bla
             var i = 0;
             i = i - 1;
             i -= 1;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_division_by_([Values("2", "2l", "2u", "2.0", "2.0d", "2.0f")] string number) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var i = 1 / " + number + @";
+            i /= " + number + @";
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_assignment_([Values("42", "-42", "(-42)")] string number) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            int i;
+            i = " + number + @";
         }
     }
 }
@@ -481,7 +629,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_([Values(-42, 42)] int value) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_([Values(-42, 42)] int value) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla

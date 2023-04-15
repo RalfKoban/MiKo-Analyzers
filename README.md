@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 357 rules that are currently provided by the analyzer.
+The following tables list all the 359 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -128,7 +128,8 @@ The following tables list all the 357 rules that are currently provided by the a
 |MiKo_1110|Test methods with parameters should be suffixed with underscore|&#x2713;|&#x2713;|
 |MiKo_1111|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1112|Do not name test data 'arbitrary'|&#x2713;|&#x2713;|
-|MiKo_1113|Do not name unit test methods BDD style|&#x2713;|\-|
+|MiKo_1113|Test methods should not be named according BDD style|&#x2713;|\-|
+|MiKo_1114|Test methods should not be named 'HappyPath' or 'BadPath'|&#x2713;|\-|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
@@ -188,7 +189,7 @@ The following tables list all the 357 rules that are currently provided by the a
 |MiKo_2043|&lt;summary&gt; documentation of custom delegates should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2044|Documentation references method parameters correctly|&#x2713;|&#x2713;|
 |MiKo_2045|&lt;summary&gt; documentation should not reference parameters|&#x2713;|&#x2713;|
-|MiKo_2046|Documentation should reference type parameters correctly|&#x2713;|\-|
+|MiKo_2046|Documentation should reference type parameters correctly|&#x2713;|&#x2713;|
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a default starting phrase|&#x2713;|\-|
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2049|Documentation should be more explicit and not use 'will be'|&#x2713;|\-|
@@ -215,7 +216,7 @@ The following tables list all the 357 rules that are currently provided by the a
 |MiKo_2091|Documentation for inequality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase|&#x2713;|&#x2713;|
 |MiKo_2101|&lt;example&gt; documentation should show code example in &lt;code&gt; tags|&#x2713;|&#x2713;|
-|MiKo_2200|Use a capitalized letter to start the comment|&#x2713;|\-|
+|MiKo_2200|Use a capitalized letter to start the comment|&#x2713;|&#x2713;|
 |MiKo_2201|Use a capitalized letter to start the sentences in the comment|&#x2713;|\-|
 |MiKo_2202|Documentation should use the term 'identifier' instead of 'id'|&#x2713;|&#x2713;|
 |MiKo_2203|Documentation should use the term 'unique identifier' instead of 'guid'|&#x2713;|&#x2713;|
@@ -237,6 +238,7 @@ The following tables list all the 357 rules that are currently provided by the a
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
+|MiKo_2222|Documentation should use the term 'identification' instead of 'ident'|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|

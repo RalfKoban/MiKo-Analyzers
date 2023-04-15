@@ -31,10 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual IEnumerable<Diagnostic> AnalyzeException(ISymbol owningSymbol, IReadOnlyCollection<IParameterSymbol> parameters, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
-            var comment = exceptionComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim().ToString();
+            var comment = exceptionComment.GetTextTrimmed();
 
             // remove -or- separators and split comment into parts to inspect individually
-            var parts = comment.Split(Constants.Comments.ExceptionSplittingPhrase, StringSplitOptions.RemoveEmptyEntries);
+            var parts = comment.SplitBy(Constants.Comments.ExceptionSplittingPhrase);
 
             // create default proposal for parameter names
             var proposal = parameters

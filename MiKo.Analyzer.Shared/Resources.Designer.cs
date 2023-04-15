@@ -3705,8 +3705,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For maintenance reasons, parameterized test methods should be easy to read.
-        ///Therefore, they should be suffixed with underscores..
+        ///   Looks up a localized string similar to For maintenance reasons, parameterized test methods should be easy to read and parameters easy to spot.
+        ///Therefore, the methods should be suffixed with underscores.
+        ///
+        ///Example:
+        ///   &quot;Do_something_for_value_(42)&quot; is easier to read than &quot;Do_something_for_value(42)&quot; because of the additional space before the brace..
         /// </summary>
         public static string MiKo_1110_Description {
             get {
@@ -3829,11 +3832,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not name unit test methods BDD style.
+        ///   Looks up a localized string similar to Test methods should not be named according BDD style.
         /// </summary>
         public static string MiKo_1113_Title {
             get {
                 return ResourceManager.GetString("MiKo_1113_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named according to what scenario they test but not according to whether that is a so-called &apos;happy path&apos; or &apos;bad path&apos; inside the code..
+        /// </summary>
+        public static string MiKo_1114_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1114_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not name &apos;{0}&apos; a happy or bad path.
+        /// </summary>
+        public static string MiKo_1114_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1114_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not be named &apos;HappyPath&apos; or &apos;BadPath&apos;.
+        /// </summary>
+        public static string MiKo_1114_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1114_Title", resourceCulture);
             }
         }
         
@@ -4364,7 +4394,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Documentation to: &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2004_MessageFormat {
             get {
@@ -4734,7 +4764,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2018_CodeFixTitle {
             get {
@@ -4752,7 +4782,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;{2}&apos; instead of &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2018_MessageFormat {
             get {
@@ -5049,7 +5079,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2027_MessageFormat {
             get {
@@ -5743,6 +5773,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace invalid type parameter reference.
+        /// </summary>
+        public static string MiKo_2046_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2046_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The XML documentation should reference type parameters properly via &apos;&lt;typeparamref name=&quot;...&quot; /&gt;&apos;..
         /// </summary>
         public static string MiKo_2046_Description {
@@ -5752,7 +5791,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace invalid type parameter reference &apos;{1}&apos; by &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace invalid type parameter reference.
         /// </summary>
         public static string MiKo_2046_MessageFormat {
             get {
@@ -6261,7 +6300,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in &lt;summary&gt;.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in &lt;summary&gt;.
         /// </summary>
         public static string MiKo_2071_MessageFormat {
             get {
@@ -6333,7 +6372,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;Determines whether&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;Determines whether&apos;.
         /// </summary>
         public static string MiKo_2073_MessageFormat {
             get {
@@ -6407,7 +6446,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2075_MessageFormat {
             get {
@@ -6507,7 +6546,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not start &lt;summary&gt; with: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Do not start &lt;summary&gt; with: &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2082_MessageFormat {
             get {
@@ -6665,6 +6704,15 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2101_Title {
             get {
                 return ResourceManager.GetString("MiKo_2101_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use capitalized letter.
+        /// </summary>
+        public static string MiKo_2200_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2200_CodeFixTitle", resourceCulture);
             }
         }
         
@@ -6878,7 +6926,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;{1}&apos; from documentation.
+        ///   Looks up a localized string similar to Remove &apos;{0}&apos; from documentation.
         /// </summary>
         public static string MiKo_2206_MessageFormat {
             get {
@@ -6943,7 +6991,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use a better description than &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Use a better description than &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_2208_MessageFormat {
             get {
@@ -7369,7 +7417,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Replace &apos;{1}&apos; with &apos;{2}&apos;.
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2218_MessageFormat {
             get {
@@ -7400,7 +7448,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in documentation.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in documentation.
         /// </summary>
         public static string MiKo_2219_MessageFormat {
             get {
@@ -7477,6 +7525,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2221_Title {
             get {
                 return ResourceManager.GetString("MiKo_2221_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change &apos;ident&apos; into identification&apos;.
+        /// </summary>
+        public static string MiKo_2222_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2222_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should not use the abbreviation &apos;ident&apos;. Instead, it should clearly document that this is an identification. Hence, it should use the term &apos;identification&apos; instead..
+        /// </summary>
+        public static string MiKo_2222_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2222_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;identification&apos; instead of &apos;ident&apos;.
+        /// </summary>
+        public static string MiKo_2222_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2222_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should use the term &apos;identification&apos; instead of &apos;ident&apos;.
+        /// </summary>
+        public static string MiKo_2222_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2222_Title", resourceCulture);
             }
         }
         

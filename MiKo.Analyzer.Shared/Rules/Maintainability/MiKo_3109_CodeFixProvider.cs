@@ -62,6 +62,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = args.Arguments;
             var text = GetText(arguments[0].Expression);
 
+            string suffix = null;
+
             var finalText = text.AsSpan()
                                 .Words()
                                 .Select(_ => _.ToLowerCaseAt(0))
@@ -70,7 +72,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                 switch (_)
                                                 {
                                                     case "add":
-                                                    case "can":
                                                     case "get":
                                                     case "has":
                                                     case "is":
@@ -84,6 +85,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                     case "id":
                                                         return "identifier";
 
+                                                    case "can":
+                                                    {
+                                                        suffix = "state";
+                                                        return string.Empty;
+                                                    }
+
+                                                    case "execute":
+                                                        return "executable";
+
                                                     default:
                                                         return _;
                                                 }
@@ -94,6 +104,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var firstWord = GetStartingWord(arguments);
 
             finalText.Insert(0, firstWord);
+
+            if (suffix != null)
+            {
+                finalText.Add(suffix);
+            }
 
             return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
         }

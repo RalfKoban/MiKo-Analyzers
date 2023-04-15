@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -85,7 +86,7 @@ namespace MiKoSolutions.Analyzers
                         .OfType<LocalFunctionStatementSyntax>();
         }
 
-        internal static bool ContainsExtensionMethods(this ITypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.GetExtensionMethods().Any();
+        internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
@@ -206,13 +207,104 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
-            var parameters = "(" + value.Parameters.Select(GetParameterSignature).ConcatenatedWith(",") + ")";
-            var staticPrefix = value.IsStatic ? "static " : string.Empty;
-            var asyncPrefix = value.IsAsync ? "async " : string.Empty;
+            var builder = new StringBuilder();
 
-            var methodName = GetMethodNameForKind(value);
+            if (value.IsStatic)
+            {
+                builder.Append("static ");
+            }
 
-            return string.Concat(staticPrefix, asyncPrefix, methodName, parameters);
+            if (value.IsAsync)
+            {
+                builder.Append("async ");
+            }
+
+            AppendMethodNameForKind(value, builder);
+            AppendParameters(value.Parameters, builder);
+
+            var signature = builder.ToString();
+
+            return signature;
+
+            void AppendMethodNameForKind(IMethodSymbol method, StringBuilder sb)
+            {
+                switch (method.MethodKind)
+                {
+                    case MethodKind.Constructor:
+                    case MethodKind.StaticConstructor:
+                        sb.Append(method.ContainingType.Name);
+                        break;
+
+                    default:
+                    {
+                        var returnType = method.ReturnType.MinimalTypeName();
+
+                        sb.Append(returnType).Append(" ").Append(method.Name);
+
+                        if (method.IsGenericMethod)
+                        {
+                            sb.Append("<");
+
+                            var typeParameters = method.TypeParameters;
+                            var count = typeParameters.Length - 1;
+
+                            for (var i = 0; i <= count; i++)
+                            {
+                                sb.Append(typeParameters[i].MinimalTypeName());
+
+                                if (i < count)
+                                {
+                                    sb.Append(",");
+                                }
+                            }
+
+                            sb.Append(">");
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            void AppendParameters(IReadOnlyList<IParameterSymbol> parameters, StringBuilder sb)
+            {
+                sb.Append("(");
+
+                var count = parameters.Count - 1;
+
+                for (var i = 0; i <= count; i++)
+                {
+                    AppendParameterSignature(parameters[i], sb);
+
+                    if (i < count)
+                    {
+                        sb.Append(",");
+                    }
+                }
+
+                sb.Append(")");
+            }
+
+            void AppendParameterSignature(IParameterSymbol parameter, StringBuilder sb)
+            {
+                sb.Append(GetModifierSignature(parameter));
+                sb.Append(parameter.Type.MinimalTypeName());
+            }
+
+            string GetModifierSignature(IParameterSymbol parameter)
+            {
+                if (parameter.IsParams)
+                {
+                    return "params ";
+                }
+
+                switch (parameter.RefKind)
+                {
+                    case RefKind.Ref: return "ref ";
+                    case RefKind.Out: return "out ";
+                    default: return string.Empty;
+                }
+            }
         }
 
         internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
@@ -300,7 +392,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct();
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>();
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
@@ -442,6 +534,28 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool AnyBaseType(this ITypeSymbol value, Predicate<ITypeSymbol> callback)
+        {
+            var symbol = value;
+
+            while (true)
+            {
+                if (callback(symbol))
+                {
+                    return true;
+                }
+
+                var baseType = symbol.BaseType;
+
+                if (baseType is null)
+                {
+                    return false;
+                }
+
+                symbol = baseType;
+            }
+        }
+
         internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
             var symbol = value;
@@ -524,31 +638,15 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
-                    {
-                        var symbol = value;
+                {
+                    return value.AnyBaseType(_ => baseClass == string.Intern(_.ToString()));
+                }
 
-                        while (true)
-                        {
-                            var fullName = string.Intern(symbol.ToString());
-
-                            if (baseClass == fullName)
-                            {
-                                return true;
-                            }
-
-                            var baseType = symbol.BaseType;
-
-                            if (baseType is null)
-                            {
-                                return false;
-                            }
-
-                            symbol = baseType;
-                        }
-                    }
+                default:
+                {
+                    return false;
+                }
             }
-
-            return false;
         }
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName, string baseClassFullQualifiedName)
@@ -582,58 +680,42 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
-                    {
-                        var symbol = value;
+                {
+                    return value.AnyBaseType(_ =>
+                                                 {
+                                                     var fullName = string.Intern(_.ToString());
 
-                        while (true)
-                        {
-                            var fullName = string.Intern(symbol.ToString());
+                                                     return baseClassName == fullName || baseClassFullQualifiedName == fullName;
+                                                 });
+                }
 
-                            if (baseClassName == fullName)
-                            {
-                                return true;
-                            }
-
-                            if (baseClassFullQualifiedName == fullName)
-                            {
-                                return true;
-                            }
-
-                            var baseType = symbol.BaseType;
-
-                            if (baseType is null)
-                            {
-                                return false;
-                            }
-
-                            symbol = baseType;
-                        }
-                    }
+                default:
+                    return false;
             }
-
-            return false;
         }
 
         internal static bool IsRelated(this ITypeSymbol value, ITypeSymbol type)
         {
-            if (type.TypeKind == TypeKind.Interface)
+            switch (type.TypeKind)
             {
-                if (value.AllInterfaces.Contains(type))
+                case TypeKind.Interface:
                 {
                     // its an interface implementation, so we do not need an extra type
-                    return true;
+                    return value.AllInterfaces.Contains(type, SymbolEqualityComparer.Default);
                 }
-            }
-            else
-            {
-                if (value.IncludingAllBaseTypes().Contains(type))
+
+                case TypeKind.Class:
+                case TypeKind.Struct:
                 {
                     // its a base type, so we do not need an extra type
-                    return true;
+                    return value.AnyBaseType(_ => _.Equals(type, SymbolEqualityComparer.Default));
+                }
+
+                default:
+                {
+                    return false;
                 }
             }
-
-            return false;
         }
 
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
@@ -715,6 +797,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;
+
+        internal static bool IsDisposable(this ITypeSymbol value) => value.AllInterfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
@@ -1073,15 +1157,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsRoutedEvent(this ITypeSymbol value)
         {
-            switch (value.Name)
+            if (value.TypeKind == TypeKind.Class && value.IsSealed)
             {
-                case "RoutedEvent":
-                case "System.Windows.RoutedEvent":
-                    return true;
-
-                default:
-                    return false;
+                switch (value.Name)
+                {
+                    case "RoutedEvent":
+                    case "System.Windows.RoutedEvent":
+                        return true;
+                }
             }
+
+            return false;
         }
 
         internal static bool IsSerializationConstructor(this IMethodSymbol value) => value.IsConstructor() && value.Parameters.Length == 2 && value.Parameters[0].IsSerializationInfoParameter() && value.Parameters[1].IsStreamingContextParameter();
@@ -1159,7 +1245,7 @@ namespace MiKoSolutions.Analyzers
                     fieldNames = Constants.Markers.FieldPrefixes.Select(_ => _ + parameterName).ToArray();
                 }
 
-                if (field.Name.EqualsAny(fieldNames, StringComparison.OrdinalIgnoreCase))
+                if (field.Name.EqualsAny(fieldNames))
                 {
                     return true;
                 }
@@ -1232,45 +1318,6 @@ namespace MiKoSolutions.Analyzers
             return result != null;
         }
 
-        private static string GetMethodNameForKind(IMethodSymbol method)
-        {
-            switch (method.MethodKind)
-            {
-                case MethodKind.Constructor:
-                case MethodKind.StaticConstructor:
-                    return method.ContainingType.Name;
-
-                default:
-                    {
-                        var returnType = method.ReturnType.MinimalTypeName();
-
-                        if (method.IsGenericMethod)
-                        {
-                            var suffix = string.Concat("<", method.TypeParameters.Select(MinimalTypeName).ConcatenatedWith(","), ">");
-
-                            return string.Concat(returnType, " ", method.Name, suffix);
-                        }
-
-                        return string.Concat(returnType, " ", method.Name);
-                    }
-            }
-        }
-
-        private static string GetModifierSignature(IParameterSymbol parameter)
-        {
-            if (parameter.IsParams)
-            {
-                return "params ";
-            }
-
-            switch (parameter.RefKind)
-            {
-                case RefKind.Ref: return "ref ";
-                case RefKind.Out: return "out ";
-                default: return string.Empty;
-            }
-        }
-
         private static string GetNameWithoutInterfacePrefix(this ITypeSymbol value)
         {
             var typeName = value.Name;
@@ -1278,14 +1325,6 @@ namespace MiKoSolutions.Analyzers
             return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I')
                        ? typeName.Substring(1)
                        : typeName;
-        }
-
-        private static string GetParameterSignature(IParameterSymbol parameter)
-        {
-            var modifier = GetModifierSignature(parameter);
-            var parameterType = parameter.Type.MinimalTypeName();
-
-            return modifier + parameterType;
         }
     }
 }

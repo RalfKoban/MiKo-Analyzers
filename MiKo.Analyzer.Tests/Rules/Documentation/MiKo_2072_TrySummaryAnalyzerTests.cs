@@ -21,6 +21,32 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public bool TryDoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_that_starts_documentation_with_see_XML() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe""/>.
+    /// </summary>
+    public bool TryDoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_Try_method_([Values("Try", "Tries")] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {

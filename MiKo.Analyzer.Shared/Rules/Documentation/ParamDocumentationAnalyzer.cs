@@ -15,40 +15,59 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeParameters(symbol, commentXml, comment);
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, string comment, string[] phrase)
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrase, StringComparison comparison = StringComparison.Ordinal)
         {
-            if (comment.StartsWithAny(phrase, StringComparison.Ordinal) is false)
+            if (comment.StartsWithAny(phrase, comparison) is false)
             {
                 var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
                 var proposal = useAllPhrases
                                    ? phrase.HumanizedConcatenated()
                                    : phrase[0].SurroundedWithApostrophe();
 
-                yield return Issue(parameter, string.Intern(proposal));
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), string.Intern(proposal));
             }
+        }
+
+        protected IEnumerable<Diagnostic> AnalyzePlainTextStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
+        {
+            var text = parameterComment.GetTextTrimmed();
+
+            if (text.StartsWithAny(phrases, comparison))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            var useAllPhrases = phrases.Length > 1 && phrases[0].Length <= 10;
+            var proposal = useAllPhrases
+                               ? phrases.HumanizedConcatenated()
+                               : phrases[0].SurroundedWithApostrophe();
+
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), string.Intern(proposal)) };
         }
 
         protected virtual bool ShallAnalyzeParameter(IParameterSymbol parameter) => true;
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment) => Enumerable.Empty<Diagnostic>();
+        protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment) => Enumerable.Empty<Diagnostic>();
 
         protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             foreach (var parameter in symbol.Parameters.Where(ShallAnalyzeParameter))
             {
-                var parameterComment = parameter.GetComment(commentXml);
+                var parameterComment = comment.GetParameterComment(parameter.Name);
 
                 if (parameterComment is null)
                 {
                     continue;
                 }
 
-                if (parameterComment.EqualsAny(Constants.Comments.UnusedPhrase, StringComparison.Ordinal))
+                var parameterCommentXml = parameter.GetComment(commentXml);
+
+                if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase))
                 {
                     continue;
                 }
 
-                foreach (var issue in AnalyzeParameter(parameter, parameterComment))
+                foreach (var issue in AnalyzeParameter(parameter, parameterComment, parameterCommentXml))
                 {
                     yield return issue;
                 }

@@ -27,7 +27,9 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                 if (cc > MaxCyclomaticComplexity)
                 {
-                    yield return Issue(localFunction.GetName(), localFunction, cc, MaxCyclomaticComplexity);
+                    var identifier = localFunction.Identifier;
+
+                    yield return Issue(identifier.ValueText, identifier, cc, MaxCyclomaticComplexity);
                 }
             }
         }

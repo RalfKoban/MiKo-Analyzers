@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,21 +23,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(location);
+
         // overridden because we want to inspect the fields of the type as well
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             if (symbol.IsEnum())
             {
-                return symbol.GetFields()
-                             .Where(ShallAnalyze)
-                             .SelectMany(_ => AnalyzeSummaries(_, compilation, _.GetDocumentationCommentXml(), _.GetDocumentationCommentTriviaSyntax()));
+                foreach (var field in symbol.GetFields())
+                {
+                    foreach (var issue in AnalyzeField(field, compilation))
+                    {
+                        yield return issue;
+                    }
+                }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => from summary in summaries
-                                                                                                                                                                                       where summary.StartsWithAny(StartingPhrases, StringComparison.OrdinalIgnoreCase)
-                                                                                                                                                                                       select Issue(symbol, summary.FirstWord());
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
+        }
+
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
+        {
+            comparison = StringComparison.OrdinalIgnoreCase;
+
+            var text = valueText.AsSpan().TrimStart();
+
+            var startsWith = text.StartsWithAny(StartingPhrases, comparison);
+
+            problematicText = text.FirstWord().ToString();
+
+            return startsWith;
+        }
     }
 }

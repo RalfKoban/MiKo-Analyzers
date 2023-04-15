@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbolName + Suffix;
         }
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.ContainsExtensionMethods();
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.ContainsExtensionMethods();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
                                                                                                                         ? Enumerable.Empty<Diagnostic>()

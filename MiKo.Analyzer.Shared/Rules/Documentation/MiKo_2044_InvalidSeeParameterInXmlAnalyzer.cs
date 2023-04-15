@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2044";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+        private static readonly HashSet<string> Tags = new HashSet<string>
+                                                           {
+                                                               Constants.XmlTag.See,
+                                                               Constants.XmlTag.SeeAlso,
+                                                           };
 
         public MiKo_2044_InvalidSeeParameterInXmlAnalyzer() : base(Id, SymbolKind.Method)
         {
@@ -21,25 +25,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
+            var names = method.Parameters.ToHashSet(_ => _.Name);
 
-            if (method.Parameters.Length > 0)
+            if (names.Count > 0)
             {
-                var commentWithoutSymbols = commentXml.Without(Constants.Markers.Symbols);
-
-                foreach (var parameter in method.Parameters)
+                foreach (var node in comment.DescendantNodes(_ => true, true))
                 {
-                    var seePhrase = string.Concat("<see cref=\"", parameter.Name, "\"");
-
-                    if (commentWithoutSymbols.Contains(seePhrase, Comparison))
+                    switch (node)
                     {
-                        yield return Issue(parameter, seePhrase + Constants.Comments.XmlElementEndingTag);
-                    }
+                        case XmlElementSyntax _:
+                        case XmlEmptyElementSyntax _:
+                        {
+                            var tag = node.GetXmlTagName();
 
-                    var seeAlsoPhrase = string.Concat("<seealso cref=\"", parameter.Name, "\"");
+                            if (Tags.Contains(tag))
+                            {
+                                var cref = node.GetCref();
 
-                    if (commentWithoutSymbols.Contains(seeAlsoPhrase, Comparison))
-                    {
-                        yield return Issue(parameter, seeAlsoPhrase + Constants.Comments.XmlElementEndingTag);
+                                if (cref != null)
+                                {
+                                    var name = cref.GetCrefType().GetName();
+
+                                    if (names.Contains(name))
+                                    {
+                                        yield return Issue(symbol.Name, node, node.GetText());
+                                    }
+                                }
+                            }
+
+                            break;
+                        }
                     }
                 }
             }

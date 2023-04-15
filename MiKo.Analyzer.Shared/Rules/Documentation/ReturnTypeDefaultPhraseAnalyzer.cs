@@ -27,11 +27,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
             var startingPhrases = GetStartingPhrases(owningSymbol, returnType);
 
-            return AnalyzeStartingPhrase(owningSymbol, commentXml, xmlTag, startingPhrases, comment);
+            return AnalyzeStartingPhrase(owningSymbol, comment, commentXml, xmlTag, startingPhrases);
         }
 
         protected abstract bool IsAcceptedType(ITypeSymbol returnType);

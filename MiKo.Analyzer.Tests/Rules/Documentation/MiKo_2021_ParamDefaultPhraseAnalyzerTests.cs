@@ -48,6 +48,10 @@ public class TestMe
         [TestCase("A whatever.")]
         [TestCase("An whatever.")]
         [TestCase("The whatever.")]
+        [TestCase("a whatever")]
+        [TestCase("an whatever")]
+        [TestCase("the whatever")]
+        [TestCase("unused")]
         [TestCase("Unused")]
         [TestCase("Unused.")]
         public void No_issue_is_reported_for_method_with_correct_comment_(string comment) => No_issue_is_reported_for(@"

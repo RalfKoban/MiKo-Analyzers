@@ -175,6 +175,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var token in sentenceEnding.TextTokens)
                 {
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
                     var valueText = token.WithoutTrivia().ValueText;
 
                     if (valueText.IsNullOrWhiteSpace())
@@ -220,7 +225,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string GetCorrectStartText(BasePropertyDeclarationSyntax property)
         {
             var isBool = property.Type.IsBoolean();
-            var isAsync = property.Modifiers.Any(_ => _.IsKind(SyntaxKind.AsyncKeyword));
+            var isAsync = property.IsAsync();
 
             if (property.Type is GenericNameSyntax g && g.Identifier.ValueText == nameof(Task))
             {
@@ -241,7 +246,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static string GetCorrectStartText(MethodDeclarationSyntax method)
         {
             var isBool = method.ReturnType.IsBoolean();
-            var isAsync = method.Modifiers.Any(_ => _.IsKind(SyntaxKind.AsyncKeyword));
+            var isAsync = method.IsAsync();
 
             if (method.ReturnType is GenericNameSyntax g && g.Identifier.ValueText == nameof(Task))
             {

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -54,6 +56,7 @@ public class TestMe
         [TestCase("The")]
         [TestCase("Whatever that comment means")]
         [TestCase("Invoked if the something changed")]
+        [TestCase("Raised at some time")]
         public void An_issue_is_reported_for_wrong_comment_(string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {

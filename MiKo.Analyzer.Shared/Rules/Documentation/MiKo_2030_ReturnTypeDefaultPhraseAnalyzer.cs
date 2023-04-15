@@ -45,9 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return true;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, string commentXml, string xmlTag, DocumentationCommentTriviaSyntax comment)
+        protected override IEnumerable<Diagnostic> AnalyzeReturnType(ISymbol owningSymbol, ITypeSymbol returnType, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag)
         {
-            return AnalyzeStartingPhrase(owningSymbol, commentXml, xmlTag, Constants.Comments.ReturnTypeStartingPhrase, comment);
+            return AnalyzeStartingPhrase(owningSymbol, comment, commentXml, xmlTag, Constants.Comments.ReturnTypeStartingPhrase);
         }
     }
 }

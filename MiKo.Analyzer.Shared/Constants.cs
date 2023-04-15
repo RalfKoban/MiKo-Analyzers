@@ -465,12 +465,6 @@ namespace MiKoSolutions.Analyzers
                     XmlTag.Value,
                 };
 
-            internal static readonly string[] InvalidSummaryCrefPhrases = Enumerable.Empty<string>()
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, " ")))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, "/")))
-                                                                                    .Concat(InvalidSummaryCrefXmlTags.Select(_ => string.Concat(XmlElementStartingTag, _, ">")))
-                                                                                    .ToArray();
-
             internal const string ExceptionTypeSummaryStartingPhrase = "The exception that is thrown when ";
 
             internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";
@@ -659,6 +653,25 @@ namespace MiKoSolutions.Analyzers
                     "weren't",
                     "daren't",
                     "needn't",
+
+                    // without apostrophes
+                    "cant",
+                    "dont",
+                    "wont",
+                    "couldnt",
+                    "shouldnt",
+                    "wouldnt",
+                    "doesnt",
+                    "didnt",
+                    "isnt",
+                    // "arent", // ignore this as it is also contained in something like 'parent'
+                    "hasnt",
+                    "havent",
+                    "hadnt",
+                    "wasnt",
+                    "werent",
+                    "darent",
+                    "neednt",
                 };
 
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
@@ -701,6 +714,7 @@ namespace MiKoSolutions.Analyzers
                 internal const string Cref = "cref";
                 internal const string Langword = "langword";
                 internal const string Langref = "langref";
+                internal const string Name = "name";
                 internal const string Type = "type";
             }
 

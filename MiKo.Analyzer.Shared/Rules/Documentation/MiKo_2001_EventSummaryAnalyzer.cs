@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,18 +12,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2001";
 
+        private const string StartingPhrase = Constants.Comments.EventSummaryStartingPhrase;
+
         public MiKo_2001_EventSummaryAnalyzer() : base(Id, SymbolKind.Event)
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
-        {
-            if (summaries.None(_ => _.StartsWith(Constants.Comments.EventSummaryStartingPhrase, StringComparison.Ordinal)))
-            {
-                return new[] { Issue(symbol, Constants.Comments.EventSummaryStartingPhrase) };
-            }
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
 
-            return Enumerable.Empty<Diagnostic>();
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            var summaryXmls = comment.GetSummaryXmls();
+
+            foreach (var summaryXml in summaryXmls)
+            {
+                yield return AnalyzeTextStart(symbol, summaryXml);
+            }
+        }
+
+        protected override bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
+        {
+            comparison = StringComparison.Ordinal;
+
+            var text = valueText.AsSpan().TrimStart();
+
+            var startsWith = text.StartsWith(StartingPhrase, comparison);
+
+            problematicText = text.FirstWord().ToString();
+
+            return startsWith is false;
         }
     }
 }

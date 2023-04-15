@@ -28,9 +28,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType()?.IsEnum() is true && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => from summary in summaries
-                                                                                                                                                                                       from phrase in BooleanPhrases
-                                                                                                                                                                                       where summary.Contains(phrase, StringComparison.OrdinalIgnoreCase)
-                                                                                                                                                                                       select Issue(symbol, phrase.Trim());
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            foreach (var token in comment.GetXmlTextTokens())
+            {
+                const int Offset = 1; // we do not want to underline the first and last char
+
+                foreach (var location in GetAllLocations(token, BooleanPhrases, StringComparison.Ordinal, Offset, Offset))
+                {
+                    yield return Issue(location);
+                }
+            }
+        }
     }
 }

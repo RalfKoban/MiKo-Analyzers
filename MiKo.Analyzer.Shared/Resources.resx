@@ -1374,8 +1374,11 @@ Those specifically introduced types should be named as the original type, but pr
     <value>Append underscore</value>
   </data>
   <data name="MiKo_1110_Description" xml:space="preserve">
-    <value>For maintenance reasons, parameterized test methods should be easy to read.
-Therefore, they should be suffixed with underscores.</value>
+    <value>For maintenance reasons, parameterized test methods should be easy to read and parameters easy to spot.
+Therefore, the methods should be suffixed with underscores.
+
+Example:
+   "Do_something_for_value_(42)" is easier to read than "Do_something_for_value(42)" because of the additional space before the brace.</value>
   </data>
   <data name="MiKo_1110_MessageFormat" xml:space="preserve">
     <value>Suffix name with underscore</value>
@@ -1420,7 +1423,16 @@ The audience of unit tests, however, are developers. Hence, such tests should no
     <value>Do not name BDD style</value>
   </data>
   <data name="MiKo_1113_Title" xml:space="preserve">
-    <value>Do not name unit test methods BDD style</value>
+    <value>Test methods should not be named according BDD style</value>
+  </data>
+  <data name="MiKo_1114_Description" xml:space="preserve">
+    <value>Test methods should be named according to what scenario they test but not according to whether that is a so-called 'happy path' or 'bad path' inside the code.</value>
+  </data>
+  <data name="MiKo_1114_MessageFormat" xml:space="preserve">
+    <value>Do not name '{0}' a happy or bad path</value>
+  </data>
+  <data name="MiKo_1114_Title" xml:space="preserve">
+    <value>Test methods should not be named 'HappyPath' or 'BadPath'</value>
   </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
@@ -1601,7 +1613,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2004_MessageFormat" xml:space="preserve">
-    <value>Set Documentation to: '{2}'</value>
+    <value>Set Documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
     <value>Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers</value>
@@ -1725,13 +1737,13 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Dependency properties should be documented as done by the .NET Framework</value>
   </data>
   <data name="MiKo_2018_CodeFixTitle" xml:space="preserve">
-    <value>Start summary with '{0}'</value>
+    <value>Start &lt;summary&gt; with '{0}'</value>
   </data>
   <data name="MiKo_2018_Description" xml:space="preserve">
     <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines whether' instead.</value>
   </data>
   <data name="MiKo_2018_MessageFormat" xml:space="preserve">
-    <value>Use '{2}' instead of '{1}'</value>
+    <value>Start &lt;summary&gt; with '{1}'</value>
   </data>
   <data name="MiKo_2018_Title" xml:space="preserve">
     <value>Documentation should not use the ambiguous terms 'Check' or 'Test'</value>
@@ -1830,7 +1842,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>To ease the usage, the documentation of the parameters of the serialization constructors shall have a specific phrase that describes what they contain.</value>
   </data>
   <data name="MiKo_2027_MessageFormat" xml:space="preserve">
-    <value>Set Documentation to: '{1}'</value>
+    <value>Change documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2027_Title" xml:space="preserve">
     <value>Serialization constructor parameters shall be documented with a specific phrase</value>
@@ -2061,11 +2073,14 @@ Or with: '{3}'</value>
   <data name="MiKo_2045_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not reference parameters</value>
   </data>
+  <data name="MiKo_2046_CodeFixTitle" xml:space="preserve">
+    <value>Replace invalid type parameter reference</value>
+  </data>
   <data name="MiKo_2046_Description" xml:space="preserve">
     <value>The XML documentation should reference type parameters properly via '&lt;typeparamref name="..." /&gt;'.</value>
   </data>
   <data name="MiKo_2046_MessageFormat" xml:space="preserve">
-    <value>Replace invalid type parameter reference '{1}' by '{2}'</value>
+    <value>Replace invalid type parameter reference</value>
   </data>
   <data name="MiKo_2046_Title" xml:space="preserve">
     <value>Documentation should reference type parameters correctly</value>
@@ -2238,7 +2253,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase 'indicates whether').</value>
   </data>
   <data name="MiKo_2071_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in &lt;summary&gt;</value>
+    <value>Do not use '{0}' in &lt;summary&gt;</value>
   </data>
   <data name="MiKo_2071_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type</value>
@@ -2262,7 +2277,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>'Contain' methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase 'Determines whether '.</value>
   </data>
   <data name="MiKo_2073_MessageFormat" xml:space="preserve">
-    <value>Start summary with 'Determines whether'</value>
+    <value>Start &lt;summary&gt; with 'Determines whether'</value>
   </data>
   <data name="MiKo_2073_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '</value>
@@ -2288,7 +2303,7 @@ Instead, the documentation should describe what the method is intended to do.</v
 Instead, they should be mentioned as 'callback' because - as delegates represent references to methods with a particular parameter list and return type - they actually act as callbacks to those methods when used within code.</value>
   </data>
   <data name="MiKo_2075_MessageFormat" xml:space="preserve">
-    <value>Replace '{1}' with '{2}'</value>
+    <value>Replace '{0}' with '{1}'</value>
   </data>
   <data name="MiKo_2075_Title" xml:space="preserve">
     <value>Documentation should use the term 'callback' instead of 'action', 'func' or 'function'</value>
@@ -2322,7 +2337,7 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
 Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the Enum member summary should describe the meaning of the member itself.</value>
   </data>
   <data name="MiKo_2082_MessageFormat" xml:space="preserve">
-    <value>Do not start &lt;summary&gt; with: '{1}'</value>
+    <value>Do not start &lt;summary&gt; with: '{0}'</value>
   </data>
   <data name="MiKo_2082_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation</value>
@@ -2374,6 +2389,9 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
   </data>
   <data name="MiKo_2101_Title" xml:space="preserve">
     <value>&lt;example&gt; documentation should show code example in &lt;code&gt; tags</value>
+  </data>
+  <data name="MiKo_2200_CodeFixTitle" xml:space="preserve">
+    <value>Use capitalized letter</value>
   </data>
   <data name="MiKo_2200_Description" xml:space="preserve">
     <value>Documentation should start with a capitalized letter to have a full sentence.</value>
@@ -2447,7 +2465,7 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
     <value>The documentation should not use the term 'flag' which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary.</value>
   </data>
   <data name="MiKo_2206_MessageFormat" xml:space="preserve">
-    <value>Remove '{1}' from documentation</value>
+    <value>Remove '{0}' from documentation</value>
   </data>
   <data name="MiKo_2206_Title" xml:space="preserve">
     <value>Documentation should not use the term 'flag'</value>
@@ -2470,7 +2488,7 @@ More detailed information should be placed inside a &lt;remarks&gt; section.</va
 By having a more concrete description it makes it easier for a developer to understand the meaning.</value>
   </data>
   <data name="MiKo_2208_MessageFormat" xml:space="preserve">
-    <value>Use a better description than '{1}'</value>
+    <value>Use a better description than '{0}'</value>
   </data>
   <data name="MiKo_2208_Title" xml:space="preserve">
     <value>Documentation should not use the term 'an instance of'</value>
@@ -2622,7 +2640,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>
   </data>
   <data name="MiKo_2218_MessageFormat" xml:space="preserve">
-    <value>Replace '{1}' with '{2}'</value>
+    <value>Replace '{0}' with '{1}'</value>
   </data>
   <data name="MiKo_2218_Title" xml:space="preserve">
     <value>Documentation should use shorter term 'to' instead of longer term '... used to'</value>
@@ -2635,7 +2653,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
    However, documention should state and not question things - so question marks should be avoided as well.</value>
   </data>
   <data name="MiKo_2219_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}' in documentation</value>
+    <value>Do not use '{0}' in documentation</value>
   </data>
   <data name="MiKo_2219_Title" xml:space="preserve">
     <value>Do not use question or explamation marks in documentation</value>
@@ -2660,6 +2678,18 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   </data>
   <data name="MiKo_2221_Title" xml:space="preserve">
     <value>Documentation should not use empty XML tags</value>
+  </data>
+  <data name="MiKo_2222_CodeFixTitle" xml:space="preserve">
+    <value>Change 'ident' into identification'</value>
+  </data>
+  <data name="MiKo_2222_Description" xml:space="preserve">
+    <value>The XML documentation should not use the abbreviation 'ident'. Instead, it should clearly document that this is an identification. Hence, it should use the term 'identification' instead.</value>
+  </data>
+  <data name="MiKo_2222_MessageFormat" xml:space="preserve">
+    <value>Use 'identification' instead of 'ident'</value>
+  </data>
+  <data name="MiKo_2222_Title" xml:space="preserve">
+    <value>Documentation should use the term 'identification' instead of 'ident'</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.

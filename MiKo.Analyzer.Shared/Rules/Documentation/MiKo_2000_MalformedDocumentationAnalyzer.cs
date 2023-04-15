@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -17,8 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.StartsWith("<!--", StringComparison.OrdinalIgnoreCase)
-                                                                                                                                                                               ? new[] { Issue(symbol) }
-                                                                                                                                                                               : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            foreach (var token in comment.DescendantTokens(SyntaxKind.XmlEntityLiteralToken))
+            {
+                if (token.Text.Length == 1)
+                {
+                    yield return Issue(token);
+                }
+            }
+        }
     }
 }

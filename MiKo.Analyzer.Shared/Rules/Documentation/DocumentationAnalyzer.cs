@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -255,15 +256,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
         }
 
-        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IEventSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => true;
+        protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
@@ -341,16 +342,99 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment != null)
                 {
-                    return AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    return AnalyzeProperty(symbol, compilation, comment, symbol.GetDocumentationCommentXml());
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment, string commentXml) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
+
+        protected virtual Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => StartIssue(symbol, node.GetLocation());
+
+        protected virtual Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location);
+
+        protected virtual bool AnalyzeTextStart(ISymbol symbol, string valueText, out string problematicText, out StringComparison comparison)
+        {
+            problematicText = null;
+            comparison = StringComparison.Ordinal;
+
+            return false;
+        }
+
+        protected Diagnostic AnalyzeTextStart(ISymbol symbol, XmlElementSyntax xml)
+        {
+            var tag = xml.StartTag.GetName();
+
+            var descendantNodes = xml.DescendantNodes();
+
+            foreach (var node in descendantNodes)
+            {
+                switch (node)
+                {
+                    case XmlElementStartTagSyntax startTag:
+                    {
+                        var tagName = startTag.GetName();
+
+                        if (tagName == tag || tagName == Constants.XmlTag.Para)
+                        {
+                            continue; // skip over the start tag and name syntax
+                        }
+
+                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                    }
+
+                    case XmlNameSyntax _:
+                    case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
+                    case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:
+                        continue; // skip over the start tag and name syntax
+
+                    case XmlTextSyntax text:
+                        {
+                            // report the location of the first word(s) via the corresponding text token
+                            foreach (var textToken in text.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
+                            {
+                                var valueText = textToken.ValueText;
+
+                                if (valueText.IsNullOrWhiteSpace())
+                                {
+                                    // we found the first but empty /// line, so ignore it
+                                    continue;
+                                }
+
+                                // we found some text
+                                if (AnalyzeTextStart(symbol, valueText, out var problematicText, out var comparison))
+                                {
+                                    // it's no valid text, so we have an issue
+                                    var position = valueText.IndexOf(problematicText, comparison);
+
+                                    var start = textToken.SpanStart + position; // find start position for underlining
+                                    var end = start + problematicText.Length; // find end position for underlining
+
+                                    var location = CreateLocation(textToken, start, end);
+
+                                    return StartIssue(symbol, location);
+                                }
+
+                                // it's a valid text, so we quit
+                                return null;
+                            }
+
+                            // we found a completely empty /// line, so ignore it
+                            continue;
+                        }
+
+                    default:
+                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                }
+            }
+
+            // nothing to report
+            return null;
+        }
 
         private static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset, int endOffset)
         {

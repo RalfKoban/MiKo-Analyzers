@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 using MiKoSolutions.Analyzers.Linguistics;
 
@@ -71,6 +72,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstChild<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault(predicate);
 
+        internal static SyntaxToken FirstChildToken(this SyntaxNode value) => value.ChildTokens().FirstOrDefault();
+
+        internal static SyntaxToken FirstChildToken(this SyntaxNode value, SyntaxKind kind) => value.ChildTokens().First(_ => _.IsKind(kind));
+
         internal static T FirstDescendant<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault();
 
         internal static T FirstDescendant<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.FirstDescendant<T>(_ => _.IsKind(kind));
@@ -78,6 +83,106 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
+        internal static Location GetContentsLocation(this XmlElementSyntax value)
+        {
+            var contents = value.Content;
+            var span = contents.Span;
+
+            if (contents.Count > 0)
+            {
+                var start = FindStart(contents);
+                var end = FindEnd(contents);
+
+                span = TextSpan.FromBounds(start, end);
+            }
+
+            if (span.IsEmpty)
+            {
+                var start = value.StartTag.GreaterThanToken.SpanStart;
+                var end = value.EndTag.LessThanSlashToken.SpanStart;
+
+                span = TextSpan.FromBounds(start, end);
+            }
+
+            return Location.Create(value.SyntaxTree, span);
+
+            int FindStart(SyntaxList<XmlNodeSyntax> list)
+            {
+                XmlNodeSyntax first = null;
+
+                // try to find the first syntax that is not only an XmlCommentExterior
+                for (var i = 0; i < list.Count; i++)
+                {
+                    first = list[i];
+
+                    if (first is XmlTextSyntax t && t.IsWhiteSpaceOnlyText())
+                    {
+                        continue;
+                    }
+
+                    break;
+                }
+
+                var start = first?.SpanStart ?? -1;
+
+                // try to get rid of white-spaces at the beginning
+                if (first is XmlTextSyntax firstText)
+                {
+                    var token = firstText.TextTokens.FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
+                    var text = token.Text;
+
+                    var offset = text.Length - text.TrimStart().Length;
+
+                    start = token.SpanStart + offset;
+                }
+
+                return start;
+            }
+
+            int FindEnd(SyntaxList<XmlNodeSyntax> list)
+            {
+                XmlNodeSyntax last = null;
+
+                // try to find the last syntax that is not only an XmlCommentExterior
+                for (var i = list.Count - 1; i > -1; i--)
+                {
+                    last = list[i];
+
+                    if (last is XmlTextSyntax t && t.IsWhiteSpaceOnlyText())
+                    {
+                        continue;
+                    }
+
+                    break;
+                }
+
+                var end = last?.Span.End ?? -1;
+
+                // try to get rid of white-spaces at the end
+                if (last is XmlTextSyntax lastText)
+                {
+                    var token = lastText.TextTokens.LastOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
+                    var text = token.Text;
+
+                    var offset = text.Length - text.TrimEnd().Length;
+
+                    end = token.Span.End - offset;
+                }
+
+                return end;
+            }
+        }
+
+        internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode syntax)
+        {
+            switch (syntax)
+            {
+                case XmlElementSyntax e: return e.GetAttributes<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Name);
+                case XmlEmptyElementSyntax ee: return ee.Attributes.OfType<XmlTextAttributeSyntax>().FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Name);
+                default: return null;
+            }
+        }
 
         internal static string GetParameterName(this XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
 
@@ -146,16 +251,26 @@ namespace MiKoSolutions.Analyzers
         {
             var dataFlow = semanticModel.AnalyzeDataFlow(statementOrExpression);
 
+            var result = new HashSet<string>();
+
             // do not use the declared ones as we are interested in parameters, not unused variables
-            // var variablesDeclared = dataFlow.VariablesDeclared;
-            var variablesRead = dataFlow.ReadInside.Union(dataFlow.ReadOutside);
+            foreach (var variable in dataFlow.ReadInside)
+            {
+                result.Add(variable.Name);
+            }
+
+            foreach (var variable in dataFlow.ReadOutside)
+            {
+                result.Add(variable.Name);
+            }
 
             // do not include the ones that are written outside as those are the ones that are not used at all
-            var variablesWritten = dataFlow.WrittenInside;
+            foreach (var variable in dataFlow.WrittenInside)
+            {
+                result.Add(variable.Name);
+            }
 
-            var used = variablesRead.Union(variablesWritten).ToHashSet(_ => _.Name);
-
-            return used;
+            return result;
         }
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) => value?.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
@@ -561,21 +676,21 @@ namespace MiKoSolutions.Analyzers
             {
                 if (node.HasStructuredTrivia)
                 {
-                    foreach (var childToken in node.ChildTokens())
+                    var childToken = node.FirstChildToken();
+
+                    if (childToken.HasStructuredTrivia)
                     {
-                        if (childToken.HasStructuredTrivia)
+                        // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
+                        // so we can save some time and memory by doing it by ourselves
+                        var leadingTrivia = childToken.LeadingTrivia;
+
+                        if (leadingTrivia.Count > 0)
                         {
-                            // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
-                            // so we can save some time and memory by doing it by ourselves
-                            var leadingTrivia = childToken.LeadingTrivia;
-                            if (leadingTrivia.Count > 0)
+                            foreach (var trivia in leadingTrivia)
                             {
-                                foreach (var t in leadingTrivia.Where(_ => _.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia)))
+                                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                                 {
-                                    if (t.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                                    {
-                                        return syntax;
-                                    }
+                                    return syntax;
                                 }
                             }
                         }
@@ -586,23 +701,69 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static ReadOnlySpan<char> GetTextTrimmed(this XmlElementSyntax element)
+        {
+            if (element is null)
+            {
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            return element.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+        }
+
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
         {
-            return text != null
-                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
-                       : null;
+            if (text is null)
+            {
+                return null;
+            }
+
+            var builder = new StringBuilder();
+
+            foreach (var token in text.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                builder.Append(token.WithoutTrivia().ValueText);
+            }
+
+            var result = builder.ToString();
+
+            return result.Trim();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextSyntax text)
         {
-            return text != null
-                       ? string.Concat(text.TextTokens.Select(_ => _.WithoutTrivia())).Trim()
-                       : null;
+            if (text is null)
+            {
+                return null;
+            }
+
+            var builder = new StringBuilder();
+
+            foreach (var token in text.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                builder.Append(token.WithoutTrivia().ValueText);
+            }
+
+            var result = builder.ToString();
+
+            return result.Trim();
         }
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
 
         internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
+
+        internal static IEnumerable<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Example);
 
         internal static IEnumerable<XmlElementSyntax> GetExceptionXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Exception);
 
@@ -926,6 +1087,31 @@ namespace MiKoSolutions.Analyzers
                     && Constants.Names.ObjectUnderTestNames.Contains(ins.GetName());
 
             return found;
+        }
+
+        internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
+        {
+            foreach (var modifier in value.Modifiers)
+            {
+                if (modifier.IsKind(SyntaxKind.AsyncKeyword))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        internal static bool IsAsync(this MethodDeclarationSyntax value)
+        {
+            foreach (var modifier in value.Modifiers)
+            {
+                if (modifier.IsKind(SyntaxKind.AsyncKeyword))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName)

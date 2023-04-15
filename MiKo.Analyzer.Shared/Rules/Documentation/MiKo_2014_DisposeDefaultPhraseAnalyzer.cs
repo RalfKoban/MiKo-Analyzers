@@ -27,9 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var summary in summaries)
             {
-                var textWithoutTrivia = summary.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
-
-                if (textWithoutTrivia.SequenceEqual(SummaryPhrase.AsSpan()) is false)
+                if (IsEqual(summary, SummaryPhrase) is false)
                 {
                     yield return Issue(symbol, SummaryPhrase);
                 }
@@ -41,15 +39,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (parameterComment != null)
                     {
-                        var text = parameterComment.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
-
-                        if (text.SequenceEqual(ParameterPhrase.AsSpan()) is false)
+                        if (IsEqual(parameterComment, ParameterPhrase) is false)
                         {
                             yield return Issue(parameter, ParameterPhrase);
                         }
                     }
                 }
             }
+        }
+
+        private static bool IsEqual(XmlElementSyntax syntax, string text)
+        {
+            var trimmed = syntax.GetTextTrimmed();
+
+            return trimmed.SequenceEqual(text.AsSpan());
         }
     }
 }

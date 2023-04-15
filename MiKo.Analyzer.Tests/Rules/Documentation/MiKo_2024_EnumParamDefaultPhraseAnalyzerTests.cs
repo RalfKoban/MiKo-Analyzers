@@ -68,6 +68,27 @@ public class TestMe
 }
 ");
 
+        [TestCase("One of the enumeration members specifying something.")]
+        [TestCase("One of the enumeration members that specifies something.")]
+        [TestCase("One of the enumeration members that specifies something")]
+        [TestCase("One of the enumeration members that determines something.")]
+        [TestCase("One of the enumeration members that determines something")]
+        [TestCase("One of the enumeration values specifying something.")]
+        [TestCase("One of the enumeration values that specifies something.")]
+        [TestCase("One of the enumeration values that specifies something")]
+        [TestCase("One of the enumeration values that determines something.")]
+        [TestCase("One of the enumeration values that determines something")]
+        public void No_issue_is_reported_for_ctor_with_correct_comment_(string comment) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
+    public TestMe(StringComparison o) { }
+}
+");
+
         [TestCase("Unused")]
         [TestCase("Unused.")]
         public void No_issue_is_reported_for_method_with_correct_unused_comment_(string comment) => No_issue_is_reported_for(@"
@@ -121,6 +142,19 @@ public class TestMe
 }
 ");
 
+        [TestCase("whatever.")]
+        [TestCase("Whatever.")]
+        public void An_issue_is_reported_for_ctor_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>" + comment + @"</param>
+    public TestMe(StringComparison o) { }
+}
+");
+
         [TestCase("<summary />")]
         [TestCase("<inheritdoc />")]
         [TestCase("<exclude />")]
@@ -135,7 +169,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_for_method()
         {
             const string OriginalCode = @"
 using System;
@@ -158,6 +192,35 @@ public class TestMe
     /// <summary />
     /// <param name='o'>One of the enumeration members that specifies whatever it is.</param>
     public void DoSomething(StringComparison o) { }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_ctor()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>Whatever it is.</param>
+    public TestMe(StringComparison o) { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>One of the enumeration members that specifies whatever it is.</param>
+    public TestMe(StringComparison o) { }
 }
 ";
             VerifyCSharpFix(OriginalCode, FixedCode);

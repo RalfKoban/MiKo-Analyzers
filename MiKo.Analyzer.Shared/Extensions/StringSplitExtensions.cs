@@ -10,7 +10,7 @@ namespace System
         {
             if (value.IsNullOrWhiteSpace())
             {
-                return Enumerable.Empty<string>();
+                return Array.Empty<string>();
             }
 
             return SplitBy(value.AsSpan(), findings, comparison);
@@ -23,15 +23,17 @@ namespace System
                 return Array.Empty<string>();
             }
 
-            var tuples = new List<Tuple<int, string>>();
+            var tuples = new List<ValueTuple<int, string>>();
 
             foreach (var finding in findings)
             {
                 var indices = value.AllIndicesOf(finding.AsSpan(), comparison);
 
+                tuples.Capacity += indices.Count;
+
                 foreach (var index in indices)
                 {
-                    tuples.Add(new Tuple<int, string>(index, finding));
+                    tuples.Add(new ValueTuple<int, string>(index, finding));
                 }
             }
 

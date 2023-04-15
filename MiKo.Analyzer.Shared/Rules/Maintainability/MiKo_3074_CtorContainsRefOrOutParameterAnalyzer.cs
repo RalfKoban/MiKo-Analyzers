@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -28,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case RefKind.Ref:
                         {
-                            var keyword = parameter.GetSyntax().ChildTokens().First(__ => __.IsKind(SyntaxKind.RefKeyword));
+                            var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.RefKeyword);
 
                             yield return Issue(methodName, keyword, keyword.ToString());
 
@@ -37,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case RefKind.Out:
                         {
-                            var keyword = parameter.GetSyntax().ChildTokens().First(__ => __.IsKind(SyntaxKind.OutKeyword));
+                            var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.OutKeyword);
 
                             yield return Issue(methodName, keyword, keyword.ToString());
 

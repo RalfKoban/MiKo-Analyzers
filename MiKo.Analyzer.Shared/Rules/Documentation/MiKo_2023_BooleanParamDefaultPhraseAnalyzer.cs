@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -20,16 +20,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                   && parameter.Type.IsBoolean()
                                                                                   && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
 
-        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, string comment)
+        protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             var startingPhrase = Constants.Comments.BooleanParameterStartingPhrase;
             var endingPhrase = Constants.Comments.BooleanParameterEndingPhrase;
 
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            return comment.StartsWithAny(startingPhrase, Comparison) && comment.ContainsAny(endingPhrase, Comparison)
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(parameter, startingPhrase[0], endingPhrase[0]) };
+            if (comment.StartsWithAny(startingPhrase, Comparison) is false || comment.ContainsAny(endingPhrase, Comparison) is false)
+            {
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), startingPhrase[0], endingPhrase[0]);
+            }
         }
     }
 }

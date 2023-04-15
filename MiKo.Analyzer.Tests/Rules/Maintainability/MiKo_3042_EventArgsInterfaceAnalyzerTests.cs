@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -36,6 +38,18 @@ public class TestMeEventArgs : EventArgs, IDisposable
     public void Dispose() { }
 }
 ");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_EventArgs_with_multiple_interface_implementations() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMeEventArgs : EventArgs, IDisposable, ICloneable
+{
+    public void Dispose() { }
+}
+", 2);
 
         protected override string GetDiagnosticId() => MiKo_3042_EventArgsInterfaceAnalyzer.Id;
 

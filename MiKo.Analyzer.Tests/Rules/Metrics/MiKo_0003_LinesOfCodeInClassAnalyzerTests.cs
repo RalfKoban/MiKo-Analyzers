@@ -63,7 +63,26 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 ");
 
         [Test]
-        public void Type_with_length_above_limit_is_reported() => An_issue_is_reported_for(@"
+        public void Type_with_ctor_length_above_limit_is_reported() => An_issue_is_reported_for(@"
+
+    public class MyType
+    {
+        public MyType()
+        {
+            if (true)
+            {
+                var x = 0;
+                if (x == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Type_with_method_length_above_limit_is_reported() => An_issue_is_reported_for(@"
 
     public class MyType
     {
@@ -75,6 +94,28 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 if (x == 0)
                 {
                     return;
+                }
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Type_with_property_length_above_limit_is_reported() => An_issue_is_reported_for(@"
+
+    public class MyType
+    {
+        public int Property
+        {
+            get
+            {
+                if (true)
+                {
+                    var x = 0;
+                    if (x == 0)
+                    {
+                        return x;
+                    }
                 }
             }
         }

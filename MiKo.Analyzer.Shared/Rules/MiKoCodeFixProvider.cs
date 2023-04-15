@@ -84,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return null;
             }
 
-            var semanticModel = await context.Document.GetSemanticModelAsync(cancellationToken);
+            var semanticModel = await context.Document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
             if (syntax is TypeSyntax typeSyntax)
             {
@@ -173,7 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return Task.FromResult(context.Document);
             }
 
-            var oldToken = GetToken(trivia);
+            var oldToken = GetToken(trivia, diagnostic);
             var updatedToken = GetUpdatedToken(oldToken, diagnostic);
 
             var newRoot = oldToken == updatedToken ? root : root.ReplaceToken(oldToken, updatedToken);
@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
 
-        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia) => trivia.Token;
+        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
 
         protected virtual SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => null;
 
@@ -213,8 +213,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(context, root, trivia, issue), GetType().Name);
             }
 
-            var token = root.FindToken(startPosition);
-            var syntaxNodes = token.Parent.AncestorsAndSelf();
+            // TODO RKN
+            // var token = root.FindToken(startPosition);
+            // var syntaxNodes = token.Parent.AncestorsAndSelf();
+            var node = root.FindNode(issueSpan, true, true);
+            var syntaxNodes = node.AncestorsAndSelf();
 
             var syntax = GetSyntax(syntaxNodes);
 

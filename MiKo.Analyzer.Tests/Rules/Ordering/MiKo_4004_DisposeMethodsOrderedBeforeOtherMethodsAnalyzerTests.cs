@@ -113,7 +113,7 @@ public class TestMe : IDisposable
         public void No_issue_is_reported_for_class_with_public_Dispose_method_after_public_static_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
     public static void A() { }
 
@@ -141,11 +141,13 @@ public class TestMe : IDisposable
         public void No_issue_is_reported_for_class_with_protected_Dispose_method_after_all_public_methods_and_before_other_protected_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
-    protected void Dispose() { }
+    protected void Dispose(bool disposing) { }
 
     protected void B() { }
 }
@@ -155,11 +157,13 @@ public class TestMe
         public void No_issue_is_reported_for_class_with_protected_Dispose_method_after_all_public_methods_and_before_private_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
-    protected void Dispose() { }
+    protected void Dispose(bool disposing) { }
 
     private void B() { }
 }
@@ -169,13 +173,15 @@ public class TestMe
         public void No_issue_is_reported_for_class_with_private_Dispose_method_after_all_public_and_protected_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 }
 ");
 
@@ -183,13 +189,15 @@ public class TestMe
         public void No_issue_is_reported_for_class_with_private_Dispose_method_after_all_public_and_protected_methods_and_before_other_private_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 
     private void C() { }
 }
@@ -199,15 +207,17 @@ public class TestMe
         public void No_issue_is_reported_for_class_with_private_Dispose_method_after_all_public_and_protected_and_private_static_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
     private static void C() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 }
 ");
 
@@ -215,15 +225,17 @@ public class TestMe
         public void No_issue_is_reported_for_class_with_private_Dispose_method_after_all_public_and_protected_and_private_static_methods_and_before_other_private_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
     private static void C() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 
     private void D() { }
 }
@@ -233,7 +245,7 @@ public class TestMe
         public void An_issue_is_reported_for_class_with_Dispose_interface_method_after_other_public_methods() => An_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
     public void A() { }
 
@@ -245,7 +257,7 @@ public class TestMe
         public void An_issue_is_reported_for_class_with_public_Dispose_method_after_other_public_methods() => An_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
     public void A() { }
 
@@ -257,13 +269,15 @@ public class TestMe
         public void An_issue_is_reported_for_class_with_protected_Dispose_method_after_other_protected_methods() => An_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
-    protected void Dispose() { }
+    protected void Dispose(bool disposing) { }
 }
 ");
 
@@ -271,15 +285,17 @@ public class TestMe
         public void An_issue_is_reported_for_class_with_private_Dispose_method_after_other_private_methods() => An_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
     private void C() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 }
 ");
 
@@ -287,7 +303,7 @@ public class TestMe
         public void No_issue_is_reported_for_class_with_Dispose_methods_as_only_matching_methods_with_same_accessibility_after_all_other_methods() => No_issue_is_reported_for(@"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
     public static void A() { }
 
@@ -300,8 +316,6 @@ public class TestMe
     protected void Dispose(bool disposing) { }
 }
 ");
-
-        //// TODO RKN: partial parts
 
         [Test]
         public void Code_gets_fixed_for_class_with_Dispose_interface_method_after_other_public_methods()
@@ -337,7 +351,7 @@ public class TestMe : IDisposable
             const string OriginalCode = @"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
     public void A() { }
 
@@ -348,7 +362,7 @@ public class TestMe
             const string FixedCode = @"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
     public void Dispose() { }
 
@@ -365,24 +379,28 @@ public class TestMe
             const string OriginalCode = @"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
-    protected void Dispose() { }
+    protected void Dispose(bool disposing) { }
 }
 ";
 
             const string FixedCode = @"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
-    protected void Dispose() { }
+    protected void Dispose(bool disposing) { }
 
     protected void B() { }
 }
@@ -397,28 +415,32 @@ public class TestMe
             const string OriginalCode = @"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
     private void C() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 }
 ";
 
             const string FixedCode = @"
 using System;
 
-public class TestMe
+public class TestMe : IDisposable
 {
+    public void Dispose() { }
+
     public void A() { }
 
     protected void B() { }
 
-    private void Dispose() { }
+    private void Dispose(bool disposing) { }
 
     private void C() { }
 }
@@ -426,6 +448,8 @@ public class TestMe
 
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
+
+        //// TODO RKN: partial parts
 
         protected override string GetDiagnosticId() => MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer.Id;
 

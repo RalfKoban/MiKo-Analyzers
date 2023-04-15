@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -17,6 +18,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs();
 
-        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation) => symbol.Interfaces.Select(_ => Issue(symbol.Name, _));
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            var interfaces = symbol.Interfaces;
+
+            if (interfaces.Any())
+            {
+                var names = interfaces.ToHashSet(_ => _.Name);
+
+                if (symbol.GetSyntax() is ClassDeclarationSyntax declaration)
+                {
+                    var baseList = declaration.BaseList;
+
+                    if (baseList != null)
+                    {
+                        foreach (var type in baseList.Types)
+                        {
+                            var typeName = type.Type.GetName();
+
+                            if (names.Contains(typeName))
+                            {
+                                yield return Issue(symbol.Name, type);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
