@@ -97,6 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            .Replace("hallow", "#") // filter 'shallow' and 'Shallow'
                                                            .Replace("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
                                                            .Replace("eeded", "#") // filter 'needed' and 'Needed'
+                                                           .Replace("eeds", "#") // filter 'needs' and 'Needs'
                                                            .ToString();
 
             return Constants.Markers.Requirements

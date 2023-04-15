@@ -32,7 +32,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_method_([Values("RefreshAllChildren", "CreateShallowCopy")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_method_([Values("RefreshAllChildren", "CreateShallowCopy", "NeedsLicense", "Something_needs_license")] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
