@@ -13,35 +13,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1049";
 
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMapEntries().ToArray();
+
         public MiKo_1049_RequirementTermAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
+        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
+
+        internal static string FindBetterName(string symbolName)
         {
-            var symbolName = new StringBuilder(symbol.Name);
+            var result = new StringBuilder(symbolName);
 
-            foreach (var term in Constants.Markers.Requirements)
+            foreach (var pair in ReplacementMap)
             {
-                var lowerTerm = term.ToLowerCase();
-
-                symbolName = symbolName.Replace(term + "Have", "Have")
-                                       .Replace(term + "NotHave", "DoNotHave")
-                                       .Replace(term + "NtHave", "DoNotHave")
-                                       .Replace(term + "ntHave", "DoNotHave")
-                                       .Replace(term + "Be", "Is")
-                                       .Replace(term + "NotBe", "IsNot")
-                                       .Replace(term + "NtBe", "IsNot")
-                                       .Replace(term + "ntBe", "IsNot")
-                                       .Replace(term, "Does")
-                                       .Replace("_" + lowerTerm + "_have_", "_has_")
-                                       .Replace("_" + lowerTerm + "_not_have_", "_does_not_have_")
-                                       .Replace("_" + lowerTerm + "_not_be_", "_is_not_")
-                                       .Replace("_" + lowerTerm + "_be_", "_is_")
-                                       .Replace("_" + lowerTerm +"_", "_does_");
+                result.Replace(pair.Key, pair.Value);
             }
 
-            return symbolName.ToString();
+            return result.ToString();
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
@@ -60,10 +49,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
+        private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
+        {
+            foreach (var term in Constants.Markers.Requirements)
+            {
+                var lowerTerm = term.ToLowerCase();
+
+                yield return new KeyValuePair<string, string>(term + "Be", "Is");
+                yield return new KeyValuePair<string, string>(term + "_Be", "Is");
+                yield return new KeyValuePair<string, string>(term + "Call", "Calls");
+                yield return new KeyValuePair<string, string>(term + "_Call", "Calls");
+                yield return new KeyValuePair<string, string>(term + "Create", "Creates");
+                yield return new KeyValuePair<string, string>(term + "_Create", "Creates");
+                yield return new KeyValuePair<string, string>(term + "Fail", "Fails");
+                yield return new KeyValuePair<string, string>(term + "Have", "Have");
+                yield return new KeyValuePair<string, string>(term + "NotHave", "DoNotHave");
+                yield return new KeyValuePair<string, string>(term + "NtHave", "DoNotHave");
+                yield return new KeyValuePair<string, string>(term + "ntHave", "DoNotHave");
+                yield return new KeyValuePair<string, string>(term + "NotBe", "IsNot");
+                yield return new KeyValuePair<string, string>(term + "NtBe", "IsNot");
+                yield return new KeyValuePair<string, string>(term + "ntBe", "IsNot");
+                yield return new KeyValuePair<string, string>(term + "Returns", "Returns");
+                yield return new KeyValuePair<string, string>(term + "Return", "Returns");
+                yield return new KeyValuePair<string, string>(term + "_Returns", "Returns");
+                yield return new KeyValuePair<string, string>(term + "_Return", "Returns");
+                yield return new KeyValuePair<string, string>(term + "Throw", "Throws");
+                yield return new KeyValuePair<string, string>(term + "_Throw", "Throws");
+                yield return new KeyValuePair<string, string>(term, "Does");
+
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_be_", "_is_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_call", "_calls");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_create", "_creates");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_fail", "_fails");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_have_", "_has_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_not_have_", "_does_not_have_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_not_be_", "_is_not_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_return_", "_returns_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_returns_", "_returns_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_throw_", "_throws_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_", "_does_");
+            }
+        }
+
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
             var symbolName = new StringBuilder(symbol.Name).Replace("efresh", "#") // filter 'refresh' and 'Refresh'
                                                            .Replace("hallow", "#") // filter 'shallow' and 'Shallow'
+                                                           .Replace("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                                           .Replace("eeded", "#") // filter 'needed' and 'Needed'
+                                                           .Replace("eeds", "#") // filter 'needs' and 'Needs'
                                                            .ToString();
 
             return Constants.Markers.Requirements

@@ -865,18 +865,26 @@ namespace MiKoSolutions.Analyzers
                                                                                           {
                                                                                               "ObjectUnderTest",
                                                                                               "objectUnderTest",
+                                                                                              "ObjectToTest",
+                                                                                              "objectToTest",
+                                                                                              "SubjectToTest",
+                                                                                              "subjectToTest",
                                                                                               "SubjectUnderTest",
                                                                                               "subjectUnderTest",
                                                                                               "Sut",
                                                                                               "sut",
+                                                                                              "UnitToTest",
+                                                                                              "unitToTest",
                                                                                               "UnitUnderTest",
                                                                                               "unitUnderTest",
                                                                                               "Uut",
                                                                                               "uut",
                                                                                               "TestCandidate",
-                                                                                              "TestObject",
                                                                                               "testCandidate",
+                                                                                              "TestObject",
                                                                                               "testObject",
+                                                                                              "candidateToTest",
+                                                                                              "candidateUnderTest",
                                                                                           };
 
             internal static readonly IEnumerable<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
@@ -884,10 +892,13 @@ namespace MiKoSolutions.Analyzers
             internal static readonly IEnumerable<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                           {
                                                                                               "ObjectUnderTest",
+                                                                                              "ObjectToTest",
                                                                                               "Sut",
                                                                                               "SuT",
                                                                                               "SUT",
+                                                                                              "SubjectToTest",
                                                                                               "SubjectUnderTest",
+                                                                                              "UnitToTest",
                                                                                               "UnitUnderTest",
                                                                                               "Uut",
                                                                                               "UuT",
@@ -901,12 +912,17 @@ namespace MiKoSolutions.Analyzers
             internal static readonly IEnumerable<string> TypeUnderTestVariableNames = new HashSet<string>
                                                                                           {
                                                                                               "objectUnderTest",
+                                                                                              "objectToTest",
                                                                                               "sut",
+                                                                                              "subjectToTest",
                                                                                               "subjectUnderTest",
+                                                                                              "unitToTest",
                                                                                               "unitUnderTest",
                                                                                               "uut",
                                                                                               "testCandidate",
                                                                                               "testObject",
+                                                                                              "candidateToTest",
+                                                                                              "candidateUnderTest",
                                                                                           };
 
             internal static readonly IEnumerable<string> ObjectUnderTestNames = Enumerable.Empty<string>()
