@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1049";
 
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMapEntries().ToArray();
+
         public MiKo_1049_RequirementTermAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -23,43 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var result = new StringBuilder(symbolName);
 
-            foreach (var term in Constants.Markers.Requirements)
+            foreach (var pair in ReplacementMap)
             {
-                var lowerTerm = term.ToLowerCase();
-
-                result
-                    .Replace(term + "Be", "Is")
-                    .Replace(term + "_Be", "Is")
-                    .Replace(term + "Call", "Calls")
-                    .Replace(term + "_Call", "Calls")
-                    .Replace(term + "Create", "Creates")
-                    .Replace(term + "_Create", "Creates")
-                    .Replace(term + "Fail", "Fails")
-                    .Replace(term + "Have", "Have")
-                    .Replace(term + "NotHave", "DoNotHave")
-                    .Replace(term + "NtHave", "DoNotHave")
-                    .Replace(term + "ntHave", "DoNotHave")
-                    .Replace(term + "NotBe", "IsNot")
-                    .Replace(term + "NtBe", "IsNot")
-                    .Replace(term + "ntBe", "IsNot")
-                    .Replace(term + "Returns", "Returns")
-                    .Replace(term + "Return", "Returns")
-                    .Replace(term + "_Returns", "Returns")
-                    .Replace(term + "_Return", "Returns")
-                    .Replace(term + "Throw", "Throws")
-                    .Replace(term + "_Throw", "Throws")
-                    .Replace(term, "Does")
-                    .Replace("_" + lowerTerm + "_be_", "_is_")
-                    .Replace("_" + lowerTerm + "_call", "_calls")
-                    .Replace("_" + lowerTerm + "_create", "_creates")
-                    .Replace("_" + lowerTerm + "_fail", "_fails")
-                    .Replace("_" + lowerTerm + "_have_", "_has_")
-                    .Replace("_" + lowerTerm + "_not_have_", "_does_not_have_")
-                    .Replace("_" + lowerTerm + "_not_be_", "_is_not_")
-                    .Replace("_" + lowerTerm + "_return_", "_returns_")
-                    .Replace("_" + lowerTerm + "_returns_", "_returns_")
-                    .Replace("_" + lowerTerm + "_throw_", "_throws_")
-                    .Replace("_" + lowerTerm + "_", "_does_");
+                result.Replace(pair.Key, pair.Value);
             }
 
             return result.ToString();
@@ -80,6 +48,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsConst is false && base.ShallAnalyze(symbol);
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+
+        private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
+        {
+            foreach (var term in Constants.Markers.Requirements)
+            {
+                var lowerTerm = term.ToLowerCase();
+
+                yield return new KeyValuePair<string, string>(term + "Be", "Is");
+                yield return new KeyValuePair<string, string>(term + "_Be", "Is");
+                yield return new KeyValuePair<string, string>(term + "Call", "Calls");
+                yield return new KeyValuePair<string, string>(term + "_Call", "Calls");
+                yield return new KeyValuePair<string, string>(term + "Create", "Creates");
+                yield return new KeyValuePair<string, string>(term + "_Create", "Creates");
+                yield return new KeyValuePair<string, string>(term + "Fail", "Fails");
+                yield return new KeyValuePair<string, string>(term + "Have", "Have");
+                yield return new KeyValuePair<string, string>(term + "NotHave", "DoNotHave");
+                yield return new KeyValuePair<string, string>(term + "NtHave", "DoNotHave");
+                yield return new KeyValuePair<string, string>(term + "ntHave", "DoNotHave");
+                yield return new KeyValuePair<string, string>(term + "NotBe", "IsNot");
+                yield return new KeyValuePair<string, string>(term + "NtBe", "IsNot");
+                yield return new KeyValuePair<string, string>(term + "ntBe", "IsNot");
+                yield return new KeyValuePair<string, string>(term + "Returns", "Returns");
+                yield return new KeyValuePair<string, string>(term + "Return", "Returns");
+                yield return new KeyValuePair<string, string>(term + "_Returns", "Returns");
+                yield return new KeyValuePair<string, string>(term + "_Return", "Returns");
+                yield return new KeyValuePair<string, string>(term + "Throw", "Throws");
+                yield return new KeyValuePair<string, string>(term + "_Throw", "Throws");
+                yield return new KeyValuePair<string, string>(term, "Does");
+
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_be_", "_is_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_call", "_calls");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_create", "_creates");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_fail", "_fails");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_have_", "_has_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_not_have_", "_does_not_have_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_not_be_", "_is_not_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_return_", "_returns_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_returns_", "_returns_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_throw_", "_throws_");
+                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_", "_does_");
+            }
+        }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
