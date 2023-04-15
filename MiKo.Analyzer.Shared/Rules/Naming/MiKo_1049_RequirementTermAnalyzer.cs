@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                        .Replace(term + "NtHave", "DoNotHave")
                                        .Replace(term + "ntHave", "DoNotHave")
                                        .Replace(term + "Be", "Is")
+                                       .Replace(term + "_Be", "Is")
                                        .Replace(term + "NotBe", "IsNot")
                                        .Replace(term + "NtBe", "IsNot")
                                        .Replace(term + "ntBe", "IsNot")
