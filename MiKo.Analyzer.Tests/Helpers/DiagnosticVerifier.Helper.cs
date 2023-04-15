@@ -90,7 +90,8 @@ namespace TestHelper
 
             foreach (var project in projects)
             {
-                var compilationWithAnalyzers = project.GetCompilationAsync().Result.WithAnalyzers(ImmutableArray.Create(analyzers));
+                var compilation = project.GetCompilationAsync().Result;
+                var compilationWithAnalyzers = compilation.WithAnalyzers(ImmutableArray.Create(analyzers));
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
 
                 foreach (var diag in diags)
@@ -139,7 +140,7 @@ namespace TestHelper
         /// <param name="language">The language the source classes are in.</param>
         /// <param name="analyzers">The analyzers to be run on the sources.</param>
         /// <returns>An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.</returns>
-        private static Diagnostic[] GetSortedDiagnostics(string[] sources, string language, params DiagnosticAnalyzer[] analyzers)
+        private static Diagnostic[] GetSortedDiagnostics(IReadOnlyCollection<string> sources, string language, params DiagnosticAnalyzer[] analyzers)
         {
             return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, language));
         }
@@ -160,7 +161,7 @@ namespace TestHelper
         /// <param name="sources">Classes in the form of strings.</param>
         /// <param name="language">The language the source code is in.</param>
         /// <returns>The <see cref="Document"/>s produced from the sources.</returns>
-        private static Document[] GetDocuments(string[] sources, string language)
+        private static Document[] GetDocuments(IReadOnlyCollection<string> sources, string language)
         {
             if (language != LanguageNames.CSharp && language != LanguageNames.VisualBasic)
             {
@@ -170,7 +171,7 @@ namespace TestHelper
             var project = CreateProject(sources, language);
             var documents = project.Documents.ToArray();
 
-            if (sources.Length != documents.Length)
+            if (sources.Count != documents.Length)
             {
                 throw new InvalidOperationException("Amount of sources did not match amount of Documents created");
             }
@@ -184,7 +185,7 @@ namespace TestHelper
         /// <param name="sources">Classes in the form of strings.</param>
         /// <param name="language">The language the source code is in.</param>
         /// <returns>A Project created out of the Documents created from the source strings.</returns>
-        private static Project CreateProject(string[] sources, string language = LanguageNames.CSharp)
+        private static Project CreateProject(IEnumerable<string> sources, string language = LanguageNames.CSharp)
         {
             var fileNamePrefix = DefaultFilePathPrefix;
             var fileExt = language == LanguageNames.CSharp ? CSharpDefaultFileExt : VisualBasicDefaultExt;
