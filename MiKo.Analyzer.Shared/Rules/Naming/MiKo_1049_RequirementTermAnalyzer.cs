@@ -17,32 +17,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
+        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
+
+        internal static string FindBetterName(string symbolName)
         {
-            var symbolName = new StringBuilder(symbol.Name);
+            var result = new StringBuilder(symbolName);
 
             foreach (var term in Constants.Markers.Requirements)
             {
                 var lowerTerm = term.ToLowerCase();
 
-                symbolName = symbolName.Replace(term + "Have", "Have")
-                                       .Replace(term + "NotHave", "DoNotHave")
-                                       .Replace(term + "NtHave", "DoNotHave")
-                                       .Replace(term + "ntHave", "DoNotHave")
-                                       .Replace(term + "Be", "Is")
-                                       .Replace(term + "_Be", "Is")
-                                       .Replace(term + "NotBe", "IsNot")
-                                       .Replace(term + "NtBe", "IsNot")
-                                       .Replace(term + "ntBe", "IsNot")
-                                       .Replace(term, "Does")
-                                       .Replace("_" + lowerTerm + "_have_", "_has_")
-                                       .Replace("_" + lowerTerm + "_not_have_", "_does_not_have_")
-                                       .Replace("_" + lowerTerm + "_not_be_", "_is_not_")
-                                       .Replace("_" + lowerTerm + "_be_", "_is_")
-                                       .Replace("_" + lowerTerm +"_", "_does_");
+                result
+                    .Replace(term + "Be", "Is")
+                    .Replace(term + "_Be", "Is")
+                    .Replace(term + "Fail", "Fails")
+                    .Replace(term + "Have", "Have")
+                    .Replace(term + "NotHave", "DoNotHave")
+                    .Replace(term + "NtHave", "DoNotHave")
+                    .Replace(term + "ntHave", "DoNotHave")
+                    .Replace(term + "NotBe", "IsNot")
+                    .Replace(term + "NtBe", "IsNot")
+                    .Replace(term + "ntBe", "IsNot")
+                    .Replace(term + "Return", "Returns")
+                    .Replace(term + "_Return", "Returns")
+                    .Replace(term, "Does")
+                    .Replace("_" + lowerTerm + "_be_", "_is_")
+                    .Replace("_" + lowerTerm + "_fail", "_fails")
+                    .Replace("_" + lowerTerm + "_have_", "_has_")
+                    .Replace("_" + lowerTerm + "_not_have_", "_does_not_have_")
+                    .Replace("_" + lowerTerm + "_not_be_", "_is_not_")
+                    .Replace("_" + lowerTerm + "_return_", "_returns_")
+                    .Replace("_" + lowerTerm + "_", "_does_");
             }
 
-            return symbolName.ToString();
+            return result.ToString();
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
@@ -65,6 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = new StringBuilder(symbol.Name).Replace("efresh", "#") // filter 'refresh' and 'Refresh'
                                                            .Replace("hallow", "#") // filter 'shallow' and 'Shallow'
+                                                           .Replace("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                                           .Replace("eeded", "#") // filter 'needed' and 'Needed'
                                                            .ToString();
 
             return Constants.Markers.Requirements

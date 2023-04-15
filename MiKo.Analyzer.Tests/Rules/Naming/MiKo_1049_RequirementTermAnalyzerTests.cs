@@ -115,6 +115,7 @@ public class TestMe
 }
 ");
 
+        [TestCase("SomethingShouldFail", "SomethingFails")]
         [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]
         [TestCase("SomethingShouldNotHaveAnything", "SomethingDoNotHaveAnything")]
         [TestCase("SomethingShouldNtHaveAnything", "SomethingDoNotHaveAnything")]
@@ -125,18 +126,23 @@ public class TestMe
         [TestCase("SomethingShouldNtBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShouldntBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShould_BeAnything", "SomethingIsAnything")]
+        [TestCase("SomethingShouldReturnAnything", "SomethingReturnsAnything")]
+        [TestCase("SomethingShould_ReturnAnything", "SomethingReturnsAnything")]
         [TestCase("SomethingWillBeAnything", "SomethingIsAnything")]
         [TestCase("SomethingWillNotBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShallBeAnything", "SomethingIsAnything")]
         [TestCase("SomethingShallNotBeAnything", "SomethingIsNotAnything")]
+        [TestCase("Something_should_fail", "Something_fails")]
         [TestCase("Something_should_have_Anything", "Something_has_Anything")]
         [TestCase("Something_should_not_have_Anything", "Something_does_not_have_Anything")]
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
+        [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
                                                                                                  "using System; class TestMe { void " + method + "() { } }",
                                                                                                  "using System; class TestMe { void " + wanted + "() { } }");
 
+        [TestCase("SomethingShouldFail", "SomethingFails")]
         [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]
         [TestCase("SomethingShouldNotHaveAnything", "SomethingDoNotHaveAnything")]
         [TestCase("SomethingShouldNtHaveAnything", "SomethingDoNotHaveAnything")]
@@ -147,18 +153,22 @@ public class TestMe
         [TestCase("SomethingShouldNtBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShouldntBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShould_BeAnything", "SomethingIsAnything")]
+        [TestCase("SomethingShouldReturnAnything", "SomethingReturnsAnything")]
+        [TestCase("SomethingShould_ReturnAnything", "SomethingReturnsAnything")]
         [TestCase("SomethingWillBeAnything", "SomethingIsAnything")]
         [TestCase("SomethingWillNotBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShallBeAnything", "SomethingIsAnything")]
         [TestCase("SomethingShallNotBeAnything", "SomethingIsNotAnything")]
+        [TestCase("Something_should_fail", "Something_fails")]
         [TestCase("Something_should_have_Anything", "Something_has_Anything")]
         [TestCase("Something_should_not_have_Anything", "Something_does_not_have_Anything")]
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
         [TestCase("Something_should_not_do_Anything", "Something_does_not_do_Anything")]
+        [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
-                                                                                                 "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
-                                                                                                 "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
+                                                                                                         "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
+                                                                                                         "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1049_RequirementTermAnalyzer.Id;
 
