@@ -40,6 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     .Replace(term + "ntBe", "IsNot")
                     .Replace(term + "Return", "Returns")
                     .Replace(term + "_Return", "Returns")
+                    .Replace(term + "Throw", "Throws")
+                    .Replace(term + "_Throw", "Throws")
                     .Replace(term, "Does")
                     .Replace("_" + lowerTerm + "_be_", "_is_")
                     .Replace("_" + lowerTerm + "_fail", "_fails")
@@ -47,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     .Replace("_" + lowerTerm + "_not_have_", "_does_not_have_")
                     .Replace("_" + lowerTerm + "_not_be_", "_is_not_")
                     .Replace("_" + lowerTerm + "_return_", "_returns_")
+                    .Replace("_" + lowerTerm + "_throw_", "_throws_")
                     .Replace("_" + lowerTerm + "_", "_does_");
             }
 

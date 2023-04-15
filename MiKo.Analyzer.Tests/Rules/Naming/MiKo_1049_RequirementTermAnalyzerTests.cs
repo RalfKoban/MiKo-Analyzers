@@ -128,6 +128,8 @@ public class TestMe
         [TestCase("SomethingShould_BeAnything", "SomethingIsAnything")]
         [TestCase("SomethingShouldReturnAnything", "SomethingReturnsAnything")]
         [TestCase("SomethingShould_ReturnAnything", "SomethingReturnsAnything")]
+        [TestCase("SomethingShouldThrowAnything", "SomethingThrowsAnything")]
+        [TestCase("SomethingShould_ThrowAnything", "SomethingThrowsAnything")]
         [TestCase("SomethingWillBeAnything", "SomethingIsAnything")]
         [TestCase("SomethingWillNotBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShallBeAnything", "SomethingIsAnything")]
@@ -138,6 +140,7 @@ public class TestMe
         [TestCase("Something_should_be_Anything", "Something_is_Anything")]
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
         [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
+        [TestCase("Something_should_throw_Anything", "Something_throws_Anything")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
                                                                                                  "using System; class TestMe { void " + method + "() { } }",
                                                                                                  "using System; class TestMe { void " + wanted + "() { } }");
@@ -155,6 +158,8 @@ public class TestMe
         [TestCase("SomethingShould_BeAnything", "SomethingIsAnything")]
         [TestCase("SomethingShouldReturnAnything", "SomethingReturnsAnything")]
         [TestCase("SomethingShould_ReturnAnything", "SomethingReturnsAnything")]
+        [TestCase("SomethingShouldThrowAnything", "SomethingThrowsAnything")]
+        [TestCase("SomethingShould_ThrowAnything", "SomethingThrowsAnything")]
         [TestCase("SomethingWillBeAnything", "SomethingIsAnything")]
         [TestCase("SomethingWillNotBeAnything", "SomethingIsNotAnything")]
         [TestCase("SomethingShallBeAnything", "SomethingIsAnything")]
@@ -166,6 +171,7 @@ public class TestMe
         [TestCase("Something_should_not_be_Anything", "Something_is_not_Anything")]
         [TestCase("Something_should_not_do_Anything", "Something_does_not_do_Anything")]
         [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
+        [TestCase("Something_should_throw_Anything", "Something_throws_Anything")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
                                                                                                          "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
                                                                                                          "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
