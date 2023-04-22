@@ -290,9 +290,9 @@ namespace MiKoSolutions.Analyzers
                     return null;
                 }
 
-                foreach (var syntaxKind in syntaxKinds)
+                for (var index = 0; index < syntaxKinds.Length; index++)
                 {
-                    if (node.IsKind(syntaxKind))
+                    if (node.IsKind(syntaxKinds[index]))
                     {
                         return node;
                     }
@@ -328,9 +328,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
+
         internal static string GetMethodName(this ParameterSyntax node)
         {
-            var enclosingNode = node.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration);
+            var enclosingNode = node.GetEnclosing(MethodNameSyntaxKinds);
 
             switch (enclosingNode)
             {
@@ -1049,7 +1051,7 @@ namespace MiKoSolutions.Analyzers
         {
             while (true)
             {
-                var ifStatement = value.GetEnclosingIfStatement();
+                var ifStatement = value.GetEnclosing<IfStatementSyntax>();
 
                 if (ifStatement != null)
                 {
@@ -1065,7 +1067,7 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 // maybe an else block
-                var elseStatement = value.GetEnclosingElseStatement();
+                var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
 
                 if (elseStatement != null)
                 {
@@ -2082,40 +2084,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
-
-        private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
-        {
-            var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.ElseClause);
-
-            if (enclosingNode is BlockSyntax)
-            {
-                enclosingNode = enclosingNode.Parent;
-            }
-
-            return enclosingNode as ElseClauseSyntax;
-        }
-
-        private static IfStatementSyntax GetEnclosingIfStatement(this SyntaxNode node)
-        {
-            // consider brackets:
-            //                    if (true)
-            //                    {
-            //                      xyz();
-            //                    }
-            //
-            //  and no brackets:
-            //                    if (true)
-            //                      xyz();
-            // ...
-            var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.IfStatement);
-
-            if (enclosingNode is BlockSyntax)
-            {
-                enclosingNode = enclosingNode.Parent;
-            }
-
-            return enclosingNode as IfStatementSyntax;
-        }
 
         private static bool Is(this SyntaxNode value, string tagName, params string[] contents)
         {
