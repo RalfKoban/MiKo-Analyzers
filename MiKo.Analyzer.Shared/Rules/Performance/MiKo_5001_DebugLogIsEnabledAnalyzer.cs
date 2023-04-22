@@ -20,6 +20,20 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
+        private static string FindEnclosingMethodName(MemberAccessExpressionSyntax syntax)
+        {
+            foreach (var ancestor in syntax.Ancestors())
+            {
+                switch (ancestor)
+                {
+                    case BaseMethodDeclarationSyntax method: return method.GetName();
+                    case LocalFunctionStatementSyntax function: return function.GetName();
+                }
+            }
+
+            return string.Empty;
+        }
+
         private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
             var node = (InvocationExpressionSyntax)context.Node;
@@ -63,9 +77,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return null;
                     }
 
-                    var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
+                    var enclosingMethodName = FindEnclosingMethodName(methodCall);
 
-                    return Issue(enclosingMethod.Name, methodCall.Parent, methodName, Constants.ILog.IsDebugEnabled);
+                    return Issue(enclosingMethodName, methodCall, methodName, Constants.ILog.IsDebugEnabled);
                 }
 
                 default:
