@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,57 +12,68 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0003";
 
+        private static readonly SyntaxKind[] CountableDeclarations = { SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.RecordDeclaration, SyntaxKind.RecordStructDeclaration };
+
         public MiKo_0003_LinesOfCodeInClassAnalyzer() : base(Id)
         {
         }
 
         public int MaxLinesOfCode { get; set; } = 220;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSymbolAction(AnalyzeType, SymbolKind.NamedType);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, CountableDeclarations);
 
-        protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
+        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            switch (symbol.TypeKind)
+            if (context.Node is TypeDeclarationSyntax declaration)
             {
-                case TypeKind.Class:
-                case TypeKind.Struct:
+                if (declaration.IsGenerated())
+                {
+                    // ignore generated code
+                    return;
+                }
+
+                if (declaration.IsTestClass())
+                {
+                    // ignore test classes
+                    return;
+                }
+
+                var issues = AnalyzeDeclarations(declaration);
+
+                ReportDiagnostics(context, issues);
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeDeclarations(TypeDeclarationSyntax declaration)
+        {
+            var loc = 0;
+
+            foreach (var member in declaration.Members)
+            {
+                switch (member)
+                {
+                    case ConstructorDeclarationSyntax _:
+                    case DestructorDeclarationSyntax _:
+                    case IndexerDeclarationSyntax _:
+                    case PropertyDeclarationSyntax _:
+                    case EventDeclarationSyntax _:
+                    case MethodDeclarationSyntax _:
+                    case ConversionOperatorDeclarationSyntax _:
+                    case OperatorDeclarationSyntax _:
                     {
-                        if (symbol.IsGenerated())
+                        foreach (var block in member.DescendantNodes<BlockSyntax>())
                         {
-                            yield break;
+                            loc += Counter.CountLinesOfCode(block);
                         }
 
-                        // ignore test classes
-                        if (symbol.IsTestClass())
-                        {
-                            yield break;
-                        }
-
-                        var methods = symbol.GetMethods()
-                                            .Where(_ => _.CanBeReferencedByName || _.IsConstructor());
-                        var properties = symbol.GetProperties();
-
-                        var loc = Enumerable.Empty<ISymbol>().Concat(methods).Concat(properties)
-                                            .Where(_ => _.Locations.Any(__ => __.IsInSource))
-                                            .Select(_ => _.GetSyntax())
-                                            .Where(_ => _ != null)
-                                            .SelectMany(_ => _.DescendantNodes().OfType<BlockSyntax>())
-                                            .Sum(_ => Counter.CountLinesOfCode(_));
-
-                        if (loc > MaxLinesOfCode)
-                        {
-                            yield return Issue(symbol, loc, MaxLinesOfCode);
-                        }
-
-                        yield break;
+                        break;
                     }
+                }
+            }
 
-                // ignore interfaces
-                case TypeKind.Interface:
-                    yield break;
-
-                default:
-                    yield break;
+            if (loc > MaxLinesOfCode)
+            {
+                yield return Issue(declaration.GetLocation(), loc, MaxLinesOfCode);
             }
         }
 

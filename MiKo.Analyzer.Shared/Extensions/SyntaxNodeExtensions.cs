@@ -345,6 +345,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this ArgumentSyntax argument) => argument.Expression.GetName();
 
+        internal static string GetName(this AttributeSyntax attribute)
+        {
+            switch (attribute.Name)
+            {
+                case QualifiedNameSyntax q: return q.Right.GetName();
+                case SimpleNameSyntax s: return s.GetName();
+                default: return string.Empty;
+            }
+        }
+
         internal static string GetName(this BaseMethodDeclarationSyntax value)
         {
             switch (value)
@@ -1047,6 +1057,8 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsGenerated(this TypeDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.GeneratedAttributeNames.Contains);
+
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode value, string methodName)
         {
             while (true)
@@ -1093,6 +1105,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
         {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var modifier in value.Modifiers)
             {
                 if (modifier.IsKind(SyntaxKind.AsyncKeyword))
@@ -1105,6 +1118,7 @@ namespace MiKoSolutions.Analyzers
         }
         internal static bool IsAsync(this MethodDeclarationSyntax value)
         {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var modifier in value.Modifiers)
             {
                 if (modifier.IsKind(SyntaxKind.AsyncKeyword))
@@ -1286,6 +1300,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
+
+        internal static bool IsTestClass(this TypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
 
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
 
@@ -2060,9 +2076,37 @@ namespace MiKoSolutions.Analyzers
                        .FirstOrDefault();
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this ClassDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+        internal static IEnumerable<string> GetAttributeNames(this TypeDeclarationSyntax value)
+        {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var attributeList in value.AttributeLists)
+            {
+                // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+                foreach (var attribute in attributeList.Attributes)
+                {
+                    var name = attribute.GetName();
 
-        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        continue;
+                    }
+
+                    yield return name;
+                }
+            }
+        }
+
+        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value)
+        {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var attributeList in value.AttributeLists)
+            {
+                foreach (var attribute in attributeList.Attributes)
+                {
+                    yield return attribute.GetName();
+                }
+            }
+        }
 
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {

@@ -64,6 +64,22 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
+        private static void CountLinesOfCode<T>(SeparatedSyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
+        {
+            foreach (var node in nodes)
+            {
+                CountLinesOfCode(node, lines);
+            }
+        }
+
+        private static void CountLinesOfCode<T>(SyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
+        {
+            foreach (var node in nodes)
+            {
+                CountLinesOfCode(node, lines);
+            }
+        }
+
         private static void CountLinesOfCode(SyntaxNode node, ISet<int> lines)
         {
             while (true)
@@ -82,7 +98,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         CountLinesOfCode(s.Declaration.GetLocation().GetLineSpan().StartLinePosition, lines);
 
                         // get normal initializers and object initializers
-                        CountLinesOfCode(s.Declaration.Variables.Select(_ => _.Initializer?.Value).OfType<ObjectCreationExpressionSyntax>(), lines);
+                        foreach (var variable in s.Declaration.Variables)
+                        {
+                            if (variable.Initializer?.Value is ObjectCreationExpressionSyntax syntax)
+                            {
+                                CountLinesOfCode(syntax, lines);
+                            }
+                        }
 
                         break;
 
@@ -119,7 +141,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
                     case SwitchStatementSyntax s:
                         CountLinesOfCode(s.Expression, lines);
-                        CountLinesOfCode(s.Sections.SelectMany(_ => _.Labels), lines);
+
+                        foreach (var section in s.Sections)
+                        {
+                            CountLinesOfCode(section.Labels, lines);
+                        }
 
                         break;
 
@@ -138,6 +164,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         private static void CountLinesOfCode(Location location, ISet<int> lines)
         {
             var lineSpan = location.GetLineSpan();
+
             CountLinesOfCode(lineSpan.StartLinePosition, lines);
             CountLinesOfCode(lineSpan.EndLinePosition, lines);
         }

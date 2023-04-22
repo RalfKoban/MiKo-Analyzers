@@ -43,9 +43,71 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 ");
 
         [Test]
-        public void Generated_type_with_length_above_limit_is_not_reported() => No_issue_is_reported_for(@"
+        public void Fully_qualified_generated_type_with_length_above_limit_is_not_reported() => No_issue_is_reported_for(@"
 
-    [System.Rutime.CompilerServices.CompilerGeneratedAttribute]
+    [System.Runtime.CompilerServices.CompilerGeneratedAttribute]
+    public class MyType
+    {
+        public void Method()
+        {
+            if (true)
+            {
+                var x = 0;
+                if (x == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Generated_type_with_length_above_limit_is_not_reported() => No_issue_is_reported_for(@"
+using System.Runtime.CompilerServices; 
+
+    [CompilerGenerated]
+    public class MyType
+    {
+        public void Method()
+        {
+            if (true)
+            {
+                var x = 0;
+                if (x == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Fully_qualified_test_type_with_length_above_limit_is_not_reported() => No_issue_is_reported_for(@"
+
+    [NUnit.Framework.TestFixtureAttribute]
+    public class MyType
+    {
+        public void Method()
+        {
+            if (true)
+            {
+                var x = 0;
+                if (x == 0)
+                {
+                    return;
+                }
+            }
+        }
+    }
+");
+
+        [Test]
+        public void Test_type_with_length_above_limit_is_not_reported() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+    [TestFixture]
     public class MyType
     {
         public void Method()
