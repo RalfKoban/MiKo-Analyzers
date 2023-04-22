@@ -1375,19 +1375,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string phrase, string replacement)
         {
-            var result = source.ToList();
-
-            for (var index = 0; index < result.Count; index++)
-            {
-                var value = result[index];
-
-                if (value is XmlTextSyntax text)
-                {
-                    result[index] = text.ReplaceText(phrase, replacement);
-                }
-            }
-
-            return new SyntaxList<XmlNodeSyntax>(result);
+            return source.ReplaceText(new[] { phrase }, replacement);
         }
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
@@ -1407,30 +1395,57 @@ namespace MiKoSolutions.Analyzers
             return new SyntaxList<XmlNodeSyntax>(result);
         }
 
-        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
-        {
-            return ReplaceText(value, new[] { phrase }, replacement);
-        }
-
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
         {
             var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
             foreach (var token in value.TextTokens)
             {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
                 var text = token.ValueText;
 
-                bool replaced = false;
+                var replaced = false;
+
                 var result = new StringBuilder(text);
 
-                foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
+                foreach (var phrase in phrases.Where(_ => text.Contains(_)))
                 {
-                    replaced = true;
                     result.Replace(phrase, replacement);
+
+                    replaced = true;
                 }
 
                 if (replaced)
                 {
+                    map[token] = token.WithText(result);
+                }
+            }
+
+            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
+        }
+
+        internal static XmlTextSyntax ReplaceFirstText(this XmlTextSyntax value, string phrase, string replacement)
+        {
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+
+            foreach (var token in value.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var text = token.ValueText;
+
+                var index = text.IndexOf(phrase, StringComparison.Ordinal);
+                if (index > -1)
+                {
+                    var result = string.Concat(text.Substring(0, index), replacement, text.Substring(index + phrase.Length));
+
                     map[token] = token.WithText(result);
                 }
             }

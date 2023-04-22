@@ -126,7 +126,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (firstWord.IsNullOrWhiteSpace() is false)
                     {
-                        var fixedText = newText.ReplaceText(firstWord, firstWord.ToUpperCaseAt(0));
+                        var fixedText = newText.ReplaceFirstText(firstWord, firstWord.ToUpperCaseAt(0));
 
                         return replaced.ReplaceNode(newText, fixedText);
                     }
@@ -142,8 +142,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             return comment.Content.OfType<XmlElementSyntax>()
                           .Where(_ => _.IsException())
-                          .Select(e => FixExceptionComment(context, syntax, e, comment))
-                          .FirstOrDefault(fix => fix != null);
+                          .Select(_ => FixExceptionComment(context, syntax, _, comment))
+                          .FirstOrDefault(_ => _ != null);
         }
 
         protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(CodeFixContext context, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment) => null;
