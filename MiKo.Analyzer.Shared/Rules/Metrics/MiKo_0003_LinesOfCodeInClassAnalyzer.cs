@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
             if (loc > MaxLinesOfCode)
             {
-                yield return Issue(declaration.GetLocation(), loc, MaxLinesOfCode);
+                yield return Issue(declaration.Identifier.GetLocation(), loc, MaxLinesOfCode);
             }
         }
 
