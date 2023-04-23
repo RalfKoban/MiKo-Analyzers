@@ -10,18 +10,18 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0001";
 
-        public MiKo_0001_LinesOfCodeAnalyzer() : base(Id)
+        public MiKo_0001_LinesOfCodeAnalyzer() : base(Id, DefaultSyntaxKinds)
         {
         }
 
         public int MaxLinesOfCode { get; set; } = 20;
 
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol)
+        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol)
         {
             var loc = Counter.CountLinesOfCode(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
 
             return loc > MaxLinesOfCode
-                    ? Issue(owningSymbol, loc, MaxLinesOfCode)
+                    ? Issue(containingSymbol, loc, MaxLinesOfCode)
                     : null;
         }
     }

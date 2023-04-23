@@ -10,15 +10,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0006";
 
-        public MiKo_0006_LocalFunctionCyclomaticComplexityAnalyzer() : base(Id)
+        public MiKo_0006_LocalFunctionCyclomaticComplexityAnalyzer() : base(Id, SyntaxKind.LocalFunctionStatement)
         {
         }
 
         public int MaxCyclomaticComplexity { get; set; } = 7;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.LocalFunctionStatement);
-
-        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
+        protected override void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
@@ -34,7 +32,5 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 }
             }
         }
-
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
-    }
+   }
 }

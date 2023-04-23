@@ -12,13 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private const int MaxParametersCount = 3;
 
-        public MiKo_0007_LocalFunctionParameterCountAnalyzer() : base(Id)
+        public MiKo_0007_LocalFunctionParameterCountAnalyzer() : base(Id, SyntaxKind.LocalFunctionStatement)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.LocalFunctionStatement);
-
-        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
+        protected override void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
@@ -32,7 +30,5 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 }
             }
         }
-
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
     }
 }

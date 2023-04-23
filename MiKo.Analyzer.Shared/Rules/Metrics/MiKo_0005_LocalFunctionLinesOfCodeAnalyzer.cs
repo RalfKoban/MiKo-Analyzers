@@ -10,15 +10,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0005";
 
-        public MiKo_0005_LocalFunctionLinesOfCodeAnalyzer() : base(Id)
+        public MiKo_0005_LocalFunctionLinesOfCodeAnalyzer() : base(Id, SyntaxKind.LocalFunctionStatement)
         {
         }
 
         public int MaxLinesOfCode { get; set; } = 20;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.LocalFunctionStatement);
-
-        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
+        protected override void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
@@ -32,7 +30,5 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 }
             }
         }
-
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
     }
 }

@@ -12,17 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0003";
 
-        private static readonly SyntaxKind[] CountableDeclarations = { SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.RecordDeclaration, SyntaxKind.RecordStructDeclaration };
-
-        public MiKo_0003_LinesOfCodeInClassAnalyzer() : base(Id)
+        public MiKo_0003_LinesOfCodeInClassAnalyzer() : base(Id, SyntaxKind.ClassDeclaration, SyntaxKind.StructDeclaration, SyntaxKind.RecordDeclaration, SyntaxKind.RecordStructDeclaration)
         {
         }
 
         public int MaxLinesOfCode { get; set; } = 220;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, CountableDeclarations);
-
-        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
+        protected override void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is TypeDeclarationSyntax declaration)
             {
@@ -76,7 +72,5 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 yield return Issue(declaration.Identifier.GetLocation(), loc, MaxLinesOfCode);
             }
         }
-
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
     }
 }
