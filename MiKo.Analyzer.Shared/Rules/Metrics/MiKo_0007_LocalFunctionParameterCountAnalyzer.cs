@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -17,17 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.LocalFunctionStatement);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
+        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            foreach (var localFunction in symbol.GetLocalFunctions())
+            if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
                 var parameterCount = localFunction.ParameterList?.Parameters.Count;
 
                 if (parameterCount > MaxParametersCount)
                 {
-                    yield return Issue(symbol, parameterCount, MaxParametersCount);
+                    var issue = Issue(localFunction.Identifier.GetLocation(), parameterCount, MaxParametersCount);
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }

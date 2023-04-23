@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -17,17 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         public int MaxLinesOfCode { get; set; } = 20;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.LocalFunctionStatement);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
+        private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            foreach (var localFunction in symbol.GetLocalFunctions())
+            if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
                 var loc = Counter.CountLinesOfCode(localFunction.Body);
 
                 if (loc > MaxLinesOfCode)
                 {
-                    yield return Issue(localFunction.GetName(), localFunction.Identifier, loc, MaxLinesOfCode);
+                    var issue = Issue(localFunction.GetName(), localFunction.Identifier, loc, MaxLinesOfCode);
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }
