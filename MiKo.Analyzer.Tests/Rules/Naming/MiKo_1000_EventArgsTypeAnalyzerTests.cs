@@ -37,10 +37,10 @@ public class TestMe : EventArgs
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "using System; class TestMe : EventArgs { }",
-                                                         "using System; class TestMeEventArgs : EventArgs { }");
+        [TestCase("using System; class TestMe : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeArgs : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1000_EventArgsTypeAnalyzer.Id;
 

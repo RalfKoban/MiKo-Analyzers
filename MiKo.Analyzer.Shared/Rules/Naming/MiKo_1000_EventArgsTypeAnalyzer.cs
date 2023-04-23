@@ -12,12 +12,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1000";
 
         private const string Suffix = nameof(EventArgs);
+        private const string BadSuffix1 = "Args";
+        private const string BadSuffix2 = "EventArg";
 
         public MiKo_1000_EventArgsTypeAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => symbol.Name + Suffix;
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            var name = symbol.Name;
+
+            if (name.EndsWith(BadSuffix1, StringComparison.Ordinal))
+            {
+                return name.WithoutSuffix(BadSuffix1) + Suffix;
+            }
+
+            if (name.EndsWith(BadSuffix2, StringComparison.Ordinal))
+            {
+                return name.WithoutSuffix(BadSuffix2) + Suffix;
+            }
+
+            return name + Suffix;
+        }
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEventArgs();
 
