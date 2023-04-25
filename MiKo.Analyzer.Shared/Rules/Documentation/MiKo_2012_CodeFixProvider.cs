@@ -59,7 +59,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "The implementation ",
             };
 
+        private static readonly string[] ClassUsedToPhrases =
+            {
+                "A class to ",
+                "A class that is used to ",
+                "A class which is used to ",
+                "An class that is used to ",
+                "An class which is used to ",
+                "Class to ",
+                "Class used to ",
+                "The class is used to ",
+                "The class that is used to ",
+                "This class is used to ",
+                "Used to ",
+            };
+
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.Keys.Select(_ => _.Trim()).ToArray();
 
         public override string FixableDiagnosticId => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
@@ -103,6 +120,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(comment, startingPhrase);
                     }
                 }
+
+                if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
+                {
+                    return Comment(comment, ReplacementMap.Keys, ReplacementMap);
+                }
+
+                foreach (var phrase in ClassUsedToPhrases)
+                {
+                    if (text.StartsWith(phrase, StringComparison.Ordinal))
+                    {
+                        var remainingText = text.AsSpan(phrase.Length);
+
+                        var firstWord = remainingText.FirstWord();
+                        var index = remainingText.IndexOf(firstWord);
+                        var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToString()).ToUpperCaseAt(0);
+
+                        var replacedText = replacementForFirstWord + remainingText.Slice(index + firstWord.Length).ToString();
+
+                        return Comment(comment, replacedText, content.RemoveAt(0));
+                    }
+                }
             }
 
             var updatedComment = Comment(comment, ReplacementMap.Keys, ReplacementMap);
@@ -120,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return inheritdoc;
             }
 
-            // maybe it is a docu that should be an inherit documentation instead
+            // maybe it is a documentation that should be an inherit documentation instead
             if (content.FirstOrDefault() is XmlTextSyntax t)
             {
                 var text = t.GetTextWithoutTrivia();
