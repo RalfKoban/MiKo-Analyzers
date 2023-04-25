@@ -86,6 +86,40 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_call_in_method_in_block_in_deeply_nested_foreach_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(IEnumerable<string> items)
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log." + method + @"();
+
+                foreach (var item in item)
+                {
+                    Log." + method + @"();
+                }
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_call_in_method_in_block_in_deeply_nested_if_statement_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 namespace log4net
 {
@@ -421,6 +455,34 @@ namespace log4net
 ");
 
         [Test]
+        public void An_issue_is_reported_for_call_in_local_function_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool flag)
+        {
+            DoSomethingCore();
+
+            void DoSomethingCore()
+            {
+                Log." + method + @"();
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"
@@ -463,6 +525,67 @@ namespace log4net
             if (Log.IsDebugEnabled)
             {
                 Log.Debug(""something"");
+            }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_local_function()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool flag)
+        {
+            DoSomethingCore();
+
+            void DoSomethingCore()
+            {
+                Log.Debug(""something"");
+            }
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool flag)
+        {
+            DoSomethingCore();
+
+            void DoSomethingCore()
+            {
+                if (Log.IsDebugEnabled)
+                {
+                    Log.Debug(""something"");
+                }
             }
         }
     }

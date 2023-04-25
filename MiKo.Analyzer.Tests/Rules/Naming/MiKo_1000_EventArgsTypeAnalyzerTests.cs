@@ -37,10 +37,22 @@ public class TestMe : EventArgs
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "using System; class TestMe : EventArgs { }",
-                                                         "using System; class TestMeEventArgs : EventArgs { }");
+        [TestCase("using System; class TestMe : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeArgs : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeBaseArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeBaseArgs : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventsArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventsArgs : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventBaseArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventsBaseArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventsBaseArgs : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventArgBase : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventArgsBase : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventsArgBase : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        [TestCase("using System; class TestMeEventsArgsBase : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         protected override string GetDiagnosticId() => MiKo_1000_EventArgsTypeAnalyzer.Id;
 

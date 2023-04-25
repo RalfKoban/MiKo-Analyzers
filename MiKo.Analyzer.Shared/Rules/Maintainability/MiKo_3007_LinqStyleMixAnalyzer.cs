@@ -18,9 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQueryExpression, SyntaxKind.QueryExpression);
 
+        private static readonly SyntaxKind[] InspectionTargetSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.FieldDeclaration };
+
         private static bool TryFindInspectionTarget(SyntaxNode query, out SyntaxNode result, out string identifier)
         {
-            result = query.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.FieldDeclaration);
+            result = query.GetEnclosing(InspectionTargetSyntaxKinds);
 
             switch (result)
             {

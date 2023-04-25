@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (comment.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase, StringComparison.OrdinalIgnoreCase))
             {
-                yield return Issue(symbol.Name, exceptionComment);
+                yield return Issue(symbol.Name, exceptionComment.GetContentsLocation());
             }
         }
     }

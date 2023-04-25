@@ -290,9 +290,9 @@ namespace MiKoSolutions.Analyzers
                     return null;
                 }
 
-                foreach (var syntaxKind in syntaxKinds)
+                for (var index = 0; index < syntaxKinds.Length; index++)
                 {
-                    if (node.IsKind(syntaxKind))
+                    if (node.IsKind(syntaxKinds[index]))
                     {
                         return node;
                     }
@@ -328,9 +328,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
+
         internal static string GetMethodName(this ParameterSyntax node)
         {
-            var enclosingNode = node.GetEnclosing(SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration);
+            var enclosingNode = node.GetEnclosing(MethodNameSyntaxKinds);
 
             switch (enclosingNode)
             {
@@ -342,6 +344,16 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static string GetName(this ArgumentSyntax argument) => argument.Expression.GetName();
+
+        internal static string GetName(this AttributeSyntax attribute)
+        {
+            switch (attribute.Name)
+            {
+                case QualifiedNameSyntax q: return q.Right.GetName();
+                case SimpleNameSyntax s: return s.GetName();
+                default: return string.Empty;
+            }
+        }
 
         internal static string GetName(this BaseMethodDeclarationSyntax value)
         {
@@ -1045,11 +1057,13 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsGenerated(this TypeDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.GeneratedAttributeNames.Contains);
+
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode value, string methodName)
         {
             while (true)
             {
-                var ifStatement = value.GetEnclosingIfStatement();
+                var ifStatement = value.GetEnclosing<IfStatementSyntax>();
 
                 if (ifStatement != null)
                 {
@@ -1065,7 +1079,7 @@ namespace MiKoSolutions.Analyzers
                 }
 
                 // maybe an else block
-                var elseStatement = value.GetEnclosingElseStatement();
+                var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
 
                 if (elseStatement != null)
                 {
@@ -1091,6 +1105,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
         {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var modifier in value.Modifiers)
             {
                 if (modifier.IsKind(SyntaxKind.AsyncKeyword))
@@ -1103,6 +1118,7 @@ namespace MiKoSolutions.Analyzers
         }
         internal static bool IsAsync(this MethodDeclarationSyntax value)
         {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var modifier in value.Modifiers)
             {
                 if (modifier.IsKind(SyntaxKind.AsyncKeyword))
@@ -1285,6 +1301,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
 
+        internal static bool IsTestClass(this TypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
+
         internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
 
         internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
@@ -1373,19 +1391,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string phrase, string replacement)
         {
-            var result = source.ToList();
-
-            for (var index = 0; index < result.Count; index++)
-            {
-                var value = result[index];
-
-                if (value is XmlTextSyntax text)
-                {
-                    result[index] = text.ReplaceText(phrase, replacement);
-                }
-            }
-
-            return new SyntaxList<XmlNodeSyntax>(result);
+            return source.ReplaceText(new[] { phrase }, replacement);
         }
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
@@ -1405,30 +1411,57 @@ namespace MiKoSolutions.Analyzers
             return new SyntaxList<XmlNodeSyntax>(result);
         }
 
-        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
-        {
-            return ReplaceText(value, new[] { phrase }, replacement);
-        }
-
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
         {
             var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
             foreach (var token in value.TextTokens)
             {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
                 var text = token.ValueText;
 
-                bool replaced = false;
+                var replaced = false;
+
                 var result = new StringBuilder(text);
 
-                foreach (var phrase in phrases.Where(phrase => text.Contains(phrase)))
+                foreach (var phrase in phrases.Where(_ => text.Contains(_)))
                 {
-                    replaced = true;
                     result.Replace(phrase, replacement);
+
+                    replaced = true;
                 }
 
                 if (replaced)
                 {
+                    map[token] = token.WithText(result);
+                }
+            }
+
+            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
+        }
+
+        internal static XmlTextSyntax ReplaceFirstText(this XmlTextSyntax value, string phrase, string replacement)
+        {
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+
+            foreach (var token in value.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var text = token.ValueText;
+
+                var index = text.IndexOf(phrase, StringComparison.Ordinal);
+                if (index > -1)
+                {
+                    var result = string.Concat(text.Substring(0, index), replacement, text.Substring(index + phrase.Length));
+
                     map[token] = token.WithText(result);
                 }
             }
@@ -2043,9 +2076,37 @@ namespace MiKoSolutions.Analyzers
                        .FirstOrDefault();
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this ClassDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+        internal static IEnumerable<string> GetAttributeNames(this TypeDeclarationSyntax value)
+        {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var attributeList in value.AttributeLists)
+            {
+                // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+                foreach (var attribute in attributeList.Attributes)
+                {
+                    var name = attribute.GetName();
 
-        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value) => value.AttributeLists.SelectMany(_ => _.Attributes).Select(_ => _.Name.GetNameOnlyPart());
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        continue;
+                    }
+
+                    yield return name;
+                }
+            }
+        }
+
+        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value)
+        {
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var attributeList in value.AttributeLists)
+            {
+                foreach (var attribute in attributeList.Attributes)
+                {
+                    yield return attribute.GetName();
+                }
+            }
+        }
 
         private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
@@ -2082,40 +2143,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
-
-        private static ElseClauseSyntax GetEnclosingElseStatement(this SyntaxNode node)
-        {
-            var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.ElseClause);
-
-            if (enclosingNode is BlockSyntax)
-            {
-                enclosingNode = enclosingNode.Parent;
-            }
-
-            return enclosingNode as ElseClauseSyntax;
-        }
-
-        private static IfStatementSyntax GetEnclosingIfStatement(this SyntaxNode node)
-        {
-            // consider brackets:
-            //                    if (true)
-            //                    {
-            //                      xyz();
-            //                    }
-            //
-            //  and no brackets:
-            //                    if (true)
-            //                      xyz();
-            // ...
-            var enclosingNode = node.GetEnclosing(SyntaxKind.Block, SyntaxKind.IfStatement);
-
-            if (enclosingNode is BlockSyntax)
-            {
-                enclosingNode = enclosingNode.Parent;
-            }
-
-            return enclosingNode as IfStatementSyntax;
-        }
 
         private static bool Is(this SyntaxNode value, string tagName, params string[] contents)
         {

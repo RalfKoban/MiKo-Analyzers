@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
-        public void Method_with_exaclty_matching_ObjectInitializer_statement_as_return_statement_is_not_reported() => No_issue_is_reported_for(@"
+        public void Method_with_exactly_matching_ObjectInitializer_statement_as_return_statement_is_not_reported() => No_issue_is_reported_for(@"
 
     public class TypeWithMethod
     {
@@ -220,7 +220,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
-        public void Method_with_exaclty_matching_ObjectInitializer_statement_is_not_reported() => No_issue_is_reported_for(@"
+        public void Method_with_exactly_matching_ObjectInitializer_statement_is_not_reported() => No_issue_is_reported_for(@"
 
     public class TypeWithMethod
     {

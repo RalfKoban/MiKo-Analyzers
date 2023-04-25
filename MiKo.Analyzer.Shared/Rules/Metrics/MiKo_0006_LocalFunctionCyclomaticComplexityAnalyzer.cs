@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -11,17 +10,15 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0006";
 
-        public MiKo_0006_LocalFunctionCyclomaticComplexityAnalyzer() : base(Id)
+        public MiKo_0006_LocalFunctionCyclomaticComplexityAnalyzer() : base(Id, SyntaxKind.LocalFunctionStatement)
         {
         }
 
         public int MaxCyclomaticComplexity { get; set; } = 7;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method);
-
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
+        protected override void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            foreach (var localFunction in symbol.GetLocalFunctions())
+            if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
                 var cc = Counter.CountCyclomaticComplexity(localFunction.Body);
 
@@ -29,11 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 {
                     var identifier = localFunction.Identifier;
 
-                    yield return Issue(identifier.ValueText, identifier, cc, MaxCyclomaticComplexity);
+                    var issue = Issue(identifier.ValueText, identifier, cc, MaxCyclomaticComplexity);
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }
-
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol) => null;
-    }
+   }
 }

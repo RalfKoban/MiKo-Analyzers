@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -16,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private const string Invocation = nameof(Task) + "." + nameof(Task.Run);
 
+        private static readonly SyntaxKind[] EnclosingInvocationSyntaxKinds = { SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause };
+
         public MiKo_3021_TaskRunAnalyzer() : base(Id)
         {
         }
@@ -26,35 +27,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var methodName = symbol.Name;
 
-            var descendantNodes = symbol.GetSyntax().DescendantNodes().ToList();
+            var taskRunExpressions = new List<MemberAccessExpressionSyntax>();
+            var identifierNames = new HashSet<string>();
 
-            foreach (var taskRunExpression in descendantNodes.OfType<MemberAccessExpressionSyntax>().Where(_ => _.ToCleanedUpString() == Invocation))
+            foreach (var node in symbol.GetSyntax().DescendantNodes())
+            {
+                switch (node)
+                {
+                    case MemberAccessExpressionSyntax maes when maes.ToCleanedUpString() == Invocation:
+                        taskRunExpressions.Add(maes);
+
+                        break;
+
+                    case ReturnStatementSyntax rss when rss.Expression is IdentifierNameSyntax ins:
+                        identifierNames.Add(ins.GetName());
+
+                        break;
+                }
+            }
+
+            foreach (var taskRunExpression in taskRunExpressions)
             {
                 var expression = taskRunExpression.GetEnclosing<InvocationExpressionSyntax>();
-                var node = expression.GetEnclosing(SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause);
+                var node = expression.GetEnclosing(EnclosingInvocationSyntaxKinds);
+                var syntaxKind = node?.Kind();
 
-                switch (node?.Kind())
+                switch (syntaxKind)
                 {
                     case SyntaxKind.ReturnStatement:
                     case SyntaxKind.ArrowExpressionClause:
+                    {
                         yield return ReportIssue(taskRunExpression, methodName);
 
                         break;
+                    }
 
                     case SyntaxKind.VariableDeclarator:
+                    {
                         var variable = (VariableDeclaratorSyntax)node;
                         var variableName = variable.GetName();
 
-                        foreach (var unused in descendantNodes
-                                               .OfType<ReturnStatementSyntax>()
-                                               .Select(_ => _.Expression)
-                                               .OfType<IdentifierNameSyntax>()
-                                               .Where(_ => _.GetName() == variableName))
+                        foreach (var identifierName in identifierNames)
                         {
-                            yield return ReportIssue(taskRunExpression, methodName);
+                            if (identifierName == variableName)
+                            {
+                                yield return ReportIssue(taskRunExpression, methodName);
+                            }
                         }
 
                         break;
+                    }
                 }
             }
         }

@@ -10,18 +10,18 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         public const string Id = "MiKo_0002";
 
-        public MiKo_0002_CyclomaticComplexityAnalyzer() : base(Id)
+        public MiKo_0002_CyclomaticComplexityAnalyzer() : base(Id, DefaultSyntaxKinds)
         {
         }
 
         public int MaxCyclomaticComplexity { get; set; } = 7;
 
-        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol owningSymbol)
+        protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol)
         {
             var cc = Counter.CountCyclomaticComplexity(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
 
             return cc > MaxCyclomaticComplexity
-                    ? Issue(owningSymbol, cc, MaxCyclomaticComplexity)
+                    ? Issue(containingSymbol, cc, MaxCyclomaticComplexity)
                     : null;
         }
     }

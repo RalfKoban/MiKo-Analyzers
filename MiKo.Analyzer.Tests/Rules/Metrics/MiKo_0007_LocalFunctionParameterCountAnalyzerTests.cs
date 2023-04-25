@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         [TestCase("int a")]
         [TestCase("int a, int b")]
         [TestCase("int a, int b, int c")]
-        public void Less_than_max_parameters_are_allowed_(string parameters) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_less_than_max_parameters_(string parameters) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private bool DoSomething()
@@ -29,7 +29,7 @@ public class TestMe
         [TestCase("int a, int b, int c, int d, int e, int f")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g, int h")]
-        public void More_than_max_parameters_are_reported_(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_more_than_max_parameters_(string parameters) => An_issue_is_reported_for(@"
 public class TestMe
 {
     private bool DoSomething()
