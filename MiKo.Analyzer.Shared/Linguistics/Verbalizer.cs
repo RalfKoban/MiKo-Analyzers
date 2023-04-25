@@ -145,6 +145,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         {
             var length = value?.Length;
 
+            if (length == 4 && value.Equals("will", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
             if (length >= 2)
             {
                 return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]) is false;
@@ -247,6 +252,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         return word;
                     }
+                }
+
+                if (word.Equals("will", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word;
                 }
 
                 var result = word + 's';
