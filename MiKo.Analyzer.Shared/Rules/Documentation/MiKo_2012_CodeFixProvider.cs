@@ -59,11 +59,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "The implementation ",
             };
 
-        private static readonly string[] ClassUsedToPhrases =
+        private static readonly string[] UsedToPhrases =
             {
+                // attributes
+                "Attribute that ",
+
+                // classes
                 "A class to ",
                 "A class that is used to ",
                 "A class which is used to ",
+                "An class to ",
                 "An class that is used to ",
                 "An class which is used to ",
                 "Class to ",
@@ -71,6 +76,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "The class is used to ",
                 "The class that is used to ",
                 "This class is used to ",
+
+                // interfaces
+                "A interface to ",
+                "An interface to ",
+                "A interface that is used to ",
+                "A interface which is used to ",
+                "An interface that is used to ",
+                "An interface which is used to ",
+                "Interface to ",
+                "Interface used to ",
+                "The interface is used to ",
+                "The interface that is used to ",
+                "This interface is used to ",
+
+                // misc.
                 "Used to ",
             };
 
@@ -126,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Comment(comment, ReplacementMap.Keys, ReplacementMap);
                 }
 
-                foreach (var phrase in ClassUsedToPhrases)
+                foreach (var phrase in UsedToPhrases)
                 {
                     if (text.StartsWith(phrase, StringComparison.Ordinal))
                     {
