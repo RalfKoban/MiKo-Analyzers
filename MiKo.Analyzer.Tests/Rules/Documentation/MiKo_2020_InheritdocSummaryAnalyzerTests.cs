@@ -19,13 +19,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Phrases = CreatePhrases(Marker);
 
         [Test]
+        public void No_issue_is_reported_for_non_inheritable_link_in_XML_summary_of_type() => No_issue_is_reported_for(@"
+using System;
+
+public class BaseType
+{
+}
+
+/// <summary>
+/// Represents a special case of a <see cref=""BaseType""/>.
+/// </summary>
+public class TestMe : BaseType
+{
+    public void Bla()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_non_inheritable_link_in_XML_summary_of_method_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// " + phrase.Replace(Marker, "<see cref=\"\"string.Format(string,object)\"\"/>") + @"
+    /// " + phrase.Replace(Marker, @"<see cref=""string.Format(string,object)""/>") + @"
     /// </summary>
     public void Bla()
     {
@@ -40,7 +59,7 @@ using System;
 public class TestMe
 {
     /// <summary>
-    /// " + phrase.Replace(Marker, "<see cref=\"\"string.Format(string,object)\"\"/>") + @"
+    /// " + phrase.Replace(Marker,  @"<see cref=""string.Format(string,object)""/>") + @"
     /// </summary>
     public int DoSomething { get; set; }
 }
@@ -53,7 +72,7 @@ using System;
 public class TestMe
 {
     /// <summary>
-    /// " + phrase.Replace(Marker, "<see cref=\"\"string.Format(string,object)\"\"/>") + @"
+    /// " + phrase.Replace(Marker,  @"<see cref=""string.Format(string,object)""/>") + @"
     /// </summary>
     public event EventHandler MyEvent;
 }
@@ -183,6 +202,20 @@ public class TestMe : ITestMe
     /// <summary>
     /// " + phrase.Replace(Marker, "ITestMe.DoSomething") + @"
     /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_XML_summary_of_method_when_on_same_line_([ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
+public interface ITestMe
+{
+    void DoSomething();
+}
+
+public class TestMe : ITestMe
+{
+    /// <summary>" + phrase.Replace(Marker, "ITestMe.DoSomething") + @"</summary>
     public void DoSomething() { }
 }
 ");
