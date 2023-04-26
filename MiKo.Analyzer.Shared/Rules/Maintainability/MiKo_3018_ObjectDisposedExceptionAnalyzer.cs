@@ -51,20 +51,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (ThrowsObjectDisposedException(symbol) is false)
+            var syntax = symbol.GetSyntax();
+
+            if (ThrowsObjectDisposedException(syntax, symbol) is false && AlwaysThrows<NotImplementedException, NotSupportedException>(syntax) is false)
             {
-                if (AlwaysThrows<NotImplementedException, NotSupportedException>(symbol) is false)
-                {
-                    yield return Issue(symbol);
-                }
+                yield return Issue(symbol.Name, GetLocation(syntax));
             }
         }
 
-        private static bool ThrowsObjectDisposedException(IMethodSymbol symbol)
+        private static Location GetLocation(SyntaxNode syntax)
         {
-            var methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>().ToLookup(_ => _.Name);
+            switch (syntax)
+            {
+                case AccessorDeclarationSyntax ads: return ads.Keyword.GetLocation();
+                case ArrowExpressionClauseSyntax aecs: return aecs.ArrowToken.GetLocation();
+                case IndexerDeclarationSyntax i: return i.ThisKeyword.GetLocation();
+                case MethodDeclarationSyntax m: return m.Identifier.GetLocation();
+                default: return syntax.GetLocation();
+            }
+        }
 
-            foreach (var node in symbol.GetSyntax().DescendantNodes())
+        private static bool ThrowsObjectDisposedException(SyntaxNode syntax, ISymbol symbol)
+        {
+            ILookup<string, IMethodSymbol> methods = null;
+
+            foreach (var node in syntax.DescendantNodes())
             {
                 if (ThrowsObjectDisposedException(node))
                 {
@@ -76,9 +87,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var name = ii.GetName();
 
-                    if (name.Contains("Dispos") && methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))
+                    if (name.Contains("Dispos"))
                     {
-                        return true;
+                        if (methods is null)
+                        {
+                            methods = symbol.ContainingType.GetMembersIncludingInherited<IMethodSymbol>().ToLookup(_ => _.Name);
+                        }
+
+                        if (methods.Contains(name) && methods[name].Any(DirectlyThrowsObjectDisposedException))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -90,11 +109,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
 
-        private static bool AlwaysThrows<T1, T2>(IMethodSymbol symbol)
+        private static bool AlwaysThrows<T1, T2>(SyntaxNode syntax)
             where T1 : Exception
             where T2 : Exception
         {
-            foreach (var node in symbol.GetSyntax().ChildNodes())
+            foreach (var node in syntax.ChildNodes())
             {
                 switch (node)
                 {

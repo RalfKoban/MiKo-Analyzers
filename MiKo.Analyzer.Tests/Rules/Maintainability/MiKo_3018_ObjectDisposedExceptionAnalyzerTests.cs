@@ -127,6 +127,20 @@ public class TestMe : IDisposable
 ");
 
         [Test]
+        public void No_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_expression_body_private_property() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    private int SomeProperty => 42;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_disposable_type_that_throws_ObjectDisposedException_in_property_that_is_([ValueSource(nameof(Visibilities))] string visibility) => No_issue_is_reported_for(@"
 using System;
 
@@ -439,6 +453,20 @@ public class TestMe : IDisposable
 ");
 
         [Test]
+        public void An_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_expression_body_method_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    " + visibility + @" int DoSomething() => 42;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_property_getter_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
 using System;
 
@@ -491,6 +519,72 @@ public class TestMe : IDisposable
         set
         {
         }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_expression_body_property_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    " + visibility + @" int SomeProperty => 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_property_getter_expression_body_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    " + visibility + @" int SomeProperty
+    {
+        get => 42;
+
+        set
+        {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException();
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_disposable_type_that_does_not_throw_ObjectDisposedException_in_property_setter_expression_body_that_is_([ValueSource(nameof(ProblematicVisibilities))] string visibility) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IDisposable
+{
+    private bool _isDisposed;
+
+    public void Dispose() => _isDisposed = true;
+
+    " + visibility + @" int SomeProperty
+    {
+        get
+        {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException();
+            }
+
+            return 42;
+        }
+
+        set => value = value;
     }
 }
 ");
