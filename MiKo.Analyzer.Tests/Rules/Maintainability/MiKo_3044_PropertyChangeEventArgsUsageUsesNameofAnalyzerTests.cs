@@ -230,6 +230,32 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_PropertyChangedEventArgs_PropertyName_comparison_with_whitespace_only_strings_in_switch_case_statement() => No_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public class TestMe
+{
+    private int MyProperty { get; set; }
+
+    public bool DoSomething(PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case ""   "":
+                return true;
+
+            case """":
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_PropertyChangedEventArgs_PropertyName_comparison_with_nameof_in_switch_case_statement() => No_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;

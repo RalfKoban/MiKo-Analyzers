@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,6 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssue(LiteralExpressionSyntax literal)
         {
+            if (literal.Token.ValueText.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
             switch (literal.Parent)
             {
                 case BinaryExpressionSyntax binary when binary.IsAnyKind(EqualsExpressions):
