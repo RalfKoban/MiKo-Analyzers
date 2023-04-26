@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(phrases) is false)
                 {
-                    yield return Issue(parameter.Name, parameterComment, phrases[0]);
+                    yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), phrases[0]);
                 }
             }
             else if (parameter.IsStreamingContextParameter())
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (comment.EqualsAny(phrases) is false)
                 {
-                    yield return Issue(parameter.Name, parameterComment, phrases[0]);
+                    yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), phrases[0]);
                 }
             }
         }
