@@ -467,6 +467,7 @@ public class TestMe : ITestMe
         [TestCase("The class offers", "Provides")]
         [TestCase("The interface offers", "Provides")]
         [TestCase("This class offers", "Provides")]
+        [TestCase("This class provides", "Provides")]
         [TestCase("This class represents", "Represents")]
         [TestCase("This interface offers", "Provides")]
         [TestCase("This interface represents", "Represents")]
@@ -741,6 +742,73 @@ public class TestMe
     /// ###
     /// </summary>
     public static void DoSomething(this TestMe value) { }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("A class to render something", "Renders something")]
+        [TestCase("An class to render something", "Renders something")]
+        [TestCase("A class that is used to render something", "Renders something")]
+        [TestCase("An class that is used to render something", "Renders something")]
+        [TestCase("A class which is used to render something", "Renders something")]
+        [TestCase("An class which is used to render something", "Renders something")]
+        [TestCase("Class to render something", "Renders something")]
+        [TestCase("Class used to render something", "Renders something")]
+        [TestCase("The class is used to render something", "Renders something")]
+        [TestCase("The class that is used to render something", "Renders something")]
+        [TestCase("This class is used to render something", "Renders something")]
+        [TestCase("Used to render something", "Renders something")]
+        public void Code_gets_fixed_for_class_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ###.
+/// </summary>
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("A interface to render something", "Renders something")]
+        [TestCase("An interface to render something", "Renders something")]
+        [TestCase("A interface that is used to render something", "Renders something")]
+        [TestCase("An interface that is used to render something", "Renders something")]
+        [TestCase("A interface which is used to render something", "Renders something")]
+        [TestCase("An interface which is used to render something", "Renders something")]
+        [TestCase("Interface to render something", "Renders something")]
+        [TestCase("Interface used to render something", "Renders something")]
+        [TestCase("The interface is used to render something", "Renders something")]
+        [TestCase("The interface that is used to render something", "Renders something")]
+        [TestCase("This interface is used to render something", "Renders something")]
+        [TestCase("Used to render something", "Renders something")]
+        public void Code_gets_fixed_for_interface_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ###.
+/// </summary>
+public interface ITestMe
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("Attribute that allows to render something", "Allows to render something")]
+        public void Code_gets_fixed_for_attribute_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ###.
+/// </summary>
+public class TestMeAttribute : System.Attribute
+{
 }
 ";
 

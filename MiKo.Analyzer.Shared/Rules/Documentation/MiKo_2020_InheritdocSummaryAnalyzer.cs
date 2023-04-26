@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2020_InheritdocSummaryAnalyzer : SummaryDocumentationAnalyzer
     {
         public const string Id = "MiKo_2020";
+
+        private static readonly string[] InheritMarkerTexts = { "See", "Impl", "Default" };
 
         private static readonly HashSet<string> Tags = new HashSet<string>
                                                            {
@@ -31,9 +35,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var cref = xmlTag.GetCref();
 
-                if (cref != null && HasIssue(symbol, compilation, cref))
+                if (cref == null)
                 {
-                    yield return Issue(xmlTag);
+                    continue;
+                }
+
+                if (xmlTag.Parent is XmlElementSyntax e)
+                {
+                    var index = e.Content.IndexOf(xmlTag);
+
+                    if (index == 0)
+                    {
+                        // is it the first inside the comment
+                        if (HasIssue(symbol, compilation, cref))
+                        {
+                            yield return Issue(xmlTag);
+                        }
+                    }
+                    else if (index > 0 && e.Content[index - 1] is XmlTextSyntax t) // there might be multiple <see/> in a comment, so consider all of them
+                    {
+                        // we seem to have an issue here, so inspect the code
+                        if (HasIssue(symbol, compilation, cref))
+                        {
+                            var text = t.GetTextWithoutTrivia();
+
+                            if (text.IsNullOrWhiteSpace())
+                            {
+                                yield return Issue(xmlTag);
+                            }
+                            else
+                            {
+                                // inspect first and last word
+                                var words = text.Words();
+
+                                if (words.First().StartsWithAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase)
+                                    || words.Last().ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    yield return Issue(xmlTag);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

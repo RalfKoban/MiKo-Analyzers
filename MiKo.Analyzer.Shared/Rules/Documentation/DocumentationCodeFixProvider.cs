@@ -36,6 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
 
+            var minLength = terms.Min(_ => _.Length);
+
             foreach (var text in syntax.DescendantNodes<XmlTextSyntax>())
             {
                 var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
@@ -49,6 +51,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     var originalText = token.Text;
+
+                    if (originalText.Length < minLength)
+                    {
+                        // length is smaller than minimum provided, so no replacement possible
+                        continue;
+                    }
 
                     if (originalText.ContainsAny(terms))
                     {
