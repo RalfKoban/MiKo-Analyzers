@@ -52,6 +52,8 @@ public class TestMe
         [TestCase("Whatever.")]
         [TestCase("On true, returns something.")]
         [TestCase("On <see langword='true' />, returns something.")]
+        [TestCase("On return, contains something.")]
+        [TestCase("On return, indicates something.")]
         [TestCase("On successful return, indicates something.")]
         [TestCase("")]
         public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"
@@ -87,16 +89,41 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_boolean_out_parameter()
+        [TestCase("[out] The something.")]
+        [TestCase("[Out] The something.")]
+        [TestCase("[OUT] The something.")]
+        [TestCase("[out]: The something.")]
+        [TestCase("[Out]: The something.")]
+        [TestCase("[OUT]: The something.")]
+        [TestCase("flag indicating the something.")]
+        [TestCase("Flag indicating the something.")]
+        [TestCase("flag that indicates the something.")]
+        [TestCase("Flag that indicates the something.")]
+        [TestCase("flag which indicates the something.")]
+        [TestCase("Flag which indicates the something.")]
+        [TestCase("Indicates the something.")]
+        [TestCase("Indicating the something.")]
+        [TestCase("out - The something.")]
+        [TestCase("Out - The something.")]
+        [TestCase("OUT - The something.")]
+        [TestCase("out -The something.")]
+        [TestCase("Out -The something.")]
+        [TestCase("OUT The something.")]
+        [TestCase("OUT -The something.")]
+        [TestCase("out: The something.")]
+        [TestCase("Out: The something.")]
+        [TestCase("OUT: The something.")]
+        [TestCase("Specifies the something.")]
+        [TestCase("The something.")]
+        public void Code_gets_fixed_for_boolean_out_parameter_(string text)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System.Windows;
 
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>The object.</param>
+    /// <param name='o'>" + text + @"</param>
     public void DoSomething(out bool o) { }
 }";
 
@@ -106,21 +133,40 @@ using System.Windows;
 public class TestMe
 {
     /// <summary />
-    /// <param name='o'>On successful return, indicates the object.</param>
+    /// <param name='o'>On successful return, indicates the something.</param>
     public void DoSomething(out bool o) { }
 }";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase("The object.")]
-        [TestCase("out parameter that returns the object.")]
-        [TestCase("Out parameter that returns the object.")]
         [TestCase("[out] parameter that returns the object.")]
         [TestCase("[Out] parameter that returns the object.")]
-        [TestCase("Returns the object.")]
+        [TestCase("[OUT] parameter that returns the object.")]
         [TestCase("Contains the object.")]
         [TestCase("Indicates the object.")]
+        [TestCase("On return contains the object.")]
+        [TestCase("On return, contains the object.")]
+        [TestCase("out - The object.")]
+        [TestCase("out parameter that returns the object.")]
+        [TestCase("Out parameter that returns the object.")]
+        [TestCase("out The object.")]
+        [TestCase("out -The object.")]
+        [TestCase("OUT The object.")]
+        [TestCase("out: The object.")]
+        [TestCase("Provides the object.")]
+        [TestCase("return the object.")]
+        [TestCase("Return the object.")]
+        [TestCase("Returned on the object.")]
+        [TestCase("Returned when the object.")]
+        [TestCase("returns the object.")]
+        [TestCase("Returns the object.")]
+        [TestCase("The object.")]
+        [TestCase("To return the object.")]
+        [TestCase("When the method returns, the object.")]
+        [TestCase("When this method returns, the object.")]
+        [TestCase("Will be the object.")]
+        [TestCase("Will contain the object.")]
         public void Code_gets_fixed_for_out_parameter_(string text)
         {
             var originalCode = @"
