@@ -71,8 +71,10 @@ public class TestMe
         [TestCase("NoDocumentIsDirty_ProjectIsNotDirty", "Project_is_not_dirty_if_no_document_is_dirty")]
         [TestCase("IfLoadFails_ReturnsNull", "Returns_null_if_load_fails")]
         [TestCase("MethodName_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails")]
-        [TestCase("ClassName_MethodName_LoadFails_ReturnNull", "Class_name_method_name_returns_null_if_load_fails")]
+        [TestCase("MethodName_SomeCondition_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails_and_some_condition")]
         [TestCase("Initialize_NothingCanBeFound_ShouldNotDoAnything", "Initialize_should_not_do_anything_if_nothing_can_be_found")]
+        [TestCase("MethodName_ShouldDoSomething_And_SomethingMore", "Method_name_should_do_something_and_something_more")]
+        [TestCase("MethodName_WhenSome_Stuff_ReturnsTrue", "Method_name_returns_true_when_some_stuff")]
         public void Code_gets_fixed_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                          "class TestMe { [Test] void " + originalName + "() { } }",
                                                                                          "class TestMe { [Test] void " + fixedName + "() { } }");

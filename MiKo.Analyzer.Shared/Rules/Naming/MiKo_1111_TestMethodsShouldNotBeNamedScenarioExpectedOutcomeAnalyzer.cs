@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -40,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parts = symbolName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
 
-            if (TryGetReversed(parts, out var reversed))
+            if (TryGetInOrder(parts, out var nameInOrder))
             {
-                return NamesFinder.FindBetterTestName(reversed);
+                return NamesFinder.FindBetterTestName(nameInOrder);
             }
 
             return NamesFinder.FindBetterTestName(symbolName);
@@ -80,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return false;
                     }
 
-                    if (index == last)
+                    // if (index == last)
                     {
                         if (part.ContainsAny(ExpectedOutcomeMarkers))
                         {
@@ -95,40 +96,76 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool TryGetReversed(string[] parts, out string reversed)
+        private static bool TryGetInOrder(string[] parts, out string result)
         {
+            const string If = "If";
+
             switch (parts.Length)
             {
                 case 2:
                 {
-                    reversed = parts[0].StartsWith("If", StringComparison.Ordinal)
+                    result = parts[0].StartsWith(If, StringComparison.Ordinal)
                                ? string.Concat(parts[1], parts[0])
-                               : string.Concat(parts[1], "If", parts[0]); // add if
+                               : string.Concat(parts[1], If, parts[0]); // add if
 
-                        return true;
+                    return true;
                 }
 
                 case 3:
                 {
-                    reversed = parts[1].StartsWith("If", StringComparison.Ordinal)
+                    result = parts[1].StartsWith(If, StringComparison.Ordinal)
                                ? string.Concat(parts[0], parts[2], parts[1])
-                               : string.Concat(parts[0], parts[2], "If", parts[1]); // add if
+                               : string.Concat(parts[0], parts[2], If, parts[1]); // add if
 
-                        return true;
+                    return true;
                 }
 
                 case 4:
                 {
-                    reversed = parts[2].StartsWith("If", StringComparison.Ordinal)
-                               ? string.Concat(parts[0], parts[1], parts[3], parts[2])
-                               : string.Concat(parts[0], parts[1], parts[3], "If", parts[2]); // add if
+                    const string And = "And";
+
+                    if (parts[2].StartsWith(And, StringComparison.Ordinal))
+                    {
+                        // it seems like this is in normal order and a combination of 2 scenarios, so do not change the order
+                        result = null;
+
+                        return false;
+                    }
+
+                    var useWhen = parts[1].StartsWith("When", StringComparison.Ordinal);
+                    var addIf = useWhen is false && parts[2].StartsWith(If, StringComparison.Ordinal) is false;
+
+                    var capacity = parts[0].Length + parts[1].Length + parts[2].Length + parts[3].Length + And.Length;
+
+                    if (addIf)
+                    {
+                        capacity += If.Length;
+                    }
+
+                    var builder = new StringBuilder(capacity).Append(parts[0]).Append(parts[3]);
+
+                    if (addIf)
+                    {
+                        builder.Append(If);
+                    }
+
+                    if (useWhen)
+                    {
+                        builder.Append(parts[1]).Append(parts[2]);
+                    }
+                    else
+                    {
+                        builder.Append(parts[2]).Append(And).Append(parts[1]);
+                    }
+
+                    result = builder.ToString();
 
                     return true;
                 }
 
                 default:
                 {
-                    reversed = null;
+                    result = null;
 
                     return false;
                 }
