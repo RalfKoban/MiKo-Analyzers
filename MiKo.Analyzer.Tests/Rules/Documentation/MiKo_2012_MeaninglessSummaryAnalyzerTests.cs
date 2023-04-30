@@ -815,6 +815,62 @@ public class TestMeAttribute : System.Attribute
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
+        [TestCase("View model for a something", "Represents the view model of a something")]
+        [TestCase("View Model for a something", "Represents the view model of a something")]
+        [TestCase("View model for an anything", "Represents the view model of an anything")]
+        [TestCase("View Model for an anything", "Represents the view model of an anything")]
+        [TestCase("View model for the something", "Represents the view model of the something")]
+        [TestCase("View Model for the something", "Represents the view model of the something")]
+        [TestCase("View model for something", "Represents the view model of something")]
+        [TestCase("View Model for something", "Represents the view model of something")]
+        [TestCase("ViewModel for something", "Represents the view model of something")]
+
+        [TestCase("View model representing a something", "Represents the view model of a something")]
+        [TestCase("View Model representing a something", "Represents the view model of a something")]
+        [TestCase("View model representing an anything", "Represents the view model of an anything")]
+        [TestCase("View Model representing an anything", "Represents the view model of an anything")]
+        [TestCase("View model representing the something", "Represents the view model of the something")]
+        [TestCase("View Model representing the something", "Represents the view model of the something")]
+        [TestCase("View model representing something", "Represents the view model of something")]
+        [TestCase("View Model representing something", "Represents the view model of something")]
+        [TestCase("ViewModel representing something", "Represents the view model of something")]
+
+        [TestCase("View model that represents a something", "Represents the view model of a something")]
+        [TestCase("View Model that represents a something", "Represents the view model of a something")]
+        [TestCase("View model that represents an anything", "Represents the view model of an anything")]
+        [TestCase("View Model that represents an anything", "Represents the view model of an anything")]
+        [TestCase("View model that represents the something", "Represents the view model of the something")]
+        [TestCase("View Model that represents the something", "Represents the view model of the something")]
+        [TestCase("View model that represents something", "Represents the view model of something")]
+        [TestCase("View Model that represents something", "Represents the view model of something")]
+        [TestCase("ViewModel that represents something", "Represents the view model of something")]
+
+        [TestCase("View model of a something", "Represents the view model of a something")]
+        [TestCase("View Model of a something", "Represents the view model of a something")]
+        [TestCase("View model of an anything", "Represents the view model of an anything")]
+        [TestCase("View Model of an anything", "Represents the view model of an anything")]
+        [TestCase("View model of the something", "Represents the view model of the something")]
+        [TestCase("View Model of the something", "Represents the view model of the something")]
+        [TestCase("View model of something", "Represents the view model of something")]
+        [TestCase("View Model of something", "Represents the view model of something")]
+        [TestCase("ViewModel of something", "Represents the view model of something")]
+
+        [TestCase(@"ViewModel for <see cref=""string""/>", "Represents the view model of <see cref=\"string\"/>")]
+        [TestCase(@"ViewModel of <see cref=""string""/>", "Represents the view model of <see cref=\"string\"/>")]
+        public void Code_gets_fixed_for_view_model_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ###.
+/// </summary>
+public class TestMeViewModel
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2012_MeaninglessSummaryAnalyzer();

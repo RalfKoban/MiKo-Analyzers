@@ -321,6 +321,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return new KeyValuePair<string, string>("This class offers ", "Provides ");
             yield return new KeyValuePair<string, string>("This interface offers ", "Provides ");
 
+            // view models
+            yield return new KeyValuePair<string, string>("ViewModel of ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View Model of ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View model of ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("ViewModel for ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View Model for ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View model for ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("ViewModel representing ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View Model representing ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View model representing ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("ViewModel that represents ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View Model that represents ", "Represents the view model of ");
+            yield return new KeyValuePair<string, string>("View model that represents ", "Represents the view model of ");
+
             foreach (var phrase in CreatePhrases())
             {
                 yield return phrase;
