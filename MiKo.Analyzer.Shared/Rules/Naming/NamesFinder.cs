@@ -63,7 +63,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    .Replace("ShouldFail", "Fails")
                                                                    .Replace("ShouldReturn", "Returns")
                                                                    .Replace("ShouldThrow", "Throws")
+                                                                   .Replace("ReturnNull", "ReturnsNull")
+                                                                   .Replace("ReturnTrue", "ReturnsTrue")
+                                                                   .Replace("ReturnFalse", "ReturnsFalse")
+                                                                   .Replace("NullReturned", "ReturnsNull")
+                                                                   .Replace("TrueReturned", "ReturnsTrue")
+                                                                   .Replace("FalseReturned", "ReturnsFalse")
                                                                    .Replace("IsExceptional", "ThrowsException")
+                                                                   .Replace(nameof(ArgumentNullException) + "Thrown", "Throws" + nameof(ArgumentNullException))
+                                                                   .Replace(nameof(ArgumentException) + "Thrown", "Throws" + nameof(ArgumentException))
+                                                                   .Replace(nameof(ArgumentOutOfRangeException) + "Thrown", "Throws" + nameof(ArgumentOutOfRangeException))
+                                                                   .Replace(nameof(InvalidOperationException) + "Thrown", "Throws" + nameof(InvalidOperationException))
+                                                                   .Replace(nameof(ObjectDisposedException) + "Thrown", "Throws" + nameof(ObjectDisposedException))
+                                                                   .Replace(nameof(NotSupportedException) + "Thrown", "Throws" + nameof(NotSupportedException))
+                                                                   .Replace(nameof(NotImplementedException) + "Thrown", "Throws" + nameof(NotImplementedException))
+                                                                   .Replace(nameof(TaskCanceledException) + "Thrown", "Throws" + nameof(TaskCanceledException))
+                                                                   .Replace(nameof(OperationCanceledException) + "Thrown", "Throws" + nameof(OperationCanceledException))
+                                                                   .Replace(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
                                                                    .ToString();
 
             var multipleUpperCases = false;
