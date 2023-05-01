@@ -42,9 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 
-                var types = AnalyzeTestCreationMethod(methodDeclaration, semanticModel);
+                var type = AnalyzeTestCreationMethod(methodDeclaration, semanticModel);
 
-                foreach (var type in types)
+                if (type != null)
                 {
                     typesUnderTest.Add(type);
                 }
@@ -61,9 +61,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var methodDeclaration = (MethodDeclarationSyntax)method.GetSyntax();
 
-                var types = AnalyzeTestMethod(methodDeclaration, semanticModel);
+                var type = AnalyzeTestMethod(methodDeclaration, semanticModel);
 
-                foreach (var type in types)
+                if (type != null)
                 {
                     typesUnderTest.Add(type);
                 }
@@ -79,16 +79,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return testClass.GetTypeUnderTestTypes().ToList();
         }
 
-        private static IEnumerable<ITypeSymbol> AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
+        private static ITypeSymbol AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            var types = new HashSet<ITypeSymbol>();
-
             if (methodDeclaration.Body is null)
             {
                 if (methodDeclaration.ExpressionBody?.Expression is ObjectCreationExpressionSyntax oces)
                 {
-                    var type = oces.GetTypeSymbol(semanticModel);
-                    types.Add(type);
+                    var typeUnderTest = oces.GetTypeSymbol(semanticModel);
+
+                    return typeUnderTest;
                 }
             }
             else
@@ -100,30 +99,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     if (returnStatements.Any(_ => _.Expression is IdentifierNameSyntax ins && variable.GetName() == ins.GetName()) && variable.Initializer?.Value is ObjectCreationExpressionSyntax oces)
                     {
-                        var type = oces.GetTypeSymbol(semanticModel);
-                        types.Add(type);
+                        var typeUnderTest = oces.GetTypeSymbol(semanticModel);
+
+                        return typeUnderTest;
                     }
                 }
             }
 
-            return types;
+            return null;
         }
 
-        private static IEnumerable<ITypeSymbol> AnalyzeTestMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
+        private static ITypeSymbol AnalyzeTestMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
         {
-            var types = new HashSet<ITypeSymbol>();
-
             foreach (var variableDeclaration in methodDeclaration.DescendantNodes<VariableDeclarationSyntax>())
             {
                 // inspect associated test method
                 if (variableDeclaration.Variables.Any(_ => _.IsTypeUnderTestVariable()))
                 {
                     var typeUnderTest = variableDeclaration.GetTypeSymbol(semanticModel);
-                    types.Add(typeUnderTest);
+
+                    return typeUnderTest;
                 }
             }
 
-            return types;
+            return null;
         }
 
         private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
