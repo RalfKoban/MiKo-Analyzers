@@ -177,6 +177,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                             .Replace("<1>", "_in_return_")
                                             .Replace("<2>", "_to_return_")
                                             .Replace("<3>", "_not_throw_")
+                                            .Replace("D_oes", "_does")
+                                            .Replace("O_bject", "_object")
+                                            .Replace("R_eference", "_reference")
+                                            .Replace("T_ype", "_type")
                                             .ToString();
 
             return string.Intern(result);

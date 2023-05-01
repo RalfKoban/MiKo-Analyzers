@@ -89,6 +89,7 @@ public class TestMe
         [TestCase("SomeCondition_TrueReturned", "Returns_true_if_some_condition")]
         [TestCase("SomeCondition_Returned", "Returns_some_condition")]
         [TestCase("SomeCondition_ObjectReturned", "Returns_object_if_some_condition")]
+        [TestCase("Method_ThrowsExceptionIfNull", "Method_throws_exception_if_null")]
         public void Code_gets_fixed_for_1_slash_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                          "class TestMe { [Test] void " + originalName + "() { } }",
                                                                                                          "class TestMe { [Test] void " + fixedName + "() { } }");
@@ -114,6 +115,11 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_TrueReturned", "Method_name_returns_true_if_some_condition")]
         [TestCase("MethodName_SomeCondition_ObjectReturned", "Method_name_returns_object_if_some_condition")]
         [TestCase("MethodName_SomeCondition_Returned", "Method_name_returns_some_condition")]
+        [TestCase("MethodName_WhenSomeCondition_ThrowsException", "Method_name_throws_exception_if_some_condition")]
+        [TestCase("MethodName_XYZObject_ThrowsException", "Method_name_throws_exception_if_XYZ_object")]
+        [TestCase("MethodName_XYZType_ThrowsException", "Method_name_throws_exception_if_XYZ_type")]
+        [TestCase("MethodName_XYZReference_ThrowsException", "Method_name_throws_exception_if_XYZ_reference")]
+        [TestCase("MethodName_XYZDoesSomething_ThrowsException", "Method_name_throws_exception_if_XYZ_does_something")]
         public void Code_gets_fixed_for_2_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                                 "class TestMe { [Test] void " + originalName + "() { } }",
                                                                                                                 "class TestMe { [Test] void " + fixedName + "() { } }");
@@ -122,12 +128,13 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails_and_some_condition")]
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnTrue", "Method_name_returns_true_if_load_fails_and_some_condition")]
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnFalse", "Method_name_returns_false_if_load_fails_and_some_condition")]
-        [TestCase("MethodName_WhenSome_Stuff_ReturnsTrue", "Method_name_returns_true_when_some_stuff")]
-        [TestCase("MethodName_WhenSome_Stuff_ReturnsFalse", "Method_name_returns_false_when_some_stuff")]
-        [TestCase("MethodName_WhenSome_Stuff_ReturnsNull", "Method_name_returns_null_when_some_stuff")]
-        [TestCase("MethodName_WhenSome_Stuff_TrueReturned", "Method_name_returns_true_when_some_stuff")]
-        [TestCase("MethodName_WhenSome_Stuff_FalseReturned", "Method_name_returns_false_when_some_stuff")]
-        [TestCase("MethodName_WhenSome_Stuff_NullReturned", "Method_name_returns_null_when_some_stuff")]
+        [TestCase("MethodName_WhenSome_Stuff_ReturnsTrue", "Method_name_returns_true_if_some_stuff")]
+        [TestCase("MethodName_WhenSome_Stuff_ReturnsFalse", "Method_name_returns_false_if_some_stuff")]
+        [TestCase("MethodName_WhenSome_Stuff_ReturnsNull", "Method_name_returns_null_if_some_stuff")]
+        [TestCase("MethodName_WhenSome_Stuff_TrueReturned", "Method_name_returns_true_if_some_stuff")]
+        [TestCase("MethodName_WhenSome_Stuff_FalseReturned", "Method_name_returns_false_if_some_stuff")]
+        [TestCase("MethodName_WhenSome_Stuff_NullReturned", "Method_name_returns_null_if_some_stuff")]
+        [TestCase("MethodName_WhenSomething_Expect_NullReturned", "Method_name_returns_null_if_something")]
         public void Code_gets_fixed_for_3_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                          "class TestMe { [Test] void " + originalName + "() { } }",
                                                                                                          "class TestMe { [Test] void " + fixedName + "() { } }");

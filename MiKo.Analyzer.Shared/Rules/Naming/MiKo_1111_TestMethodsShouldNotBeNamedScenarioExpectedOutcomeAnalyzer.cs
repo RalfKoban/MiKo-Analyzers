@@ -13,6 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1111";
 
         private const string Returned = "Returned";
+        private const string If = "If";
+        private const string When = "When";
+        private const string And = "And";
 
         private static readonly char[] Underscores = { '_' };
 
@@ -41,14 +44,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(string symbolName)
         {
-            var parts = symbolName.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var name = symbolName.Replace("_Expect_", "_");
 
-            if (TryGetInOrder(parts, out var nameInOrder))
+            if (TryGetInOrder(name, out var nameInOrder))
             {
                 return NamesFinder.FindBetterTestName(nameInOrder);
             }
 
-            return NamesFinder.FindBetterTestName(symbolName);
+            return NamesFinder.FindBetterTestName(name);
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
@@ -80,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return false;
                     }
 
-                    if (part.ContainsAny(ExpectedOutcomeMarkers))
+                    if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
                     {
                         return true;
                     }
@@ -90,52 +93,62 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        private static bool TryGetInOrder(string[] parts, out string result)
+        private static bool TryGetInOrder(string name, out string result)
         {
-            const string If = "If";
+            var parts = name.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
 
             switch (parts.Length)
             {
                 case 2:
                 {
-                    if (parts[0].StartsWith(If, StringComparison.Ordinal))
+                    if (parts[1].Contains("ThrowsExceptionIf", StringComparison.OrdinalIgnoreCase))
                     {
-                        result = string.Concat(FixReturn(parts[1]), FixReturn(parts[0]));
+                        // it seems like this is in normal order, so do not change the order
+                        result = null;
+
+                        return false;
                     }
-                    else if (parts[1].Equals(Returned, StringComparison.OrdinalIgnoreCase))
+
+                    var addIf = IsIfRequired(parts[0], parts[1]);
+
+                    var builder = new StringBuilder(FixReturn(parts[1]));
+
+                    if (addIf)
                     {
-                        result = string.Concat(FixReturn(parts[1]), FixReturn(parts[0]));
+                        builder.Append(If);
                     }
-                    else
-                    {
-                        result = string.Concat(FixReturn(parts[1]), If, FixReturn(parts[0]));
-                    }
+
+                    builder.Append(FixReturn(parts[0]));
+
+                    builder.Replace(When, If).Replace(If + If, If);
+
+                    result = builder.ToString();
 
                     return true;
                 }
 
                 case 3:
                 {
-                    if (parts[1].StartsWith(If, StringComparison.Ordinal))
+                    var addIf = IsIfRequired(parts[1], parts[2]);
+
+                    var builder = new StringBuilder(FixReturn(parts[0])).Append(FixReturn(parts[2]));
+
+                    if (addIf)
                     {
-                        result = string.Concat(FixReturn(parts[0]), FixReturn(parts[2]), FixReturn(parts[1]));
+                        builder.Append(If);
                     }
-                    else if (parts[2].Equals(Returned, StringComparison.OrdinalIgnoreCase))
-                    {
-                        result = string.Concat(FixReturn(parts[0]), FixReturn(parts[2]), FixReturn(parts[1]));
-                    }
-                    else
-                    {
-                        result = string.Concat(FixReturn(parts[0]), FixReturn(parts[2]), If, FixReturn(parts[1]));
-                    }
+
+                    builder.Append(FixReturn(parts[1]));
+
+                    builder.Replace(When, If).Replace(If + If, If);
+
+                    result = builder.ToString();
 
                     return true;
                 }
 
                 case 4:
                 {
-                    const string And = "And";
-
                     if (parts[2].StartsWith(And, StringComparison.Ordinal))
                     {
                         // it seems like this is in normal order and a combination of 2 scenarios, so do not change the order
@@ -144,9 +157,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return false;
                     }
 
-                    var useWhen = parts[1].StartsWith("When", StringComparison.Ordinal);
-                    var isReturned = parts[3].Equals(Returned, StringComparison.OrdinalIgnoreCase);
-                    var addIf = useWhen is false && isReturned is false && parts[2].StartsWith(If, StringComparison.Ordinal) is false;
+                    var useWhen = parts[1].StartsWith(When, StringComparison.Ordinal);
+                    var addIf = useWhen is false && IsIfRequired(parts[2], parts[3]);
 
                     var capacity = parts[0].Length + parts[1].Length + parts[2].Length + parts[3].Length + And.Length;
 
@@ -171,6 +183,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         builder.Append(FixReturn(parts[2])).Append(And).Append(FixReturn(parts[1]));
                     }
 
+                    builder.Replace(When, If).Replace(If + If, If);
+
                     result = builder.ToString();
 
                     return true;
@@ -184,6 +198,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
         }
+
+        private static bool IsIfRequired(string part1, string part2) => part1.StartsWith(If, StringComparison.Ordinal) is false
+                                                                     && part2.Equals(Returned, StringComparison.OrdinalIgnoreCase) is false;
 
         private static string FixReturn(string original)
         {
