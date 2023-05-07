@@ -1198,15 +1198,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
 
-        internal static bool IsTestMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
+        internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
-        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
+        internal static bool IsTestOneTimeSetUpMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestOneTimeSetupAttributeNames);
 
-        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
+        internal static bool IsTestOneTimeTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestOneTimeTearDownAttributeNames);
 
-        internal static bool IsTestSetUpMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetUpMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestSetupAttributeNames);
 
-        internal static bool IsTestTearDownMethod(this IMethodSymbol value) => value.MethodKind == MethodKind.Ordinary && value.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestTearDownAttributeNames);
+
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);
 
         internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol value) => value.ReturnsVoid is false && Constants.Names.TypeUnderTestMethodNames.Contains(value.Name);
 

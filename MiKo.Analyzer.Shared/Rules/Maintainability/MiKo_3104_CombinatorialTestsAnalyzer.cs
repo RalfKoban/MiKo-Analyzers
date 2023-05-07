@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
-            foreach (var method in symbol.GetNamedMethods())
+            foreach (var method in symbol.GetNamedMethods().Where(_ => _.IsPubliclyVisible()))
             {
                 if (IsSequential(method))
                 {

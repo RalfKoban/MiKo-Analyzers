@@ -127,21 +127,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var node = (ClassDeclarationSyntax)context.Node;
-
-            var issues = AnalyzeClassDeclaration(context, node);
+            var issues = AnalyzeTypeSymbol(context);
 
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeClassDeclaration(SyntaxNodeAnalysisContext context, ClassDeclarationSyntax node)
+        private IEnumerable<Diagnostic> AnalyzeTypeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var semanticModel = context.SemanticModel;
-
-            var testClass = node.GetTypeSymbol(semanticModel);
-
-            if (testClass.IsTestClass())
+            if (context.FindContainingType() is ITypeSymbol testClass && testClass.IsTestClass())
             {
+                var semanticModel = context.SemanticModel;
+
                 var typesUnderTest = GetTypeUnderTestTypes(testClass, semanticModel);
 
                 foreach (var typeUnderTest in typesUnderTest)

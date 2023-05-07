@@ -92,13 +92,13 @@ public class TestMe3 : TestMe2
 public class TestMe2 : TestMe1
 {
     [" + test + @"]
-    private void DoSomething2() { }
+    public void DoSomething2() { }
 }
 
 public class TestMe1
 {
     [" + test + @"]
-    private void DoSomething1() { }
+    public void DoSomething1() { }
 }
 ");
 
