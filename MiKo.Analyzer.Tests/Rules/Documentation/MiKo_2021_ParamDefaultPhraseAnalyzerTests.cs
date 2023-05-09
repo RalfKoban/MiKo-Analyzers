@@ -63,6 +63,22 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_method_with_correct_comment_and_line_break_after_first_word_([Values("A", "An", "The")] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + comment + @"
+    /// <see cref=""object"">
+    /// something
+    /// </see>
+    /// to do.
+    /// </param>
+    public void DoSomething(object o) { }
+}
+");
+
         [TestCase("whatever.")]
         [TestCase("Whatever.")]
         public void An_issue_is_reported_for_method_with_wrong_comment_phrase_(string comment) => An_issue_is_reported_for(@"

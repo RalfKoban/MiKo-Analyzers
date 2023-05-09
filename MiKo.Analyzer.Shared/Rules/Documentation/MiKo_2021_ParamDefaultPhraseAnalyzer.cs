@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -41,6 +42,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             return AnalyzePlainTextStartingPhrase(parameter, parameterComment, Constants.Comments.ParameterStartingPhrase, StringComparison.OrdinalIgnoreCase);
+        }
+
+        protected override Location GetIssueLocation(XmlElementSyntax parameterComment)
+        {
+            var content = parameterComment.Content;
+
+            if (content.Count > 0)
+            {
+                var item = content[0];
+
+                if (item is XmlTextSyntax text)
+                {
+                    foreach (var token in text.TextTokens)
+                    {
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                        {
+                            return token.GetLocation();
+                        }
+                    }
+                }
+
+                return item.GetLocation();
+            }
+
+            return base.GetIssueLocation(parameterComment);
         }
     }
 }

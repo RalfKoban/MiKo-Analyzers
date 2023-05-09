@@ -33,17 +33,46 @@ namespace MiKoSolutions.Analyzers
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
         {
-            return value?.ChildNodes<XmlTextSyntax>().SelectMany(_ => _.TextTokens).Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)) ?? Enumerable.Empty<SyntaxToken>();
+            if (value is null)
+            {
+                return Enumerable.Empty<SyntaxToken>();
+            }
+
+            return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
         }
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlElementSyntax> value)
         {
-            return value?.SelectMany(_ => _.ChildNodes<XmlTextSyntax>()).SelectMany(_ => _.TextTokens).Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)) ?? Enumerable.Empty<SyntaxToken>();
+            if (value is null)
+            {
+                return Enumerable.Empty<SyntaxToken>();
+            }
+
+            return value.SelectMany(_ => _.GetXmlTextTokens());
+        }
+
+        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
+        {
+            if (value != null)
+            {
+                foreach (var token in value.TextTokens)
+                {
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                    {
+                        yield return token;
+                    }
+                }
+            }
         }
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
         {
-            return value?.SelectMany(_ => _.TextTokens).Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)) ?? Enumerable.Empty<SyntaxToken>();
+            if (value == null)
+            {
+                return Enumerable.Empty<SyntaxToken>();
+            }
+
+            return value.SelectMany(_ => _.GetXmlTextTokens());
         }
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)

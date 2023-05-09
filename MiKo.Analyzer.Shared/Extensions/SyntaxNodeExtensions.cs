@@ -720,7 +720,7 @@ namespace MiKoSolutions.Analyzers
                 return ReadOnlySpan<char>.Empty;
             }
 
-            return element.GetTextWithoutTrivia().WithoutParaTagsAsSpan().Trim();
+            return element.GetTextWithoutTrivia().Without(Environment.NewLine).WithoutParaTagsAsSpan().Trim();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
