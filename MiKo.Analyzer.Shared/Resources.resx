@@ -2038,7 +2038,7 @@ Or with: '{3}'</value>
     <value>Documentation should use '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' HTML tags</value>
   </data>
   <data name="MiKo_2043_CodeFixTitle" xml:space="preserve">
-    <value>Start summary with 'Encapsulates a method that '</value>
+    <value>Start &lt;summary&gt; with 'Encapsulates a method that '</value>
   </data>
   <data name="MiKo_2043_Description" xml:space="preserve">
     <value>The documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates.</value>
@@ -2259,7 +2259,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;summary&gt; documentation for methods that return Enum types should not contain phrase for boolean type</value>
   </data>
   <data name="MiKo_2072_CodeFixTitle" xml:space="preserve">
-    <value>Start summary with 'Attempts to'</value>
+    <value>Start &lt;summary&gt; with 'Attempts to'</value>
   </data>
   <data name="MiKo_2072_Description" xml:space="preserve">
     <value>'Try' methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase 'Attempts to '.</value>
@@ -2271,7 +2271,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;summary&gt; documentation should not start with 'Try'</value>
   </data>
   <data name="MiKo_2073_CodeFixTitle" xml:space="preserve">
-    <value>Start summary with 'Determines whether'</value>
+    <value>Start &lt;summary&gt; with 'Determines whether'</value>
   </data>
   <data name="MiKo_2073_Description" xml:space="preserve">
     <value>'Contain' methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase 'Determines whether '.</value>

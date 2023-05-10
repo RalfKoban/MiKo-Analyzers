@@ -5665,7 +5665,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;Encapsulates a method that &apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;Encapsulates a method that &apos;.
         /// </summary>
         public static string MiKo_2043_CodeFixTitle {
             get {
@@ -6318,7 +6318,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;Attempts to&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;Attempts to&apos;.
         /// </summary>
         public static string MiKo_2072_CodeFixTitle {
             get {
@@ -6354,7 +6354,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start summary with &apos;Determines whether&apos;.
+        ///   Looks up a localized string similar to Start &lt;summary&gt; with &apos;Determines whether&apos;.
         /// </summary>
         public static string MiKo_2073_CodeFixTitle {
             get {
