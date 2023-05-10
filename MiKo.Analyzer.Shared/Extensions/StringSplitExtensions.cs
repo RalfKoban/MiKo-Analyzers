@@ -61,13 +61,13 @@ namespace System
             return results;
         }
 
-        public static SplitEnumerator SplitBy(this string text, params char[] separatorChars) => SplitBy(text.AsSpan(), separatorChars, StringSplitOptions.None);
-
-        public static SplitEnumerator SplitBy(this ReadOnlySpan<char> text, params char[] separatorChars) => SplitBy(text, separatorChars, StringSplitOptions.None);
-
         public static SplitEnumerator SplitBy(this string text, char[] separatorChars, StringSplitOptions options) => SplitBy(text.AsSpan(), separatorChars, options);
 
         public static SplitEnumerator SplitBy(this ReadOnlySpan<char> text, char[] separatorChars, StringSplitOptions options) => new SplitEnumerator(text, separatorChars, options);
+
+        public static SplitEnumerator SplitBy(this string text, params char[] separatorChars) => SplitBy(text.AsSpan(), separatorChars, StringSplitOptions.None);
+
+        public static SplitEnumerator SplitBy(this ReadOnlySpan<char> text, params char[] separatorChars) => SplitBy(text, separatorChars, StringSplitOptions.None);
 
         // Must be a ref struct as it contains a ReadOnlySpan<char>
         public ref struct SplitEnumerator

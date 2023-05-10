@@ -642,6 +642,7 @@ namespace MiKoSolutions.Analyzers
                         }
 
                         var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+
                         if (commentOnCode != null)
                         {
                             return commentOnCode;
@@ -665,6 +666,7 @@ namespace MiKoSolutions.Analyzers
                         }
 
                         var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+
                         if (commentOnCode != null)
                         {
                             return commentOnCode;
@@ -1458,6 +1460,7 @@ namespace MiKoSolutions.Analyzers
                 var text = token.ValueText;
 
                 var index = text.IndexOf(phrase, StringComparison.Ordinal);
+
                 if (index > -1)
                 {
                     var result = string.Concat(text.Substring(0, index), replacement, text.Substring(index + phrase.Length));
@@ -1882,9 +1885,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
 
-        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value, SyntaxNode node) => value.Append(node).WithoutXmlCommentExterior();
-
         internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder().WithoutXmlCommentExterior(value).ToString().Trim();
+
+        internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value, SyntaxNode node) => value.Append(node).WithoutXmlCommentExterior();
 
         internal static SyntaxList<XmlNodeSyntax> WithoutStartText(this XmlElementSyntax value, params string[] startTexts) => value.Content.WithoutStartText(startTexts);
 
@@ -1900,7 +1903,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutStartText(this XmlTextSyntax value, params string[] startTexts)
         {
-            if (startTexts == null || startTexts.Length == 0)
+            if (startTexts is null || startTexts.Length == 0)
             {
                 return value;
             }

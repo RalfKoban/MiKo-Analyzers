@@ -68,6 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var startText = m.ReturnType.IsBoolean()
                                 ? Constants.Comments.DeterminesWhetherPhrase
                                 : "Gets";
+
                 if (m.IsAsync)
                 {
                     return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);

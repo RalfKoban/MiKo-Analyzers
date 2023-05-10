@@ -40,14 +40,6 @@ public static class TestMeExtensions
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_specific_string_extension_method() => No_issue_is_reported_for(@"
-public static class TestMeExtensions
-{
-    public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
-}
-");
-
         [Test, Combinatorial]
         public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
                                                                                     [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
@@ -57,6 +49,14 @@ public static class TestMeExtensions
 public static class TestMeExtensions
 {
     public static int " + prefix + methodName + "(this int " + name + @") => 42;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_specific_string_extension_method() => No_issue_is_reported_for(@"
+public static class TestMeExtensions
+{
+    public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
 }
 ");
 

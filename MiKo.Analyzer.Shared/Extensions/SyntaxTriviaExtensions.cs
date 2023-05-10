@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return Enumerable.Empty<SyntaxToken>();
             }

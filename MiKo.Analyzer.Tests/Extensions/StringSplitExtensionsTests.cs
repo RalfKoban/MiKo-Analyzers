@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Extensions
             Assert.That(count, Is.EqualTo(2));
 
             var foundLines = new List<string>();
+
             foreach (var line in lines)
             {
                 foundLines.Add(line.ToString());
@@ -41,6 +42,7 @@ namespace MiKoSolutions.Analyzers.Extensions
             Assert.That(count, Is.EqualTo(3)); // additional 'empty' line between both lines
 
             var foundLines = new List<string>();
+
             foreach (var line in lines)
             {
                 foundLines.Add(line.ToString());

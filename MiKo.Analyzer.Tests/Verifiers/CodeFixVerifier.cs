@@ -102,6 +102,7 @@ namespace TestHelper
                 if (codeFixIndex != null)
                 {
                     document = ApplyFix(document, actions.ElementAt((int)codeFixIndex));
+
                     break;
                 }
 

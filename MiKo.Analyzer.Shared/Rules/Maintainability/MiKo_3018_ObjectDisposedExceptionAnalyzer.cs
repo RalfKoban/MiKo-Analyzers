@@ -71,6 +71,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node.Throws<ObjectDisposedException>();
+
         private static bool ThrowsObjectDisposedException(SyntaxNode syntax, ISymbol symbol)
         {
             ILookup<string, IMethodSymbol> methods = null;
@@ -104,8 +106,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return false;
         }
-
-        private static bool ThrowsObjectDisposedException(SyntaxNode node) => node.Throws<ObjectDisposedException>();
 
         private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
 

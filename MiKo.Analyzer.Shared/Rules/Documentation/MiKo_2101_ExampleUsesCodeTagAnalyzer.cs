@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var token in tokens)
                 {
                     var index = token.ValueText.IndexOf("=", StringComparison.OrdinalIgnoreCase);
+
                     if (index >= 0)
                     {
                         // we have an issue

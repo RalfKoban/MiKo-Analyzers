@@ -88,6 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                     case "can":
                                                     {
                                                         suffix = "state";
+
                                                         return string.Empty;
                                                     }
 

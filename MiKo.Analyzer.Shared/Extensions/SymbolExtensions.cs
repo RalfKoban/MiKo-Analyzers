@@ -232,8 +232,11 @@ namespace MiKoSolutions.Analyzers
                 {
                     case MethodKind.Constructor:
                     case MethodKind.StaticConstructor:
+                    {
                         sb.Append(method.ContainingType.Name);
+
                         break;
+                    }
 
                     default:
                     {

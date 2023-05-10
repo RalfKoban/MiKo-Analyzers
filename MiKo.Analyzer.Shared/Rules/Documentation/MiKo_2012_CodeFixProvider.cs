@@ -204,7 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string GetPropertyStartingPhrase(AccessorListSyntax accessorList)
         {
-            if (accessorList == null)
+            if (accessorList is null)
             {
                 return string.Empty;
             }

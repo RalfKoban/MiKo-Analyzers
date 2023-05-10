@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var text = token.Text;
 
             var index = 0;
+
             while (text[index].IsWhiteSpace())
             {
                 index++;

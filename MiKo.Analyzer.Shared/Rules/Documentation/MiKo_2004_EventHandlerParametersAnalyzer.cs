@@ -70,6 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var phrases = CreatePhrases(method).Concat(Constants.Comments.UnusedPhrase).ToList();
 
                 var phrase = eventArgs.GetComment(xml);
+
                 if (phrases.None(_ => _ == phrase))
                 {
                     yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases.ElementAt(0), new Dictionary<string, string>());

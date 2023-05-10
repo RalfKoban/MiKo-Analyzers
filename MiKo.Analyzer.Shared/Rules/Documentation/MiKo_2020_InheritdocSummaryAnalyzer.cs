@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var cref = xmlTag.GetCref();
 
-                if (cref == null)
+                if (cref is null)
                 {
                     continue;
                 }

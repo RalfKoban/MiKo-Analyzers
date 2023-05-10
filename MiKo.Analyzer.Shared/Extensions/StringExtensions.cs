@@ -630,6 +630,27 @@ namespace System
         public static char ToLowerCase(this char value) => char.ToLowerInvariant(value);
 
         /// <summary>
+        /// Gets an interned copy of the <see cref="string"/> where the characters are lower-case.
+        /// </summary>
+        /// <param name="value">
+        /// The original text.
+        /// </param>
+        /// <returns>
+        /// An interned copy of the <see cref="string"/> where the character are lower-case.
+        /// </returns>
+        public static string ToLowerCase(this ReadOnlySpan<char> value)
+        {
+            var characters = value.ToArray();
+
+            for (var index = 0; index < characters.Length; index++)
+            {
+                characters[index] = value[index].ToLowerCase();
+            }
+
+            return string.Intern(new string(characters));
+        }
+
+        /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
         /// <param name="value">
@@ -680,27 +701,6 @@ namespace System
 
             var characters = value.ToArray();
             characters[index] = value[index].ToLowerCase();
-
-            return string.Intern(new string(characters));
-        }
-
-        /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the characters are lower-case.
-        /// </summary>
-        /// <param name="value">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// An interned copy of the <see cref="string"/> where the character are lower-case.
-        /// </returns>
-        public static string ToLowerCase(this ReadOnlySpan<char> value)
-        {
-            var characters = value.ToArray();
-
-            for (var index = 0; index < characters.Length; index++)
-            {
-                characters[index] = value[index].ToLowerCase();
-            }
 
             return string.Intern(new string(characters));
         }

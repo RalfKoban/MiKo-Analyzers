@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var syntax = base.GetSyntax(syntaxNodes);
 
-            if (syntax == null)
+            if (syntax is null)
             {
                 foreach (var syntaxNode in syntaxNodes)
                 {
