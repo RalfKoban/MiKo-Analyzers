@@ -221,6 +221,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+        protected static Location GetFirstTextIssueLocation(SyntaxList<XmlNodeSyntax> content)
+        {
+            var item = content[0];
+
+            if (item is XmlTextSyntax text)
+            {
+                foreach (var token in text.TextTokens)
+                {
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                    {
+                        return token.GetLocation();
+                    }
+                }
+            }
+
+            return item.GetLocation();
+        }
 
         protected static IEnumerable<string> GetStartingPhrases(ITypeSymbol symbolReturnType, string[] startingPhrases)
         {
@@ -402,6 +419,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 if (valueText.IsNullOrWhiteSpace())
                                 {
                                     // we found the first but empty /// line, so ignore it
+                                    continue;
+                                }
+
+                                if (valueText.Length == 1 && Constants.Comments.Delimiters.Contains(valueText[0]))
+                                {
+                                    // this is a dot or something directly after the XML tag, so ignore that
                                     continue;
                                 }
 

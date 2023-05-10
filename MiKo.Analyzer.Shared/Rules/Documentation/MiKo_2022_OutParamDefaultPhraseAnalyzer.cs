@@ -27,5 +27,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return AnalyzePlainTextStartingPhrase(parameter, parameterComment, phrases);
         }
+
+        protected override Location GetIssueLocation(XmlElementSyntax parameterComment)
+        {
+            var content = parameterComment.Content;
+
+            return content.Count > 0
+                       ? GetFirstTextIssueLocation(content)
+                       : base.GetIssueLocation(parameterComment);
+        }
     }
 }

@@ -176,6 +176,32 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_Checks_if_phrase_with_dot_directly_after_XML_tag()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>.
+    /// Checks if it is there.
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>.
+    /// Determines whether it is there.
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer();

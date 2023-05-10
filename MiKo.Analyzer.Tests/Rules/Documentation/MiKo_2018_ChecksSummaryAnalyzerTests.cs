@@ -176,6 +176,32 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_Checks_if_phrase_with_leading_dot_after_XML_tag()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>.
+    /// Checks if it is there.
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>.
+    /// Determines whether it is there.
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_Asynchronously_Checks_if_phrase()
         {
             const string OriginalCode = @"

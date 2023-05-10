@@ -48,25 +48,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var content = parameterComment.Content;
 
-            if (content.Count > 0)
-            {
-                var item = content[0];
-
-                if (item is XmlTextSyntax text)
-                {
-                    foreach (var token in text.TextTokens)
-                    {
-                        if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
-                        {
-                            return token.GetLocation();
-                        }
-                    }
-                }
-
-                return item.GetLocation();
-            }
-
-            return base.GetIssueLocation(parameterComment);
+            return content.Count > 0
+                       ? GetFirstTextIssueLocation(content)
+                       : base.GetIssueLocation(parameterComment);
         }
     }
 }

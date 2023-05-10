@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers
             if (span.IsEmpty)
             {
                 var start = value.StartTag.GreaterThanToken.SpanStart;
-                var end = value.EndTag.LessThanSlashToken.SpanStart;
+                var end = value.EndTag.LessThanSlashToken.SpanStart + 1;
 
                 span = TextSpan.FromBounds(start, end);
             }

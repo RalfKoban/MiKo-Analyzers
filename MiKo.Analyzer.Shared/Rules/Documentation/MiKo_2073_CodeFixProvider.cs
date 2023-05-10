@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            var startText = comment.Content.ToString().Without("/");
+            var startText = comment.Content.ToString().Without("/").TrimStart(Constants.Comments.Delimiters);
             var firstWord = startText.FirstWord();
 
             var map = new Dictionary<string, string>();
