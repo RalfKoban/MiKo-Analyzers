@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var parent = FilterUnimportantUnaryParents(node.Parent);
 
-            if (parent?.Kind() == SyntaxKind.ParenthesizedExpression)
+            if (parent != null && parent.IsKind(SyntaxKind.ParenthesizedExpression))
             {
                 parent = parent?.Parent;
             }
@@ -311,7 +311,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 yield break;
             }
 
-            yield return node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.Kind() == SyntaxKind.UnaryMinusExpression
+            yield return node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression)
                              ? Issue(symbol.Name, prefix, "-" + number)
                              : Issue(symbol.Name, node, number);
         }

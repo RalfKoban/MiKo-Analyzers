@@ -67,12 +67,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arg0 = args[0];
             var arg1 = args[1];
 
-            if (arg0.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
+            if (arg0.Expression.IsKind(SyntaxKind.NumericLiteralExpression))
             {
                 return AssertThat(arg1, Has("Exactly", arg0, "Items"), args);
             }
 
-            if (arg1.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
+            if (arg1.Expression.IsKind(SyntaxKind.NumericLiteralExpression))
             {
                 return AssertThat(arg0, Has("Exactly", arg1, "Items"), args);
             }
@@ -87,12 +87,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arg0 = args[0];
             var arg1 = args[1];
 
-            if (arg0.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
+            if (arg0.Expression.IsKind(SyntaxKind.NumericLiteralExpression))
             {
                 return AssertThat(arg1, HasCount("Not", "EqualTo", arg0.Expression), args);
             }
 
-            if (arg1.Expression.Kind() == SyntaxKind.NumericLiteralExpression)
+            if (arg1.Expression.IsKind(SyntaxKind.NumericLiteralExpression))
             {
                 return AssertThat(arg0, HasCount("Not", "EqualTo", arg1.Expression), args);
             }
