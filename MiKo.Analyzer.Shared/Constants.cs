@@ -315,27 +315,48 @@ namespace MiKoSolutions.Analyzers
                     BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                 };
 
-            internal const string StringReturnTypeStartingPhraseTemplate = "A {0} that {1} ";
-            internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "A {0} containing ";
+            internal const string StringReturnTypeStartingPhraseTemplate = "A {0} {1} ";
+            internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
 
             internal static readonly string[] StringReturnTypeStartingPhrase =
                 {
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "contains"), // this is just to have a proposal how to optimize
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "contains"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "contains"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "contains"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "consists of"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "consists of"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "consists of"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "consists of"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "represents"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "represents"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "represents"),
-                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "represents"),
-                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>"),
-                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />"),
-                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>"),
-                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that contains"), // this is just to have a proposal how to optimize
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that contains"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that contains"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that contains"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "containing"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "containing"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "containing"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "containing"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that consists of"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that represents"),
+                    StringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that represents"),
+
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "where"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "where"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "where"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "where"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that contains"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that contains"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that contains"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that contains"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "containing"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "containing"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "containing"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "containing"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that consists of"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that consists of"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that consists of"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that consists of"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\"/>", "that represents"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"string\" />", "that represents"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\"/>", "that represents"),
+                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that represents"),
                 };
 
             internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The {0} property on the task object returns a {1} that {2} ";

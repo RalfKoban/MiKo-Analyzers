@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2033_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
         private static readonly string[] TaskParts = Constants.Comments.StringTaskReturnTypeStartingPhraseTemplate.FormatWith("|", "|", "contains").Split('|');
-        private static readonly string[] StringParts = Constants.Comments.StringReturnTypeStartingPhraseTemplate.FormatWith("|", "contains").Split('|');
+        private static readonly string[] StringParts = Constants.Comments.StringReturnTypeStartingPhraseTemplate.FormatWith("|", "that contains").Split('|');
 
         private static readonly string[] TextParts =
             {

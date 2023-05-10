@@ -153,6 +153,23 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_String_interned_method() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// An interned copy of the <see cref=""string""/> that contains something.
+    /// </returns>
+    public string DoSomething(object o) => null;
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
                                                                 [Values("returns", "value")] string xmlTag,
