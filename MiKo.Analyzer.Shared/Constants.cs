@@ -926,6 +926,7 @@ namespace MiKoSolutions.Analyzers
                                                                                               "UUT",
                                                                                               "TestCandidate",
                                                                                               "TestObject",
+                                                                                              "Testee",
                                                                                           };
 
             internal static readonly IEnumerable<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
@@ -942,6 +943,7 @@ namespace MiKoSolutions.Analyzers
                                                                                               "uut",
                                                                                               "testCandidate",
                                                                                               "testObject",
+                                                                                              "testee",
                                                                                               "candidateToTest",
                                                                                               "candidateUnderTest",
                                                                                           };

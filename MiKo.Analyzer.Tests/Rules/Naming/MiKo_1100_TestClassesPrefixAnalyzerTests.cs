@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 "testObject",
                 "sut",
                 "uut",
+                "testee",
+                "candidateToTest",
             };
 
         [Test]
