@@ -1142,6 +1142,12 @@ namespace MiKoSolutions.Analyzers
                                                                                              "WritingPrintTicketRequiredEventHandler",
                                                                                              "WritingProgressChangedEventHandler",
                                                                                          };
+
+            internal const string IMultiValueConverter = "IMultiValueConverter";
+            internal const string IMultiValueConverterFullName = "System.Windows.Data.IMultiValueConverter";
+
+            internal const string IValueConverter = "IValueConverter";
+            internal const string IValueConverterFullName = "System.Windows.Data.IValueConverter";
         }
     }
 }

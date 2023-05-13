@@ -1134,7 +1134,8 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsMultiValueConverter(this ITypeSymbol value) => value.Implements("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter") || value.InheritsFrom("IMultiValueConverter", "System.Windows.Data.IMultiValueConverter");
+        internal static bool IsMultiValueConverter(this ITypeSymbol value) => value.Implements(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName)
+                                                                           || value.InheritsFrom(Constants.Names.IMultiValueConverter, Constants.Names.IMultiValueConverterFullName);
 
         // ignore special situation for task factory
         internal static bool IsNullable(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Nullable);
@@ -1227,7 +1228,8 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsValueConverter(this ITypeSymbol value) => value.Implements("IValueConverter", "System.Windows.Data.IValueConverter") || value.InheritsFrom("IValueConverter", "System.Windows.Data.IValueConverter");
+        internal static bool IsValueConverter(this ITypeSymbol value) => value.Implements(Constants.Names.IValueConverter, Constants.Names.IValueConverterFullName)
+                                                                      || value.InheritsFrom(Constants.Names.IValueConverter, Constants.Names.IValueConverterFullName);
 
         /// <summary>
         /// Determines whether a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
