@@ -7426,7 +7426,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use shorter term &apos;to&apos; instead of longer term &apos;... used to&apos;.
+        ///   Looks up a localized string similar to Documentation should use shorter terms instead of longer term &apos;used to/in&apos;.
         /// </summary>
         public static string MiKo_2218_Title {
             get {

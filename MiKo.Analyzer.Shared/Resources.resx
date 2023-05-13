@@ -2643,7 +2643,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Replace '{0}' with '{1}'</value>
   </data>
   <data name="MiKo_2218_Title" xml:space="preserve">
-    <value>Documentation should use shorter term 'to' instead of longer term '... used to'</value>
+    <value>Documentation should use shorter terms instead of longer term 'used to/in'</value>
   </data>
   <data name="MiKo_2219_Description" xml:space="preserve">
     <value>XML documentation is intended for other developers. It shall contain all the information that is important for them in a way that they can easily read and understand.

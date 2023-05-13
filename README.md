@@ -234,7 +234,7 @@ The following tables list all the 359 rules that are currently provided by the a
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
 |MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
 |MiKo_2217|&lt;list&gt; documentation is done properly|&#x2713;|&#x2713;|
-|MiKo_2218|Documentation should use shorter term 'to' instead of longer term '... used to'|&#x2713;|&#x2713;|
+|MiKo_2218|Documentation should use shorter terms instead of longer term 'used to/in'|&#x2713;|&#x2713;|
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
