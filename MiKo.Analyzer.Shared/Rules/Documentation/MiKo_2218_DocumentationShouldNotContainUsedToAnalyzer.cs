@@ -20,6 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string CanReplacement = "allows to";
         private const string UsedToReplacement = "to";
 
+        private const string UsedInCombinationPluralReplacement = "are made to work with";
+        private const string UsedInCombinationSingularReplacement = "is made to work with";
+        private const string UsedInCombinationUnclearReplacement = "made to work with";
+
+        private const string UsedInPluralReplacement = "are suitable for";
+        private const string UsedInSingularReplacement = "is suitable for";
+        private const string UsedInUnclearReplacement = "suitable for";
+
         private const string UsedToPhrase = "used to";
         private const string IsUsedToPhrase = "is used to";
         private const string AreUsedToPhrase = "are used to";
@@ -66,6 +74,75 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "which would be used to",
             };
 
+        private static readonly string[] UsedInCombinationPluralPhrases =
+            {
+                "are to be used in combination with",
+                "are to be used in conjunction with",
+                "are intended to be used in combination with",
+                "are intended to be used in conjunction with",
+                "are meant to be used in combination with",
+                "are meant to be used in conjunction with",
+                "are primarily meant to be used in combination with",
+                "are primarily meant to be used in conjunction with",
+                "are primarily intended to be used in combination with",
+                "are primarily intended to be used in conjunction with",
+                "have to be used in combination with",
+                "have to be used in conjunction with",
+            };
+
+        private static readonly string[] UsedInCombinationSingularPhrases =
+            {
+                "can be used in combination with",
+                "can be used in conjunction with",
+                "could be used in combination with",
+                "could be used in conjunction with",
+                "has to be used in combination with",
+                "has to be used in conjunction with",
+                "is intended to be used in combination with",
+                "is intended to be used in conjunction with",
+                "is meant to be used in combination with",
+                "is meant to be used in conjunction with",
+                "is primarily meant to be used in combination with",
+                "is primarily meant to be used in conjunction with",
+                "is primarily intended to be used in combination with",
+                "is primarily intended to be used in conjunction with",
+                "might be used in combination with",
+                "might be used in conjunction with",
+            };
+
+        private static readonly string[] UsedInCombinationUnclearPhrases =
+            {
+                "meant to be used in combination with",
+                "meant to be used in conjunction with",
+            };
+
+        private static readonly string[] UsedInPluralPhrases =
+            {
+                "are to be used in",
+                "are intended to be used in",
+                "are meant to be used in",
+                "are primarily meant to be used in",
+                "are primarily intended to be used in",
+                "have to be used in",
+            };
+
+        private static readonly string[] UsedInSingularPhrases =
+            {
+                "can be used in",
+                "could be used in",
+                "has to be used in",
+                "is intended to be used in",
+                "is meant to be used in",
+                "is primarily meant to be used in",
+                "is primarily intended to be used in",
+                "might be used in",
+            };
+
+        private static readonly string[] UsedInUnclearPhrases =
+            {
+                "meant to be used in",
+            };
+
         public MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer() : base(Id)
         {
         }
@@ -90,10 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var sb = new StringBuilder(text);
 
-                foreach (var phrase in UsedToPhrases)
-                {
-                    sb.Replace(phrase, UsedToReplacement);
-                }
+                sb.ReplaceAll(UsedToPhrases, UsedToReplacement);
 
                 // TODO RKN: Use stringBuilder for replacement
                 var result = sb.ToString();
@@ -129,12 +203,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 sb = new StringBuilder(result);
 
-                foreach (var canPhrase in CanPhrases)
-                {
-                    sb.Replace(canPhrase, CanReplacement);
-                }
-
+                sb.ReplaceAll(CanPhrases, CanReplacement);
                 sb.Replace(UsedToPhrase, UsedToReplacement);
+
+                sb.ReplaceAll(UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement);
+                sb.ReplaceAll(UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement);
+                sb.ReplaceAll(UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement);
+                sb.ReplaceAll(UsedInPluralPhrases, UsedInPluralReplacement);
+                sb.ReplaceAll(UsedInSingularPhrases, UsedInSingularReplacement);
+                sb.ReplaceAll(UsedInUnclearPhrases, UsedInUnclearReplacement);
 
                 result = sb.ToString();
 
@@ -158,7 +235,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var locations = new List<Location>();
 
-            var issues = AnalyzeCommentXml(symbol, comment);
+            var issues = AnalyzeCommentXml(comment);
 
             foreach (var issue in issues)
             {
@@ -172,7 +249,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentXml(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
+        private IEnumerable<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
@@ -181,17 +258,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return Issue(location, UsedToReplacement);
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {
                     yield return issue;
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, AreUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {
                     yield return issue;
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, UsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     yield return issue;
                 }
@@ -209,7 +286,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {
                     yield return issue;
                 }
@@ -218,10 +295,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     yield return Issue(location, UsedToReplacement);
                 }
+
+                foreach (var location in GetAllLocations(token, UsedInCombinationPluralPhrases))
+                {
+                    yield return Issue(location, UsedInCombinationPluralReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInCombinationSingularPhrases))
+                {
+                    yield return Issue(location, UsedInCombinationSingularReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInCombinationUnclearPhrases))
+                {
+                    yield return Issue(location, UsedInCombinationUnclearReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInPluralPhrases))
+                {
+                    yield return Issue(location, UsedInPluralReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInSingularPhrases))
+                {
+                    yield return Issue(location, UsedInSingularReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInUnclearPhrases))
+                {
+                    yield return Issue(location, UsedInUnclearReplacement);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeForSpecialPhrase(ISymbol symbol, SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
+        private IEnumerable<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
         {
             var makeUpper = startingPhrase[0].IsUpperCase();
 

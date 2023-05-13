@@ -60,19 +60,60 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                                                                          // TODO RKN:
 
-                                                                         // are intended to be used in
-                                                                         // are meant to be used in
-                                                                         // are primarily meant to be used in
-                                                                         // are primarily intended to be used in
-                                                                         // can be used in
-                                                                         // could be used in
-                                                                         // has to be used in
-                                                                         // have to be used in
-                                                                         // is intended to be used in
-                                                                         // is meant to be used in
-                                                                         // is primarily meant to be used in
-                                                                         // is primarily intended to be used in
-                                                                         // meant to be used in
+                                                                         // can be used in case of -> allow
+                                                                         // can be used in case
+                                                                         // to be used in case of -> allow
+                                                                         // to be used in case
+
+                                                                         // -> suitable for /  made to work with
+                                                                         { "are to be used in", "are suitable for" },
+                                                                         { "are to be used in combination with", "are made to work with" },
+                                                                         { "are to be used in conjunction with", "are made to work with" },
+                                                                         { "are intended to be used in", "are suitable for" },
+                                                                         { "are intended to be used in combination with", "are made to work with" },
+                                                                         { "are intended to be used in conjunction with", "are made to work with" },
+                                                                         { "are meant to be used in", "are suitable for" },
+                                                                         { "are meant to be used in combination with", "are made to work with" },
+                                                                         { "are meant to be used in conjunction with", "are made to work with" },
+                                                                         { "are primarily meant to be used in", "are suitable for" },
+                                                                         { "are primarily meant to be used in combination with", "are made to work with" },
+                                                                         { "are primarily meant to be used in conjunction with", "are made to work with" },
+                                                                         { "are primarily intended to be used in", "are suitable for" },
+                                                                         { "are primarily intended to be used in combination with", "are made to work with" },
+                                                                         { "are primarily intended to be used in conjunction with", "are made to work with" },
+                                                                         { "can be used in", "is suitable for" },
+                                                                         { "can be used in combination with", "is made to work with" },
+                                                                         { "can be used in conjunction with", "is made to work with" },
+                                                                         { "could be used in", "is suitable for" },
+                                                                         { "could be used in combination with", "is made to work with" },
+                                                                         { "could be used in conjunction with", "is made to work with" },
+                                                                         { "has to be used in", "is suitable for" },
+                                                                         { "has to be used in combination with", "is made to work with" },
+                                                                         { "has to be used in conjunction with", "is made to work with" },
+                                                                         { "have to be used in", "are suitable for" },
+                                                                         { "have to be used in combination with", "are made to work with" },
+                                                                         { "have to be used in conjunction with", "are made to work with" },
+                                                                         { "is intended to be used in", "is suitable for" },
+                                                                         { "is intended to be used in combination with", "is made to work with" },
+                                                                         { "is intended to be used in conjunction with", "is made to work with" },
+                                                                         { "is meant to be used in", "is suitable for" },
+                                                                         { "is meant to be used in combination with", "is made to work with" },
+                                                                         { "is meant to be used in conjunction with", "is made to work with" },
+                                                                         { "is primarily meant to be used in", "is suitable for" },
+                                                                         { "is primarily meant to be used in combination with", "is made to work with" },
+                                                                         { "is primarily meant to be used in conjunction with", "is made to work with" },
+                                                                         { "is primarily intended to be used in", "is suitable for" },
+                                                                         { "is primarily intended to be used in combination with", "is made to work with" },
+                                                                         { "is primarily intended to be used in conjunction with", "is made to work with" },
+                                                                         { "meant to be used in", "suitable for" },
+                                                                         { "meant to be used in combination with", "made to work with" },
+                                                                         { "meant to be used in conjunction with", "made to work with" },
+                                                                         { "might be used in", "is suitable for" },
+                                                                         { "might be used in combination with", "is made to work with" },
+                                                                         { "might be used in conjunction with", "is made to work with" },
+
+                                                                         // it shall be used in
+                                                                         // it should be used in
                                                                          // shall be used in
                                                                          // should be used in
                                                                          // that can be used in
@@ -83,6 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          // will be used in
 
                                                                          // should not be used in future
+                                                                         // can not be used in general
                                                                          // cannot be used in general
 
                                                                          // !!! ATTENTION:
