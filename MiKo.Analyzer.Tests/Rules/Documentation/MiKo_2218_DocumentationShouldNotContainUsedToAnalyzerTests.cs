@@ -16,13 +16,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
                                                                      {
                                                                          { "can be used to", "allows to" },
+                                                                         { "can be used in order to", "allows to" },
+                                                                         { "could be used to", "allows to" },
+                                                                         { "could be used in order to", "allows to" },
+
+                                                                         // parts starting with 'that'
+                                                                         { "that can be used in order to", "that allows to" },
+                                                                         { "that can be used to", "that allows to" },
+                                                                         { "that could be used in order to", "that allows to" },
+                                                                         { "that could be used to", "that allows to" },
                                                                          { "that is used to", "to" },
+                                                                         { "that is used in order to", "to" },
                                                                          { "that it is used to", "to" },
+                                                                         { "that it is used in order to", "to" },
                                                                          { "that are used to", "to" },
+                                                                         { "that are used in order to", "to" },
                                                                          { "that shall be used to", "to" },
+                                                                         { "that shall be used in order to", "to" },
+                                                                         { "that should be used to", "to" },
+                                                                         { "that should be used in order to", "to" },
+                                                                         { "that will be used to", "to" },
+                                                                         { "that will be used in order to", "to" },
+                                                                         { "that would be used to", "to" },
+                                                                         { "that would be used in order to", "to" },
+
+                                                                         // parts starting with 'which'
+                                                                         { "which can be used in order to", "which allows to" },
+                                                                         { "which can be used to", "which allows to" },
+                                                                         { "which could be used in order to", "which allows to" },
+                                                                         { "which could be used to", "which allows to" },
                                                                          { "which is used to", "to" },
+                                                                         { "which is used in order to", "to" },
                                                                          { "which are used to", "to" },
+                                                                         { "which are used in order to", "to" },
                                                                          { "which shall be used to", "to" },
+                                                                         { "which shall be used in order to", "to" },
+                                                                         { "which should be used to", "to" },
+                                                                         { "which should be used in order to", "to" },
+                                                                         { "which will be used to", "to" },
+                                                                         { "which will be used in order to", "to" },
+                                                                         { "which would be used to", "to" },
+                                                                         { "which would be used in order to", "to" },
+
+                                                                         // TODO RKN:
+
+                                                                         // are intended to be used in
+                                                                         // are meant to be used in
+                                                                         // are primarily meant to be used in
+                                                                         // are primarily intended to be used in
+                                                                         // can be used in
+                                                                         // could be used in
+                                                                         // has to be used in
+                                                                         // have to be used in
+                                                                         // is intended to be used in
+                                                                         // is meant to be used in
+                                                                         // is primarily meant to be used in
+                                                                         // is primarily intended to be used in
+                                                                         // meant to be used in
+                                                                         // shall be used in
+                                                                         // should be used in
+                                                                         // that can be used in
+                                                                         // that will be used in
+                                                                         // to be used in
+                                                                         // which can be used in
+                                                                         // which will be used in
+                                                                         // will be used in
+
+                                                                         // should not be used in future
+                                                                         // cannot be used in general
+
+                                                                         // !!! ATTENTION:
+                                                                         // Be aware of follow-up texts:
+                                                                         // - in order to
+                                                                         // - in combination with
+                                                                         // - in conjunction with
+                                                                         // - in future
+                                                                         // - in general
                                                                      };
 
         private static readonly string[] WrongPhrases = Map.Keys.ToArray();
@@ -70,7 +139,16 @@ public class TestMe
         [TestCase("Does something. It is used to analyze stuff. Performs something more.", "Does something. It analyzes stuff. Performs something more.")]
         [TestCase("Does something. Used to analyze stuff. Performs something more.", "Does something. Analyzes stuff. Performs something more.")]
         [TestCase("Does something. Used to analyze stuff.", "Does something. Analyzes stuff.")]
+        [TestCase("Does something that can be used to analyze stuff.", "Does something that allows to analyze stuff.")]
+        [TestCase("Does something that can be used in order to analyze stuff.", "Does something that allows to analyze stuff.")]
+        [TestCase("Does something that could be used to analyze stuff.", "Does something that allows to analyze stuff.")]
+        [TestCase("Does something that could be used in order to analyze stuff.", "Does something that allows to analyze stuff.")]
+        [TestCase("Does something which can be used to analyze stuff.", "Does something which allows to analyze stuff.")]
+        [TestCase("Does something which can be used in order to analyze stuff.", "Does something which allows to analyze stuff.")]
+        [TestCase("Does something which could be used to analyze stuff.", "Does something which allows to analyze stuff.")]
+        [TestCase("Does something which could be used in order to analyze stuff.", "Does something which allows to analyze stuff.")]
         [TestCase("It can be used to analyze stuff.", "It allows to analyze stuff.")]
+        [TestCase("It can be used in order to analyze stuff.", "It allows to analyze stuff.")]
         [TestCase("Markers are used to analyze stuff.", "Markers analyze stuff.")]
         [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
         public void Code_gets_fixed_for_special_case_text_(string originalCode, string fixedCode)

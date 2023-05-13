@@ -17,23 +17,53 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2218";
 
-        private const string Replacement = "to";
-
-        private const string CanPhrase = "can be used to";
         private const string CanReplacement = "allows to";
+        private const string UsedToReplacement = "to";
+
         private const string UsedToPhrase = "used to";
         private const string IsUsedToPhrase = "is used to";
         private const string AreUsedToPhrase = "are used to";
 
-        private static readonly string[] Phrases =
+        private static readonly string[] CanPhrases =
             {
+                "can be used in order to",
+                "can be used to",
+                "could be used in order to",
+                "could be used to",
+            };
+
+        private static readonly string[] UsedToPhrases =
+            {
+                "that is used in order to",
                 "that is used to",
+                "that it is used in order to",
                 "that it is used to",
+                "that are used in order to",
                 "that are used to",
+                "that shall be used in order to",
                 "that shall be used to",
+                "that should be used in order to",
+                "that should be used to",
+                "that will be used in order to",
+                "that will be used to",
+                "that would be used in order to",
+                "that would be used to",
+
+                // 'which' parts
+                "which is used in order to",
                 "which is used to",
+                "which it is used in order to",
+                "which it is used to",
+                "which are used in order to",
                 "which are used to",
+                "which shall be used in order to",
                 "which shall be used to",
+                "which should be used in order to",
+                "which should be used to",
+                "which will be used in order to",
+                "which will be used to",
+                "which would be used in order to",
+                "which would be used to",
             };
 
         public MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer() : base(Id)
@@ -60,9 +90,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var sb = new StringBuilder(text);
 
-                foreach (var phrase in Phrases)
+                foreach (var phrase in UsedToPhrases)
                 {
-                    sb.Replace(phrase, Replacement);
+                    sb.Replace(phrase, UsedToReplacement);
                 }
 
                 // TODO RKN: Use stringBuilder for replacement
@@ -72,31 +102,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 result = ReplaceSpecialPhrase(AreUsedToPhrase, result, _ => _);
                 result = ReplaceSpecialPhrase(UsedToPhrase.ToUpperCaseAt(0), result, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0));
 
-                result = result.Replace(CanPhrase.ToUpperCaseAt(0), CanReplacement.ToUpperCaseAt(0));
-
-                // special situation for <param> texts
-                var belowParam = node.Ancestors<XmlElementSyntax>().Any(_ => _.GetName() == Constants.XmlTag.Param);
-
-                if (belowParam)
+                foreach (var canPhrase in CanPhrases)
                 {
-                    // let's find out if we have the first sentence
-                    var canIndex = result.IndexOf(CanPhrase, StringComparison.Ordinal);
+                    result = result.Replace(canPhrase.ToUpperCaseAt(0), CanReplacement.ToUpperCaseAt(0));
 
-                    if (canIndex != -1)
+                    // special situation for <param> texts
+                    var belowParam = node.Ancestors<XmlElementSyntax>().Any(_ => _.GetName() == Constants.XmlTag.Param);
+
+                    if (belowParam)
                     {
-                        var firstSentence = textSoFar.LastIndexOf('.') == -1 && canIndex < result.IndexOf('.');
+                        // let's find out if we have the first sentence
+                        var canIndex = result.IndexOf(canPhrase, StringComparison.Ordinal);
 
-                        if (firstSentence)
+                        if (canIndex != -1)
                         {
-                            // we seem to be in the first sentence
-                            result = result.Replace(CanPhrase, Replacement);
+                            var firstSentence = textSoFar.LastIndexOf('.') == -1 && canIndex < result.IndexOf('.');
+
+                            if (firstSentence)
+                            {
+                                // we seem to be in the first sentence
+                                result = result.Replace(canPhrase, UsedToReplacement);
+                            }
                         }
                     }
                 }
 
                 sb = new StringBuilder(result);
-                sb.Replace(CanPhrase, CanReplacement);
-                sb.Replace(UsedToPhrase, Replacement);
+
+                foreach (var canPhrase in CanPhrases)
+                {
+                    sb.Replace(canPhrase, CanReplacement);
+                }
+
+                sb.Replace(UsedToPhrase, UsedToReplacement);
 
                 result = sb.ToString();
 
@@ -138,9 +176,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, Phrases))
+                foreach (var location in GetAllLocations(token, UsedToPhrases))
                 {
-                    yield return Issue(location, Replacement);
+                    yield return Issue(location, UsedToReplacement);
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
@@ -158,14 +196,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return issue;
                 }
 
-                foreach (var location in GetAllLocations(token, CanPhrase.ToUpperCaseAt(0)))
+                foreach (var canPhrase in CanPhrases)
                 {
-                    yield return Issue(location, CanReplacement.ToUpperCaseAt(0));
-                }
+                    foreach (var location in GetAllLocations(token, canPhrase.ToUpperCaseAt(0)))
+                    {
+                        yield return Issue(location, CanReplacement.ToUpperCaseAt(0));
+                    }
 
-                foreach (var location in GetAllLocations(token, CanPhrase))
-                {
-                    yield return Issue(location, CanReplacement);
+                    foreach (var location in GetAllLocations(token, canPhrase))
+                    {
+                        yield return Issue(location, CanReplacement);
+                    }
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(symbol, token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
@@ -175,7 +216,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var location in GetAllLocations(token, UsedToPhrase))
                 {
-                    yield return Issue(location, Replacement);
+                    yield return Issue(location, UsedToReplacement);
                 }
             }
         }
