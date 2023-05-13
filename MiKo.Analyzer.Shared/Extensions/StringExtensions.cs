@@ -216,7 +216,7 @@ namespace System
 
         public static bool EndsWithAny(this string value, string suffixCharacters) => suffixCharacters.Any(value.EndsWith);
 
-        public static bool EndsWithAny(this string value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
+        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string suffixCharacters)
         {
@@ -234,9 +234,11 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => EndsWithAny(value, suffixes, StringComparison.OrdinalIgnoreCase);
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => value.EndsWithAny((IEnumerable<string>)suffixes, comparison);
+
+        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes, StringComparison comparison)
         {
@@ -264,11 +266,11 @@ namespace System
 
         public static bool Equals(this ReadOnlySpan<char> value, string other, StringComparison comparison) => other != null && value.Equals(other.AsSpan(), comparison);
 
-        public static bool EqualsAny(this string value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool EqualsAny(this string value, IEnumerable<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
+        public static bool EqualsAny(this string value, IEnumerable<string> phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
 
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
         {
@@ -589,11 +591,13 @@ namespace System
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
-        public static bool StartsWithAny(this string value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
+        public static bool StartsWithAny(this string value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes) => StartsWithAny(value, prefixes, StringComparison.OrdinalIgnoreCase);
+        public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
+        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => value.StartsWithAny((IEnumerable<string>)prefixes, comparison);
+
+        public static bool StartsWithAny(this string value, IEnumerable<string> prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes, StringComparison comparison)
         {

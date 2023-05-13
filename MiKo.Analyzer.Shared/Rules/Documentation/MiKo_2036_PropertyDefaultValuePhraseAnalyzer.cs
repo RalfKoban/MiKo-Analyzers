@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var properties = new Dictionary<string, string>();
 
             string proposedEndingPhrase;
-            string[] endingPhrases;
+            IEnumerable<string> endingPhrases;
 
             if (returnType.IsBoolean())
             {
@@ -65,13 +65,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 proposedEndingPhrase = Constants.Comments.DefaultCrefPhrase.FormatWith("...");
 
                 endingPhrases = returnType.GetFields()
-                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
-                                          .ToArray();
+                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol));
             }
 
-            return commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal)
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase, Constants.Comments.NoDefaultPhrase, properties) };
+            if (commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal))
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(owningSymbol, xmlTag, proposedEndingPhrase, Constants.Comments.NoDefaultPhrase, properties) };
         }
     }
 }

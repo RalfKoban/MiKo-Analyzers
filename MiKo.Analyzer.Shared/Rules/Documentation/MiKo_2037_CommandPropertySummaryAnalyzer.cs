@@ -23,9 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetStartingPhrase((IPropertySymbol)symbol);
 
-            return summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal))
-                       ? new[] { Issue(symbol, Constants.XmlTag.Summary, phrases.First()) }
-                       : Enumerable.Empty<Diagnostic>();
+            if (summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
+            {
+                yield return Issue(symbol, Constants.XmlTag.Summary, phrases.First());
+            }
         }
 
         private static string[] GetStartingPhrase(IPropertySymbol symbol)
