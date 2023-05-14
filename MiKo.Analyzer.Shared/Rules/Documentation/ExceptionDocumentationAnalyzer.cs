@@ -36,6 +36,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return documentation.GetExceptionXmls().Where(_ => _.IsExceptionComment(m_exceptionType));
         }
 
-        protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(string.Empty, exceptionComment, ExceptionPhrase, proposal);
+        protected Diagnostic ExceptionIssue(XmlElementSyntax exceptionComment, string proposal) => Issue(string.Empty, exceptionComment.GetContentsLocation(), ExceptionPhrase, proposal);
     }
 }
