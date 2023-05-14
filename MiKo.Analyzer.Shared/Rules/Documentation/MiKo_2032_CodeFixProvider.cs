@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ",",
                 ";",
                 ":",
+                "-",
             };
 
         private static readonly string[] OtherStartingPhrases =
