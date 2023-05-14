@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -312,6 +311,8 @@ public class TestMe
         [TestCase(@"<see langword=""true""/>: if something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> - if something; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> - If something; <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> something.")]
+        [TestCase(@"<see langword=""true""/> - something.")]
         [TestCase("true if something. Otherwise false.")]
         [TestCase("<b>true</b> if something. Otherwise <b>false</b>.")]
         [TestCase("<c>true</c> if something. Otherwise <c>false</c>.")]

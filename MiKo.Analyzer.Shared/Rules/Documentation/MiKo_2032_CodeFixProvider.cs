@@ -110,7 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    "value",
                                    "Value",
                                };
-            var verbs = new[] { "indicating", "that indicates", "which indicates" };
+            var verbs = new[] { "indicating", "that indicates", "which indicates", "indicates", "indicate" };
             var conditions = new[] { "if", "whether", "when" };
 
             foreach (var start in starts)
