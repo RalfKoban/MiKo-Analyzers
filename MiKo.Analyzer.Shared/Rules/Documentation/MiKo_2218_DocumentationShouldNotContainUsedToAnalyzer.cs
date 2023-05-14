@@ -263,7 +263,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return issue;
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb))
                 {
                     yield return issue;
                 }
