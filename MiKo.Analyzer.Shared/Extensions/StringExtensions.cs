@@ -214,7 +214,9 @@ namespace System
 
         public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => string.IsNullOrEmpty(characters) is false && value.EndsWith(characters.AsSpan(), comparison);
 
-        public static bool EndsWithAny(this string value, string suffixCharacters) => suffixCharacters.Any(value.EndsWith);
+        public static bool EndsWithAny(this string value, string suffixCharacters) => string.IsNullOrEmpty(value) is false && suffixCharacters.Contains(value[value.Length - 1]);
+
+        public static bool EndsWithAny(this string value, char[] suffixCharacters) => string.IsNullOrEmpty(value) is false && suffixCharacters.Contains(value[value.Length - 1]);
 
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
@@ -222,9 +224,29 @@ namespace System
         {
             if (value.Length > 0)
             {
+                var lastChar = value[value.Length - 1];
+
                 for (var index = 0; index < suffixCharacters.Length; index++)
                 {
-                    if (value.EndsWith(suffixCharacters[index]))
+                    if (lastChar == suffixCharacters[index])
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, char[] suffixCharacters)
+        {
+            if (value.Length > 0)
+            {
+                var lastChar = value[value.Length - 1];
+
+                for (var index = 0; index < suffixCharacters.Length; index++)
+                {
+                    if (lastChar == suffixCharacters[index])
                     {
                         return true;
                     }

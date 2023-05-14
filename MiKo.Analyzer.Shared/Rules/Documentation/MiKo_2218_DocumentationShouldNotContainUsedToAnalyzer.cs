@@ -377,7 +377,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     break;
                 }
 
-                var nextWord = result.AsSpan(index + phrase.Length).FirstWord().ToString();
+                var firstWord = result.AsSpan(index + phrase.Length).FirstWord();
+
+                if (firstWord.EndsWithAny(Constants.SentenceMarkers))
+                {
+                    // trim any sentence markers
+                    firstWord = firstWord.Slice(0, firstWord.Length - 1);
+                }
+
+                var nextWord = firstWord.ToString();
+
                 var nextWordEnd = result.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length;
 
                 var replaceText = result.Substring(index, nextWordEnd - index);

@@ -212,6 +212,7 @@ public class TestMe
         [TestCase("The information can be used to do something.", "The information to do something.")]
         [TestCase("The information. It can be used to analyze stuff.", "The information. It allows to analyze stuff.")]
         [TestCase("The information. Can be used to analyze stuff.", "The information. Allows to analyze stuff.")]
+        [TestCase("The information is used to connect.", "The information connects.")]
         [TestCase(
              @"<see langword=""true""/> to indicate something; otherwise, <see langword=""false""/>. This information can be used to hide specific stuff. The default is <see langword=""false""/>.",
              @"<see langword=""true""/> to indicate something; otherwise, <see langword=""false""/>. This information allows to hide specific stuff. The default is <see langword=""false""/>.")]
