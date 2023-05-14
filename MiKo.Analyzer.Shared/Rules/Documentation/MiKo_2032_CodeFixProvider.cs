@@ -29,6 +29,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 "TRUE,",
                 "True,",
                 "true,",
+                "TRUE means",
+                "True means",
+                "true means",
+                "TRUE when",
+                "True when",
+                "true when",
+                "TRUE of",
+                "True of",
+                "true of",
                 "TRUE",
                 "True",
                 "true",
@@ -60,7 +69,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 "If ",
                 "When ",
+                "Whether ",
                 "In case ",
+                "Means ",
+                "if ",
+                "when ",
+                "whether ",
+                "in case ",
+                "means ",
             };
 
         private static readonly string[] SimpleTrailingPhrases =
@@ -92,9 +108,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    "boolean",
                                    "Boolean",
                                    "value",
+                                   "Value",
                                };
             var verbs = new[] { "indicating", "that indicates", "which indicates" };
-            var conditions = new[] { "if", "whether" };
+            var conditions = new[] { "if", "whether", "when" };
 
             foreach (var start in starts)
             {

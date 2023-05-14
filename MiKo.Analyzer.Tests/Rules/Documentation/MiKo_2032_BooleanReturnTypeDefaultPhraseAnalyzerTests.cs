@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -733,6 +734,42 @@ public class TestMe
     /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
     /// </returns>
     /// </summary>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase("if ")]
+        [TestCase("If ")]
+        [TestCase("whether ")]
+        [TestCase("Whether ")]
+        [TestCase("True when")]
+        [TestCase("True means")]
+        [TestCase("True of")] // typo
+        public void Code_gets_fixed_for_specific_starting_phrase_(string comment)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>" + comment + @" something.</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
