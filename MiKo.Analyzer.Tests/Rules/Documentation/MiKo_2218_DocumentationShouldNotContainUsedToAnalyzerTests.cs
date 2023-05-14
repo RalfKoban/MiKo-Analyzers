@@ -134,6 +134,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          // - in conjunction with
                                                                          // - in future
                                                                          // - in general
+                                                                         // - in case of
+                                                                         // - instead
                                                                      };
 
         private static readonly string[] WrongPhrases = Map.Keys.ToArray();
