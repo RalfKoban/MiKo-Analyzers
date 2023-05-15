@@ -173,9 +173,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => symbol.Name == "paramName"
-                                                                                                                        ? Enumerable.Empty<Diagnostic>()
-                                                                                                                        : AnalyzeName(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
+        {
+            switch (symbol.Name)
+            {
+                case "paramName": // used in exceptions
+                case "lParam": // used by Windows C++ API
+                case "wParam": // used by Windows C++ API
+                    return Enumerable.Empty<Diagnostic>();
+
+                default:
+                    return AnalyzeName(symbol);
+            }
+        }
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase() && symbolName.StartsWith(key, StringComparison.Ordinal);
 
