@@ -63,7 +63,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                "2.0f",
                                                            };
 
-
         public MiKo_3038_DoNotUseMagicNumbersAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }

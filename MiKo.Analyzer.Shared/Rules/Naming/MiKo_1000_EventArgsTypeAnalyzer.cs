@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var proposal = GetNameWithoutSuffix(symbol.Name) + CorrectSuffix;
 
-                yield return Issue(symbol, proposal, new Dictionary<string, string> { { Proposal, proposal }});
+                yield return Issue(symbol, proposal, new Dictionary<string, string> { { Proposal, proposal } });
             }
         }
 

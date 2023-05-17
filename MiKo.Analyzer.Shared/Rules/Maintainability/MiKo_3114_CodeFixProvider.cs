@@ -27,5 +27,4 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
     }
-
 }

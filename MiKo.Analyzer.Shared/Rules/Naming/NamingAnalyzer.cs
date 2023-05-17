@@ -276,7 +276,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     {
                         if (symbolName.StartsWith(prefix, StringComparison.Ordinal))
                         {
-                           index = prefix.Length;
+                            index = prefix.Length;
                         }
                     }
 

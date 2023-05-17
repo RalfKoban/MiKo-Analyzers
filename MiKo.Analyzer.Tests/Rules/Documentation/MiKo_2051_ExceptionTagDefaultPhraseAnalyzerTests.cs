@@ -16,10 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ExceptionTypes =
             {
-                typeof(ArgumentException).Name,
-                typeof(InvalidOperationException).Name,
-                typeof(NotSupportedException).Name,
-                typeof(Exception).Name,
+                nameof(ArgumentException),
+                nameof(InvalidOperationException),
+                nameof(NotSupportedException),
+                nameof(Exception),
             };
 
         private static readonly string[] ForbiddenExceptionStartingPhrases = CreateForbiddenExceptionStartingPhrases();

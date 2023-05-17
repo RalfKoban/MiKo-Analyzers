@@ -46,12 +46,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     return classDeclaration.WithModifiers(modifiers);
                 }
+
                 case RecordDeclarationSyntax recordDeclaration:
                 {
                     var modifiers = CreateModifiers(recordDeclaration, SyntaxKind.SealedKeyword);
 
                     return recordDeclaration.WithModifiers(modifiers);
                 }
+
                 default:
                 {
                     return syntax;

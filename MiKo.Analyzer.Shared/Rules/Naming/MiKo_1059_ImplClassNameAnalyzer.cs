@@ -32,7 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbolName;
         }
 
-
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;

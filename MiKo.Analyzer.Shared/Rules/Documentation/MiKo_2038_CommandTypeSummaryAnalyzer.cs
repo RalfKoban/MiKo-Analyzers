@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2038";
 
-        const string StartingPhrase = Constants.Comments.CommandSummaryStartingPhrase;
+        private const string StartingPhrase = Constants.Comments.CommandSummaryStartingPhrase;
 
         public MiKo_2038_CommandTypeSummaryAnalyzer() : base(Id, SymbolKind.NamedType)
         {

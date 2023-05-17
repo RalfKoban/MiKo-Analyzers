@@ -34,8 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return originalSolution;
             }
 
+#pragma warning disable CS0618 // Type or member is obsolete : Required as we still are running in 2019 and there the overload is not available
+
             // Return the new solution with the new symbol name.
             return await Renamer.RenameSymbolAsync(originalSolution, symbol, newName, originalSolution.Workspace.Options, cancellationToken).ConfigureAwait(false);
+
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         protected abstract string GetNewName(Diagnostic diagnostic, ISymbol symbol);

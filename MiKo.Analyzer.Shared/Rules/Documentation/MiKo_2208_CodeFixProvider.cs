@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2208_CodeFixProvider)), Shared]
     public sealed class MiKo_2208_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.Id;
-
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+
+        public override string FixableDiagnosticId => MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2208_CodeFixTitle;
 

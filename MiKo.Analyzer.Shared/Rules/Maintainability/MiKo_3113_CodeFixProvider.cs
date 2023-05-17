@@ -231,6 +231,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     return AssertThat(expression, Does("Contain", argument), arguments, removeNameColon: true);
                 }
+
                 case "OnlyContain": return AssertThatHasMatches("All");
                 case "ContainSingle" when arguments.Count > 0: return AssertThatHasMatches("One");
                 case "ContainSingle": return AssertThat(expression, Has("Exactly", Argument(Literal(1)), "Items"), arguments, removeNameColon: true);

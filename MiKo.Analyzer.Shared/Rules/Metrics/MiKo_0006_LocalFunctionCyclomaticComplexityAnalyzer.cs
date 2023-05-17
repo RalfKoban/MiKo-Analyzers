@@ -32,5 +32,5 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 }
             }
         }
-   }
+    }
 }

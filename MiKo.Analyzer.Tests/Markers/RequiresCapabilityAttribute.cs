@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable IDE0130 // Namespace does not match folder structure
+
+using System;
 
 //// ReSharper disable once CheckNamespace
 namespace NCrunch.Framework
@@ -21,3 +23,5 @@ namespace NCrunch.Framework
         public string CapabilityName { get; }
     }
 }
+
+#pragma warning restore IDE0130 // Namespace does not match folder structure

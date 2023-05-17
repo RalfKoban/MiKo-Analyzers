@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         continue;
                     }
 
-                    var order = similarMethods.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Environment.NewLine);
+                    var order = similarMethods.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Constants.EnvironmentNewLine);
 
                     // check for locations
                     var lastLine = similarMethods.First().GetStartingLine();

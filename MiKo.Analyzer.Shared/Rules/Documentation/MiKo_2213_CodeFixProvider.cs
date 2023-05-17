@@ -45,6 +45,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                          .Replace("Wont", "Will not")
                                                                                          .Replace("Won't", "Will not")
                                                                                          .Replace("n't", " not");
-
     }
 }

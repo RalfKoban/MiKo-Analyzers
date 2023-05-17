@@ -45,9 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (returnType is IArrayTypeSymbol arrayType)
             {
-               return arrayType.ElementType.IsByte()
-                                     ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
-                                     : Constants.Comments.ArrayReturnTypeStartingPhrase;
+                return arrayType.ElementType.IsByte()
+                           ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
+                           : Constants.Comments.ArrayReturnTypeStartingPhrase;
             }
 
             return Constants.Comments.EnumerableReturnTypeStartingPhrase;

@@ -186,7 +186,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word;
                 }
 
-                return new StringBuilder(word + "ing").Replace("ping", "pping").Replace("eing", "ing").ToString();
+                var sb = new StringBuilder(word + "ing").Replace("ping", "pping").Replace("eing", "ing");
+
+                return sb.ToString();
             }
         }
 

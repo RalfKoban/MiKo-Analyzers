@@ -159,7 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = token.Text;
 
-                if (text.Length <= Environment.NewLine.Length && text.IsNullOrWhiteSpace())
+                if (text.Length <= Constants.EnvironmentNewLine.Length && text.IsNullOrWhiteSpace())
                 {
                     // do not bother with only empty text
                     continue;
@@ -201,19 +201,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                sb = new StringBuilder(result);
-
-                sb.ReplaceAll(CanPhrases, CanReplacement);
-                sb.Replace(UsedToPhrase, UsedToReplacement);
-
-                sb.ReplaceAll(UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement);
-                sb.ReplaceAll(UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement);
-                sb.ReplaceAll(UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement);
-                sb.ReplaceAll(UsedInPluralPhrases, UsedInPluralReplacement);
-                sb.ReplaceAll(UsedInSingularPhrases, UsedInSingularReplacement);
-                sb.ReplaceAll(UsedInUnclearPhrases, UsedInUnclearReplacement);
-
-                result = sb.ToString();
+                result = new StringBuilder(result).ReplaceAll(CanPhrases, CanReplacement)
+                                                  .Replace(UsedToPhrase, UsedToReplacement)
+                                                  .ReplaceAll(UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement)
+                                                  .ReplaceAll(UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement)
+                                                  .ReplaceAll(UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement)
+                                                  .ReplaceAll(UsedInPluralPhrases, UsedInPluralReplacement)
+                                                  .ReplaceAll(UsedInSingularPhrases, UsedInSingularReplacement)
+                                                  .ReplaceAll(UsedInUnclearPhrases, UsedInUnclearReplacement)
+                                                  .ToString();
 
                 textSoFar += result;
 
@@ -247,6 +243,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return issue;
                 }
             }
+        }
+
+        private static string ReplaceSpecialPhrase(string phrase, string text, Func<string, string> replacementCallback)
+        {
+            var result = text;
+
+            while (true)
+            {
+                if (result.Length == 0)
+                {
+                    // no text left to search within
+                    break;
+                }
+
+                var index = result.IndexOf(phrase, StringComparison.Ordinal);
+
+                if (index < 0)
+                {
+                    // nothing found anymore
+                    break;
+                }
+
+                var firstWord = result.AsSpan(index + phrase.Length).FirstWord();
+
+                if (firstWord.EndsWithAny(Constants.SentenceMarkers))
+                {
+                    // trim any sentence markers
+                    firstWord = firstWord.Slice(0, firstWord.Length - 1);
+                }
+
+                var nextWord = firstWord.ToString();
+
+                var nextWordEnd = result.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length;
+
+                var replaceText = result.Substring(index, nextWordEnd - index);
+                var replacement = replacementCallback(nextWord);
+
+                result = result.Replace(replaceText, replacement);
+            }
+
+            return result;
         }
 
         private IEnumerable<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
@@ -355,47 +392,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 yield return Issue(finalLocation, replacement);
             }
-        }
-
-        private static string ReplaceSpecialPhrase(string phrase, string text, Func<string, string> replacementCallback)
-        {
-            var result = text;
-
-            while (true)
-            {
-                if (result.Length == 0)
-                {
-                    // no text left to search within
-                    break;
-                }
-
-                var index = result.IndexOf(phrase, StringComparison.Ordinal);
-
-                if (index < 0)
-                {
-                    // nothing found anymore
-                    break;
-                }
-
-                var firstWord = result.AsSpan(index + phrase.Length).FirstWord();
-
-                if (firstWord.EndsWithAny(Constants.SentenceMarkers))
-                {
-                    // trim any sentence markers
-                    firstWord = firstWord.Slice(0, firstWord.Length - 1);
-                }
-
-                var nextWord = firstWord.ToString();
-
-                var nextWordEnd = result.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length;
-
-                var replaceText = result.Substring(index, nextWordEnd - index);
-                var replacement = replacementCallback(nextWord);
-
-                result = result.Replace(replaceText, replacement);
-            }
-
-            return result;
         }
     }
 }

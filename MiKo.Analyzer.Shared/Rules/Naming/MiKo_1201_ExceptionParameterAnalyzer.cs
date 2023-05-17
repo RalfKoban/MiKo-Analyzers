@@ -34,14 +34,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return false;
 
                 case Constants.InnerExceptionIdentifier:
-                    return symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException()
-                               ? false
-                               : true;
+                    var isConstructorInException = symbol.ContainingSymbol.IsConstructor() && symbol.ContainingType.IsException();
+
+                    return isConstructorInException is false;
 
                 default:
-                    return symbol.ContainingSymbol.IsConstructor() && symbol.MatchesProperty()
-                               ? false
-                               : true;
+                    var isConstructorInProperty = symbol.ContainingSymbol.IsConstructor() && symbol.MatchesProperty();
+
+                    return isConstructorInProperty is false;
             }
         }
     }

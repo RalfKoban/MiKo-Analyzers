@@ -14,7 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> Tags = Constants.Comments.InvalidSummaryCrefXmlTags.ToHashSet();
 
-
         public MiKo_2041_InvalidXmlInSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }

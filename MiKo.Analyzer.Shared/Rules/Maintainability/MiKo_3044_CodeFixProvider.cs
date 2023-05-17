@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (ifStatement != null)
             {
                 // search if block
-                return FindRelatedType(context,  ifStatement.Statement, identifierName) ?? FindRelatedType(context, ifStatement.Else, identifierName);
+                return FindRelatedType(context, ifStatement.Statement, identifierName) ?? FindRelatedType(context, ifStatement.Else, identifierName);
             }
 
             var switchStatement = syntax.GetEnclosing<SwitchStatementSyntax>();

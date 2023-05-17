@@ -12,13 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3007";
 
+        private static readonly SyntaxKind[] InspectionTargetSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.FieldDeclaration };
+
         public MiKo_3007_LinqStyleMixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeQueryExpression, SyntaxKind.QueryExpression);
-
-        private static readonly SyntaxKind[] InspectionTargetSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration, SyntaxKind.FieldDeclaration };
 
         private static bool TryFindInspectionTarget(SyntaxNode query, out SyntaxNode result, out string identifier)
         {

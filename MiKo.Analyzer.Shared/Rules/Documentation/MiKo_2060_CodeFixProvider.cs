@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                    "a ",
                                    "an ",
                                    "the ",
-                                   string.Empty
+                                   string.Empty,
                                };
 
             var instances = new[]

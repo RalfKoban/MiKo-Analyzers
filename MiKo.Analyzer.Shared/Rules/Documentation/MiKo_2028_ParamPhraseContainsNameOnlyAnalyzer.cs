@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (parameterComment.GetTextTrimmed().EqualsAny(phrases))
             {
-               yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
             }
         }
 

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private const string Invocation = nameof(Guid) + "." + nameof(Guid.NewGuid);
 
-        public MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer() : base(Id, ((SymbolKind)(-1)))
+        public MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 

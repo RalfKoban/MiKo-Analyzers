@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
-                foreach (var location in GetAllLocations(token, "..", _ => AllowedChars.Contains(_) is false))  // we want to underline the first and last char
+                foreach (var location in GetAllLocations(token, "..", _ => AllowedChars.Contains(_) is false)) // we want to underline the first and last char
                 {
                     yield return Issue(symbol.Name, location);
                 }

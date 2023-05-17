@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.See,
                                                                Constants.XmlTag.SeeAlso,
                                                            };
+
         public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }

@@ -139,11 +139,11 @@ namespace MiKoSolutions.Analyzers
                 {
                     case ArrowExpressionClauseSyntax arrow when arrow.Parent == method:
                     case ReturnStatementSyntax rs when rs.Parent == method:
-                        {
-                            yield return createdObject;
+                    {
+                        yield return createdObject;
 
-                            break;
-                        }
+                        break;
+                    }
                 }
             }
         }
@@ -1212,8 +1212,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestTearDownMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestTearDownAttributeNames);
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);
-
         internal static bool IsTypeUnderTestCreationMethod(this IMethodSymbol value) => value.ReturnsVoid is false && Constants.Names.TypeUnderTestMethodNames.Contains(value.Name);
 
         internal static bool IsValidateValueCallback(this IMethodSymbol value)
@@ -1333,5 +1331,7 @@ namespace MiKoSolutions.Analyzers
                        ? typeName.Substring(1)
                        : typeName;
         }
+
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);
     }
 }

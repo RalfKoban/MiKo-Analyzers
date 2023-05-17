@@ -23,7 +23,7 @@ namespace System
                 return Array.Empty<string>();
             }
 
-            var tuples = new List<ValueTuple<int, string>>();
+            var tuples = new List<(int, string)>();
 
             foreach (var finding in findings)
             {
@@ -33,7 +33,7 @@ namespace System
 
                 foreach (var index in indices)
                 {
-                    tuples.Add(new ValueTuple<int, string>(index, finding));
+                    tuples.Add((index, finding));
                 }
             }
 
@@ -90,9 +90,9 @@ namespace System
             /// <summary>
             /// Gets the element in the collection at the current position of the enumerator.
             /// </summary>
-            /// <returns>
+            /// <value>
             /// The element in the collection at the current position of the enumerator.
-            /// </returns>
+            /// </value>
             public SplitEntry Current { get; private set; }
 
             /// <summary>
@@ -166,8 +166,8 @@ namespace System
                             }
 
                             break;
-
-                        } while (next);
+                        }
+                        while (next);
 
                         return next;
                     }

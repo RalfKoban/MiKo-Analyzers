@@ -26,22 +26,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (parameter.RefKind)
                 {
                     case RefKind.Ref:
-                        {
-                            var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.RefKeyword);
+                    {
+                        var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.RefKeyword);
 
-                            yield return Issue(methodName, keyword, keyword.ToString());
+                        yield return Issue(methodName, keyword, keyword.ToString());
 
-                            break;
-                        }
+                        break;
+                    }
 
                     case RefKind.Out:
-                        {
-                            var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.OutKeyword);
+                    {
+                        var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.OutKeyword);
 
-                            yield return Issue(methodName, keyword, keyword.ToString());
+                        yield return Issue(methodName, keyword, keyword.ToString());
 
-                            break;
-                        }
+                        break;
+                    }
                 }
             }
         }

@@ -37,59 +37,57 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic AnalyzeVariableDeclaration(VariableDeclarationSyntax declaration, ISymbol containingSymbol, SemanticModel semanticModel)
         {
-            var type = declaration.GetTypeSymbol(semanticModel) as INamedTypeSymbol;
-
-            if (type is null)
+            if (declaration.GetTypeSymbol(semanticModel) is INamedTypeSymbol type)
             {
-                return null; // ignore unknown type
+                var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
+
+                var eventName = identifier.ValueText;
+
+                if (eventName == nameof(ICommand.CanExecuteChanged) && type.Name == nameof(EventHandler))
+                {
+                    return null; // ignore event that we cannot change anymore
+                }
+
+                // we either nave no correct event handler or too few/less type arguments, so try to guess the EventArgs
+                if (type.TypeArguments.Length != 1)
+                {
+                    return null;
+                }
+
+                var eventArgsType = type.TypeArguments[0];
+
+                if (eventArgsType.IsEventArgs() is false)
+                {
+                    return null;
+                }
+
+                if (IsInherited(identifier, semanticModel))
+                {
+                    return null; // ignore inherited events that we cannot change anymore
+                }
+
+                if (eventArgsType.FullyQualifiedName() == "System.EventArgs")
+                {
+                    return null; // ignore special event args
+                }
+
+                var eventTypeNamespace = eventArgsType.ContainingNamespace.FullyQualifiedName();
+                var eventUsageNamespace = containingSymbol.ContainingNamespace.FullyQualifiedName();
+
+                if (eventUsageNamespace == eventTypeNamespace)
+                {
+                    return null; // ignore same namespaces
+                }
+
+                if (declaration.Type is GenericNameSyntax g)
+                {
+                    return Issue(eventName, g.TypeArgumentList.Arguments[0], eventArgsType.Name, eventUsageNamespace);
+                }
+
+                return Issue(eventName, eventArgsType, eventArgsType.Name, eventUsageNamespace);
             }
 
-            var identifier = declaration.Variables.Select(_ => _.Identifier).FirstOrDefault();
-
-            var eventName = identifier.ValueText;
-
-            if (eventName == nameof(ICommand.CanExecuteChanged) && type.Name == nameof(EventHandler))
-            {
-                return null; // ignore event that we cannot change anymore
-            }
-
-            // we either nave no correct event handler or too few/less type arguments, so try to guess the EventArgs
-            if (type.TypeArguments.Length != 1)
-            {
-                return null;
-            }
-
-            var eventArgsType = type.TypeArguments[0];
-
-            if (eventArgsType.IsEventArgs() is false)
-            {
-                return null;
-            }
-
-            if (IsInherited(identifier, semanticModel))
-            {
-                return null; // ignore inherited events that we cannot change anymore
-            }
-
-            if (eventArgsType.FullyQualifiedName() == "System.EventArgs")
-            {
-                return null; // ignore special event args
-            }
-
-            var eventTypeNamespace = eventArgsType.ContainingNamespace.FullyQualifiedName();
-            var eventUsageNamespace = containingSymbol.ContainingNamespace.FullyQualifiedName();
-
-            if (eventUsageNamespace == eventTypeNamespace)
-            {
-                return null; // ignore same namespaces
-            }
-
-            if (declaration.Type is GenericNameSyntax g)
-            {
-                return Issue(eventName, g.TypeArgumentList.Arguments[0], eventArgsType.Name, eventUsageNamespace);
-            }
-
-            return Issue(eventName, eventArgsType, eventArgsType.Name, eventUsageNamespace);
+            return null; // ignore unknown type
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1087";
 
-        private const string  BetterName = "BetterName";
+        private const string BetterName = "BetterName";
 
         public MiKo_1087_CtorParameterNameAnalyzer() : base(Id)
         {

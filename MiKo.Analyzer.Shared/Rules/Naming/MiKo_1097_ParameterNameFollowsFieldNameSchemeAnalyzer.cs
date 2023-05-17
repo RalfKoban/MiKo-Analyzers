@@ -71,10 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (foundPrefix != null)
             {
-                return new[]
-                           {
-                               Issue(symbol, foundPrefix, new Dictionary<string, string> { { FoundPrefix, foundPrefix } })
-                           };
+                return new[] { Issue(symbol, foundPrefix, new Dictionary<string, string> { { FoundPrefix, foundPrefix } }) };
             }
 
             return Enumerable.Empty<Diagnostic>();

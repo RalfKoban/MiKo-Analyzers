@@ -12,13 +12,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\</OutputPath>
     <NoWarn>0618;1701;1702;1705</NoWarn>
-    <CodeAnalysisRuleSet>MiKo.Analyzer.Tests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\</OutputPath>
     <NoWarn>0618;1701;1702;1705</NoWarn>
-    <CodeAnalysisRuleSet>MiKo.Analyzer.Tests.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,15 +34,12 @@
   </ItemGroup>
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
-  <ItemGroup Condition="'$(NCrunch)' == '1'">
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
+  <ItemGroup Condition="'$(NCrunch)' != '1'">
+    <PackageReference Include="Codecov" Version="1.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(NCrunch)' != '1'">
-    <PackageReference Include="Codecov" Version="1.10.0" />
     <PackageReference Include="OpenCover" Version="4.7.1221" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>

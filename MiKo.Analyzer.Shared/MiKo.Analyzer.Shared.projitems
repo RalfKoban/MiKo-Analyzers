@@ -687,6 +687,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory).editorconfig" />
     <None Include="$(MSBuildThisFileDirectory)MiKo.Analyzer.ruleset" />
   </ItemGroup>
 </Project>

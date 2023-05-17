@@ -65,13 +65,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroMinutes = IsZero(minutes);
             var zeroSeconds = IsZero(seconds);
 
-            if (zeroMinutes && zeroSeconds) return FromHours(hours);
+            if (zeroMinutes && zeroSeconds)
+            {
+                return FromHours(hours);
+            }
 
-            if (zeroHours && zeroSeconds) return FromMinutes(minutes);
-
-            if (zeroHours && zeroMinutes) return FromSeconds(seconds);
-
-            return null;
+            switch (zeroHours)
+            {
+                case true when zeroSeconds: return FromMinutes(minutes);
+                case true when zeroMinutes: return FromSeconds(seconds);
+                default: return null;
+            }
         }
 
         private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds)
@@ -81,15 +85,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroMinutes = IsZero(minutes);
             var zeroSeconds = IsZero(seconds);
 
-            if (zeroHours && zeroMinutes && zeroSeconds) return FromDays(days);
+            if (zeroHours && zeroMinutes && zeroSeconds)
+            {
+                return FromDays(days);
+            }
 
-            if (zeroDays && zeroMinutes && zeroSeconds) return FromHours(hours);
-
-            if (zeroDays && zeroHours && zeroSeconds) return FromMinutes(minutes);
-
-            if (zeroDays && zeroHours && zeroMinutes) return FromSeconds(seconds);
-
-            return null;
+            switch (zeroDays)
+            {
+                case true when zeroMinutes && zeroSeconds: return FromHours(hours);
+                case true when zeroHours && zeroSeconds: return FromMinutes(minutes);
+                case true when zeroHours && zeroMinutes: return FromSeconds(seconds);
+                default: return null;
+            }
         }
 
         private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds, ArgumentSyntax milliseconds)
@@ -100,17 +107,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroSeconds = IsZero(seconds);
             var zeroMilliseconds = IsZero(milliseconds);
 
-            if (zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds) return FromDays(days);
+            if (zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds)
+            {
+                return FromDays(days);
+            }
 
-            if (zeroDays && zeroMinutes && zeroSeconds && zeroMilliseconds) return FromHours(hours);
-
-            if (zeroDays && zeroHours && zeroSeconds && zeroMilliseconds) return FromMinutes(minutes);
-
-            if (zeroDays && zeroHours && zeroMinutes && zeroMilliseconds) return FromSeconds(seconds);
-
-            if (zeroDays && zeroHours && zeroMinutes && zeroSeconds) return FromMilliseconds(milliseconds);
-
-            return null;
+            switch (zeroDays)
+            {
+                case true when zeroMinutes && zeroSeconds && zeroMilliseconds: return FromHours(hours);
+                case true when zeroHours && zeroSeconds && zeroMilliseconds: return FromMinutes(minutes);
+                case true when zeroHours && zeroMinutes && zeroMilliseconds: return FromSeconds(seconds);
+                case true when zeroHours && zeroMinutes && zeroSeconds: return FromMilliseconds(milliseconds);
+                default: return null;
+            }
         }
 
         private static SyntaxNode GetUpdatedSyntax(ArgumentSyntax days, ArgumentSyntax hours, ArgumentSyntax minutes, ArgumentSyntax seconds, ArgumentSyntax milliseconds, ArgumentSyntax microseconds)
@@ -122,19 +131,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var zeroMilliseconds = IsZero(milliseconds);
             var zeroMicroseconds = IsZero(microseconds);
 
-            if (zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds && zeroMicroseconds) return FromDays(days);
+            if (zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds && zeroMicroseconds)
+            {
+                return FromDays(days);
+            }
 
-            if (zeroDays && zeroMinutes && zeroSeconds && zeroMilliseconds && zeroMicroseconds) return FromHours(hours);
-
-            if (zeroDays && zeroHours && zeroSeconds && zeroMilliseconds && zeroMicroseconds) return FromMinutes(minutes);
-
-            if (zeroDays && zeroHours && zeroMinutes && zeroMilliseconds && zeroMicroseconds) return FromSeconds(seconds);
-
-            if (zeroDays && zeroHours && zeroMinutes && zeroSeconds && zeroMicroseconds) return FromMilliseconds(milliseconds);
-
-            if (zeroDays && zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds) return FromMicroseconds(microseconds);
-
-            return null;
+            switch (zeroDays)
+            {
+                case true when zeroMinutes && zeroSeconds && zeroMilliseconds && zeroMicroseconds: return FromHours(hours);
+                case true when zeroHours && zeroSeconds && zeroMilliseconds && zeroMicroseconds: return FromMinutes(minutes);
+                case true when zeroHours && zeroMinutes && zeroMilliseconds && zeroMicroseconds: return FromSeconds(seconds);
+                case true when zeroHours && zeroMinutes && zeroSeconds && zeroMicroseconds: return FromMilliseconds(milliseconds);
+                case true when zeroHours && zeroMinutes && zeroSeconds && zeroMilliseconds: return FromMicroseconds(microseconds);
+                default:
+                    return null;
+            }
         }
 
         private static bool IsZero(ArgumentSyntax argument) => argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NumericLiteralExpression) && double.TryParse(literal.Token.Text, out var number) && number == 0d;

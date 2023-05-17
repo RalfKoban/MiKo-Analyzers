@@ -19,6 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// <summary>
         /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
         /// </summary>
+        /// <param name="values">
+        /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// The encapsulated terms.
+        /// </returns>
         protected static string[] GetWithDelimiters(params string[] values)
         {
             var result = new List<string>();
@@ -222,6 +228,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+
         protected static Location GetFirstTextIssueLocation(SyntaxList<XmlNodeSyntax> content)
         {
             var item = content[0];
@@ -251,27 +258,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 returnTypeFullyQualified = symbolReturnType.FullyQualifiedName(false);
             }
 
-            symbolReturnType.TryGetGenericArgumentCount(out var count);
-
-            if (count <= 0)
+            if (symbolReturnType.TryGetGenericArgumentCount(out var count) && count > 0)
             {
+                var ts = symbolReturnType.GetGenericArgumentsAsTs();
+
+                var length = returnType.IndexOf('<'); // just until the first one
+
+                var firstPart = returnType.Substring(0, length);
+
+                var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
+                var returnTypeWithGenericCount = string.Concat(firstPart, '`', count);
+
                 return Enumerable.Empty<string>()
-                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
-                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
+                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
+                                 .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
             }
 
-            var ts = symbolReturnType.GetGenericArgumentsAsTs();
-
-            var length = returnType.IndexOf('<'); // just until the first one
-
-            var firstPart = returnType.Substring(0, length);
-
-            var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
-            var returnTypeWithGenericCount = string.Concat(firstPart, '`', count);
-
             return Enumerable.Empty<string>()
-                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
-                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
+                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
+                             .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
         }
 
         protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentId() != null;
@@ -403,45 +408,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue; // skip over the start tag and name syntax
 
                     case XmlTextSyntax text:
+                    {
+                        // report the location of the first word(s) via the corresponding text token
+                        foreach (var textToken in text.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
                         {
-                            // report the location of the first word(s) via the corresponding text token
-                            foreach (var textToken in text.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
+                            var valueText = textToken.ValueText;
+
+                            if (valueText.IsNullOrWhiteSpace())
                             {
-                                var valueText = textToken.ValueText;
-
-                                if (valueText.IsNullOrWhiteSpace())
-                                {
-                                    // we found the first but empty /// line, so ignore it
-                                    continue;
-                                }
-
-                                if (valueText.Length == 1 && Constants.Comments.Delimiters.Contains(valueText[0]))
-                                {
-                                    // this is a dot or something directly after the XML tag, so ignore that
-                                    continue;
-                                }
-
-                                // we found some text
-                                if (AnalyzeTextStart(symbol, valueText, out var problematicText, out var comparison))
-                                {
-                                    // it's no valid text, so we have an issue
-                                    var position = valueText.IndexOf(problematicText, comparison);
-
-                                    var start = textToken.SpanStart + position; // find start position for underlining
-                                    var end = start + problematicText.Length; // find end position for underlining
-
-                                    var location = CreateLocation(textToken, start, end);
-
-                                    return StartIssue(symbol, location);
-                                }
-
-                                // it's a valid text, so we quit
-                                return null;
+                                // we found the first but empty /// line, so ignore it
+                                continue;
                             }
 
-                            // we found a completely empty /// line, so ignore it
-                            continue;
+                            if (valueText.Length == 1 && Constants.Comments.Delimiters.Contains(valueText[0]))
+                            {
+                                // this is a dot or something directly after the XML tag, so ignore that
+                                continue;
+                            }
+
+                            // we found some text
+                            if (AnalyzeTextStart(symbol, valueText, out var problematicText, out var comparison))
+                            {
+                                // it's no valid text, so we have an issue
+                                var position = valueText.IndexOf(problematicText, comparison);
+
+                                var start = textToken.SpanStart + position; // find start position for underlining
+                                var end = start + problematicText.Length; // find end position for underlining
+
+                                var location = CreateLocation(textToken, start, end);
+
+                                return StartIssue(symbol, location);
+                            }
+
+                            // it's a valid text, so we quit
+                            return null;
                         }
+
+                        // we found a completely empty /// line, so ignore it
+                        continue;
+                    }
 
                     default:
                         return StartIssue(symbol, node); // it's no text, so it must be something different

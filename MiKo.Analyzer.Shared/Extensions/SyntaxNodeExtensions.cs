@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
+        private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
@@ -328,8 +329,6 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
-
         internal static string GetMethodName(this ParameterSyntax node)
         {
             var enclosingNode = node.GetEnclosing(MethodNameSyntaxKinds);
@@ -594,6 +593,7 @@ namespace MiKoSolutions.Analyzers
 
             return symbol as ITypeSymbol;
         }
+
         internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, SemanticModel semanticModel)
         {
             var symbol = value.Identifier.GetSymbol(semanticModel);
@@ -620,70 +620,70 @@ namespace MiKoSolutions.Analyzers
             switch (syntaxNode)
             {
                 case BaseTypeDeclarationSyntax type:
+                {
+                    // inspect for attributes
+                    var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+
+                    if (attributeListSyntax != null)
                     {
-                        // inspect for attributes
-                        var attributeListSyntax = type.AttributeLists.FirstOrDefault();
-
-                        if (attributeListSyntax != null)
-                        {
-                            return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                        }
-
-                        return FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+                        return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                     }
+
+                    return FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+                }
 
                 case BaseMethodDeclarationSyntax method:
+                {
+                    var attributeListSyntax = method.AttributeLists.FirstOrDefault();
+
+                    if (attributeListSyntax != null)
                     {
-                        var attributeListSyntax = method.AttributeLists.FirstOrDefault();
-
-                        if (attributeListSyntax != null)
-                        {
-                            return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                        }
-
-                        var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
-
-                        if (commentOnCode != null)
-                        {
-                            return commentOnCode;
-                        }
-
-                        if (method.FirstChild() is SyntaxNode child)
-                        {
-                            return FindDocumentationCommentTriviaSyntaxForNode(child);
-                        }
-
-                        return null;
+                        return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                     }
+
+                    var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+
+                    if (commentOnCode != null)
+                    {
+                        return commentOnCode;
+                    }
+
+                    if (method.FirstChild() is SyntaxNode child)
+                    {
+                        return FindDocumentationCommentTriviaSyntaxForNode(child);
+                    }
+
+                    return null;
+                }
 
                 case BasePropertyDeclarationSyntax property:
+                {
+                    var attributeListSyntax = property.AttributeLists.FirstOrDefault();
+
+                    if (attributeListSyntax != null)
                     {
-                        var attributeListSyntax = property.AttributeLists.FirstOrDefault();
-
-                        if (attributeListSyntax != null)
-                        {
-                            return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                        }
-
-                        var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
-
-                        if (commentOnCode != null)
-                        {
-                            return commentOnCode;
-                        }
-
-                        if (property.FirstChild() is SyntaxNode child)
-                        {
-                            return FindDocumentationCommentTriviaSyntaxForNode(child);
-                        }
-
-                        return null;
+                        return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
                     }
+
+                    var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+
+                    if (commentOnCode != null)
+                    {
+                        return commentOnCode;
+                    }
+
+                    if (property.FirstChild() is SyntaxNode child)
+                    {
+                        return FindDocumentationCommentTriviaSyntaxForNode(child);
+                    }
+
+                    return null;
+                }
 
                 default:
-                    {
-                        return FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
-                    }
+                {
+                    return FindDocumentationCommentTriviaSyntaxForNode(syntaxNode);
+                }
             }
 
             DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
@@ -722,7 +722,7 @@ namespace MiKoSolutions.Analyzers
                 return ReadOnlySpan<char>.Empty;
             }
 
-            return element.GetTextWithoutTrivia().Without(Environment.NewLine).WithoutParaTagsAsSpan().Trim();
+            return element.GetTextWithoutTrivia().Without(Constants.EnvironmentNewLine).WithoutParaTagsAsSpan().Trim();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax text)
@@ -1118,6 +1118,7 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
         internal static bool IsAsync(this MethodDeclarationSyntax value)
         {
             // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -1132,10 +1133,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName)
-        {
-            return value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
-        }
+        internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName) => value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
 
         internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
 
@@ -1187,22 +1185,22 @@ namespace MiKoSolutions.Analyzers
                 {
                     case Constants.XmlTag.Attribute.Langword:
                     case Constants.XmlTag.Attribute.Langref:
+                    {
+                        foreach (var token in attribute.DescendantTokens())
                         {
-                            foreach (var token in attribute.DescendantTokens())
+                            if ("true".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
                             {
-                                if ("true".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    return true;
-                                }
-
-                                if ("false".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    return true;
-                                }
+                                return true;
                             }
 
-                            break;
+                            if ("false".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                            {
+                                return true;
+                            }
                         }
+
+                        break;
+                    }
                 }
             }
 

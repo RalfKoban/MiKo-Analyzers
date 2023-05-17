@@ -248,9 +248,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotSame(CodeFixContext context,  SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(context, args, "SameAs");
+        private static InvocationExpressionSyntax FixAreNotSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(context, args, "SameAs");
 
-        private static InvocationExpressionSyntax FixAreSame(CodeFixContext context,  SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(context, args, "SameAs");
+        private static InvocationExpressionSyntax FixAreSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(context, args, "SameAs");
 
         private static InvocationExpressionSyntax FixCollectionAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), args);
 

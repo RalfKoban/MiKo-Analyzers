@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -19,8 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected override bool IsUnitTestAnalyzer => true;
-
-        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("FluentAssertions.AssertionExtensions") != null;
 
         internal static MemberAccessExpressionSyntax GetIssue(ExpressionStatementSyntax statement)
         {
@@ -40,6 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return null;
         }
+
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("FluentAssertions.AssertionExtensions") != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionStatementSyntax, SyntaxKind.ExpressionStatement);
 

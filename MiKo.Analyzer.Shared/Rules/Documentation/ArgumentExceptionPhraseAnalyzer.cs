@@ -38,8 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // create default proposal for parameter names
             var proposal = parameters
-                           .Select(_ => m_exceptionPhrases[0].FormatWith(_.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Environment.NewLine)
-                           .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Environment.NewLine);
+                           .Select(_ => m_exceptionPhrases[0].FormatWith(_.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Constants.EnvironmentNewLine)
+                           .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Constants.EnvironmentNewLine);
 
             var parameterIndicators = parameters.ToDictionary(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name));
             var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();

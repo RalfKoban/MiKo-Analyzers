@@ -67,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
                         var signatures = methodsWithSameName.Except(method)
                                                             .Select(_ => "   " + _.GetMethodSignature())
-                                                            .ConcatenatedWith(Environment.NewLine);
+                                                            .ConcatenatedWith(Constants.EnvironmentNewLine);
 
                         yield return Issue(method, signatures);
                     }
