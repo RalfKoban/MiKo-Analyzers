@@ -16,12 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2034_CodeFixTitle;
 
-        protected override XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
         {
             return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], RemoveStartingWord(comment));
         }
 
-        protected override XmlElementSyntax NonGenericComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType)
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
             return Comment(comment, Constants.Comments.EnumReturnTypeStartingPhrase, RemoveStartingWord(comment));
         }

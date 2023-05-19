@@ -32,13 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             switch (syntax)
             {
                 case ClassDeclarationSyntax classDeclaration:
                 {
-                    var keyword = MakeStatic(context, classDeclaration)
+                    var keyword = MakeStatic(document, classDeclaration)
                                       ? SyntaxKind.StaticKeyword
                                       : SyntaxKind.SealedKeyword;
 
@@ -61,9 +61,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool MakeStatic(CodeFixContext context, ClassDeclarationSyntax syntax)
+        private static bool MakeStatic(Document document, ClassDeclarationSyntax syntax)
         {
-            var type = syntax.GetTypeSymbol(GetSemanticModel(context));
+            var type = syntax.GetTypeSymbol(GetSemanticModel(document));
 
             // Inspect members, if all are static, then make it static, else make it sealed
             if (type.BaseType is null || type.BaseType.IsObject())

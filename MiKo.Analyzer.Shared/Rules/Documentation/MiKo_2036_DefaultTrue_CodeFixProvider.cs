@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected override string Title => Resources.MiKo_2036_CodeFixTitle_DefaultTrue;
 
-        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(CodeFixContext context, TypeSyntax returnType)
+        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
         {
             yield return XmlText(Constants.Comments.DefaultStartingPhrase);
             yield return SeeLangword_True();

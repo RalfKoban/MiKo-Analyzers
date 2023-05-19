@@ -73,18 +73,18 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static SemanticModel GetSemanticModel(CodeFixContext context) => context.Document.GetSemanticModelAsync(context.CancellationToken).Result;
+        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).Result;
 
-        protected static ISymbol GetSymbol(CodeFixContext context, SyntaxNode syntax) => GetSymbolAsync(context, syntax, CancellationToken.None).Result;
+        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).Result;
 
-        protected static async Task<ISymbol> GetSymbolAsync(CodeFixContext context, SyntaxNode syntax, CancellationToken cancellationToken)
+        protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
         {
-            if (context.CancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
                 return null;
             }
 
-            var semanticModel = await context.Document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
             if (syntax is TypeSyntax typeSyntax)
             {
@@ -94,11 +94,11 @@ namespace MiKoSolutions.Analyzers.Rules
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
 
-        protected static bool IsConst(CodeFixContext context, ArgumentSyntax syntax)
+        protected static bool IsConst(Document document, ArgumentSyntax syntax)
         {
             var identifierName = syntax.Expression.GetName();
 
-            var method = syntax.GetEnclosingMethod(GetSemanticModel(context));
+            var method = syntax.GetEnclosingMethod(GetSemanticModel(document));
             var type = method.FindContainingType();
 
             var isConst = type.GetMembers(identifierName).OfType<IFieldSymbol>().Any(_ => _.IsConst);
@@ -116,11 +116,11 @@ namespace MiKoSolutions.Analyzers.Rules
             return isLocalConst;
         }
 
-        protected static bool IsEnum(CodeFixContext context, ArgumentSyntax syntax)
+        protected static bool IsEnum(Document document, ArgumentSyntax syntax)
         {
             var expression = (MemberAccessExpressionSyntax)syntax.Expression;
 
-            if (GetSymbol(context, expression.Expression) is ITypeSymbol type)
+            if (GetSymbol(document, expression.Expression) is ITypeSymbol type)
             {
                 return type.IsEnum();
             }
@@ -130,16 +130,16 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any();
 
-        protected virtual Task<Solution> ApplySolutionCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(context.Document.Project.Solution);
+        protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
-        protected Task<Document> ApplyDocumentCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic)
+        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
         {
-            if (context.CancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromResult(context.Document);
+                return Task.FromResult(document);
             }
 
-            var updatedSyntax = GetUpdatedSyntax(context, syntax, diagnostic);
+            var updatedSyntax = GetUpdatedSyntax(document, syntax, diagnostic);
 
             var newRoot = root;
 
@@ -151,26 +151,26 @@ namespace MiKoSolutions.Analyzers.Rules
 
                 if (newRoot is null)
                 {
-                    return Task.FromResult(context.Document);
+                    return Task.FromResult(document);
                 }
             }
 
-            if (context.CancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromResult(context.Document);
+                return Task.FromResult(document);
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(context, newRoot, updatedSyntax, diagnostic) ?? newRoot;
-            var newDocument = context.Document.WithSyntaxRoot(finalRoot);
+            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, updatedSyntax, diagnostic) ?? newRoot;
+            var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
         }
 
-        protected Task<Document> ApplyDocumentCodeFixAsync(CodeFixContext context, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic)
+        protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic diagnostic, CancellationToken cancellationToken)
         {
-            if (context.CancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromResult(context.Document);
+                return Task.FromResult(document);
             }
 
             var oldToken = GetToken(trivia, diagnostic);
@@ -178,13 +178,13 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var newRoot = oldToken == updatedToken ? root : root.ReplaceToken(oldToken, updatedToken);
 
-            if (context.CancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
-                return Task.FromResult(context.Document);
+                return Task.FromResult(document);
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(context, newRoot, trivia, diagnostic) ?? newRoot;
-            var newDocument = context.Document.WithSyntaxRoot(finalRoot);
+            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, trivia, diagnostic) ?? newRoot;
+            var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
         }
@@ -193,16 +193,18 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
 
-        protected virtual SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => null;
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null;
 
         protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => null;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
 
         private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)
         {
+            var document = context.Document;
+
             var issueSpan = issue.Location.SourceSpan;
             var startPosition = issueSpan.Start;
 
@@ -210,7 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 var trivia = root.FindTrivia(startPosition);
 
-                return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(context, root, trivia, issue), GetType().Name);
+                return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, trivia, issue, token), GetType().Name);
             }
 
             // TODO RKN
@@ -228,10 +230,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsSolutionWide)
             {
-                return CodeAction.Create(Title, _ => ApplySolutionCodeFixAsync(context, root, syntax, issue, _), GetType().Name);
+                return CodeAction.Create(Title, token => ApplySolutionCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
             }
 
-            return CodeAction.Create(Title, _ => ApplyDocumentCodeFixAsync(context, root, syntax, issue), GetType().Name);
+            return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
         }
     }
 }

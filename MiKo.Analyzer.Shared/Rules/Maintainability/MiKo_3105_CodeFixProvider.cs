@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var original = (InvocationExpressionSyntax)syntax;
 
@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var args = original.ArgumentList.Arguments;
 
-                        var fixedSyntax = UpdatedSyntax(context, maes, args, typeName);
+                        var fixedSyntax = UpdatedSyntax(document, maes, args, typeName);
 
                         if (fixedSyntax != null)
                         {
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
-        private static ExpressionSyntax UpdatedSyntax(CodeFixContext context, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
+        private static ExpressionSyntax UpdatedSyntax(Document document, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
         {
             var methodName = syntax.GetName();
 
@@ -72,14 +72,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AllItemsAreInstancesOfType": return FixAllItemsAreInstancesOfType(args, syntax.Name);
                 case "AllItemsAreNotNull": return FixAllItemsAreNotNull(args);
                 case "AllItemsAreUnique": return FixAllItemsAreUnique(args);
-                case "AreEqual": return FixAreEqual(context, args);
+                case "AreEqual": return FixAreEqual(document, args);
                 case "AreEqualIgnoringCase": return FixAreEqualIgnoringCase(args);
                 case "AreEquivalent": return FixAreEquivalent(args);
-                case "AreNotEqual": return FixAreNotEqual(context, args);
+                case "AreNotEqual": return FixAreNotEqual(document, args);
                 case "AreNotEqualIgnoringCase": return FixAreNotEqualIgnoringCase(args);
                 case "AreNotEquivalent": return FixAreNotEquivalent(args);
-                case "AreNotSame": return FixAreNotSame(context, args);
-                case "AreSame": return FixAreSame(context, args);
+                case "AreNotSame": return FixAreNotSame(document, args);
+                case "AreSame": return FixAreSame(document, args);
                 case "Contains": return FixContains(typeName, args);
                 case "DoesNotContain": return FixDoesNotContain(args, typeName);
                 case "DoesNotMatch": return FixStringAssertDoesNotMatch(args);
@@ -132,11 +132,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAllItemsAreUnique(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Is("Unique"), args, 1);
 
-        private static InvocationExpressionSyntax FixAreEqual(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(context, args, "EqualTo");
+        private static InvocationExpressionSyntax FixAreEqual(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "EqualTo");
 
         private static InvocationExpressionSyntax FixAreEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EqualTo", args[0], "IgnoreCase"), args);
 
-        private static InvocationExpressionSyntax FixAreEqualOrSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static InvocationExpressionSyntax FixAreEqualOrSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -144,8 +144,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is(call, arg0), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg0) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg0): return AssertThat(arg1, Is(call, arg0), args);
+                case SyntaxKind.IdentifierName when IsConst(document, arg0) || IsExpected(arg0): return AssertThat(arg1, Is(call, arg0), args);
                 case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is(call, arg1), args);
 
                 // literals
@@ -173,8 +173,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg1.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is(call, arg1), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg1) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg1): return AssertThat(arg0, Is(call, arg1), args);
+                case SyntaxKind.IdentifierName when IsConst(document, arg1) || IsExpected(arg1): return AssertThat(arg0, Is(call, arg1), args);
                 case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is(call, arg0), args);
 
                 // literals
@@ -204,11 +204,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotEqual(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(context, args, "EqualTo");
+        private static InvocationExpressionSyntax FixAreNotEqual(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "EqualTo");
 
         private static InvocationExpressionSyntax FixAreNotEqualIgnoringCase(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EqualTo", args[0], "IgnoreCase"), args);
 
-        private static InvocationExpressionSyntax FixAreNotEqualOrSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args, string call)
+        private static InvocationExpressionSyntax FixAreNotEqualOrSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args, string call)
         {
             var arg0 = args[0];
             var arg1 = args[1];
@@ -216,8 +216,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg0.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg0) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
+                case SyntaxKind.IdentifierName when IsConst(document, arg0) || IsExpected(arg0): return AssertThat(arg1, Is("Not", call, arg0), args);
                 case SyntaxKind.IdentifierName when IsActual(arg0): return AssertThat(arg0, Is("Not", call, arg1), args);
 
                 // literals
@@ -231,8 +231,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (arg1.Expression.Kind())
             {
                 // constants & enums
-                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(context, arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
-                case SyntaxKind.IdentifierName when IsConst(context, arg1) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.SimpleMemberAccessExpression when IsEnum(document, arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
+                case SyntaxKind.IdentifierName when IsConst(document, arg1) || IsExpected(arg1): return AssertThat(arg0, Is("Not", call, arg1), args);
                 case SyntaxKind.IdentifierName when IsActual(arg1): return AssertThat(arg1, Is("Not", call, arg0), args);
 
                 // literals
@@ -248,9 +248,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixAreNotEquivalent(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[1], Is("Not", "EquivalentTo", args[0]), args);
 
-        private static InvocationExpressionSyntax FixAreNotSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(context, args, "SameAs");
+        private static InvocationExpressionSyntax FixAreNotSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreNotEqualOrSame(document, args, "SameAs");
 
-        private static InvocationExpressionSyntax FixAreSame(CodeFixContext context, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(context, args, "SameAs");
+        private static InvocationExpressionSyntax FixAreSame(Document document, SeparatedSyntaxList<ArgumentSyntax> args) => FixAreEqualOrSame(document, args, "SameAs");
 
         private static InvocationExpressionSyntax FixCollectionAssertContains(SeparatedSyntaxList<ArgumentSyntax> args) => AssertThat(args[0], Does("Contain", args[1]), args);
 

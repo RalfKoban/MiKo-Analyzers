@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -31,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
             var parameterName = GetParameterName(parameterCommentSyntax);
@@ -44,13 +43,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (parameter.GetName() == parameterName)
                 {
-                    return Comment(context, parameterCommentSyntax, parameter, index);
+                    return Comment(document, parameterCommentSyntax, parameter, index);
                 }
             }
 
             return parameterCommentSyntax;
         }
 
-        protected abstract XmlElementSyntax Comment(CodeFixContext context, XmlElementSyntax comment, ParameterSyntax parameter, int index);
+        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index);
     }
 }

@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<PropertyDeclarationSyntax>().FirstOrDefault();
 
-        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => syntax;
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             var propertySyntax = (PropertyDeclarationSyntax)syntax;
 
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (accessors?.Count == 2 && accessors.Value[0].Body is null && accessors.Value[0].ExpressionBody is null && accessors.Value[1].Body is null && accessors.Value[1].ExpressionBody is null)
             {
                 // append a semicolon to the end
-                var initializer = CreateInitializer(context, propertySyntax.Type);
+                var initializer = CreateInitializer(document, propertySyntax.Type);
                 var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".ToSyntaxToken(SyntaxKind.SemicolonToken));
 
                 return root.ReplaceNode(propertySyntax, updatedNode);
@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             if (variable.GetName() == identifierName)
                             {
-                                var initializer = CreateInitializer(context, declaration.Type);
+                                var initializer = CreateInitializer(document, declaration.Type);
                                 var updatedNode = variable.WithInitializer(initializer);
 
                                 return root.ReplaceNode(variable, updatedNode);
@@ -66,9 +66,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root;
         }
 
-        private static EqualsValueClauseSyntax CreateInitializer(CodeFixContext context, TypeSyntax typeSyntax)
+        private static EqualsValueClauseSyntax CreateInitializer(Document document, TypeSyntax typeSyntax)
         {
-            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(context));
+            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(document));
 
             var memberAccess = SimpleMemberAccess(type.Name, type.GetFields().First().Name);
 

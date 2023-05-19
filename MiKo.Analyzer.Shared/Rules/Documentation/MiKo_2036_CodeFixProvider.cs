@@ -2,7 +2,6 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -13,15 +12,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any(MiKo_2036_PropertyDefaultValuePhraseAnalyzer.IsBooleanIssue);
 
-        protected override XmlElementSyntax NonGenericComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType) => WithDefaultComment(context, comment, returnType);
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => WithDefaultComment(document, comment, returnType);
 
-        protected override XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType) => WithDefaultComment(context, comment, returnType);
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType) => WithDefaultComment(document, comment, returnType);
 
-        protected abstract IEnumerable<XmlNodeSyntax> GetDefaultComment(CodeFixContext context, TypeSyntax returnType);
+        protected abstract IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType);
 
-        private XmlElementSyntax WithDefaultComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType)
+        private XmlElementSyntax WithDefaultComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
-            var texts = GetDefaultComment(context, returnType);
+            var texts = GetDefaultComment(document, returnType);
 
             var newContent = comment.Content
                                     .AddRange(texts)

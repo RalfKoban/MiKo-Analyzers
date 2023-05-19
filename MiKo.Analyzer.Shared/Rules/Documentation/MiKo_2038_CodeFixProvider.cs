@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeInfinite);
         }
 
-        protected override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
 
         private static Dictionary<string, string> CreateReplacementMap()
         {

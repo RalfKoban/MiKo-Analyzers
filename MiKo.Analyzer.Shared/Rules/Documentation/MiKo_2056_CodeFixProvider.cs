@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2056_CodeFixTitle;
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(CodeFixContext context, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             foreach (var ancestor in syntax.AncestorsAndSelf())
             {
@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case PropertyDeclarationSyntax _:
                     case MethodDeclarationSyntax _:
                     {
-                        return FixComment(context, ancestor, syntax);
+                        return FixComment(document, ancestor, syntax);
                     }
                 }
             }
@@ -32,11 +32,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override DocumentationCommentTriviaSyntax FixExceptionComment(CodeFixContext context, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment)
+        protected override DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment)
         {
             if (exception.IsExceptionCommentFor<ObjectDisposedException>())
             {
-                var symbol = GetSymbol(context, syntax);
+                var symbol = GetSymbol(document, syntax);
                 var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
 
                 var exceptionComment = CommentEndingWith(exception, phrase);

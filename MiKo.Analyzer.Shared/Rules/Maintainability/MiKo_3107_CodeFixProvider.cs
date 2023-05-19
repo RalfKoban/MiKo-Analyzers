@@ -21,11 +21,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntaxNodes.OfType<InvocationExpressionSyntax>().First();
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var invocation = (InvocationExpressionSyntax)syntax;
 
-            return ReplacementFor(context, invocation).WithTriviaFrom(invocation);
+            return ReplacementFor(document, invocation).WithTriviaFrom(invocation);
         }
 
         private static SyntaxNode ReplacementFor(PredefinedTypeSyntax type)
@@ -45,17 +45,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static SyntaxNode ReplacementFor(CodeFixContext context, InvocationExpressionSyntax invocation)
+        private static SyntaxNode ReplacementFor(Document document, InvocationExpressionSyntax invocation)
         {
             if (invocation.Expression is MemberAccessExpressionSyntax maes && maes.Name is GenericNameSyntax generic)
             {
-                return ReplacementFor(context, generic.TypeArgumentList.Arguments.First());
+                return ReplacementFor(document, generic.TypeArgumentList.Arguments.First());
             }
 
             return Literal(SyntaxKind.NullLiteralExpression);
         }
 
-        private static SyntaxNode ReplacementFor(CodeFixContext context, TypeSyntax typeSyntax)
+        private static SyntaxNode ReplacementFor(Document document, TypeSyntax typeSyntax)
         {
             if (typeSyntax is PredefinedTypeSyntax predefined)
             {
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // it might be a struct or an an enum, so let's check that
-            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(context));
+            var type = typeSyntax.GetTypeSymbol(GetSemanticModel(document));
 
             if (type.IsValueType)
             {

@@ -19,12 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var statement = (ExpressionStatementSyntax)syntax;
 
             var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
-            var assertThat = ConvertToAssertThat(context, shouldNode);
+            var assertThat = ConvertToAssertThat(document, shouldNode);
 
             if (assertThat is null)
             {
@@ -43,14 +43,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return statement.WithExpression(assertThat).WithTriviaFrom(statement);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             // only remove assertions if there are no more diagnostics
             // return root.WithUsing("NUnit.Framework").WithoutUsing("FluentAssertions");
             return root.WithUsing("NUnit.Framework");
         }
 
-        private static InvocationExpressionSyntax ConvertToAssertThat(CodeFixContext context, MemberAccessExpressionSyntax shouldNode)
+        private static InvocationExpressionSyntax ConvertToAssertThat(Document document, MemberAccessExpressionSyntax shouldNode)
         {
             var originalExpression = shouldNode.Expression;
 
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotBeNull": return AssertThat(expression, Is("Not", "Null"), arguments, 0, removeNameColon: true);
                 case "BeEmpty":
                 {
-                    var semanticModel = GetSemanticModel(context);
+                    var semanticModel = GetSemanticModel(document);
                     var type = originalExpression.GetTypeSymbol(semanticModel);
 
                     if (type != null)
@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case "NotBeEmpty":
                 {
-                    var semanticModel = GetSemanticModel(context);
+                    var semanticModel = GetSemanticModel(document);
                     var type = originalExpression.GetTypeSymbol(semanticModel);
 
                     if (type != null)
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var argument = arguments[0];
 
-                        var semanticModel = GetSemanticModel(context);
+                        var semanticModel = GetSemanticModel(document);
                         var type = argument.GetTypeSymbol(semanticModel);
 
                         if (type != null)
@@ -146,7 +146,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var argument = arguments[0];
 
-                        var semanticModel = GetSemanticModel(context);
+                        var semanticModel = GetSemanticModel(document);
                         var type = argument.GetTypeSymbol(semanticModel);
 
                         if (type != null)
@@ -217,7 +217,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argument = arguments.First();
 
-                    var semanticModel = GetSemanticModel(context);
+                    var semanticModel = GetSemanticModel(document);
                     var type = argument.GetTypeSymbol(semanticModel);
 
                     if (type != null)
@@ -266,7 +266,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (argument.Expression is SimpleLambdaExpressionSyntax)
                 {
                     // we need to find out the type
-                    var semanticModel = GetSemanticModel(context);
+                    var semanticModel = GetSemanticModel(document);
                     var type = originalExpression.GetTypeSymbol(semanticModel);
 
                     if (type != null && type.TryGetGenericArgumentCount(out var genericArgumentsCount))

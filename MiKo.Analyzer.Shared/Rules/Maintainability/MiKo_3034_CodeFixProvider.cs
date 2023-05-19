@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().First();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(CodeFixContext context, SyntaxNode syntax, Diagnostic issue)
+        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var parameter = (ParameterSyntax)syntax;
 
@@ -30,6 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             .WithDefault(SyntaxFactory.EqualsValueClause(Literal(SyntaxKind.NullLiteralExpression)));
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => root.WithUsing("System.Runtime.CompilerServices");
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => root.WithUsing("System.Runtime.CompilerServices");
     }
 }

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any();
 
-        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(CodeFixContext context, TypeSyntax returnType)
+        protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
         {
             yield return XmlText(Constants.Comments.NoDefaultPhrase);
         }

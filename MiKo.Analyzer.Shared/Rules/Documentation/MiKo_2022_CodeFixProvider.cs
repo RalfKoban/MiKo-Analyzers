@@ -70,11 +70,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2022_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(CodeFixContext context, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
             var preparedComment = PrepareComment(comment);
 
-            var symbol = (IParameterSymbol)GetSymbol(context, parameter);
+            var symbol = (IParameterSymbol)GetSymbol(document, parameter);
             var phrase = MiKo_2022_OutParamDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
 
             return CommentStartingWith(preparedComment, phrase);

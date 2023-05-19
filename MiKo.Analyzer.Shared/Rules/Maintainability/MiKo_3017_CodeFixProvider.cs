@@ -19,11 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax) => syntax.ArgumentList; // there might be multiple nodes to replace, hence return original and do replacement in GetUpdatedSyntaxRoot
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(CodeFixContext context, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
-            var problematicNode = MiKo_3017_DoNotSwallowExceptionAnalyzer.FindProblematicSyntaxNode(o, GetSemanticModel(context));
+            var problematicNode = MiKo_3017_DoNotSwallowExceptionAnalyzer.FindProblematicSyntaxNode(o, GetSemanticModel(document));
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 

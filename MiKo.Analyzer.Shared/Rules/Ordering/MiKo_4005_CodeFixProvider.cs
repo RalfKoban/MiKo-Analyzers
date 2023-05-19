@@ -17,26 +17,26 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4005_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedTypeSyntax(CodeFixContext context, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
+        protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             switch (typeSyntax)
             {
-                case ClassDeclarationSyntax c: return c.WithBaseList(UpdatedBaseList(context, c.BaseList, c.Identifier));
-                case RecordDeclarationSyntax r: return r.WithBaseList(UpdatedBaseList(context, r.BaseList, r.Identifier));
-                case StructDeclarationSyntax s: return s.WithBaseList(UpdatedBaseList(context, s.BaseList, s.Identifier));
+                case ClassDeclarationSyntax c: return c.WithBaseList(UpdatedBaseList(document, c.BaseList, c.Identifier));
+                case RecordDeclarationSyntax r: return r.WithBaseList(UpdatedBaseList(document, r.BaseList, r.Identifier));
+                case StructDeclarationSyntax s: return s.WithBaseList(UpdatedBaseList(document, s.BaseList, s.Identifier));
 
                 default:
                     return typeSyntax;
             }
         }
 
-        private static BaseListSyntax UpdatedBaseList(CodeFixContext context, BaseListSyntax baseList, SyntaxToken identifier)
+        private static BaseListSyntax UpdatedBaseList(Document document, BaseListSyntax baseList, SyntaxToken identifier)
         {
             var interfaceName = "I" + identifier.ValueText.GetNameOnlyPart();
 
             var baseType = baseList.Types.First();
 
-            var type = baseType.GetTypeSymbol(GetSemanticModel(context));
+            var type = baseType.GetTypeSymbol(GetSemanticModel(document));
 
             var types = new List<BaseTypeSyntax>();
 

@@ -29,12 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2031_CodeFixTitle;
 
-        protected override SyntaxNode Comment(CodeFixContext context, XmlElementSyntax comment, MethodDeclarationSyntax method)
+        protected override SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method)
         {
-            return HandleSpecialMethod(comment, method) ?? base.Comment(context, comment, method);
+            return HandleSpecialMethod(comment, method) ?? base.Comment(document, comment, method);
         }
 
-        protected override XmlElementSyntax GenericComment(CodeFixContext context, XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
         {
             comment = PrepareGenericComment(comment);
 
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], comment.Content);
         }
 
-        protected override XmlElementSyntax NonGenericComment(CodeFixContext context, XmlElementSyntax comment, TypeSyntax returnType)
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
         {
             return Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
         }
