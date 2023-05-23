@@ -455,6 +455,38 @@ namespace log4net
 ");
 
         [Test]
+        public void An_issue_is_reported_for_call_in_method_in_else_block_of_if_statement_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void " + method + @"();
+
+        void Info();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                // missing log call
+            }
+            else
+            {
+                Log." + method + @"();
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_call_in_local_function_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace log4net
 {

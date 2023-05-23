@@ -1071,26 +1071,33 @@ namespace MiKoSolutions.Analyzers
                 {
                     if (ifStatement.IsCallTo(methodName))
                     {
+                        var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
+
+                        if (elseStatement != null && ifStatement.Equals(elseStatement.Parent))
+                        {
+                            // we are in the else part, not the if part, so fail
+                            return false;
+                        }
+
                         return true;
                     }
 
                     // maybe a nested one, so check parent
                     value = ifStatement.Parent;
-
-                    continue;
                 }
-
-                // maybe an else block
-                var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
-
-                if (elseStatement != null)
+                else
                 {
-                    value = elseStatement.Parent;
+                    // maybe an else block
+                    var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
+                    if (elseStatement != null)
+                    {
+                        value = elseStatement.Parent;
 
-                    continue;
+                        continue;
+                    }
+
+                    return false;
                 }
-
-                return false;
             }
         }
 
