@@ -2691,6 +2691,15 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2222_Title" xml:space="preserve">
     <value>Documentation should use the term 'identification' instead of 'ident'</value>
   </data>
+  <data name="MiKo_2223_Description" xml:space="preserve">
+    <value>The XML documentation should link references (such as methods or types) via &lt;see cref="..."/&gt; instead of just having them as plain text. Doing so allows refactoring tools to adjust also those references during renames, thus preventing the documentation from mentioning no-longer-existing code.</value>
+  </data>
+  <data name="MiKo_2223_MessageFormat" xml:space="preserve">
+    <value>Use '&lt;see cref="{0}"/&gt;' instead</value>
+  </data>
+  <data name="MiKo_2223_Title" xml:space="preserve">
+    <value>Documentation links references via &lt;see cref="..."/&gt;</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>

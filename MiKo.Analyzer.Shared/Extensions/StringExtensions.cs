@@ -599,6 +599,9 @@ namespace System
         public static bool IsUpperCase(this char value) => char.IsUpper(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsUpperCaseLetter(this char value) => value.IsLetter() && value.IsUpperCase();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
 
         public static string SecondWord(this string text) => string.Intern(text.AsSpan().WithoutFirstWord().FirstWord().ToString());

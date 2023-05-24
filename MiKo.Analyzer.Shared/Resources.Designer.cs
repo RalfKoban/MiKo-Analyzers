@@ -7565,6 +7565,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The XML documentation should link references (such as methods or types) via &lt;see cref=&quot;...&quot;/&gt; instead of just having them as plain text. Doing so allows refactoring tools to adjust also those references during renames, thus preventing the documentation from mentioning no-longer-existing code..
+        /// </summary>
+        public static string MiKo_2223_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2223_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;&lt;see cref=&quot;{0}&quot;/&gt;&apos; instead.
+        /// </summary>
+        public static string MiKo_2223_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2223_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation links references via &lt;see cref=&quot;...&quot;/&gt;.
+        /// </summary>
+        public static string MiKo_2223_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2223_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
