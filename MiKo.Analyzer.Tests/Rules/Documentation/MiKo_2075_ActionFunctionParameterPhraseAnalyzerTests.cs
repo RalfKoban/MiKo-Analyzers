@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2075_ActionFunctionParameterPhraseAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2075_ActionFunctionParameterPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ProblematicWords = { "action", "func", "function", "Action", "Func", "Function" };
 

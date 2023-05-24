@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
-    public class MiKo_1087_CtorParameterNameAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_1087_CtorParameterNameAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_primary_constructor_on_record() => No_issue_is_reported_for(@"

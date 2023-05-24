@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2219_DocumentationContainsNoQuestionOrExclamationMarkAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2219_DocumentationContainsNoQuestionOrExclamationMarkAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
         private static readonly string[] Markers = { "?", "!" };

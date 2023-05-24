@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3076_StaticMemberInitializerRefersToStaticMemberBelowOrInOtherPartAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3076_StaticMemberInitializerRefersToStaticMemberBelowOrInOtherPartAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_enum() => No_issue_is_reported_for(@"

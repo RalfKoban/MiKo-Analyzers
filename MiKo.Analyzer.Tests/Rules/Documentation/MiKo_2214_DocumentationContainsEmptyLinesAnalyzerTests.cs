@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2214_DocumentationContainsEmptyLinesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2214_DocumentationContainsEmptyLinesAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

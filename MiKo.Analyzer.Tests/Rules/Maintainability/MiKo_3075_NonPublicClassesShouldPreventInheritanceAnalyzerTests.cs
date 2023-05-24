@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3075_NonPublicClassesShouldPreventInheritanceAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3075_NonPublicClassesShouldPreventInheritanceAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_abstract_class_with_accessibility_([Values("public", "internal", "protected", "private")] string accessibility) => No_issue_is_reported_for(@"

@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_simple_lambda_expression_body() => No_issue_is_reported_for(@"

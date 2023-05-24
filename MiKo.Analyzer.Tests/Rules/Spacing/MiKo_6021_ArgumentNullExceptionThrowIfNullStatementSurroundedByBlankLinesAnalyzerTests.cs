@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public class MiKo_6021_ArgumentNullExceptionThrowIfNullStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6021_ArgumentNullExceptionThrowIfNullStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public class MiKo_3114_UseMockOfInsteadMockObjectAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3114_UseMockOfInsteadMockObjectAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_correct_usage() => No_issue_is_reported_for(@"
