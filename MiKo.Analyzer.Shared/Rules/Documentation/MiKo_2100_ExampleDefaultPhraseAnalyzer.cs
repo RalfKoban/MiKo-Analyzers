@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (tokens.None(_ => _.ValueText.TrimStart().StartsWith(Phrase, StringComparison.Ordinal)))
                 {
-                    yield return Issue(symbol.Name, example, Phrase);
+                    yield return Issue(symbol.Name, example.StartTag, Phrase);
                 }
             }
         }
