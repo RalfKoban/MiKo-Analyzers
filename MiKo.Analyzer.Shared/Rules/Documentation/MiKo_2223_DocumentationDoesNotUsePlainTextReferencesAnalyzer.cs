@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,12 +13,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2223";
 
+        private const string TrimChars = ".?!;:,'\"()[]{}%";
+
+        private static readonly char[] SpecialIndicators =
+                                                            {
+                                                                '+',  // seems to be a shortcut
+                                                                '/',  // seems to be a combined word
+                                                                '\\', // seems to be a path word
+                                                            };
+
+        private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
+
         private static readonly HashSet<string> IgnoreTags = new HashSet<string>
+                                                             {
+                                                                 Constants.XmlTag.Code,
+                                                                 Constants.XmlTag.C,
+                                                                 Constants.XmlTag.See,
+                                                                 Constants.XmlTag.SeeAlso,
+                                                                 "a",
+                                                             };
+
+        private static readonly HashSet<string> WellKnownWords = new HashSet<string>
                                                                  {
-                                                                     Constants.XmlTag.Code,
-                                                                     Constants.XmlTag.C,
-                                                                     Constants.XmlTag.See,
-                                                                     Constants.XmlTag.SeeAlso,
+                                                                     "IntelliSense",
+                                                                     "FxCop",
+                                                                     "StyleCop",
+                                                                     "SonarQube",
                                                                  };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
@@ -99,10 +120,57 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 if (TryFindCompoundWord(text, ref start, ref end))
                 {
-                    // we found a compound word, so report that
-                    var location = CreateLocation(token, token.SpanStart + start, token.SpanStart + end);
+                    // get rid of leading or trailing additional characters such as braces or sentence markers
+                    var span = text.AsSpan(start, end - start);
+                    var trimmedStart = span.TrimStart(TrimChars.AsSpan());
+                    var trimmedEnd = span.TrimEnd(TrimChars.AsSpan());
 
-                    yield return Issue(location);
+                    start += span.Length - trimmedStart.Length;
+                    end -= span.Length - trimmedEnd.Length;
+
+                    var trimmed = text.Substring(start, end - start);
+
+                    var compoundWord = true;
+
+                    if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
+                    {
+                        compoundWord = false;
+                    }
+                    else if (trimmed.ContainsAny(SpecialIndicators))
+                    {
+                        compoundWord = false;
+                    }
+                    else if (trimmed.All(char.IsUpper))
+                    {
+                        // seems like an abbreviation such as UML, so do not report
+                        compoundWord = false;
+                    }
+                    else if (trimmed.Length > 31 && Guid.TryParse(trimmed, out _))
+                    {
+                        compoundWord = false;
+                    }
+                    else if (WellKnownWords.Contains(trimmed))
+                    {
+                        compoundWord = false;
+                    }
+
+                    if (compoundWord && trimmed.StartsWith("default(", StringComparison.Ordinal) && trimmed.EndsWith(')') is false)
+                    {
+                        // adjust the default to include the brace as it had been trimmed above
+                        var i = text.IndexOf(')');
+                        if (i != -1)
+                        {
+                            end = i + 1;
+                        }
+                    }
+
+                    if (compoundWord)
+                    {
+                        // we found a compound word, so report that
+                        var location = CreateLocation(token, token.SpanStart + start, token.SpanStart + end);
+
+                        yield return Issue(location);
+                    }
                 }
 
                 // jump over word
