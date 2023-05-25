@@ -406,6 +406,7 @@ public sealed class TestMe
                 results.Add("(" + token + " ");
                 results.Add("(" + token + ")");
                 results.Add(" " + token + ")");
+                results.Add("'" + token + "'");
                 results.Add(token + ",");
                 results.Add(token + ";");
                 results.Add(token + ".");

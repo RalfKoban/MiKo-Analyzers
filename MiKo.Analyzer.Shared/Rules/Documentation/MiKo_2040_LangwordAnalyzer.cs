@@ -78,6 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($" {phrase},", $" {proposal},");
                 results.Add($" {phrase};", $" {proposal};");
                 results.Add($" {phrase}:", $" {proposal}:");
+                results.Add($"'{phrase}'", $"{proposal}");
             }
 
             return results.ToArray();
