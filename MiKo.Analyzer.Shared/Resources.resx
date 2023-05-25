@@ -2700,6 +2700,15 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2223_Title" xml:space="preserve">
     <value>Documentation links references via &lt;see cref="..."/&gt;</value>
   </data>
+  <data name="MiKo_2224_Description" xml:space="preserve">
+    <value>To ease usage, XML documentation should have its XML tags and texts placed on separate lines.</value>
+  </data>
+  <data name="MiKo_2224_MessageFormat" xml:space="preserve">
+    <value>Place '{0}' on separate line</value>
+  </data>
+  <data name="MiKo_2224_Title" xml:space="preserve">
+    <value>Documentation should have XML tags and texts placed on separate lines</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>

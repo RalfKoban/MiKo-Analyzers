@@ -7592,6 +7592,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease usage, XML documentation should have its XML tags and texts placed on separate lines..
+        /// </summary>
+        public static string MiKo_2224_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2224_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;{0}&apos; on separate line.
+        /// </summary>
+        public static string MiKo_2224_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2224_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should have XML tags and texts placed on separate lines.
+        /// </summary>
+        public static string MiKo_2224_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2224_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
