@@ -5,39 +5,39 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers;
-using MiKoSolutions.Analyzers.Rules.Documentation;
-
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2222_CodeFixProvider)), Shared]
-public sealed class MiKo_2222_CodeFixProvider : OverallDocumentationCodeFixProvider
+namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
-
-    public override string FixableDiagnosticId => MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Id;
-
-    protected override string Title => Resources.MiKo_2222_CodeFixTitle;
-
-    protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2222_CodeFixProvider)), Shared]
+    public sealed class MiKo_2222_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        return Comment(syntax, MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Terms, ReplacementMap);
-    }
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
-    private static Dictionary<string, string> CreateReplacementMap()
-    {
-        var dictionary = new Dictionary<string, string>();
+        public override string FixableDiagnosticId => MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Id;
 
-        foreach (var term in MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Terms)
+        protected override string Title => Resources.MiKo_2222_CodeFixTitle;
+
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var replacement = term.Replace(MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Term, "identification");
-            dictionary.Add(term, replacement);
-
-            // alternative 1
-            dictionary.Add(term.Replace('i', 'I'), replacement);
-
-            // alternative 2
-            dictionary.Add(term.ToUpper(), replacement);
+            return Comment(syntax, MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Terms, ReplacementMap);
         }
 
-        return dictionary;
+        private static Dictionary<string, string> CreateReplacementMap()
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            foreach (var term in MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Terms)
+            {
+                var replacement = term.Replace(MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Term, "identification");
+                dictionary.Add(term, replacement);
+
+                // alternative 1
+                dictionary.Add(term.Replace('i', 'I'), replacement);
+
+                // alternative 2
+                dictionary.Add(term.ToUpper(), replacement);
+            }
+
+            return dictionary;
+        }
     }
 }
