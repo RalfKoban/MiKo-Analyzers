@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var currentToken = tokens[i];
 
-                    if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.ValueText.IsNullOrWhiteSpace())
+                    if (currentToken.IsKind(SyntaxKind.XmlTextLiteralToken) && currentToken.LeadingTrivia.Any(SyntaxKind.DocumentationCommentExteriorTrivia) && currentToken.ValueText.IsNullOrWhiteSpace())
                     {
                         var nextToken = tokens[i + 1];
 

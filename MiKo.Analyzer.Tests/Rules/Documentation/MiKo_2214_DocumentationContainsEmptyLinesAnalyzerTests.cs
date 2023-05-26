@@ -34,6 +34,15 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_comment_with_spaces_on_end_of_line() => No_issue_is_reported_for(@"
+/// <summary>   
+/// Some summary.
+/// </summary>
+public class TestMe
+{
+}");
+
+        [Test]
         public void An_issue_is_reported_for_comment_with_empty_line() => An_issue_is_reported_for(@"
 /// <summary>
 /// 
