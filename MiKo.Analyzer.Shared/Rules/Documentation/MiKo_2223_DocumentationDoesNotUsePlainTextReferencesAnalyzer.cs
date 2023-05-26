@@ -17,7 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly char[] SpecialIndicators =
                                                             {
+                                                                '*',  // seems to be a file extension
                                                                 '+',  // seems to be a shortcut
+                                                                '-',  // seems to be an abbreviation
                                                                 '/',  // seems to be a combined word
                                                                 '\\', // seems to be a path word
                                                             };
@@ -35,10 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly HashSet<string> WellKnownWords = new HashSet<string>
                                                                  {
-                                                                     "IntelliSense",
+                                                                     "CSharp",
                                                                      "FxCop",
-                                                                     "StyleCop",
+                                                                     "IntelliSense",
+                                                                     "NCrunch",
+                                                                     "PostSharp",
                                                                      "SonarQube",
+                                                                     "StyleCop",
+                                                                     "VisualBasic",
                                                                  };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
@@ -143,6 +149,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     else if (trimmed.All(char.IsUpper))
                     {
                         // seems like an abbreviation such as UML, so do not report
+                        compoundWord = false;
+                    }
+                    else if (trimmed.EndsWith("'s", StringComparison.Ordinal) && trimmed.Substring(0, trimmed.Length - 2).All(char.IsUpper))
+                    {
+                        // seems like a genitive tense of an abbreviation such as UI's, so do not report
+                        compoundWord = false;
+                    }
+                    else if (trimmed.EndsWith('s') && trimmed.Substring(0, trimmed.Length - 1).All(char.IsUpper))
+                    {
+                        // seems like an abbreviation such as UIs, so do not report
                         compoundWord = false;
                     }
                     else if (trimmed.Length > 31 && Guid.TryParse(trimmed, out _))

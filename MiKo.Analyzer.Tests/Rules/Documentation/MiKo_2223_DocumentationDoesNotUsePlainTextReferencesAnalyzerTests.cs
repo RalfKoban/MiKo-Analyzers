@@ -98,6 +98,51 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_in_plural_form() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something inside UIs that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_in_genitive_case() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something inside UI's parts that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_and_additional_information() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something inside UML-whatever that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_method_with_Guid() => No_issue_is_reported_for(@"
 using System;
 
@@ -173,7 +218,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([Values("IntelliSense", "FxCop", "StyleCop", "SonarQube")] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([Values("IntelliSense", "FxCop", "StyleCop", "SonarQube", "CSharp", "VisualBasic", "NCrunch", "PostSharp")] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -195,6 +240,21 @@ public class TestMe
 {
     /// <summary>
     /// Does something regarding " + text + @" that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_file_extension() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding '*.ZipFile' that is very important.
     /// </summary>
     public void DoSomething()
     {
