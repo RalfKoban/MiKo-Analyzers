@@ -142,14 +142,16 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Guid() => No_issue_is_reported_for(@"
+        [TestCase("{B19F1C23-57F6-4a4E-aa69-5EE303F5184B}")]
+        [TestCase("B19F1C23-57F6-4a4E-aa69-5EE303F5184B")]
+        [TestCase("B19F1C2357F64a4Eaa695EE303F5184B")]
+        public void No_issue_is_reported_for_correctly_documented_method_with_Guid(string guid) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// Does something inside {B19F1C23-57F6-4a4E-aa69-5EE303F5184B} that is very important.
+    /// Does something inside " + guid + @" that is very important.
     /// </summary>
     public void DoSomething()
     {
@@ -255,6 +257,36 @@ public class TestMe
 {
     /// <summary>
     /// Does something regarding '*.ZipFile' that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_hash() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding '#SomeText#' that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_starting_number() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding '123_SomeText' that is very important.
     /// </summary>
     public void DoSomething()
     {
@@ -391,6 +423,21 @@ public class TestMe
     /// </para>
     /// </summary>
     public void DoSomething<TItem>()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_starting_number() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding _123_SomeText that is very important.
+    /// </summary>
+    public void DoSomething()
     {
     }
 }

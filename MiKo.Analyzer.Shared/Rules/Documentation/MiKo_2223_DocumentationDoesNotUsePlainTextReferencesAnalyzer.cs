@@ -22,6 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                 '-',  // seems to be an abbreviation
                                                                 '/',  // seems to be a combined word
                                                                 '\\', // seems to be a path word
+                                                                '#',
                                                             };
 
         private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
@@ -138,36 +139,47 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var compoundWord = true;
 
-                    if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
+                    if (trimmed.Length == 0)
                     {
                         compoundWord = false;
                     }
-                    else if (trimmed.ContainsAny(SpecialIndicators))
+                    else
                     {
-                        compoundWord = false;
-                    }
-                    else if (trimmed.All(char.IsUpper))
-                    {
-                        // seems like an abbreviation such as UML, so do not report
-                        compoundWord = false;
-                    }
-                    else if (trimmed.EndsWith("'s", StringComparison.Ordinal) && trimmed.Substring(0, trimmed.Length - 2).All(char.IsUpper))
-                    {
-                        // seems like a genitive tense of an abbreviation such as UI's, so do not report
-                        compoundWord = false;
-                    }
-                    else if (trimmed.EndsWith('s') && trimmed.Substring(0, trimmed.Length - 1).All(char.IsUpper))
-                    {
-                        // seems like an abbreviation such as UIs, so do not report
-                        compoundWord = false;
-                    }
-                    else if (trimmed.Length > 31 && Guid.TryParse(trimmed, out _))
-                    {
-                        compoundWord = false;
-                    }
-                    else if (WellKnownWords.Contains(trimmed))
-                    {
-                        compoundWord = false;
+                        if (trimmed[0].IsNumber())
+                        {
+                            compoundWord = false;
+                        }
+                        else if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
+                        {
+                            compoundWord = false;
+                        }
+                        else if (trimmed.ContainsAny(SpecialIndicators))
+                        {
+                            compoundWord = false;
+                        }
+                        else if (trimmed.All(char.IsUpper))
+                        {
+                            // seems like an abbreviation such as UML, so do not report
+                            compoundWord = false;
+                        }
+                        else if (trimmed.EndsWith("'s", StringComparison.Ordinal) && trimmed.Substring(0, trimmed.Length - 2).All(char.IsUpper))
+                        {
+                            // seems like a genitive tense of an abbreviation such as UI's, so do not report
+                            compoundWord = false;
+                        }
+                        else if (trimmed.EndsWith('s') && trimmed.Substring(0, trimmed.Length - 1).All(char.IsUpper))
+                        {
+                            // seems like an abbreviation such as UIs, so do not report
+                            compoundWord = false;
+                        }
+                        else if (trimmed.Length > 31 && Guid.TryParse(trimmed, out _))
+                        {
+                            compoundWord = false;
+                        }
+                        else if (WellKnownWords.Contains(trimmed))
+                        {
+                            compoundWord = false;
+                        }
                     }
 
                     if (compoundWord && trimmed.StartsWith("default(", StringComparison.Ordinal) && trimmed.EndsWith(')') is false)
