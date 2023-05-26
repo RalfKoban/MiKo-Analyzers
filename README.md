@@ -240,7 +240,7 @@ The following tables list all the 361 rules that are currently provided by the a
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
 |MiKo_2222|Documentation should use the term 'identification' instead of 'ident'|&#x2713;|&#x2713;|
 |MiKo_2223|Documentation links references via &lt;see cref=&quot;...&quot;/&gt;|&#x2713;|\-|
-|MiKo_2224|Documentation should have XML tags and texts placed on separate lines|&#x2713;|\-|
+|MiKo_2224|Documentation should have XML tags and texts placed on separate lines|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|

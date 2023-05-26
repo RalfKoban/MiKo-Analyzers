@@ -549,6 +549,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, new SyntaxList<XmlNodeSyntax>(contents));
 
+        protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
+
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
         protected static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);

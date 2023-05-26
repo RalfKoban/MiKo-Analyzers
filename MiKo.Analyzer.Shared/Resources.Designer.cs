@@ -7592,6 +7592,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place on separate line.
+        /// </summary>
+        public static string MiKo_2224_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2224_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease usage, XML documentation should have its XML tags and texts placed on separate lines..
         /// </summary>
         public static string MiKo_2224_Description {

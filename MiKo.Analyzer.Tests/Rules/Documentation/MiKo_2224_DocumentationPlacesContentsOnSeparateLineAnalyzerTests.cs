@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -109,7 +110,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + "> " + gap + "</" + tag + @">
+    /// <" + tag + ">" + gap + "</" + tag + @">
     public void DoSomething()
     {
     }
@@ -138,7 +139,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + "><see cref=\"TestMe/></" + tag + @">
+    /// <" + tag + "><see cref=\"TestMe\"/></" + tag + @">
     public void DoSomething()
     {
     }
@@ -153,7 +154,7 @@ using System;
 
 public class TestMe
 {
-    /// <" + tag + @"><see cref=""TestMe/>
+    /// <" + tag + @"><see cref=""TestMe""/>
     /// </" + tag + @">
     public void DoSomething()
     {
@@ -170,7 +171,7 @@ using System;
 public class TestMe
 {
     /// <" + tag + @">
-    /// <see cref=""TestMe/></" + tag + @">
+    /// <see cref=""TestMe""/></" + tag + @">
     public void DoSomething()
     {
     }
@@ -260,8 +261,206 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_with_text()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_text_is_on_same_line_as_start_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Does something.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_text_is_on_same_line_as_end_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.</summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_with_see()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary><see cref=""TestMe"" /></summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe"" />
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_see_is_on_same_line_as_start_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary><see cref=""TestMe""/>
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe""/>
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_see_is_on_same_line_as_end_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe""/></summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <see cref=""TestMe""/>
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2224_CodeFixProvider();
     }
 }
