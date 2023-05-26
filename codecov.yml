@@ -22,7 +22,8 @@ coverage:
 flags:
   api:
     paths:
-      - MiKo.Analyzer/
+      - MiKo.Analyzer.2019/
+      - MiKo.Analyzer.Shared/
   test:
     paths:
       - MiKo.Analyzer.Tests/
