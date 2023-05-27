@@ -27,13 +27,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Terms)
             {
+                var alternative = term.Replace('i', 'I');
+
+                var termWithA = "A " + term.TrimStart();
+                var alternativeWithA = "A " + alternative.TrimStart();
+
                 var replacement = term.Replace(MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Term, "identifier");
+                var replacementWithA = "An " + replacement.TrimStart();
+
+                dictionary.Add(termWithA, replacementWithA);
                 dictionary.Add(term, replacement);
 
-                var alternative = term.Replace('i', 'I');
+                dictionary.Add(alternativeWithA, replacementWithA);
                 dictionary.Add(alternative, replacement);
 
                 // also consider the upper case as its a commonly used abbreviation
+                dictionary.Add(alternativeWithA.ToUpperInvariant(), replacementWithA);
                 dictionary.Add(alternative.ToUpperInvariant(), replacement);
             }
 

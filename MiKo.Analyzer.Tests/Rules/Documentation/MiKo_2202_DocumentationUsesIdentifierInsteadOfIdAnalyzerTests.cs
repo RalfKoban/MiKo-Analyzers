@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Id_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
-/// The " + id + @" something.
+/// The " + id.Trim() + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
@@ -79,7 +79,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongIds))] string wrongText)
+        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongIds))] string wrongId)
         {
             const string Template = @"
 /// <summary>
@@ -88,9 +88,33 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ";
 
+            var wrongText = wrongId.Trim();
             var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_special_start_with_A([ValueSource(nameof(WrongIds))] string wrongId)
+        {
+            const string OriginalTemplate = @"
+/// <summary>
+/// A ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            const string FixedTemplate = @"
+/// <summary>
+/// An ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var wrongText = wrongId.Trim();
+            var correctText = wrongText.Replace("id", "identifier", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(OriginalTemplate.Replace("###", wrongText), FixedTemplate.Replace("###", correctText));
         }
 
         protected override string GetDiagnosticId() => MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Id;
