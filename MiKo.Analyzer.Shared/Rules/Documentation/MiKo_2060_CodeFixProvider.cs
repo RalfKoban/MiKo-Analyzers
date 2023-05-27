@@ -13,9 +13,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly IEnumerable<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().OrderBy(_ => _.Length).ThenBy(_ => _).ToArray();
+        private static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().OrderBy(_ => _.Length)
+                                                                                                                   .ThenBy(_ => _)
+                                                                                                                   .Distinct()
+                                                                                                                   .ToArray();
 
-        private static readonly IEnumerable<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.OrderByDescending(_ => _.Length).ThenBy(_ => _).Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.OrderByDescending(_ => _.Length)
+                                                                                                                             .ThenBy(_ => _)
+                                                                                                                             .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                             .ToArray();
 
         private static readonly Dictionary<string, string> MethodReplacementMap = CreateMethodReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 

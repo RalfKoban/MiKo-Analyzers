@@ -32,15 +32,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
-        protected static T Comment<T>(T syntax, IEnumerable<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
         {
-            var textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
+            Dictionary<XmlTextSyntax, XmlTextSyntax> textMap = null;
 
             var minLength = terms.Min(_ => _.Length);
 
             foreach (var text in syntax.DescendantNodes<XmlTextSyntax>())
             {
-                var tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
+                Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
 
                 // replace token in text
                 foreach (var token in text.TextTokens)
@@ -69,25 +69,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         var newToken = token.WithText(replacedText);
 
+                        if (tokenMap is null)
+                        {
+                            tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
+                        }
+
                         tokenMap.Add(token, newToken);
                     }
                 }
 
-                if (tokenMap.Any())
+                if (tokenMap is null)
+                {
+                    // nothing found, so nothing to replace
+                }
+                else
                 {
                     var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+
+                    if (textMap is null)
+                    {
+                        textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
+                    }
+
                     textMap.Add(text, newText);
                 }
             }
 
-            if (textMap.Any())
+            if (textMap is null)
             {
-                var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
-
-                return result;
+                // nothing found, so nothing to replace
+                return syntax;
             }
 
-            return syntax;
+            var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
+
+            return result;
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
@@ -187,9 +203,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     // in case there is any, get rid of last dot
-                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.') + ending;
 
-                    return comment.ReplaceToken(lastToken, lastToken.WithText(valueText + ending));
+                    return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
                 }
             }
 
@@ -221,9 +237,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     // in case there is any, get rid of last dot
-                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.');
-
-                    text = valueText + commentStart;
+                    text = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.') + commentStart;
                 }
 
                 return comment.ReplaceNode(t, XmlText(text))
@@ -608,9 +622,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return -1;
             }
 
-            return content[0].IsWhiteSpaceOnlyText() && content.Count > 1
-                       ? 1
-                       : 0;
+            if (content.Count > 1 && content[0].IsWhiteSpaceOnlyText())
+            {
+                return 1;
+            }
+
+            return 0;
         }
 
         private static bool IsSameGeneric(TypeSyntax t1, TypeSyntax t2)

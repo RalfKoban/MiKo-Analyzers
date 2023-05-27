@@ -158,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (trueIndex == -1)
             {
                 // cannot fix currently (false case comes as only case)
-                if (comment.IndexOf("otherwise", StringComparison.OrdinalIgnoreCase) == -1)
+                if (comment.Contains("otherwise", StringComparison.OrdinalIgnoreCase) is false)
                 {
                     return false;
                 }

@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (trueIndex == -1)
             {
                 // cannot fix currently (false case comes as only case)
-                if (comment.IndexOf("otherwise", StringComparison.OrdinalIgnoreCase) == -1)
+                if (comment.Contains("otherwise", StringComparison.OrdinalIgnoreCase) is false)
                 {
                     return false;
                 }
@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var startText = GetCorrectStartText(summary);
                         var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether").ToString();
 
-                        var newText = " " + startText + " " + remainingText;
+                        var newText = string.Concat(" ", startText, " ", remainingText);
 
                         if (contents.Count > 1 && contents[1].IsKind(SyntaxKind.XmlText) is false)
                         {
@@ -193,8 +193,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         foreach (var marker in Constants.TrailingSentenceMarkers)
                         {
-                            newText = newText.ReplaceWithCheck($"{marker}.", ".")
-                                             .ReplaceWithCheck($"{marker} .", ".");
+                            newText = newText.ReplaceAll(new[] { $"{marker}.", $"{marker} ." }, ".");
                         }
 
                         summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));
