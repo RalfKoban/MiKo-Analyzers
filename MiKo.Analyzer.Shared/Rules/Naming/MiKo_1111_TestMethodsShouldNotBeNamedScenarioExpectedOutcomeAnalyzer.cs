@@ -120,7 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     builder.Append(FixReturn(parts[0]));
 
-                    builder.Replace(When, If).Replace(If + If, If);
+                    builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
                     result = builder.ToString();
 
@@ -140,7 +140,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     builder.Append(FixReturn(parts[1]));
 
-                    builder.Replace(When, If).Replace(If + If, If);
+                    builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
                     result = builder.ToString();
 
@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         builder.Append(FixReturn(parts[2])).Append(And).Append(FixReturn(parts[1]));
                     }
 
-                    builder.Replace(When, If).Replace(If + If, If);
+                    builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
                     result = builder.ToString();
 

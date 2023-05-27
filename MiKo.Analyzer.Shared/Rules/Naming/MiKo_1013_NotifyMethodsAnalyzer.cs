@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).Replace(StartingPhrase, CorrectStartingPhrase)
-                                                                                                     .Replace(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
+        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
+                                                                                                     .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
                                                                                                      .ToString();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;

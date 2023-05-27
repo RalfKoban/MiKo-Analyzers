@@ -19,10 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).Replace("Fire", "Raise")
-                                                                                                     .Replace("_fire", "_raise")
-                                                                                                     .Replace("Firing", "Raising")
-                                                                                                     .Replace("_firing", "_raising")
+        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).ReplaceWithCheck("Fire", "Raise")
+                                                                                                     .ReplaceWithCheck("_fire", "_raise")
+                                                                                                     .ReplaceWithCheck("Firing", "Raising")
+                                                                                                     .ReplaceWithCheck("_firing", "_raising")
                                                                                                      .ToString();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;

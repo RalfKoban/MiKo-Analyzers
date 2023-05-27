@@ -30,14 +30,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var whitespaces = 0;
 
-            var clearedSummary = new StringBuilder(summary).Replace(" - ", " ")
-                                                           .Replace(" />", "/>")
-                                                           .Replace(" </", "</")
-                                                           .Replace("> <", "><")
-                                                           .Replace(" cref=", "cref=")
-                                                           .Replace(" href=", "href=")
-                                                           .Replace(" type=", "type=")
-                                                           .Replace(" langword=", "langword=")
+            var clearedSummary = new StringBuilder(summary).ReplaceWithCheck(" - ", " ")
+                                                           .ReplaceWithCheck(" />", "/>")
+                                                           .ReplaceWithCheck(" </", "</")
+                                                           .ReplaceWithCheck("> <", "><")
+                                                           .ReplaceWithCheck(" cref=", "cref=")
+                                                           .ReplaceWithCheck(" href=", "href=")
+                                                           .ReplaceWithCheck(" type=", "type=")
+                                                           .ReplaceWithCheck(" langword=", "langword=")
                                                            .ToString()
                                                            .Trim();
 

@@ -187,14 +187,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var newText = new StringBuilder(valueText).Without("otherwise").Without("false").Replace("; , .", ".");
+                    var newText = new StringBuilder(valueText).Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
 
                     if (valueText.Length > newText.Length)
                     {
                         foreach (var marker in Constants.TrailingSentenceMarkers)
                         {
-                            newText = newText.Replace($"{marker}.", ".")
-                                             .Replace($"{marker} .", ".");
+                            newText = newText.ReplaceWithCheck($"{marker}.", ".")
+                                             .ReplaceWithCheck($"{marker} .", ".");
                         }
 
                         summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));

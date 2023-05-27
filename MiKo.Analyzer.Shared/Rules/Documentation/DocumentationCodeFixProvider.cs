@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         foreach (var pair in replacementMap)
                         {
-                            replacedText.Replace(pair.Key, pair.Value);
+                            replacedText.ReplaceWithCheck(pair.Key, pair.Value);
                         }
 
                         var newToken = token.WithText(replacedText);

@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 result = new StringBuilder(result).ReplaceAll(CanPhrases, CanReplacement)
-                                                  .Replace(UsedToPhrase, UsedToReplacement)
+                                                  .ReplaceWithCheck(UsedToPhrase, UsedToReplacement)
                                                   .ReplaceAll(UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement)
                                                   .ReplaceAll(UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement)
                                                   .ReplaceAll(UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement)

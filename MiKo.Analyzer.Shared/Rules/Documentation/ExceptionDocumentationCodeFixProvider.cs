@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parametersAsTextReferences = parameters.SelectMany(GetParameterAsTextReference).ToArray();
 
             // seems we found the reference in text, so we have to split the text into 2 separate ones and place a <paramref/> between
-            var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTrivia().ContainsAny(parametersAsTextReferences)).ToList();
+            var textNodes = exceptionComment.DescendantNodes<XmlTextSyntax>(_ => _.GetTextWithoutTriviaLazy().Any(__ => __.ContainsAny(parametersAsTextReferences))).ToList();
 
             if (textNodes.Any())
             {
@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (replaced.Content.First() is XmlTextSyntax newText)
                 {
-                    var firstWord = newText.GetTextWithoutTrivia().FirstWord();
+                    var firstWord = newText.GetTextWithoutTriviaLazy().FirstOrDefault(_ => _.IsNullOrWhiteSpace() is false).FirstWord();
 
                     if (firstWord.IsNullOrWhiteSpace() is false)
                     {

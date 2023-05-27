@@ -758,6 +758,23 @@ namespace MiKoSolutions.Analyzers
 
             var builder = new StringBuilder();
 
+            foreach (var valueText in text.GetTextWithoutTriviaLazy())
+            {
+                builder.Append(valueText);
+            }
+
+            var result = builder.ToString();
+
+            return result.Trim();
+        }
+
+        internal static IEnumerable<string> GetTextWithoutTriviaLazy(this XmlTextSyntax text)
+        {
+            if (text is null)
+            {
+                yield break;
+            }
+
             foreach (var token in text.TextTokens)
             {
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
@@ -765,12 +782,8 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                builder.Append(token.WithoutTrivia().ValueText);
+                yield return token.WithoutTrivia().ValueText;
             }
-
-            var result = builder.ToString();
-
-            return result.Trim();
         }
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
@@ -1144,7 +1157,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
 
-        internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value) => value.GetTextWithoutTrivia().IsNullOrWhiteSpace();
+        internal static bool IsWhiteSpaceOnlyText(this XmlTextSyntax value)
+        {
+            foreach (var text in value.GetTextWithoutTriviaLazy())
+            {
+                if (text.IsNullOrWhiteSpace() is false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         internal static bool IsParameter(this IdentifierNameSyntax node, SemanticModel semanticModel) => node.EnclosingMethodHasParameter(node.GetName(), semanticModel);
 
@@ -1437,7 +1461,7 @@ namespace MiKoSolutions.Analyzers
 
                 foreach (var phrase in phrases.Where(_ => text.Contains(_)))
                 {
-                    result.Replace(phrase, replacement);
+                    result.ReplaceWithCheck(phrase, replacement);
 
                     replaced = true;
                 }
@@ -1732,7 +1756,7 @@ namespace MiKoSolutions.Analyzers
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = new StringBuilder(token.Text).Without(text).Replace("  ", " ").ToString();
+                            var modifiedText = new StringBuilder(token.Text).Without(text).ReplaceWithCheck("  ", " ").ToString();
 
                             if (modifiedText.IsNullOrWhiteSpace())
                             {

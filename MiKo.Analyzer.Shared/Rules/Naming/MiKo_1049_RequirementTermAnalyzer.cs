@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var pair in ReplacementMap)
             {
-                result.Replace(pair.Key, pair.Value);
+                result.ReplaceWithCheck(pair.Key, pair.Value);
             }
 
             return result.ToString();
@@ -93,11 +93,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            var symbolName = new StringBuilder(symbol.Name).Replace("efresh", "#") // filter 'refresh' and 'Refresh'
-                                                           .Replace("hallow", "#") // filter 'shallow' and 'Shallow'
-                                                           .Replace("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
-                                                           .Replace("eeded", "#") // filter 'needed' and 'Needed'
-                                                           .Replace("eeds", "#") // filter 'needs' and 'Needs'
+            var symbolName = new StringBuilder(symbol.Name).ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
+                                                           .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
+                                                           .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                                           .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
+                                                           .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
                                                            .ToString();
 
             return Constants.Markers.Requirements

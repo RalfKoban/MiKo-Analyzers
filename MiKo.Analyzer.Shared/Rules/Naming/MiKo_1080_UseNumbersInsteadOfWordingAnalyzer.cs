@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var part in KnownParts)
             {
-                finalName.Replace(part, "#");
+                finalName.ReplaceWithCheck(part, "#");
             }
 
             return finalName.ToString();

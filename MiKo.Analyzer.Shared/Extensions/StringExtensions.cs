@@ -312,8 +312,12 @@ namespace System
 
         public static string FirstWord(this string value)
         {
-            var span = value.AsSpan();
+            if (value is null)
+            {
+                return null;
+            }
 
+            var span = value.AsSpan();
             var word = FirstWord(span);
 
             return word != span
@@ -797,7 +801,7 @@ namespace System
 
         public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).ToString();
 
-        public static StringBuilder Without(this StringBuilder value, string phrase) => value.Replace(phrase, string.Empty);
+        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
 
         public static StringBuilder Without(this StringBuilder value, string[] phrases)
         {

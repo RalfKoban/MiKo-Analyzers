@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            var betterName = new StringBuilder(symbolName).Replace("TypeEnum", "Kind")
+            var betterName = new StringBuilder(symbolName).ReplaceWithCheck("TypeEnum", "Kind")
                                                           .Without(WrongNames)
                                                           .ToString();
 
