@@ -50,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string guid) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
-/// The " + guid + @" something.
+/// The " + guid.Trim() + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
@@ -72,14 +72,14 @@ public sealed class TestMe { }
         public void No_issue_is_reported_for_Guid_in_code_tag_([Values("c", "code")] string xmlTag, [ValueSource(nameof(WrongGuids))] string guid) => No_issue_is_reported_for(@"
 /// <summary>
 /// <" + xmlTag + @">
-/// The " + guid + @" something.
+/// The " + guid.Trim() + @" something.
 /// </" + xmlTag + @">
 /// </summary>
 public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongGuids))] string wrongText)
+        public void Code_gets_fixed_for_type_([ValueSource(nameof(WrongGuids))] string wrongGuid)
         {
             const string Template = @"
 /// <summary>
@@ -88,9 +88,33 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ";
 
+            var wrongText = wrongGuid.Trim();
             var correctText = wrongText.Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
 
             VerifyCSharpFix(Template.Replace("###", wrongText), Template.Replace("###", correctText));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_special_start_with_A_([ValueSource(nameof(WrongGuids))] string wrongGuid)
+        {
+            const string OriginalTemplate = @"
+/// <summary>
+/// A ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            const string FixedTemplate = @"
+/// <summary>
+/// An ### something.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            var wrongText = wrongGuid.Trim();
+            var correctText = wrongText.Replace("guid", "unique identifier", StringComparison.OrdinalIgnoreCase);
+
+            VerifyCSharpFix(OriginalTemplate.Replace("###", wrongText), FixedTemplate.Replace("###", correctText));
         }
 
         protected override string GetDiagnosticId() => MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Id;

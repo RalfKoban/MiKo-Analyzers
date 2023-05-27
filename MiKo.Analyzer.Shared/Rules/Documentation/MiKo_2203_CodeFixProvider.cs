@@ -27,7 +27,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var term in MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Phrases)
             {
+                var termWithA = "A " + term.TrimStart();
+
                 var replacement = term.ToUpperInvariant().Replace("GUID", "unique identifier");
+                var replacementWithA = "An " + replacement.TrimStart();
+
+                dictionary.Add(termWithA, replacementWithA);
                 dictionary.Add(term, replacement);
             }
 

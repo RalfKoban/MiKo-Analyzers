@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2203";
 
-        internal static readonly string[] Guids = { "guid", " Guid", "GUID" };
+        internal static readonly string[] Guids = { "guid", "Guid", "GUID" };
 
         internal static readonly string[] Phrases = GetWithDelimiters(Guids);
 
