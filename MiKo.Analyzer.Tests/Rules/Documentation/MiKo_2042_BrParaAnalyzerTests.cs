@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] WrongItems = CreateWrongItems();
 
         [Test]
-        public void Wrong_documentation_is_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_documentation_on_class_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something. " + finding + @"
 /// </summary>
@@ -29,61 +29,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_documentation_is_reported_on_method_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
-public sealed class TestMe
-{
-    /// <summary>
-    /// Does something. " + finding + @"
-    /// </summary>
-    public void Malform() { }
-}
-");
-
-        [Test]
-        public void Wrong_documentation_is_reported_on_property_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
-public sealed class TestMe
-{
-    /// <summary>
-    /// Does something. " + finding + @"
-    /// </summary>
-    public int Malform { get; set; }
-}
-");
-
-        [Test]
-        public void Wrong_documentation_is_reported_on_event_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
-public sealed class TestMe
-{
-    /// <summary>
-    /// Does something. " + finding + @"
-    /// </summary>
-    public event EventHandler Malform;
-}
-");
-
-        [Test]
-        public void Wrong_documentation_is_reported_on_field_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
-public sealed class TestMe
-{
-    /// <summary>
-    /// Does something. " + finding + @"
-    /// </summary>
-    private string Malform;
-}
-");
-
-        [Test]
-        public void Valid_documentation_is_not_reported_on_class_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
-/// <summary>
-/// Does something. " + finding + @"
-/// </summary>
-public sealed class TestMe
-{
-}
-");
-
-        [Test]
-        public void Valid_documentation_is_not_reported_on_method_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_documentation_on_method_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -94,7 +40,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_property_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_documentation_on_property_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -105,7 +51,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_event_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_documentation_on_event_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -116,7 +62,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_documentation_is_not_reported_on_field_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_documentation_on_field_([ValueSource(nameof(CorrectItems))] string finding) => No_issue_is_reported_for(@"
 public sealed class TestMe
 {
     /// <summary>
@@ -127,7 +73,7 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Valid_example_for_documentation_is_not_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_valid_example_on_class_([ValueSource(nameof(WrongItems))] string finding) => No_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -140,7 +86,61 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Wrong_example_for_documentation_is_reported_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_documentation_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+/// <summary>
+/// Does something. " + finding + @"
+/// </summary>
+public sealed class TestMe
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_documentation_on_method_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something. " + finding + @"
+    /// </summary>
+    public void Malform() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_documentation_on_property_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something. " + finding + @"
+    /// </summary>
+    public int Malform { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_documentation_on_event_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something. " + finding + @"
+    /// </summary>
+    public event EventHandler Malform;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_documentation_on_field_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
+public sealed class TestMe
+{
+    /// <summary>
+    /// Does something. " + finding + @"
+    /// </summary>
+    private string Malform;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_example_on_class_([ValueSource(nameof(WrongItems))] string finding) => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>
@@ -155,7 +155,7 @@ public sealed class TestMe
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void Wrong_combined_example_for_documentation_is_reported_on_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_combined_example_on_class() => An_issue_is_reported_for(@"
 /// <summary>
 /// Does something.
 /// </summary>

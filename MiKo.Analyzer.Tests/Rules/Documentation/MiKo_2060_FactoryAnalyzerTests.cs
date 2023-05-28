@@ -559,17 +559,22 @@ internal interface IFactory
                                   " new instances of",
                               };
 
-            foreach (var start in startingPhrases)
+            foreach (var startingPhrase in startingPhrases)
             {
                 foreach (var article in articles)
                 {
                     foreach (var middle in middles)
                     {
-                        var phrase = string.IsNullOrWhiteSpace(middle)
-                                         ? start + article
-                                         : start + article + middle + article;
+                        var start = startingPhrase + article;
 
-                        yield return phrase;
+                        if (string.IsNullOrWhiteSpace(middle))
+                        {
+                            yield return start;
+                        }
+                        else
+                        {
+                            yield return string.Concat(start, middle, article);
+                        }
                     }
                 }
             }
