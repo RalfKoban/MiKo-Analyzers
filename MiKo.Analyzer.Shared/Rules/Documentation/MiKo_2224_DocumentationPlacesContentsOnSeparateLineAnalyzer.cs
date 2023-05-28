@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        var line = token.GetLocation().GetLineSpan().StartLinePosition.Line;
+                        var line = token.GetStartingLine();
 
                         if (lines.Contains(line))
                         {
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    var line = content.GetLocation().GetLineSpan().StartLinePosition.Line;
+                    var line = content.GetStartingLine();
 
                     if (lines.Contains(line))
                     {
@@ -83,8 +83,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var startTagLine = element.StartTag.GetLocation().GetLineSpan().StartLinePosition.Line;
-                var endTagLine = element.EndTag.GetLocation().GetLineSpan().StartLinePosition.Line;
+                var startTagLine = element.StartTag.GetStartingLine();
+                var endTagLine = element.EndTag.GetStartingLine();
 
                 var startLineOnSeparateLine = lines.Add(startTagLine);
                 var endLineOnSeparateLine = lines.Add(endTagLine);

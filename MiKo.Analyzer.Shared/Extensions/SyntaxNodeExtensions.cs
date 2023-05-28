@@ -516,6 +516,10 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<string>();
         }
 
+        internal static int GetStartingLine(this SyntaxNode value) => value.GetLocation().GetStartingLine();
+
+        internal static int GetEndingLine(this SyntaxNode value) => value.GetLocation().GetEndingLine();
+
         internal static ISymbol GetSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
             var symbolInfo = GetSymbolInfo();

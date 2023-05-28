@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         continue;
 
                     case LocalDeclarationStatementSyntax s:
-                        CountLinesOfCode(s.Declaration.GetLocation().GetLineSpan().StartLinePosition, lines);
+                        CountLinesOfCode(s.Declaration.GetStartingLine(), lines);
 
                         // get normal initializers and object initializers
                         foreach (var variable in s.Declaration.Variables)
@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                         break;
 
                     case ReturnStatementSyntax s:
-                        CountLinesOfCode(s.GetLocation().GetLineSpan().StartLinePosition, lines);
+                        CountLinesOfCode(s.GetStartingLine(), lines);
 
                         if (s.Expression != null)
                         {
@@ -159,14 +159,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             }
         }
 
-        private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => lines.Add(position.Line);
+        private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => CountLinesOfCode(position.Line, lines);
 
         private static void CountLinesOfCode(Location location, ISet<int> lines)
         {
-            var lineSpan = location.GetLineSpan();
-
-            CountLinesOfCode(lineSpan.StartLinePosition, lines);
-            CountLinesOfCode(lineSpan.EndLinePosition, lines);
+            CountLinesOfCode(location.GetStartingLine(), lines);
+            CountLinesOfCode(location.GetEndingLine(), lines);
         }
+
+        private static void CountLinesOfCode(int line, ISet<int> lines) => lines.Add(line);
     }
 }

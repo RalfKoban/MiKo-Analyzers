@@ -18,6 +18,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
+        internal static int GetStartingLine(this SyntaxToken value) => value.GetLocation().GetStartingLine();
+
+        internal static int GetEndingLine(this SyntaxToken value) => value.GetLocation().GetEndingLine();
+
         internal static ISymbol GetSymbol(this SyntaxToken value, Compilation compilation)
         {
             if (value.SyntaxTree is null)

@@ -15,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected static bool HasNoBlankLinesBefore(FileLinePositionSpan callLineSpan, SyntaxNode other)
         {
-            var otherLineSpan = other.GetLocation().GetLineSpan();
+            var endingLine = other.GetLocation().GetEndingLine();
 
-            var differenceBefore = callLineSpan.StartLinePosition.Line - otherLineSpan.EndLinePosition.Line;
+            var differenceBefore = callLineSpan.StartLinePosition.Line - endingLine;
 
             return differenceBefore == 1;
         }
@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected static bool HasNoBlankLinesAfter(FileLinePositionSpan callLineSpan, SyntaxNode other)
         {
-            var otherLineSpan = other.GetLocation().GetLineSpan();
+            var startingLine = other.GetLocation().GetStartingLine();
 
-            var differenceAfter = otherLineSpan.StartLinePosition.Line - callLineSpan.EndLinePosition.Line;
+            var differenceAfter = startingLine - callLineSpan.EndLinePosition.Line;
 
             return differenceAfter == 1;
         }
