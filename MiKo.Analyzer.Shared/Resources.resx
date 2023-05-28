@@ -2712,6 +2712,21 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2224_Title" xml:space="preserve">
     <value>Documentation should have XML tags and texts placed on separate lines</value>
   </data>
+  <data name="MiKo_2225_CodeFixTitle" xml:space="preserve">
+    <value>Place on same line</value>
+  </data>
+  <data name="MiKo_2225_Description" xml:space="preserve">
+    <value>The &lt;c&gt; tag allows developers to indicate that text within a description should be marked as code. However, the text should be a single line. To indicate multiple lines as code, the &lt;code&gt; tag has to be used.</value>
+  </data>
+  <data name="MiKo_2225_HelpLinkUri" xml:space="preserve">
+    <value>https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#c</value>
+  </data>
+  <data name="MiKo_2225_MessageFormat" xml:space="preserve">
+    <value>Place '&lt;c&gt;' tag with its content on same line</value>
+  </data>
+  <data name="MiKo_2225_Title" xml:space="preserve">
+    <value>Code marked with &lt;c&gt; tags should be placed on single line</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>

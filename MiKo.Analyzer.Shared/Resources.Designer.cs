@@ -7628,6 +7628,51 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place on same line.
+        /// </summary>
+        public static string MiKo_2225_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2225_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &lt;c&gt; tag allows developers to indicate that text within a description should be marked as code. However, the text should be a single line. To indicate multiple lines as code, the &lt;code&gt; tag has to be used..
+        /// </summary>
+        public static string MiKo_2225_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2225_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#c.
+        /// </summary>
+        public static string MiKo_2225_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_2225_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;&lt;c&gt;&apos; tag with its content on same line.
+        /// </summary>
+        public static string MiKo_2225_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2225_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code marked with &lt;c&gt; tags should be placed on single line.
+        /// </summary>
+        public static string MiKo_2225_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2225_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
