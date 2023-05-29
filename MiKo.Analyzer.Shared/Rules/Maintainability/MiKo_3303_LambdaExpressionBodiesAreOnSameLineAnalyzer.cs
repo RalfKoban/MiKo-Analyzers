@@ -16,17 +16,44 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeParenthesizedLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
 
+        private static bool CanAnalyzeBody(SyntaxNode lambda)
+        {
+            switch (lambda)
+            {
+                case ParenthesizedLambdaExpressionSyntax p when p.ExpressionBody != null: return CanAnalyze(p.Body);
+                case SimpleLambdaExpressionSyntax s when s.ExpressionBody != null: return CanAnalyze(s.Body);
+                default:
+                    return false; // nothing to analyze
+            }
+
+            bool CanAnalyze(SyntaxNode body)
+            {
+                if (body is ObjectCreationExpressionSyntax o)
+                {
+                    if (o.Initializer?.Expressions.Count > 1)
+                    {
+                        // initializers are allowed to span multiple lines, so nothing to analyze here
+                        return false;
+                    }
+
+                    if (o.ArgumentList?.Arguments.Count > 1)
+                    {
+                        // a lot of arguments are allowed to span multiple lines, so nothing to analyze here
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
         private void AnalyzeParenthesizedLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var lambda = context.Node;
 
-            switch (lambda)
+            if (CanAnalyzeBody(lambda))
             {
-                case ParenthesizedLambdaExpressionSyntax p when p.ExpressionBody != null:
-                case SimpleLambdaExpressionSyntax s when s.ExpressionBody != null:
-                    AnalyzeBody(context, lambda);
-
-                    break;
+                AnalyzeBody(context, lambda);
             }
         }
 

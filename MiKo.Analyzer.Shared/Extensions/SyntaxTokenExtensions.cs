@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
+        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use non-elastic one to prevent formatting to be done automatically
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
@@ -137,6 +137,8 @@ namespace MiKoSolutions.Analyzers
 
             return tokens;
         }
+
+        internal static SyntaxToken WithSurroundingSpace(this SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
 
         internal static SyntaxToken WithText(this SyntaxToken token, string text) => SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), text, text, token.TrailingTrivia);
 
