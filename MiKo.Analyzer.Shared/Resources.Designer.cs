@@ -11104,6 +11104,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place on single line.
+        /// </summary>
+        public static string MiKo_3303_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3303_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines..
+        /// </summary>
+        public static string MiKo_3303_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3303_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place lambda on single line.
+        /// </summary>
+        public static string MiKo_3303_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3303_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expression bodies of lambdas should be placed on same line as lambda itself.
+        /// </summary>
+        public static string MiKo_3303_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3303_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
         ///Such namespaces should be flattened..
         /// </summary>
