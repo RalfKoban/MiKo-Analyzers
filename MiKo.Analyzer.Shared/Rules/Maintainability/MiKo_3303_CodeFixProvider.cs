@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -42,25 +44,53 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax lambda) => lambda.WithParameterList(lambda.ParameterList.WithoutTrivia())
-                                                                                                                          .WithArrowToken(lambda.ArrowToken.WithSurroundingSpace())
-                                                                                                                          .WithExpressionBody(GetUpdatedSyntax(lambda.ExpressionBody));
+        private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax) => syntax.WithParameterList(GetUpdatedSyntax(syntax.ParameterList))
+                                                                                                                                 .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
+                                                                                                                                 .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody));
 
-        private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax lambda) => lambda.WithParameter(lambda.Parameter.WithoutTrivia())
-                                                                                                                   .WithArrowToken(lambda.ArrowToken.WithSurroundingSpace())
-                                                                                                                   .WithExpressionBody(GetUpdatedSyntax(lambda.ExpressionBody));
+        private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax) => syntax.WithParameter(GetUpdatedSyntax(syntax.Parameter))
+                                                                                                                   .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
+                                                                                                                   .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody));
 
-        private static ExpressionSyntax GetUpdatedSyntax(ExpressionSyntax expression)
+        private static ExpressionSyntax GetUpdatedSyntax(ExpressionSyntax syntax)
         {
-            if (expression is BinaryExpressionSyntax binary)
+            switch (syntax)
             {
-                return binary.WithoutTrivia()
-                             .WithLeft(GetUpdatedSyntax(binary.Left))
-                             .WithOperatorToken(binary.OperatorToken.WithSurroundingSpace())
-                             .WithRight(GetUpdatedSyntax(binary.Right));
-            }
+                case BinaryExpressionSyntax binary:
+                    return binary.WithoutTrivia()
+                                 .WithLeft(GetUpdatedSyntax(binary.Left))
+                                 .WithOperatorToken(GetUpdatedSyntax(binary.OperatorToken))
+                                 .WithRight(GetUpdatedSyntax(binary.Right));
 
-            return expression.WithoutTrivia();
+                case InvocationExpressionSyntax invocation:
+                    return invocation.WithoutTrivia()
+                                     .WithExpression(GetUpdatedSyntax(invocation.Expression))
+                                     .WithArgumentList(GetUpdatedSyntax(invocation.ArgumentList));
+
+                case MemberAccessExpressionSyntax maes:
+                    return maes.WithoutTrivia()
+                               .WithName(GetUpdatedSyntax(maes.Name))
+                               .WithOperatorToken(maes.OperatorToken.WithoutTrivia()) // remove the spaces or line breaks around the dot
+                               .WithExpression(GetUpdatedSyntax(maes.Expression));
+
+                default:
+                    return syntax.WithoutTrivia();
+            }
         }
+
+        private static ArgumentListSyntax GetUpdatedSyntax(ArgumentListSyntax syntax) => syntax?.WithoutTrivia()
+                                                                                               .WithOpenParenToken(syntax.OpenParenToken.WithoutTrivia()) // remove the spaces or line breaks around the opening parenthesis
+                                                                                               .WithArguments(SyntaxFactory.SeparatedList(syntax.Arguments.Select(GetUpdatedSyntax)))
+                                                                                               .WithCloseParenToken(syntax.CloseParenToken.WithoutTrivia()); // remove the spaces or line breaks around the closing parenthesis
+
+        private static ArgumentSyntax GetUpdatedSyntax(ArgumentSyntax syntax) => syntax.WithoutTrivia();
+
+        private static ParameterListSyntax GetUpdatedSyntax(ParameterListSyntax syntax) => syntax.WithoutTrivia();
+
+        private static ParameterSyntax GetUpdatedSyntax(ParameterSyntax syntax) => syntax.WithoutTrivia();
+
+        private static T GetUpdatedSyntax<T>(T syntax) where T : NameSyntax => syntax?.WithoutTrivia();
+
+        private static SyntaxToken GetUpdatedSyntax(SyntaxToken token) => token.WithSurroundingSpace();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -142,7 +140,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_line_and_contains_an_object_creation_with_initializer() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_and_contains_an_object_creation_with_initializer() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -171,7 +169,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_line_and_contains_an_object_creation_with_argumentList() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_and_contains_an_object_creation_with_argumentList() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -243,7 +241,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_line_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -265,7 +263,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_line_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -287,7 +285,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_parenthesized_multi_parameter_lambda_expression_body_that_spans_multiple_line_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_parenthesized_multi_parameter_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -405,7 +403,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_spans_multiple_line_if_line_break_is_before_arrow()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -452,7 +450,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_spans_multiple_line_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -499,7 +497,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_2_parameter_lambda_expression_body_that_spans_multiple_line_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_parenthesized_2_parameter_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -548,7 +546,7 @@ namespace Bla
         }
 
         [Test]
-        public void Code_gets_fixed_for_parenthesized_3_parameter_lambda_expression_body_that_spans_multiple_line_if_line_break_is_after_arrow()
+        public void Code_gets_fixed_for_parenthesized_3_parameter_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_after_arrow()
         {
             const string OriginalCode = @"
 using System;
@@ -585,6 +583,57 @@ namespace Bla
         public int DoSomething()
         {
             return DoSomethingCore((x, y, z) => x + y + z);
+        }
+
+        private int DoSomethingCore(Func<int, int, int, int> callback)
+        {
+            return callback();
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_invocation_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y, z) => 
+                                                TestMe
+                                                    .DoSomething(
+                                                                x,
+                                                                    y,
+                                                                        z));
+        }
+
+        private int DoSomethingCore(Func<int, int, int, int> callback)
+        {
+            return callback();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y, z) => TestMe.DoSomething(x, y, z));
         }
 
         private int DoSomethingCore(Func<int, int, int, int> callback)
