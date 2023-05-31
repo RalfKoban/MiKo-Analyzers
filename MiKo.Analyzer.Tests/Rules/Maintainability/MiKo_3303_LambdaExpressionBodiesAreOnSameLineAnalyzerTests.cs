@@ -647,6 +647,54 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_invocation_whose_parameters_span_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y, z) => TestMe.DoSomething(x,
+                                                                       string.Format(""{0} is some very strange number, {1} would fit much better whereas {2} would be best"", a, b, c),
+                                                                            z));
+        }
+
+        private int DoSomethingCore(Func<int, string, int, int> callback)
+        {
+            return callback();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y, z) => TestMe.DoSomething(x, string.Format(""{0} is some very strange number, {1} would fit much better whereas {2} would be best"", a, b, c), z));
+        }
+
+        private int DoSomethingCore(Func<int, string, int, int> callback)
+        {
+            return callback();
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer();

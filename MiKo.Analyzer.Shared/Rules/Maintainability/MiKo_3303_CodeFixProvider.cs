@@ -73,6 +73,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                .WithOperatorToken(maes.OperatorToken.WithoutTrivia()) // remove the spaces or line breaks around the dot
                                .WithExpression(GetUpdatedSyntax(maes.Expression));
 
+                case IdentifierNameSyntax identifier:
+                    return GetUpdatedSyntax(identifier);
+
                 default:
                     return syntax.WithoutTrivia();
             }
@@ -83,7 +86,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                                .WithArguments(SyntaxFactory.SeparatedList(syntax.Arguments.Select(GetUpdatedSyntax)))
                                                                                                .WithCloseParenToken(syntax.CloseParenToken.WithoutTrivia()); // remove the spaces or line breaks around the closing parenthesis
 
-        private static ArgumentSyntax GetUpdatedSyntax(ArgumentSyntax syntax) => syntax.WithoutTrivia();
+        private static ArgumentSyntax GetUpdatedSyntax(ArgumentSyntax syntax) => syntax.WithoutTrivia()
+                                                                                       .WithExpression(GetUpdatedSyntax(syntax.Expression));
 
         private static ParameterListSyntax GetUpdatedSyntax(ParameterListSyntax syntax) => syntax.WithoutTrivia();
 
