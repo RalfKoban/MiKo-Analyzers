@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -13,9 +14,43 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
+        protected static Location GetLocationOfNodeOrLeadingComment(SyntaxNode node)
+        {
+            foreach (var trivia in node.GetLeadingTrivia())
+            {
+                switch (trivia.Kind())
+                {
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                    {
+                        return trivia.GetLocation();
+                    }
+                }
+            }
+
+            return node.GetLocation();
+        }
+
+        protected static Location GetLocationOfNodeOrTrailingComment(SyntaxNode node)
+        {
+            foreach (var trivia in node.GetTrailingTrivia().Reverse())
+            {
+                switch (trivia.Kind())
+                {
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                    {
+                        return trivia.GetLocation();
+                    }
+                }
+            }
+
+            return node.GetLocation();
+        }
+
         protected static bool HasNoBlankLinesBefore(FileLinePositionSpan callLineSpan, SyntaxNode other)
         {
-            var endingLine = other.GetLocation().GetEndingLine();
+            var endingLine = GetLocationOfNodeOrTrailingComment(other).GetEndingLine();
 
             var differenceBefore = callLineSpan.StartLinePosition.Line - endingLine;
 
@@ -24,12 +59,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected static bool HasNoBlankLinesBefore(SyntaxNode node, SyntaxNode other)
         {
-            return HasNoBlankLinesBefore(node.GetLocation().GetLineSpan(), other);
+            return HasNoBlankLinesBefore(GetLocationOfNodeOrLeadingComment(node).GetLineSpan(), other);
         }
 
         protected static bool HasNoBlankLinesAfter(FileLinePositionSpan callLineSpan, SyntaxNode other)
         {
-            var startingLine = other.GetLocation().GetStartingLine();
+            var startingLine = GetLocationOfNodeOrLeadingComment(other).GetStartingLine();
 
             var differenceAfter = startingLine - callLineSpan.EndLinePosition.Line;
 
@@ -38,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected static bool HasNoBlankLinesAfter(SyntaxNode node, SyntaxNode other)
         {
-            return HasNoBlankLinesAfter(node.GetLocation().GetLineSpan(), other);
+            return HasNoBlankLinesAfter(GetLocationOfNodeOrTrailingComment(node).GetLineSpan(), other);
         }
 
         protected Diagnostic Issue(SyntaxNode call, bool noBlankLinesBefore, bool noBlankLinesAfter)

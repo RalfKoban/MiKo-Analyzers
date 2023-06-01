@@ -51,12 +51,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeStatement(BlockSyntax block, T node)
         {
-            var nodeLineSpan = node.GetLocation().GetLineSpan();
+            var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
+            var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
 
             var otherStatements = block.Statements.Except(node);
 
-            var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(nodeLineSpan, _));
-            var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(nodeLineSpan, _));
+            var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
+            var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));
 
             if (noBlankLinesBefore || noBlankLinesAfter)
             {
@@ -68,12 +69,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeStatement(SwitchSectionSyntax section, T node)
         {
-            var nodeLineSpan = node.GetLocation().GetLineSpan();
+            var beforePosition = GetLocationOfNodeOrLeadingComment(node).GetLineSpan();
+            var afterPosition = GetLocationOfNodeOrTrailingComment(node).GetLineSpan();
 
             var statements = section.Statements;
+            var otherStatements = statements.Except(node);
 
-            var noBlankLinesBefore = statements.Except(node).Any(_ => HasNoBlankLinesBefore(nodeLineSpan, _));
-            var noBlankLinesAfter = statements.Except(node).Any(_ => HasNoBlankLinesAfter(nodeLineSpan, _));
+            var noBlankLinesBefore = otherStatements.Any(_ => HasNoBlankLinesBefore(beforePosition, _));
+            var noBlankLinesAfter = otherStatements.Any(_ => HasNoBlankLinesAfter(afterPosition, _));
 
             if (noBlankLinesAfter is false)
             {
@@ -83,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 if (nextSection != null && statements.Last() == node)
                 {
                     // determine whether the next section has no blank line between itself and our node
-                    noBlankLinesAfter = HasNoBlankLinesAfter(nodeLineSpan, nextSection);
+                    noBlankLinesAfter = HasNoBlankLinesAfter(afterPosition, nextSection);
                 }
             }
 
