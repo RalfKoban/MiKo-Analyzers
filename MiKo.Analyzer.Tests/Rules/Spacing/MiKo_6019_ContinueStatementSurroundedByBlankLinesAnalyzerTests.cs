@@ -126,7 +126,7 @@ namespace Bla
 }
 ");
 
-        [Test]
+        [Test] // missing blank line before comment would be detected by StyleCop Analyzers rule SA1515
         public void An_issue_is_reported_for_continue_statement_below_if_statement_without_blank_line_before_comment_for_variable_assignment_in_method() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -141,6 +141,32 @@ namespace Bla
                 if (condition)
                     continue;
                 // some comment
+                condition = false;
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_continue_statement_with_comment_above_that_is_below_if_statement_without_blank_line_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+
+            while (condition)
+            {
+                if (condition)
+                {
+                    condition = false;
+                    // some comment
+                    continue;
+                }
+
                 condition = false;
             }
         }
@@ -391,6 +417,63 @@ namespace Bla
                     continue;
 
                 // some comment
+                condition = false;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_continue_statement_with_comment_above_that_is_below_if_statement_without_blank_line_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+
+            while (condition)
+            {
+                if (condition)
+                {
+                    condition = false;
+                    // some comment
+                    continue;
+                }
+
+                condition = false;
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+
+            while (condition)
+            {
+                if (condition)
+                {
+                    condition = false;
+
+                    // some comment
+                    continue;
+                }
+
                 condition = false;
             }
         }
