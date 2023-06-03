@@ -4413,7 +4413,7 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Surround 'ThrowIfNullOrEmpty' with a blank line</value>
   </data>
   <data name="MiKo_6022_Title" xml:space="preserve">
-    <value>ArgumentExceptionThrowIfNullOrEmpty statements should be surrounded by blank lines</value>
+    <value>ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6023_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
@@ -4426,5 +4426,17 @@ Instead the equality operator should be used to compare value types.</value>
   </data>
   <data name="MiKo_6023_Title" xml:space="preserve">
     <value>ObjectDisposedException.ThrowIf statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6030_CodeFixTitle" xml:space="preserve">
+    <value>Place open brace directly below type</value>
+  </data>
+  <data name="MiKo_6030_Description" xml:space="preserve">
+    <value>To indicate the initializations and to distinguish them from blocks (such as if blocks), the open brace of the initializer should be positioned directly below the corresponding type definition.</value>
+  </data>
+  <data name="MiKo_6030_MessageFormat" xml:space="preserve">
+    <value>Place open brace directly below type</value>
+  </data>
+  <data name="MiKo_6030_Title" xml:space="preserve">
+    <value>Open braces of initializers should be placed directly below the corresponding type definition</value>
   </data>
 </root>

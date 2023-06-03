@@ -12546,7 +12546,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ArgumentExceptionThrowIfNullOrEmpty statements should be surrounded by blank lines.
+        ///   Looks up a localized string similar to ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_6022_Title {
             get {
@@ -12587,6 +12587,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6023_Title {
             get {
                 return ResourceManager.GetString("MiKo_6023_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open brace directly below type.
+        /// </summary>
+        public static string MiKo_6030_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6030_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To indicate the initializations and to distinguish them from blocks (such as if blocks), the open brace of the initializer should be positioned directly below the corresponding type definition..
+        /// </summary>
+        public static string MiKo_6030_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6030_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open brace directly below type.
+        /// </summary>
+        public static string MiKo_6030_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6030_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open braces of initializers should be placed directly below the corresponding type definition.
+        /// </summary>
+        public static string MiKo_6030_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6030_Title", resourceCulture);
             }
         }
     }
