@@ -3341,6 +3341,36 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case a type implements a specific business interface, that type should indicate that within its name. This allows to identify the types more easily when a developer wants to use one of them.
+        ///
+        ///Example:
+        ///A type implements interface &apos;IPart&apos;. So it should be named accordingly, such as &apos;XyzPart&apos;..
+        /// </summary>
+        public static string MiKo_1098_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1098_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix type name according to one of the following interfaces: {1}.
+        /// </summary>
+        public static string MiKo_1098_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1098_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type names should reflect the business interface(s) they implement.
+        /// </summary>
+        public static string MiKo_1098_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1098_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>
