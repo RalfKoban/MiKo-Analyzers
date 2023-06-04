@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var position = MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.GetStartPosition(initializer);
 
                 var spaces = position.Character;
-                var expressionSpaces = spaces + 4;
+                var expressionSpaces = spaces + Constants.Indentation;
 
                 return initializer.WithOpenBraceToken(initializer.OpenBraceToken.WithLeadingSpaces(spaces))
                                   .WithExpressions(SyntaxFactory.SeparatedList(

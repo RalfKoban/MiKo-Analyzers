@@ -7,6 +7,8 @@ namespace MiKoSolutions.Analyzers
 {
     public static class Constants
     {
+        internal const int Indentation = 4;
+
         internal const string AsyncSuffix = "Async";
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string TestsSuffix = "Tests";
