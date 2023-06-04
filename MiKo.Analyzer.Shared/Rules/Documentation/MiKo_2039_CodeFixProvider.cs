@@ -32,43 +32,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var starts = new[]
-                             {
-                                 string.Empty,
-                                 "Class containing",
-                                 "Contains",
-                                 "Offers",
-                                 "Provides",
-                                 "Static collection of",
-                                 "The",
-                             };
+                         {
+                             string.Empty,
+                             "Class containing",
+                             "Contains",
+                             "Offers",
+                             "Provides",
+                             "Static collection of",
+                             "The",
+                         };
 
             var preMiddles = new[]
-                                 {
-                                     string.Empty,
-                                     " different",
-                                     " the",
-                                 };
-
-            var middles = new[]
                              {
-                                 "extension",
-                                 "extensions",
-                                 "extension method",
-                                 "extension methods",
-                                 "extension-method",
-                                 "extension-methods",
-                                 "extension mehtod", // typo by intent
-                                 "extension-mehtod", // typo by intent
-                                 "extension mehtods", // typo by intent
-                                 "extension-mehtods", // typo by intent
+                                 string.Empty,
+                                 " different",
+                                 " the",
                              };
 
+            var middles = new[]
+                          {
+                              "extension",
+                              "extensions",
+                              "extension method",
+                              "extension methods",
+                              "extension-method",
+                              "extension-methods",
+                              "extension mehtod", // typo by intent
+                              "extension-mehtod", // typo by intent
+                              "extension mehtods", // typo by intent
+                              "extension-mehtods", // typo by intent
+                          };
+
             var ends = new[]
-                           {
-                               "for",
-                               "to",
-                               "used in",
-                           };
+                       {
+                           "for",
+                           "to",
+                           "used in",
+                       };
 
             foreach (var start in starts)
             {

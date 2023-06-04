@@ -19,10 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                };
 
         private static readonly string[] EqualsMethods =
-            {
-                nameof(Equals),
-                nameof(ReferenceEquals),
-            };
+                                                         {
+                                                             nameof(Equals),
+                                                             nameof(ReferenceEquals),
+                                                         };
 
         public MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzer() : base(Id)
         {

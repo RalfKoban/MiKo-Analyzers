@@ -11,22 +11,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2301";
 
         private static readonly string[] Phrases =
-            {
-                "arrange",
-                "act",
-                "assert",
-                "execute",
-                "execution",
-                "prep",
-                "prepare",
-                "preparation",
-                "run",
-                "set-up",
-                "setup",
-                "test",
-                "verify",
-                "verification",
-            };
+                                                   {
+                                                       "arrange",
+                                                       "act",
+                                                       "assert",
+                                                       "execute",
+                                                       "execution",
+                                                       "prep",
+                                                       "prepare",
+                                                       "preparation",
+                                                       "run",
+                                                       "set-up",
+                                                       "setup",
+                                                       "test",
+                                                       "verify",
+                                                       "verification",
+                                                   };
 
         public MiKo_2301_TestArrangeActAssertCommentAnalyzer() : base(Id)
         {

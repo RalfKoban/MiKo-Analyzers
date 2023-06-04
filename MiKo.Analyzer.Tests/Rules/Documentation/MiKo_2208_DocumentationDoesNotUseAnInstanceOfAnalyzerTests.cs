@@ -13,28 +13,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Phrases =
-            {
-                "An instance of ",
-                "A instance of ",
-                "The instance of ",
-                "An object of ",
-                "A object of ",
-                "The object of ",
-
-                "an instance of ",
-                "a instance of ",
-                "the instance of ",
-                "an object of ",
-                "a object of ",
-                "the object of ",
-
-                "An instance if ", // 'semi'-typo by intent
-                "A instance if ", // 'semi'-typo by intent
-                "The instance if ", // 'semi'-typo by intent
-                "an instance if ", // 'semi'-typo by intent
-                "a instance if ", // 'semi'-typo by intent
-                "the instance if ", // 'semi'-typo by intent
-            };
+                                                   {
+                                                       "An instance of ",
+                                                       "A instance of ",
+                                                       "The instance of ",
+                                                       "An object of ",
+                                                       "A object of ",
+                                                       "The object of ",
+                                                       "an instance of ",
+                                                       "a instance of ",
+                                                       "the instance of ",
+                                                       "an object of ",
+                                                       "a object of ",
+                                                       "the object of ",
+                                                       "An instance if ", // 'semi'-typo by intent
+                                                       "A instance if ", // 'semi'-typo by intent
+                                                       "The instance if ", // 'semi'-typo by intent
+                                                       "an instance if ", // 'semi'-typo by intent
+                                                       "a instance if ", // 'semi'-typo by intent
+                                                       "the instance if ", // 'semi'-typo by intent
+                                                   };
 
         private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
 

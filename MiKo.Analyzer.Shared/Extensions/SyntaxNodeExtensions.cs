@@ -21,10 +21,10 @@ namespace MiKoSolutions.Analyzers
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
-                                                                {
-                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
-                                                                    XmlCommentExterior,
-                                                                };
+                                                                  {
+                                                                      SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
+                                                                      XmlCommentExterior,
+                                                                  };
 
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 

@@ -10,20 +10,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     internal sealed class MiKo_1113_TestMethodsShouldNotBeNamedGivenWhenThenAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AcceptedMethodNames =
-            {
-                "GivenSomething",
-                "Given_something",
-                "GivenSomething_ThenNothing",
-                "Given_something_then_nothing",
-                "GivenSomething_WhenAnything",
-                "Given_something_when_anything",
-            };
+                                                               {
+                                                                   "GivenSomething",
+                                                                   "Given_something",
+                                                                   "GivenSomething_ThenNothing",
+                                                                   "Given_something_then_nothing",
+                                                                   "GivenSomething_WhenAnything",
+                                                                   "Given_something_when_anything",
+                                                               };
 
         private static readonly string[] WrongMethodNames =
-            {
-                "GivenSomething_WhenAnything_ThenNothing",
-                "Given_something_when_there_is_anything_then_nothing_happens",
-            };
+                                                            {
+                                                                "GivenSomething_WhenAnything_ThenNothing",
+                                                                "Given_something_when_there_is_anything_then_nothing_happens",
+                                                            };
 
         [Test]
         public void No_issue_is_reported_for_test_method_with_correct_name_([ValueSource(nameof(AcceptedMethodNames))] string methodName)

@@ -38,13 +38,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var defaultEnding = GetEventArgsEndingPhrase();
 
             return new[]
-                       {
-                           $"{defaultStart}<see cref=\"{typeName}\" />{defaultEnding}.", // just used for the proposal
-                           $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}",
-                           $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}",
-                       };
+                   {
+                       $"{defaultStart}<see cref=\"{typeName}\" />{defaultEnding}.", // just used for the proposal
+                       $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}.",
+                       $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}",
+                       $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}.",
+                       $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}",
+                   };
         }
 
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml, DocumentationCommentTriviaSyntax comment)

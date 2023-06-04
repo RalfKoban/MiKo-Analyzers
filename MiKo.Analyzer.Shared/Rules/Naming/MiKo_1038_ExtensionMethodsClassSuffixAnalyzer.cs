@@ -15,13 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal const string Suffix = "Extensions";
 
         private static readonly string[] WrongSuffixes =
-            {
-                "ExtensionMethods",
-                "ExtensionMethod",
-                "Extension",
-                "ExtensionsClass",
-                "ExtensionClass",
-            };
+                                                         {
+                                                             "ExtensionMethods",
+                                                             "ExtensionMethod",
+                                                             "Extension",
+                                                             "ExtensionsClass",
+                                                             "ExtensionClass",
+                                                         };
 
         public MiKo_1038_ExtensionMethodsClassSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {

@@ -12,39 +12,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-            {
-                "example",
-                "exception",
-                "note",
-                "overloads",
-                "para",
-                "param",
-                "permission",
-                "remarks",
-                "returns",
-                "summary",
-                "typeparam",
-                "value",
-            };
+                                                   {
+                                                       "example",
+                                                       "exception",
+                                                       "note",
+                                                       "overloads",
+                                                       "para",
+                                                       "param",
+                                                       "permission",
+                                                       "remarks",
+                                                       "returns",
+                                                       "summary",
+                                                       "typeparam",
+                                                       "value",
+                                                   };
 
         private static readonly string[] WellknownFileExtensions =
-            {
-                ".bmp",
-                ".gif",
-                ".png",
-                ".jpg",
-                ".jpeg",
-                ".htm",
-                ".html",
-                ".xaml",
-                ".xml",
-                ".cs",
-                ".dll",
-                ".resx",
-                ".eds",
-                ".config",
-                ".txt",
-            };
+                                                                   {
+                                                                       ".bmp",
+                                                                       ".gif",
+                                                                       ".png",
+                                                                       ".jpg",
+                                                                       ".jpeg",
+                                                                       ".htm",
+                                                                       ".html",
+                                                                       ".xaml",
+                                                                       ".xml",
+                                                                       ".cs",
+                                                                       ".dll",
+                                                                       ".resx",
+                                                                       ".eds",
+                                                                       ".config",
+                                                                       ".txt",
+                                                                   };
 
         private static readonly char[] LowerCaseLetters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
 

@@ -11,23 +11,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3110_TestAssertsDoNotUseCountAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AssertionMethods =
-            {
-                nameof(Assert.AreEqual),
-                nameof(Assert.AreNotEqual),
-                nameof(Assert.AreSame),
-                nameof(Assert.AreNotSame),
-                nameof(Assert.Less),
-                nameof(Assert.LessOrEqual),
-                nameof(Assert.Greater),
-                nameof(Assert.GreaterOrEqual),
-            };
+                                                            {
+                                                                nameof(Assert.AreEqual),
+                                                                nameof(Assert.AreNotEqual),
+                                                                nameof(Assert.AreSame),
+                                                                nameof(Assert.AreNotSame),
+                                                                nameof(Assert.Less),
+                                                                nameof(Assert.LessOrEqual),
+                                                                nameof(Assert.Greater),
+                                                                nameof(Assert.GreaterOrEqual),
+                                                            };
 
         private static readonly string[] Culprits =
-            {
-                "Length",
-                "Count",
-                "Count()",
-            };
+                                                    {
+                                                        "Length",
+                                                        "Count",
+                                                        "Count()",
+                                                    };
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

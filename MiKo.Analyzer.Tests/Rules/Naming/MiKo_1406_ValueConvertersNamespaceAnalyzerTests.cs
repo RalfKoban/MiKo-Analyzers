@@ -10,12 +10,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1406_ValueConvertersNamespaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidTypes =
-            {
-                "IValueConverter",
-                "IMultiValueConverter",
-                "System.Windows.Data.IValueConverter",
-                "System.Windows.Data.IMultiValueConverter",
-            };
+                                                      {
+                                                          "IValueConverter",
+                                                          "IMultiValueConverter",
+                                                          "System.Windows.Data.IValueConverter",
+                                                          "System.Windows.Data.IMultiValueConverter",
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_non_converter_class() => No_issue_is_reported_for(@"

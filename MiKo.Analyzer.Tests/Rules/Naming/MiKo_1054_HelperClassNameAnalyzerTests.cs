@@ -15,14 +15,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1054_HelperClassNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongSuffixes =
-            {
-                "Helper",
-                "Helpers",
-                "Util",
-                "Utils",
-                "Utility",
-                "Utilities",
-            };
+                                                         {
+                                                             "Helper",
+                                                             "Helpers",
+                                                             "Util",
+                                                             "Utils",
+                                                             "Utility",
+                                                             "Utilities",
+                                                         };
 
         private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
         private static readonly string[] CorrectNames = { "TestMe", "OnlineHelp", "SoftwareUtilization" };

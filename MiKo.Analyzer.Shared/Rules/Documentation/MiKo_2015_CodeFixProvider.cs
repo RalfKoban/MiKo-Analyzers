@@ -23,16 +23,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                      };
 
         private static readonly Dictionary<string, string> ExceptionReplacementMap = new Dictionary<string, string>
-                                                                                     {
-                                                                                         { "fired", "thrown" },
-                                                                                         { "fires", "throws" },
-                                                                                         { "firing", "throwing" },
-                                                                                         { "fire", "throw" },
-                                                                                         { "Fired", "Thrown" },
-                                                                                         { "Fires", "Throws" },
-                                                                                         { "Firing", "Throwing" },
-                                                                                         { "Fire", "Throw" },
-                                                                                     };
+                                                                                         {
+                                                                                             { "fired", "thrown" },
+                                                                                             { "fires", "throws" },
+                                                                                             { "firing", "throwing" },
+                                                                                             { "fire", "throw" },
+                                                                                             { "Fired", "Thrown" },
+                                                                                             { "Fires", "Throws" },
+                                                                                             { "Firing", "Throwing" },
+                                                                                             { "Fire", "Throw" },
+                                                                                         };
 
         public override string FixableDiagnosticId => MiKo_2015_FireMethodsAnalyzer.Id;
 

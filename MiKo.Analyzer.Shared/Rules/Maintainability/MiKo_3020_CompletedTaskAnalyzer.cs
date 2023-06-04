@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private const string Invocation = nameof(Task) + "." + nameof(Task.FromResult);
 
         private static readonly SyntaxKind[] Lambdas =
-            {
-                SyntaxKind.SimpleLambdaExpression,
-                SyntaxKind.ParenthesizedLambdaExpression,
-            };
+                                                       {
+                                                           SyntaxKind.SimpleLambdaExpression,
+                                                           SyntaxKind.ParenthesizedLambdaExpression,
+                                                       };
 
         public MiKo_3020_CompletedTaskAnalyzer() : base(Id)
         {

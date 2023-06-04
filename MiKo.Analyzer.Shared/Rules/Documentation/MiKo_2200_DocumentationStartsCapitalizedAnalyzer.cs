@@ -15,20 +15,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2200";
 
         private static readonly string[] XmlTags =
-            {
-                Constants.XmlTag.Example,
-                Constants.XmlTag.Exception,
-                Constants.XmlTag.Note,
-                Constants.XmlTag.Overloads,
-                Constants.XmlTag.Para,
-                Constants.XmlTag.Param,
-                Constants.XmlTag.Permission,
-                Constants.XmlTag.Remarks,
-                Constants.XmlTag.Returns,
-                Constants.XmlTag.Summary,
-                Constants.XmlTag.TypeParam,
-                Constants.XmlTag.Value,
-            };
+                                                   {
+                                                       Constants.XmlTag.Example,
+                                                       Constants.XmlTag.Exception,
+                                                       Constants.XmlTag.Note,
+                                                       Constants.XmlTag.Overloads,
+                                                       Constants.XmlTag.Para,
+                                                       Constants.XmlTag.Param,
+                                                       Constants.XmlTag.Permission,
+                                                       Constants.XmlTag.Remarks,
+                                                       Constants.XmlTag.Returns,
+                                                       Constants.XmlTag.Summary,
+                                                       Constants.XmlTag.TypeParam,
+                                                       Constants.XmlTag.Value,
+                                                   };
 
         public MiKo_2200_DocumentationStartsCapitalizedAnalyzer() : base(Id)
         {

@@ -13,12 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         public const string Id = "MiKo_4004";
 
         private static readonly Accessibility[] Accessibilities =
-            {
-                Accessibility.Public,
-                Accessibility.Internal,
-                Accessibility.Protected,
-                Accessibility.Private,
-            };
+                                                                  {
+                                                                      Accessibility.Public,
+                                                                      Accessibility.Internal,
+                                                                      Accessibility.Protected,
+                                                                      Accessibility.Private,
+                                                                  };
 
         public MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
         {

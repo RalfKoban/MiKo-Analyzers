@@ -31,19 +31,19 @@ namespace MiKoSolutions.Analyzers
                                                                                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
         private static readonly string[] GeneratedCSharpFileExtensions =
-            {
-                ".g.cs",
-                ".generated.cs",
-                ".Designer.cs",
-            };
+                                                                         {
+                                                                             ".g.cs",
+                                                                             ".generated.cs",
+                                                                             ".Designer.cs",
+                                                                         };
 
         private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
-            {
-                SyntaxKind.MethodDeclaration,
-                SyntaxKind.Block,
-                SyntaxKind.ConstructorDeclaration,
-                SyntaxKind.LocalFunctionStatement,
-            };
+                                                                                 {
+                                                                                     SyntaxKind.MethodDeclaration,
+                                                                                     SyntaxKind.Block,
+                                                                                     SyntaxKind.ConstructorDeclaration,
+                                                                                     SyntaxKind.LocalFunctionStatement,
+                                                                                 };
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 

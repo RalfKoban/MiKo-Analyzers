@@ -33,115 +33,113 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string AreUsedToPhrase = "are used to";
 
         private static readonly string[] CanPhrases =
-            {
-                "can be used in order to",
-                "can be used to",
-                "could be used in order to",
-                "could be used to",
-            };
+                                                      {
+                                                          "can be used in order to",
+                                                          "can be used to",
+                                                          "could be used in order to",
+                                                          "could be used to",
+                                                      };
 
         private static readonly string[] UsedToPhrases =
-            {
-                "that is used in order to",
-                "that is used to",
-                "that it is used in order to",
-                "that it is used to",
-                "that are used in order to",
-                "that are used to",
-                "that shall be used in order to",
-                "that shall be used to",
-                "that should be used in order to",
-                "that should be used to",
-                "that will be used in order to",
-                "that will be used to",
-                "that would be used in order to",
-                "that would be used to",
-
-                // 'which' parts
-                "which is used in order to",
-                "which is used to",
-                "which it is used in order to",
-                "which it is used to",
-                "which are used in order to",
-                "which are used to",
-                "which shall be used in order to",
-                "which shall be used to",
-                "which should be used in order to",
-                "which should be used to",
-                "which will be used in order to",
-                "which will be used to",
-                "which would be used in order to",
-                "which would be used to",
-            };
+                                                         {
+                                                             "that is used in order to",
+                                                             "that is used to",
+                                                             "that it is used in order to",
+                                                             "that it is used to",
+                                                             "that are used in order to",
+                                                             "that are used to",
+                                                             "that shall be used in order to",
+                                                             "that shall be used to",
+                                                             "that should be used in order to",
+                                                             "that should be used to",
+                                                             "that will be used in order to",
+                                                             "that will be used to",
+                                                             "that would be used in order to",
+                                                             "that would be used to",
+                                                             "which is used in order to",
+                                                             "which is used to",
+                                                             "which it is used in order to",
+                                                             "which it is used to",
+                                                             "which are used in order to",
+                                                             "which are used to",
+                                                             "which shall be used in order to",
+                                                             "which shall be used to",
+                                                             "which should be used in order to",
+                                                             "which should be used to",
+                                                             "which will be used in order to",
+                                                             "which will be used to",
+                                                             "which would be used in order to",
+                                                             "which would be used to",
+                                                         };
 
         private static readonly string[] UsedInCombinationPluralPhrases =
-            {
-                "are to be used in combination with",
-                "are to be used in conjunction with",
-                "are intended to be used in combination with",
-                "are intended to be used in conjunction with",
-                "are meant to be used in combination with",
-                "are meant to be used in conjunction with",
-                "are primarily meant to be used in combination with",
-                "are primarily meant to be used in conjunction with",
-                "are primarily intended to be used in combination with",
-                "are primarily intended to be used in conjunction with",
-                "have to be used in combination with",
-                "have to be used in conjunction with",
-            };
+                                                                          {
+                                                                              "are to be used in combination with",
+                                                                              "are to be used in conjunction with",
+                                                                              "are intended to be used in combination with",
+                                                                              "are intended to be used in conjunction with",
+                                                                              "are meant to be used in combination with",
+                                                                              "are meant to be used in conjunction with",
+                                                                              "are primarily meant to be used in combination with",
+                                                                              "are primarily meant to be used in conjunction with",
+                                                                              "are primarily intended to be used in combination with",
+                                                                              "are primarily intended to be used in conjunction with",
+                                                                              "have to be used in combination with",
+                                                                              "have to be used in conjunction with",
+                                                                          };
 
         private static readonly string[] UsedInCombinationSingularPhrases =
-            {
-                "can be used in combination with",
-                "can be used in conjunction with",
-                "could be used in combination with",
-                "could be used in conjunction with",
-                "has to be used in combination with",
-                "has to be used in conjunction with",
-                "is intended to be used in combination with",
-                "is intended to be used in conjunction with",
-                "is meant to be used in combination with",
-                "is meant to be used in conjunction with",
-                "is primarily meant to be used in combination with",
-                "is primarily meant to be used in conjunction with",
-                "is primarily intended to be used in combination with",
-                "is primarily intended to be used in conjunction with",
-                "might be used in combination with",
-                "might be used in conjunction with",
-            };
+                                                                            {
+                                                                                "can be used in combination with",
+                                                                                "can be used in conjunction with",
+                                                                                "could be used in combination with",
+                                                                                "could be used in conjunction with",
+                                                                                "has to be used in combination with",
+                                                                                "has to be used in conjunction with",
+                                                                                "is intended to be used in combination with",
+                                                                                "is intended to be used in conjunction with",
+                                                                                "is meant to be used in combination with",
+                                                                                "is meant to be used in conjunction with",
+                                                                                "is primarily meant to be used in combination with",
+                                                                                "is primarily meant to be used in conjunction with",
+                                                                                "is primarily intended to be used in combination with",
+                                                                                "is primarily intended to be used in conjunction with",
+                                                                                "might be used in combination with",
+                                                                                "might be used in conjunction with",
+                                                                            };
 
         private static readonly string[] UsedInCombinationUnclearPhrases =
-            {
-                "meant to be used in combination with",
-                "meant to be used in conjunction with",
-            };
+                                                                           {
+                                                                               "meant to be used in combination with",
+                                                                               "meant to be used in conjunction with",
+                                                                           };
 
         private static readonly string[] UsedInPluralPhrases =
-            {
-                "are to be used in",
-                "are intended to be used in",
-                "are meant to be used in",
-                "are primarily meant to be used in",
-                "are primarily intended to be used in",
-                "have to be used in",
-            };
+                                                               {
+                                                                   "are to be used in",
+                                                                   "are intended to be used in",
+                                                                   "are meant to be used in",
+                                                                   "are primarily meant to be used in",
+                                                                   "are primarily intended to be used in",
+                                                                   "have to be used in",
+                                                               };
 
         private static readonly string[] UsedInSingularPhrases =
-            {
-                "can be used in",
-                "could be used in",
-                "has to be used in",
-                "is intended to be used in",
-                "is meant to be used in",
-                "is primarily meant to be used in",
-                "is primarily intended to be used in",
-                "might be used in",
-            };
+                                                                 {
+                                                                     "can be used in",
+                                                                     "could be used in",
+                                                                     "has to be used in",
+                                                                     "is intended to be used in",
+                                                                     "is meant to be used in",
+                                                                     "is primarily meant to be used in",
+                                                                     "is primarily intended to be used in",
+                                                                     "might be used in",
+                                                                 };
 
         private static readonly string[] UsedInUnclearPhrases =
-            {
-                "meant to be used in",
-            };
+                                                                {
+                                                                    "meant to be used in",
+                                                                };
 
         public MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer() : base(Id)
         {

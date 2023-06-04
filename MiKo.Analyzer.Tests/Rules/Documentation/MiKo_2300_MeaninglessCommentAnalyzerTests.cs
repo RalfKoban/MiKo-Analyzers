@@ -10,82 +10,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2300_MeaninglessCommentAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Comments =
-            {
-                "add ",
-                "adds ",
-                "build ",
-                "builds ",
-                "calculate ",
-                "calculates ",
-                "call ",
-                "calls ",
-                "check ",
-                "checks ",
-                "close ",
-                "closes ",
-                "compare ",
-                "compares ",
-                "convert ",
-                "converts ",
-                "count ",
-                "counts ",
-                "create ",
-                "creates ",
-                "decr.",
-                "decrease ",
-                "decreases ",
-                "decrement ",
-                "decrements ",
-                "determine ",
-                "determines ",
-                "evaluate event arg", // no space at the end to allow combinations of the word
-                "get ",
-                "gets ",
-                "has ",
-                "if ",
-                "incr.",
-                "increase ",
-                "increases ",
-                "increment ",
-                "increments ",
-                "initialize", // no space at the end to allow combinations of the word
-                "invoke", // no space at the end to allow combinations of the word
-                "is ",
-                "iterate", // no space at the end to allow combinations of the word
-                "load",  // no space at the end to allow combinations of the word
-                "open ",
-                "opens ",
-                "raise ",
-                "raises ",
-                "remove ",
-                "removes ",
-                "retrieve ",
-                "retrieves ",
-                "return", // no space at the end to allow combinations of the word
-                "save",  // no space at the end to allow combinations of the word
-                "set ",
-                "sets ",
-                "start ",
-                "starts ",
-                "stop ",
-                "stops ",
-                "use", // no space at the end to allow combinations of the word
-            };
+                                                    {
+                                                        "add ",
+                                                        "adds ",
+                                                        "build ",
+                                                        "builds ",
+                                                        "calculate ",
+                                                        "calculates ",
+                                                        "call ",
+                                                        "calls ",
+                                                        "check ",
+                                                        "checks ",
+                                                        "close ",
+                                                        "closes ",
+                                                        "compare ",
+                                                        "compares ",
+                                                        "convert ",
+                                                        "converts ",
+                                                        "count ",
+                                                        "counts ",
+                                                        "create ",
+                                                        "creates ",
+                                                        "decr.",
+                                                        "decrease ",
+                                                        "decreases ",
+                                                        "decrement ",
+                                                        "decrements ",
+                                                        "determine ",
+                                                        "determines ",
+                                                        "evaluate event arg", // no space at the end to allow combinations of the word
+                                                        "get ",
+                                                        "gets ",
+                                                        "has ",
+                                                        "if ",
+                                                        "incr.",
+                                                        "increase ",
+                                                        "increases ",
+                                                        "increment ",
+                                                        "increments ",
+                                                        "initialize", // no space at the end to allow combinations of the word
+                                                        "invoke", // no space at the end to allow combinations of the word
+                                                        "is ",
+                                                        "iterate", // no space at the end to allow combinations of the word
+                                                        "load",  // no space at the end to allow combinations of the word
+                                                        "open ",
+                                                        "opens ",
+                                                        "raise ",
+                                                        "raises ",
+                                                        "remove ",
+                                                        "removes ",
+                                                        "retrieve ",
+                                                        "retrieves ",
+                                                        "return", // no space at the end to allow combinations of the word
+                                                        "save",  // no space at the end to allow combinations of the word
+                                                        "set ",
+                                                        "sets ",
+                                                        "start ",
+                                                        "starts ",
+                                                        "stop ",
+                                                        "stops ",
+                                                        "use", // no space at the end to allow combinations of the word
+                                                    };
 
         private static readonly string[] AllowedComments =
-            {
-                "blank by intent",
-                "checked by",
-                "do nothing here",
-                "do nothing",
-                "ignore this",
-                "ignore",
-                "intentionally left empty",
-                "No-Op",
-                "not needed",
-                "nothing to do",
-                "special handling",
-            };
+                                                           {
+                                                               "blank by intent",
+                                                               "checked by",
+                                                               "do nothing here",
+                                                               "do nothing",
+                                                               "ignore this",
+                                                               "ignore",
+                                                               "intentionally left empty",
+                                                               "No-Op",
+                                                               "not needed",
+                                                               "nothing to do",
+                                                               "special handling",
+                                                           };
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"

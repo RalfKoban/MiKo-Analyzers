@@ -15,10 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1059_ImplClassNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongSuffixes =
-            {
-                "Impl",
-                "Implementation",
-            };
+                                                         {
+                                                             "Impl",
+                                                             "Implementation",
+                                                         };
 
         private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
 

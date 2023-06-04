@@ -20,15 +20,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Terms = { "true", "false", "null", };
 
         private static readonly IEnumerable<string> CorrectItems = new[]
-                                                                       {
-                                                                           "<see langword=\"true\" />",
-                                                                           "<see langword=\"true\"/>",
-                                                                           "<see langword=\"false\" />",
-                                                                           "<see langword=\"false\"/>",
-                                                                           "<see langword=\"null\" />",
-                                                                           "<see langword=\"null\"/>",
-                                                                           string.Empty,
-                                                                       };
+                                                                   {
+                                                                       "<see langword=\"true\" />",
+                                                                       "<see langword=\"true\"/>",
+                                                                       "<see langword=\"false\" />",
+                                                                       "<see langword=\"false\"/>",
+                                                                       "<see langword=\"null\" />",
+                                                                       "<see langword=\"null\"/>",
+                                                                       string.Empty,
+                                                                   };
 
         private static readonly IEnumerable<string> WrongItemsWithoutCode = CreateWrongItems(false, Terms);
         private static readonly IEnumerable<string> WrongItemsWithCode = CreateWrongItems(true, Terms);

@@ -45,10 +45,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return syntax.WithoutTrivia()
                          .WithContent(SyntaxFactory.List<XmlNodeSyntax>(new[]
-                                                                            {
-                                                                                summary.WithTrailingXmlComment(),
-                                                                                field.WithEndOfLine(),
-                                                                            }))
+                                                                        {
+                                                                            summary.WithTrailingXmlComment(),
+                                                                            field.WithEndOfLine(),
+                                                                        }))
                          .WithLeadingXmlCommentExterior();
         }
     }

@@ -14,10 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2204_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
         private static readonly string[] Markers =
-            {
-                "- ",
-                "* ",
-            };
+                                                   {
+                                                       "- ",
+                                                       "* ",
+                                                   };
 
         public override string FixableDiagnosticId => MiKo_2204_DocumentationShallUseListAnalyzer.Id;
 

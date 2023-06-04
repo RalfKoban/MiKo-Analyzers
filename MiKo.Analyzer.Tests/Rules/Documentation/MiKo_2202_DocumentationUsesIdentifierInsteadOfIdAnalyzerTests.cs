@@ -13,39 +13,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-            {
-                "example",
-                "exception",
-                "note",
-                "overloads",
-                "para",
-                "param",
-                "permission",
-                "remarks",
-                "returns",
-                "summary",
-                "typeparam",
-                "value",
-            };
+                                                   {
+                                                       "example",
+                                                       "exception",
+                                                       "note",
+                                                       "overloads",
+                                                       "para",
+                                                       "param",
+                                                       "permission",
+                                                       "remarks",
+                                                       "returns",
+                                                       "summary",
+                                                       "typeparam",
+                                                       "value",
+                                                   };
 
         private static readonly string[] WrongIds =
-            {
-                " id ",
-                " id,",
-                " id;",
-                " id.",
-                " id:",
-                " Id ",
-                " Id,",
-                " Id;",
-                " Id.",
-                " Id:",
-                " ID ",
-                " ID,",
-                " ID;",
-                " ID.",
-                " ID:",
-            };
+                                                    {
+                                                        " id ",
+                                                        " id,",
+                                                        " id;",
+                                                        " id.",
+                                                        " id:",
+                                                        " Id ",
+                                                        " Id,",
+                                                        " Id;",
+                                                        " Id.",
+                                                        " Id:",
+                                                        " ID ",
+                                                        " ID,",
+                                                        " ID;",
+                                                        " ID.",
+                                                        " ID:",
+                                                    };
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Id_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"

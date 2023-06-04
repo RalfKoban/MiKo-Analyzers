@@ -13,39 +13,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-            {
-                "example",
-                "exception",
-                "note",
-                "overloads",
-                "para",
-                "param",
-                "permission",
-                "remarks",
-                "returns",
-                "summary",
-                "typeparam",
-                "value",
-            };
+                                                   {
+                                                       "example",
+                                                       "exception",
+                                                       "note",
+                                                       "overloads",
+                                                       "para",
+                                                       "param",
+                                                       "permission",
+                                                       "remarks",
+                                                       "returns",
+                                                       "summary",
+                                                       "typeparam",
+                                                       "value",
+                                                   };
 
         private static readonly string[] WrongGuids =
-            {
-                " guid ",
-                " guid,",
-                " guid;",
-                " guid.",
-                " guid:",
-                " Guid ",
-                " Guid,",
-                " Guid;",
-                " Guid.",
-                " Guid:",
-                " GUID ",
-                " GUID,",
-                " GUID;",
-                " GUID.",
-                " GUID:",
-            };
+                                                      {
+                                                          " guid ",
+                                                          " guid,",
+                                                          " guid;",
+                                                          " guid.",
+                                                          " guid:",
+                                                          " Guid ",
+                                                          " Guid,",
+                                                          " Guid;",
+                                                          " Guid.",
+                                                          " Guid:",
+                                                          " GUID ",
+                                                          " GUID,",
+                                                          " GUID;",
+                                                          " GUID.",
+                                                          " GUID:",
+                                                      };
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string guid) => An_issue_is_reported_for(@"

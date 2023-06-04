@@ -14,13 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const StringComparison Comparison = StringComparison.Ordinal;
 
         private static readonly string[] TypeSuffixes =
-            {
-                "Element",
-                Constants.Entity,
-                "Item",
-                "Info",
-                "Information",
-            };
+                                                        {
+                                                            "Element",
+                                                            Constants.Entity,
+                                                            "Item",
+                                                            "Info",
+                                                            "Information",
+                                                        };
 
         public MiKo_1092_AbilityTypeWrongSuffixedAnalyzer() : base(Id, SymbolKind.NamedType)
         {

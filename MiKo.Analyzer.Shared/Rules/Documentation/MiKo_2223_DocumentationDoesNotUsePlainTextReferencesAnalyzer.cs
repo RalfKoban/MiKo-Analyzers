@@ -16,37 +16,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string TrimChars = ".?!;:,'\"()[]{}%";
 
         private static readonly char[] SpecialIndicators =
-                                                            {
-                                                                '*',  // seems to be a file extension
-                                                                '+',  // seems to be a shortcut
-                                                                '-',  // seems to be an abbreviation
-                                                                '/',  // seems to be a combined word
-                                                                '\\', // seems to be a path word
-                                                                '#',
-                                                            };
+                                                           {
+                                                               '*',  // seems to be a file extension
+                                                               '+',  // seems to be a shortcut
+                                                               '-',  // seems to be an abbreviation
+                                                               '/',  // seems to be a combined word
+                                                               '\\', // seems to be a path word
+                                                               '#',
+                                                           };
 
         private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
 
         private static readonly HashSet<string> IgnoreTags = new HashSet<string>
-                                                             {
-                                                                 Constants.XmlTag.Code,
-                                                                 Constants.XmlTag.C,
-                                                                 Constants.XmlTag.See,
-                                                                 Constants.XmlTag.SeeAlso,
-                                                                 "a",
-                                                             };
+                                                                 {
+                                                                     Constants.XmlTag.Code,
+                                                                     Constants.XmlTag.C,
+                                                                     Constants.XmlTag.See,
+                                                                     Constants.XmlTag.SeeAlso,
+                                                                     "a",
+                                                                 };
 
         private static readonly HashSet<string> WellKnownWords = new HashSet<string>
-                                                                 {
-                                                                     "CSharp",
-                                                                     "FxCop",
-                                                                     "IntelliSense",
-                                                                     "NCrunch",
-                                                                     "PostSharp",
-                                                                     "SonarQube",
-                                                                     "StyleCop",
-                                                                     "VisualBasic",
-                                                                 };
+                                                                     {
+                                                                         "CSharp",
+                                                                         "FxCop",
+                                                                         "IntelliSense",
+                                                                         "NCrunch",
+                                                                         "PostSharp",
+                                                                         "SonarQube",
+                                                                         "StyleCop",
+                                                                         "VisualBasic",
+                                                                     };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
         {

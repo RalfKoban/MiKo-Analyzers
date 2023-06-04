@@ -12,70 +12,70 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1400_NamespacesInPluralAnalyzerTests : CodeFixVerifier
     {
         private static readonly IEnumerable<string> SingularNamespaceNames = new[]
-                                                                                 {
-                                                                                     "Converter",
-                                                                                     "Test",
-                                                                                 };
+                                                                             {
+                                                                                 "Converter",
+                                                                                 "Test",
+                                                                             };
 
         private static readonly IEnumerable<string> AllowedNamespaceNames = new[]
-                                                                                {
-                                                                                    "Activities",
-                                                                                    "Build",
-                                                                                    "Children",
-                                                                                    "ComponentModel",
-                                                                                    "Composition",
-                                                                                    "Converters",
-                                                                                    "Core",
-                                                                                    "CPlusPlus",
-                                                                                    "CSharp",
-                                                                                    "Data",
-                                                                                    "Design",
-                                                                                    "Documentation",
-                                                                                    "Extensions",
-                                                                                    "Framework",
-                                                                                    "Generic",
-                                                                                    "Infrastructure",
-                                                                                    "Interop",
-                                                                                    "IO",
-                                                                                    "JavaScript",
-                                                                                    "Lifetime",
-                                                                                    "Linq",
-                                                                                    "Maintainability",
-                                                                                    "MyOwnNumber0815",
-                                                                                    "Naming",
-                                                                                    "Office",
-                                                                                    "Performance",
-                                                                                    "Perl",
-                                                                                    "Resources",
-                                                                                    "Runtime",
-                                                                                    "Security",
-                                                                                    "Serialization",
-                                                                                    "ServiceModel",
-                                                                                    "Shared",
-                                                                                    "SomeTrivia",
-                                                                                    "Support",
-                                                                                    "System",
-                                                                                    "Threading",
-                                                                                    "TypeScript",
-                                                                                    "UI",
-                                                                                    "UserExperience",
-                                                                                    "VisualBasic",
-                                                                                    "Web",
-                                                                                };
+                                                                            {
+                                                                                "Activities",
+                                                                                "Build",
+                                                                                "Children",
+                                                                                "ComponentModel",
+                                                                                "Composition",
+                                                                                "Converters",
+                                                                                "Core",
+                                                                                "CPlusPlus",
+                                                                                "CSharp",
+                                                                                "Data",
+                                                                                "Design",
+                                                                                "Documentation",
+                                                                                "Extensions",
+                                                                                "Framework",
+                                                                                "Generic",
+                                                                                "Infrastructure",
+                                                                                "Interop",
+                                                                                "IO",
+                                                                                "JavaScript",
+                                                                                "Lifetime",
+                                                                                "Linq",
+                                                                                "Maintainability",
+                                                                                "MyOwnNumber0815",
+                                                                                "Naming",
+                                                                                "Office",
+                                                                                "Performance",
+                                                                                "Perl",
+                                                                                "Resources",
+                                                                                "Runtime",
+                                                                                "Security",
+                                                                                "Serialization",
+                                                                                "ServiceModel",
+                                                                                "Shared",
+                                                                                "SomeTrivia",
+                                                                                "Support",
+                                                                                "System",
+                                                                                "Threading",
+                                                                                "TypeScript",
+                                                                                "UI",
+                                                                                "UserExperience",
+                                                                                "VisualBasic",
+                                                                                "Web",
+                                                                            };
 
         private static readonly IEnumerable<string> WellKnownCompanyAndFrameworkNames = new[]
-                                                                                            {
-                                                                                                "JetBrains",
-                                                                                                "Microsoft",
-                                                                                                "MiKoSolutions",
-                                                                                                "NDepend",
-                                                                                                "PostSharp",
-                                                                                            };
+                                                                                        {
+                                                                                            "JetBrains",
+                                                                                            "Microsoft",
+                                                                                            "MiKoSolutions",
+                                                                                            "NDepend",
+                                                                                            "PostSharp",
+                                                                                        };
 
         private static readonly IEnumerable<string> Acronyms = new[]
-                                                                   {
-                                                                       "WYSIWYG",
-                                                                   };
+                                                               {
+                                                                   "WYSIWYG",
+                                                               };
 
         [Test]
         public void No_issue_is_reported_for_acronym_namespace_name_([ValueSource(nameof(Acronyms))]string ns) => No_issue_is_reported_for(@"

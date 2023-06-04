@@ -11,19 +11,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1067_PerformMethodsAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongNames =
-            {
-                "CanPerform",
-                "DoPerform",
-                "HasToPerform",
-                "Perform",
-            };
+                                                      {
+                                                          "CanPerform",
+                                                          "DoPerform",
+                                                          "HasToPerform",
+                                                          "Perform",
+                                                      };
 
         private static readonly string[] AllowedNames =
-            {
-                "CheckPerformance",
-                "RunPerformanceTests",
-                "HasPerformed",
-            };
+                                                        {
+                                                            "CheckPerformance",
+                                                            "RunPerformanceTests",
+                                                            "HasPerformed",
+                                                        };
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_method_([ValueSource(nameof(AllowedNames))] string methodName) => No_issue_is_reported_for(@"

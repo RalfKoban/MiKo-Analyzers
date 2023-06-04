@@ -12,31 +12,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1401_TechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
         private static readonly IEnumerable<string> ForbiddenNamespaceNames = new[]
-                                                                                  {
-                                                                                      "Action",
-                                                                                      "Actions",
-                                                                                      "Base",
-                                                                                      "Class",
-                                                                                      "Classes",
-                                                                                      "Enum",
-                                                                                      "Enums",
-                                                                                      "Enumeration",
-                                                                                      "Enumerations",
-                                                                                      "Exception",
-                                                                                      "Exceptions",
-                                                                                      "Imp",
-                                                                                      "Impl",
-                                                                                      "Implementation",
-                                                                                      "Implementations",
-                                                                                      "Interface",
-                                                                                      "Interfaces",
-                                                                                      "Proxies",
-                                                                                      "Proxy",
-                                                                                      "ServiceProxies",
-                                                                                      "ServiceProxy",
-                                                                                      "Struct",
-                                                                                      "Structs",
-                                                                                  };
+                                                                              {
+                                                                                  "Action",
+                                                                                  "Actions",
+                                                                                  "Base",
+                                                                                  "Class",
+                                                                                  "Classes",
+                                                                                  "Enum",
+                                                                                  "Enums",
+                                                                                  "Enumeration",
+                                                                                  "Enumerations",
+                                                                                  "Exception",
+                                                                                  "Exceptions",
+                                                                                  "Imp",
+                                                                                  "Impl",
+                                                                                  "Implementation",
+                                                                                  "Implementations",
+                                                                                  "Interface",
+                                                                                  "Interfaces",
+                                                                                  "Proxies",
+                                                                                  "Proxy",
+                                                                                  "ServiceProxies",
+                                                                                  "ServiceProxy",
+                                                                                  "Struct",
+                                                                                  "Structs",
+                                                                              };
 
         [TestCase("MiKoSolutions")]
         [TestCase("MiKoSolutions.Infrastructure")]

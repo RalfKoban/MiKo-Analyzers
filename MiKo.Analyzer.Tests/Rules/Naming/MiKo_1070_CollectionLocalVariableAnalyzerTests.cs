@@ -11,35 +11,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1070_CollectionLocalVariableAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-            {
-                "map",
-                "array",
-                "buffer",
-                "collection",
-                "dictionary",
-                "items",
-                "list",
-                "queue",
-                "result",
-                "results",
-                "set",
-                "source",
-                "stack",
-                "typesUnderTest",
-                "variablesRead",
-                "variablesWritten",
-                "gateways",
-                "someTrivia",
-            };
+                                                        {
+                                                            "map",
+                                                            "array",
+                                                            "buffer",
+                                                            "collection",
+                                                            "dictionary",
+                                                            "items",
+                                                            "list",
+                                                            "queue",
+                                                            "result",
+                                                            "results",
+                                                            "set",
+                                                            "source",
+                                                            "stack",
+                                                            "typesUnderTest",
+                                                            "variablesRead",
+                                                            "variablesWritten",
+                                                            "gateways",
+                                                            "someTrivia",
+                                                        };
 
         private static readonly string[] WrongNames =
-            {
-                "item",
-                "enumerable",
-                "target",
-                "myDictionary",
-                "myList42",
-            };
+                                                      {
+                                                          "item",
+                                                          "enumerable",
+                                                          "target",
+                                                          "myDictionary",
+                                                          "myList42",
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

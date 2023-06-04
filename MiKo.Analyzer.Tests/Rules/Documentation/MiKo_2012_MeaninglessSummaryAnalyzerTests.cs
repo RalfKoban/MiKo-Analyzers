@@ -17,18 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MeaninglessTextPhrases =
-            {
-                "does implement",
-                "implements",
-                "that is called ",
-                "that is used for ",
-                "that is used to ",
-                "used for ",
-                "used to ",
-                "which is called ",
-                "which is used for ",
-                "which is used to ",
-            };
+                                                                  {
+                                                                      "does implement",
+                                                                      "implements",
+                                                                      "that is called ",
+                                                                      "that is used for ",
+                                                                      "that is used to ",
+                                                                      "used for ",
+                                                                      "used to ",
+                                                                      "which is called ",
+                                                                      "which is used for ",
+                                                                      "which is used to ",
+                                                                  };
 
         private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases();
 
@@ -881,36 +881,36 @@ public class TestMeViewModel
         private static string[] CreateMeaninglessPhrases()
         {
             var types = new[]
-                            {
-                                "Attribute",
-                                "Base",
-                                "Class",
-                                "Interface",
-                                "Method",
-                                "Field",
-                                "Property",
-                                "Event",
-                                "EventHandler",
-                                "Handler",
-                                "Component",
-                                "Constructor",
-                                "Ctor",
-                                "Delegate",
-                                "Creator",
-                                "Entity",
-                                "Model",
-                                "View",
-                                "ViewModel",
-                                "Command",
-                                "Action",
-                                "Func",
-                                "Converter",
-                                "Adapter ",
-                                "Builder",
-                                "Factory",
-                                "Proxy ",
-                                "Wrapper ",
-                            };
+                        {
+                            "Attribute",
+                            "Base",
+                            "Class",
+                            "Interface",
+                            "Method",
+                            "Field",
+                            "Property",
+                            "Event",
+                            "EventHandler",
+                            "Handler",
+                            "Component",
+                            "Constructor",
+                            "Ctor",
+                            "Delegate",
+                            "Creator",
+                            "Entity",
+                            "Model",
+                            "View",
+                            "ViewModel",
+                            "Command",
+                            "Action",
+                            "Func",
+                            "Converter",
+                            "Adapter ",
+                            "Builder",
+                            "Factory",
+                            "Proxy ",
+                            "Wrapper ",
+                        };
 
             var phrases = MeaninglessTextPhrases;
 

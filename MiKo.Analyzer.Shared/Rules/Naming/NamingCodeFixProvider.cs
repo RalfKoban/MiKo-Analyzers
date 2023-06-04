@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public abstract class NamingCodeFixProvider : MiKoCodeFixProvider
     {
         protected static readonly SyntaxKind[] MethodKinds =
-            {
-                SyntaxKind.LocalFunctionStatement,
-                SyntaxKind.MethodDeclaration,
-            };
+                                                             {
+                                                                 SyntaxKind.LocalFunctionStatement,
+                                                                 SyntaxKind.MethodDeclaration,
+                                                             };
 
         protected override bool IsSolutionWide => true;
 

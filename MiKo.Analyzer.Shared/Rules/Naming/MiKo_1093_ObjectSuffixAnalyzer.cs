@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1093";
 
         internal static readonly string[] WrongSuffixes =
-            {
-                "Object",
-                "Struct",
-            };
+                                                          {
+                                                              "Object",
+                                                              "Struct",
+                                                          };
 
         public MiKo_1093_ObjectSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {

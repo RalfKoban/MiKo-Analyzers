@@ -13,18 +13,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2034_EnumReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] EnumOnlyReturnValues =
-            {
-                "StringComparison",
-                "System.StringComparison",
-            };
+                                                                {
+                                                                    "StringComparison",
+                                                                    "System.StringComparison",
+                                                                };
 
         private static readonly string[] EnumTaskReturnValues =
-            {
-                "Task<StringComparison>",
-                "Task<System.StringComparison>",
-                "System.Threading.Tasks.Task<StringComparison>",
-                "System.Threading.Tasks.Task<System.StringComparison>",
-            };
+                                                                {
+                                                                    "Task<StringComparison>",
+                                                                    "Task<System.StringComparison>",
+                                                                    "System.Threading.Tasks.Task<StringComparison>",
+                                                                    "System.Threading.Tasks.Task<System.StringComparison>",
+                                                                };
 
         private static readonly string[] EnumReturnValues = EnumOnlyReturnValues.Concat(EnumTaskReturnValues).ToArray();
 

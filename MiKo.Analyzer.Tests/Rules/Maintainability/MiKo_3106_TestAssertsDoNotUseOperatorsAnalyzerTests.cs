@@ -10,31 +10,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AssertionMethods =
-            {
-                nameof(Assert.That),
-                nameof(Assert.IsTrue),
-                nameof(Assert.True),
-                nameof(Assert.IsFalse),
-                nameof(Assert.False),
-            };
+                                                            {
+                                                                nameof(Assert.That),
+                                                                nameof(Assert.IsTrue),
+                                                                nameof(Assert.True),
+                                                                nameof(Assert.IsFalse),
+                                                                nameof(Assert.False),
+                                                            };
 
         private static readonly string[] Operators =
-            {
-                "==",
-                "!=",
-                "<",
-                "<=",
-                ">",
-                ">=",
-            };
+                                                     {
+                                                         "==",
+                                                         "!=",
+                                                         "<",
+                                                         "<=",
+                                                         ">",
+                                                         ">=",
+                                                     };
 
         private static readonly string[] Methods =
-            {
-                "All",
-                "Any",
-                "Contains",
-                "Equals",
-            };
+                                                   {
+                                                       "All",
+                                                       "Any",
+                                                       "Contains",
+                                                       "Equals",
+                                                   };
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

@@ -16,14 +16,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] StringParts = Constants.Comments.StringReturnTypeStartingPhraseTemplate.FormatWith("|", "that contains").Split('|');
 
         private static readonly string[] TextParts =
-            {
-                "containing",
-                "returning",
-                "that contains",
-                "that returns",
-                "which contains",
-                "which returns",
-            };
+                                                     {
+                                                         "containing",
+                                                         "returning",
+                                                         "that contains",
+                                                         "that returns",
+                                                         "which contains",
+                                                         "which returns",
+                                                     };
 
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 

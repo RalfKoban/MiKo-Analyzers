@@ -126,9 +126,9 @@ public static class TestMeExtensions
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2039_CodeFixProvider();
 
         private static IEnumerable<string> ValidPhrases() => new[]
-                                                                 {
-                                                                     @"Provides a set of <see langword=""static""/> methods for ",
-                                                                     @"Provides a set of <see langword=""static"" /> methods for ",
-                                                                 };
+                                                             {
+                                                                 @"Provides a set of <see langword=""static""/> methods for ",
+                                                                 @"Provides a set of <see langword=""static"" /> methods for ",
+                                                             };
     }
 }

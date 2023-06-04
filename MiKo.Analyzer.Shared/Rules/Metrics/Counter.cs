@@ -13,28 +13,28 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     {
         // if | do... while | while | for | foreach | case | switch expression arm | continue | goto | && | and | || | or | catch | catch when | ternary operator ?: | ?? | ??= | ?.
         private static readonly HashSet<int> CCSyntaxKinds = new HashSet<int>
-            {
-                (int)SyntaxKind.IfStatement,
-                (int)SyntaxKind.DoStatement,
-                (int)SyntaxKind.WhileStatement,
-                (int)SyntaxKind.ForStatement,
-                (int)SyntaxKind.ForEachStatement,
-                (int)SyntaxKind.CaseSwitchLabel,
-                (int)SyntaxKind.CasePatternSwitchLabel,
-                (int)SyntaxKind.SwitchExpressionArm,
-                (int)SyntaxKind.ContinueStatement,
-                (int)SyntaxKind.GotoStatement,
-                (int)SyntaxKind.LogicalAndExpression,
-                (int)SyntaxKind.AndPattern,
-                (int)SyntaxKind.LogicalOrExpression,
-                (int)SyntaxKind.OrPattern,
-                (int)SyntaxKind.CatchClause,
-                (int)SyntaxKind.CatchFilterClause,
-                (int)SyntaxKind.ConditionalExpression,
-                (int)SyntaxKind.CoalesceExpression,
-                (int)SyntaxKind.CoalesceAssignmentExpression,
-                (int)SyntaxKind.ConditionalAccessExpression,
-            };
+                                                                 {
+                                                                     (int)SyntaxKind.IfStatement,
+                                                                     (int)SyntaxKind.DoStatement,
+                                                                     (int)SyntaxKind.WhileStatement,
+                                                                     (int)SyntaxKind.ForStatement,
+                                                                     (int)SyntaxKind.ForEachStatement,
+                                                                     (int)SyntaxKind.CaseSwitchLabel,
+                                                                     (int)SyntaxKind.CasePatternSwitchLabel,
+                                                                     (int)SyntaxKind.SwitchExpressionArm,
+                                                                     (int)SyntaxKind.ContinueStatement,
+                                                                     (int)SyntaxKind.GotoStatement,
+                                                                     (int)SyntaxKind.LogicalAndExpression,
+                                                                     (int)SyntaxKind.AndPattern,
+                                                                     (int)SyntaxKind.LogicalOrExpression,
+                                                                     (int)SyntaxKind.OrPattern,
+                                                                     (int)SyntaxKind.CatchClause,
+                                                                     (int)SyntaxKind.CatchFilterClause,
+                                                                     (int)SyntaxKind.ConditionalExpression,
+                                                                     (int)SyntaxKind.CoalesceExpression,
+                                                                     (int)SyntaxKind.CoalesceAssignmentExpression,
+                                                                     (int)SyntaxKind.ConditionalAccessExpression,
+                                                                 };
 
         public static int CountCyclomaticComplexity(BlockSyntax body, Predicate<SyntaxNode> predicate = null)
         {

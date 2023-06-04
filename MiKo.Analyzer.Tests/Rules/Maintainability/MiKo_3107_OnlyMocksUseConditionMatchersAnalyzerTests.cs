@@ -11,15 +11,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3107_OnlyMocksUseConditionMatchersAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MethodNames =
-            {
-                "Is",
-                "IsAny",
-                "IsIn",
-                "IsNotIn",
-                "IsInRange",
-                "IsNotNull",
-                "IsRegex",
-            };
+                                                       {
+                                                           "Is",
+                                                           "IsAny",
+                                                           "IsIn",
+                                                           "IsNotIn",
+                                                           "IsInRange",
+                                                           "IsNotNull",
+                                                           "IsRegex",
+                                                       };
 
         [Test]
         public void No_issue_is_reported_for_correct_object_creation_on_field() => No_issue_is_reported_for(@"

@@ -15,38 +15,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2201";
 
         private static readonly string[] XmlTags =
-            {
-                Constants.XmlTag.Summary,
-                Constants.XmlTag.Remarks,
-                Constants.XmlTag.Returns,
-                Constants.XmlTag.Value,
-                Constants.XmlTag.Param,
-                Constants.XmlTag.Exception,
-                Constants.XmlTag.TypeParam,
-                Constants.XmlTag.Example,
-                Constants.XmlTag.Note,
-                Constants.XmlTag.Overloads,
-                Constants.XmlTag.Para,
-                Constants.XmlTag.Permission,
-            };
+                                                   {
+                                                       Constants.XmlTag.Summary,
+                                                       Constants.XmlTag.Remarks,
+                                                       Constants.XmlTag.Returns,
+                                                       Constants.XmlTag.Value,
+                                                       Constants.XmlTag.Param,
+                                                       Constants.XmlTag.Exception,
+                                                       Constants.XmlTag.TypeParam,
+                                                       Constants.XmlTag.Example,
+                                                       Constants.XmlTag.Note,
+                                                       Constants.XmlTag.Overloads,
+                                                       Constants.XmlTag.Para,
+                                                       Constants.XmlTag.Permission,
+                                                   };
 
         private static readonly string[] WellknownFileExtensions =
-            {
-                ".bmp",
-                ".config",
-                ".cs",
-                ".dll",
-                ".eds",
-                ".gif",
-                ".htm",
-                ".jpeg",
-                ".jpg",
-                ".png",
-                ".resx",
-                ".txt",
-                ".xaml",
-                ".xml",
-            };
+                                                                   {
+                                                                       ".bmp",
+                                                                       ".config",
+                                                                       ".cs",
+                                                                       ".dll",
+                                                                       ".eds",
+                                                                       ".gif",
+                                                                       ".htm",
+                                                                       ".jpeg",
+                                                                       ".jpg",
+                                                                       ".png",
+                                                                       ".resx",
+                                                                       ".txt",
+                                                                       ".xaml",
+                                                                       ".xml",
+                                                                   };
 
         public MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzer() : base(Id)
         {

@@ -13,34 +13,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-            {
-                "example",
-                "exception",
-                "note",
-                "overloads",
-                "para",
-                "param",
-                "permission",
-                "remarks",
-                "returns",
-                "summary",
-                "typeparam",
-                "value",
-            };
+                                                   {
+                                                       "example",
+                                                       "exception",
+                                                       "note",
+                                                       "overloads",
+                                                       "para",
+                                                       "param",
+                                                       "permission",
+                                                       "remarks",
+                                                       "returns",
+                                                       "summary",
+                                                       "typeparam",
+                                                       "value",
+                                                   };
 
         private static readonly string[] WrongTerms =
-            {
-                " info ",
-                " info,",
-                " info;",
-                " info.",
-                " info:",
-                " Info ",
-                " Info,",
-                " Info;",
-                " Info.",
-                " Info:",
-            };
+                                                      {
+                                                          " info ",
+                                                          " info,",
+                                                          " info;",
+                                                          " info.",
+                                                          " info:",
+                                                          " Info ",
+                                                          " Info,",
+                                                          " Info;",
+                                                          " Info.",
+                                                          " Info:",
+                                                      };
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Info_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongTerms))] string term) => An_issue_is_reported_for(@"

@@ -10,28 +10,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3008_ListReturnValueAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AllowedTypes =
-            {
-                "string",
-                "byte[]",
-                "Byte[]",
-                "int",
-                "IReadOnlyCollection<string>",
-                "IReadOnlyList<string>",
-                "IReadOnlyDictionary<string, string>",
-            };
+                                                        {
+                                                            "string",
+                                                            "byte[]",
+                                                            "Byte[]",
+                                                            "int",
+                                                            "IReadOnlyCollection<string>",
+                                                            "IReadOnlyList<string>",
+                                                            "IReadOnlyDictionary<string, string>",
+                                                        };
 
         private static readonly string[] ForbiddenTypes =
-            {
-                "ICollection<string>",
-                "IList<string>",
-                "List<string>",
-                "IDictionary<string, string>",
-                "Dictionary<string, string>",
-//// TODO: RKN    "Queue<string>",
-//// TODO: RKN    "Stack<string>",
-//// TODO: RKN    "HashSet<string>",
-//// TODO: RKN    "ArrayList",
-            };
+                                                          {
+                                                              "ICollection<string>",
+                                                              "IList<string>",
+                                                              "List<string>",
+                                                              "IDictionary<string, string>",
+                                                              "Dictionary<string, string>",
+                                                          };
 
         [Test]
         public void No_issue_is_reported_for_allowed_type_([ValueSource(nameof(AllowedTypes))] string returnValue) => No_issue_is_reported_for(@"

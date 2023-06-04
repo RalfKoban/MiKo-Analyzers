@@ -11,34 +11,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2204_DocumentationShallUseListAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-            {
-                "example",
-                "exception",
-                "note",
-                "overloads",
-                "para",
-                "param",
-                "permission",
-                "remarks",
-                "returns",
-                "summary",
-                "typeparam",
-                "value",
-            };
+                                                   {
+                                                       "example",
+                                                       "exception",
+                                                       "note",
+                                                       "overloads",
+                                                       "para",
+                                                       "param",
+                                                       "permission",
+                                                       "remarks",
+                                                       "returns",
+                                                       "summary",
+                                                       "typeparam",
+                                                       "value",
+                                                   };
 
         private static readonly string[] EnumerationMarkers =
-            {
-                " 1. ",
-                " 1: ",
-                " a. ",
-                " A. ",
-                " 1) ",
-                " a) ",
-                " A) ",
-                " 1.) ",
-                " a.) ",
-                " A.) ",
-            };
+                                                              {
+                                                                  " 1. ",
+                                                                  " 1: ",
+                                                                  " a. ",
+                                                                  " A. ",
+                                                                  " 1) ",
+                                                                  " a) ",
+                                                                  " A) ",
+                                                                  " 1.) ",
+                                                                  " a.) ",
+                                                                  " A.) ",
+                                                              };
 
         [Test]
         public void An_issue_is_reported_for_Enumeration_in_Xml_tag() => Assert.Multiple(() =>

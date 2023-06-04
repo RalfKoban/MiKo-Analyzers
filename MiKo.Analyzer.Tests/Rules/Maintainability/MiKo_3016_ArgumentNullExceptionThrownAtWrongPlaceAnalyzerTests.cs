@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ExceptionNames =
-            {
-                nameof(ArgumentNullException),
-                typeof(ArgumentNullException).FullName,
-            };
+                                                          {
+                                                              nameof(ArgumentNullException),
+                                                              typeof(ArgumentNullException).FullName,
+                                                          };
 
         [Test]
         public void No_issue_is_reported_for_coalescence_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"

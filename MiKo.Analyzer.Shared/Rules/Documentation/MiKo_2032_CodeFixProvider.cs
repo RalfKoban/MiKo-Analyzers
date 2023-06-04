@@ -18,77 +18,77 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] GenericEndParts = Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
 
         private static readonly string[] Phrases =
-            {
-                " if ",
-                "A task that has the result ",
-                "A task that will complete with a result of ",
-                "a task that will complete with a result of ",
-                "TRUE:",
-                "True:",
-                "true:",
-                "TRUE,",
-                "True,",
-                "true,",
-                "TRUE means",
-                "True means",
-                "true means",
-                "TRUE when",
-                "True when",
-                "true when",
-                "TRUE of",
-                "True of",
-                "true of",
-                "TRUE",
-                "True",
-                "true",
-                "FALSE:",
-                "False:",
-                "false:",
-                "FALSE,",
-                "False,",
-                "false,",
-                "FALSE",
-                "False",
-                "false",
-                "Returns",
-                "returns",
-                "will return",
-            };
+                                                   {
+                                                       " if ",
+                                                       "A task that has the result ",
+                                                       "A task that will complete with a result of ",
+                                                       "a task that will complete with a result of ",
+                                                       "TRUE:",
+                                                       "True:",
+                                                       "true:",
+                                                       "TRUE,",
+                                                       "True,",
+                                                       "true,",
+                                                       "TRUE means",
+                                                       "True means",
+                                                       "true means",
+                                                       "TRUE when",
+                                                       "True when",
+                                                       "true when",
+                                                       "TRUE of",
+                                                       "True of",
+                                                       "true of",
+                                                       "TRUE",
+                                                       "True",
+                                                       "true",
+                                                       "FALSE:",
+                                                       "False:",
+                                                       "false:",
+                                                       "FALSE,",
+                                                       "False,",
+                                                       "false,",
+                                                       "FALSE",
+                                                       "False",
+                                                       "false",
+                                                       "Returns",
+                                                       "returns",
+                                                       "will return",
+                                                   };
 
         private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
 
         private static readonly string[] DelimiterPhrases =
-            {
-                ",",
-                ";",
-                ":",
-                "-",
-            };
+                                                            {
+                                                                ",",
+                                                                ";",
+                                                                ":",
+                                                                "-",
+                                                            };
 
         private static readonly string[] OtherStartingPhrases =
-            {
-                "If ",
-                "When ",
-                "Whether ",
-                "In case ",
-                "Means ",
-                "if ",
-                "when ",
-                "whether ",
-                "in case ",
-                "means ",
-            };
+                                                                {
+                                                                    "If ",
+                                                                    "When ",
+                                                                    "Whether ",
+                                                                    "In case ",
+                                                                    "Means ",
+                                                                    "if ",
+                                                                    "when ",
+                                                                    "whether ",
+                                                                    "in case ",
+                                                                    "means ",
+                                                                };
 
         private static readonly string[] SimpleTrailingPhrases =
-            {
-                " otherwise",
-                " otherwise not",
-                " otherwise with a result of",
-                " otherwise the task has the result",
-                " else it",
-                " else with",
-                ", ; else",
-            };
+                                                                 {
+                                                                     " otherwise",
+                                                                     " otherwise not",
+                                                                     " otherwise with a result of",
+                                                                     " otherwise the task has the result",
+                                                                     " else it",
+                                                                     " else with",
+                                                                     ", ; else",
+                                                                 };
 
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
@@ -98,18 +98,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]
-                               {
-                                   "bool value",
-                                   "Bool value",
-                                   "bool",
-                                   "Bool",
-                                   "boolean value",
-                                   "Boolean value",
-                                   "boolean",
-                                   "Boolean",
-                                   "value",
-                                   "Value",
-                               };
+                           {
+                               "bool value",
+                               "Bool value",
+                               "bool",
+                               "Bool",
+                               "boolean value",
+                               "Boolean value",
+                               "boolean",
+                               "Boolean",
+                               "value",
+                               "Value",
+                           };
             var verbs = new[] { "indicating", "that indicates", "which indicates", "indicates", "indicate" };
             var conditions = new[] { "if", "whether", "when" };
 

@@ -15,10 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const StringComparison Comparison = StringComparison.Ordinal;
 
         private static readonly string[] AcceptedPrefixes =
-            {
-                "source",
-                "target",
-            };
+                                                            {
+                                                                "source",
+                                                                "target",
+                                                            };
 
         private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
                                                                                {

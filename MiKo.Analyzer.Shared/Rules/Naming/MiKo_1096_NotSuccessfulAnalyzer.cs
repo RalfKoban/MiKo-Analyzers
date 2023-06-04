@@ -12,14 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1096";
 
         private static readonly string[] WrongPhrases =
-            {
-                "Not_Successful",
-                "NotSuccessful",
-                "Not_Sucessful", // to find typos
-                "NotSucessful", // to find typos
-                "Not_Succesful", // to find typos
-                "NotSuccesful", // to find typos
-            };
+                                                        {
+                                                            "Not_Successful",
+                                                            "NotSuccessful",
+                                                            "Not_Sucessful", // to find typos
+                                                            "NotSucessful", // to find typos
+                                                            "Not_Succesful", // to find typos
+                                                            "NotSuccesful", // to find typos
+                                                        };
 
         public MiKo_1096_NotSuccessfulAnalyzer() : base(Id, (SymbolKind)(-1))
         {

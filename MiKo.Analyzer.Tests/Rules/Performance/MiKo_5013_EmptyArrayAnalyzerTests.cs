@@ -11,19 +11,19 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     public sealed class MiKo_5013_EmptyArrayAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidArrayCreations =
-            {
-                "Array.Empty<int>()",
-                "new int[1]",
-                "new int[] { 42 }",
-                "new[] { 42 }",
-            };
+                                                               {
+                                                                   "Array.Empty<int>()",
+                                                                   "new int[1]",
+                                                                   "new int[] { 42 }",
+                                                                   "new[] { 42 }",
+                                                               };
 
         private static readonly string[] WrongArrayCreations =
-            {
-                "new int[0]",
-                "new int[] { }",
-                "new int[] { /* some comment */ }",
-            };
+                                                               {
+                                                                   "new int[0]",
+                                                                   "new int[] { }",
+                                                                   "new int[] { /* some comment */ }",
+                                                               };
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

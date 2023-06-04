@@ -20,19 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly char[] Underscores = { '_' };
 
         private static readonly string[] ExpectedOutcomeMarkers =
-        {
-            "Actual",
-            "Expect",
-            "IsEmpty",
-            "IsExceptional",
-            "IsNot",
-            "IsNull",
-            "Return",
-            "Shall",
-            "Should",
-            "Throw",
-            "Will",
-        };
+                                                                  {
+                                                                      "Actual",
+                                                                      "Expect",
+                                                                      "IsEmpty",
+                                                                      "IsExceptional",
+                                                                      "IsNot",
+                                                                      "IsNull",
+                                                                      "Return",
+                                                                      "Shall",
+                                                                      "Should",
+                                                                      "Throw",
+                                                                      "Will",
+                                                                  };
 
         public MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {

@@ -16,12 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Parts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
         private static readonly string[] ContinueTextParts =
-            {
-                "containing",
-                "that contains",
-                "which contains",
-                "that represents the asynchronous operation.",
-            };
+                                                             {
+                                                                 "containing",
+                                                                 "that contains",
+                                                                 "which contains",
+                                                                 "that represents the asynchronous operation.",
+                                                             };
 
         private static readonly string[] TextParts = CreateTextParts().ToArray();
 

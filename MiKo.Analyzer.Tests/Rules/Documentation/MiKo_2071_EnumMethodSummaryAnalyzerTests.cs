@@ -86,13 +86,13 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2071_EnumMethodSummaryAnalyzer();
 
         private static IEnumerable<string> BooleanPhrases() => new[]
-                                                            {
-                                                                "indicate if",
-                                                                "indicate whether",
-                                                                "indicates if",
-                                                                "indicates whether",
-                                                                "indicating if",
-                                                                "indicating whether",
-                                                            };
+                                                               {
+                                                                   "indicate if",
+                                                                   "indicate whether",
+                                                                   "indicates if",
+                                                                   "indicates whether",
+                                                                   "indicating if",
+                                                                   "indicating whether",
+                                                               };
     }
 }

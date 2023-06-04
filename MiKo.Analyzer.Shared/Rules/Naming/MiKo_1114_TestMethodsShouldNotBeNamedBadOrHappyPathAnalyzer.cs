@@ -12,20 +12,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1114";
 
         private static readonly string[] WrongTerms =
-            {
-                "bad_case",
-                "bad_path",
-                "BadCase",
-                "BadPath",
-                "good_case",
-                "good_path",
-                "GoodCase",
-                "GoodPath",
-                "happy_case",
-                "happy_path",
-                "HappyCase",
-                "HappyPath",
-            };
+                                                      {
+                                                          "bad_case",
+                                                          "bad_path",
+                                                          "BadCase",
+                                                          "BadPath",
+                                                          "good_case",
+                                                          "good_path",
+                                                          "GoodCase",
+                                                          "GoodPath",
+                                                          "happy_case",
+                                                          "happy_path",
+                                                          "HappyCase",
+                                                          "HappyPath",
+                                                      };
 
         public MiKo_1114_TestMethodsShouldNotBeNamedBadOrHappyPathAnalyzer() : base(Id)
         {

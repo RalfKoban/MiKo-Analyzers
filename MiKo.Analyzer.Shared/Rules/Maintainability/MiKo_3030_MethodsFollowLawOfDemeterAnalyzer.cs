@@ -13,11 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         public const string Id = "MiKo_3030";
 
         private static readonly SyntaxKind[] SyntaxKinds =
-            {
-                SyntaxKind.SimpleMemberAccessExpression,
-                SyntaxKind.ConditionalAccessExpression,
-                SyntaxKind.ElementAccessExpression,
-            };
+                                                           {
+                                                               SyntaxKind.SimpleMemberAccessExpression,
+                                                               SyntaxKind.ConditionalAccessExpression,
+                                                               SyntaxKind.ElementAccessExpression,
+                                                           };
 
         public MiKo_3030_MethodsFollowLawOfDemeterAnalyzer() : base(Id, (SymbolKind)(-1))
         {

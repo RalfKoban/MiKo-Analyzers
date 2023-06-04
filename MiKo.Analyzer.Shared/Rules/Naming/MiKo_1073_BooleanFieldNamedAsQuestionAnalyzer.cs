@@ -14,12 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1073";
 
         private static readonly string[] RawPrefixes =
-            {
-                "Is",
-                "Are",
-                "is",
-                "are",
-            };
+                                                       {
+                                                           "Is",
+                                                           "Are",
+                                                           "is",
+                                                           "are",
+                                                       };
 
         private static readonly string[] Prefixes = Constants.Markers.FieldPrefixes.SelectMany(_ => RawPrefixes, (prefix, name) => prefix + name).ToArray();
 

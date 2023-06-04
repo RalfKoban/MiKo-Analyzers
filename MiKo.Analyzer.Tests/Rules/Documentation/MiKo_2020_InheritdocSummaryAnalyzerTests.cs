@@ -367,12 +367,12 @@ class TestMe : ITestMe
         private static string[] CreatePhrases(string marker)
         {
             var phrases = new[]
-                              {
-                                  "<see cref='" + marker + "'/>",
-                                  "<see cref='" + marker + "' />",
-                                  "<seealso cref='" + marker + "'/>",
-                                  "<seealso cref='" + marker + "' />",
-                              };
+                          {
+                              "<see cref='" + marker + "'/>",
+                              "<see cref='" + marker + "' />",
+                              "<seealso cref='" + marker + "'/>",
+                              "<seealso cref='" + marker + "' />",
+                          };
 
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _ + "."));

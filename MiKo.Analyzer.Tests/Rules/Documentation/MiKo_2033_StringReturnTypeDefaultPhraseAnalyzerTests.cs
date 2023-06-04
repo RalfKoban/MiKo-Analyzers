@@ -15,21 +15,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2033_StringReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] StringOnlyReturnValues =
-            {
-                "string",
-                "String",
-                "System.String",
-            };
+                                                                  {
+                                                                      "string",
+                                                                      "String",
+                                                                      "System.String",
+                                                                  };
 
         private static readonly string[] StringTaskReturnValues =
-            {
-                "Task<string>",
-                "Task<String>",
-                "Task<System.String>",
-                "System.Threading.Tasks.Task<string>",
-                "System.Threading.Tasks.Task<String>",
-                "System.Threading.Tasks.Task<System.String>",
-            };
+                                                                  {
+                                                                      "Task<string>",
+                                                                      "Task<String>",
+                                                                      "Task<System.String>",
+                                                                      "System.Threading.Tasks.Task<string>",
+                                                                      "System.Threading.Tasks.Task<String>",
+                                                                      "System.Threading.Tasks.Task<System.String>",
+                                                                  };
 
         private static readonly string[] StringReturnValues = StringOnlyReturnValues.Concat(StringTaskReturnValues).ToArray();
 

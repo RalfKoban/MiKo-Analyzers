@@ -11,35 +11,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3109_TestAssertsHaveMessageAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AssertionsWithoutMessages =
-            {
-                "Assert.That(42, Is.Not.EqualTo(0815))",
-                "Assert.AreEqual(42, 0815)",
-                "Assert.IsNull(null)",
-                "Assert.False(true)",
-                "Assert.Fail()",
-                "Assert.Pass()",
-                "Assert.AreSame(1, 2)",
-            };
+                                                                     {
+                                                                         "Assert.That(42, Is.Not.EqualTo(0815))",
+                                                                         "Assert.AreEqual(42, 0815)",
+                                                                         "Assert.IsNull(null)",
+                                                                         "Assert.False(true)",
+                                                                         "Assert.Fail()",
+                                                                         "Assert.Pass()",
+                                                                         "Assert.AreSame(1, 2)",
+                                                                     };
 
         private static readonly string[] AssertionsWithMessages =
-            {
-                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message {0}"", 42)",
-                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42)",
-                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message"")",
-                @"Assert.That(42, Is.Not.EqualTo(0815), 42 + "" some message "")",
-                @"Assert.That(42, Is.Not.EqualTo(0815), $""{42} some message "")",
-                @"Assert.That(42, Is.Not.EqualTo(0815), $""some message {42} "")",
-                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"")",
-                @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"" + 0815)",
-                @"Assert.AreEqual(42, 0815, ""some message"")",
-                @"Assert.IsNull(null, ""some message {0}"", 42)",
-                @"Assert.IsNull(null, ""some message"")",
-                @"Assert.False(true, ""some message"")",
-                @"Assert.Fail(""some message {0}"", 42)",
-                @"Assert.Fail(""some message"")",
-                @"Assert.Pass(""some message"")",
-                @"Assert.AreSame(1, 2, ""some message"")",
-            };
+                                                                  {
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message {0}"", 42)",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42)",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message"")",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), 42 + "" some message "")",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), $""{42} some message "")",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), $""some message {42} "")",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"")",
+                                                                      @"Assert.That(42, Is.Not.EqualTo(0815), ""some message "" + 42 + ""some more message"" + 0815)",
+                                                                      @"Assert.AreEqual(42, 0815, ""some message"")",
+                                                                      @"Assert.IsNull(null, ""some message {0}"", 42)",
+                                                                      @"Assert.IsNull(null, ""some message"")",
+                                                                      @"Assert.False(true, ""some message"")",
+                                                                      @"Assert.Fail(""some message {0}"", 42)",
+                                                                      @"Assert.Fail(""some message"")",
+                                                                      @"Assert.Pass(""some message"")",
+                                                                      @"Assert.AreSame(1, 2, ""some message"")",
+                                                                  };
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

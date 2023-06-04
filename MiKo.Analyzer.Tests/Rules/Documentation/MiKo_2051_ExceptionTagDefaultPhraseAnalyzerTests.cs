@@ -15,12 +15,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2051_ExceptionTagDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ExceptionTypes =
-            {
-                nameof(ArgumentException),
-                nameof(InvalidOperationException),
-                nameof(NotSupportedException),
-                nameof(Exception),
-            };
+                                                          {
+                                                              nameof(ArgumentException),
+                                                              nameof(InvalidOperationException),
+                                                              nameof(NotSupportedException),
+                                                              nameof(Exception),
+                                                          };
 
         private static readonly string[] ForbiddenExceptionStartingPhrases = CreateForbiddenExceptionStartingPhrases();
 
@@ -635,26 +635,26 @@ public class TestMe
         private static string[] CreateForbiddenExceptionStartingPhrases()
         {
             var phrases = new[]
-                              {
-                                  "If ",
-                                  "In case ",
-                                  "When ",
-                                  "Throw ",
-                                  "Throws ",
-                                  "Thrown ",
-                                  "Is thrown ",
-                                  "Gets thrown ",
-                                  "Will be thrown ",
-                                  "Can be thrown ",
-                                  "Should be thrown ",
-                                  "The exception in case ",
-                                  "This exception should be thrown ",
-                                  "Exception in case ",
-                                  "A exception thrown ",
-                                  "An exception thrown ",
-                                  "Fired ",
-                                  "Is fired ",
-                              };
+                          {
+                              "If ",
+                              "In case ",
+                              "When ",
+                              "Throw ",
+                              "Throws ",
+                              "Thrown ",
+                              "Is thrown ",
+                              "Gets thrown ",
+                              "Will be thrown ",
+                              "Can be thrown ",
+                              "Should be thrown ",
+                              "The exception in case ",
+                              "This exception should be thrown ",
+                              "Exception in case ",
+                              "A exception thrown ",
+                              "An exception thrown ",
+                              "Fired ",
+                              "Is fired ",
+                          };
 
             return phrases.Concat(phrases.Select(_ => _.ToLower())).Distinct().OrderBy(_ => _).ToArray();
         }

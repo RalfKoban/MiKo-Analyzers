@@ -11,83 +11,83 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         public const string Id = "MiKo_2300";
 
         private static readonly string[] MeaninglessPhrases =
-            {
-                "add ",
-                "adds ",
-                "build ",
-                "builds ",
-                "calculate ",
-                "calculates ",
-                "call ",
-                "calls ",
-                "check ",
-                "checks ",
-                "close ",
-                "closes ",
-                "compare ",
-                "compares ",
-                "convert ",
-                "converts ",
-                "count ",
-                "counts ",
-                "create ",
-                "creates ",
-                "decr.",
-                "decrease ",
-                "decreases ",
-                "decrement ",
-                "decrements ",
-                "determine ",
-                "determines ",
-                "evaluate event arg", // no space at the end to allow combinations of the word
-                "get ",
-                "gets ",
-                "has ",
-                "if ",
-                "incr.",
-                "increase ",
-                "increases ",
-                "increment ",
-                "increments ",
-                "initialize", // no space at the end to allow combinations of the word
-                "invoke", // no space at the end to allow combinations of the word
-                "is ",
-                "iterate", // no space at the end to allow combinations of the word
-                "load",
-                "open ",
-                "opens ",
-                "raise ",
-                "raises ",
-                "remove ",
-                "removes ",
-                "retrieve ",
-                "retrieves ",
-                "return", // no space at the end to allow combinations of the word
-                "save", // no space at the end to allow combinations of the word
-                "set ",
-                "sets ",
-                "start ",
-                "starts ",
-                "stop ",
-                "stops ",
-                "use", // no space at the end to allow combinations of the word
-            };
+                                                              {
+                                                                  "add ",
+                                                                  "adds ",
+                                                                  "build ",
+                                                                  "builds ",
+                                                                  "calculate ",
+                                                                  "calculates ",
+                                                                  "call ",
+                                                                  "calls ",
+                                                                  "check ",
+                                                                  "checks ",
+                                                                  "close ",
+                                                                  "closes ",
+                                                                  "compare ",
+                                                                  "compares ",
+                                                                  "convert ",
+                                                                  "converts ",
+                                                                  "count ",
+                                                                  "counts ",
+                                                                  "create ",
+                                                                  "creates ",
+                                                                  "decr.",
+                                                                  "decrease ",
+                                                                  "decreases ",
+                                                                  "decrement ",
+                                                                  "decrements ",
+                                                                  "determine ",
+                                                                  "determines ",
+                                                                  "evaluate event arg", // no space at the end to allow combinations of the word
+                                                                  "get ",
+                                                                  "gets ",
+                                                                  "has ",
+                                                                  "if ",
+                                                                  "incr.",
+                                                                  "increase ",
+                                                                  "increases ",
+                                                                  "increment ",
+                                                                  "increments ",
+                                                                  "initialize", // no space at the end to allow combinations of the word
+                                                                  "invoke", // no space at the end to allow combinations of the word
+                                                                  "is ",
+                                                                  "iterate", // no space at the end to allow combinations of the word
+                                                                  "load",
+                                                                  "open ",
+                                                                  "opens ",
+                                                                  "raise ",
+                                                                  "raises ",
+                                                                  "remove ",
+                                                                  "removes ",
+                                                                  "retrieve ",
+                                                                  "retrieves ",
+                                                                  "return", // no space at the end to allow combinations of the word
+                                                                  "save", // no space at the end to allow combinations of the word
+                                                                  "set ",
+                                                                  "sets ",
+                                                                  "start ",
+                                                                  "starts ",
+                                                                  "stop ",
+                                                                  "stops ",
+                                                                  "use", // no space at the end to allow combinations of the word
+                                                              };
 
         private static readonly string[] AllowedMarkers =
-            {
-                "0x",
-                "://",
-                "@formatter:off",
-                "@formatter:on",
-                "blank",
-                "checked by",
-                "ignore",
-                "intentionally",
-                "No-Op",
-                "not needed",
-                "nothing",
-                "special handling",
-            };
+                                                          {
+                                                              "0x",
+                                                              "://",
+                                                              "@formatter:off",
+                                                              "@formatter:on",
+                                                              "blank",
+                                                              "checked by",
+                                                              "ignore",
+                                                              "intentionally",
+                                                              "No-Op",
+                                                              "not needed",
+                                                              "nothing",
+                                                              "special handling",
+                                                          };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
         {

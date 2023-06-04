@@ -11,12 +11,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongTags =
-            {
-                "see cref=",
-                "see name=",
-                "seealso cref=",
-                "seealso name=",
-            };
+                                                     {
+                                                         "see cref=",
+                                                         "see name=",
+                                                         "seealso cref=",
+                                                         "seealso name=",
+                                                     };
 
         [Test]
         public void No_issue_is_reported_for_undocumented_generic_type() => No_issue_is_reported_for(@"

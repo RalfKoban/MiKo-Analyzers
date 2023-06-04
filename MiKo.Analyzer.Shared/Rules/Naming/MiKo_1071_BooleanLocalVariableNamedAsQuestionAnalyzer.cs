@@ -12,10 +12,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1071";
 
         private static readonly string[] Prefixes =
-            {
-                "is",
-                "are",
-            };
+                                                    {
+                                                        "is",
+                                                        "are",
+                                                    };
 
         public MiKo_1071_BooleanLocalVariableNamedAsQuestionAnalyzer() : base(Id)
         {

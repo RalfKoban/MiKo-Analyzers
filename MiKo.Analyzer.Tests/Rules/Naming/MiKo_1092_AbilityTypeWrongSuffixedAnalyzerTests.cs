@@ -11,14 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1092_AbilityTypeWrongSuffixedAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongNames =
-            {
-                "ComparableItem",
-                "ComparableEntity",
-                "ComparableElement",
-                "ComparableElementInfo",
-                "ComparableInfo",
-                "ComparableInformation",
-            };
+                                                      {
+                                                          "ComparableItem",
+                                                          "ComparableEntity",
+                                                          "ComparableElement",
+                                                          "ComparableElementInfo",
+                                                          "ComparableInfo",
+                                                          "ComparableInformation",
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_class() => No_issue_is_reported_for(@"

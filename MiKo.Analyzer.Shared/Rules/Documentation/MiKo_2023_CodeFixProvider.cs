@@ -13,23 +13,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2023_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
         private static readonly KeyValuePair<string, string>[] ReplacementMap =
-            {
-                new KeyValuePair<string, string>("true", string.Empty),
-                new KeyValuePair<string, string>("false", string.Empty),
-                new KeyValuePair<string, string>(" to determine whether ", " to "),
-                new KeyValuePair<string, string>(" to determines whether ", " to "),
-                new KeyValuePair<string, string>(" to indicate whether ", " to "),
-                new KeyValuePair<string, string>(" to indicates whether ", " to "),
-                new KeyValuePair<string, string>(" to if set to ", " to "),
-                new KeyValuePair<string, string>(" to if ", " to "),
-                new KeyValuePair<string, string>(" to  if ", " to "),
-                new KeyValuePair<string, string>(" to to ", " to "),
-                new KeyValuePair<string, string>(" to  to ", " to "),
-                new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
-                new KeyValuePair<string, string>("; otherwise ", string.Empty),
-                new KeyValuePair<string, string>(". Otherwise ", string.Empty),
-                new KeyValuePair<string, string>(". ", "; "),
-            };
+                                                                                {
+                                                                                    new KeyValuePair<string, string>("true", string.Empty),
+                                                                                    new KeyValuePair<string, string>("false", string.Empty),
+                                                                                    new KeyValuePair<string, string>(" to determine whether ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to determines whether ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to indicate whether ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to indicates whether ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to if set to ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to if ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to  if ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to to ", " to "),
+                                                                                    new KeyValuePair<string, string>(" to  to ", " to "),
+                                                                                    new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
+                                                                                    new KeyValuePair<string, string>("; otherwise ", string.Empty),
+                                                                                    new KeyValuePair<string, string>(". Otherwise ", string.Empty),
+                                                                                    new KeyValuePair<string, string>(". ", "; "),
+                                                                                };
 
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).Distinct().ToArray();
 

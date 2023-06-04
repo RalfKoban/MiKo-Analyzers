@@ -10,17 +10,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1100_TestClassesPrefixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] VariableNames =
-            {
-                "objectUnderTest",
-                "subjectUnderTest",
-                "unitUnderTest",
-                "testCandidate",
-                "testObject",
-                "sut",
-                "uut",
-                "testee",
-                "candidateToTest",
-            };
+                                                         {
+                                                             "objectUnderTest",
+                                                             "subjectUnderTest",
+                                                             "unitUnderTest",
+                                                             "testCandidate",
+                                                             "testObject",
+                                                             "sut",
+                                                             "uut",
+                                                             "testee",
+                                                             "candidateToTest",
+                                                         };
 
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"

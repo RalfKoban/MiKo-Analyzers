@@ -10,28 +10,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-            {
-                "AreConnected",
-                "IsConnected",
-                "Connected",
-                "HasConnectionEstablished",
-                "CanBeConnected",
-                nameof(string.IsNullOrEmpty),
-                nameof(string.IsNullOrWhiteSpace),
-                "IsSameKey",
-                "IsReadOnly",
-                "IsReadWrite",
-                "IsWriteProtected",
-                "IsInDesign",
-                "IsInDesignMode",
-                "IsInDesignerMode",
-            };
+                                                        {
+                                                            "AreConnected",
+                                                            "IsConnected",
+                                                            "Connected",
+                                                            "HasConnectionEstablished",
+                                                            "CanBeConnected",
+                                                            nameof(string.IsNullOrEmpty),
+                                                            nameof(string.IsNullOrWhiteSpace),
+                                                            "IsSameKey",
+                                                            "IsReadOnly",
+                                                            "IsReadWrite",
+                                                            "IsWriteProtected",
+                                                            "IsInDesign",
+                                                            "IsInDesignMode",
+                                                            "IsInDesignerMode",
+                                                        };
 
         private static readonly string[] WrongNames =
-            {
-                "IsConnectionPossible",
-                "AreDevicesConnected",
-            };
+                                                      {
+                                                          "IsConnectionPossible",
+                                                          "AreDevicesConnected",
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

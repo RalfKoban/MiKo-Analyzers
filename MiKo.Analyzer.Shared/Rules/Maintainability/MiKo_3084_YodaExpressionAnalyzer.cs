@@ -14,23 +14,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         public const string Id = "MiKo_3084";
 
         private static readonly HashSet<SyntaxKind> ExpressionValues = new HashSet<SyntaxKind>
-                                                                        {
-                                                                            SyntaxKind.TrueLiteralExpression,
-                                                                            SyntaxKind.FalseLiteralExpression,
-                                                                            SyntaxKind.NullLiteralExpression,
-                                                                            SyntaxKind.NumericLiteralExpression,
-                                                                            SyntaxKind.StringLiteralExpression,
-                                                                        };
+                                                                           {
+                                                                               SyntaxKind.TrueLiteralExpression,
+                                                                               SyntaxKind.FalseLiteralExpression,
+                                                                               SyntaxKind.NullLiteralExpression,
+                                                                               SyntaxKind.NumericLiteralExpression,
+                                                                               SyntaxKind.StringLiteralExpression,
+                                                                           };
 
         private static readonly SyntaxKind[] Expressions =
-            {
-                SyntaxKind.EqualsExpression,
-                SyntaxKind.NotEqualsExpression,
-                SyntaxKind.LessThanExpression,
-                SyntaxKind.LessThanOrEqualExpression,
-                SyntaxKind.GreaterThanExpression,
-                SyntaxKind.GreaterThanOrEqualExpression,
-            };
+                                                           {
+                                                               SyntaxKind.EqualsExpression,
+                                                               SyntaxKind.NotEqualsExpression,
+                                                               SyntaxKind.LessThanExpression,
+                                                               SyntaxKind.LessThanOrEqualExpression,
+                                                               SyntaxKind.GreaterThanExpression,
+                                                               SyntaxKind.GreaterThanOrEqualExpression,
+                                                           };
 
         public MiKo_3084_YodaExpressionAnalyzer() : base(Id, (SymbolKind)(-1))
         {

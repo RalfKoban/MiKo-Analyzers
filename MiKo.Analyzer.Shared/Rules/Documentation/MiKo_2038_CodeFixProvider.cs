@@ -15,11 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2038_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
         internal static readonly string[] CommandStartingPhrases =
-            {
-                "A command ",
-                "Command ",
-                "command ",
-            };
+                                                                   {
+                                                                       "A command ",
+                                                                       "Command ",
+                                                                       "command ",
+                                                                   };
 
         private static readonly Dictionary<string, string> CommandReplacementMap = CreateReplacementMap();
 
@@ -56,17 +56,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
         {
             var middleParts = new[]
-                                  {
-                                      "that can",
-                                      "that will",
-                                      "that",
-                                      "which can",
-                                      "which will",
-                                      "which",
-                                      "will",
-                                      "to",
-                                      "for",
-                                  };
+                              {
+                                  "that can",
+                                  "that will",
+                                  "that",
+                                  "which can",
+                                  "which will",
+                                  "which",
+                                  "will",
+                                  "to",
+                                  "for",
+                              };
 
             var results = new List<KeyValuePair<string, string>>();
 

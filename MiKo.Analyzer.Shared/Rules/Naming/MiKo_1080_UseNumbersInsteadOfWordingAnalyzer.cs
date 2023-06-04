@@ -14,102 +14,102 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1080";
 
         private static readonly string[] Numbers =
-            {
-                "one",
-                "two",
-                "three",
-                "four",
-                "five",
-                "six",
-                "seven",
-                "eight",
-                "nine",
-                "eleven",
-                "twelve",
-                "thirteen",
-                "fifteen",
-                "twenty",
-                "thirty",
-                "forty",
-                "fifty",
-                "first",
-                "second",
-                "third",
-            };
+                                                   {
+                                                       "one",
+                                                       "two",
+                                                       "three",
+                                                       "four",
+                                                       "five",
+                                                       "six",
+                                                       "seven",
+                                                       "eight",
+                                                       "nine",
+                                                       "eleven",
+                                                       "twelve",
+                                                       "thirteen",
+                                                       "fifteen",
+                                                       "twenty",
+                                                       "thirty",
+                                                       "forty",
+                                                       "fifty",
+                                                       "first",
+                                                       "second",
+                                                       "third",
+                                                   };
 
         private static readonly IEnumerable<string> KnownParts = new[]
-                                                                     {
-                                                                         "_one_",
-                                                                         "_first_",
-                                                                         "_second_",
-                                                                         "_third_",
-                                                                         "anyone",
-                                                                         "Anyone",
-                                                                         "bone",
-                                                                         "Bone",
-                                                                         "omponent", // 'component'
-                                                                         "OMPONENT",
-                                                                         "cone",
-                                                                         "Cone",
-                                                                         "done",
-                                                                         "Done",
-                                                                         "etwork", // 'network'
-                                                                         "ETWORK",
-                                                                         "everyone",
-                                                                         "Everyone",
-                                                                         "forType",
-                                                                         "ForType",
-                                                                         "gone",
-                                                                         "Gone",
-                                                                         "height",
-                                                                         "Height",
-                                                                         "HEIGHT",
-                                                                         "hone",
-                                                                         "Hone",
-                                                                         "ione",
-                                                                         "ionE",
-                                                                         "IonE",
-                                                                         "late", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
-                                                                         "lone",
-                                                                         "Lone",
-                                                                         "mone",
-                                                                         "Mone",
-                                                                         "none",
-                                                                         "None",
-                                                                         "NONE",
-                                                                         "noOne",
-                                                                         "NoOne",
-                                                                         "onE", // 'SetupNonExistentDevice'
-                                                                         "OnE",
-                                                                         "OneTime",
-                                                                         "Ones",
-                                                                         "oNeeded",
-                                                                         "oxone",
-                                                                         "Oxone",
-                                                                         "sEven", // 'isEvent'
-                                                                         "someone", // 'someone'
-                                                                         "Someone", // 'someone'
-                                                                         "sone",
-                                                                         "Sone",
-                                                                         "seconds",
-                                                                         "Seconds",
-                                                                         "tone",
-                                                                         "Tone",
-                                                                         "twoLetter", // 'twoLetterLanguageCode'
-                                                                         "TwoLetter", // 'TwoLetterLanguageCode'
-                                                                         "tWord", // 'firstWord'
-                                                                         "WaitOne",
-                                                                         "WAITONE",
-                                                                         "weight",
-                                                                         "Weight",
-                                                                         "WEIGHT",
-                                                                         "work", // 'ImportWorkflow'
-                                                                         "Work",
-                                                                         "zone",
-                                                                         "Zone",
-                                                                         "ZONE",
-                                                                         "xponent",
-                                                                     };
+                                                                 {
+                                                                     "_one_",
+                                                                     "_first_",
+                                                                     "_second_",
+                                                                     "_third_",
+                                                                     "anyone",
+                                                                     "Anyone",
+                                                                     "bone",
+                                                                     "Bone",
+                                                                     "omponent", // 'component'
+                                                                     "OMPONENT",
+                                                                     "cone",
+                                                                     "Cone",
+                                                                     "done",
+                                                                     "Done",
+                                                                     "etwork", // 'network'
+                                                                     "ETWORK",
+                                                                     "everyone",
+                                                                     "Everyone",
+                                                                     "forType",
+                                                                     "ForType",
+                                                                     "gone",
+                                                                     "Gone",
+                                                                     "height",
+                                                                     "Height",
+                                                                     "HEIGHT",
+                                                                     "hone",
+                                                                     "Hone",
+                                                                     "ione",
+                                                                     "ionE",
+                                                                     "IonE",
+                                                                     "late", // prevent stuff like 'CalculateLevenshtein' which contains the term 'eLeven'
+                                                                     "lone",
+                                                                     "Lone",
+                                                                     "mone",
+                                                                     "Mone",
+                                                                     "none",
+                                                                     "None",
+                                                                     "NONE",
+                                                                     "noOne",
+                                                                     "NoOne",
+                                                                     "onE", // 'SetupNonExistentDevice'
+                                                                     "OnE",
+                                                                     "OneTime",
+                                                                     "Ones",
+                                                                     "oNeeded",
+                                                                     "oxone",
+                                                                     "Oxone",
+                                                                     "sEven", // 'isEvent'
+                                                                     "someone", // 'someone'
+                                                                     "Someone", // 'someone'
+                                                                     "sone",
+                                                                     "Sone",
+                                                                     "seconds",
+                                                                     "Seconds",
+                                                                     "tone",
+                                                                     "Tone",
+                                                                     "twoLetter", // 'twoLetterLanguageCode'
+                                                                     "TwoLetter", // 'TwoLetterLanguageCode'
+                                                                     "tWord", // 'firstWord'
+                                                                     "WaitOne",
+                                                                     "WAITONE",
+                                                                     "weight",
+                                                                     "Weight",
+                                                                     "WEIGHT",
+                                                                     "work", // 'ImportWorkflow'
+                                                                     "Work",
+                                                                     "zone",
+                                                                     "Zone",
+                                                                     "ZONE",
+                                                                     "xponent",
+                                                                 };
 
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
         {

@@ -8,79 +8,79 @@ namespace MiKoSolutions.Analyzers.Rules
     public static class CodeDetector
     {
         private static readonly char[] CodeBlockMarkers =
-            {
-                '{',
-                '}',
-            };
+                                                          {
+                                                              '{',
+                                                              '}',
+                                                          };
 
         private static readonly char[] ArgumentBlockMarkers =
-            {
-                '(',
-                ')',
-                '[',
-                ']',
-            };
+                                                              {
+                                                                  '(',
+                                                                  ')',
+                                                                  '[',
+                                                                  ']',
+                                                              };
 
         private static readonly string[] CodeConditionMarkers =
-            {
-                "??",
-                "?.",
-                "if(",
-                "if (",
-                "switch(",
-                "switch (",
-                "else if(",
-                "else if (",
-            };
+                                                                {
+                                                                    "??",
+                                                                    "?.",
+                                                                    "if(",
+                                                                    "if (",
+                                                                    "switch(",
+                                                                    "switch (",
+                                                                    "else if(",
+                                                                    "else if (",
+                                                                };
 
         private static readonly string[] Operators =
-            {
-                "==",
-                "!=",
-                ">=",
-                "<=",
-                ">",
-                "<",
-                "++",
-                "--",
-                "+=",
-                "-=",
-                "*=",
-                "/=",
-                "=>", // lambda
-                "&&",
-                "||",
-            };
+                                                     {
+                                                         "==",
+                                                         "!=",
+                                                         ">=",
+                                                         "<=",
+                                                         ">",
+                                                         "<",
+                                                         "++",
+                                                         "--",
+                                                         "+=",
+                                                         "-=",
+                                                         "*=",
+                                                         "/=",
+                                                         "=>", // lambda
+                                                         "&&",
+                                                         "||",
+                                                     };
 
         private static readonly string[] CodeStartMarkers =
-            {
-                "var ",
-                "int ",
-                "bool ",
-                "public ",
-                "private ",
-                "internal ",
-                "protected ",
-            };
+                                                            {
+                                                                "var ",
+                                                                "int ",
+                                                                "bool ",
+                                                                "public ",
+                                                                "private ",
+                                                                "internal ",
+                                                                "protected ",
+                                                            };
 
         private static readonly string[] ReSharperMarkers =
-            {
-                "ReSharper disable ",
-                "ReSharper restore ",
-            };
+                                                            {
+                                                                "ReSharper disable ",
+                                                                "ReSharper restore ",
+                                                            };
 
         private static readonly string[] FrameMarkers =
-            {
-                "===",
-                "---",
-                "***",
-            };
+                                                        {
+                                                            "===",
+                                                            "---",
+                                                            "***",
+                                                        };
 
         private static readonly string[] LockStatements =
-            {
-                "lock (",
-                "lock(",
-            };
+                                                          {
+                                                              "lock (",
+                                                              "lock(",
+                                                          };
 
         public static bool IsCSharpKeyword(string value) => SyntaxFactory.ParseToken(value).IsKeyword();
 

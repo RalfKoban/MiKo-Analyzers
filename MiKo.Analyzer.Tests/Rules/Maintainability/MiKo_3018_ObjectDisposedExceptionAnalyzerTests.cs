@@ -13,12 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3018_ObjectDisposedExceptionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ProblematicVisibilities =
-            {
-                "public",
-                "internal",
-                "protected",
-                "protected internal",
-            };
+                                                                   {
+                                                                       "public",
+                                                                       "internal",
+                                                                       "protected",
+                                                                       "protected internal",
+                                                                   };
 
         private static readonly string[] Visibilities = ProblematicVisibilities.Concat(new[] { "private " }).ToArray();
 

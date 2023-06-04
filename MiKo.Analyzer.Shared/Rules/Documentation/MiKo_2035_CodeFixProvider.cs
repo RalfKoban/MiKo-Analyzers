@@ -62,14 +62,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                          };
 
         private static readonly string[] ByteArrayContinueTexts =
-            {
-                "s containing ",
-                "s that contains ",
-                "s which contains ",
-                " containing ",
-                " that contains ",
-                " which contains ",
-            };
+                                                                  {
+                                                                      "s containing ",
+                                                                      "s that contains ",
+                                                                      "s which contains ",
+                                                                      " containing ",
+                                                                      " that contains ",
+                                                                      " which contains ",
+                                                                  };
 
         private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
 

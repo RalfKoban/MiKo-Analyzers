@@ -115,36 +115,36 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                     };
 
         private static readonly string[] AllowedPostFixTerms =
-            {
-                "cept", // accept
-                "cepts", // accepts
-                "dopt", // adopt
-                "dopts", // adopts
-                "ires",
-                "ixtures",
-                "kept",
-                "Kept",
-                "mpt", // prompt
-                "mpts", // attempts
-                "cript", // script
-                "cripts", // scripts
-                "rupt",
-                "rupts",
-                "ures",
-                "wares",
-            };
+                                                               {
+                                                                   "cept", // accept
+                                                                   "cepts", // accepts
+                                                                   "dopt", // adopt
+                                                                   "dopts", // adopts
+                                                                   "ires",
+                                                                   "ixtures",
+                                                                   "kept",
+                                                                   "Kept",
+                                                                   "mpt", // prompt
+                                                                   "mpts", // attempts
+                                                                   "cript", // script
+                                                                   "cripts", // scripts
+                                                                   "rupt",
+                                                                   "rupts",
+                                                                   "ures",
+                                                                   "wares",
+                                                               };
 
         private static readonly string[] AllowedNames =
-            {
-                "Enumerable",
-                "Enumeration",
-                "Enum", // must be after the others so that those get properly replaced
-                "Identifiable",
-                "Identification",
-                "Identifier",
-                "Identity",
-                "Identities",
-            };
+                                                        {
+                                                            "Enumerable",
+                                                            "Enumeration",
+                                                            "Enum", // must be after the others so that those get properly replaced
+                                                            "Identifiable",
+                                                            "Identification",
+                                                            "Identifier",
+                                                            "Identity",
+                                                            "Identities",
+                                                        };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)
         {

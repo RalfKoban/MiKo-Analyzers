@@ -10,31 +10,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     internal sealed class MiKo_1114_TestMethodsShouldNotBeNamedBadOrHappyPathAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AcceptedMethodNames =
-            {
-                "DoSomething",
-            };
+                                                               {
+                                                                   "DoSomething",
+                                                               };
 
         private static readonly string[] WrongMethodNames =
-            {
-                "Bad_case",
-                "Bad_Case",
-                "bad_path",
-                "Bad_Path",
-                "BadCase",
-                "BadPath",
-                "Good_case",
-                "Good_Case",
-                "Good_path",
-                "Good_Path",
-                "GoodCase",
-                "GoodPath",
-                "happy_case",
-                "Happy_Case",
-                "happy_path",
-                "Happy_Path",
-                "HappyCase",
-                "HappyPath",
-            };
+                                                            {
+                                                                "Bad_case",
+                                                                "Bad_Case",
+                                                                "bad_path",
+                                                                "Bad_Path",
+                                                                "BadCase",
+                                                                "BadPath",
+                                                                "Good_case",
+                                                                "Good_Case",
+                                                                "Good_path",
+                                                                "Good_Path",
+                                                                "GoodCase",
+                                                                "GoodPath",
+                                                                "happy_case",
+                                                                "Happy_Case",
+                                                                "happy_path",
+                                                                "Happy_Path",
+                                                                "HappyCase",
+                                                                "HappyPath",
+                                                            };
 
         [Test]
         public void No_issue_is_reported_for_test_method_with_correct_name_([ValueSource(nameof(AcceptedMethodNames))] string methodName)

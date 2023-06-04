@@ -11,12 +11,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidTypes =
-            {
-                "IValueConverter",
-                "IMultiValueConverter",
-                "System.Windows.Data.IValueConverter",
-                "System.Windows.Data.IMultiValueConverter",
-            };
+                                                      {
+                                                          "IValueConverter",
+                                                          "IMultiValueConverter",
+                                                          "System.Windows.Data.IValueConverter",
+                                                          "System.Windows.Data.IMultiValueConverter",
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_non_value_converter_class() => No_issue_is_reported_for(@"

@@ -186,23 +186,23 @@ public class TestMe
         private static string[] CreateAmbiguousPhrases()
         {
             var phrases = new[]
-                              {
-                                  "<example />",
-                                  "<exception />",
-                                  "<include />",
-                                  "<inheritdoc />",
-                                  "<overloads />",
-                                  "<param />",
-                                  "<paramref />",
-                                  "<permission />",
-                                  "<remarks />",
-                                  "<returns />",
-                                  "<seealso />",
-                                  "<summary />",
-                                  "<typeparam />",
-                                  "<value />",
-                                  "<seealso>Bla</seealso>",
-                              };
+                          {
+                              "<example />",
+                              "<exception />",
+                              "<include />",
+                              "<inheritdoc />",
+                              "<overloads />",
+                              "<param />",
+                              "<paramref />",
+                              "<permission />",
+                              "<remarks />",
+                              "<returns />",
+                              "<seealso />",
+                              "<summary />",
+                              "<typeparam />",
+                              "<value />",
+                              "<seealso>Bla</seealso>",
+                          };
 
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _.Replace(" ", string.Empty)));

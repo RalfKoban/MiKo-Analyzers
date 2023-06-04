@@ -16,21 +16,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] SentenceEndings = { ".", string.Empty };
         private static readonly string[] Phrases = new[]
-                                                       {
-                                                           "Unused",
-                                                           "Not used",
-                                                           "Not in use",
-                                                           "No use",
-                                                           "No usage",
-                                                           "Ignore",
-                                                           "Ignored",
-                                                           "This parameter is not used",
-                                                           "This parameter is ignored",
-                                                           "The parameter is not used",
-                                                           "The parameter is ignored",
-                                                           "Parameter is not used",
-                                                           "Parameter is ignored",
-                                                       }
+                                                   {
+                                                       "Unused",
+                                                       "Not used",
+                                                       "Not in use",
+                                                       "No use",
+                                                       "No usage",
+                                                       "Ignore",
+                                                       "Ignored",
+                                                       "This parameter is not used",
+                                                       "This parameter is ignored",
+                                                       "The parameter is not used",
+                                                       "The parameter is ignored",
+                                                       "Parameter is not used",
+                                                       "Parameter is ignored",
+                                                   }
                                                    .SelectMany(_ => SentenceEndings, (phrase, end) => phrase + end)
                                                    .ToArray();
 

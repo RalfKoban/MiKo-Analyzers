@@ -15,22 +15,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1051_DelegateParameterNameSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] DelegateTypes =
-            {
-                "Action",
-                "Action<int>",
-                "Action<int, string>",
-                "Func<bool>",
-                "Func<bool, bool>",
-                "Delegate",
-            };
+                                                         {
+                                                             "Action",
+                                                             "Action<int>",
+                                                             "Action<int, string>",
+                                                             "Func<bool>",
+                                                             "Func<bool, bool>",
+                                                             "Delegate",
+                                                         };
 
         private static readonly string[] CorrectDelegateNames =
-            {
-                "callback",
-                "map",
-                "filter",
-                "predicate",
-            };
+                                                                {
+                                                                    "callback",
+                                                                    "map",
+                                                                    "filter",
+                                                                    "predicate",
+                                                                };
 
         private static readonly string[] WrongDelegateNames = CreateWrongDelegateNames();
 

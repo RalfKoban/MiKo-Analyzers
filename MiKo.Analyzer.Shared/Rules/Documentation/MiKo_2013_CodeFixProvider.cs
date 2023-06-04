@@ -16,11 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string Phrase = Constants.Comments.EnumStartingPhrase;
 
         private static readonly string[] StartingPhrases =
-            {
-                "Defines",
-                "Indicates",
-                "Specifies",
-            };
+                                                           {
+                                                               "Defines",
+                                                               "Indicates",
+                                                               "Specifies",
+                                                           };
 
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 

@@ -16,83 +16,76 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
         private static readonly string[] Verbs =
-            {
-                "Adopt",
-                "Allow",
-                "Create",
-                "Describe",
-                "Detect",
-                "Enhance",
-                "Extend",
-                "Generate",
-                "Initialize",
-                "Handle",
-                "Manipulate",
-                "Offer",
-                "Perform",
-                "Provide",
-                "Process",
-                "Represent",
-                "Store",
-                "Wrap",
-            };
+                                                 {
+                                                     "Adopt",
+                                                     "Allow",
+                                                     "Create",
+                                                     "Describe",
+                                                     "Detect",
+                                                     "Enhance",
+                                                     "Extend",
+                                                     "Generate",
+                                                     "Initialize",
+                                                     "Handle",
+                                                     "Manipulate",
+                                                     "Offer",
+                                                     "Perform",
+                                                     "Provide",
+                                                     "Process",
+                                                     "Represent",
+                                                     "Store",
+                                                     "Wrap",
+                                                 };
 
         private static readonly Dictionary<string, string> ThirdPersonVerbs = Verbs.ToDictionary(_ => _, Verbalizer.MakeThirdPersonSingularVerb);
 
         private static readonly Dictionary<string, string> GerundVerbs = Verbs.ToDictionary(_ => _, Verbalizer.MakeGerundVerb);
 
         private static readonly string[] DefaultPhrases =
-            {
-                "A default impl",
-                "A default-impl",
-                "A impl ",
-                "An impl ",
-                "A implementation ",
-                "An implementation ",
-                "Default impl",
-                "Default-impl",
-                "Impl ",
-                "Implementation ",
-                "The default impl",
-                "The default-impl",
-                "The imp ",
-                "The implementation ",
-            };
+                                                          {
+                                                              "A default impl",
+                                                              "A default-impl",
+                                                              "A impl ",
+                                                              "An impl ",
+                                                              "A implementation ",
+                                                              "An implementation ",
+                                                              "Default impl",
+                                                              "Default-impl",
+                                                              "Impl ",
+                                                              "Implementation ",
+                                                              "The default impl",
+                                                              "The default-impl",
+                                                              "The imp ",
+                                                              "The implementation ",
+                                                          };
 
         private static readonly string[] UsedToPhrases =
-            {
-                // attributes
-                "Attribute that ",
-
-                // classes
-                "A class to ",
-                "A class that is used to ",
-                "A class which is used to ",
-                "An class to ",
-                "An class that is used to ",
-                "An class which is used to ",
-                "Class to ",
-                "Class used to ",
-                "The class is used to ",
-                "The class that is used to ",
-                "This class is used to ",
-
-                // interfaces
-                "A interface to ",
-                "An interface to ",
-                "A interface that is used to ",
-                "A interface which is used to ",
-                "An interface that is used to ",
-                "An interface which is used to ",
-                "Interface to ",
-                "Interface used to ",
-                "The interface is used to ",
-                "The interface that is used to ",
-                "This interface is used to ",
-
-                // misc.
-                "Used to ",
-            };
+                                                         {
+                                                             "Attribute that ",
+                                                             "A class to ",
+                                                             "A class that is used to ",
+                                                             "A class which is used to ",
+                                                             "An class to ",
+                                                             "An class that is used to ",
+                                                             "An class which is used to ",
+                                                             "Class to ",
+                                                             "Class used to ",
+                                                             "The class is used to ",
+                                                             "The class that is used to ",
+                                                             "This class is used to ",
+                                                             "A interface to ",
+                                                             "An interface to ",
+                                                             "A interface that is used to ",
+                                                             "A interface which is used to ",
+                                                             "An interface that is used to ",
+                                                             "An interface which is used to ",
+                                                             "Interface to ",
+                                                             "Interface used to ",
+                                                             "The interface is used to ",
+                                                             "The interface that is used to ",
+                                                             "This interface is used to ",
+                                                             "Used to ",
+                                                         };
 
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
@@ -344,40 +337,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<KeyValuePair<string, string>> CreatePhrases()
         {
             var beginnings = new[]
-                                 {
-                                     "Class",
-                                     "Classes implementing the interfaces",
-                                     "Classes implementing the interfaces,",
-                                     "Extension method",
-                                     "Factory method",
-                                     "Function",
-                                     "Help function",
-                                     "Help method",
-                                     "Helper class",
-                                     "Helper function",
-                                     "Helper method",
-                                     "Interface definition of helper",
-                                     "Interface definition of a helper",
-                                     "Interface definition of an helper",
-                                     "Interface definition of the helper",
-                                     "Interface for classes",
-                                     "Interface for elements",
-                                     "Interface for items",
-                                     "Interface for objects",
-                                     "Interface for view models",
-                                     "Interface for workflows",
-                                     "Interface for work flows",
-                                     "Interface for",
-                                     "Interface implemented to",
-                                     "Interface",
-                                     "Method",
-                                     "The class implementing the interface",
-                                     "The class implementing the interface,",
-                                     "The class implementing this interface",
-                                     "This class",
-                                     "This interface class",
-                                     "This interface",
-                                 };
+                             {
+                                 "Class",
+                                 "Classes implementing the interfaces",
+                                 "Classes implementing the interfaces,",
+                                 "Extension method",
+                                 "Factory method",
+                                 "Function",
+                                 "Help function",
+                                 "Help method",
+                                 "Helper class",
+                                 "Helper function",
+                                 "Helper method",
+                                 "Interface definition of helper",
+                                 "Interface definition of a helper",
+                                 "Interface definition of an helper",
+                                 "Interface definition of the helper",
+                                 "Interface for classes",
+                                 "Interface for elements",
+                                 "Interface for items",
+                                 "Interface for objects",
+                                 "Interface for view models",
+                                 "Interface for workflows",
+                                 "Interface for work flows",
+                                 "Interface for",
+                                 "Interface implemented to",
+                                 "Interface",
+                                 "Method",
+                                 "The class implementing the interface",
+                                 "The class implementing the interface,",
+                                 "The class implementing this interface",
+                                 "This class",
+                                 "This interface class",
+                                 "This interface",
+                             };
 
             var middleParts = new[]
                               {

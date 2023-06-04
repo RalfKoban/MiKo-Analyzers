@@ -10,101 +10,90 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] PropertyNames =
-            {
-                "ObjectUnderTest",
-                "SubjectUnderTest",
-                "UnitUnderTest",
-                "Sut",
-                "SuT",
-                "SUT",
-                "UUT",
-                "UuT",
-                "Uut",
-                "TestCandidate",
-                "TestObject",
-            };
+                                                         {
+                                                             "ObjectUnderTest",
+                                                             "SubjectUnderTest",
+                                                             "UnitUnderTest",
+                                                             "Sut",
+                                                             "SuT",
+                                                             "SUT",
+                                                             "UUT",
+                                                             "UuT",
+                                                             "Uut",
+                                                             "TestCandidate",
+                                                             "TestObject",
+                                                         };
 
         private static readonly string[] FieldNames =
-            {
-                "ObjectUnderTest",
-                "_ObjectUnderTest",
-                "m_ObjectUnderTest",
-                "s_ObjectUnderTest",
-
-                "objectUnderTest",
-                "_objectUnderTest",
-                "m_objectUnderTest",
-                "s_objectUnderTest",
-
-                "subjectUnderTest",
-                "_subjectUnderTest",
-                "m_subjectUnderTest",
-                "s_subjectUnderTest",
-
-                "SubjectUnderTest",
-                "_SubjectUnderTest",
-                "m_SubjectUnderTest",
-                "s_SubjectUnderTest",
-
-                "unitUnderTest",
-                "_unitUnderTest",
-                "m_unitUnderTest",
-                "s_unitUnderTest",
-
-                "UnitUnderTest",
-                "_UnitUnderTest",
-                "m_UnitUnderTest",
-                "s_UnitUnderTest",
-
-                "sut",
-                "_sut",
-                "m_sut",
-                "s_sut",
-
-                "Sut",
-                "_Sut",
-                "m_Sut",
-                "s_Sut",
-
-                "uut",
-                "_uut",
-                "m_uut",
-                "s_uut",
-
-                "Uut",
-                "_Uut",
-                "m_Uut",
-                "s_Uut",
-
-                "TestCandidate",
-                "testCandidate",
-                "_testCandidate",
-                "m_testCandidate",
-                "s_testCandidate",
-
-                "TestObject",
-                "testObject",
-                "_testObject",
-                "m_testObject",
-                "s_testObject",
-            };
+                                                      {
+                                                          "ObjectUnderTest",
+                                                          "_ObjectUnderTest",
+                                                          "m_ObjectUnderTest",
+                                                          "s_ObjectUnderTest",
+                                                          "objectUnderTest",
+                                                          "_objectUnderTest",
+                                                          "m_objectUnderTest",
+                                                          "s_objectUnderTest",
+                                                          "subjectUnderTest",
+                                                          "_subjectUnderTest",
+                                                          "m_subjectUnderTest",
+                                                          "s_subjectUnderTest",
+                                                          "SubjectUnderTest",
+                                                          "_SubjectUnderTest",
+                                                          "m_SubjectUnderTest",
+                                                          "s_SubjectUnderTest",
+                                                          "unitUnderTest",
+                                                          "_unitUnderTest",
+                                                          "m_unitUnderTest",
+                                                          "s_unitUnderTest",
+                                                          "UnitUnderTest",
+                                                          "_UnitUnderTest",
+                                                          "m_UnitUnderTest",
+                                                          "s_UnitUnderTest",
+                                                          "sut",
+                                                          "_sut",
+                                                          "m_sut",
+                                                          "s_sut",
+                                                          "Sut",
+                                                          "_Sut",
+                                                          "m_Sut",
+                                                          "s_Sut",
+                                                          "uut",
+                                                          "_uut",
+                                                          "m_uut",
+                                                          "s_uut",
+                                                          "Uut",
+                                                          "_Uut",
+                                                          "m_Uut",
+                                                          "s_Uut",
+                                                          "TestCandidate",
+                                                          "testCandidate",
+                                                          "_testCandidate",
+                                                          "m_testCandidate",
+                                                          "s_testCandidate",
+                                                          "TestObject",
+                                                          "testObject",
+                                                          "_testObject",
+                                                          "m_testObject",
+                                                          "s_testObject",
+                                                      };
 
         private static readonly string[] VariableNames =
-            {
-                "objectUnderTest",
-                "subjectUnderTest",
-                "unitUnderTest",
-                "testCandidate",
-                "testObject",
-                "sut",
-                "uut",
-            };
+                                                         {
+                                                             "objectUnderTest",
+                                                             "subjectUnderTest",
+                                                             "unitUnderTest",
+                                                             "testCandidate",
+                                                             "testObject",
+                                                             "sut",
+                                                             "uut",
+                                                         };
 
         private static readonly string[] MethodPrefixes =
-            {
-                "Get",
-                "Create",
-            };
+                                                          {
+                                                              "Get",
+                                                              "Create",
+                                                          };
 
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"

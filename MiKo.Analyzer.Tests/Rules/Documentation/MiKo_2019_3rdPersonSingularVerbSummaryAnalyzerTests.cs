@@ -10,19 +10,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2019_3rdPersonSingularVerbSummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ThirdPersonVerbs =
-            {
-                "Accesses",
-                "Allows",
-                "Breaks",
-                "Contains",
-                "Converts",
-                "Describes",
-                "Gets",
-                "Occurs",
-                "Performs",
-                "Stops",
-                "Tells",
-            };
+                                                            {
+                                                                "Accesses",
+                                                                "Allows",
+                                                                "Breaks",
+                                                                "Contains",
+                                                                "Converts",
+                                                                "Describes",
+                                                                "Gets",
+                                                                "Occurs",
+                                                                "Performs",
+                                                                "Stops",
+                                                                "Tells",
+                                                            };
 
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

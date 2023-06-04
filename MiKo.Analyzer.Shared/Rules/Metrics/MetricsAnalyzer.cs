@@ -8,16 +8,16 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
     public abstract class MetricsAnalyzer : Analyzer
     {
         protected static readonly SyntaxKind[] DefaultSyntaxKinds =
-            {
-                SyntaxKind.GetAccessorDeclaration,
-                SyntaxKind.SetAccessorDeclaration,
-                SyntaxKind.InitAccessorDeclaration,
-                SyntaxKind.AddAccessorDeclaration,
-                SyntaxKind.RemoveAccessorDeclaration,
-                SyntaxKind.ConstructorDeclaration,
-                SyntaxKind.LocalDeclarationStatement,
-                SyntaxKind.MethodDeclaration,
-            };
+                                                                    {
+                                                                        SyntaxKind.GetAccessorDeclaration,
+                                                                        SyntaxKind.SetAccessorDeclaration,
+                                                                        SyntaxKind.InitAccessorDeclaration,
+                                                                        SyntaxKind.AddAccessorDeclaration,
+                                                                        SyntaxKind.RemoveAccessorDeclaration,
+                                                                        SyntaxKind.ConstructorDeclaration,
+                                                                        SyntaxKind.LocalDeclarationStatement,
+                                                                        SyntaxKind.MethodDeclaration,
+                                                                    };
 
         private readonly SyntaxKind[] m_syntaxKinds;
 

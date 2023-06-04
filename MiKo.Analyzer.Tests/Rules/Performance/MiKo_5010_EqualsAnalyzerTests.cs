@@ -13,30 +13,30 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     public sealed class MiKo_5010_EqualsAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValueTypes =
-            {
-                "bool",
-                "char",
-                "short",
-                "int",
-                "long",
-                "ushort",
-                "uint",
-                "ulong",
-                "byte",
-                "sbyte",
-                nameof(Boolean),
-                nameof(Char),
-                nameof(Int16),
-                nameof(Int32),
-                nameof(Int64),
-                nameof(UInt16),
-                nameof(UInt32),
-                nameof(UInt64),
-                nameof(Byte),
-                nameof(SByte),
-                nameof(Guid),
-                nameof(AttributeTargets),
-            };
+                                                      {
+                                                          "bool",
+                                                          "char",
+                                                          "short",
+                                                          "int",
+                                                          "long",
+                                                          "ushort",
+                                                          "uint",
+                                                          "ulong",
+                                                          "byte",
+                                                          "sbyte",
+                                                          nameof(Boolean),
+                                                          nameof(Char),
+                                                          nameof(Int16),
+                                                          nameof(Int32),
+                                                          nameof(Int64),
+                                                          nameof(UInt16),
+                                                          nameof(UInt32),
+                                                          nameof(UInt64),
+                                                          nameof(Byte),
+                                                          nameof(SByte),
+                                                          nameof(Guid),
+                                                          nameof(AttributeTargets),
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_non_object_Equals_method() => No_issue_is_reported_for(@"

@@ -15,10 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] WrongNames = { "Action", "Delegate", "Func" };
 
         private static readonly string[] WrongSuffixes =
-            {
-                "action", "delegate", "func",
-                "Action", "Delegate", "Func",
-            };
+                                                         {
+                                                             "action",                                                              "delegate",                                                              "func",
+                                                             "Action",                                                              "Delegate",                                                              "Func",
+                                                         };
 
         public MiKo_1053_DelegateFieldNameSuffixAnalyzer() : base(Id, SymbolKind.Field)
         {

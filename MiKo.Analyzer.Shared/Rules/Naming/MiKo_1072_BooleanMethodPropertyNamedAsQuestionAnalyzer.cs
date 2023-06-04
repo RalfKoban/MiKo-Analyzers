@@ -14,25 +14,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1072";
 
         private static readonly string[] Prefixes =
-            {
-                "Is",
-                "Are",
-            };
+                                                    {
+                                                        "Is",
+                                                        "Are",
+                                                    };
 
         private static readonly string[] AllowedNames =
-            {
-                nameof(string.IsNullOrEmpty),
-                nameof(string.IsNullOrWhiteSpace),
-                "IsReadOnly",
-                "IsReadWrite",
-                "IsWriteProtected",
-            };
+                                                        {
+                                                            nameof(string.IsNullOrEmpty),
+                                                            nameof(string.IsNullOrWhiteSpace),
+                                                            "IsReadOnly",
+                                                            "IsReadWrite",
+                                                            "IsWriteProtected",
+                                                        };
 
         private static readonly string[] WellKnownPrefixes =
-            {
-                "IsSame",
-                "IsInDesign",
-            };
+                                                             {
+                                                                 "IsSame",
+                                                                 "IsInDesign",
+                                                             };
 
         public MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer() : base(Id)
         {

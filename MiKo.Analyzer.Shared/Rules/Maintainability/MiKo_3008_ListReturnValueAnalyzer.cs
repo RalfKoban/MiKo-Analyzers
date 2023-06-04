@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         public const string Id = "MiKo_3008";
 
         private static readonly Type[] ForbiddenTypes =
-            {
-                typeof(ICollection<>),
-                typeof(ICollection),
-            };
+                                                        {
+                                                            typeof(ICollection<>),
+                                                            typeof(ICollection),
+                                                        };
 
         public MiKo_3008_ListReturnValueAnalyzer() : base(Id, SymbolKind.NamedType)
         {

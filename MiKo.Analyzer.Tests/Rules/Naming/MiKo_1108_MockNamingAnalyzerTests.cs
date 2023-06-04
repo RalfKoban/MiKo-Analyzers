@@ -11,22 +11,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1108_MockNamingAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongNames =
-            {
-                "childFake",
-                "childMock1",
-                "childShim",
-                "fakeChild1",
-                "mock",
-                "mockChild1",
-                "MockManager",
-                "shimChild",
-                "somethingMock",
-                "somethingStub",
-                "stub",
-                "StubManager",
-                "mockedValue",
-                "fakedValue",
-            };
+                                                      {
+                                                          "childFake",
+                                                          "childMock1",
+                                                          "childShim",
+                                                          "fakeChild1",
+                                                          "mock",
+                                                          "mockChild1",
+                                                          "MockManager",
+                                                          "shimChild",
+                                                          "somethingMock",
+                                                          "somethingStub",
+                                                          "stub",
+                                                          "StubManager",
+                                                          "mockedValue",
+                                                          "fakedValue",
+                                                      };
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

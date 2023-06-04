@@ -13,12 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3033_PropertyChangeEventArgsCtorUsesNameofAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] TypeNames =
-                                                    {
-                                                        nameof(PropertyChangedEventArgs),
-                                                        nameof(PropertyChangingEventArgs),
-                                                        typeof(PropertyChangedEventArgs).FullName,
-                                                        typeof(PropertyChangingEventArgs).FullName,
-                                                    };
+                                                     {
+                                                         nameof(PropertyChangedEventArgs),
+                                                         nameof(PropertyChangingEventArgs),
+                                                         typeof(PropertyChangedEventArgs).FullName,
+                                                         typeof(PropertyChangingEventArgs).FullName,
+                                                     };
 
         [Test]
         public void No_issue_is_reported_for_correct_usage_inside_property_([ValueSource(nameof(TypeNames))] string typeName) => No_issue_is_reported_for(@"

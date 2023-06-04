@@ -13,25 +13,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1017";
 
         private static readonly string[] StrangePrefixes =
-            {
-                "GetCan",
-                "GetHas",
-                "GetIs",
-                "GetExists",
-                "SetCan",
-                "SetHas",
-                "SetIs",
-                "SetExists",
-                "CanHas",
-                "CanIs",
-                "CanExists",
-                "HasCan",
-                "HasIs",
-                "HasExists",
-                "IsCan",
-                "IsHas",
-                "IsExists",
-            };
+                                                           {
+                                                               "GetCan",
+                                                               "GetHas",
+                                                               "GetIs",
+                                                               "GetExists",
+                                                               "SetCan",
+                                                               "SetHas",
+                                                               "SetIs",
+                                                               "SetExists",
+                                                               "CanHas",
+                                                               "CanIs",
+                                                               "CanExists",
+                                                               "HasCan",
+                                                               "HasIs",
+                                                               "HasExists",
+                                                               "IsCan",
+                                                               "IsHas",
+                                                               "IsExists",
+                                                           };
 
         public MiKo_1017_GetSetPrefixedMethodsAnalyzer() : base(Id)
         {

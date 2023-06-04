@@ -8,17 +8,17 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
 
         private static readonly string[] AllowedListNames =
-            {
-                "map",
-                "array",
-                "collection",
-                "dictionary",
-                "list",
-                "blackList",
-                "whiteList",
-                "playList",
-                "stack",
-            };
+                                                            {
+                                                                "map",
+                                                                "array",
+                                                                "collection",
+                                                                "dictionary",
+                                                                "list",
+                                                                "blackList",
+                                                                "whiteList",
+                                                                "playList",
+                                                                "stack",
+                                                            };
 
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
