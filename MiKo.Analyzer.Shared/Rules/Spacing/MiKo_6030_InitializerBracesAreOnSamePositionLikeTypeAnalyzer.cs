@@ -39,10 +39,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        internal static LinePosition GetStartPosition(SyntaxNode node) => node.GetLocation().GetLineSpan().StartLinePosition;
-
-        internal static LinePosition GetStartPosition(SyntaxToken token) => token.GetLocation().GetLineSpan().StartLinePosition;
-
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Initializers);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)

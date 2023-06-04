@@ -4439,4 +4439,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_6030_Title" xml:space="preserve">
     <value>Open braces of initializers should be placed directly below the corresponding type definition</value>
   </data>
+  <data name="MiKo_6031_CodeFixTitle" xml:space="preserve">
+    <value>Place ternary operator directly below condition</value>
+  </data>
+  <data name="MiKo_6031_Description" xml:space="preserve">
+    <value>To easily spot the 2 possibilities of ternary operators based on their conditions, the question and colon tokens should be positioned directly below the corresponding condition.</value>
+  </data>
+  <data name="MiKo_6031_MessageFormat" xml:space="preserve">
+    <value>Place ternary operator directly below condition</value>
+  </data>
+  <data name="MiKo_6031_Title" xml:space="preserve">
+    <value>Question and colon tokens of ternary operators should be placed directly below the corresponding condition</value>
+  </data>
 </root>

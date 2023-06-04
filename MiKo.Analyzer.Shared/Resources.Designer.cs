@@ -12625,5 +12625,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6030_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place ternary operator directly below condition.
+        /// </summary>
+        public static string MiKo_6031_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6031_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily spot the 2 possibilities of ternary operators based on their conditions, the question and colon tokens should be positioned directly below the corresponding condition..
+        /// </summary>
+        public static string MiKo_6031_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6031_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place ternary operator directly below condition.
+        /// </summary>
+        public static string MiKo_6031_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6031_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question and colon tokens of ternary operators should be placed directly below the corresponding condition.
+        /// </summary>
+        public static string MiKo_6031_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6031_Title", resourceCulture);
+            }
+        }
     }
 }
