@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_field_reduced_array_initializer_when_placed_on_same_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_with_reduced_array_initializer_when_placed_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_field_reduced_array_initializer_when_placed_on_same_position_as_type() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_with_reduced_array_initializer_when_placed_on_same_position_as_type() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -68,6 +68,21 @@ public class TestMe
                                 2,
                                 3
                             };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_field_with_implicit_array_initializer_when_placed_on_same_position_as_type() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new[]
+                                {
+                                    1,
+                                    2,
+                                    3,
+                                };
 }
 ");
 
@@ -122,7 +137,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_reduced_array_initializer_when_placed_on_position_before_position_of_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_reduced_array_initializer_when_placed_on_position_before_position_of_type() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -137,7 +152,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_reduced_array_initializer_when_placed_on_position_after_position_of_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_reduced_array_initializer_when_placed_on_position_after_position_of_type() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -252,7 +267,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_field_reduced_array_initializer_when_placed_on_position_before_position_of_type()
+        public void Code_gets_fixed_for_field_with_reduced_array_initializer_when_placed_on_position_before_position_of_type()
         {
             const string OriginalCode = @"
 using System;
@@ -286,7 +301,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_field_reduced_array_initializer_when_placed_on_position_after_position_of_type()
+        public void Code_gets_fixed_for_field_with_reduced_array_initializer_when_placed_on_position_after_position_of_type()
         {
             const string OriginalCode = @"
 using System;
@@ -313,6 +328,73 @@ public class TestMe
                                 2,
                                 3
                             };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_with_implicit_array_initializer_when_placed_on_position_before_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new[]
+                               {
+                                    1,
+                                    2,
+                                    3,
+                                };
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new[]
+                                {
+                                    1,
+                                    2,
+                                    3,
+                                };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_with_implicit_array_initializer_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new[]
+                                 {
+                                    1,
+                                    2,
+                                    3,
+                                };
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new[]
+                                {
+                                    1,
+                                    2,
+                                    3,
+                                };
 }
 ";
 
