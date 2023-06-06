@@ -55,5 +55,18 @@ namespace System.Linq
                 yield return item;
             }
         }
+
+        public static bool All(this ReadOnlySpan<char> source, Func<char, bool> callback)
+        {
+            foreach (var c in source)
+            {
+                if (callback(c) is false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
