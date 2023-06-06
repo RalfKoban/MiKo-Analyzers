@@ -130,7 +130,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // get rid of leading or trailing additional characters such as braces or sentence markers
                     var span = text.AsSpan(start, end - start);
                     var trimmedStart = span.TrimStart(TrimChars.AsSpan());
-                    var trimmedEnd = span.TrimEnd(TrimChars.AsSpan());
+                    var trimmedEnd = trimmedStart.Contains('(') && span.EndsWith(')')
+                                         ? span
+                                         : span.TrimEnd(TrimChars.AsSpan());
 
                     start += span.Length - trimmedStart.Length;
                     end -= span.Length - trimmedEnd.Length;
