@@ -2320,6 +2320,15 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2075_Title" xml:space="preserve">
     <value>Documentation should use the term 'callback' instead of 'action', 'func' or 'function'</value>
   </data>
+  <data name="MiKo_2076_Description" xml:space="preserve">
+    <value>In case a parameter is an optional one it is important to document its default value. This is because the values of those optional parameters are "baked into" the calling code.</value>
+  </data>
+  <data name="MiKo_2076_MessageFormat" xml:space="preserve">
+    <value>Document the default value via '{1}'</value>
+  </data>
+  <data name="MiKo_2076_Title" xml:space="preserve">
+    <value>Documentation should document default values of optional parameters</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>
