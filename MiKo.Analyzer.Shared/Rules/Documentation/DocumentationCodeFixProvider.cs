@@ -15,9 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
         {
-            return comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                          .WithContent(content)
-                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+            var result = comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                                          .WithContent(content)
+                                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+
+            return CombineTexts(result);
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
@@ -30,6 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, SyntaxList<XmlNodeSyntax> additionalComment)
         {
             return Comment(comment, text[0], additionalComment);
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        {
+            var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap);
+
+            return CombineTexts(result);
         }
 
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
@@ -516,7 +525,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
 
-        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment) => comment.Without(comment.Content.Where(_ => _.IsBooleanTag()));
+        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment) => CombineTexts(comment.Without(comment.Content.Where(_ => _.IsBooleanTag())));
 
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
@@ -694,6 +703,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return text;
+        }
+
+        private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
+        {
+            var modified = false;
+            var contents = comment.Content;
+
+            for (var i = 0; i <= contents.Count - 2; i++)
+            {
+                var nextIndex = i + 1;
+
+                var content1 = contents[i];
+                var content2 = contents[nextIndex];
+
+                if (content1 is XmlTextSyntax text1 && content2 is XmlTextSyntax text2)
+                {
+                    var lastToken = text1.TextTokens.Last();
+                    var firstToken = text2.TextTokens.First();
+
+                    var token = lastToken.WithText(lastToken.Text + firstToken.Text)
+                                         .WithLeadingTrivia(lastToken.LeadingTrivia)
+                                         .WithTrailingTrivia(firstToken.TrailingTrivia);
+
+                    var tokens = text1.TextTokens.Replace(lastToken, token).AddRange(text2.TextTokens.Skip(1));
+                    var newText = text1.WithTextTokens(tokens);
+
+                    contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
+
+                    modified = true;
+                }
+            }
+
+            if (modified)
+            {
+                return comment.WithContent(contents);
+            }
+
+            return comment;
         }
     }
 }
