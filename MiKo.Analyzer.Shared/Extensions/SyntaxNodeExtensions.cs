@@ -753,7 +753,7 @@ namespace MiKoSolutions.Analyzers
             return result.Trim();
         }
 
-        internal static string GetTextWithoutTrivia(this XmlTextSyntax text)
+        internal static ReadOnlySpan<char> GetTextWithoutTrivia(this XmlTextSyntax text)
         {
             if (text is null)
             {
@@ -769,7 +769,7 @@ namespace MiKoSolutions.Analyzers
 
             var result = builder.ToString();
 
-            return result.Trim();
+            return result.AsSpan().Trim();
         }
 
         internal static IEnumerable<string> GetTextWithoutTriviaLazy(this XmlTextSyntax text)

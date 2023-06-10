@@ -143,7 +143,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     if (text.StartsWith(phrase, StringComparison.Ordinal))
                     {
-                        var remainingText = text.AsSpan(phrase.Length);
+                        var remainingText = text.Slice(phrase.Length);
 
                         var firstWord = remainingText.FirstWord();
                         var index = remainingText.IndexOf(firstWord);

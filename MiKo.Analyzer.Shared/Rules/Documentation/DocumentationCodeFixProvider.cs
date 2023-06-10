@@ -15,9 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
         {
-            return comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                          .WithContent(content)
-                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+            var result = comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+                                          .WithContent(content)
+                                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+
+            return CombineTexts(result);
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
@@ -30,6 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, SyntaxList<XmlNodeSyntax> additionalComment)
         {
             return Comment(comment, text[0], additionalComment);
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        {
+            var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap);
+
+            return CombineTexts(result);
         }
 
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
@@ -495,6 +504,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
+        protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
+        {
+            foreach (var token in text.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var valueText = token.ValueText;
+
+                if (valueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                // first word
+                var firstWord = valueText.FirstWord();
+                var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
+
+                if (firstWord != infiniteVerb)
+                {
+                    return text.ReplaceToken(token, token.WithText(infiniteVerb + valueText.WithoutFirstWord()));
+                }
+            }
+
+            return text;
+        }
+
+        protected static string MakeFirstWordInfiniteVerb(string text)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            var firstWord = text.FirstWord();
+            var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
+
+            return infiniteVerb + text.WithoutFirstWord();
+        }
+
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
 
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
@@ -516,7 +567,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
 
-        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment) => comment.Without(comment.Content.Where(_ => _.IsBooleanTag()));
+        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment) => CombineTexts(comment.Without(comment.Content.Where(_ => _.IsBooleanTag())));
 
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
@@ -667,33 +718,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return t1.ToString() == t2.ToString();
         }
 
-        private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
+        private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
-            foreach (var token in text.TextTokens)
+            var modified = false;
+            var contents = comment.Content;
+
+            for (var i = 0; i <= contents.Count - 2; i++)
             {
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                var nextIndex = i + 1;
+
+                var content1 = contents[i];
+                var content2 = contents[nextIndex];
+
+                if (content1 is XmlTextSyntax text1 && content2 is XmlTextSyntax text2)
                 {
-                    continue;
-                }
+                    var lastToken = text1.TextTokens.Last();
+                    var firstToken = text2.TextTokens.First();
 
-                var valueText = token.ValueText;
+                    var token = lastToken.WithText(lastToken.Text + firstToken.Text)
+                                         .WithLeadingTrivia(lastToken.LeadingTrivia)
+                                         .WithTrailingTrivia(firstToken.TrailingTrivia);
 
-                if (valueText.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
+                    var tokens = text1.TextTokens.Replace(lastToken, token).AddRange(text2.TextTokens.Skip(1));
+                    var newText = text1.WithTextTokens(tokens);
 
-                // first word
-                var firstWord = valueText.FirstWord();
-                var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
+                    contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
 
-                if (firstWord != infiniteVerb)
-                {
-                    return text.ReplaceToken(token, token.WithText(infiniteVerb + valueText.WithoutFirstWord()));
+                    modified = true;
                 }
             }
 
-            return text;
+            if (modified)
+            {
+                return comment.WithContent(contents);
+            }
+
+            return comment;
         }
     }
 }

@@ -148,9 +148,7 @@ namespace MiKoSolutions.Analyzers
 
             return new StringBuilder(value).WithoutParaTags()
                                            .Without(Constants.Markers.SymbolsAndLineBreaks)
-                                           .ReplaceWithCheck("    ", " ")
-                                           .ReplaceWithCheck("   ", " ")
-                                           .ReplaceWithCheck("  ", " ")
+                                           .ReplaceAll(new[] { "    ", "   ", "  " }, " ")
                                            .ToString()
                                            .Trim();
         }

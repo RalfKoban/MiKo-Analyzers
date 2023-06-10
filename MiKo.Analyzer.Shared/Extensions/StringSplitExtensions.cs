@@ -61,6 +61,8 @@ namespace System
             return results;
         }
 
+        public static SplitEnumerator SplitBy(this string text, char separatorChar, StringSplitOptions options) => SplitBy(text.AsSpan(), new[] { separatorChar }, options);
+
         public static SplitEnumerator SplitBy(this string text, char[] separatorChars, StringSplitOptions options) => SplitBy(text.AsSpan(), separatorChars, options);
 
         public static SplitEnumerator SplitBy(this ReadOnlySpan<char> text, char[] separatorChars, StringSplitOptions options) => new SplitEnumerator(text, separatorChars, options);

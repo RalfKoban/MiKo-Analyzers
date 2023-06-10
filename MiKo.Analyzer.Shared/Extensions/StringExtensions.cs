@@ -192,18 +192,9 @@ namespace System
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
         {
-            if (value.Length > 0)
-            {
-                foreach (var phrase in phrases)
-                {
-                    if (value.Contains(phrase, comparison))
-                    {
-                        return true;
-                    }
-                }
-            }
+            var index = value.IndexOfAny(phrases, comparison);
 
-            return false;
+            return index > -1;
         }
 
         public static bool EndsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[value.Length - 1] == character;
@@ -365,40 +356,6 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
 
-        public static IEnumerable<string> Words(this string text) => Words(text.AsSpan());
-
-        public static IEnumerable<string> Words(this ReadOnlySpan<char> text)
-        {
-            var words = new List<string>();
-
-            var startIndex = 0;
-
-            // start at index 1 to skip first upper case character (and avoid return of empty word)
-            var index = 1;
-
-            for (; index < text.Length; index++)
-            {
-                var c = text[index];
-
-                if (c.IsUpperCase())
-                {
-                    var word = text.Slice(startIndex, index - startIndex);
-
-                    startIndex = index;
-
-                    words.Add(word.ToString());
-                }
-            }
-
-            // return the remaining word
-            if (index == text.Length)
-            {
-                words.Add(text.Slice(startIndex).ToString());
-            }
-
-            return words;
-        }
-
         public static string GetNameOnlyPart(this string fullName) => GetNameOnlyPart(fullName.AsSpan());
 
         public static string GetNameOnlyPart(this ReadOnlySpan<char> fullName)
@@ -530,6 +487,24 @@ namespace System
             span.CopyTo(chars);
 
             return new string(chars);
+        }
+
+        public static int IndexOfAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
+        {
+            if (value.Length > 0)
+            {
+                foreach (var phrase in phrases)
+                {
+                    var index = value.IndexOf(phrase.AsSpan(), comparison);
+
+                    if (index > -1)
+                    {
+                        return index;
+                    }
+                }
+            }
+
+            return -1;
         }
 
         public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.None(_ => _.IsLowerCaseLetter());
@@ -914,6 +889,40 @@ namespace System
             return length <= 0
                        ? string.Empty
                        : value.Substring(0, length);
+        }
+
+        public static IEnumerable<string> Words(this string text) => Words(text.AsSpan());
+
+        public static IEnumerable<string> Words(this ReadOnlySpan<char> text)
+        {
+            var words = new List<string>();
+
+            var startIndex = 0;
+
+            // start at index 1 to skip first upper case character (and avoid return of empty word)
+            var index = 1;
+
+            for (; index < text.Length; index++)
+            {
+                var c = text[index];
+
+                if (c.IsUpperCase())
+                {
+                    var word = text.Slice(startIndex, index - startIndex);
+
+                    startIndex = index;
+
+                    words.Add(word.ToString());
+                }
+            }
+
+            // return the remaining word
+            if (index == text.Length)
+            {
+                words.Add(text.Slice(startIndex).ToString());
+            }
+
+            return words;
         }
     }
 }
