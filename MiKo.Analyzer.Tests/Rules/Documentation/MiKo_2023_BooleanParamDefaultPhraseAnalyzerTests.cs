@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Distinct().ToArray();
         private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Distinct().ToArray();
+        private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Distinct().ToArray();
 
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
@@ -355,38 +356,8 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase(@"If set to <see langword=""true""/> some condition.")]
-        [TestCase(@"If set to <see langword=""true""/>, some condition.")]
-        [TestCase(@"If set to <see langword=""true""/>; some condition.")]
-        [TestCase(@"If set to <see langword=""true""/>: some condition.")]
-        [TestCase(@"If set to <see langref=""true""/> some condition.")]
-        [TestCase(@"If set to <see langref=""true""/>, some condition.")]
-        [TestCase(@"If set to <see langref=""true""/>; some condition.")]
-        [TestCase(@"If set to <see langref=""true""/>: some condition.")]
-        [TestCase("If set to true some condition.")]
-        [TestCase("If set to true, some condition.")]
-        [TestCase("If set to true; some condition.")]
-        [TestCase("If set to true: some condition.")]
-        [TestCase("If given true, some condition.")]
-        [TestCase("If given true; some condition.")]
-        [TestCase("If given true: some condition.")]
-        [TestCase("If given <see langword=\"true\"/>, some condition.")]
-        [TestCase("If given <see langword=\"true\"/>; some condition.")]
-        [TestCase("If given <see langword=\"true\"/>: some condition.")]
-        [TestCase("If true some condition.")]
-        [TestCase("If true, some condition.")]
-        [TestCase("If true; some condition.")]
-        [TestCase("If true: some condition.")]
-        [TestCase("If <see langword=\"true\"/> some condition.")]
-        [TestCase("If <see langword=\"true\"/>, some condition.")]
-        [TestCase("If <see langword=\"true\"/>; some condition.")]
-        [TestCase("If <see langword=\"true\"/>: some condition.")]
-        [TestCase("If given true some condition. Otherwise any other condition.")]
-        [TestCase("If true some condition. Otherwise any other condition.")]
-        [TestCase("If true some condition else any other condition.")]
-        [TestCase(@"When set to <see langword=""true""/> some condition.")]
-        [TestCase(@"When given <see langword=""true""/> some condition.")]
-        public void Code_gets_fixed_on_same_line_for_If_phrase_(string phrase)
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_If_phrase_([ValueSource(nameof(ConditionalPhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -395,7 +366,40 @@ public class TestMe
 {
     /// <summary>
     /// </summary>
-    /// <param name=""condition"">" + phrase + @"</param>
+    /// <param name=""condition"">" + phrase + @" some condition</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test, Combinatorial]
+        public void Code_gets_fixed_on_same_line_for_If_Otherwise_phrase_(
+                                                                    [ValueSource(nameof(ConditionalPhrases))] string phraseStart,
+                                                                    [Values(". Otherwise any other condition.", " else any other condition.")] string phraseEnd)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">" + phraseStart + " some condition" + phraseEnd + @"</param>
     public void DoSomething(bool condition) { }
 }
 ";
@@ -447,6 +451,41 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_multi_line_for_phrase()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// ""true"": does some stuff inside
+    /// ""false"": only other stuff shall be done
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to do some stuff inside; otherwise, <see langword=""false""/>.
+    /// In such case only other stuff shall be done.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
@@ -527,6 +566,22 @@ public class TestMe
                                    from verb in verbs
                                    from condition in conditions
                                    select $"{start} parameter {verb} {condition}")
+            {
+                yield return phrase;
+                yield return phrase.ToLowerCaseAt(0);
+            }
+        }
+
+        private static IEnumerable<string> CreateConditionalStartPhrases()
+        {
+            var starts = new[] { "If set to", "If given", "If", "When set to", "When given", "When", "In case set to", "In case" };
+            var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true" };
+            var separators = new[] { string.Empty, ":", ";", "," };
+
+            foreach (var phrase in from start in starts
+                                   from boolean in booleans
+                                   from separator in separators
+                                   select $"{start} {boolean}{separator}")
             {
                 yield return phrase;
                 yield return phrase.ToLowerCaseAt(0);

@@ -25,5 +25,23 @@ namespace System.Text
 
             return value.Replace(oldValue, newValue);
         }
+
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
+        {
+            foreach (var pair in replacementPairs)
+            {
+                if (pair.Key.Length > value.Length)
+                {
+                    // cannot be part in the replacement as value is too big
+                    continue;
+                }
+
+                value.Replace(pair.Key, pair.Value);
+            }
+
+            return value;
+        }
+
+        // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
     }
 }

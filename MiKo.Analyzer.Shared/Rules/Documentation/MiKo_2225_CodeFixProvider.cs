@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -21,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax is XmlElementSyntax element && element.Content.FirstOrDefault() is XmlTextSyntax text)
             {
-                var code = text.GetTextWithoutTrivia().Trim();
+                var code = text.GetTextWithoutTrivia().ToString();
 
                 return element.WithContent(XmlText(code));
             }

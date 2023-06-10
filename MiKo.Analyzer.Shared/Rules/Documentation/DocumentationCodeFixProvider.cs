@@ -504,6 +504,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax;
         }
 
+        protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
+        {
+            foreach (var token in text.TextTokens)
+            {
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var valueText = token.ValueText;
+
+                if (valueText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                // first word
+                var firstWord = valueText.FirstWord();
+                var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
+
+                if (firstWord != infiniteVerb)
+                {
+                    return text.ReplaceToken(token, token.WithText(infiniteVerb + valueText.WithoutFirstWord()));
+                }
+            }
+
+            return text;
+        }
+
+        protected static string MakeFirstWordInfiniteVerb(string text)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            var firstWord = text.FirstWord();
+            var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
+
+            return infiniteVerb + text.WithoutFirstWord();
+        }
+
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
 
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
@@ -674,35 +716,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return t1.ToString() == t2.ToString();
-        }
-
-        private static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
-        {
-            foreach (var token in text.TextTokens)
-            {
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                {
-                    continue;
-                }
-
-                var valueText = token.ValueText;
-
-                if (valueText.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
-                // first word
-                var firstWord = valueText.FirstWord();
-                var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
-
-                if (firstWord != infiniteVerb)
-                {
-                    return text.ReplaceToken(token, token.WithText(infiniteVerb + valueText.WithoutFirstWord()));
-                }
-            }
-
-            return text;
         }
 
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)

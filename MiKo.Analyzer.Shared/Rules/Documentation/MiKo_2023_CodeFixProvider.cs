@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -14,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
+        private static readonly string[] Conditionals = { "if", "when", "in case", "whether" };
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap(
                                                                                                      new KeyValuePair<string, string>("'true'", string.Empty),
@@ -48,13 +50,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                      new KeyValuePair<string, string>(" to indicates whether ", Replacement),
                                                                                                      new KeyValuePair<string, string>(" to define if ", Replacement),
                                                                                                      new KeyValuePair<string, string>(" to define whether ", Replacement),
+                                                                                                     new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
+                                                                                                     new KeyValuePair<string, string>(" to in case ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to if given ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to when given ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to if set to ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to when set to ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to if ", ReplacementTo),
+                                                                                                     new KeyValuePair<string, string>(" to when ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to set to you want to ", ReplacementTo),
+                                                                                                     new KeyValuePair<string, string>(" to set to ", ReplacementTo),
+                                                                                                     new KeyValuePair<string, string>(" to given ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to . if ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to , if ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
@@ -65,7 +71,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                      new KeyValuePair<string, string>(" to to ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" to  ", ReplacementTo),
                                                                                                      new KeyValuePair<string, string>(" that to ", " that "),
-                                                                                                     new KeyValuePair<string, string>(" else ", " otherwise, "),
                                                                                                      new KeyValuePair<string, string>(",  otherwise", ";  otherwise"),
                                                                                                      new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
                                                                                                      new KeyValuePair<string, string>("; otherwise ", string.Empty),
@@ -85,6 +90,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
+            if (comment.Content.Count == 1 && comment.Content.First() is XmlTextSyntax t)
+            {
+                var text = t.GetTextWithoutTrivia();
+
+                // determine whether we have a comment like:
+                //    true: some condition
+                //    false: some other condition'
+                var replacement = text.Contains(':') ? ReplacementTo : Replacement;
+
+                foreach (var key in ReplacementMapKeys)
+                {
+                    if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var subText = text.Slice(key.Length)
+                                          .TrimStart(Constants.TrailingSentenceMarkers)
+                                          .TrimEnd(Constants.TrailingSentenceMarkers);
+
+                        return FixTextOnlyComment(comment, t, subText, replacement);
+                    }
+                }
+
+                // seems we could not fix the part
+                var otherPhraseStart = text.IndexOfAny(new[] { "else", "otherwise" }, StringComparison.OrdinalIgnoreCase);
+
+                if (otherPhraseStart > -1)
+                {
+                    var subText = text.Slice(0, otherPhraseStart)
+                                      .TrimStart(Constants.TrailingSentenceMarkers)
+                                      .TrimEnd(Constants.TrailingSentenceMarkers);
+
+                    return FixTextOnlyComment(comment, t, subText, replacement);
+                }
+            }
+
             var preparedComment = PrepareComment(comment);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
 
@@ -94,6 +133,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var fixedComment = Comment(bothFixed, ReplacementMapKeys, ReplacementMap);
 
             return fixedComment;
+        }
+
+        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement)
+        {
+            foreach (var conditional in Conditionals)
+            {
+                if (subText.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
+                {
+                    subText = subText.Slice(conditional.Length).TrimStart();
+
+                    replacement = ReplacementTo;
+
+                    break;
+                }
+            }
+
+            var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
+
+            var commentContinue = new StringBuilder(replacement + MakeFirstWordInfiniteVerb(subText.ToString()))
+                                  .ReplaceAllWithCheck(ReplacementMap)
+                                  .ToString();
+
+            var newStart = CommentStartingWith(prepared, StartPhraseParts[0], SeeLangword_True(), commentContinue);
+            var newEnd = CommentEndingWith(newStart, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
+
+            return newEnd;
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
