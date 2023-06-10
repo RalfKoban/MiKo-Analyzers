@@ -6494,6 +6494,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case a parameter is an optional one it is important to document its default value. This is because the values of those optional parameters are &quot;baked into&quot; the calling code..
+        /// </summary>
+        public static string MiKo_2076_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2076_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document the default value via &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_2076_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2076_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should document default values of optional parameters.
+        /// </summary>
+        public static string MiKo_2076_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2076_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         public static string MiKo_2080_CodeFixTitle {

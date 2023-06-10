@@ -443,6 +443,21 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_braces() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer();
