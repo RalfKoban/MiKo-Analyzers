@@ -124,6 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
+            // TODO RKN: Split text on else/otherwise part
             var preparedComment = PrepareComment(comment);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
 
