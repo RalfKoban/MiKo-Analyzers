@@ -119,6 +119,98 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_reported_for_class_with_correctly_ordered_interfaces_and_generic_base_class() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class Base<T>
+    {
+    }
+
+    public interface ITestMe
+    {
+    }
+
+    public class TestMe : Base<int>, ITestMe, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_reported_for_class_with_incorrectly_ordered_interfaces_and_generic_base_class() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class Base<T>
+    {
+    }
+
+    public interface ITestMe
+    {
+    }
+
+    public class TestMe : Base<int>, IDisposable, ITestMe
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_reported_for_class_with_correctly_ordered_generic_interfaces_and_generic_base_class() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class Base<T>
+    {
+    }
+
+    public interface ITestMe<T>
+    {
+    }
+
+    public class TestMe : Base<int>, ITestMe<int>, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_reported_for_class_with_incorrectly_ordered_generic_interfaces_and_generic_base_class() => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class Base<T>
+    {
+    }
+
+    public interface ITestMe<T>
+    {
+    }
+
+    public class TestMe : Base<int>, IDisposable, ITestMe<int>
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_reported_for_record_with_correctly_ordered_interfaces() => No_issue_is_reported_for(@"
 using System;
 
@@ -341,6 +433,62 @@ namespace Bla
     /// Some comment.
     /// </summary>
     public class TestMe : ITestMe, IDisposable
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_type_with_generic_base_class()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public abstract class Base<T>
+    {
+    }
+
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    public class TestMe : Base<int>, IDisposable, ITestMe
+    {
+        public void Dispose()
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public abstract class Base<T>
+    {
+    }
+
+    public interface ITestMe
+    {
+    }
+
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    public class TestMe : Base<int>, ITestMe, IDisposable
     {
         public void Dispose()
         {
