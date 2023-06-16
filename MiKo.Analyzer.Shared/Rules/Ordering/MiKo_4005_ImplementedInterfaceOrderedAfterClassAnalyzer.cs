@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 if (interfaces.Any(_ => _.Name == defaultInterfaceName && IsAtFirstPosition(symbol, defaultInterfaceName) is false))
                 {
                     var type = symbol.GetSyntax() as BaseTypeDeclarationSyntax;
-                    var syntax = type.BaseList.Types.First(_ => _.Type.GetNameOnlyPart() == defaultInterfaceName);
+                    var syntax = type.BaseList.Types.First(_ => _.Type.GetNameOnlyPartWithoutGeneric() == defaultInterfaceName);
 
                     yield return Issue(symbol.Name, syntax, defaultInterfaceName);
                 }
@@ -44,9 +44,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             }
 
             // find out the order
-            var types = bases.Types;
+            var types = bases.Types.Select(_ => _.Type.GetNameOnlyPartWithoutGeneric()).ToList();
 
-            var index = types.IndexOf(_ => _.Type.GetNameOnlyPart() == defaultInterfaceName);
+            var index = types.IndexOf(defaultInterfaceName);
 
             if (index <= 0)
             {
@@ -59,10 +59,10 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 return false;
             }
 
-            var hasBaseTypeDefined = types.Any(_ => _.Type.GetNameOnlyPart() == symbol.BaseType.Name);
+            var baseTypeName = symbol.BaseType.Name;
 
             // interface should be first after base type
-            return hasBaseTypeDefined && index == 1;
+            return types.Any(_ => _ == baseTypeName) && index == 1;
         }
 
         private static BaseListSyntax GetBaseListSyntax(INamedTypeSymbol symbol)
