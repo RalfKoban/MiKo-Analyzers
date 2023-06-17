@@ -22,10 +22,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                '-',  // seems to be an abbreviation
                                                                '/',  // seems to be a combined word
                                                                '\\', // seems to be a path word
+                                                               ':', // seems to be a 'suppress message' text
+                                                               '=', // seems to be something like 'PublicKeyToken=1234'
                                                                '#',
                                                            };
 
         private static readonly string[] HyperlinkIndicators = { "http:", "https:", "ftp:", "ftps:" };
+
+        private static readonly string[] CompilerWarningIndicators = { "CS", "CA", "SA" };
 
         private static readonly HashSet<string> IgnoreTags = new HashSet<string>
                                                                  {
@@ -41,11 +45,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          "CSharp",
                                                                          "FxCop",
                                                                          "IntelliSense",
+                                                                         "NCover",
                                                                          "NCrunch",
                                                                          "PostSharp",
+                                                                         "ReSharper",
+                                                                         "SonarCube",
+                                                                         "SonarLint",
                                                                          "SonarQube",
                                                                          "StyleCop",
                                                                          "VisualBasic",
+                                                                         "ASP.NET",
                                                                      };
 
         public MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer() : base(Id)
@@ -151,6 +160,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             compoundWord = false;
                         }
+                        else if (trimmed.Length > 3 && trimmed[2].IsNumber() && trimmed.StartsWithAny(CompilerWarningIndicators, StringComparison.Ordinal))
+                        {
+                            compoundWord = false;
+                        }
                         else if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
                         {
                             compoundWord = false;
@@ -159,24 +172,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             compoundWord = false;
                         }
+                        else if (trimmed.Length > 31 && Guid.TryParse(trimmed.ToString(), out _))
+                        {
+                            compoundWord = false;
+                        }
                         else if (trimmed.All(char.IsUpper))
                         {
                             // seems like an abbreviation such as UML, so do not report
                             compoundWord = false;
                         }
-                        else if (trimmed.EndsWith("'s", StringComparison.Ordinal) && trimmed.Slice(0, trimmed.Length - 2).All(char.IsUpper))
+                        else if (trimmed.EndsWith('s'))
                         {
-                            // seems like a genitive tense of an abbreviation such as UI's, so do not report
-                            compoundWord = false;
-                        }
-                        else if (trimmed.EndsWith('s') && trimmed.Slice(0, trimmed.Length - 1).All(char.IsUpper))
-                        {
-                            // seems like an abbreviation such as UIs, so do not report
-                            compoundWord = false;
-                        }
-                        else if (trimmed.Length > 31 && Guid.TryParse(trimmed.ToString(), out _))
-                        {
-                            compoundWord = false;
+                            var characters = trimmed.EndsWith("'s", StringComparison.Ordinal) ? 2 : 1;
+
+                            var part = trimmed.Slice(0, trimmed.Length - characters).ToString();
+
+                            if (part.All(char.IsUpper) || WellKnownWords.Contains(part))
+                            {
+                                // seems like an abbreviation (such as UIs) or a genitive tense of an abbreviation (such as UI's), so do not report
+                                compoundWord = false;
+                            }
                         }
                         else if (WellKnownWords.Contains(trimmed.ToString()))
                         {

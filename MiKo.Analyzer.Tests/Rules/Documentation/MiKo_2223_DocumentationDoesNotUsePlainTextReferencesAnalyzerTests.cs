@@ -220,7 +220,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([Values("IntelliSense", "FxCop", "StyleCop", "SonarQube", "CSharp", "VisualBasic", "NCrunch", "PostSharp")] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_known_text_([Values("IntelliSense", "FxCop", "StyleCop", "SonarCube", "SonarQube", "CSharp", "VisualBasic", "NCrunch", "NCrunch's", "NCover", "PostSharp", "SonarLint", "ReSharper", "ASP.NET")] string text)
+            => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -235,13 +236,28 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_combined_text_([Values("Undo/Redo")] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_combined_text_([Values("Undo/Redo", "XYZ1234:Method", "PublicKeyToken=1234")] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
     /// Does something regarding " + text + @" that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_compiler_warning_([Values("CS0012", "CS0067")] string warning) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding " + warning + @" that is very important.
     /// </summary>
     public void DoSomething()
     {
