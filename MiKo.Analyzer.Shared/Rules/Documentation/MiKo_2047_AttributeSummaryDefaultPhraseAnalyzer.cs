@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.InheritsFrom<Attribute>() && base.ShallAnalyze(symbol);
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.XmlTag.Summary, StartingPhrases);
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrases);
 
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
