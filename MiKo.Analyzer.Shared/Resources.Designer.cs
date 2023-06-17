@@ -12661,5 +12661,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6031_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place parameter outdented below method.
+        /// </summary>
+        public static string MiKo_6032_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6032_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily spot the multi-line parameters of a method, those parameters should be positioned outdented below the corresponding method declaration..
+        /// </summary>
+        public static string MiKo_6032_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6032_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place parameter &apos;{0}&apos; outdented below method.
+        /// </summary>
+        public static string MiKo_6032_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6032_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi-line parameters are positioned outdented at end of method.
+        /// </summary>
+        public static string MiKo_6032_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6032_Title", resourceCulture);
+            }
+        }
     }
 }
