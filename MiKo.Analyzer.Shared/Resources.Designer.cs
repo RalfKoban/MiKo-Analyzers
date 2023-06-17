@@ -10011,7 +10011,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return IEnumerable shall never return null.
+        ///   Looks up a localized string similar to Do not return null for an IEnumerable.
         /// </summary>
         public static string MiKo_3070_Title {
             get {
@@ -10039,7 +10039,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Methods that return Task shall never return null.
+        ///   Looks up a localized string similar to Do not return null for a Task.
         /// </summary>
         public static string MiKo_3071_Title {
             get {
