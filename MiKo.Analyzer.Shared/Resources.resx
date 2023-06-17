@@ -3544,7 +3544,7 @@ It is unexpected that such places throw a NullReferenceException or ArgumentNull
     <value>Do not return null</value>
   </data>
   <data name="MiKo_3070_Title" xml:space="preserve">
-    <value>Methods that return IEnumerable shall never return null</value>
+    <value>Do not return null for an IEnumerable</value>
   </data>
   <data name="MiKo_3071_Description" xml:space="preserve">
     <value>Methods that return Task are expected to be used for async calls.
@@ -3554,7 +3554,7 @@ It is unexpected that when calling such methods you get a NullReferenceException
     <value>Do not return null</value>
   </data>
   <data name="MiKo_3071_Title" xml:space="preserve">
-    <value>Methods that return Task shall never return null</value>
+    <value>Do not return null for a Task</value>
   </data>
   <data name="MiKo_3072_Description" xml:space="preserve">
     <value>Methods that are visible to the public should not return a List&lt;&gt; or Dictionary&lt;&gt;. Instead, they should return the interfaces IList&lt;&gt; or IDictionary&lt;&gt;.
