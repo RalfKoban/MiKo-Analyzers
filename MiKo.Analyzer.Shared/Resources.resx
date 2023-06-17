@@ -4460,4 +4460,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_6031_Title" xml:space="preserve">
     <value>Question and colon tokens of ternary operators should be placed directly below the corresponding condition</value>
   </data>
+  <data name="MiKo_6032_CodeFixTitle" xml:space="preserve">
+    <value>Place parameter outdented below method</value>
+  </data>
+  <data name="MiKo_6032_Description" xml:space="preserve">
+    <value>To easily spot the multi-line parameters of a method, those parameters should be positioned outdented below the corresponding method declaration.</value>
+  </data>
+  <data name="MiKo_6032_MessageFormat" xml:space="preserve">
+    <value>Place parameter '{0}' outdented below method</value>
+  </data>
+  <data name="MiKo_6032_Title" xml:space="preserve">
+    <value>Multi-line parameters are positioned outdented at end of method</value>
+  </data>
 </root>
