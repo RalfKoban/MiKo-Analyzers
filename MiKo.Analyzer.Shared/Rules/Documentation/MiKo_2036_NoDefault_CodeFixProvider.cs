@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         protected override string Title => Resources.MiKo_2036_CodeFixTitle_NoDefault;
 
-        protected override bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any();
+        protected override bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
 
         protected override IEnumerable<XmlNodeSyntax> GetDefaultComment(Document document, TypeSyntax returnType)
         {

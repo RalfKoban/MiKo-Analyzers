@@ -16,8 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
             var phrase = (index == 0)
-                             ? Constants.Comments.CtorSerializationInfoParamPhrase
-                             : Constants.Comments.CtorStreamingContextParamPhrase;
+                         ? Constants.Comments.CtorSerializationInfoParamPhrase
+                         : Constants.Comments.CtorStreamingContextParamPhrase;
 
             return Comment(comment, phrase);
         }

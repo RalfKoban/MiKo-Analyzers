@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsEnum();
 
         protected override string[] GetStartingPhrases(ISymbol owningSymbol, ITypeSymbol returnType) => IsAcceptedType(returnType)
-                                                                                                            ? Constants.Comments.EnumReturnTypeStartingPhrase
-                                                                                                            : Constants.Comments.EnumTaskReturnTypeStartingPhrase;
+                                                                                                        ? Constants.Comments.EnumReturnTypeStartingPhrase
+                                                                                                        : Constants.Comments.EnumTaskReturnTypeStartingPhrase;
     }
 }

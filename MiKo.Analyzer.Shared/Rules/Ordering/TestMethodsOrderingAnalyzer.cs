@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var method = GetMethod(symbol);
 
             return method != null
-                       ? AnalyzeTestType(symbol, method)
-                       : Enumerable.Empty<Diagnostic>();
+                   ? AnalyzeTestType(symbol, method)
+                   : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeTestType(INamedTypeSymbol symbol, IMethodSymbol method)

@@ -31,8 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var endsWithUnderscore = symbol.Name.EndsWith('_');
 
             return endsWithUnderscore
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol) };
+                   ? Enumerable.Empty<Diagnostic>()
+                   : new[] { Issue(symbol) };
         }
     }
 }

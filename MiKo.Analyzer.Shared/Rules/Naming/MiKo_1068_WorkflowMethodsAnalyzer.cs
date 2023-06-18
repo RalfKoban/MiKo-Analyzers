@@ -46,8 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var isBoolean = returnType.TryGetGenericArgumentType(out var argumentType) && argumentType.IsBoolean();
 
             return isBoolean
-                       ? "CanRunAsync"
-                       : "RunAsync";
+                   ? "CanRunAsync"
+                   : "RunAsync";
         }
     }
 }

@@ -443,8 +443,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (attribute.Cref is NameMemberCrefSyntax m)
                     {
                         return t is GenericNameSyntax
-                                   ? IsSameGeneric(m.Name, t)
-                                   : IsSameName(m.Name, t);
+                               ? IsSameGeneric(m.Name, t)
+                               : IsSameName(m.Name, t);
                     }
                 }
 
@@ -594,8 +594,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var modifiedText = text.ReplaceText(phrases, replacement);
 
             return ReferenceEquals(text, modifiedText)
-                       ? comment
-                       : comment.ReplaceNode(text, modifiedText);
+                   ? comment
+                   : comment.ReplaceNode(text, modifiedText);
         }
 
         protected static XmlEmptyElementSyntax SeeCref(string typeName) => Cref(Constants.XmlTag.See, SyntaxFactory.ParseTypeName(typeName));

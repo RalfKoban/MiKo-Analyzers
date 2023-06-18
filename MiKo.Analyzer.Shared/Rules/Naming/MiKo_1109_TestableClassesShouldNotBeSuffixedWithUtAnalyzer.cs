@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         internal static string FindBetterName(INamedTypeSymbol symbol) => FindBetterName(symbol.Name);
 
         internal static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix)
-                                                                        ? symbolName.WithoutSuffix(Suffix)
-                                                                        : Prefix + symbolName.WithoutSuffix(Suffix);
+                                                                    ? symbolName.WithoutSuffix(Suffix)
+                                                                    : Prefix + symbolName.WithoutSuffix(Suffix);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {

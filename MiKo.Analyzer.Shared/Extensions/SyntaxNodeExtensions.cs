@@ -471,8 +471,8 @@ namespace MiKoSolutions.Analyzers
                     case SimpleNameSyntax simple: return simple.GetName().AsSpan();
                     default:
                         return value is null
-                                   ? ReadOnlySpan<char>.Empty
-                                   : value.ToString().AsSpan();
+                               ? ReadOnlySpan<char>.Empty
+                               : value.ToString().AsSpan();
                 }
             }
         }
@@ -508,8 +508,8 @@ namespace MiKoSolutions.Analyzers
 
                     case BasePropertyDeclarationSyntax property:
                         return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
-                                   ? Constants.Names.DefaultPropertyParameterNames
-                                   : Array.Empty<string>();
+                               ? Constants.Names.DefaultPropertyParameterNames
+                               : Array.Empty<string>();
                 }
             }
 
@@ -1545,8 +1545,8 @@ namespace MiKoSolutions.Analyzers
                     if (enumerator.Current == node)
                     {
                         var nextSibling = enumerator.MoveNext()
-                                              ? enumerator.Current
-                                              : default;
+                                          ? enumerator.Current
+                                          : default;
 
                         return nextSibling;
                     }
@@ -1628,13 +1628,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithFirstLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
         {
-            if (value.HasLeadingTrivia)
-            {
-                // Attention: leading trivia contains XML comments, so we have to keep them!
-                var leadingTrivia = value.GetLeadingTrivia();
+            // Attention: leading trivia contains XML comments, so we have to keep them!
+            var leadingTrivia = value.GetLeadingTrivia();
 
+            if (leadingTrivia.Count > 0)
+            {
                 // remove leading end-of-line as otherwise we would have multiple empty lines left over
-                if (leadingTrivia[0].IsKind(SyntaxKind.EndOfLineTrivia))
+                if (leadingTrivia[0].IsEndOfLine())
                 {
                     leadingTrivia = leadingTrivia.RemoveAt(0);
                 }
@@ -1651,9 +1651,40 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace);
+        internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode
+        {
+            var space = SyntaxFactory.Space; // use non-elastic one to prevent formatting to be done automatically
 
-        internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically
+            var trivia = value.GetLeadingTrivia();
+
+            if (trivia.Count == 0)
+            {
+                return value.WithLeadingTrivia(Enumerable.Repeat(space, count));
+            }
+
+            if (trivia[0].IsEndOfLine())
+            {
+                // keep empty line at beginning
+                return value.WithLeadingTrivia(Enumerable.Repeat(space, count)).WithLeadingEmptyLine();
+            }
+
+            // re-construct leading comment with correct amount of spaces
+            var finalTrivia = new List<SyntaxTrivia>();
+
+            foreach (var t in trivia)
+            {
+                if (t.IsWhiteSpace())
+                {
+                    finalTrivia.AddRange(Enumerable.Repeat(space, count));
+                }
+                else
+                {
+                    finalTrivia.Add(t);
+                }
+            }
+
+            return value.WithLeadingTrivia(finalTrivia);
+        }
 
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
@@ -1674,8 +1705,8 @@ namespace MiKoSolutions.Analyzers
                 var newText = text.WithoutFirstXmlNewLine();
 
                 return newText.TextTokens.Count != 0
-                           ? list.Replace(text, newText)
-                           : list.Remove(text);
+                       ? list.Replace(text, newText)
+                       : list.Remove(text);
             }
 
             return list;
@@ -1708,15 +1739,15 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
             return node.HasLeadingTrivia
-                    ? value.WithLeadingTrivia(node.GetLeadingTrivia())
-                    : value;
+                   ? value.WithLeadingTrivia(node.GetLeadingTrivia())
+                   : value;
         }
 
         internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
             return node.HasTrailingTrivia
-                    ? value.WithTrailingTrivia(node.GetTrailingTrivia())
-                    : value;
+                   ? value.WithTrailingTrivia(node.GetTrailingTrivia())
+                   : value;
         }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
@@ -1746,14 +1777,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, string text)
         {
-            var contents = new List<XmlNodeSyntax>(values);
+            var contents = values.ToList();
 
             for (var index = 0; index < values.Count; index++)
             {
                 if (values[index] is XmlTextSyntax s)
                 {
                     var originalTextTokens = s.TextTokens;
-                    var textTokens = new List<SyntaxToken>(originalTextTokens);
+                    var textTokens = originalTextTokens.ToList();
 
                     var modified = false;
 
@@ -1800,7 +1831,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
         {
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             var replaced = false;
 
@@ -1842,7 +1873,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
         {
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             var replaced = false;
 
@@ -1895,8 +1926,8 @@ namespace MiKoSolutions.Analyzers
             if (texts.Count > 0)
             {
                 var text = texts.Count == 1
-                               ? texts[0]
-                               : texts[texts.Count - 2];
+                           ? texts[0]
+                           : texts[texts.Count - 2];
 
                 return WithoutWhitespaceOnlyComment(text);
             }
@@ -1945,7 +1976,7 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             for (var i = 0; i < textTokens.Count; i++)
             {
@@ -1985,8 +2016,8 @@ namespace MiKoSolutions.Analyzers
             if (values.Count > 0)
             {
                 return values[0] is XmlTextSyntax textSyntax
-                           ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordHandling))
-                           : values.Insert(0, XmlText(startText));
+                       ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordHandling))
+                       : values.Insert(0, XmlText(startText));
             }
 
             return new SyntaxList<XmlNodeSyntax>(XmlText(startText));
@@ -1994,7 +2025,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             var replaced = false;
 
@@ -2161,7 +2192,7 @@ namespace MiKoSolutions.Analyzers
 
             if (indexer != null)
             {
-                var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
+                var parameters = indexer.ParameterList.Parameters.ToList();
 
                 // 'value' is a special parameter that is not part of the parameter list
                 parameters.Insert(0, Parameter(indexer.Type));

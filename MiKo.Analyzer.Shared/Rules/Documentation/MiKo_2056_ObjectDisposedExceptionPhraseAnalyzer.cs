@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         internal static string GetEndingPhrase(ISymbol symbol) => HasCloseMethod(symbol)
-                                                                      ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
-                                                                      : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
+                                                                  ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
+                                                                  : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
 
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {

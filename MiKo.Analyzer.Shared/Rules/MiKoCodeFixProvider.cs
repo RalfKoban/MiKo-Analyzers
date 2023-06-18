@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules
             return false;
         }
 
-        protected virtual bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any();
+        protected virtual bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
 
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
@@ -146,8 +146,8 @@ namespace MiKoSolutions.Analyzers.Rules
             if (ReferenceEquals(updatedSyntax, syntax) is false)
             {
                 newRoot = updatedSyntax is null
-                              ? root.Without(syntax)
-                              : root.ReplaceNode(syntax, updatedSyntax);
+                          ? root.Without(syntax)
+                          : root.ReplaceNode(syntax, updatedSyntax);
 
                 if (newRoot is null)
                 {

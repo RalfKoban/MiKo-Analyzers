@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IMethodSymbol symbol) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => ContainsAssertion(symbol)
-                                                                                                                 ? Enumerable.Empty<Diagnostic>()
-                                                                                                                 : new[] { Issue(symbol) };
+                                                                                                             ? Enumerable.Empty<Diagnostic>()
+                                                                                                             : new[] { Issue(symbol) };
 
         private static bool ContainsAssertion(IMethodSymbol symbol)
         {

@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var type = FindRelatedType(document, literal);
 
             return type is null
-                       ? NameOf(literal)
-                       : NameOf(type, literal);
+                   ? NameOf(literal)
+                   : NameOf(type, literal);
         }
 
         private static ITypeSymbol FindRelatedType(Document document, LiteralExpressionSyntax syntax)

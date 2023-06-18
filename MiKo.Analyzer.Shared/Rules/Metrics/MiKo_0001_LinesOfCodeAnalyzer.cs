@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             var loc = Counter.CountLinesOfCode(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
 
             return loc > MaxLinesOfCode
-                    ? Issue(containingSymbol, loc, MaxLinesOfCode)
-                    : null;
+                   ? Issue(containingSymbol, loc, MaxLinesOfCode)
+                   : null;
         }
     }
 }

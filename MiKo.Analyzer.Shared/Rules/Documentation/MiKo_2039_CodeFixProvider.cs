@@ -79,8 +79,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var end in ends)
                         {
                             yield return start.IsNullOrWhiteSpace()
-                                             ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
-                                             : string.Concat(start, preMiddle, " ", middle, " ", end);
+                                         ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
+                                         : string.Concat(start, preMiddle, " ", middle, " ", end);
                         }
                     }
                 }

@@ -67,13 +67,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     {
                         case BlockSyntax block:
                             return IsLocalSymbol(i, semanticModel)
-                                       ? AnalyzeSimpleAssignmentExpression(block.Statements, statement)
-                                       : null;
+                                   ? AnalyzeSimpleAssignmentExpression(block.Statements, statement)
+                                   : null;
 
                         case SwitchSectionSyntax section:
                             return IsLocalSymbol(i, semanticModel)
-                                       ? AnalyzeSimpleAssignmentExpression(section.Statements, statement)
-                                       : null;
+                                   ? AnalyzeSimpleAssignmentExpression(section.Statements, statement)
+                                   : null;
 
                         case IfStatementSyntax _:
                         case ElseClauseSyntax _:

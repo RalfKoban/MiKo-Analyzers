@@ -12,12 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         }
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                              ? Analyze(symbol, compilation)
-                                                                                                                              : Enumerable.Empty<Diagnostic>();
+                                                                                                                          ? Analyze(symbol, compilation)
+                                                                                                                          : Enumerable.Empty<Diagnostic>();
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation) => ShallAnalyze(symbol)
-                                                                                                                            ? Analyze(symbol, compilation)
-                                                                                                                            : Enumerable.Empty<Diagnostic>();
+                                                                                                                        ? Analyze(symbol, compilation)
+                                                                                                                        : Enumerable.Empty<Diagnostic>();
 
         protected virtual bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsOverride is false;
 

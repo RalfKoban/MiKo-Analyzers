@@ -95,8 +95,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         // skip first new line of a normal text as that would remain and lead to an additional empty line
                         var syntaxToken = noXmlTagOnCommentStart
-                                              ? tokensForTexts.First()
-                                              : tokensForTexts.Last();
+                                          ? tokensForTexts.First()
+                                          : tokensForTexts.Last();
 
                         if (syntaxToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                         {

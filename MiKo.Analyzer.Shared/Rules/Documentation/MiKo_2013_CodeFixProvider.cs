@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlNodeSyntax NewXmlComment(XmlTextSyntax comment, string text)
         {
-            var textTokens = new List<SyntaxToken>(comment.TextTokens);
+            var textTokens = comment.TextTokens.ToList();
 
             // get rid of all empty tokens at the beginning
             while (textTokens.Any() && textTokens[0].ValueText.IsNullOrWhiteSpace())

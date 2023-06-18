@@ -19,8 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var parameter = syntax.GetUsedParameter();
             var exceptionName = parameter is null
-                                    ? nameof(InvalidOperationException)
-                                    : nameof(ArgumentException);
+                                ? nameof(InvalidOperationException)
+                                : nameof(ArgumentException);
 
             return SyntaxFactory.ParseTypeName(exceptionName);
         }
@@ -31,8 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var errorMessage = GetUpdatedErrorMessage(syntax.ArgumentList);
 
             return parameter != null
-                       ? ArgumentList(errorMessage, ParamName(parameter))
-                       : ArgumentList(errorMessage);
+                   ? ArgumentList(errorMessage, ParamName(parameter))
+                   : ArgumentList(errorMessage);
         }
     }
 }

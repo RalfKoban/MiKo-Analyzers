@@ -154,7 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         // let's see if we have the special case 'Is.Not.Null'
         private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments) => arguments.Count > 1 && arguments[1].Expression.ToString() == "Is.Not.Null"
-                                                                                                    ? "missing"
-                                                                                                    : "wrong";
+                                                                                                ? "missing"
+                                                                                                : "wrong";
     }
 }

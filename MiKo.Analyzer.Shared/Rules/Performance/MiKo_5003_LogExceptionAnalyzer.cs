@@ -52,8 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     case Constants.ILog.Fatal:
                     {
                         return arguments.Count == 1
-                                   ? AnalyzeCall(methodCall, new[] { arguments[0] }, semanticModel, methodName)
-                                   : null;
+                               ? AnalyzeCall(methodCall, new[] { arguments[0] }, semanticModel, methodName)
+                               : null;
                     }
 
                     case Constants.ILog.DebugFormat:

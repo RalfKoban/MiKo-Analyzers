@@ -82,8 +82,8 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XElement> GetCommentElements(this XElement commentXml, string xmlTag)
         {
             return commentXml is null
-                       ? Enumerable.Empty<XElement>() // happens in case of an invalid character
-                       : commentXml.Descendants(xmlTag);
+                   ? Enumerable.Empty<XElement>() // happens in case of an invalid character
+                   : commentXml.Descendants(xmlTag);
         }
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)

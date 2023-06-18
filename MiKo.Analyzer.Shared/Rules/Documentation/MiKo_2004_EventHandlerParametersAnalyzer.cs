@@ -26,8 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler() && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
-                                                                                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                    : VerifyParameterComments(symbol, commentXml, comment);
+                                                                                                                                                                                ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                                                : VerifyParameterComments(symbol, commentXml, comment);
 
         private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
         {

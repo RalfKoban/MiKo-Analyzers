@@ -195,7 +195,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_indented_block_below_defaul()
+        public void Code_gets_fixed_for_indented_block_below_default()
         {
             const string OriginalCode = @"
 using System;
@@ -230,6 +230,152 @@ public class TestMe
 
             default:
             {
+                return i;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_indented_block_with_empty_line_below_default()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(int i)
+    {
+        switch (i)
+        {
+            case 1: return i;
+
+            default:
+                {
+                    i = i + 1;
+
+                    return i;
+                }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(int i)
+    {
+        switch (i)
+        {
+            case 1: return i;
+
+            default:
+            {
+                i = i + 1;
+
+                return i;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_indented_block_with_single_line_comment_below_default()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(int i)
+    {
+        switch (i)
+        {
+            case 1: return i;
+
+            default:
+                {
+                    // some comment
+                    return i;
+                }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(int i)
+    {
+        switch (i)
+        {
+            case 1: return i;
+
+            default:
+            {
+                // some comment
+                return i;
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_indented_block_with_multi_line_comment_below_default()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(int i)
+    {
+        switch (i)
+        {
+            case 1: return i;
+
+            default:
+                {
+                    /* some comment */
+                    return i;
+                }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(int i)
+    {
+        switch (i)
+        {
+            case 1: return i;
+
+            default:
+            {
+                /* some comment */
                 return i;
             }
         }

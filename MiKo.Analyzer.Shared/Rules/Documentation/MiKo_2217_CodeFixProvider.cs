@@ -99,8 +99,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return syntax.ReplaceNodes(nodes, (original, rewritten) =>
                                                               {
                                                                   var newName = nodes.IndexOf(original) == 0
-                                                                                    ? Constants.XmlTag.Term
-                                                                                    : Constants.XmlTag.Description;
+                                                                                ? Constants.XmlTag.Term
+                                                                                : Constants.XmlTag.Description;
 
                                                                   return SyntaxFactory.XmlElement(newName, original.Content);
                                                               });

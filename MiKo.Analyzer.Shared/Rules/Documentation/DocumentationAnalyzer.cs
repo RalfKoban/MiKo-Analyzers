@@ -267,7 +267,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var firstPart = returnType.Substring(0, length);
 
                 var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
-                var returnTypeWithGenericCount = string.Concat(firstPart, '`', count);
+                var returnTypeWithGenericCount = string.Concat(firstPart, "`", count.ToString());
 
                 return Enumerable.Empty<string>()
                                  .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user

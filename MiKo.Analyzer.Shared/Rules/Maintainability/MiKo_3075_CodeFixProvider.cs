@@ -39,8 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ClassDeclarationSyntax classDeclaration:
                 {
                     var keyword = MakeStatic(document, classDeclaration)
-                                      ? SyntaxKind.StaticKeyword
-                                      : SyntaxKind.SealedKeyword;
+                                  ? SyntaxKind.StaticKeyword
+                                  : SyntaxKind.SealedKeyword;
 
                     var modifiers = CreateModifiers(classDeclaration, keyword);
 
@@ -82,8 +82,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var syntaxToken = SyntaxFactory.Token(keyword);
 
             return position > -1
-                       ? modifiers.Insert(position, syntaxToken)
-                       : modifiers.Add(syntaxToken);
+                   ? modifiers.Insert(position, syntaxToken)
+                   : modifiers.Add(syntaxToken);
         }
     }
 }

@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private Diagnostic AnalyzeParameter(IParameterSymbol parameter, string name) => parameter.Name == name
-                                                                                            ? null
-                                                                                            : Issue(parameter, name);
+                                                                                        ? null
+                                                                                        : Issue(parameter, name);
     }
 }
