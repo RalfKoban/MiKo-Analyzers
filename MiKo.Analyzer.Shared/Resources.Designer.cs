@@ -12724,5 +12724,42 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6032_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open brace directly below case.
+        /// </summary>
+        public static string MiKo_6033_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6033_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
+        ///Hence, as it is a block similar to the if blocks), the open brace of the block should be positioned directly below the corresponding case keyword..
+        /// </summary>
+        public static string MiKo_6033_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6033_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open brace directly below case.
+        /// </summary>
+        public static string MiKo_6033_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6033_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Braces of blocks below case sections should be placed directly below the corresponding case keyword.
+        /// </summary>
+        public static string MiKo_6033_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6033_Title", resourceCulture);
+            }
+        }
     }
 }
