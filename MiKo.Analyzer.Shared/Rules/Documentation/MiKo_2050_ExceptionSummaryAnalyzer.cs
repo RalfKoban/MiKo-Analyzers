@@ -133,8 +133,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var summaries = symbol.GetOverloadSummaries();
 
             return summaries.Any()
-                       ? AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases)
-                       : Enumerable.Empty<Diagnostic>();
+                   ? AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases)
+                   : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeRemarksPhrase(IMethodSymbol symbol, params string[] defaultPhrases)
@@ -142,8 +142,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comments = symbol.GetRemarks();
 
             return comments.Any()
-                       ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases)
-                       : Enumerable.Empty<Diagnostic>();
+                   ? AnalyzeStartingPhrase(symbol, Constants.XmlTag.Remarks, comments, defaultPhrases)
+                   : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
@@ -165,8 +165,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = GetParameterPhrases(symbol);
 
             return phrases.Length == 0
-                       ? Enumerable.Empty<Diagnostic>()
-                       : AnalyzeParameter(symbol, commentXml, phrases);
+                   ? Enumerable.Empty<Diagnostic>()
+                   : AnalyzeParameter(symbol, commentXml, phrases);
         }
 
         private IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, string commentXml, IReadOnlyList<string> phrase)

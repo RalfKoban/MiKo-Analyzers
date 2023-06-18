@@ -49,8 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     // non-matching types, maybe we have some base types and have to investigate the creation methods
                     return TestClassIsNamedAfterCreatedTypeUnderTest(symbol)
-                               ? Enumerable.Empty<Diagnostic>()
-                               : new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
+                           ? Enumerable.Empty<Diagnostic>()
+                           : new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
                 }
             }
 

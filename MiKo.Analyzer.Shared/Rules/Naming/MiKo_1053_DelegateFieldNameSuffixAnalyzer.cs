@@ -33,8 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 var newName = symbolName.Without(suffix);
                 var upperCase = newName.Length > 0 && symbolName[newName.Length].IsUpperCase();
                 var correctSuffix = upperCase
-                                        ? "Callback"
-                                        : "callback";
+                                    ? "Callback"
+                                    : "callback";
 
                 return newName + correctSuffix;
             }
@@ -51,8 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case TypeKind.Delegate:
                 case TypeKind.Class when symbolType.ToString() == TypeNames.Delegate:
                     return symbol.Name.EndsWithAny(WrongNames)
-                               ? new[] { Issue(symbol) }
-                               : Enumerable.Empty<Diagnostic>();
+                           ? new[] { Issue(symbol) }
+                           : Enumerable.Empty<Diagnostic>();
 
                 default:
                     return Enumerable.Empty<Diagnostic>();

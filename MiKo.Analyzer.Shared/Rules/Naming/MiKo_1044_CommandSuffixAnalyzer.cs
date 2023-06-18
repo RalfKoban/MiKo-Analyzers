@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => AnalyzeNames(symbol, SingleSuffix);
 
         private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, IEnumerable<string> suffixes) => suffixes.Any(_ => symbol.Name.EndsWith(_, StringComparison.Ordinal))
-                                                                                                          ? Enumerable.Empty<Diagnostic>()
-                                                                                                          : new[] { Issue(symbol, Suffix) };
+                                                                                                      ? Enumerable.Empty<Diagnostic>()
+                                                                                                      : new[] { Issue(symbol, Suffix) };
     }
 }

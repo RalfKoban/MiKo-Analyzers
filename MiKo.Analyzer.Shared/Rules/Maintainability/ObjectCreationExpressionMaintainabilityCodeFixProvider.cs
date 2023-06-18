@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static ArgumentSyntax GetUpdatedErrorMessage(ArgumentListSyntax argumentList) => GetUpdatedErrorMessage(argumentList.Arguments);
 
-        protected static ArgumentSyntax GetUpdatedErrorMessage(IEnumerable<ArgumentSyntax> arguments)
+        protected static ArgumentSyntax GetUpdatedErrorMessage(SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             foreach (var argument in arguments)
             {

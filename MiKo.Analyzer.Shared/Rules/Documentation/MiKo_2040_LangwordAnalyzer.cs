@@ -37,8 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             return comment is null
-                       ? Enumerable.Empty<Diagnostic>()
-                       : AnalyzeComment(symbol.Name, comment);
+                   ? Enumerable.Empty<Diagnostic>()
+                   : AnalyzeComment(symbol.Name, comment);
         }
 
         private static KeyValuePair<string, string>[] CreateStartParts()

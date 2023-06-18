@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         internal static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
-                                                                                                                    ? documentation.GetSummaryXmls(InvalidTags)
-                                                                                                                    : Enumerable.Empty<XmlNodeSyntax>();
+                                                                                                                ? documentation.GetSummaryXmls(InvalidTags)
+                                                                                                                : Enumerable.Empty<XmlNodeSyntax>();
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {

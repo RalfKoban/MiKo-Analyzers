@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var diagnostic = AnalyzeCollectionSuffix(symbol);
 
             return diagnostic != null
-                       ? new[] { diagnostic }
-                       : Enumerable.Empty<Diagnostic>();
+                   ? new[] { diagnostic }
+                   : Enumerable.Empty<Diagnostic>();
         }
     }
 }

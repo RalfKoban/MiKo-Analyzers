@@ -32,8 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return setter.DeclaredAccessibility != Accessibility.Private
-                       ? new[] { Issue(setter) }
-                       : Enumerable.Empty<Diagnostic>();
+                   ? new[] { Issue(setter) }
+                   : Enumerable.Empty<Diagnostic>();
         }
     }
 }

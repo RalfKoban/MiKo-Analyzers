@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyProperty();
 
         protected override IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation) => symbol.IsStatic && symbol.IsReadOnly && symbol.DeclaredAccessibility == Accessibility.Public
-                                                                                                                ? Enumerable.Empty<Diagnostic>()
-                                                                                                                : new[] { Issue(symbol) };
+                                                                                                            ? Enumerable.Empty<Diagnostic>()
+                                                                                                            : new[] { Issue(symbol) };
     }
 }

@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(HasIssue)
-                                                                                                                                                                                           ? new[] { Issue(symbol) }
-                                                                                                                                                                                           : Enumerable.Empty<Diagnostic>();
+                                                                                                                                                                                       ? new[] { Issue(symbol) }
+                                                                                                                                                                                       : Enumerable.Empty<Diagnostic>();
 
         private static bool HasIssue(string summary)
         {

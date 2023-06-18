@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -66,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameter(string propertyName, IEnumerable<IParameterSymbol> parameters)
+        private IEnumerable<Diagnostic> AnalyzeParameter(string propertyName, ImmutableArray<IParameterSymbol> parameters)
         {
             // TODO: RKN
             // x - get parent invocation

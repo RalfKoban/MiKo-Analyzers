@@ -51,15 +51,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var hasPropertySetter = owningSymbol is IPropertySymbol property && property.IsReadOnly is false;
 
                 return hasPropertySetter
-                           ? Constants.Comments.BooleanPropertySetterStartingPhrase
-                           : Constants.Comments.BooleanReturnTypeStartingPhrase;
+                       ? Constants.Comments.BooleanPropertySetterStartingPhrase
+                       : Constants.Comments.BooleanReturnTypeStartingPhrase;
             }
 
             return Constants.Comments.BooleanTaskReturnTypeStartingPhrase;
         }
 
         private string[] GetEndingPhrases(ITypeSymbol returnType) => IsAcceptedType(returnType)
-                                                                         ? Constants.Comments.BooleanReturnTypeEndingPhrase
-                                                                         : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
+                                                                     ? Constants.Comments.BooleanReturnTypeEndingPhrase
+                                                                     : Constants.Comments.BooleanTaskReturnTypeEndingPhrase;
     }
 }

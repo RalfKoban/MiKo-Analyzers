@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -10,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public sealed override string FixableDiagnosticId => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
 
-        protected override bool IsApplicable(IEnumerable<Diagnostic> diagnostics) => diagnostics.Any(MiKo_2036_PropertyDefaultValuePhraseAnalyzer.IsBooleanIssue);
+        protected override bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any(MiKo_2036_PropertyDefaultValuePhraseAnalyzer.IsBooleanIssue);
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => WithDefaultComment(document, comment, returnType);
 

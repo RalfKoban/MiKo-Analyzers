@@ -438,8 +438,8 @@ public sealed class TestMe
                 {
                     // distinguish between XML and non-XML
                     var fixedPhrase = phrase.StartsWith('<')
-                                          ? $@"<see langword=""{word}""/>"
-                                          : phrase.Replace(word, $@"<see langword=""{word}""/>", StringComparison.OrdinalIgnoreCase);
+                                      ? $@"<see langword=""{word}""/>"
+                                      : phrase.Replace(word, $@"<see langword=""{word}""/>", StringComparison.OrdinalIgnoreCase);
 
                     yield return new TestCaseData
                                      {

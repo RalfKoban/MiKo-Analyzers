@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax propertySyntax) => Comment(document, comment, propertySyntax.Type);
 
         private SyntaxNode Comment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                              ? GenericComment(document, comment, genericReturnType)
-                                                                                                              : NonGenericComment(document, comment, returnType);
+                                                                                                          ? GenericComment(document, comment, genericReturnType)
+                                                                                                          : NonGenericComment(document, comment, returnType);
     }
 }

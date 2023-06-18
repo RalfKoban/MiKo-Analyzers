@@ -11,19 +11,6 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
-        public static bool Any(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
-        {
-            foreach (var trivia in value)
-            {
-                if (filter(trivia))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public static bool IsSpanningMultipleLines(this SyntaxTrivia value)
         {
             var foundLine = false;

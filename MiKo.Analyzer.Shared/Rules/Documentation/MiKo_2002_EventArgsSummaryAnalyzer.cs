@@ -28,8 +28,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEventArgs() && base.ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => HasEventSummary(summaries)
-                                                                                                                                                                                           ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                           : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
+                                                                                                                                                                                       ? Enumerable.Empty<Diagnostic>()
+                                                                                                                                                                                       : new[] { Issue(symbol, StartingPhraseConcrete, "\"" + EndingPhraseConcrete) };
 
         private static bool HasEventSummary(IEnumerable<string> summaries)
         {
@@ -40,8 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (trimmedSummary.StartsWith(StartingPhrase, Comparison))
                 {
                     var phrase = trimmedSummary.StartsWith(StartingPhraseConcrete, Comparison)
-                                     ? EndingPhraseConcrete
-                                     : EndingPhraseMultiple;
+                                 ? EndingPhraseConcrete
+                                 : EndingPhraseMultiple;
 
                     return trimmedSummary.EndsWith(phrase, Comparison);
                 }

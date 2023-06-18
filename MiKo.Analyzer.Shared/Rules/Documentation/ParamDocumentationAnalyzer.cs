@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
                 var proposal = useAllPhrases
-                                   ? phrase.HumanizedConcatenated()
-                                   : phrase[0].SurroundedWithApostrophe();
+                               ? phrase.HumanizedConcatenated()
+                               : phrase[0].SurroundedWithApostrophe();
 
                 yield return Issue(parameter.Name, GetIssueLocation(parameterComment), string.Intern(proposal));
             }
@@ -39,8 +39,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var useAllPhrases = phrases.Length > 1 && phrases[0].Length <= 10;
             var proposal = useAllPhrases
-                               ? phrases.HumanizedConcatenated()
-                               : phrases[0].SurroundedWithApostrophe();
+                           ? phrases.HumanizedConcatenated()
+                           : phrases[0].SurroundedWithApostrophe();
 
             return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), string.Intern(proposal)) };
         }

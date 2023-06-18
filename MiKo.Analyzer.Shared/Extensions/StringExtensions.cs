@@ -312,8 +312,8 @@ namespace System
             var word = FirstWord(span);
 
             return word != span
-                       ? word.ToString()
-                       : value;
+                   ? word.ToString()
+                   : value;
         }
 
         public static ReadOnlySpan<char> FirstWord(this ReadOnlySpan<char> value)
@@ -345,16 +345,25 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1) => string.Format(format, arg0, arg1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string FormatWith(this string format, string arg0, char arg1) => string.Format(format, arg0, arg1.ToString());
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2) => string.Format(format, arg0, arg1, arg2);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
         public static string GetNameOnlyPart(this string fullName) => GetNameOnlyPart(fullName.AsSpan());
 
@@ -383,8 +392,8 @@ namespace System
             var genericIndexStart = fullName.IndexOf('<');
 
             var name = genericIndexStart > 0
-                           ? fullName.Slice(0, genericIndexStart)
-                           : fullName;
+                       ? fullName.Slice(0, genericIndexStart)
+                       : fullName;
 
             return name.GetPartAfterLastDot().ToString();
         }
@@ -849,8 +858,8 @@ namespace System
             }
 
             return end >= 0 && end <= totalLength
-                       ? value.Substring(0, end)
-                       : value;
+                   ? value.Substring(0, end)
+                   : value;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -870,8 +879,8 @@ namespace System
                 var length = value.Length - 1;
 
                 return length <= 0
-                           ? string.Empty
-                           : value.Slice(0, length).ToString();
+                       ? string.Empty
+                       : value.Slice(0, length).ToString();
             }
 
             return value.ToString();
@@ -887,8 +896,8 @@ namespace System
             var length = value.Length - suffix.Length;
 
             return length <= 0
-                       ? string.Empty
-                       : value.Substring(0, length);
+                   ? string.Empty
+                   : value.Substring(0, length);
         }
 
         public static IEnumerable<string> Words(this string text) => Words(text.AsSpan());

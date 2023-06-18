@@ -31,8 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (argumentType is IArrayTypeSymbol array)
                 {
                     return array.ElementType.IsByte()
-                               ? Constants.Comments.ByteArrayTaskReturnTypeStartingPhrase
-                               : Constants.Comments.ArrayTaskReturnTypeStartingPhrase;
+                           ? Constants.Comments.ByteArrayTaskReturnTypeStartingPhrase
+                           : Constants.Comments.ArrayTaskReturnTypeStartingPhrase;
                 }
 
                 return Constants.Comments.EnumerableTaskReturnTypeStartingPhrase;
@@ -46,8 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (returnType is IArrayTypeSymbol arrayType)
             {
                 return arrayType.ElementType.IsByte()
-                           ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
-                           : Constants.Comments.ArrayReturnTypeStartingPhrase;
+                       ? Constants.Comments.ByteArrayReturnTypeStartingPhrase
+                       : Constants.Comments.ArrayReturnTypeStartingPhrase;
             }
 
             return Constants.Comments.EnumerableReturnTypeStartingPhrase;

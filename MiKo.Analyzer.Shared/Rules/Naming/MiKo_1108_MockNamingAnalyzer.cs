@@ -78,8 +78,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                                           where name.Length > 3 && name.ContainsAny(MockNames)
                                                                                                                                                           let symbol = identifier.GetSymbol(semanticModel)
                                                                                                                                                           select symbol is null
-                                                                                                                                                                     ? Issue(identifier)
-                                                                                                                                                                     : Issue(symbol);
+                                                                                                                                                                 ? Issue(identifier)
+                                                                                                                                                                 : Issue(symbol);
 
         private static bool ShallAnalyze(INamedTypeSymbol type)
         {

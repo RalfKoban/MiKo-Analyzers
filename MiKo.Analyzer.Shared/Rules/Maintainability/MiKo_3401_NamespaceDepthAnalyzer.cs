@@ -24,8 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var depth = GetNamespaceDepth(symbol);
 
             return depth > MaxDepth
-                       ? new[] { Issue(symbol, depth, MaxDepth) }
-                       : Enumerable.Empty<Diagnostic>();
+                   ? new[] { Issue(symbol, depth, MaxDepth) }
+                   : Enumerable.Empty<Diagnostic>();
         }
 
         private static int GetNamespaceDepth(INamespaceSymbol symbol)

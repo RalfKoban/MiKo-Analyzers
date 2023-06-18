@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             var cc = Counter.CountCyclomaticComplexity(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
 
             return cc > MaxCyclomaticComplexity
-                    ? Issue(containingSymbol, cc, MaxCyclomaticComplexity)
-                    : null;
+                   ? Issue(containingSymbol, cc, MaxCyclomaticComplexity)
+                   : null;
         }
     }
 }

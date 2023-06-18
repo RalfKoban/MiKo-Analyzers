@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override bool ShallAnalyze(IFieldSymbol symbol) => symbol.Type.IsDependencyPropertyKey();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Constants.DependencyPropertyKey.FieldSuffix, StringComparison.Ordinal)
-                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                    : new[] { Issue(symbol, symbol.Name + Constants.DependencyPropertyKey.FieldSuffix) };
+                                                                                                                ? Enumerable.Empty<Diagnostic>()
+                                                                                                                : new[] { Issue(symbol, symbol.Name + Constants.DependencyPropertyKey.FieldSuffix) };
     }
 }

@@ -16,8 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         internal static string[] GetStartingPhrase(IParameterSymbol parameter) => parameter.Type.IsBoolean()
-                                                                                      ? Constants.Comments.OutBoolParameterStartingPhrase
-                                                                                      : Constants.Comments.OutParameterStartingPhrase;
+                                                                                  ? Constants.Comments.OutBoolParameterStartingPhrase
+                                                                                  : Constants.Comments.OutParameterStartingPhrase;
 
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 
@@ -33,8 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var content = parameterComment.Content;
 
             return content.Count > 0
-                       ? GetFirstTextIssueLocation(content)
-                       : base.GetIssueLocation(parameterComment);
+                   ? GetFirstTextIssueLocation(content)
+                   : base.GetIssueLocation(parameterComment);
         }
     }
 }
