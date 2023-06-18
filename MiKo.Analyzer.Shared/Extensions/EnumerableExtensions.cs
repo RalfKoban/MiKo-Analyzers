@@ -10,9 +10,9 @@ namespace System.Linq
     {
         internal static bool All(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
-            foreach (var trivia in value)
+            for (var index = 0; index < value.Count; index++)
             {
-                if (filter(trivia) is false)
+                if (filter(value[index]) is false)
                 {
                     return false;
                 }
@@ -23,9 +23,9 @@ namespace System.Linq
 
         internal static bool All<T>(this SyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
-            foreach (var node in source)
+            for (var index = 0; index < source.Count; index++)
             {
-                if (predicate(node) is false)
+                if (predicate(source[index]) is false)
                 {
                     return false;
                 }
@@ -36,9 +36,9 @@ namespace System.Linq
 
         internal static bool All<T>(this SeparatedSyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
-            foreach (var node in source)
+            for (var index = 0; index < source.Count; index++)
             {
-                if (predicate(node) is false)
+                if (predicate(source[index]) is false)
                 {
                     return false;
                 }
@@ -62,9 +62,9 @@ namespace System.Linq
 
         internal static bool All(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
         {
-            foreach (var node in source)
+            for (var index = 0; index < source.Count; index++)
             {
-                if (predicate(node) is false)
+                if (predicate(source[index]) is false)
                 {
                     return false;
                 }
@@ -75,9 +75,9 @@ namespace System.Linq
 
         internal static bool Any(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
-            foreach (var trivia in value)
+            for (var index = 0; index < value.Count; index++)
             {
-                if (filter(trivia))
+                if (filter(value[index]))
                 {
                     return true;
                 }
@@ -88,9 +88,9 @@ namespace System.Linq
 
         internal static bool Any<T>(this SyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
-            foreach (var node in source)
+            for (var index = 0; index < source.Count; index++)
             {
-                if (predicate(node))
+                if (predicate(source[index]))
                 {
                     return true;
                 }
@@ -101,9 +101,9 @@ namespace System.Linq
 
         internal static bool Any<T>(this SeparatedSyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
-            foreach (var node in source)
+            for (var index = 0; index < source.Count; index++)
             {
-                if (predicate(node))
+                if (predicate(source[index]))
                 {
                     return true;
                 }
@@ -114,9 +114,9 @@ namespace System.Linq
 
         internal static bool Any(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
         {
-            foreach (var node in source)
+            for (var index = 0; index < source.Count; index++)
             {
-                if (predicate(node))
+                if (predicate(source[index]))
                 {
                     return true;
                 }
@@ -546,8 +546,10 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this ImmutableArray<T> source, Func<T, IEnumerable<TResult>> selector) where T : ISymbol
                                                                                                                                            where TResult : class
         {
-            foreach (var value in source)
+            for (var index = 0; index < source.Length; index++)
             {
+                var value = source[index];
+
                 foreach (var item in selector(value))
                 {
                     yield return item;
@@ -558,8 +560,10 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this SyntaxList<T> source, Func<T, IEnumerable<TResult>> selector) where T : SyntaxNode
                                                                                                                                        where TResult : class
         {
-            foreach (var value in source)
+            for (var index = 0; index < source.Count; index++)
             {
+                var value = source[index];
+
                 foreach (var item in selector(value))
                 {
                     yield return item;
@@ -570,8 +574,10 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this SeparatedSyntaxList<T> source, Func<T, IEnumerable<TResult>> selector) where T : SyntaxNode
                                                                                                                                                 where TResult : class
         {
-            foreach (var value in source)
+            for (var index = 0; index < source.Count; index++)
             {
+                var value = source[index];
+
                 foreach (var item in selector(value))
                 {
                     yield return item;
