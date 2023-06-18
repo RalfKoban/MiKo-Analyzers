@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -269,11 +270,11 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            void AppendParameters(IReadOnlyList<IParameterSymbol> parameters, StringBuilder sb)
+            void AppendParameters(ImmutableArray<IParameterSymbol> parameters, StringBuilder sb)
             {
                 sb.Append("(");
 
-                var count = parameters.Count - 1;
+                var count = parameters.Length - 1;
 
                 for (var i = 0; i <= count; i++)
                 {
@@ -954,7 +955,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsImportingConstructor(this ISymbol value) => value.IsConstructor() && value.GetAttributeNames().Any(Constants.Names.ImportingConstructorAttributeNames.Contains);
 
-        internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol value) where TSymbol : ISymbol
+        internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol value) where TSymbol : class, ISymbol
         {
             if (value.IsStatic)
             {

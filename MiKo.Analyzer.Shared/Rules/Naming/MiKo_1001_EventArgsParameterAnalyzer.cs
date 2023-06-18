@@ -26,9 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return method.Name == nameof(Equals) ? "other" : "e";
             }
 
-            var i = applicableParameters.IndexOf(symbol);
-
-            return "e" + i;
+            return GetNameForIndex(applicableParameters.IndexOf(symbol));
         }
 
         internal static bool IsAccepted(IParameterSymbol parameter)
@@ -83,8 +81,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 foreach (var parameter in parameters)
                 {
                     var expected = count == 1
-                                   ? (symbol.Name == nameof(Equals) ? "other" : "e")
-                                   : "e" + i;
+                                   ? symbol.Name == nameof(Equals) ? "other" : "e"
+                                   : GetNameForIndex(i);
+
                     i++;
 
                     if (parameter.Name != expected)
@@ -92,6 +91,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         yield return Issue(parameter, expected);
                     }
                 }
+            }
+        }
+
+        private static string GetNameForIndex(int i)
+        {
+            switch (i)
+            {
+                case 0: return "e0";
+                case 1: return "e1";
+                case 2: return "e2";
+                default:
+                    return "e" + i.ToString("D");
             }
         }
 

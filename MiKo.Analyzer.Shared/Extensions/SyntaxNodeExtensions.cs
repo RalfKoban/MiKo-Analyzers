@@ -1777,14 +1777,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, string text)
         {
-            var contents = new List<XmlNodeSyntax>(values);
+            var contents = values.ToList();
 
             for (var index = 0; index < values.Count; index++)
             {
                 if (values[index] is XmlTextSyntax s)
                 {
                     var originalTextTokens = s.TextTokens;
-                    var textTokens = new List<SyntaxToken>(originalTextTokens);
+                    var textTokens = originalTextTokens.ToList();
 
                     var modified = false;
 
@@ -1831,7 +1831,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
         {
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             var replaced = false;
 
@@ -1873,7 +1873,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
         {
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             var replaced = false;
 
@@ -1976,7 +1976,7 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             for (var i = 0; i < textTokens.Count; i++)
             {
@@ -2025,7 +2025,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
-            var textTokens = new List<SyntaxToken>(value.TextTokens);
+            var textTokens = value.TextTokens.ToList();
 
             var replaced = false;
 
@@ -2192,7 +2192,7 @@ namespace MiKoSolutions.Analyzers
 
             if (indexer != null)
             {
-                var parameters = new List<ParameterSyntax>(indexer.ParameterList.Parameters);
+                var parameters = indexer.ParameterList.Parameters.ToList();
 
                 // 'value' is a special parameter that is not part of the parameter list
                 parameters.Insert(0, Parameter(indexer.Type));

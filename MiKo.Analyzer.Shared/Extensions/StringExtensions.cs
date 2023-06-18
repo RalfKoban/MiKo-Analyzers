@@ -345,16 +345,25 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0) => string.Format(format, arg0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1) => string.Format(format, arg0, arg1);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string FormatWith(this string format, string arg0, char arg1) => string.Format(format, arg0, arg1.ToString());
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2) => string.Format(format, arg0, arg1, arg2);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, object arg0, object arg1, object arg2, object arg3) => string.Format(format, arg0, arg1, arg2, arg3);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
         public static string GetNameOnlyPart(this string fullName) => GetNameOnlyPart(fullName.AsSpan());
 
