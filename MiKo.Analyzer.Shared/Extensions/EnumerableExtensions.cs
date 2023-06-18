@@ -665,7 +665,7 @@ namespace System.Linq
 
             for (var index = 0; index < source.Count; index++)
             {
-                target[index] = source[index];
+                target.Add(source[index]);
             }
 
             return target;
@@ -677,7 +677,7 @@ namespace System.Linq
 
             for (var index = 0; index < source.Count; index++)
             {
-                target[index] = source[index];
+                target.Add(source[index]);
             }
 
             return target;
@@ -689,7 +689,7 @@ namespace System.Linq
 
             for (var index = 0; index < source.Count; index++)
             {
-                target[index] = source[index];
+                target.Add(source[index]);
             }
 
             return target;
