@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -18,13 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             foreach (var trivia in node.GetLeadingTrivia())
             {
-                switch (trivia.Kind())
+                if (trivia.IsComment())
                 {
-                    case SyntaxKind.SingleLineCommentTrivia:
-                    case SyntaxKind.MultiLineCommentTrivia:
-                    {
-                        return trivia.GetLocation();
-                    }
+                    return trivia.GetLocation();
                 }
             }
 
@@ -35,13 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             foreach (var trivia in node.GetTrailingTrivia().Reverse())
             {
-                switch (trivia.Kind())
+                if (trivia.IsComment())
                 {
-                    case SyntaxKind.SingleLineCommentTrivia:
-                    case SyntaxKind.MultiLineCommentTrivia:
-                    {
-                        return trivia.GetLocation();
-                    }
+                    return trivia.GetLocation();
                 }
             }
 

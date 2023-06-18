@@ -11,13 +11,26 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
+        public static bool Any(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
+        {
+            foreach (var trivia in value)
+            {
+                if (filter(trivia))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static bool IsSpanningMultipleLines(this SyntaxTrivia value)
         {
             var foundLine = false;
 
             foreach (var syntaxTrivia in value.Token.LeadingTrivia)
             {
-                if (syntaxTrivia.IsKind(SyntaxKind.SingleLineCommentTrivia))
+                if (syntaxTrivia.IsComment())
                 {
                     if (foundLine)
                     {
@@ -29,6 +42,27 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
+        }
+
+        public static bool IsEndOfLine(this SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
+
+        public static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
+
+        public static bool IsSingleLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
+
+        public static bool IsMultiLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
+
+        public static bool IsComment(this SyntaxTrivia value)
+        {
+            switch (value.Kind())
+            {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    return true;
+
+                default:
+                    return false;
+            }
         }
 
         public static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)

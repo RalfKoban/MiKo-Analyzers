@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
         {
-            foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsKind(SyntaxKind.SingleLineCommentTrivia)))
+            foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsSingleLineComment()))
             {
                 var hasIssue = AnalyzeSingleLineComment(trivia, semanticModel);
 
