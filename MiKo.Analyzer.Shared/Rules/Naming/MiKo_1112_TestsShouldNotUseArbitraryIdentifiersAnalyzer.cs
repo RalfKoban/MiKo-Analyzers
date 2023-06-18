@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool HasIssue(string name) => name?.Contains(Phrase, StringComparison.OrdinalIgnoreCase) is true;
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => HasIssue(symbol.Name)
-                                                                           ? new[] { Issue(symbol) }
-                                                                           : Enumerable.Empty<Diagnostic>();
+                                                                       ? new[] { Issue(symbol) }
+                                                                       : Enumerable.Empty<Diagnostic>();
     }
 }

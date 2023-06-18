@@ -380,13 +380,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case SyntaxKind.EqualsExpression:
                             return leftIsNull || rightIsNull
-                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), args)
-                                       : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), args);
+                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), args)
+                                   : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), args);
 
                         case SyntaxKind.NotEqualsExpression:
                             return leftIsNull || rightIsNull
-                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), args)
-                                       : AssertThat(b.Left, Is("EqualTo", b.Right), args);
+                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), args)
+                                   : AssertThat(b.Left, Is("EqualTo", b.Right), args);
 
                         case SyntaxKind.LessThanExpression: return AssertThat(b.Left, Is("GreaterThanOrEqualTo", b.Right), args);
                         case SyntaxKind.LessThanOrEqualExpression: return AssertThat(b.Left, Is("GreaterThan", b.Right), args);
@@ -453,13 +453,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case SyntaxKind.EqualsExpression:
                             return leftIsNull || rightIsNull
-                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), args)
-                                       : AssertThat(b.Left, Is("EqualTo", b.Right), args);
+                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Null"), args)
+                                   : AssertThat(b.Left, Is("EqualTo", b.Right), args);
 
                         case SyntaxKind.NotEqualsExpression:
                             return leftIsNull || rightIsNull
-                                       ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), args)
-                                       : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), args);
+                                   ? AssertThat(leftIsNull ? b.Right : b.Left, Is("Not", "Null"), args)
+                                   : AssertThat(b.Left, Is("Not", "EqualTo", b.Right), args);
 
                         case SyntaxKind.LessThanExpression: return AssertThat(b.Left, Is("LessThan", b.Right), args);
                         case SyntaxKind.LessThanOrEqualExpression: return AssertThat(b.Left, Is("LessThanOrEqualTo", b.Right), args);

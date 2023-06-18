@@ -16,8 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
             var argument = syntax.IsInsideTestClass()
-                               ? Argument(StringLiteral("It's a mock."))
-                               : ToDo();
+                           ? Argument(StringLiteral("It's a mock."))
+                           : ToDo();
 
             return syntax.ArgumentList.AddArguments(argument);
         }

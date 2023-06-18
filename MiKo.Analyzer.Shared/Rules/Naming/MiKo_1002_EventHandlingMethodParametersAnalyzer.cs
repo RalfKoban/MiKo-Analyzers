@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         internal static string FindBetterName(IParameterSymbol symbol) => symbol.Type.IsObject()
-                                                                              ? Parameter1
-                                                                              : Parameter2;
+                                                                          ? Parameter1
+                                                                          : Parameter2;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 

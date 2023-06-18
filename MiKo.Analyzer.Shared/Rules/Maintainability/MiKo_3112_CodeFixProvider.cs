@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var argumentSyntax = syntax.ToString().Contains(".Not.")
-                                   ? Is("Not", "Empty")
-                                   : Is("Empty");
+                                 ? Is("Not", "Empty")
+                                 : Is("Empty");
 
             return argumentSyntax.Expression;
         }

@@ -146,8 +146,8 @@ namespace MiKoSolutions.Analyzers.Rules
             if (ReferenceEquals(updatedSyntax, syntax) is false)
             {
                 newRoot = updatedSyntax is null
-                              ? root.Without(syntax)
-                              : root.ReplaceNode(syntax, updatedSyntax);
+                          ? root.Without(syntax)
+                          : root.ReplaceNode(syntax, updatedSyntax);
 
                 if (newRoot is null)
                 {

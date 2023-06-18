@@ -83,8 +83,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 foreach (var parameter in parameters)
                 {
                     var expected = count == 1
-                                       ? (symbol.Name == nameof(Equals) ? "other" : "e")
-                                       : "e" + i;
+                                   ? (symbol.Name == nameof(Equals) ? "other" : "e")
+                                   : "e" + i;
                     i++;
 
                     if (parameter.Name != expected)

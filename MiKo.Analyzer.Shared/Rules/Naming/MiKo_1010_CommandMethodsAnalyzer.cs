@@ -51,8 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var enhancedForbiddenName = forbiddenName + "d";
 
             var phrase = methodName.Contains(enhancedForbiddenName)
-                             ? enhancedForbiddenName
-                             : forbiddenName;
+                         ? enhancedForbiddenName
+                         : forbiddenName;
 
             // TODO RKN: find better name by inspecting method assignment (?)
             return methodName.Without(phrase);

@@ -31,8 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                    .FirstOrDefault();
 
             return diagnostic is null
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { diagnostic };
+                   ? Enumerable.Empty<Diagnostic>()
+                   : new[] { diagnostic };
         }
     }
 }

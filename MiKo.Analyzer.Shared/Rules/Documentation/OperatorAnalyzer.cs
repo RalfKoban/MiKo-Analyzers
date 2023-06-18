@@ -81,8 +81,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var comment = parameter.GetComment(commentXml);
 
             return comment == phrase
-                       ? null
-                       : Issue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
+                   ? null
+                   : Issue(parameter, $"{Constants.XmlTag.Param} name=\"{parameter.Name}\"", phrase);
         }
     }
 }

@@ -53,8 +53,8 @@ namespace MiKoSolutions.Analyzers
         {
             // note that methods with MethodKind.Constructor cannot be referenced by name
             var methods = kind == MethodKind.Ordinary
-                              ? value.GetNamedMethods()
-                              : value.GetMethods();
+                          ? value.GetNamedMethods()
+                          : value.GetMethods();
 
             return methods.Where(_ => _.MethodKind == kind);
         }
@@ -91,8 +91,8 @@ namespace MiKoSolutions.Analyzers
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
         internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value is INamedTypeSymbol type
-                                                                                        ? type
-                                                                                        : value?.ContainingType;
+                                                                                   ? type
+                                                                                   : value?.ContainingType;
 
         internal static string FullyQualifiedName(this ISymbol value, bool useAlias = true)
         {
@@ -176,8 +176,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static string GetGenericArgumentsAsTs(this ITypeSymbol value) => value is INamedTypeSymbol n
-                                                                                       ? n.GetGenericArgumentsAsTs()
-                                                                                       : string.Empty;
+                                                                                  ? n.GetGenericArgumentsAsTs()
+                                                                                  : string.Empty;
 
         internal static string GetGenericArgumentsAsTs(this INamedTypeSymbol value)
         {
@@ -514,8 +514,8 @@ namespace MiKoSolutions.Analyzers
 
             var index = interfaceType.IndexOf('`');
             var interfaceTypeWithoutGeneric = index > -1
-                                                  ? interfaceType.Substring(0, index)
-                                                  : interfaceType;
+                                              ? interfaceType.Substring(0, index)
+                                              : interfaceType;
 
             var fullName = string.Intern(value.ToString());
 
@@ -1328,8 +1328,8 @@ namespace MiKoSolutions.Analyzers
             var typeName = value.Name;
 
             return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I')
-                       ? typeName.Substring(1)
-                       : typeName;
+                   ? typeName.Substring(1)
+                   : typeName;
         }
 
         private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);

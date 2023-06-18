@@ -25,8 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (syntax is InvocationExpressionSyntax invocation)
                 {
                     return IsToStringCall(invocation.Parent)
-                               ? invocation.Parent?.Parent
-                               : invocation;
+                           ? invocation.Parent?.Parent
+                           : invocation;
                 }
 
                 if (syntax is ArgumentSyntax argument)

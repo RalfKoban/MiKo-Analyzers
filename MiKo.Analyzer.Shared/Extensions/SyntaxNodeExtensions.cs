@@ -471,8 +471,8 @@ namespace MiKoSolutions.Analyzers
                     case SimpleNameSyntax simple: return simple.GetName().AsSpan();
                     default:
                         return value is null
-                                   ? ReadOnlySpan<char>.Empty
-                                   : value.ToString().AsSpan();
+                               ? ReadOnlySpan<char>.Empty
+                               : value.ToString().AsSpan();
                 }
             }
         }
@@ -508,8 +508,8 @@ namespace MiKoSolutions.Analyzers
 
                     case BasePropertyDeclarationSyntax property:
                         return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
-                                   ? Constants.Names.DefaultPropertyParameterNames
-                                   : Array.Empty<string>();
+                               ? Constants.Names.DefaultPropertyParameterNames
+                               : Array.Empty<string>();
                 }
             }
 
@@ -1545,8 +1545,8 @@ namespace MiKoSolutions.Analyzers
                     if (enumerator.Current == node)
                     {
                         var nextSibling = enumerator.MoveNext()
-                                              ? enumerator.Current
-                                              : default;
+                                          ? enumerator.Current
+                                          : default;
 
                         return nextSibling;
                     }
@@ -1705,8 +1705,8 @@ namespace MiKoSolutions.Analyzers
                 var newText = text.WithoutFirstXmlNewLine();
 
                 return newText.TextTokens.Count != 0
-                           ? list.Replace(text, newText)
-                           : list.Remove(text);
+                       ? list.Replace(text, newText)
+                       : list.Remove(text);
             }
 
             return list;
@@ -1739,15 +1739,15 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
             return node.HasLeadingTrivia
-                    ? value.WithLeadingTrivia(node.GetLeadingTrivia())
-                    : value;
+                   ? value.WithLeadingTrivia(node.GetLeadingTrivia())
+                   : value;
         }
 
         internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {
             return node.HasTrailingTrivia
-                    ? value.WithTrailingTrivia(node.GetTrailingTrivia())
-                    : value;
+                   ? value.WithTrailingTrivia(node.GetTrailingTrivia())
+                   : value;
         }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
@@ -1926,8 +1926,8 @@ namespace MiKoSolutions.Analyzers
             if (texts.Count > 0)
             {
                 var text = texts.Count == 1
-                               ? texts[0]
-                               : texts[texts.Count - 2];
+                           ? texts[0]
+                           : texts[texts.Count - 2];
 
                 return WithoutWhitespaceOnlyComment(text);
             }
@@ -2016,8 +2016,8 @@ namespace MiKoSolutions.Analyzers
             if (values.Count > 0)
             {
                 return values[0] is XmlTextSyntax textSyntax
-                           ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordHandling))
-                           : values.Insert(0, XmlText(startText));
+                       ? values.Replace(textSyntax, textSyntax.WithStartText(startText, firstWordHandling))
+                       : values.Insert(0, XmlText(startText));
             }
 
             return new SyntaxList<XmlNodeSyntax>(XmlText(startText));

@@ -311,8 +311,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             yield return node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression)
-                             ? Issue(symbol.Name, prefix, "-" + number)
-                             : Issue(symbol.Name, node, number);
+                         ? Issue(symbol.Name, prefix, "-" + number)
+                         : Issue(symbol.Name, node, number);
         }
     }
 }

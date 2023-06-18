@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             return symbol.IsTestClass()
-                       ? Enumerable.Empty<Diagnostic>() // ignore tests
-                       : symbol.GetNamedMethods().Select(AnalyzeTryMethod).Where(_ => _ != null);
+                   ? Enumerable.Empty<Diagnostic>() // ignore tests
+                   : symbol.GetNamedMethods().Select(AnalyzeTryMethod).Where(_ => _ != null);
         }
 
         private static string GetPreferredParameterName(string methodName)
@@ -48,8 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         private Diagnostic AnalyzeTryMethod(IMethodSymbol method) => method.Name.StartsWith("Try", StringComparison.Ordinal)
-                                                                         ? AnalyzeOutParameter(method)
-                                                                         : null;
+                                                                     ? AnalyzeOutParameter(method)
+                                                                     : null;
 
         private Diagnostic AnalyzeOutParameter(IMethodSymbol method)
         {

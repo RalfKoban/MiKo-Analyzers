@@ -48,8 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var betterName = FindBetterName(symbol);
 
             return betterName.IsNullOrWhiteSpace()
-                       ? Enumerable.Empty<Diagnostic>()
-                       : new[] { Issue(symbol, betterName) };
+                   ? Enumerable.Empty<Diagnostic>()
+                   : new[] { Issue(symbol, betterName) };
         }
     }
 }

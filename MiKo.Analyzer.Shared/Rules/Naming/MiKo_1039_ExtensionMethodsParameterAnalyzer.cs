@@ -90,7 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType == SpecialType.System_String && method.Name.StartsWith("Format", StringComparison.Ordinal);
 
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names) => names.Any(_ => _ == parameter.Name)
-                                                                                                              ? Enumerable.Empty<Diagnostic>()
-                                                                                                              : new[] { Issue(parameter, names.HumanizedConcatenated()) };
+                                                                                                          ? Enumerable.Empty<Diagnostic>()
+                                                                                                          : new[] { Issue(parameter, names.HumanizedConcatenated()) };
     }
 }

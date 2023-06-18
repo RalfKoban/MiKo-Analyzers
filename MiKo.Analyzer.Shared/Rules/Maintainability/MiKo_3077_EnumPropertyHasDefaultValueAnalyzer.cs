@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var expression = GetPropertyExpression(syntax);
 
             return expression is IdentifierNameSyntax identifier
-                       ? identifier.GetName()
-                       : null;
+                   ? identifier.GetName()
+                   : null;
         }
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType().IsEnum();

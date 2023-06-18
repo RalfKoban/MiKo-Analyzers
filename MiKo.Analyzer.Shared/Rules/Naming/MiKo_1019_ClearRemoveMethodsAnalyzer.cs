@@ -20,16 +20,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         internal static string FindBetterName(IMethodSymbol method) => method.Parameters.Any()
-                                                                           ? method.Name.Replace(Clear, Remove)
-                                                                           : method.Name.Replace(Remove, Clear);
+                                                                       ? method.Name.Replace(Clear, Remove)
+                                                                       : method.Name.Replace(Remove, Clear);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod()
-                                                                                                                               ? Enumerable.Empty<Diagnostic>() // do not consider local functions inside tests
-                                                                                                                               : base.AnalyzeLocalFunctions(symbol, compilation);
+                                                                                                                           ? Enumerable.Empty<Diagnostic>() // do not consider local functions inside tests
+                                                                                                                           : base.AnalyzeLocalFunctions(symbol, compilation);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

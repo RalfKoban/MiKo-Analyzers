@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool ViolatesLimit(string name, ushort limit) => name.StartsWithAny(Prefixes, StringComparison.OrdinalIgnoreCase) && name.HasUpperCaseLettersAbove(limit);
 
         private IEnumerable<Diagnostic> AnalyzeCamelCase(ISymbol symbol, string symbolName, ushort limit) => ViolatesLimit(symbolName, limit)
-                                                                                                              ? new[] { Issue(symbol, limit) }
-                                                                                                              : Enumerable.Empty<Diagnostic>();
+                                                                                                             ? new[] { Issue(symbol, limit) }
+                                                                                                             : Enumerable.Empty<Diagnostic>();
     }
 }

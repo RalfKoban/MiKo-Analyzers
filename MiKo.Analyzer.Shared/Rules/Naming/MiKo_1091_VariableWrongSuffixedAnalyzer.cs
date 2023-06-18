@@ -44,8 +44,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.EndsWith("Element", Comparison))
             {
                 return name == "frameworkElement"
-                           ? "element"
-                           : name.WithoutSuffix("Element");
+                       ? "element"
+                       : name.WithoutSuffix("Element");
             }
 
             foreach (var pair in WrongSuffixes)

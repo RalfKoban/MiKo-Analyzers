@@ -19,8 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var summaries = CommentExtensions.GetSummaries(commentXml);
 
             return summaries.Any()
-                       ? AnalyzeSummary(symbol, compilation, summaries, comment)
-                       : Enumerable.Empty<Diagnostic>();
+                   ? AnalyzeSummary(symbol, compilation, summaries, comment)
+                   : Enumerable.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();

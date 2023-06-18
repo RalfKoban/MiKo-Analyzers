@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var method = symbol.GetEnclosingMethod();
 
             return symbol.Equals(method.Parameters[0], SymbolEqualityComparer.Default)
-                       ? Parameter1
-                       : Parameter2;
+                   ? Parameter1
+                   : Parameter2;
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsDependencyObjectEventHandler();

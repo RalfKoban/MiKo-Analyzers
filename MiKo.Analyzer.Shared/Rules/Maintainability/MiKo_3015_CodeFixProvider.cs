@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var arguments = argumentList.Arguments;
 
             var errorMessage = arguments.Count == 3
-                                   ? GetUpdatedErrorMessage(arguments.RemoveAt(1)) // actual argument seems to be part of the exception, so we have to ignore it when trying to find the error message
-                                   : GetUpdatedErrorMessage(argumentList);
+                               ? GetUpdatedErrorMessage(arguments.RemoveAt(1)) // actual argument seems to be part of the exception, so we have to ignore it when trying to find the error message
+                               : GetUpdatedErrorMessage(argumentList);
 
             return ArgumentList(errorMessage);
         }

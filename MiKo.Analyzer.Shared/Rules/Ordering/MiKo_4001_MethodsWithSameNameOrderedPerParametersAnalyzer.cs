@@ -30,8 +30,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var methodsAndCtors = ctors.Concat(methods).ToList();
 
             return methodsAndCtors.Any()
-                       ? AnalyzeMethods(methodsAndCtors)
-                       : Enumerable.Empty<Diagnostic>();
+                   ? AnalyzeMethods(methodsAndCtors)
+                   : Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeMethods(IEnumerable<IMethodSymbol> methods)

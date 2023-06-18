@@ -115,8 +115,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (argument is ArrayTypeSyntax arrayType)
             {
                 return arrayType.ElementType.IsByte()
-                           ? "a byte array containing "
-                           : "an array of ";
+                       ? "a byte array containing "
+                       : "an array of ";
             }
 
             return "a collection of ";

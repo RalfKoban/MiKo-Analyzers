@@ -53,8 +53,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name is null)
             {
                 name = method.Name.StartsWith(Prefix, StringComparison.Ordinal)
-                           ? method.Name.Substring(Prefix.Length)
-                           : method.Name;
+                       ? method.Name.Substring(Prefix.Length)
+                       : method.Name;
             }
 
             return name.Without("_").ToUpperCaseAt(0);

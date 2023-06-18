@@ -81,8 +81,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var expressionBody = accessor.ExpressionBody;
 
             return expressionBody != null
-                       ? Analyze(expressionBody, symbolName)
-                       : Analyze(accessor.Body, symbolName);
+                   ? Analyze(expressionBody, symbolName)
+                   : Analyze(accessor.Body, symbolName);
         }
 
         private IEnumerable<Diagnostic> Analyze(BaseMethodDeclarationSyntax method, string symbolName)
@@ -90,8 +90,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             var expressionBody = method.ExpressionBody;
 
             return expressionBody != null
-                       ? Analyze(expressionBody, symbolName)
-                       : Analyze(method.Body, symbolName);
+                   ? Analyze(expressionBody, symbolName)
+                   : Analyze(method.Body, symbolName);
         }
 
         private IEnumerable<Diagnostic> Analyze(ArrowExpressionClauseSyntax expressionBody, string symbolName)

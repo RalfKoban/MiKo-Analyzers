@@ -48,8 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var content = parameterComment.Content;
 
             return content.Count > 0
-                       ? GetFirstTextIssueLocation(content)
-                       : base.GetIssueLocation(parameterComment);
+                   ? GetFirstTextIssueLocation(content)
+                   : base.GetIssueLocation(parameterComment);
         }
     }
 }
