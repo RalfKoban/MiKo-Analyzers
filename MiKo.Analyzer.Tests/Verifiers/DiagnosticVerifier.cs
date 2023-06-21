@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace TestHelper
 {
@@ -34,15 +33,15 @@ namespace TestHelper
         /// </returns>
         protected virtual string GetDiagnosticId() => null;
 
-        protected void An_issue_is_reported_for(string fileContent, int violations = 0)
+        protected void An_issue_is_reported_for(string fileContent) => An_issue_is_reported_for(1, fileContent);
+
+        protected void An_issue_is_reported_for(int violations, string fileContent)
         {
             Assert.Multiple(() =>
                                 {
-                                    var constraint = (violations == 0) ? Is.GreaterThan(violations) : (IResolveConstraint)Is.EqualTo(violations);
-
                                     var results = GetDiagnostics(fileContent);
 
-                                    Assert.That(results.Length, constraint, string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
+                                    Assert.That(results.Length, Is.EqualTo(violations), string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
                                     foreach (var result in results)
                                     {
@@ -60,7 +59,7 @@ namespace TestHelper
                                 });
         }
 
-        protected void An_issue_is_reported_for_file(string path, int violations = 0) => An_issue_is_reported_for(File.ReadAllText(path), violations);
+        protected void An_issue_is_reported_for_file_(string path, int violations) => An_issue_is_reported_for(violations, File.ReadAllText(path));
 
         protected void No_issue_is_reported_for(string fileContent, string message = null)
         {
@@ -69,20 +68,20 @@ namespace TestHelper
             Assert.That(results, Is.Empty, message ?? Environment.NewLine + string.Join(Environment.NewLine, results.Select(_ => _.Location + ":" + _)));
         }
 
-        protected void No_issue_is_reported_for_file(string path) => No_issue_is_reported_for(File.ReadAllText(path), path);
+        protected void No_issue_is_reported_for_file_(string path) => No_issue_is_reported_for(File.ReadAllText(path), path);
 
-        protected void No_issue_is_reported_for_folder(string path)
+        protected void No_issue_is_reported_for_folder_(string path)
         {
             Assert.Multiple(() =>
                                 {
                                     foreach (var directory in Directory.EnumerateDirectories(path))
                                     {
-                                        No_issue_is_reported_for_folder(directory);
+                                        No_issue_is_reported_for_folder_(directory);
                                     }
 
                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
                                     {
-                                        No_issue_is_reported_for_file(file);
+                                        No_issue_is_reported_for_file_(file);
                                     }
                                 });
         }

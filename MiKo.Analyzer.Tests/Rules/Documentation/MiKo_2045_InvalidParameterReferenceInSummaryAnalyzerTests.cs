@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -62,8 +60,6 @@ public class TestMe
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void A_single_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
 using System;
@@ -75,7 +71,7 @@ public class TestMe
     /// </summary>
     public void DoSomething(int i) { }
 }
-", 1);
+");
 
         [Test]
         public void Code_gets_fixed_for_incorrectly_documented_method_with_empty_([Values("param", "paramref")] string tag)

@@ -614,8 +614,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_returns_null_in_if_clause() => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_method_that_returns_null_in_if_clause() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -635,8 +634,7 @@ namespace Bla
             return new List<int>();
         }
     }
-}",
-1);
+}");
 
         //// TODO: RKN what about Linq calls such as FirstOrDefault();
 

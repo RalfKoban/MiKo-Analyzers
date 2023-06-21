@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -117,9 +119,9 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_text_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_text_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -129,12 +131,11 @@ public class TestMe
     {
     }
 }
-",
-2);
+");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_see_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -144,12 +145,10 @@ public class TestMe
     {
     }
 }
-",
-2);
+");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_see_is_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_see_is_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -160,12 +159,10 @@ public class TestMe
     {
     }
 }
-",
-1);
+");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_see_is_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_see_is_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -176,12 +173,10 @@ public class TestMe
     {
     }
 }
-",
-1);
+");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_text_is_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_text_is_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -192,12 +187,10 @@ public class TestMe
     {
     }
 }
-",
-1);
+");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_method_if_text_is_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_text_is_on_same_line_as_end_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -208,8 +201,7 @@ public class TestMe
     {
     }
 }
-",
-1);
+");
 
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_if_some_inner_XML_elements_are_on_same_line_as_start_tag_([ValueSource(nameof(Tags))] string tag) => An_issue_is_reported_for(@"

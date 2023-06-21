@@ -147,7 +147,7 @@ public class TestMe : TestMeBase
 }
 ";
 
-            An_issue_is_reported_for(Code, 1); // it's only a single issue on the base class
+            An_issue_is_reported_for(Code); // it's only a single issue on the base class
         }
 
         [Test]
@@ -168,7 +168,7 @@ public class TestMe : ITestMe
 }
 ";
 
-            An_issue_is_reported_for(Code, 1); // it's only a single issue on the interface
+            An_issue_is_reported_for(Code); // it's only a single issue on the interface
         }
 
         protected override string GetDiagnosticId() => MiKo_3072_MethodReturnsListAnalyzer.Id;
