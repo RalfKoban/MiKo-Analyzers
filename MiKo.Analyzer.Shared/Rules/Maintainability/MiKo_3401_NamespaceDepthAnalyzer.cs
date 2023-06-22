@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (depth > MaxDepth)
             {
-                var issue = Issue(string.Empty, node, depth, MaxDepth);
+                var issue = Issue(string.Empty, node.Name, depth, MaxDepth);
 
                 ReportDiagnostics(context, issue);
             }
