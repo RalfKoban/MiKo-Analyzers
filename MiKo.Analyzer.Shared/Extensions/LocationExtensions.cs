@@ -57,10 +57,49 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool Contains(this Location value, Location other)
         {
-            var valueSourceSpan = value.SourceSpan;
-            var otherSourceSpan = other.SourceSpan;
+            var valueSpan = value.SourceSpan;
+            var otherSpan = other.SourceSpan;
 
-            return valueSourceSpan.Start <= otherSourceSpan.Start && otherSourceSpan.End <= valueSourceSpan.End;
+            return valueSpan.Start <= otherSpan.Start && otherSpan.End <= valueSpan.End;
+        }
+
+        internal static bool IntersectsWith(this Location value, Location other)
+        {
+            var valueSpan = value.SourceSpan;
+            var otherSpan = other.SourceSpan;
+
+            var a = valueSpan.Start;
+            var b = valueSpan.End;
+            var x = otherSpan.Start;
+            var y = otherSpan.End;
+
+            if (a <= x)
+            {
+                if (y <= b)
+                {
+                    return true; // axyb
+                }
+
+                if (b <= y)
+                {
+                    return true; // axby
+                }
+            }
+
+            if (x <= a)
+            {
+                if (y <= b)
+                {
+                    return true; // xayb
+                }
+
+                if (b <= y)
+                {
+                    return true; // xaby
+                }
+            }
+
+            return false;
         }
     }
 }

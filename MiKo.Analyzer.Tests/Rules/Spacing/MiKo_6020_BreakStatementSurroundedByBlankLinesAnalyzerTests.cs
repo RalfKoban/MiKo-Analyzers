@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -105,8 +107,9 @@ namespace Bla
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section() => An_issue_is_reported_for(4, @"
 namespace Bla
 {
     public class TestMe

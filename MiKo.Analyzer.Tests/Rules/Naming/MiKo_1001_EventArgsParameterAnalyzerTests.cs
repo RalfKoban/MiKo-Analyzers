@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -47,17 +49,18 @@ public class TestMe
 }
 ");
 
-        [TestCase("EventArgs args")]
-        [TestCase("EventArgs args, object s")]
-        [TestCase("EventArgs e, EventArgs a")]
-        [TestCase("object s, EventArgs args, object whatever")]
-        [TestCase("object whatever, object s, EventArgs args")]
-        [TestCase("DependencyPropertyChangedEventArgs args")]
-        [TestCase("DependencyPropertyChangedEventArgs args, object s")]
-        [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a")]
-        [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever")]
-        [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args")]
-        public void An_issue_is_reported_for_matching_parameters_on_method_(string parameters) => An_issue_is_reported_for(@"
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [TestCase("EventArgs args", 1)]
+        [TestCase("EventArgs args, object s", 1)]
+        [TestCase("EventArgs e, EventArgs a", 2)]
+        [TestCase("object s, EventArgs args, object whatever", 1)]
+        [TestCase("object whatever, object s, EventArgs args", 1)]
+        [TestCase("DependencyPropertyChangedEventArgs args", 1)]
+        [TestCase("DependencyPropertyChangedEventArgs args, object s", 1)]
+        [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a", 2)]
+        [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever", 1)]
+        [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args", 1)]
+        public void An_issue_is_reported_for_matching_parameters_on_method_(string parameters, int violations) => An_issue_is_reported_for(violations, @"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs
@@ -77,17 +80,18 @@ namespace Bla
 }
 ");
 
-        [TestCase("EventArgs args")]
-        [TestCase("EventArgs args, object s")]
-        [TestCase("EventArgs e, EventArgs a")]
-        [TestCase("object s, EventArgs args, object whatever")]
-        [TestCase("object whatever, object s, EventArgs args")]
-        [TestCase("DependencyPropertyChangedEventArgs args")]
-        [TestCase("DependencyPropertyChangedEventArgs args, object s")]
-        [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a")]
-        [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever")]
-        [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args")]
-        public void An_issue_is_reported_for_matching_parameters_on_local_function_(string parameters) => An_issue_is_reported_for(@"
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [TestCase("EventArgs args", 1)]
+        [TestCase("EventArgs args, object s", 1)]
+        [TestCase("EventArgs e, EventArgs a", 2)]
+        [TestCase("object s, EventArgs args, object whatever", 1)]
+        [TestCase("object whatever, object s, EventArgs args", 1)]
+        [TestCase("DependencyPropertyChangedEventArgs args", 1)]
+        [TestCase("DependencyPropertyChangedEventArgs args, object s", 1)]
+        [TestCase("DependencyPropertyChangedEventArgs e, DependencyPropertyChangedEventArgs a", 2)]
+        [TestCase("object s, DependencyPropertyChangedEventArgs args, object whatever", 1)]
+        [TestCase("object whatever, object s, DependencyPropertyChangedEventArgs args", 1)]
+        public void An_issue_is_reported_for_matching_parameters_on_local_function_(string parameters, int violations) => An_issue_is_reported_for(violations, @"
 namespace System.Windows
 {
     public struct DependencyPropertyChangedEventArgs

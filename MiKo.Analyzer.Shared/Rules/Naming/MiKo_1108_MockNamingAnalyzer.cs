@@ -109,7 +109,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (ShallAnalyze(type))
             {
-                AnalyzeIdentifiers(context, type, (VariableDeclarationSyntax)context.Node);
+                var variableDeclarationSyntax = (VariableDeclarationSyntax)context.Node;
+
+                if (variableDeclarationSyntax.Parent is FieldDeclarationSyntax)
+                {
+                    // nothing to do, we already analyzed the field separately
+                }
+                else
+                {
+                    AnalyzeIdentifiers(context, type, variableDeclarationSyntax);
+                }
             }
         }
 

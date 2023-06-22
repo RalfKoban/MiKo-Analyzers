@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -115,13 +117,14 @@ namespace My
     }
 }");
 
-        [TestCase("bool b")]
-        [TestCase("bool b, int x")]
-        [TestCase("int x, bool b, int y")]
-        [TestCase("int x, bool b")]
-        [TestCase("bool b1, bool b2, bool b3")]
-        [TestCase("bool b, DependencyObject o, int x")] // check for method with dependency object but 3 parameters
-        public void An_issue_is_reported_for_boolean_parameter_on_method_(string parameters) => An_issue_is_reported_for(@"
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [TestCase("bool b", 1)]
+        [TestCase("bool b, int x", 1)]
+        [TestCase("int x, bool b, int y", 1)]
+        [TestCase("int x, bool b", 1)]
+        [TestCase("bool b1, bool b2, bool b3", 3)]
+        [TestCase("bool b, DependencyObject o, int x", 1)] // check for method with dependency object but 3 parameters
+        public void An_issue_is_reported_for_boolean_parameter_on_method_(string parameters, int violations) => An_issue_is_reported_for(violations, @"
 using System;
 
 public class TestMe

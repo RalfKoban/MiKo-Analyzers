@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -102,8 +104,9 @@ public enum TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_undocumented_enum_type() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_undocumented_enum_type() => An_issue_is_reported_for(2, @"
 using System;
 using System.ComponentModel;
 

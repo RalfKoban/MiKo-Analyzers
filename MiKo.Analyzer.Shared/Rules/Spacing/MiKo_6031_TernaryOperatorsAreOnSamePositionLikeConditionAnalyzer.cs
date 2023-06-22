@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     yield return Issue(operatorToken);
                 }
 
-                if (operatorPosition.Character != colonPosition.Character)
+                if (conditionPosition.Character != colonPosition.Character)
                 {
                     yield return Issue(colonToken);
                 }

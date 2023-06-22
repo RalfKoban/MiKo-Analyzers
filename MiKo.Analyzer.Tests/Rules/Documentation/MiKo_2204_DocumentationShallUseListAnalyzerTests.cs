@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -57,8 +59,9 @@ public sealed class TestMe { }
                                                                                                  }
                                                                                              });
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_dot_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_dot_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(2, @"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// * It is something.
@@ -67,8 +70,9 @@ public sealed class TestMe { }
 public sealed class TestMe { }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_slash_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_slash_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(2, @"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// - It is something.

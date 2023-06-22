@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -177,8 +179,9 @@ namespace Bla
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_recursive_yield() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_recursive_yield() => An_issue_is_reported_for(2, @"
 using System;
 using System.Collections.Generic;
 
@@ -216,8 +219,9 @@ namespace Bla
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_recursive_yield_as_extension() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_recursive_yield_as_extension() => An_issue_is_reported_for(2, @"
 using System;
 using System.Collections.Generic;
 
