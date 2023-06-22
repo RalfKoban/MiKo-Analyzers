@@ -77,9 +77,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
-            var issue = Issue(string.Empty, node);
+            var problematicNode = node is MemberAccessExpressionSyntax maes
+                                  ? maes.Name
+                                  : node;
 
-            ReportDiagnostics(context, issue);
+            ReportDiagnostics(context, Issue(string.Empty, problematicNode));
         }
     }
 }

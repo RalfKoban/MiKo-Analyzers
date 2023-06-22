@@ -58,11 +58,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
                 }
 
-                case ReturnStatementSyntax r:
-                {
-                    return r.DescendantNodes<LiteralExpressionSyntax>();
-                }
-
                 case ParameterSyntax p:
                 {
                     if (names.Contains(p.GetName()))
@@ -188,7 +183,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
 
                 default:
-                    GetAndReportIssue(context, expression);
+                    if (HasIssue(expression))
+                    {
+                        ReportIssue(context, expression);
+                    }
 
                     break;
             }
@@ -196,21 +194,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context, MethodDeclarationSyntax method, ExpressionSyntax expression)
         {
-            if (GetAndReportIssue(context, expression))
+            if (HasIssue(expression))
             {
-                return;
+                ReportIssue(context, expression);
             }
-
-            var exp = (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression)) ? b.Right : expression;
-            var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
-
-            var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
-
-            var candidates = GetCandidates(method, localVariableNames).ToHashSet();
-
-            if (candidates.Any())
+            else
             {
-                AnalyzeAssignments(context, candidates);
+                var exp = (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression)) ? b.Right : expression;
+                var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
+
+                var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);
+
+                var candidates = GetCandidates(method, localVariableNames).ToHashSet();
+
+                if (candidates.Any())
+                {
+                    AnalyzeAssignments(context, candidates);
+                }
+                else
+                {
+                    // might be no candidates with variables, so check for ternary operators
+                    if (exp is ConditionalExpressionSyntax conditional)
+                    {
+                        AnalyzeConditional(context, conditional);
+                    }
+                }
             }
         }
 
@@ -251,18 +259,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var issues = GetIssues(context, conditional);
 
             ReportIssues(context, issues);
-        }
-
-        private bool GetAndReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode methodBody)
-        {
-            var hasIssue = HasIssue(methodBody);
-
-            if (hasIssue)
-            {
-                ReportIssue(context, methodBody);
-            }
-
-            return hasIssue;
         }
 
         private void ReportIssues(SyntaxNodeAnalysisContext context, IEnumerable<ExpressionSyntax> assignmentsWithIssues)

@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -141,15 +143,16 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_list_containing_multiple_terms_in_item_for_type_([ValueSource(nameof(EnumeratedListTypes))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_list_containing_multiple_terms_in_item_for_type_([ValueSource(nameof(EnumeratedListTypes))] string type) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <remarks>
-    /// <list type=""" + type + @""">>
+    /// <list type=""" + type + @""">
     ///   <item>
     ///     <term>Some text</term>
     ///     <term>Some more text</term>
@@ -168,7 +171,7 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <remarks>
-    /// <list type=""" + type + @""">>
+    /// <list type=""" + type + @""">
     ///   <item>
     ///     <description>Some text</description>
     ///     <description>Some more text</description>
@@ -179,15 +182,16 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_list_containing_multiple_items_that_contain_only_text_but_no_description_for_type_([ValueSource(nameof(EnumeratedListTypes))] string type) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_list_containing_multiple_items_that_contain_only_text_but_no_description_for_type_([ValueSource(nameof(EnumeratedListTypes))] string type) => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <remarks>
-    /// <list type=""" + type + @""">>
+    /// <list type=""" + type + @""">
     ///   <item>Some text</item>
     ///   <item>Some more text</item>
     /// </list>
@@ -196,8 +200,9 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_list_of_type_table_with_listheader_and_multiple_terms_and_multiple_descriptions_mixed_up_in_different_items() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_list_of_type_table_with_listheader_and_multiple_terms_and_multiple_descriptions_mixed_up_in_different_items() => An_issue_is_reported_for(3, @"
 using System;
 
 public class TestMe

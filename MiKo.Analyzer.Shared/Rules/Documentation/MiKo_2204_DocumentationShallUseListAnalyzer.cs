@@ -19,7 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               .Concat(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")))
                                                               .Concat(new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
                                                               .Concat(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
-                                                              .OrderBy(_ => _.Length).ThenBy(_ => _)
+                                                              .OrderByDescending(_ => _.Length).ThenBy(_ => _)
+                                                              .Distinct()
                                                               .ToArray();
 
         public MiKo_2204_DocumentationShallUseListAnalyzer() : base(Id)

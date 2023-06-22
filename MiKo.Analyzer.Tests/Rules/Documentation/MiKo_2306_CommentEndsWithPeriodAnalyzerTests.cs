@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -60,8 +62,9 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_multi_line_comment_with_some_missing_periods() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_multi_line_comment_with_some_missing_periods() => An_issue_is_reported_for(2, @"
 
 public class TestMe
 {

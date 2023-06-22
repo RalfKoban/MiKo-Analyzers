@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -15,8 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 public sealed record TestMe(int X, int Y, double Distance);
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void Issue_For_ctor_is_reported() => An_issue_is_reported_for(@"
+        public void Issue_For_ctor_is_reported() => An_issue_is_reported_for(3, @"
 using System;
 
 public class BaseClass
