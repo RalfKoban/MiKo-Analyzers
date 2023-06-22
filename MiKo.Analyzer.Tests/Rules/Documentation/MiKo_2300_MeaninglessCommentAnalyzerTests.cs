@@ -85,6 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                "not needed",
                                                                "nothing to do",
                                                                "special handling",
+                                                               "initializers are allowed",
                                                            };
 
         [Test]

@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (body is ObjectCreationExpressionSyntax o)
                 {
-                    if (o.Initializer?.Expressions.Count > 1)
+                    if (o.Initializer?.Expressions.Count > 0)
                     {
                         // initializers are allowed to span multiple lines, so nothing to analyze here
                         return false;

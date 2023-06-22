@@ -87,6 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "not needed",
                                                               "nothing",
                                                               "special handling",
+                                                              "initializer",
                                                           };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
@@ -105,7 +106,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // ignore all empty comments
             }
 
-            if (comment.StartsWithAny(MeaninglessPhrases))
+            if (comment.StartsWithAny(MeaninglessPhrases)
+             && comment.StartsWithAny(AllowedMarkers) is false)
             {
                 return true;
             }
