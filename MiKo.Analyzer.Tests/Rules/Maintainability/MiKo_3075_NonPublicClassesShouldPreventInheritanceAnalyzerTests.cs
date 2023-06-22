@@ -141,9 +141,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_unsealed_private_class_that_inherits_from_private_class()
-        {
-            const string Code = @"
+        public void An_issue_is_reported_for_unsealed_private_class_that_inherits_from_private_class() => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -159,9 +157,7 @@ namespace Bla
         }
     }
 }
-";
-            An_issue_is_reported_for(Code, 1);
-        }
+");
 
         [Test]
         public void Code_gets_fixed_for_unsealed_private_class_that_becomes_static()

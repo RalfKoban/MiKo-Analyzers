@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -13,35 +14,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private const int MaxDepth = 7;
 
-        public MiKo_3401_NamespaceDepthAnalyzer() : base(Id, SymbolKind.Namespace)
+        public MiKo_3401_NamespaceDepthAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override bool ShallAnalyze(INamespaceSymbol symbol) => symbol.IsGlobalNamespace is false;
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNamespace, SyntaxKind.NamespaceDeclaration);
 
-        protected override IEnumerable<Diagnostic> Analyze(INamespaceSymbol symbol, Compilation compilation)
+        private static int CountNamespaces(NamespaceDeclarationSyntax declaration) => declaration.Name.DescendantTokens().Count(_ => _.IsKind(SyntaxKind.DotToken)) + 1;
+
+        private static int GetNamespaceDepth(NamespaceDeclarationSyntax declaration)
         {
-            var depth = GetNamespaceDepth(symbol);
+            var parentNamespaces = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ToList();
 
-            return depth > MaxDepth
-                   ? new[] { Issue(symbol, depth, MaxDepth) }
-                   : Enumerable.Empty<Diagnostic>();
-        }
-
-        private static int GetNamespaceDepth(INamespaceSymbol symbol)
-        {
-            var depth = -1;
-
-            var s = symbol;
-
-            while (s != null)
+            if (parentNamespaces.Any())
             {
-                depth++;
-
-                s = s.ContainingNamespace;
+                return parentNamespaces.Sum(CountNamespaces) + 1;
             }
 
-            return depth;
+            return CountNamespaces(declaration);
+        }
+
+        private void AnalyzeNamespace(SyntaxNodeAnalysisContext context)
+        {
+            var node = (NamespaceDeclarationSyntax)context.Node;
+
+            var depth = GetNamespaceDepth(node);
+
+            if (depth > MaxDepth)
+            {
+                var issue = Issue(string.Empty, node, depth, MaxDepth);
+
+                ReportDiagnostics(context, issue);
+            }
         }
     }
 }

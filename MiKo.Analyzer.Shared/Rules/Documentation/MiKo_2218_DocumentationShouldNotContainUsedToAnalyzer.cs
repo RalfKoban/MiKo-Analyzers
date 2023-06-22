@@ -227,19 +227,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var locations = new List<Location>();
+            var alreadyReportedLocations = new List<Location>();
 
             var issues = AnalyzeCommentXml(comment);
 
             foreach (var issue in issues)
             {
-                // filter issues within other issues as those are somehow duplicates due to the phrases to search for
-                if (locations.None(__ => __.Contains(issue.Location)))
-                {
-                    locations.Add(issue.Location);
+                var location = issue.Location;
 
-                    yield return issue;
+                if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                {
+                    // already reported, so ignore it
+                    continue;
                 }
+
+                alreadyReportedLocations.Add(location);
+
+                yield return issue;
             }
         }
 

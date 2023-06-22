@@ -86,8 +86,6 @@ namespace Bla
     }
 }");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_equality_operator_summary() => An_issue_is_reported_for(@"
 using System;
@@ -100,10 +98,8 @@ public class TestMe
     /// <returns><see langword=""true""/> if both instances are considered equal; otherwise, <see langword=""false""/>.</returns>
     public static bool operator ==(TestMe left, TestMe right) => false;
 }
-", 1);
+");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_equality_operator_returnValue() => An_issue_is_reported_for(@"
 using System;
@@ -116,12 +112,11 @@ public class TestMe
     /// <returns>true if both are equal.</returns>
     public static bool operator ==(TestMe left, TestMe right) => false;
 }
-", 1);
+");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_equality_operator_parameter() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_equality_operator_parameter() => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMe
@@ -132,7 +127,7 @@ public class TestMe
     /// <returns><see langword=""true""/> if both instances are considered equal; otherwise, <see langword=""false""/>.</returns>
     public static bool operator ==(TestMe left, TestMe right) => false;
 }
-", 2);
+");
 
         [Test]
         public void Code_gets_fixed()

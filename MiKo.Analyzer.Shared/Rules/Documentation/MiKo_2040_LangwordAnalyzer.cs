@@ -188,6 +188,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeTextTokens(string symbolName, XmlTextSyntax textNode)
         {
+            var aldreadyFoundLocations = new HashSet<Location>();
+
             foreach (var textToken in textNode.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
             {
                 var text = textToken.ValueText;
@@ -216,7 +218,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
                     {
-                        yield return Issue(symbolName, location, wrongText, proposal);
+                        if (aldreadyFoundLocations.Add(location))
+                        {
+                            yield return Issue(symbolName, location, wrongText, proposal);
+                        }
                     }
                 }
 
@@ -231,7 +236,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
 
-                    if (location != null)
+                    if (location != null && aldreadyFoundLocations.Add(location))
                     {
                         yield return Issue(symbolName, location, wrongText, proposal);
                     }
@@ -248,7 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
 
-                    if (location != null)
+                    if (location != null && aldreadyFoundLocations.Add(location))
                     {
                         yield return Issue(symbolName, location, wrongText, proposal);
                     }

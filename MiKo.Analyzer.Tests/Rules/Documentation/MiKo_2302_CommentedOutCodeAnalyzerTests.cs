@@ -144,10 +144,9 @@ public class TestMe
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_string_interpolation_comment() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_string_interpolation_comment() => An_issue_is_reported_for(2, @"
 using System;
 using System.Linq;
 
@@ -161,7 +160,7 @@ public class TestMe
 
     public string DoSomething(int index) => string.Empty;
 }
-", 2);
+");
 
         [Test]
         public void No_issue_is_reported_for_valid_comment_in_ctor() => No_issue_is_reported_for(@"

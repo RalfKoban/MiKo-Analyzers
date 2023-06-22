@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -20,17 +22,18 @@ public " + type + " " + name + @"
 }
 ");
 
-        [TestCase("interface", "ISomethingBase")]
-        [TestCase("class", "SomethingBase")]
-        [TestCase("interface", "IBaseSomething")]
-        [TestCase("class", "BaseSomething")]
-        [TestCase("interface", "ISomethingAbstract")]
-        [TestCase("class", "SomethingAbstract")]
-        [TestCase("interface", "IAbstractSomething")]
-        [TestCase("class", "AbstractSomething")]
-        [TestCase("interface", "IAbstractSomethingBase")]
-        [TestCase("class", "AbstractSomethingBase")]
-        public void An_issue_is_reported_for_(string type, string name) => An_issue_is_reported_for(@"
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [TestCase("interface", "ISomethingBase", 1)]
+        [TestCase("class", "SomethingBase", 1)]
+        [TestCase("interface", "IBaseSomething", 1)]
+        [TestCase("class", "BaseSomething", 1)]
+        [TestCase("interface", "ISomethingAbstract", 1)]
+        [TestCase("class", "SomethingAbstract", 1)]
+        [TestCase("interface", "IAbstractSomething", 1)]
+        [TestCase("class", "AbstractSomething", 1)]
+        [TestCase("interface", "IAbstractSomethingBase", 2)]
+        [TestCase("class", "AbstractSomethingBase", 2)]
+        public void An_issue_is_reported_for_(string type, string name, int violations) => An_issue_is_reported_for(violations, @"
 public " + type + " " + name + @"
 {
 }

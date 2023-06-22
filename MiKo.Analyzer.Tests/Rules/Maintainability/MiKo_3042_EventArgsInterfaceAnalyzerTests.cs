@@ -39,17 +39,16 @@ public class TestMeEventArgs : EventArgs, IDisposable
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1116:SplitParametersMustStartOnLineAfterDeclaration", Justification = "Would look strange otherwise.")]
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1117:ParametersMustBeOnSameLineOrSeparateLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_EventArgs_with_multiple_interface_implementations() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_EventArgs_with_multiple_interface_implementations() => An_issue_is_reported_for(2, @"
 using System;
 
 public class TestMeEventArgs : EventArgs, IDisposable, ICloneable
 {
     public void Dispose() { }
 }
-", 2);
+");
 
         protected override string GetDiagnosticId() => MiKo_3042_EventArgsInterfaceAnalyzer.Id;
 

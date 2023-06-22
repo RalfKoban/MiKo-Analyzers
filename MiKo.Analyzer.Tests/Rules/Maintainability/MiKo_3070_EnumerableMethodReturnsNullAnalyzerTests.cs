@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -486,8 +488,9 @@ namespace Bla
     }
 }");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_quite_complex_ternary_operator() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_quite_complex_ternary_operator() => An_issue_is_reported_for(2, @"
 using System.Collections;
 using System.Collections.Generic;
 
@@ -614,8 +617,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_method_that_returns_null_in_if_clause() => An_issue_is_reported_for(
-@"
+        public void An_issue_is_reported_for_method_that_returns_null_in_if_clause() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -635,8 +637,7 @@ namespace Bla
             return new List<int>();
         }
     }
-}",
-1);
+}");
 
         //// TODO: RKN what about Linq calls such as FirstOrDefault();
 

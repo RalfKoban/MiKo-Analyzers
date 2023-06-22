@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -182,9 +184,9 @@ namespace Bla
     }
 }");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void Exactly_2_issues_are_reported_for_a_test_method_that_uses_AssertMultiple_and_2_assertions_with_no_messages_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(
-@"
+        public void Exactly_2_issues_are_reported_for_a_test_method_that_uses_AssertMultiple_and_2_assertions_with_no_messages_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(2, @"
 using NUnit.Framework;
 
 namespace Bla
@@ -201,8 +203,7 @@ namespace Bla
                             });
         }
     }
-}",
-2); // 1 issue for each assertion
+}"); // 1 issue for each assertion
 
         [TestCase("Assert.That(values.Length, Is.EqualTo(42))", @"Assert.That(values.Length, Is.EqualTo(42), ""wrong length"")")]
         [TestCase("Assert.That(values.GetHashCode(), Is.EqualTo(42))", @"Assert.That(values.GetHashCode(), Is.EqualTo(42), ""wrong hash code"")")]

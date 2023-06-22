@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -41,8 +43,9 @@ namespace Bla
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void An_issue_is_reported_for_nested_empty_region() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_nested_empty_region() => An_issue_is_reported_for(2, @"
 using System;
 
 namespace Bla
