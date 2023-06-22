@@ -119,6 +119,32 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public int DoSomething()
+        {
+            return DoSomethingCore(i => new TestMe
+                                            {
+                                                SomeProperty = i,
+                                            });
+        }
+
+        private int DoSomethingCore(Func<int, int> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_single_line() => No_issue_is_reported_for(@"
 using System;
 
