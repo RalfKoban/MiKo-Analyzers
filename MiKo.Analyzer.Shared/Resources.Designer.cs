@@ -10263,6 +10263,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace with hex value.
+        /// </summary>
+        public static string MiKo_3079_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3079_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HResults should be written in hexadecimal and not as negative integers. That makes them much easier to recognize, such as &apos;0x80070005&apos; instead of &apos;-2147024891&apos;..
+        /// </summary>
+        public static string MiKo_3079_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3079_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;unchecked((int)0x{1})&apos; instead for HResult.
+        /// </summary>
+        public static string MiKo_3079_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3079_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HResults should be written in hexadecimal.
+        /// </summary>
+        public static string MiKo_3079_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply &apos;is false&apos; pattern.
         /// </summary>
         public static string MiKo_3081_CodeFixTitle {
