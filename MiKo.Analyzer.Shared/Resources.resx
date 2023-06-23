@@ -3633,6 +3633,18 @@ Most times, such code can be simplified by refactoring the complete switch state
   <data name="MiKo_3078_Title" xml:space="preserve">
     <value>Use 'switch ... return' instead of 'switch ... break' when assigning variables</value>
   </data>
+  <data name="MiKo_3079_CodeFixTitle" xml:space="preserve">
+    <value>Replace with hex value</value>
+  </data>
+  <data name="MiKo_3079_Description" xml:space="preserve">
+    <value>HResults should be written in hexadecimal and not as negative integers. That makes them much easier to recognize, such as '0x80070005' instead of '-2147024891'.</value>
+  </data>
+  <data name="MiKo_3079_MessageFormat" xml:space="preserve">
+    <value>Use 'unchecked((int)0x{1})' instead for HResult</value>
+  </data>
+  <data name="MiKo_3079_Title" xml:space="preserve">
+    <value>HResults should be written in hexadecimal</value>
+  </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
   </data>
