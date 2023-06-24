@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         public void No_issue_is_reported_if_complete_call_is_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
-public class TestME
+public class TestMe
 {
     public void DoSomething()
     {
@@ -27,7 +27,7 @@ public class TestME
         public void No_issue_is_reported_if_method_invocation_and_parenthesis_are_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
-public class TestME
+public class TestMe
 {
     public void DoSomething()
     {
@@ -41,7 +41,7 @@ public class TestME
         public void An_issue_is_reported_if_invocation_and_parenthesis_are_on_different_lines() => An_issue_is_reported_for(@"
 using System;
 
-public class TestME
+public class TestMe
 {
     public void DoSomething()
     {
@@ -52,12 +52,30 @@ public class TestME
 ");
 
         [Test]
+        public void An_issue_is_reported_if_generic_types_and_parenthesis_are_on_different_lines() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingGeneric<int,
+                  float>();
+    }
+
+    public void DoSomethingGeneric<T1, T2>()
+    {
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_if_invocation_and_parenthesis_are_on_different_lines()
         {
             const string OriginalCode = @"
 using System;
 
-public class TestME
+public class TestMe
 {
     public void DoSomething()
     {
@@ -70,11 +88,51 @@ public class TestME
             const string FixedCode = @"
 using System;
 
-public class TestME
+public class TestMe
 {
     public void DoSomething()
     {
         GC.Collect();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_generic_type_arguments_and_parenthesis_are_on_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingGeneric<int,
+                  float,
+                  decimal>();
+    }
+
+    public void DoSomethingGeneric<T1, T2, T3>()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingGeneric<int, float, decimal>();
+    }
+
+    public void DoSomethingGeneric<T1, T2, T3>()
+    {
     }
 }
 ";

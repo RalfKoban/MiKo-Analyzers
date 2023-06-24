@@ -4,6 +4,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
@@ -22,10 +23,25 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is InvocationExpressionSyntax invocation)
             {
                 return invocation.WithArgumentList(invocation.ArgumentList.WithoutLeadingTrivia())
-                                 .WithExpression(invocation.Expression.WithoutTrailingTrivia());
+                                 .WithExpression(GetUpdatedExpression(invocation.Expression).WithoutTrailingTrivia());
             }
 
             return syntax;
+        }
+
+        private static ExpressionSyntax GetUpdatedExpression(ExpressionSyntax expression)
+        {
+            if (expression is GenericNameSyntax genericName)
+            {
+                var types = genericName.TypeArgumentList;
+                var arguments = types.Arguments;
+
+                var separators = Enumerable.Repeat(arguments.GetSeparator(0).WithoutTrivia().WithTrailingSpace(), arguments.Count - 1);
+
+                return genericName.WithTypeArgumentList(types.WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators)));
+            }
+
+            return expression;
         }
     }
 }

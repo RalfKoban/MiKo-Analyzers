@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "str", "string" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
+                                                                                       { "vol", "volume" },
                                                                                    };
 
         private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
@@ -103,6 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Str", "String" },
                                                                                        { "Tmp", "Temp" },
                                                                                        { "Txt", "Text" },
+                                                                                       { "Vol", "Volume" },
                                                                                    };
 
         private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)MidTerms)

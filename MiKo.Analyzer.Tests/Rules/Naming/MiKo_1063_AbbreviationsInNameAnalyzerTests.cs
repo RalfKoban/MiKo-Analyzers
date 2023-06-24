@@ -58,6 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "str",
                                                            "tmp",
                                                            "txt",
+                                                           "vol",
                                                        };
 
         private static readonly string[] BadMidTerms =
@@ -102,6 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Std",
                                                            "Tmp",
                                                            "Txt",
+                                                           "Vol",
                                                        };
 
         private static readonly string[] BadPostfixes = BadMidTerms
