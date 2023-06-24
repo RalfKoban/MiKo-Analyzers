@@ -31,17 +31,28 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static ExpressionSyntax GetUpdatedExpression(ExpressionSyntax expression)
         {
-            if (expression is GenericNameSyntax genericName)
+            switch (expression)
             {
-                var types = genericName.TypeArgumentList;
-                var arguments = types.Arguments;
+                case MemberAccessExpressionSyntax maes:
+                {
+                    return maes.WithName((SimpleNameSyntax)GetUpdatedExpression(maes.Name));
+                }
 
-                var separators = Enumerable.Repeat(arguments.GetSeparator(0).WithoutTrivia().WithTrailingSpace(), arguments.Count - 1);
+                case GenericNameSyntax genericName:
+                {
+                    var types = genericName.TypeArgumentList;
+                    var arguments = types.Arguments;
 
-                return genericName.WithTypeArgumentList(types.WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators)));
+                    var separators = Enumerable.Repeat(arguments.GetSeparator(0).WithoutTrivia().WithTrailingSpace(), arguments.Count - 1);
+
+                    return genericName.WithTypeArgumentList(types.WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators)));
+                }
+
+                default:
+                {
+                    return expression;
+                }
             }
-
-            return expression;
         }
     }
 }
