@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -13,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3079_DoNotUseIntegerForHResultAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_([Values(-2147, 2147)] int number) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_([Values(-2147, 2147, int.MinValue, int.MaxValue)] int number) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
