@@ -4501,12 +4501,24 @@ Hence, as it is a block similar to the if blocks), the open brace of the block s
     <value>Place dot on same line</value>
   </data>
   <data name="MiKo_6034_Description" xml:space="preserve">
-    <value>The code is easier to read when the dots are placed on the same line than the invoked members.</value>
+    <value>The code is easier to read if the dots are placed on the same line(s) as the invoked members.</value>
   </data>
   <data name="MiKo_6034_MessageFormat" xml:space="preserve">
     <value>Place dot on same line as member</value>
   </data>
   <data name="MiKo_6034_Title" xml:space="preserve">
-    <value>Dots should be placed on same line as invoked members</value>
+    <value>Dots should be placed on same line(s) as invoked members</value>
+  </data>
+  <data name="MiKo_6035_CodeFixTitle" xml:space="preserve">
+    <value>Place parenthesis on same line</value>
+  </data>
+  <data name="MiKo_6035_Description" xml:space="preserve">
+    <value>The code is easier to read if the open parenthesis are placed on the same line(s) as the invoked methods.</value>
+  </data>
+  <data name="MiKo_6035_MessageFormat" xml:space="preserve">
+    <value>Place open parenthesis on same line as invocation</value>
+  </data>
+  <data name="MiKo_6035_Title" xml:space="preserve">
+    <value>Open parenthesis should be placed on same line(s) as invoked methods</value>
   </data>
 </root>
