@@ -140,6 +140,46 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_generic_type_arguments_and_parenthesis_are_on_different_lines_and_type_is_given()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        TestMe.DoSomethingGeneric<int,
+                                  float,
+                                  decimal>();
+    }
+
+    public static void DoSomethingGeneric<T1, T2, T3>()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        TestMe.DoSomethingGeneric<int, float, decimal>();
+    }
+
+    public static void DoSomethingGeneric<T1, T2, T3>()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6035_OpenParenthesisAreOnSameLineAsInvocationAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6035_OpenParenthesisAreOnSameLineAsInvocationAnalyzer();
