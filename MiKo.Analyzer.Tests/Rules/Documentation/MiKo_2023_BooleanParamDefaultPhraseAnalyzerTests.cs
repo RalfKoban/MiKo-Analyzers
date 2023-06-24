@@ -387,10 +387,8 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test, Combinatorial]
-        public void Code_gets_fixed_on_same_line_for_If_Otherwise_phrase_(
-                                                                    [ValueSource(nameof(ConditionalPhrases))] string phraseStart,
-                                                                    [Values(". Otherwise any other condition.", " else any other condition.")] string phraseEnd)
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_If_Else_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
         {
             var originalCode = @"
 using System;
@@ -399,7 +397,38 @@ public class TestMe
 {
     /// <summary>
     /// </summary>
-    /// <param name=""condition"">" + phraseStart + " some condition" + phraseEnd + @"</param>
+    /// <param name=""condition"">" + phraseStart + @" some condition, else any other condition.</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_If_Otherwise_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">" + phraseStart + @" some condition. Otherwise any other condition.</param>
     public void DoSomething(bool condition) { }
 }
 ";
