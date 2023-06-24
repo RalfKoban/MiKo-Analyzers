@@ -12797,5 +12797,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6033_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place dot on same line.
+        /// </summary>
+        public static string MiKo_6034_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6034_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read when the dots are placed on the same line than the invoked members..
+        /// </summary>
+        public static string MiKo_6034_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6034_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place dot on same line as member.
+        /// </summary>
+        public static string MiKo_6034_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6034_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dots should be placed on same line as invoked members.
+        /// </summary>
+        public static string MiKo_6034_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6034_Title", resourceCulture);
+            }
+        }
     }
 }
