@@ -20,14 +20,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var invocation = (InvocationExpressionSyntax)context.Node;
 
-            var parenthesis = invocation.ArgumentList.OpenParenToken;
-
-            var parenthesisPosition = GetStartPosition(parenthesis);
-            var memberPosition = GetStartPosition(invocation.Expression);
-
-            if (parenthesisPosition.Line != memberPosition.Line)
+            if (invocation.Expression is MemberAccessExpressionSyntax maes)
             {
-                ReportDiagnostics(context, Issue(parenthesis));
+                var parenthesis = invocation.ArgumentList.OpenParenToken;
+
+                var parenthesisPosition = GetStartPosition(parenthesis);
+                var memberPosition = GetStartPosition(maes.Name);
+
+                if (parenthesisPosition.Line != memberPosition.Line)
+                {
+                    ReportDiagnostics(context, Issue(parenthesis));
+                }
             }
         }
     }
