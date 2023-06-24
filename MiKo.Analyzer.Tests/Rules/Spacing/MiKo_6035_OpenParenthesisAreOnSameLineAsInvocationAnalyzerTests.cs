@@ -24,6 +24,20 @@ public class TestME
 ");
 
         [Test]
+        public void No_issue_is_reported_if_method_invocation_and_parenthesis_are_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestME
+{
+    public void DoSomething()
+    {
+        GC
+         .Collect();
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_invocation_and_parenthesis_are_on_different_lines() => An_issue_is_reported_for(@"
 using System;
 
