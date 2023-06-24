@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3112_CodeFixProvider)), Shared]
-    public class MiKo_3112_CodeFixProvider : UnitTestCodeFixProvider
+    public sealed class MiKo_3112_CodeFixProvider : UnitTestCodeFixProvider
     {
         public sealed override string FixableDiagnosticId => MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.Id;
 

@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 370 rules that are currently provided by the analyzer.
+The following tables list all the 372 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -409,3 +409,5 @@ The following tables list all the 370 rules that are currently provided by the a
 |MiKo_6031|Question and colon tokens of ternary operators should be placed directly below the corresponding condition|&#x2713;|&#x2713;|
 |MiKo_6032|Multi-line parameters are positioned outdented at end of method|&#x2713;|&#x2713;|
 |MiKo_6033|Braces of blocks below case sections should be placed directly below the corresponding case keyword|&#x2713;|&#x2713;|
+|MiKo_6034|Dots should be placed on same line(s) as invoked members|&#x2713;|&#x2713;|
+|MiKo_6035|Open parenthesis should be placed on same line(s) as invoked methods|&#x2713;|&#x2713;|

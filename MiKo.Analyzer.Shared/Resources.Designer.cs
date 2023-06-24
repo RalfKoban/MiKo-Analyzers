@@ -12797,5 +12797,77 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6033_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place dot on same line.
+        /// </summary>
+        public static string MiKo_6034_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6034_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the dots are placed on the same line(s) as the invoked members..
+        /// </summary>
+        public static string MiKo_6034_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6034_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place dot on same line as member.
+        /// </summary>
+        public static string MiKo_6034_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6034_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dots should be placed on same line(s) as invoked members.
+        /// </summary>
+        public static string MiKo_6034_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6034_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place parenthesis on same line.
+        /// </summary>
+        public static string MiKo_6035_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6035_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the open parenthesis are placed on the same line(s) as the invoked methods..
+        /// </summary>
+        public static string MiKo_6035_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6035_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open parenthesis on same line as invocation.
+        /// </summary>
+        public static string MiKo_6035_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6035_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open parenthesis should be placed on same line(s) as invoked methods.
+        /// </summary>
+        public static string MiKo_6035_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6035_Title", resourceCulture);
+            }
+        }
     }
 }

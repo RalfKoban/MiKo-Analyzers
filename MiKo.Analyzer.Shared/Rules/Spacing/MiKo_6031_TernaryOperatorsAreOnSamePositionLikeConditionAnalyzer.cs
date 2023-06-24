@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6031";
 
