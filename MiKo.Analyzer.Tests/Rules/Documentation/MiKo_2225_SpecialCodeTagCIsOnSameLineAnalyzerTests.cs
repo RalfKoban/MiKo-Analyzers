@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
-    public class MiKo_2225_SpecialCodeTagCIsOnSameLineAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_2225_SpecialCodeTagCIsOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_on_documentation_with_no_code_tag() => No_issue_is_reported_for(@"

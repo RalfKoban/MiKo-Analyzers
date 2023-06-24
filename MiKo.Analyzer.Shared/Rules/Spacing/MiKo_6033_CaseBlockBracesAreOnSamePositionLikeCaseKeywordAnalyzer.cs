@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class MiKo_6033_CaseBlockBracesAreOnSamePositionLikeCaseKeywordAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6033_CaseBlockBracesAreOnSamePositionLikeCaseKeywordAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6033";
 
