@@ -34,12 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (symbol.IsEnum() || symbol.IsTestClass())
+            if (symbol.TypeKind == TypeKind.Class && symbol.IsTestClass() is false)
             {
-                return Enumerable.Empty<Diagnostic>();
+                return Analyze(symbol);
             }
 
-            return Analyze(symbol);
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)

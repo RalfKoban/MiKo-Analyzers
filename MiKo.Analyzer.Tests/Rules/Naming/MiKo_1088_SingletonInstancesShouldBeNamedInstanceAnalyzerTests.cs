@@ -22,6 +22,15 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_struct() => No_issue_is_reported_for(@"
+
+public struct TestMe
+{
+    public static TestMe Something { get; set; }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_enum_class() => No_issue_is_reported_for(@"
 
 public enum TestMe
