@@ -107,6 +107,7 @@ The following tables list all the 373 rules that are currently provided by the a
 |MiKo_1085|Parameters should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1086|Methods should not be named using numbers as slang|&#x2713;|\-|
 |MiKo_1087|Name constructor parameters after their counterparts in the base class|&#x2713;|&#x2713;|
+|MiKo_1088|Singleton instances should be named 'Instance'|&#x2713;|\-|
 |MiKo_1090|Parameters should not be suffixed with specific types|&#x2713;|&#x2713;|
 |MiKo_1091|Variables should not be suffixed with specific types|&#x2713;|&#x2713;|
 |MiKo_1092|'Ability' Types should not be suffixed with redundant information|&#x2713;|&#x2713;|
@@ -116,7 +117,6 @@ The following tables list all the 373 rules that are currently provided by the a
 |MiKo_1096|Names should use 'Failed' instead of 'NotSuccessful'|&#x2713;|\-|
 |MiKo_1097|Parameter names should not follow the naming scheme for fields|&#x2713;|&#x2713;|
 |MiKo_1098|Type names should reflect the business interface(s) they implement|&#x2713;|\-|
-|MiKo_1099|Singleton instances should be named 'Instance'|&#x2713;|\-|
 |MiKo_1100|Test classes should start with the name of the type under test|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'|&#x2713;|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test' in their names|&#x2713;|&#x2713;|
