@@ -3071,6 +3071,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To indicate that something is a singleton, the specific property or field should be named &apos;Instance&apos; as convention. That makes it easier to spot..
+        /// </summary>
+        public static string MiKo_1088_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1088_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;Instance&apos;.
+        /// </summary>
+        public static string MiKo_1088_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1088_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Singleton instances should be named &apos;Instance&apos;.
+        /// </summary>
+        public static string MiKo_1088_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1088_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename parameter.
         /// </summary>
         public static string MiKo_1090_CodeFixTitle {
