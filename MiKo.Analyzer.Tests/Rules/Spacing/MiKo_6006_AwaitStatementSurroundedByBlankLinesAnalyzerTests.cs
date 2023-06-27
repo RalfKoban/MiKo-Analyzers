@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -138,6 +140,29 @@ namespace Bla
             DoSomethingElse();
 
             var result = await Task.FromResult(true);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_awaited_calls_preceded_by_blank_line_if_their_results_get_assigned_to_local_variables() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+
+            var result1 = await Task.FromResult(true);
+            var result2 = await Task.FromResult(false);
         }
 
         private void DoSomethingElse()
@@ -320,6 +345,50 @@ namespace Bla
         {
             var result = await Task.FromResult(true);
             DoSomethingElse();
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_awaited_call_not_followed_by_blank_line_if_its_result_gets_assigned_to_local_variable_when_coming_before_another_awaited_call_without_assignment() => An_issue_is_reported_for(2, @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            var result = await Task.FromResult(true);
+            await Task.FromResult(false);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_awaited_call_not_preceded_by_blank_line_if_its_result_gets_assigned_to_local_variable_when_coming_after_another_awaited_call_without_assignment() => An_issue_is_reported_for(2, @"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            await Task.FromResult(false);
+            var result = await Task.FromResult(true);
         }
 
         private void DoSomethingElse()
