@@ -379,6 +379,48 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_ObjectUnderTest_property_call_preceded_by_another_statement_and_is_awaited() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public async Task DoSomethingAsync()
+        {
+            GC.Collect();
+            await ObjectUnderTest.DoSomethingAsync().ConfigureAwait(false);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_ObjectUnderTest_property_call_preceded_by_another_statement_and_is_not_awaited() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public Task DoSomethingAsync()
+        {
+            GC.Collect();
+            ObjectUnderTest.DoSomethingAsync().ConfigureAwait(false);
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_ObjectUnderTest_property_call_followed_by_another_statement() => An_issue_is_reported_for(@"
 using System;
 
@@ -429,6 +471,48 @@ namespace Bla
 
         public void DoSomething()
         {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_ObjectUnderTest_property_call_followed_by_another_statement_and_is_awaited() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public async Task DoSomethingAsync()
+        {
+            await ObjectUnderTest.DoSomethingAsync().ConfigureAwait(false);
+            GC.Collect();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_ObjectUnderTest_property_call_followed_by_another_statement_and_is_not_awaited() => An_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public async Task DoSomethingAsync()
+        {
+            ObjectUnderTest.DoSomethingAsync().ConfigureAwait(false);
+            GC.Collect();
         }
     }
 }
