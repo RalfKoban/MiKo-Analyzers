@@ -37,6 +37,24 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return false;
         }
 
+        private static bool HasNonAwaitedLocalDeclaration(IEnumerable<StatementSyntax> statements)
+        {
+            foreach (var statement in statements)
+            {
+                switch (statement)
+                {
+                    case LocalDeclarationStatementSyntax l1 when l1.AwaitKeyword.IsKind(SyntaxKind.AwaitKeyword):
+                    case LocalDeclarationStatementSyntax l2 when l2.Declaration.DescendantNodes().Any(_ => _.IsKind(SyntaxKind.AwaitExpression)):
+                        continue;
+
+                    default:
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeAwaitExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (AwaitExpressionSyntax)context.Node;
@@ -71,14 +89,38 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private Diagnostic AnalyzeAwaitExpression(SyntaxList<StatementSyntax> statements, AwaitExpressionSyntax node)
         {
-            var callLineSpan = node.GetLocation().GetLineSpan();
-
-            var noBlankLinesBefore = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
-            var noBlankLinesAfter = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
-
-            if (noBlankLinesBefore || noBlankLinesAfter)
+            switch (node.Parent)
             {
-                return Issue(node.AwaitKeyword, noBlankLinesBefore, noBlankLinesAfter);
+                case StatementSyntax _:
+                {
+                    var callLineSpan = node.GetLocation().GetLineSpan();
+
+                    var noBlankLinesBefore = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
+                    var noBlankLinesAfter = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
+
+                    if (noBlankLinesBefore || noBlankLinesAfter)
+                    {
+                        return Issue(node.AwaitKeyword, noBlankLinesBefore, noBlankLinesAfter);
+                    }
+
+                    break;
+                }
+
+                case EqualsValueClauseSyntax _:
+                case AssignmentExpressionSyntax _:
+                {
+                    var callLineSpan = node.GetLocation().GetLineSpan();
+
+                    var noBlankLinesBefore = HasNonAwaitedLocalDeclaration(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
+                    var noBlankLinesAfter = HasNonAwaitedLocalDeclaration(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
+
+                    if (noBlankLinesBefore || noBlankLinesAfter)
+                    {
+                        return Issue(node.AwaitKeyword, noBlankLinesBefore, noBlankLinesAfter);
+                    }
+
+                    break;
+                }
             }
 
             return null;

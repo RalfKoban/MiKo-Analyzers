@@ -1106,6 +1106,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     // maybe an else block
                     var elseStatement = value.GetEnclosing<ElseClauseSyntax>();
+
                     if (elseStatement != null)
                     {
                         value = elseStatement.Parent;
@@ -1118,15 +1119,34 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsInvocationOnObjectUnderTest(this ExpressionStatementSyntax value) => value.Expression is InvocationExpressionSyntax i && i.Expression.IsAccessOnObjectUnderTest();
+        internal static bool IsInvocationOnObjectUnderTest(this ExpressionStatementSyntax value)
+        {
+            switch (value.Expression)
+            {
+                case InvocationExpressionSyntax i when i.IsInvocationOnObjectUnderTest():
+                case AwaitExpressionSyntax a when a.Expression is InvocationExpressionSyntax inv && inv.IsInvocationOnObjectUnderTest():
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsInvocationOnObjectUnderTest(this InvocationExpressionSyntax value) => value.Expression.IsAccessOnObjectUnderTest();
 
         internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
         {
-            var found = value is MemberAccessExpressionSyntax mae
-                    && mae.Expression is IdentifierNameSyntax ins
-                    && Constants.Names.ObjectUnderTestNames.Contains(ins.GetName());
+            if (value is MemberAccessExpressionSyntax mae)
+            {
+                switch (mae.Expression)
+                {
+                    case IdentifierNameSyntax ins when Constants.Names.ObjectUnderTestNames.Contains(ins.GetName()):
+                    case InvocationExpressionSyntax i when i.IsInvocationOnObjectUnderTest():
+                        return true;
+                }
+            }
 
-            return found;
+            return false;
         }
 
         internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
