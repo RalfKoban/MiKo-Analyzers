@@ -10,7 +10,7 @@ Provides analyzers that are based on the .NET Compiler Platform (Roslyn).
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 374 rules that are currently provided by the analyzer.
+The following tables list all the 375 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -255,6 +255,7 @@ The following tables list all the 374 rules that are currently provided by the a
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|

@@ -2874,6 +2874,16 @@ It would therefore be better to clearly highlight the contradiction.</value>
   <data name="MiKo_2309_Title" xml:space="preserve">
     <value>Comments should not use the contradiction "n't"</value>
   </data>
+  <data name="MiKo_2310_Description" xml:space="preserve">
+    <value>Instead of stating *that* the intention exists, comments should better explain *what* the intention behind actually is.
+So developers have more background information at hand, allowing them to make better decisions based on that information.</value>
+  </data>
+  <data name="MiKo_2310_MessageFormat" xml:space="preserve">
+    <value>Explain what the intention behind actually is</value>
+  </data>
+  <data name="MiKo_2310_Title" xml:space="preserve">
+    <value>Comments should explain the 'Why' and not the 'That'</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>

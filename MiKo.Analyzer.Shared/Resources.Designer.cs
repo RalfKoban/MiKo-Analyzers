@@ -8090,6 +8090,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, comments should better explain *what* the intention behind actually is.
+        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        /// </summary>
+        public static string MiKo_2310_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2310_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explain what the intention behind actually is.
+        /// </summary>
+        public static string MiKo_2310_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2310_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the &apos;Why&apos; and not the &apos;That&apos;.
+        /// </summary>
+        public static string MiKo_2310_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2310_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>

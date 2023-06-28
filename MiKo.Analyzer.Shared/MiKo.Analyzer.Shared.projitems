@@ -228,6 +228,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2308_CommentPlacedAfterCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CommentContainsNtContradictionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2310_CommentContainsIntentionallyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MultiLineCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\OperatorAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\OverallDocumentationAnalyzer.cs" />
