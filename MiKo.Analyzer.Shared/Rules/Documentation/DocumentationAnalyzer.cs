@@ -80,14 +80,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
 
+            List<Location> alreadyReportedLocations = null;
+
             foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
-                if (location != null)
+                if (location is null)
                 {
-                    yield return location;
+                    continue;
                 }
+
+                if (alreadyReportedLocations is null)
+                {
+                    alreadyReportedLocations = new List<Location>();
+                }
+                else
+                {
+                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    {
+                        // already reported, so ignore it
+                        continue;
+                    }
+                }
+
+                alreadyReportedLocations.Add(location);
+
+                yield return location;
             }
         }
 
@@ -104,6 +123,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = textToken.SyntaxTree;
             var spanStart = textToken.SpanStart;
 
+            List<Location> alreadyReportedLocations = null;
+
             foreach (var value in values)
             {
                 if (text.Length < value.Length)
@@ -116,10 +137,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
-                    if (location != null)
+                    if (location is null)
                     {
-                        yield return location;
+                        continue;
                     }
+
+                    if (alreadyReportedLocations is null)
+                    {
+                        alreadyReportedLocations = new List<Location>();
+                    }
+                    else
+                    {
+                        if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                        {
+                            // already reported, so ignore it
+                            continue;
+                        }
+                    }
+
+                    alreadyReportedLocations.Add(location);
+
+                    yield return location;
                 }
             }
         }
@@ -143,14 +181,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
 
+            List<Location> alreadyReportedLocations = null;
+
             foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
-                if (location != null)
+                if (location is null)
                 {
-                    yield return location;
+                    continue;
                 }
+
+                if (alreadyReportedLocations is null)
+                {
+                    alreadyReportedLocations = new List<Location>();
+                }
+                else
+                {
+                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    {
+                        // already reported, so ignore it
+                        continue;
+                    }
+                }
+
+                alreadyReportedLocations.Add(location);
+
+                yield return location;
             }
         }
 
@@ -167,6 +224,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var syntaxTree = trivia.SyntaxTree;
             var spanStart = trivia.SpanStart;
 
+            List<Location> alreadyReportedLocations = null;
+
             foreach (var value in values)
             {
                 if (text.Length < value.Length)
@@ -179,10 +238,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
-                    if (location != null)
+                    if (location is null)
                     {
-                        yield return location;
+                        continue;
                     }
+
+                    if (alreadyReportedLocations is null)
+                    {
+                        alreadyReportedLocations = new List<Location>();
+                    }
+                    else
+                    {
+                        if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                        {
+                            // already reported, so ignore it
+                            continue;
+                        }
+                    }
+
+                    alreadyReportedLocations.Add(location);
+
+                    yield return location;
                 }
             }
         }
@@ -208,6 +284,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var lastPosition = text.Length - 1;
 
+            List<Location> alreadyReportedLocations = null;
+
             foreach (var position in text.AllIndicesOf(value, comparison))
             {
                 var afterPosition = position + value.Length;
@@ -222,10 +300,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
 
-                if (location != null)
+                if (location is null)
                 {
-                    yield return location;
+                    continue;
                 }
+
+                if (alreadyReportedLocations is null)
+                {
+                    alreadyReportedLocations = new List<Location>();
+                }
+                else
+                {
+                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    {
+                        // already reported, so ignore it
+                        continue;
+                    }
+                }
+
+                alreadyReportedLocations.Add(location);
+
+                yield return location;
             }
         }
 

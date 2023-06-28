@@ -20,22 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
 
-        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
-        {
-            var alreadyReportedLocations = new List<Location>();
-
-            foreach (var location in GetAllLocations(trivia, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
-            {
-                if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                {
-                    // already reported, so ignore it
-                    continue;
-                }
-
-                alreadyReportedLocations.Add(location);
-
-                yield return Issue(name, location);
-            }
-        }
+        protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
     }
 }
