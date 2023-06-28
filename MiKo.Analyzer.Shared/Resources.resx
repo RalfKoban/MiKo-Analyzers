@@ -2757,6 +2757,16 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
   <data name="MiKo_2225_Title" xml:space="preserve">
     <value>Code marked with &lt;c&gt; tags should be placed on single line</value>
   </data>
+  <data name="MiKo_2226_Description" xml:space="preserve">
+    <value>Instead of stating *that* the intention exists, documentation should better explain *what* the intention behind actually is.
+So developers have more background information at hand, allowing them to make better decisions based on that information.</value>
+  </data>
+  <data name="MiKo_2226_MessageFormat" xml:space="preserve">
+    <value>Explain what the intention behind actually is</value>
+  </data>
+  <data name="MiKo_2226_Title" xml:space="preserve">
+    <value>Documentation should explain the 'Why' and not the 'That'</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
