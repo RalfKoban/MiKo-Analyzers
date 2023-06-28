@@ -7757,6 +7757,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, documentation should better explain *what* the intention behind actually is.
+        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        /// </summary>
+        public static string MiKo_2226_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2226_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explain what the intention behind actually is.
+        /// </summary>
+        public static string MiKo_2226_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2226_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should explain the &apos;Why&apos; and not the &apos;That&apos;.
+        /// </summary>
+        public static string MiKo_2226_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2226_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
@@ -8086,6 +8114,34 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_2309_Title {
             get {
                 return ResourceManager.GetString("MiKo_2309_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instead of stating *that* the intention exists, comments should better explain *what* the intention behind actually is.
+        ///So developers have more background information at hand, allowing them to make better decisions based on that information..
+        /// </summary>
+        public static string MiKo_2310_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2310_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explain what the intention behind actually is.
+        /// </summary>
+        public static string MiKo_2310_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2310_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the &apos;Why&apos; and not the &apos;That&apos;.
+        /// </summary>
+        public static string MiKo_2310_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2310_Title", resourceCulture);
             }
         }
         

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,22 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            var alreadyReportedLocations = new List<Location>();
-
             foreach (var token in comment.GetXmlTextTokens())
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
                 foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
-                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                    {
-                        // already reported, so ignore it
-                        continue;
-                    }
-
-                    alreadyReportedLocations.Add(location);
-
                     yield return Issue(symbol.Name, location);
                 }
             }

@@ -636,6 +636,18 @@ namespace MiKoSolutions.Analyzers
                                                                            "darent",
                                                                            "neednt",
                                                                        };
+
+            internal static readonly string[] IntentionallyPhrase =
+                                                                    {
+                                                                        "intentionally",
+                                                                        "by intention",
+                                                                        "with intention",
+                                                                        "by intent",
+                                                                        "with intent",
+                                                                        "on purpose",
+                                                                        "purposely",
+                                                                        "purposly", // typo by intent
+                                                                    };
         }
 
         internal static class XmlTag
@@ -736,12 +748,12 @@ namespace MiKoSolutions.Analyzers
             internal static readonly HashSet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
                                                                                          .Select(_ => _.Name)
                                                                                          .Except(new[]
-                                                                                                 {
-                                                                                                     nameof(Equals),
-                                                                                                     nameof(ToString),
-                                                                                                     nameof(GetHashCode),
-                                                                                                     nameof(GetType),
-                                                                                                 })
+                                                                                                     {
+                                                                                                         nameof(Equals),
+                                                                                                         nameof(ToString),
+                                                                                                         nameof(GetHashCode),
+                                                                                                         nameof(GetType),
+                                                                                                     })
                                                                                          .ToHashSet();
 
             internal static readonly IEnumerable<string> GeneratedAttributeNames = new HashSet<string>
@@ -825,30 +837,30 @@ namespace MiKoSolutions.Analyzers
                                                                                                   };
 
             internal static readonly IEnumerable<string> TypeUnderTestRawFieldNames = new[]
-                                                                                      {
-                                                                                          "ObjectUnderTest",
-                                                                                          "objectUnderTest",
-                                                                                          "ObjectToTest",
-                                                                                          "objectToTest",
-                                                                                          "SubjectToTest",
-                                                                                          "subjectToTest",
-                                                                                          "SubjectUnderTest",
-                                                                                          "subjectUnderTest",
-                                                                                          "Sut",
-                                                                                          "sut",
-                                                                                          "UnitToTest",
-                                                                                          "unitToTest",
-                                                                                          "UnitUnderTest",
-                                                                                          "unitUnderTest",
-                                                                                          "Uut",
-                                                                                          "uut",
-                                                                                          "TestCandidate",
-                                                                                          "testCandidate",
-                                                                                          "TestObject",
-                                                                                          "testObject",
-                                                                                          "candidateToTest",
-                                                                                          "candidateUnderTest",
-                                                                                      };
+                                                                                          {
+                                                                                              "ObjectUnderTest",
+                                                                                              "objectUnderTest",
+                                                                                              "ObjectToTest",
+                                                                                              "objectToTest",
+                                                                                              "SubjectToTest",
+                                                                                              "subjectToTest",
+                                                                                              "SubjectUnderTest",
+                                                                                              "subjectUnderTest",
+                                                                                              "Sut",
+                                                                                              "sut",
+                                                                                              "UnitToTest",
+                                                                                              "unitToTest",
+                                                                                              "UnitUnderTest",
+                                                                                              "unitUnderTest",
+                                                                                              "Uut",
+                                                                                              "uut",
+                                                                                              "TestCandidate",
+                                                                                              "testCandidate",
+                                                                                              "TestObject",
+                                                                                              "testObject",
+                                                                                              "candidateToTest",
+                                                                                              "candidateUnderTest",
+                                                                                          };
 
             internal static readonly IEnumerable<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
 
