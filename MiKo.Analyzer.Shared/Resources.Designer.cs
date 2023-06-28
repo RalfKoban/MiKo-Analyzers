@@ -10635,6 +10635,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty..
+        /// </summary>
+        public static string MiKo_3094_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3094_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide a comment that reasons why the block is empty.
+        /// </summary>
+        public static string MiKo_3094_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3094_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code blocks should not be empty.
+        /// </summary>
+        public static string MiKo_3094_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3094_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
