@@ -105,6 +105,74 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return foundUpperCaseLetters > 1;
         }
 
+        private static bool IsCompoundWord(ReadOnlySpan<char> trimmed)
+        {
+            if (trimmed.Length == 0)
+            {
+                return false;
+            }
+
+            if (trimmed[0].IsNumber())
+            {
+                if (trimmed.Any(_ => _ == '.') && trimmed[1].IsLetter())
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (trimmed.Length > 3 && trimmed[2].IsNumber() && trimmed.StartsWithAny(CompilerWarningIndicators, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            if (trimmed.ContainsAny(SpecialIndicators))
+            {
+                return false;
+            }
+
+            if (trimmed.Length > 31 && Guid.TryParse(trimmed.ToString(), out _))
+            {
+                return false;
+            }
+
+            if (trimmed.All(char.IsUpper))
+            {
+                // seems like an abbreviation such as UML, so do not report
+                return false;
+            }
+
+            if (trimmed.Any(_ => _ == '!'))
+            {
+                return false;
+            }
+
+            if (trimmed.EndsWith('s'))
+            {
+                var characters = trimmed.EndsWith("'s", StringComparison.Ordinal) ? 2 : 1;
+
+                var part = trimmed.Slice(0, trimmed.Length - characters).ToString();
+
+                if (part.All(char.IsUpper) || WellKnownWords.Contains(part))
+                {
+                    // seems like an abbreviation (such as UIs) or a genitive tense of an abbreviation (such as UI's), so do not report
+                    return false;
+                }
+            }
+            else if (WellKnownWords.Contains(trimmed.ToString()))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private IEnumerable<Diagnostic> AnalyzeComment(DocumentationCommentTriviaSyntax comment)
         {
             foreach (var token in comment.GetXmlTextTokens(_ => IgnoreTags.Contains(_.GetName()) is false))
@@ -148,56 +216,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var trimmed = text.AsSpan(start, end - start);
 
-                    var compoundWord = true;
-
-                    if (trimmed.Length == 0)
-                    {
-                        compoundWord = false;
-                    }
-                    else
-                    {
-                        if (trimmed[0].IsNumber())
-                        {
-                            compoundWord = false;
-                        }
-                        else if (trimmed.Length > 3 && trimmed[2].IsNumber() && trimmed.StartsWithAny(CompilerWarningIndicators, StringComparison.Ordinal))
-                        {
-                            compoundWord = false;
-                        }
-                        else if (trimmed.StartsWithAny(HyperlinkIndicators, StringComparison.OrdinalIgnoreCase))
-                        {
-                            compoundWord = false;
-                        }
-                        else if (trimmed.ContainsAny(SpecialIndicators))
-                        {
-                            compoundWord = false;
-                        }
-                        else if (trimmed.Length > 31 && Guid.TryParse(trimmed.ToString(), out _))
-                        {
-                            compoundWord = false;
-                        }
-                        else if (trimmed.All(char.IsUpper))
-                        {
-                            // seems like an abbreviation such as UML, so do not report
-                            compoundWord = false;
-                        }
-                        else if (trimmed.EndsWith('s'))
-                        {
-                            var characters = trimmed.EndsWith("'s", StringComparison.Ordinal) ? 2 : 1;
-
-                            var part = trimmed.Slice(0, trimmed.Length - characters).ToString();
-
-                            if (part.All(char.IsUpper) || WellKnownWords.Contains(part))
-                            {
-                                // seems like an abbreviation (such as UIs) or a genitive tense of an abbreviation (such as UI's), so do not report
-                                compoundWord = false;
-                            }
-                        }
-                        else if (WellKnownWords.Contains(trimmed.ToString()))
-                        {
-                            compoundWord = false;
-                        }
-                    }
+                    var compoundWord = IsCompoundWord(trimmed);
 
                     if (compoundWord && trimmed.StartsWith("default(", StringComparison.Ordinal) && trimmed.EndsWith(')') is false)
                     {

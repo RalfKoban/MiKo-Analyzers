@@ -112,6 +112,19 @@ namespace System.Linq
             return false;
         }
 
+        internal static bool Any(this ReadOnlySpan<char> value, Predicate<char> filter)
+        {
+            for (var i = 0; i < value.Length; i++)
+            {
+                if (filter(value[i]))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool Any(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
         {
             for (var index = 0; index < source.Count; index++)

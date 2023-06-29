@@ -311,6 +311,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_exclamation_mark() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding Some!Text that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method() => An_issue_is_reported_for(@"
 using System;
 
@@ -446,6 +461,21 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_incorrectly_documented_method_with_starting_number() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something regarding 1A.SomeNameSpace.SomeClass that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_with_starting_underscore_number() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
