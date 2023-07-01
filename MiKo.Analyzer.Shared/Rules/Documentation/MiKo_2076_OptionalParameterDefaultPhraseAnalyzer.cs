@@ -23,9 +23,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             const string Phrase = Constants.Comments.DefaultStartingPhrase;
 
-            if (parameter.IsOptional && parameterComment.GetTextTrimmed().Contains(Phrase, StringComparison.Ordinal) is false)
+            if (parameter.IsOptional)
             {
-                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase);
+                if (parameter.HasAttributeApplied("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
+                {
+                    // nothing to report as that attribute indicates that the value gets automatically set
+                }
+                else
+                {
+                    if (parameterComment.GetTextTrimmed().Contains(Phrase, StringComparison.Ordinal) is false)
+                    {
+                        yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase);
+                    }
+                }
             }
         }
     }

@@ -46,6 +46,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_documented_method_with_optional_value_with_CallerMemberName_attribute() => No_issue_is_reported_for(@"
+using System.Runtime.CompilerServices;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""value"">
+    /// Some value.
+    /// </param>
+    public bool DoSomething([CallerMemberName] string value = null)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_empty_parameter_on_method_([Values("", "     ")] string parameter) => An_issue_is_reported_for(@"
 public class TestMe
 {
