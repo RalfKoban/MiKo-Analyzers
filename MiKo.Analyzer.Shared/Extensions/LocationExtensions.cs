@@ -19,40 +19,41 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetEndingLine(this Location value) => value.GetLineSpan().EndLinePosition.Line;
 
-        internal static string GetText(this Location value)
-        {
-            return value.SourceTree?.GetText().ToString(value.SourceSpan);
-        }
+        internal static string GetText(this Location value) => value.SourceTree?.GetText().ToString(value.SourceSpan);
 
         internal static string GetSurroundingWord(this Location value)
         {
             var tree = value.SourceTree;
 
-            if (tree != null)
+            if (tree == null)
             {
-                var sourceText = tree.GetText();
-                var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
-
-                var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
-
-                if (lastIndexOfFirstSpace != -1)
-                {
-                    var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
-
-                    var firstIndexOfNextSpace = followUpText.StartsWith('<') // seems like the comment finished
-                                                ? 0
-                                                : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
-
-                    if (firstIndexOfNextSpace != -1)
-                    {
-                        var result = sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
-
-                        return result;
-                    }
-                }
+                return null;
             }
 
-            return null;
+            var sourceText = tree.GetText();
+            var text = sourceText.ToString(TextSpan.FromBounds(0, value.SourceSpan.End));
+
+            var lastIndexOfFirstSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters);
+
+            if (lastIndexOfFirstSpace == -1)
+            {
+                return null;
+            }
+
+            var followUpText = sourceText.GetSubText(value.SourceSpan.End).ToString();
+
+            var firstIndexOfNextSpace = followUpText.StartsWith('<') // seems like the comment finished
+                                            ? 0
+                                            : followUpText.IndexOfAny(Constants.WhiteSpaceCharacters);
+
+            if (firstIndexOfNextSpace == -1)
+            {
+                return null;
+            }
+
+            var result = sourceText.ToString(TextSpan.FromBounds(lastIndexOfFirstSpace + 1, text.Length + firstIndexOfNextSpace));
+
+            return result;
         }
 
         internal static bool Contains(this Location value, Location other)

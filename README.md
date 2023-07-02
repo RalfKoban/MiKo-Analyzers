@@ -211,7 +211,7 @@ The following tables list all the 376 rules that are currently provided by the a
 |MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '|&#x2713;|&#x2713;|
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2075|Documentation should use the term 'callback' instead of 'action', 'func' or 'function'|&#x2713;|&#x2713;|
-|MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|\-|
+|MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|&#x2713;|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|

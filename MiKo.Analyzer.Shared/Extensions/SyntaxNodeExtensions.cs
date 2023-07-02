@@ -29,6 +29,7 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Booleans = { "true", "false", "True", "False", "TRUE", "FALSE" };
 
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
+
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
@@ -1463,7 +1464,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return new SyntaxList<XmlNodeSyntax>(result);
+            return SyntaxFactory.List(result);
         }
 
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
@@ -1636,13 +1637,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(SyntaxFactory.List(contents));
 
-        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(SyntaxFactory.List(contents));
 
-        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(SyntaxFactory.List(contents));
 
-        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(new SyntaxList<XmlNodeSyntax>(contents));
+        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(SyntaxFactory.List(contents));
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
@@ -2111,6 +2112,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
+        // internal static T WithTrailingXmlComment<T>(this T value, int spaces) where T : SyntaxNode => value.WithTrailingTrivia(
+        //                                                                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically
+        //                                                                                                                    SyntaxFactory.ElasticWhitespace(new string(' ', spaces)),
+        //                                                                                                                    XmlCommentExterior);
         internal static T WithTrailingXmlComment<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(XmlCommentStart);
 
         internal static SyntaxList<XmlNodeSyntax> WithTrailingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values.Last(), values.Last().WithoutTrailingTrivia().WithTrailingXmlComment());
