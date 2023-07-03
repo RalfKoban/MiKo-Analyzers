@@ -18,6 +18,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         internal const string DefaultSeeCrefValue = "SeeCref";
         internal const string DefaultCodeValue = "CodeValue";
 
+        private const string Phrase = Constants.Comments.DefaultStartingPhrase;
+
+        private static readonly string[] Phrases =
+                                                    {
+                                                        "Default value is",
+                                                        "Default is",
+                                                        "Defaults to",
+                                                    };
+
         public MiKo_2076_OptionalParameterDefaultPhraseAnalyzer() : base(Id)
         {
         }
@@ -28,9 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            const string Phrase = Constants.Comments.DefaultStartingPhrase;
-
-            if (parameterComment.GetTextTrimmed().Contains(Phrase, StringComparison.Ordinal))
+            if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
                 yield break;
@@ -54,19 +61,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var defaultValue = parameter.GetSyntax().Default?.Value;
 
+            var parameterType = parameter.Type;
+
             switch (defaultValue)
             {
                 case IdentifierNameSyntax _:
-                {
-                    // seems like some field or property, so simply use that one
-                    return new KeyValuePair<string, string>(DefaultSeeCrefValue, defaultValue.ToString());
-                }
+                    return new KeyValuePair<string, string>(DefaultSeeCrefValue, defaultValue.ToString()); // seems like some field or property, so simply use that one
 
                 case PrefixUnaryExpressionSyntax _:
-                {
-                    // seems like some hardcoded value negative value
-                    return new KeyValuePair<string, string>(DefaultCodeValue, defaultValue.ToString());
-                }
+                    return new KeyValuePair<string, string>(DefaultCodeValue, defaultValue.ToString()); // seems like some hardcoded value negative value
+
+                case DefaultExpressionSyntax d:
+                    return CreatePropertyDataForDefault(parameterType, d.Type); // seems like we have some 'default(Xyz)' value
 
                 case LiteralExpressionSyntax literal:
                 {
@@ -82,13 +88,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case SyntaxKind.StringLiteralExpression:
                             return new KeyValuePair<string, string>(DefaultCodeValue, defaultValue.ToString());
 
+                        case SyntaxKind.DefaultLiteralExpression:
+                            return CreatePropertyDataForDefault(parameterType, defaultValue);
+
                         default:
                             return new KeyValuePair<string, string>(DefaultSeeCrefValue, defaultValue.ToString());
                     }
                 }
             }
-
-            var parameterType = parameter.Type;
 
             if (parameterType.IsEnum())
             {
@@ -96,6 +103,53 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return new KeyValuePair<string, string>(DefaultSeeCrefValue, parameterType.MinimalTypeName());
+        }
+
+        private static KeyValuePair<string, string> CreatePropertyDataForDefault(ITypeSymbol parameterType, ExpressionSyntax defaultValue)
+        {
+            switch (parameterType.SpecialType)
+            {
+                case SpecialType.System_Boolean:
+                    return new KeyValuePair<string, string>(DefaultSeeLangwordValue, "false");
+
+                case SpecialType.System_Char:
+                    return new KeyValuePair<string, string>(DefaultCodeValue, @"'\0' (U+0000)");
+
+                case SpecialType.System_DateTime:
+                    return new KeyValuePair<string, string>(DefaultSeeCrefValue, "DateTime.MinValue");
+
+                case SpecialType.System_SByte:
+                case SpecialType.System_Byte:
+                case SpecialType.System_Int16:
+                case SpecialType.System_UInt16:
+                case SpecialType.System_Int32:
+                case SpecialType.System_UInt32:
+                case SpecialType.System_Int64:
+                case SpecialType.System_UInt64:
+                case SpecialType.System_Decimal:
+                case SpecialType.System_Single:
+                case SpecialType.System_Double:
+                    return new KeyValuePair<string, string>(DefaultCodeValue, "0");
+
+                default:
+                {
+                    if (parameterType.TypeKind == TypeKind.Struct)
+                    {
+                        return new KeyValuePair<string, string>(DefaultSeeCrefValue, parameterType.Name);
+                    }
+
+                    if (parameterType.IsEnum())
+                    {
+                        var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue?.ToString() == "0");
+
+                        return defaultFieldValue != null
+                               ? new KeyValuePair<string, string>(DefaultSeeCrefValue, parameterType.Name + "." + defaultFieldValue.Name)
+                               : new KeyValuePair<string, string>(DefaultSeeCrefValue, parameterType.Name);
+                    }
+
+                    return new KeyValuePair<string, string>(DefaultSeeLangwordValue, "null");
+                }
+            }
         }
     }
 }
