@@ -6521,6 +6521,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Document default value.
+        /// </summary>
+        public static string MiKo_2076_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2076_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to In case a parameter is an optional one it is important to document its default value. This is because the values of those optional parameters are &quot;baked into&quot; the calling code..
         /// </summary>
         public static string MiKo_2076_Description {
@@ -7510,7 +7519,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation should use shorter terms instead of longer term &apos;used to/in&apos;.
+        ///   Looks up a localized string similar to Documentation should use shorter terms instead of longer term &apos;used to/in/by&apos;.
         /// </summary>
         public static string MiKo_2218_Title {
             get {

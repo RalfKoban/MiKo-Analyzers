@@ -211,7 +211,7 @@ The following tables list all the 376 rules that are currently provided by the a
 |MiKo_2073|&lt;summary&gt; documentation of 'Contains' methods should start with 'Determines whether '|&#x2713;|&#x2713;|
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2075|Documentation should use the term 'callback' instead of 'action', 'func' or 'function'|&#x2713;|&#x2713;|
-|MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|\-|
+|MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|&#x2713;|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|
@@ -237,7 +237,7 @@ The following tables list all the 376 rules that are currently provided by the a
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
 |MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
 |MiKo_2217|&lt;list&gt; documentation is done properly|&#x2713;|&#x2713;|
-|MiKo_2218|Documentation should use shorter terms instead of longer term 'used to/in'|&#x2713;|&#x2713;|
+|MiKo_2218|Documentation should use shorter terms instead of longer term 'used to/in/by'|&#x2713;|&#x2713;|
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|

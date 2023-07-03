@@ -195,6 +195,8 @@ public class TestMe
         [TestCase("It can be used in order to analyze stuff.", "It allows to analyze stuff.")]
         [TestCase("Markers are used to analyze stuff.", "Markers analyze stuff.")]
         [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
+        [TestCase("To be used by stuff.", "For stuff.")]
+        [TestCase("Something to be used by stuff.", "Something for stuff.")]
         public void Code_gets_fixed_for_special_case_text_(string originalCode, string fixedCode)
         {
             const string Template = @"

@@ -32,6 +32,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string IsUsedToPhrase = "is used to";
         private const string AreUsedToPhrase = "are used to";
 
+        private const string UsedByPhrase = "to be used by";
+        private const string UsedByReplacement = "for";
+
         private static readonly string[] CanPhrases =
                                                       {
                                                           "can be used in order to",
@@ -165,7 +168,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var sb = new StringBuilder(text);
 
-                sb.ReplaceAll(UsedToPhrases, UsedToReplacement);
+                sb.ReplaceAll(UsedToPhrases, UsedToReplacement)
+                  .ReplaceWithCheck(UsedByPhrase, UsedByReplacement)
+                  .ReplaceWithCheck(UsedByPhrase.ToUpperCaseAt(0), UsedByReplacement.ToUpperCaseAt(0));
 
                 // TODO RKN: Use stringBuilder for replacement
                 var result = sb.ToString();
@@ -297,21 +302,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return Issue(location, UsedToReplacement);
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
-                {
-                    yield return issue;
-                }
-
                 foreach (var canPhrase in CanPhrases)
                 {
                     foreach (var location in GetAllLocations(token, canPhrase.ToUpperCaseAt(0)))
@@ -330,39 +320,64 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return issue;
                 }
 
+                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                {
+                    yield return issue;
+                }
+
+                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb))
+                {
+                    yield return issue;
+                }
+
+                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                {
+                    yield return issue;
+                }
+
                 foreach (var location in GetAllLocations(token, UsedToPhrase))
                 {
                     yield return Issue(location, UsedToReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedInCombinationPluralPhrases))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhrase.ToUpperCaseAt(0), _ => UsedToReplacement.ToUpperCaseAt(0)))
+                {
+                    yield return issue;
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInCombinationPluralPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInCombinationPluralReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedInCombinationSingularPhrases))
+                foreach (var location in GetAllLocations(token, UsedInCombinationSingularPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInCombinationSingularReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedInCombinationUnclearPhrases))
+                foreach (var location in GetAllLocations(token, UsedInCombinationUnclearPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInCombinationUnclearReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedInPluralPhrases))
+                foreach (var location in GetAllLocations(token, UsedInPluralPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInPluralReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedInSingularPhrases))
+                foreach (var location in GetAllLocations(token, UsedInSingularPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInSingularReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedInUnclearPhrases))
+                foreach (var location in GetAllLocations(token, UsedInUnclearPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInUnclearReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedByPhrase, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedByReplacement);
                 }
             }
         }
