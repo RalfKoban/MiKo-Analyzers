@@ -387,7 +387,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Ignore("Just for now")]
         [Test]
         public void Code_gets_fixed_on_same_line_for_If_Else_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
         {
@@ -419,7 +418,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Ignore("Just for now")]
         [Test]
         public void Code_gets_fixed_on_same_line_for_If_Otherwise_phrase_([ValueSource(nameof(ConditionalPhrases))] string phraseStart)
         {
@@ -451,7 +449,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Ignore("Just for now")]
         [TestCase(@"Set to <see langword=""true""/> if you want to do something, <see langword=""false""/> otherwise.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
         [TestCase("Whether to do something.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
         [TestCase(@"some data if <see langword=""true""/>, some other data if <see langword=""false""/>. Default value is <see langword=""false""/>.", @"<see langword=""true""/> to some data; otherwise, <see langword=""false""/>. Default value is <see langword=""false""/>.")]
@@ -487,7 +484,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Ignore("Just for now")]
         [Test]
         public void Code_gets_fixed_on_multi_line_for_phrase()
         {
