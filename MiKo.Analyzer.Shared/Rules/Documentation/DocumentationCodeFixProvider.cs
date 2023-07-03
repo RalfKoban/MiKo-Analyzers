@@ -520,18 +520,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var valueText = token.ValueText;
 
-                if (valueText.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
+                var fixedText = MakeFirstWordInfiniteVerb(valueText);
 
-                // first word
-                var firstWord = valueText.FirstWord();
-                var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
-
-                if (firstWord != infiniteVerb)
+                if (fixedText.Length != valueText.Length)
                 {
-                    return text.ReplaceToken(token, token.WithText(infiniteVerb + valueText.WithoutFirstWord()));
+                    return text.ReplaceToken(token, token.WithText(fixedText));
                 }
             }
 
@@ -545,10 +538,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return text;
             }
 
-            var firstWord = text.FirstWord();
+            return MakeFirstWordInfiniteVerb(text.AsSpan()).ToString();
+        }
+
+        protected static ReadOnlySpan<char> MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text)
+        {
+            if (text.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            // it may happen that the text starts with a special character, such as an ':'
+            // so remove those special characters
+            var valueText = text.TrimStart(Constants.SentenceMarkers);
+
+            if (valueText.IsNullOrWhiteSpace())
+            {
+                return text;
+            }
+
+            // first word
+            var firstWord = valueText.FirstWord().ToString();
             var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
 
-            return infiniteVerb + text.WithoutFirstWord();
+            if (firstWord != infiniteVerb)
+            {
+                return (infiniteVerb + valueText.WithoutFirstWord().ToString()).AsSpan();
+            }
+
+            return text;
         }
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
