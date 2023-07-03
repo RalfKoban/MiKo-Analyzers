@@ -24,6 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.Parameters.Any(_ => _.HasExplicitDefaultValue) && base.ShallAnalyze(symbol);
 
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.HasExplicitDefaultValue;
+
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
             const string Phrase = Constants.Comments.DefaultStartingPhrase;
@@ -77,6 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             return new KeyValuePair<string, string>(DefaultSeeLangwordValue, defaultValue.ToString());
 
                         case SyntaxKind.NumericLiteralExpression:
+                        case SyntaxKind.StringLiteralExpression:
                             return new KeyValuePair<string, string>(DefaultCodeValue, defaultValue.ToString());
 
                         default:

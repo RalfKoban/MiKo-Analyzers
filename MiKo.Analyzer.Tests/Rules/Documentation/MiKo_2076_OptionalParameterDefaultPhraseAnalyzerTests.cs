@@ -113,6 +113,25 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_documented_method_with_multiple_parameters_and_an_optional_value_with_missing_default_documentation() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""exception"">
+    /// Some exception.
+    /// </param>
+    /// <param name=""value"">
+    /// Some value.
+    /// </param>
+    public bool DoSomething(Exception exception, bool value = false)
+    {
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_documented_method_with_optional_value_with_missing_default_documentation_for_boolean_([Values("false", "true")] string value)
         {
             var originalCode = @"
@@ -348,6 +367,44 @@ public namespace Bla
         /// <summary>Does something.</summary>
         /// <param name=""value"">Some value. The default is <see cref=""StringComparison.OrdinalIgnoreCase""/>.</param>
         public bool DoSomething(StringComparison value = StringComparison.OrdinalIgnoreCase)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_documented_method_in_namespace_with_optional_value_with_missing_default_documentation_for_hardcoded_string_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Does something.</summary>
+        /// <param name=""value"">Some value.</param>
+        public bool DoSomething(string value = ""*.*"")
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Does something.</summary>
+        /// <param name=""value"">Some value. The default is <c>""*.*""</c>.</param>
+        public bool DoSomething(string value = ""*.*"")
         {
         }
     }
