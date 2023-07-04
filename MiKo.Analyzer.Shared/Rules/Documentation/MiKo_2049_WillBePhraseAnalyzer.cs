@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +13,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2049";
 
-        private static readonly string[] Phrases = GetWithDelimiters("will be", "will also be", "will as well be", "will");
+        internal static readonly IDictionary<string, string> PhrasesMap = new Dictionary<string, string>
+                                                                              {
+                                                                                  { "will be", "is" },
+                                                                                  { "will also be", "is" },
+                                                                                  { "will as well be", "is" },
+                                                                                  { "will not be", "is not" },
+                                                                                  { "will not", "does not" },
+                                                                                  { "will never be", "is never" },
+                                                                                  { "will never", "does never" },
+                                                                                  { "will", "does" },
+                                                                              };
+
+        private static readonly string[] Phrases = GetWithDelimiters(PhrasesMap.Keys.ToArray());
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
