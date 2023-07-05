@@ -20,6 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string TextReplacementKey = "TextReplacementKey";
 
         private const string CanReplacement = "allows to";
+        private const string CanPluralReplacement = "allow to";
         private const string UsedToReplacement = "to";
 
         private const string UsedInCombinationPluralReplacement = "are made to work with";
@@ -37,13 +38,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string UsedByPhrase = "to be used by";
         private const string UsedByReplacement = "for";
 
+        private const string UsedWhenPhrase = "to be used when";
+        private const string UsedWhenReplacement = "suitable when";
+
+        private const string UsedWithinReplacement = "applicable to";
+
         private static readonly string[] CanPhrases =
                                                       {
                                                           "can be used in order to",
                                                           "can be used to",
                                                           "could be used in order to",
                                                           "could be used to",
+                                                          "might be used to",
+                                                          "is expected to be used to",
+                                                          "is intended to be used to",
+                                                          "is meant to be used to",
+                                                          "is primarily expected to be used to",
+                                                          "is primarily intended to be used to",
+                                                          "is primarily meant to be used to",
                                                       };
+
+        private static readonly string[] CanPluralPhrases =
+                                                            {
+                                                                "are expected to be used to",
+                                                                "are intended to be used to",
+                                                                "are meant to be used to",
+                                                                "are primarily expected to be used to",
+                                                                "are primarily intended to be used to",
+                                                                "are primarily meant to be used to",
+                                                            };
 
         private static readonly string[] UsedToPhrases =
                                                          {
@@ -79,20 +102,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                              "which will be used to",
                                                              "which would be used in order to",
                                                              "which would be used to",
+                                                             "to be used to",
                                                          };
 
         private static readonly string[] UsedInCombinationPluralPhrases =
                                                                           {
-                                                                              "are to be used in combination with",
-                                                                              "are to be used in conjunction with",
+                                                                              "are expected to be used in combination with",
+                                                                              "are expected to be used in conjunction with",
                                                                               "are intended to be used in combination with",
                                                                               "are intended to be used in conjunction with",
                                                                               "are meant to be used in combination with",
                                                                               "are meant to be used in conjunction with",
-                                                                              "are primarily meant to be used in combination with",
-                                                                              "are primarily meant to be used in conjunction with",
+                                                                              "are primarily expected to be used in combination with",
+                                                                              "are primarily expected to be used in conjunction with",
                                                                               "are primarily intended to be used in combination with",
                                                                               "are primarily intended to be used in conjunction with",
+                                                                              "are primarily meant to be used in combination with",
+                                                                              "are primarily meant to be used in conjunction with",
+                                                                              "are to be used in combination with",
+                                                                              "are to be used in conjunction with",
                                                                               "have to be used in combination with",
                                                                               "have to be used in conjunction with",
                                                                           };
@@ -105,31 +133,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                 "could be used in conjunction with",
                                                                                 "has to be used in combination with",
                                                                                 "has to be used in conjunction with",
+                                                                                "is expected to be used in combination with",
+                                                                                "is expected to be used in conjunction with",
                                                                                 "is intended to be used in combination with",
                                                                                 "is intended to be used in conjunction with",
                                                                                 "is meant to be used in combination with",
                                                                                 "is meant to be used in conjunction with",
-                                                                                "is primarily meant to be used in combination with",
-                                                                                "is primarily meant to be used in conjunction with",
+                                                                                "is primarily expected to be used in combination with",
+                                                                                "is primarily expected to be used in conjunction with",
                                                                                 "is primarily intended to be used in combination with",
                                                                                 "is primarily intended to be used in conjunction with",
+                                                                                "is primarily meant to be used in combination with",
+                                                                                "is primarily meant to be used in conjunction with",
                                                                                 "might be used in combination with",
                                                                                 "might be used in conjunction with",
                                                                             };
 
         private static readonly string[] UsedInCombinationUnclearPhrases =
                                                                            {
+                                                                               "expected to be used in combination with",
+                                                                               "expected to be used in conjunction with",
+                                                                               "intended to be used in combination with",
+                                                                               "intended to be used in conjunction with",
                                                                                "meant to be used in combination with",
                                                                                "meant to be used in conjunction with",
                                                                            };
 
         private static readonly string[] UsedInPluralPhrases =
                                                                {
-                                                                   "are to be used in",
-                                                                   "are intended to be used in",
-                                                                   "are meant to be used in",
-                                                                   "are primarily meant to be used in",
+                                                                   "are primarily expected to be used by",
+                                                                   "are primarily expected to be used for",
+                                                                   "are primarily expected to be used in",
+                                                                   "are primarily intended to be used by",
+                                                                   "are primarily intended to be used for",
                                                                    "are primarily intended to be used in",
+                                                                   "are primarily meant to be used by",
+                                                                   "are primarily meant to be used for",
+                                                                   "are primarily meant to be used in",
+                                                                   "are expected to be used by",
+                                                                   "are expected to be used for",
+                                                                   "are expected to be used in",
+                                                                   "are intended to be used by",
+                                                                   "are intended to be used for",
+                                                                   "are intended to be used in",
+                                                                   "are meant to be used by",
+                                                                   "are meant to be used for",
+                                                                   "are meant to be used in",
+                                                                   "are to be used by",
+                                                                   "are to be used in",
                                                                    "have to be used in",
                                                                };
 
@@ -138,17 +189,55 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      "can be used in",
                                                                      "could be used in",
                                                                      "has to be used in",
-                                                                     "is intended to be used in",
-                                                                     "is meant to be used in",
-                                                                     "is primarily meant to be used in",
+                                                                     "is primarily expected to be used by",
+                                                                     "is primarily expected to be used in",
+                                                                     "is primarily intended to be used by",
                                                                      "is primarily intended to be used in",
+                                                                     "is primarily meant to be used by",
+                                                                     "is primarily meant to be used in",
+                                                                     "is expected to be used by",
+                                                                     "is expected to be used in",
+                                                                     "is intended to be used by",
+                                                                     "is intended to be used in",
+                                                                     "is meant to be used by",
+                                                                     "is meant to be used in",
+                                                                     "might be used by",
+                                                                     "might be used for",
                                                                      "might be used in",
                                                                  };
 
         private static readonly string[] UsedInUnclearPhrases =
                                                                 {
+                                                                    "primarily expected to be used by",
+                                                                    "primarily expected to be used for",
+                                                                    "primarily expected to be used in",
+                                                                    "primarily intended to be used by",
+                                                                    "primarily intended to be used for",
+                                                                    "primarily intended to be used in",
+                                                                    "primarily meant to be used by",
+                                                                    "primarily meant to be used for",
+                                                                    "primarily meant to be used in",
+                                                                    "expected to be used by",
+                                                                    "expected to be used for",
+                                                                    "expected to be used in",
+                                                                    "intended to be used by",
+                                                                    "intended to be used for",
+                                                                    "intended to be used in",
+                                                                    "meant to be used by",
+                                                                    "meant to be used for",
                                                                     "meant to be used in",
+                                                                    "to be used by",
+                                                                    "to be used during",
+                                                                    "to be used for",
+                                                                    "to be used with",
                                                                 };
+
+        private static readonly string[] UsedWithinPhrases =
+                                                             {
+                                                                 "primarily expected to be used within",
+                                                                 "expected to be used within",
+                                                                 "to be used within",
+                                                             };
 
         public MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer() : base(Id)
         {
@@ -216,12 +305,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return Issue(location, UsedToReplacement);
                 }
 
-                foreach (var canPhrase in CanPhrases)
+                foreach (var location in GetAllLocations(token, CanPhrases, StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var location in GetAllLocations(token, canPhrase, StringComparison.OrdinalIgnoreCase))
-                    {
-                        yield return Issue(location, CanReplacement);
-                    }
+                    yield return Issue(location, CanReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, CanPluralPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, CanPluralReplacement);
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
@@ -287,6 +378,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var location in GetAllLocations(token, UsedByPhrase, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedByReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedWhenPhrase, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedWhenReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedWithinPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedWithinReplacement);
                 }
             }
         }
