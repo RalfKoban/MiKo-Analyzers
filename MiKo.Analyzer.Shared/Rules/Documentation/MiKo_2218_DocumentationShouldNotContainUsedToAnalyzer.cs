@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -16,6 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2218";
+
+        private const string TextKey = "TextKey";
+        private const string TextReplacementKey = "TextReplacementKey";
 
         private const string CanReplacement = "allows to";
         private const string UsedToReplacement = "to";
@@ -55,6 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                              "that shall be used to",
                                                              "that should be used in order to",
                                                              "that should be used to",
+                                                             "that should currently be used in order to",
+                                                             "that should currently be used to",
                                                              "that will be used in order to",
                                                              "that will be used to",
                                                              "that would be used in order to",
@@ -69,6 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                              "which shall be used to",
                                                              "which should be used in order to",
                                                              "which should be used to",
+                                                             "which should currently be used in order to",
+                                                             "which should currently be used to",
                                                              "which will be used in order to",
                                                              "which will be used to",
                                                              "which would be used in order to",
@@ -148,11 +154,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static XmlTextSyntax GetBetterText(XmlTextSyntax node)
+        internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
         {
             var tokens = node.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
 
-            var textSoFar = string.Empty;
+            var properties = issue.Properties;
+            var textToReplace = properties[TextKey];
+            var textToReplaceWith = properties[TextReplacementKey];
 
             var tokensToReplace = new Dictionary<SyntaxToken, SyntaxToken>();
 
@@ -166,60 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
-                var sb = new StringBuilder(text);
-
-                sb.ReplaceAll(UsedToPhrases, UsedToReplacement)
-                  .ReplaceWithCheck(UsedByPhrase, UsedByReplacement)
-                  .ReplaceWithCheck(UsedByPhrase.ToUpperCaseAt(0), UsedByReplacement.ToUpperCaseAt(0));
-
-                // TODO RKN: Use stringBuilder for replacement
-                var result = sb.ToString();
-
-                result = ReplaceSpecialPhrase(IsUsedToPhrase, result, Verbalizer.MakeThirdPersonSingularVerb);
-                result = ReplaceSpecialPhrase(AreUsedToPhrase, result, _ => _);
-                result = ReplaceSpecialPhrase(UsedToPhrase.ToUpperCaseAt(0), result, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0));
-
-                foreach (var canPhrase in CanPhrases)
-                {
-                    result = result.Replace(canPhrase.ToUpperCaseAt(0), CanReplacement.ToUpperCaseAt(0));
-
-                    // special situation for <param> texts
-                    var belowParam = node.Ancestors<XmlElementSyntax>().Any(_ => _.GetName() == Constants.XmlTag.Param);
-
-                    if (belowParam)
-                    {
-                        // let's find out if we have the first sentence
-                        var canIndex = result.IndexOf(canPhrase, StringComparison.Ordinal);
-
-                        if (canIndex != -1)
-                        {
-                            var firstSentence = textSoFar.LastIndexOf('.') == -1 && canIndex < result.IndexOf('.');
-
-                            if (firstSentence)
-                            {
-                                // we seem to be in the first sentence
-                                result = result.Replace(canPhrase, UsedToReplacement);
-                            }
-                        }
-                    }
-                }
-
-                result = new StringBuilder(result).ReplaceAll(CanPhrases, CanReplacement)
-                                                  .ReplaceWithCheck(UsedToPhrase, UsedToReplacement)
-                                                  .ReplaceAll(UsedInCombinationPluralPhrases, UsedInCombinationPluralReplacement)
-                                                  .ReplaceAll(UsedInCombinationSingularPhrases, UsedInCombinationSingularReplacement)
-                                                  .ReplaceAll(UsedInCombinationUnclearPhrases, UsedInCombinationUnclearReplacement)
-                                                  .ReplaceAll(UsedInPluralPhrases, UsedInPluralReplacement)
-                                                  .ReplaceAll(UsedInSingularPhrases, UsedInSingularReplacement)
-                                                  .ReplaceAll(UsedInUnclearPhrases, UsedInUnclearReplacement)
-                                                  .ToString();
-
-                textSoFar += result;
-
-                if (result.Length != text.Length)
-                {
-                    tokensToReplace[token] = token.WithText(result);
-                }
+                tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
             }
 
             if (tokensToReplace.Any())
@@ -252,47 +207,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static string ReplaceSpecialPhrase(string phrase, string text, Func<string, string> replacementCallback)
-        {
-            var result = text;
-
-            while (true)
-            {
-                if (result.Length == 0)
-                {
-                    // no text left to search within
-                    break;
-                }
-
-                var index = result.IndexOf(phrase, StringComparison.Ordinal);
-
-                if (index < 0)
-                {
-                    // nothing found anymore
-                    break;
-                }
-
-                var firstWord = result.AsSpan(index + phrase.Length).FirstWord();
-
-                if (firstWord.EndsWithAny(Constants.SentenceMarkers))
-                {
-                    // trim any sentence markers
-                    firstWord = firstWord.Slice(0, firstWord.Length - 1);
-                }
-
-                var nextWord = firstWord.ToString();
-
-                var nextWordEnd = result.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length;
-
-                var replaceText = result.Substring(index, nextWordEnd - index);
-                var replacement = replacementCallback(nextWord);
-
-                result = result.Replace(replaceText, replacement);
-            }
-
-            return result;
-        }
-
         private IEnumerable<Diagnostic> AnalyzeCommentXml(DocumentationCommentTriviaSyntax comment)
         {
             foreach (var token in comment.GetXmlTextTokens())
@@ -304,28 +218,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var canPhrase in CanPhrases)
                 {
-                    foreach (var location in GetAllLocations(token, canPhrase.ToUpperCaseAt(0)))
-                    {
-                        yield return Issue(location, CanReplacement.ToUpperCaseAt(0));
-                    }
-
-                    foreach (var location in GetAllLocations(token, canPhrase))
+                    foreach (var location in GetAllLocations(token, canPhrase, StringComparison.OrdinalIgnoreCase))
                     {
                         yield return Issue(location, CanReplacement);
                     }
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
-                {
-                    yield return issue;
-                }
-
                 foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
-                {
-                    yield return issue;
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb))
                 {
                     yield return issue;
                 }
@@ -335,14 +234,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return issue;
                 }
 
-                foreach (var location in GetAllLocations(token, UsedToPhrase))
-                {
-                    yield return Issue(location, UsedToReplacement);
-                }
-
-                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhrase.ToUpperCaseAt(0), _ => UsedToReplacement.ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     yield return issue;
+                }
+
+                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase, Verbalizer.MakeThirdPersonSingularVerb))
+                {
+                    yield return issue;
+                }
+
+                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase, Verbalizer.MakeInfiniteVerb))
+                {
+                    yield return issue;
+                }
+
+                foreach (var location in GetAllLocations(token, UsedToPhrase)) // do not use case insensitive here
+                {
+                    yield return Issue(location, UsedToReplacement);
                 }
 
                 foreach (var location in GetAllLocations(token, UsedInCombinationPluralPhrases, StringComparison.OrdinalIgnoreCase))
@@ -384,8 +293,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
         {
-            var makeUpper = startingPhrase[0].IsUpperCase();
-
             foreach (var location in GetAllLocations(token, startingPhrase))
             {
                 var start = location.SourceSpan.Start;
@@ -399,16 +306,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var end = textAfterStartingPhrase.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length + offset;
 
                 var finalLocation = CreateLocation(token, start, end);
-
                 var replacement = replacementCallback(nextWord.ToString());
-
-                if (makeUpper)
-                {
-                    replacement = replacement.ToUpperCaseAt(0);
-                }
 
                 yield return Issue(finalLocation, replacement);
             }
+        }
+
+        private Diagnostic Issue(Location location, string replacement)
+        {
+            var text = location.GetText();
+
+            if (text[0].IsUpperCaseLetter())
+            {
+                text = text.ToUpperCaseAt(0);
+                replacement = replacement.ToUpperCaseAt(0);
+            }
+
+            var properties = new Dictionary<string, string>
+                                 {
+                                     { TextKey, text },
+                                     { TextReplacementKey, replacement },
+                                 };
+
+            return Issue(location, replacement, properties);
         }
     }
 }

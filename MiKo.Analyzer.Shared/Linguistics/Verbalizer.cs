@@ -224,7 +224,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
+            if (value.EndsWithAny(Constants.SentenceMarkers))
+            {
+                return ThirdPersonSingularVerbs.GetOrAdd(value, CreateThirdPersonSingularVerbForSentence);
+            }
+
             return ThirdPersonSingularVerbs.GetOrAdd(value, CreateThirdPersonSingularVerb);
+
+            string CreateThirdPersonSingularVerbForSentence(string sentenceEnding)
+            {
+                var word = sentenceEnding.Substring(0, value.Length - 1);
+
+                return CreateThirdPersonSingularVerb(word) + value.Last();
+            }
 
             string CreateThirdPersonSingularVerb(string word)
             {

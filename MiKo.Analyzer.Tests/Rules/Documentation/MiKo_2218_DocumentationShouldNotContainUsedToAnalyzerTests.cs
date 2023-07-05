@@ -35,6 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "that shall be used in order to", "to" },
                                                                          { "that should be used to", "to" },
                                                                          { "that should be used in order to", "to" },
+                                                                         { "that should currently be used to", "to" },
+                                                                         { "that should currently be used in order to", "to" },
                                                                          { "that will be used to", "to" },
                                                                          { "that will be used in order to", "to" },
                                                                          { "that would be used to", "to" },
@@ -53,6 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "which shall be used in order to", "to" },
                                                                          { "which should be used to", "to" },
                                                                          { "which should be used in order to", "to" },
+                                                                         { "which should currently be used to", "to" },
+                                                                         { "which should currently be used in order to", "to" },
                                                                          { "which will be used to", "to" },
                                                                          { "which will be used in order to", "to" },
                                                                          { "which would be used to", "to" },
@@ -222,7 +226,7 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
-        [TestCase("The information can be used to do something.", "The information to do something.")]
+        [TestCase("The information can be used to do something.", "The information allows to do something.")]
         [TestCase("The information. It can be used to analyze stuff.", "The information. It allows to analyze stuff.")]
         [TestCase("The information. Can be used to analyze stuff.", "The information. Allows to analyze stuff.")]
         [TestCase("The information is used to connect.", "The information connects.")]
@@ -281,6 +285,34 @@ public class TestMe
     public void DoSomething(object o)
     {
     }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_param_text_with_on_record()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <param name=""o"">
+/// An object that is used to order this stuff.
+/// </param>
+public sealed record TestMe(object o)
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <param name=""o"">
+/// An object that orders this stuff.
+/// </param>
+public sealed record TestMe(object o)
+{
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
