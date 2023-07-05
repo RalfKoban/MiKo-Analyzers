@@ -234,7 +234,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var alreadyReportedLocations = new List<Location>();
 
-            var issues = AnalyzeCommentXml(comment);
+            var issues = AnalyzeCommentXml(comment).OrderByDescending(_ => _.Location.SourceSpan.Length).ToList(); // find largest parts first
 
             foreach (var issue in issues)
             {

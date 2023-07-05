@@ -156,11 +156,20 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_text_in_class_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
 /// It " + phrase + @" do something.
 /// </summary>
 public class TestMe
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_text_in_record_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
+/// <summary>
+/// It " + phrase + @" do something.
+/// </summary>
+public sealed record TestMe(int primary)
 {
 }");
 
