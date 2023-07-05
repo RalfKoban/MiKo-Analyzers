@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1088_SingletonInstancesShouldBeNamedInstanceAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] FieldPrefixes = { "m_", "s_", "t_", "_", };
+        private static readonly string[] FieldPrefixes = { "m_", "s_", "t_", "_", string.Empty, };
 
         [Test]
         public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"
@@ -85,7 +85,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_property_([Values("Instance", "Empty", "Default")] string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_property_([Values("Instance", "Empty", "Default", "Zero")] string propertyName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static TestMe " + propertyName + @" { get; set; }
@@ -93,7 +93,10 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_field_([ValueSource(nameof(FieldPrefixes))] string prefix, [Values("instance", "empty", "default")] string fieldName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_field_(
+                                                                                            [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                                                                            [Values("instance", "empty", "default", "zero", "Instance", "Empty", "Default", "Zero")] string fieldName)
+            => No_issue_is_reported_for(@"
 public class TestMe
 {
     public static TestMe " + prefix + fieldName + @";
