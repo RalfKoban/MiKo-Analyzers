@@ -205,12 +205,22 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (word.EndsWith('s'))
                 {
+                    if (word.Equals("is", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                    }
+
                     if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
                     {
                         return word.WithoutSuffix("es");
                     }
 
                     return word.WithoutSuffix("s");
+                }
+
+                if (word.Equals("are", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Be" : "be";
                 }
 
                 return word;
@@ -266,6 +276,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         return word;
                     }
+                }
+
+                if (word.Equals("be", StringComparison.OrdinalIgnoreCase) || word.Equals("are", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Is" : "is";
                 }
 
                 if (word.Equals("will", StringComparison.OrdinalIgnoreCase))
