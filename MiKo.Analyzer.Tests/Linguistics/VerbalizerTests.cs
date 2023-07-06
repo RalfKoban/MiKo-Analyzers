@@ -69,6 +69,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Are", ExpectedResult = "Be")]
         [TestCase("be", ExpectedResult = "be")]
         [TestCase("Be", ExpectedResult = "Be")]
+        [TestCase("has", ExpectedResult = "have")]
+        [TestCase("Has", ExpectedResult = "Have")]
         public static string MakeInfiniteVerb_finds_proper_infinite_verb_(string name) => Verbalizer.MakeInfiniteVerb(name);
 
         [TestCase("access", ExpectedResult = "accesses")]
@@ -105,6 +107,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Are", ExpectedResult = "Is")]
         [TestCase("be", ExpectedResult = "is")]
         [TestCase("Be", ExpectedResult = "Is")]
+        [TestCase("have", ExpectedResult = "has")]
+        [TestCase("Have", ExpectedResult = "Has")]
         public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
 
         [TestCase("access", ExpectedResult = false)]
