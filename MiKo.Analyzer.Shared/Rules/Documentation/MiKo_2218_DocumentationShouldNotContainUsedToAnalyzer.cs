@@ -43,6 +43,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string UsedWithinReplacement = "applicable to";
 
+        private const string UsedToDetermineInSingularReplacement = "defines";
+        private const string UsedToDetermineInPluralReplacement = "define";
+
         private static readonly string[] CanPhrases =
                                                       {
                                                           "can be used in order to",
@@ -239,6 +242,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  "to be used within",
                                                              };
 
+        private static readonly string[] UsedToDetermineInSingular =
+                                                                     {
+                                                                         "is used to determine",
+                                                                         "is used to find out",
+                                                                         "is used to check",
+                                                                     };
+
+        private static readonly string[] UsedToDetermineInPlural =
+                                                                   {
+                                                                       "are used to determine",
+                                                                       "are used to find out",
+                                                                       "are used to check",
+                                                                   };
+
         public MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer() : base(Id)
         {
         }
@@ -313,6 +330,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var location in GetAllLocations(token, CanPluralPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, CanPluralReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedToDetermineInSingular, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedToDetermineInSingularReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedToDetermineInPlural, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedToDetermineInPluralReplacement);
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))

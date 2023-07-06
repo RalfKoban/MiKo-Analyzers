@@ -294,6 +294,12 @@ public class TestMe
         [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
         [TestCase("To be used by stuff.", "Suitable for stuff.")]
         [TestCase("Something to be used by stuff.", "Something suitable for stuff.")]
+        [TestCase("This object is used to determine whether something has to be done.", "This object defines whether something has to be done.")]
+        [TestCase("These objects are used to determine whether something has to be done.", "These objects define whether something has to be done.")]
+        [TestCase("This object is used to find out whether something has to be done.", "This object defines whether something has to be done.")]
+        [TestCase("These objects are used to find out whether something has to be done.", "These objects define whether something has to be done.")]
+        [TestCase("This object is used to check whether something has to be done.", "This object defines whether something has to be done.")]
+        [TestCase("These objects are used to check whether something has to be done.", "These objects define whether something has to be done.")]
         public void Code_gets_fixed_for_special_case_text_(string originalCode, string fixedCode)
         {
             const string Template = @"
