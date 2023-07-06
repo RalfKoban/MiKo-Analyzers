@@ -26,14 +26,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var textAfterStartingPhrase = token.ValueText.AsSpan(index);
                 var nextWord = textAfterStartingPhrase.FirstWord();
 
+                // jump over an adjective as next word
+                var adjective = ReadOnlySpan<char>.Empty;
+
+                if (nextWord.EndsWith("ly", StringComparison.Ordinal))
+                {
+                    adjective = nextWord;
+
+                    nextWord = textAfterStartingPhrase.SecondWord();
+                }
+
                 // let's find the end of the next word in the source code (but keep in mind the offset of the starting phrase)
                 var offset = start + startingPhrase.Length;
                 var end = textAfterStartingPhrase.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length + offset;
 
-                var finalLocation = CreateLocation(token, start, end);
                 var replacement = replacementCallback(nextWord.ToString());
 
-                yield return Issue(finalLocation, replacement);
+                var finalReplacement = adjective.Length > 0
+                                       ? adjective.ToString() + " " + replacement
+                                       : replacement;
+
+                var finalLocation = CreateLocation(token, start, end);
+
+                yield return Issue(finalLocation, finalReplacement);
             }
         }
 
