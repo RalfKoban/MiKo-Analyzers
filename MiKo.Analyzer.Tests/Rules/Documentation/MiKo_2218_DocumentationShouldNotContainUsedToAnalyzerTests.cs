@@ -31,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "is primarily expected to be used to", "allows to" },
                                                                          { "is primarily intended to be used to", "allows to" },
                                                                          { "is primarily meant to be used to", "allows to" },
+                                                                         { "may be used to", "allows to" },
                                                                          { "might be used to", "allows to" },
 
                                                                          // parts starting with 'that'
@@ -174,6 +175,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "meant to be used in combination with", "made to work with" },
                                                                          { "meant to be used in conjunction with", "made to work with" },
                                                                          { "meant to be used in", "suitable for" },
+                                                                         { "may be used by", "is suitable for" },
+                                                                         { "may be used for", "is suitable for" },
+                                                                         { "may be used in combination with", "is made to work with" },
+                                                                         { "may be used in conjunction with", "is made to work with" },
+                                                                         { "may be used in", "is suitable for" },
                                                                          { "might be used by", "is suitable for" },
                                                                          { "might be used for", "is suitable for" },
                                                                          { "might be used in combination with", "is made to work with" },
