@@ -44,6 +44,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                              new KeyValuePair<string, string>("sis", "ze"),
                                                                          };
 
+        private static readonly string[] IsAre = { "is", "are" };
+
         private static readonly string[] StartingPhrases = new[]
                                                            {
                                                                "Add",
@@ -181,6 +183,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateGerundVerb(string word)
             {
+                if (word.EqualsAny(IsAre, StringComparison.OrdinalIgnoreCase))
+                {
+                    return word;
+                }
+
+                if (word.Equals("has", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Having" : "having";
+                }
+
+                if (word.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Shutting down" : "shutting down";
+                }
+
                 if (word.EndsWith("ing", StringComparison.Ordinal))
                 {
                     return word;
@@ -296,6 +313,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.Equals("will", StringComparison.OrdinalIgnoreCase))
                 {
                     return word;
+                }
+
+                if (word.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Shuts down" : "shuts down";
                 }
 
                 var result = word + 's';

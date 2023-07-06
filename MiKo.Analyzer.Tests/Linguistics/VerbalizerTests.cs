@@ -109,6 +109,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("Be", ExpectedResult = "Is")]
         [TestCase("have", ExpectedResult = "has")]
         [TestCase("Have", ExpectedResult = "Has")]
+        [TestCase("shutdown", ExpectedResult = "shuts down")]
+        [TestCase("Shutdown", ExpectedResult = "Shuts down")]
         public static string MakeThirdPersonSingularVerb_finds_proper_3rd_person_singular_verb_(string name) => Verbalizer.MakeThirdPersonSingularVerb(name);
 
         [TestCase("access", ExpectedResult = false)]
@@ -133,6 +135,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("continue", ExpectedResult = "continuing")]
         [TestCase("invite", ExpectedResult = "inviting")]
         [TestCase("wrap", ExpectedResult = "wrapping")]
+        [TestCase("is", ExpectedResult = "is")]
+        [TestCase("are", ExpectedResult = "are")]
+        [TestCase("has", ExpectedResult = "having")]
+        [TestCase("Has", ExpectedResult = "Having")]
+        [TestCase("shutdown", ExpectedResult = "shutting down")]
+        [TestCase("Shutdown", ExpectedResult = "Shutting down")]
         public static string MakeGerundVerb_finds_proper_gerund_verb_(string name) => Verbalizer.MakeGerundVerb(name);
     }
 }
