@@ -162,12 +162,14 @@ public interface ITestMe
         [TestCase("It will be something.", "It is something.")]
         [TestCase("It will also be something.", "It is something.")]
         [TestCase("It will as well be something.", "It is something.")]
-        [TestCase("It will return.", "It does return.")]
-        [TestCase("It is something (will leave something)", "It is something (does leave something)")]
+        [TestCase("It will return.", "It returns.")]
+        [TestCase("It is something (will leave something)", "It is something (leaves something)")]
         [TestCase("It will not be something.", "It is not something.")]
         [TestCase("It will not contain something.", "It does not contain something.")]
         [TestCase("It will never be something.", "It is never something.")]
-        [TestCase("It will never return.", "It does never return.")]
+        [TestCase("It will never return.", "It never returns.")]
+        [TestCase("Will return.", "Returns.")]
+        [TestCase("Will never return.", "Never returns.")]
         public void Code_gets_fixed_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"

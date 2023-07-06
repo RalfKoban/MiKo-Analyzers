@@ -5947,7 +5947,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;will be&apos; in documentation.
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2049_MessageFormat {
             get {

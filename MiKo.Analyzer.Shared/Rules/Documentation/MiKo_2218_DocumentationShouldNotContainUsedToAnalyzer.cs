@@ -291,6 +291,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return node;
         }
 
+        protected override Diagnostic Issue(Location location, string replacement)
+        {
+            var text = location.GetText();
+
+            if (text[0].IsUpperCaseLetter())
+            {
+                text = text.ToUpperCaseAt(0);
+                replacement = replacement.ToUpperCaseAt(0);
+            }
+
+            var properties = new Dictionary<string, string>
+                                 {
+                                     { TextKey, text },
+                                     { TextReplacementKey, replacement },
+                                 };
+
+            return Issue(location, replacement, properties);
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             var alreadyReportedLocations = new List<Location>();
@@ -417,46 +436,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return Issue(location, UsedWithinReplacement);
                 }
             }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeForSpecialPhrase(SyntaxToken token, string startingPhrase, Func<string, string> replacementCallback)
-        {
-            foreach (var location in GetAllLocations(token, startingPhrase))
-            {
-                var start = location.SourceSpan.Start;
-                var index = start - token.SpanStart + startingPhrase.Length;
-
-                var textAfterStartingPhrase = token.ValueText.AsSpan(index);
-                var nextWord = textAfterStartingPhrase.FirstWord();
-
-                // let's find the end of the next word in the source code (but keep in mind the offset of the starting phrase)
-                var offset = start + startingPhrase.Length;
-                var end = textAfterStartingPhrase.IndexOf(nextWord, StringComparison.Ordinal) + nextWord.Length + offset;
-
-                var finalLocation = CreateLocation(token, start, end);
-                var replacement = replacementCallback(nextWord.ToString());
-
-                yield return Issue(finalLocation, replacement);
-            }
-        }
-
-        private Diagnostic Issue(Location location, string replacement)
-        {
-            var text = location.GetText();
-
-            if (text[0].IsUpperCaseLetter())
-            {
-                text = text.ToUpperCaseAt(0);
-                replacement = replacement.ToUpperCaseAt(0);
-            }
-
-            var properties = new Dictionary<string, string>
-                                 {
-                                     { TextKey, text },
-                                     { TextReplacementKey, replacement },
-                                 };
-
-            return Issue(location, replacement, properties);
         }
     }
 }
