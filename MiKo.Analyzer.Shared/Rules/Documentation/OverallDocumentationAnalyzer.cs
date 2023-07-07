@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // jump over an adjective as next word
                 var adjective = ReadOnlySpan<char>.Empty;
 
-                if (nextWord.EndsWith("ly", StringComparison.Ordinal))
+                if (nextWord.EndsWith("ly", StringComparison.OrdinalIgnoreCase) && nextWord.EndsWith("ply", StringComparison.OrdinalIgnoreCase) is false)
                 {
                     adjective = nextWord;
 

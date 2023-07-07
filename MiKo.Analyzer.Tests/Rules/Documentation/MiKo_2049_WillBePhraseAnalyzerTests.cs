@@ -172,6 +172,7 @@ public interface ITestMe
         [TestCase("Will never return.", "Never returns.")]
         [TestCase("It will automatically return.", "It automatically returns.")]
         [TestCase("It will randomly return.", "It randomly returns.")]
+        [TestCase("It will apply something to it.", "It applies something to it.")]
         public void Code_gets_fixed_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
