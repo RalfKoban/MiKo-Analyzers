@@ -19,8 +19,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string TextKey = "TextKey";
         private const string TextReplacementKey = "TextReplacementKey";
 
-        private const string NeverPhrase = "never";
+        private const string AcceptedPhrase = "willing";
+
         private const string WillPhrase = "will";
+        private const string NeverPhrase = "never";
         private const string WillNeverPhrase = WillPhrase + " " + NeverPhrase;
 
         private static readonly IDictionary<string, string> PhrasesMap = new Dictionary<string, string>
@@ -31,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                  { "will not be", "is not" },
                                                                                  { "will not", "does not" },
                                                                                  { "will never be", "is never" },
+                                                                                 { "will base", "is based" },
                                                                              };
 
         private static readonly string[] Phrases = GetWithDelimiters(PhrasesMap.Keys.ToArray());
@@ -93,7 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var alreadyReportedLocations = new List<Location>();
 
-            var issues = AnalyzeCommentXml(comment).OrderByDescending(_ => _.Location.SourceSpan.Length).ToList(); // find largest parts first
+            var issues = AnalyzeCommentXml(comment).OrderByDescending(_ => _.Location.SourceSpan.Length); // find largest parts first
 
             foreach (var issue in issues)
             {
@@ -119,9 +122,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
-                    var text = location.GetText();
+                    var text = location.GetText().ToLowerInvariant();
 
-                    if (PhrasesMap.TryGetValue(text.ToLowerInvariant(), out var replacement))
+                    if (PhrasesMap.TryGetValue(text, out var replacement))
                     {
                         yield return Issue(location, replacement);
                     }
@@ -129,12 +132,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
-                    yield return issue;
+                    var text = issue.Location.GetText().ToLowerInvariant();
+
+                    if (text.Contains(AcceptedPhrase) is false)
+                    {
+                        yield return issue;
+                    }
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhrase, Verbalizer.MakeThirdPersonSingularVerb))
                 {
-                    yield return issue;
+                    var text = issue.Location.GetText().ToLowerInvariant();
+
+                    if (text.Contains(AcceptedPhrase) is false)
+                    {
+                        yield return issue;
+                    }
                 }
 
                 foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhrase.ToUpperCaseAt(0), _ => NeverPhrase.ToUpperCaseAt(0) + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))

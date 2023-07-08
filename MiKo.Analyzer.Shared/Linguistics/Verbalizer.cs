@@ -130,8 +130,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                "Write",
                                                                "Zoom",
                                                            }.OrderBy(_ => _.Length)
-                                                                .ThenBy(_ => _)
-                                                                .ToArray();
+                                                            .ThenBy(_ => _)
+                                                            .ToArray();
 
         private static readonly string[] MiddlePhrases = new[]
                                                          {
@@ -140,8 +140,30 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                              "InformedAbout",
                                                              "BelongsTo",
                                                          }.OrderBy(_ => _.Length)
-                                                                .ThenBy(_ => _)
-                                                                .ToArray();
+                                                          .ThenBy(_ => _)
+                                                          .ToArray();
+
+        private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
+
+        private static readonly string[] AdjectivesOrAdverbs =
+                                                               {
+                                                                   "also",
+                                                                   "just",
+                                                                   "than",
+                                                                   "then",
+                                                                   "however",
+                                                                   "therefore",
+                                                               };
+
+        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value)
+        {
+            if (value.EndsWith("ly", StringComparison.OrdinalIgnoreCase))
+            {
+                return value.EndsWith("ply", StringComparison.OrdinalIgnoreCase) is false;
+            }
+
+            return value.EqualsAny(AdjectivesOrAdverbs, StringComparison.OrdinalIgnoreCase);
+        }
 
         public static bool IsThirdPersonSingularVerb(string value)
         {
@@ -256,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
-            if (value.EndsWithAny(Constants.SentenceMarkers))
+            if (value.EndsWithAny(SentenceEndingMarkers))
             {
                 return ThirdPersonSingularVerbs.GetOrAdd(value, CreateThirdPersonSingularVerbForSentence);
             }
@@ -265,9 +287,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateThirdPersonSingularVerbForSentence(string sentenceEnding)
             {
-                var word = sentenceEnding.Substring(0, value.Length - 1);
+                var word = sentenceEnding.TrimEnd(SentenceEndingMarkers);
 
-                return CreateThirdPersonSingularVerb(word) + value.Last();
+                return CreateThirdPersonSingularVerb(word) + sentenceEnding.Substring(word.Length);
             }
 
             string CreateThirdPersonSingularVerb(string word)
@@ -298,6 +320,51 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     {
                         return word;
                     }
+                }
+
+                if (word.EndsWith("ed", StringComparison.Ordinal))
+                {
+                    if (word.EndsWith("ated", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("dded", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 2) + 's';
+                    }
+
+                    if (word.EndsWith("dled", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("tted", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 3) + 's';
+                    }
+
+                    if (word.EndsWith("ced", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("eed", StringComparison.Ordinal))
+                    {
+                        return word + 's';
+                    }
+
+                    if (word.EndsWith("sed", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("ved", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    return word.Substring(0, word.Length - 2) + 's';
                 }
 
                 if (word.Equals("be", StringComparison.OrdinalIgnoreCase) || word.Equals("are", StringComparison.OrdinalIgnoreCase))

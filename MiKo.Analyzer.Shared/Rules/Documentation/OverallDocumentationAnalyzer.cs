@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class OverallDocumentationAnalyzer : DocumentationAnalyzer
@@ -29,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // jump over an adjective as next word
                 var adjective = ReadOnlySpan<char>.Empty;
 
-                if (nextWord.EndsWith("ly", StringComparison.OrdinalIgnoreCase) && nextWord.EndsWith("ply", StringComparison.OrdinalIgnoreCase) is false)
+                if (Verbalizer.IsAdjectiveOrAdverb(nextWord))
                 {
                     adjective = nextWord;
 
@@ -43,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacement = replacementCallback(nextWord.ToString());
 
                 var finalReplacement = adjective.Length > 0
-                                       ? adjective.ToString() + " " + replacement
+                                       ? adjective.ToString() + " " + replacement.ToLowerCaseAt(0)
                                        : replacement;
 
                 var finalLocation = CreateLocation(token, start, end);

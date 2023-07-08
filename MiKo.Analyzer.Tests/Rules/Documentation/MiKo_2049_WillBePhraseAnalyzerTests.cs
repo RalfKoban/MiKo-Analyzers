@@ -69,6 +69,16 @@ public class TestMe
 }
 ");
 
+        [TestCase("Something not willing to do anything.")]
+        public void No_issue_is_reported_for_specific_comment_(string phrase) => No_issue_is_reported_for(@"
+using System;
+
+/// <summary>" + phrase + @"</summary>
+public class TestMe
+{
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_incorrectly_documented_class_([ValueSource(nameof(XmlTags))] string tag, [ValueSource(nameof(Phrases))] string phrase) => An_issue_is_reported_for(@"
 using System;
@@ -164,6 +174,7 @@ public interface ITestMe
         [TestCase("It will as well be something.", "It is something.")]
         [TestCase("It will return.", "It returns.")]
         [TestCase("It is something (will leave something)", "It is something (leaves something)")]
+        [TestCase("It is something (will exist).", "It is something (exists).")]
         [TestCase("It will not be something.", "It is not something.")]
         [TestCase("It will not contain something.", "It does not contain something.")]
         [TestCase("It will never be something.", "It is never something.")]
@@ -173,6 +184,14 @@ public interface ITestMe
         [TestCase("It will automatically return.", "It automatically returns.")]
         [TestCase("It will randomly return.", "It randomly returns.")]
         [TestCase("It will apply something to it.", "It applies something to it.")]
+        [TestCase("Something will added to something else.", "Something adds to something else.")]
+        [TestCase("The object will also get notified.", "The object also gets notified.")]
+        [TestCase("The object will just get notified.", "The object just gets notified.")]
+        [TestCase("The object will then get notified.", "The object then gets notified.")]
+        [TestCase("The object will than get notified.", "The object than gets notified.")] // typo 'than' instead of 'then'
+        [TestCase("The object will therefore get notified.", "The object therefore gets notified.")]
+        [TestCase("The object will however get notified.", "The object however gets notified.")]
+        [TestCase("The object that the search will base on.", "The object that the search is based on.")]
         public void Code_gets_fixed_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
