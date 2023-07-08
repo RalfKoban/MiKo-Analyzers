@@ -38,7 +38,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string UsedByPhrase = "to be used by";
         private const string UsedByReplacement = "for";
 
-        private const string UsedWhenPhrase = "to be used when";
         private const string UsedWhenReplacement = "suitable when";
 
         private const string UsedWithinReplacement = "applicable to";
@@ -262,6 +261,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "are used to check",
                                                                    };
 
+        private static readonly string[] UsedWhenPhrases =
+                                                           {
+                                                               "intended to be used when",
+                                                               "to be used when",
+                                                           };
+
         public MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer() : base(Id)
         {
         }
@@ -432,7 +437,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return Issue(location, UsedByReplacement);
                 }
 
-                foreach (var location in GetAllLocations(token, UsedWhenPhrase, StringComparison.OrdinalIgnoreCase))
+                foreach (var location in GetAllLocations(token, UsedWhenPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedWhenReplacement);
                 }
