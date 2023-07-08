@@ -28,14 +28,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var textAfterStartingPhrase = token.ValueText.AsSpan(index);
                 var nextWord = textAfterStartingPhrase.FirstWord();
 
-                // jump over an adjective as next word
                 var adjective = ReadOnlySpan<char>.Empty;
 
                 if (Verbalizer.IsAdjectiveOrAdverb(nextWord))
                 {
+                    // jump over an adjective or adverb as next word
                     adjective = nextWord;
 
                     nextWord = textAfterStartingPhrase.SecondWord();
+
+                    if (Verbalizer.IsAdjectiveOrAdverb(nextWord))
+                    {
+                        // jump over an adjective or adverb as next word
+                        nextWord = textAfterStartingPhrase.ThirdWord();
+
+                        adjective = textAfterStartingPhrase.Slice(0, textAfterStartingPhrase.IndexOf(nextWord)).Trim(Constants.WhiteSpaceCharacters);
+                    }
                 }
 
                 // let's find the end of the next word in the source code (but keep in mind the offset of the starting phrase)

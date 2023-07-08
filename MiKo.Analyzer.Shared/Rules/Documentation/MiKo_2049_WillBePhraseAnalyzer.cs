@@ -33,7 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                  { "will not be", "is not" },
                                                                                  { "will not", "does not" },
                                                                                  { "will never be", "is never" },
+                                                                                 { "will also never be", "is also never" },
                                                                                  { "will base", "is based" },
+                                                                                 { "will all be", "all are" },
+                                                                                 { "will all", "all" },
+                                                                                 { "will always be", "is always" },
+                                                                                 { "will both be", "are both" },
                                                                              };
 
         private static readonly string[] Phrases = GetWithDelimiters(PhrasesMap.Keys.ToArray());

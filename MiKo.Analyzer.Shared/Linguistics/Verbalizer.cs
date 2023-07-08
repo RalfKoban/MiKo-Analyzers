@@ -147,19 +147,37 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AdjectivesOrAdverbs =
                                                                {
+                                                                   "afterwards",
                                                                    "also",
+                                                                   "already",
+                                                                   "always",
+                                                                   "before",
+                                                                   "either",
+                                                                   "first",
+                                                                   "however",
+                                                                   "in",
                                                                    "just",
+                                                                   "later",
+                                                                   "longer",
+                                                                   "no",
+                                                                   "not",
+                                                                   "now",
                                                                    "than",
                                                                    "then",
-                                                                   "however",
                                                                    "therefore",
+                                                                   "turn",
                                                                };
 
         public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value)
         {
             if (value.EndsWith("ly", StringComparison.OrdinalIgnoreCase))
             {
-                return value.EndsWith("ply", StringComparison.OrdinalIgnoreCase) is false;
+                if (value.EndsWith("ply", StringComparison.OrdinalIgnoreCase))
+                {
+                    return value.Equals("simply", StringComparison.OrdinalIgnoreCase);
+                }
+
+                return true;
             }
 
             return value.EqualsAny(AdjectivesOrAdverbs, StringComparison.OrdinalIgnoreCase);
@@ -294,6 +312,22 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateThirdPersonSingularVerb(string word)
             {
+                if (word.Length > 0)
+                {
+                    const char Apostrophe = '\'';
+                    const char DoubleQuote = '\"';
+
+                    if (word.First() == Apostrophe && word.Last() == Apostrophe)
+                    {
+                        return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
+                    }
+
+                    if (word.First() == DoubleQuote && word.Last() == DoubleQuote)
+                    {
+                        return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
+                    }
+                }
+
                 if (word.EndsWith('y'))
                 {
                     if (word.EndsWith("ay", StringComparison.Ordinal) || word.EndsWith("ey", StringComparison.Ordinal))
@@ -352,6 +386,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     if (word.EndsWith("eed", StringComparison.Ordinal))
                     {
                         return word + 's';
+                    }
+
+                    if (word.EndsWith("ged", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("ied", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("red", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
                     }
 
                     if (word.EndsWith("sed", StringComparison.Ordinal))

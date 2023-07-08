@@ -596,6 +596,10 @@ namespace System
 
         public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
 
+        public static string ThirdWord(this string text) => string.Intern(ThirdWord(text.AsSpan()).ToString());
+
+        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
+
         public static bool StartsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[0] == character;
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => string.IsNullOrEmpty(characters) is false && value.StartsWith(characters.AsSpan());
