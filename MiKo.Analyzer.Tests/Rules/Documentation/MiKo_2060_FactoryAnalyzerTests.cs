@@ -58,14 +58,36 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_inccorrectly_documented_factory_class() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_private_method_on_factory_class() => No_issue_is_reported_for(@"
 using System;
 
-/// <summary>
-/// Provides something.
-/// </summary>
 public class TestMeFactory
 {
+    /// <summary>Some documentation.</summary>
+    private object DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_boolean_public_method_on_factory_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeFactory
+{
+    /// <summary>Some documentation.</summary>
+    public bool DoSomething() => false;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_public_method_on_factory_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMeFactory
+{
+    /// <summary>Some documentation.</summary>
+    public void DoSomething()
+    { }
 }
 ");
 
@@ -91,27 +113,6 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
-using System;
-
-public class Whatever : IWhatever
-{
-}
-
-public interface IWhatever
-{
-}
-
-public class TestMeFactory
-{
-    /// <summary>
-    /// Create a <see cref=""IWhatever""" + gap + @"/> with a result.
-    /// </summary>
-    public IWhatever Create() => new Whatever();
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => No_issue_is_reported_for(@"
 using System;
 
@@ -127,27 +128,6 @@ public class TestMeFactory
 {
     /// <summary>
     /// Creates a new instance of the <see cref=""IWhatever{T}""" + gap + @"/> type with a result.
-    /// </summary>
-    public IWhatever<int> Create() => new Whatever<int>();
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
-using System;
-
-public class Whatever<T> : IWhatever<T>
-{
-}
-
-public interface IWhatever<T>
-{
-}
-
-public class TestMeFactory
-{
-    /// <summary>
-    /// Create <see cref=""IWhatever{T}""" + gap + @"/> with a result.
     /// </summary>
     public IWhatever<int> Create() => new Whatever<int>();
 }
@@ -176,28 +156,6 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_collection_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
-using System;
-using System.Collections.Generic;
-
-public class Whatever<T> : IWhatever<T>
-{
-}
-
-public interface IWhatever<T>
-{
-}
-
-public class TestMeFactory
-{
-    /// <summary>
-    /// Create <see cref=""IWhatever{T}""" + gap + @"/> with a result.
-    /// </summary>
-    public IList<IWhatever<int>> Create() => new List<Whatever<int>>();
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_documented_factory_method_on_string() => No_issue_is_reported_for(@"
 public class TestMeFactory
 {
@@ -218,6 +176,82 @@ public class TestMeFactory
     /// Creates a collection of new instances of the <see cref=""string""/> type with a result.
     /// </summary>
     public IList<string> Create() => new string[0];
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_inccorrectly_documented_factory_class() => An_issue_is_reported_for(@"
+using System;
+
+/// <summary>
+/// Provides something.
+/// </summary>
+public class TestMeFactory
+{
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+using System;
+
+public class Whatever : IWhatever
+{
+}
+
+public interface IWhatever
+{
+}
+
+public class TestMeFactory
+{
+    /// <summary>
+    /// Create a <see cref=""IWhatever""" + gap + @"/> with a result.
+    /// </summary>
+    public IWhatever Create() => new Whatever();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+using System;
+
+public class Whatever<T> : IWhatever<T>
+{
+}
+
+public interface IWhatever<T>
+{
+}
+
+public class TestMeFactory
+{
+    /// <summary>
+    /// Create <see cref=""IWhatever{T}""" + gap + @"/> with a result.
+    /// </summary>
+    public IWhatever<int> Create() => new Whatever<int>();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_factory_method_on_generic_collection_type_([Values(" ", "")] string gap) => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class Whatever<T> : IWhatever<T>
+{
+}
+
+public interface IWhatever<T>
+{
+}
+
+public class TestMeFactory
+{
+    /// <summary>
+    /// Create <see cref=""IWhatever{T}""" + gap + @"/> with a result.
+    /// </summary>
+    public IList<IWhatever<int>> Create() => new List<Whatever<int>>();
 }
 ");
 

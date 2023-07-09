@@ -17,7 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary && base.ShallAnalyze(symbol);
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.MethodKind == MethodKind.Ordinary
+                                                                   && symbol.IsPubliclyVisible()
+                                                                   && symbol.ReturnsVoid is false
+                                                                   && symbol.ReturnType.SpecialType != SpecialType.System_Boolean
+                                                                   && base.ShallAnalyze(symbol);
 
         // overridden because we want to inspect the methods of the type as well
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
