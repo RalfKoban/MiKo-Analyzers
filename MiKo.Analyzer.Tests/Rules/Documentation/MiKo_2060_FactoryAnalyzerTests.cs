@@ -344,6 +344,32 @@ public class TestMeFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_based_on_()
+        {
+            const string OriginalCode = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates an instance of <see cref=""string""/> based on the identifier.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            const string FixedCode = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""string""/> type with default values for the identifier.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         [TestCase("Create a factory")]
         [TestCase("Create a factory")]
         [TestCase("Creates an instance of <see cref=\"string\"/>")]
@@ -433,6 +459,28 @@ internal interface IFactory
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("Construct a instance of the")]
+        [TestCase("Construct a instance of")]
+        [TestCase("Construct a new instance of the")]
+        [TestCase("Construct a new instance of")]
+        [TestCase("Construct a new")]
+        [TestCase("Construct a")]
+        [TestCase("Construct an instance of the")]
+        [TestCase("Construct an instance of")]
+        [TestCase("Construct instances of the")]
+        [TestCase("Construct instances of")]
+        [TestCase("Construct new instances of the")]
+        [TestCase("Constructs a instance of the")]
+        [TestCase("Constructs a instance of")]
+        [TestCase("Constructs a new instance of the")]
+        [TestCase("Constructs a new instance of")]
+        [TestCase("Constructs a new")]
+        [TestCase("Constructs a")]
+        [TestCase("Constructs an instance of the")]
+        [TestCase("Constructs an instance of")]
+        [TestCase("Constructs instances of the")]
+        [TestCase("Constructs instances of")]
+        [TestCase("Constructs new instances of the")]
         [TestCase("Create a instance of the")]
         [TestCase("Create a instance of")]
         [TestCase("Create a new instance of the")]
@@ -459,6 +507,18 @@ internal interface IFactory
         [TestCase("Creates and initializes new instances of the")]
         [TestCase("Create and initialize a new instance of the")]
         [TestCase("Create and initialize new instances of the")]
+        [TestCase("Creates and provides a new instance of the")]
+        [TestCase("Creates and provides new instances of the")]
+        [TestCase("Creates and returns a new instance of the")]
+        [TestCase("Creates and returns new instances of the")]
+        [TestCase("Return a new instance of the")]
+        [TestCase("Return new instances of the")]
+        [TestCase("Returns a new instance of the")]
+        [TestCase("Returns new instances of the")]
+        [TestCase("Get a new instance of the")]
+        [TestCase("Get new instances of the")]
+        [TestCase("Gets a new instance of the")]
+        [TestCase("Gets new instances of the")]
         public void Code_gets_fixed_for_almost_correct_method_summary_starting_phrase_(string summary)
         {
             var originalCode = @"
@@ -533,16 +593,27 @@ internal interface IFactory
                                       "Creates",
                                       "Defines a factory that can create",
                                       "Defines a factory that creates",
+                                      "Defines a factory that provides",
+                                      "Defines a factory that is able to create",
                                       "Defines a factory to create",
                                       "Defines a factory which can create",
                                       "Defines a factory which creates",
+                                      "Defines a factory which provides",
+                                      "Defines a factory which is able to create",
+                                      "Defines a factory for",
                                       "Defines a method to create",
                                       "Defines methods to create",
                                       "Defines the factory that can create",
                                       "Defines the factory that creates",
+                                      "Defines the factory that provides",
+                                      "Defines the factory that is able to create",
                                       "Defines the factory to create",
                                       "Defines the factory which can create",
                                       "Defines the factory which creates",
+                                      "Defines the factory which provides",
+                                      "Defines the factory which is able to create",
+                                      "Defines the factory for",
+                                      "Factory for providing",
                                       "Factory for creating",
                                       "Factory for creation of",
                                       "Factory for the creation of",
@@ -567,22 +638,26 @@ internal interface IFactory
                                       "Provides a factory that creates",
                                       "Provides a factory to create",
                                       "Provides a factory which creates",
+                                      "Provides a factory for",
                                       "Provides a method to create",
                                       "Provides methods to create",
                                       "Provides the factory that creates",
                                       "Provides the factory to create",
                                       "Provides the factory which creates",
+                                      "Provides the factory for",
                                       "Provides",
                                       "Represents a factory that can create",
                                       "Represents a factory that creates",
                                       "Represents a factory to create",
                                       "Represents a factory which can create",
                                       "Represents a factory which creates",
+                                      "Represents a factory for",
                                       "Represents the factory that can create",
                                       "Represents the factory that creates",
                                       "Represents the factory to create",
                                       "Represents the factory which can create",
                                       "Represents the factory which creates",
+                                      "Represents the factory for",
                                       "The factory that can create",
                                       "The factory that creates",
                                       "The factory that provides methods to create",
