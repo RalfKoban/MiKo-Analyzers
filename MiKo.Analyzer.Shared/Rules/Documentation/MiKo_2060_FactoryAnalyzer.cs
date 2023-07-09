@@ -36,8 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (symbol)
             {
-                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, Constants.Comments.FactorySummaryPhrase);
-                case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, GetPhrases(method).ToArray());
+                case INamedTypeSymbol type: return AnalyzeStartingPhrase(type, summaries, comment, Constants.Comments.FactorySummaryPhrase);
+                case IMethodSymbol method: return AnalyzeStartingPhrase(symbol, summaries, comment, GetPhrases(method).ToArray());
                 default: return Enumerable.Empty<Diagnostic>();
             }
         }
@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : startingPhrases.Select(_ => _.FormatWith(argumentType));
         }
 
-        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, params string[] phrases)
+        private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
         {
             if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
@@ -71,7 +71,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                yield return Issue(symbol, phrases.First());
+                var summary = comment.GetSummaryXmls().First();
+
+                yield return Issue(symbol.Name, summary.GetContentsLocation(), phrases.First());
             }
         }
     }
