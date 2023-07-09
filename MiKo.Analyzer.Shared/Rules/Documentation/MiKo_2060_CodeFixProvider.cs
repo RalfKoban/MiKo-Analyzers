@@ -166,6 +166,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                               "This interface is implemented by factories",
                               "Used",
                               "Uses", // typo in 'Used'
+                              "A implementation of the factory pattern",
+                              "An implementation of the factory pattern",
+                              "The implementation of the factory pattern",
+                              "Implementation of the factory pattern",
+                              "A implementation of the abstract factory pattern",
+                              "An implementation of the abstract factory pattern",
+                              "The implementation of the abstract factory pattern",
+                              "Implementation of the abstract factory pattern",
                           };
 
             var articles = new[]
@@ -235,6 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Create an instance of the ";
             yield return "Create an instance of ";
             yield return "Create an ";
+            yield return "Create a factory ";
             yield return "Create a new instance of the ";
             yield return "Create a new instance of ";
             yield return "Create a instance of the ";
@@ -245,11 +254,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Create instances of ";
             yield return "Create new instances of the ";
             yield return "Create new instances of ";
+            yield return "Create and initialize a new instance of the ";
+            yield return "Create and initialize a new instance of ";
+            yield return "Create and initialize new instances of the ";
+            yield return "Create and initialize new instances of ";
             yield return "Creates an new instance of the ";
             yield return "Creates an new instance of ";
             yield return "Creates an instance of the ";
             yield return "Creates an instance of ";
             yield return "Creates an ";
+            yield return "Creates a factory ";
             yield return "Creates a new instance of the ";
             yield return "Creates a new instance of ";
             yield return "Creates a instance of the ";
@@ -260,6 +274,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Creates instances of ";
             yield return "Creates new instances of the ";
             yield return "Creates new instances of ";
+            yield return "Creates and initializes a new instance of the ";
+            yield return "Creates and initializes a new instance of ";
+            yield return "Creates and initializes new instances of the ";
+            yield return "Creates and initializes new instances of ";
             yield return "Used to create ";
             yield return "Used for creating ";
             yield return "Factory method for creating ";

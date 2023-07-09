@@ -308,6 +308,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // Note: when on new line, then the text is not the 1st one but the 2nd one
             var index = GetIndex(content);
 
+            if (index < 0)
+            {
+                return comment;
+            }
+
             var startText = XmlText(commentStart).WithLeadingXmlComment();
 
             XmlTextSyntax continueText;
@@ -324,7 +329,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (textTokens[0].IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     var newTokens = textTokens.RemoveAt(0);
-                    text = XmlText(newTokens.Replace(newTokens[0], newTokens[0].WithLeadingTrivia()));
+                    var newToken = newTokens[0];
+
+                    text = XmlText(newTokens.Replace(newToken, newToken.WithLeadingTrivia()));
                 }
 
                 continueText = text.WithStartText(commentContinue);

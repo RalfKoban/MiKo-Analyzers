@@ -310,14 +310,17 @@ public class TestMeFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_that()
+        [TestCase("Create a factory")]
+        [TestCase("Create a factory")]
+        [TestCase("Creates an instance of <see cref=\"string\"/>")]
+        [TestCase("Create an instance of <see cref=\"string\"/>")]
+        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_that_(string phrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMeFactory
 {
     /// <summary>
-    /// Creates an instance of <see cref=""string""/> that does something with the result.
+    /// " + phrase + @" that does something with the result.
     /// </summary>
     public string Create() => new string();
 }
@@ -333,7 +336,7 @@ public class TestMeFactory
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
@@ -418,6 +421,10 @@ internal interface IFactory
         [TestCase("Creates instances of the")]
         [TestCase("Creates instances of")]
         [TestCase("Creates new instances of the")]
+        [TestCase("Creates and initializes a new instance of the")]
+        [TestCase("Creates and initializes new instances of the")]
+        [TestCase("Create and initialize a new instance of the")]
+        [TestCase("Create and initialize new instances of the")]
         public void Code_gets_fixed_for_almost_correct_method_summary_starting_phrase_(string summary)
         {
             var originalCode = @"
@@ -462,6 +469,8 @@ internal interface IFactory
                                       "A factory to provide methods to create",
                                       "A factory which creates",
                                       "A factory which provides methods to create",
+                                      "A implementation of the abstract factory pattern for creation of",
+                                      "A implementation of the factory pattern for creation of",
                                       "A interface for factories that create",
                                       "A interface for factories to create",
                                       "A interface for factories which create",
@@ -473,6 +482,8 @@ internal interface IFactory
                                       "A interface to create",
                                       "A interface which is implemented by factories that create",
                                       "A interface which is implemented by factories which create",
+                                      "An implementation of the abstract factory pattern for creation of",
+                                      "An implementation of the factory pattern for creation of",
                                       "An interface for factories that create",
                                       "An interface for factories to create",
                                       "An interface for factories which create",
@@ -511,6 +522,8 @@ internal interface IFactory
                                       "Factory which can create",
                                       "Factory which provides methods to create",
                                       "Factory which provides",
+                                      "Implementation of the abstract factory pattern for creation of",
+                                      "Implementation of the factory pattern for creation of",
                                       "Interface for factories that create",
                                       "Interface for factories to create",
                                       "Interface for factories which create",
@@ -544,6 +557,8 @@ internal interface IFactory
                                       "The factory which can create",
                                       "The factory which creates",
                                       "The factory which provides methods to create",
+                                      "The implementation of the abstract factory pattern for creation of",
+                                      "The implementation of the factory pattern for creation of",
                                       "The interface implemented by factories that create",
                                       "The interface implemented by factories to create",
                                       "The interface implemented by factories which create",
