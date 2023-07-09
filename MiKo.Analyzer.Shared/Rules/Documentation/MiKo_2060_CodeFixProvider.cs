@@ -29,6 +29,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                        {
                                                                                            { " with for ", " with " },
                                                                                            { " type with type.", " type with default values." },
+                                                                                           { " type with that ", " type with default values that " },
+                                                                                           { " type with which ", " type with default values which " },
                                                                                        };
 
         public override string FixableDiagnosticId => MiKo_2060_FactoryAnalyzer.Id;

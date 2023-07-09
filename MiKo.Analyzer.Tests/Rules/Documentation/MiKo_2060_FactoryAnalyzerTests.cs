@@ -311,6 +311,32 @@ public class TestMeFactory
         }
 
         [Test]
+        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_that()
+        {
+            const string OriginalCode = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates an instance of <see cref=""string""/> that does something with the result.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            const string FixedCode = @"
+public class TestMeFactory
+{
+    /// <summary>
+    /// Creates a new instance of the <see cref=""string""/> type with default values that does something with the result.
+    /// </summary>
+    public string Create() => new string();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_collection_method_summary()
         {
             const string OriginalCode = @"
