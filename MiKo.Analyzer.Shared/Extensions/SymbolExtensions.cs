@@ -396,7 +396,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
 
-        internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
+        internal static IReadOnlyList<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
@@ -404,7 +404,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>();
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>().ToList();
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));

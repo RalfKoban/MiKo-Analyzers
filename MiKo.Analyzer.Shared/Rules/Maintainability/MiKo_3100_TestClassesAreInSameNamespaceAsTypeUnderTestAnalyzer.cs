@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // 3. If none is found, check for fields or properties that are named ObjectUnderTest
-            return testClass.GetTypeUnderTestTypes().ToList();
+            return testClass.GetTypeUnderTestTypes();
         }
 
         private static ITypeSymbol AnalyzeTestCreationMethod(MethodDeclarationSyntax methodDeclaration, SemanticModel semanticModel)
