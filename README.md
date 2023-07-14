@@ -194,7 +194,7 @@ The following tables list all the 376 rules that are currently provided by the a
 |MiKo_2046|Documentation should reference type parameters correctly|&#x2713;|&#x2713;|
 |MiKo_2047|&lt;summary&gt; documentation of Attributes should have a default starting phrase|&#x2713;|\-|
 |MiKo_2048|&lt;summary&gt; documentation of value converters should have a default starting phrase|&#x2713;|&#x2713;|
-|MiKo_2049|Documentation should be more explicit and not use 'will be'|&#x2713;|\-|
+|MiKo_2049|Documentation should be more explicit and not use 'will be'|&#x2713;|&#x2713;|
 |MiKo_2050|Exceptions should be documented following the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2051|Thrown Exceptions should be documented as kind of a condition (such as '&lt;paramref name="xyz"/&gt; is &lt;c&gt;42&lt;/c&gt;')|&#x2713;|&#x2713;|
 |MiKo_2052|Throwing of ArgumentNullException should be documented using a default phrase|&#x2713;|&#x2713;|

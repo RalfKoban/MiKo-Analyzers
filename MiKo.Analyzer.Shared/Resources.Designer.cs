@@ -5929,6 +5929,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Replace &apos;will be&apos; with &apos;is&apos;.
+        /// </summary>
+        public static string MiKo_2049_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2049_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The term &apos;will be&apos; is not explicit enough and it uses the wrong tense. Instead, a term such as &apos;is&apos; gets to the point and uses present tense..
         /// </summary>
         public static string MiKo_2049_Description {
@@ -5938,7 +5947,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;is&apos; instead of &apos;will be&apos; in documentation.
+        ///   Looks up a localized string similar to Replace &apos;{0}&apos; with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2049_MessageFormat {
             get {

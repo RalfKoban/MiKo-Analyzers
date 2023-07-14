@@ -592,7 +592,13 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
 
-        public static string SecondWord(this string text) => string.Intern(text.AsSpan().WithoutFirstWord().FirstWord().ToString());
+        public static string SecondWord(this string text) => string.Intern(SecondWord(text.AsSpan()).ToString());
+
+        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
+
+        public static string ThirdWord(this string text) => string.Intern(ThirdWord(text.AsSpan()).ToString());
+
+        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
         public static bool StartsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[0] == character;
 

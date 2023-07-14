@@ -44,6 +44,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                              new KeyValuePair<string, string>("sis", "ze"),
                                                                          };
 
+        private static readonly string[] IsAre = { "is", "are" };
+
         private static readonly string[] StartingPhrases = new[]
                                                            {
                                                                "Add",
@@ -128,8 +130,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                "Write",
                                                                "Zoom",
                                                            }.OrderBy(_ => _.Length)
-                                                                .ThenBy(_ => _)
-                                                                .ToArray();
+                                                            .ThenBy(_ => _)
+                                                            .ToArray();
 
         private static readonly string[] MiddlePhrases = new[]
                                                          {
@@ -138,8 +140,48 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                              "InformedAbout",
                                                              "BelongsTo",
                                                          }.OrderBy(_ => _.Length)
-                                                                .ThenBy(_ => _)
-                                                                .ToArray();
+                                                          .ThenBy(_ => _)
+                                                          .ToArray();
+
+        private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
+
+        private static readonly string[] AdjectivesOrAdverbs =
+                                                               {
+                                                                   "afterwards",
+                                                                   "also",
+                                                                   "already",
+                                                                   "always",
+                                                                   "before",
+                                                                   "either",
+                                                                   "first",
+                                                                   "however",
+                                                                   "in",
+                                                                   "just",
+                                                                   "later",
+                                                                   "longer",
+                                                                   "no",
+                                                                   "not",
+                                                                   "now",
+                                                                   "than",
+                                                                   "then",
+                                                                   "therefore",
+                                                                   "turn",
+                                                               };
+
+        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value)
+        {
+            if (value.EndsWith("ly", StringComparison.OrdinalIgnoreCase))
+            {
+                if (value.EndsWith("ply", StringComparison.OrdinalIgnoreCase))
+                {
+                    return value.Equals("simply", StringComparison.OrdinalIgnoreCase);
+                }
+
+                return true;
+            }
+
+            return value.EqualsAny(AdjectivesOrAdverbs, StringComparison.OrdinalIgnoreCase);
+        }
 
         public static bool IsThirdPersonSingularVerb(string value)
         {
@@ -181,6 +223,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string CreateGerundVerb(string word)
             {
+                if (word.EqualsAny(IsAre, StringComparison.OrdinalIgnoreCase))
+                {
+                    return word;
+                }
+
+                if (word.Equals("has", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Having" : "having";
+                }
+
+                if (word.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Shutting down" : "shutting down";
+                }
+
                 if (word.EndsWith("ing", StringComparison.Ordinal))
                 {
                     return word;
@@ -205,12 +262,27 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (word.EndsWith('s'))
                 {
+                    if (word.Equals("is", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                    }
+
+                    if (word.Equals("has", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word[0].IsUpperCaseLetter() ? "Have" : "have";
+                    }
+
                     if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
                     {
                         return word.WithoutSuffix("es");
                     }
 
                     return word.WithoutSuffix("s");
+                }
+
+                if (word.Equals("are", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Be" : "be";
                 }
 
                 return word;
@@ -224,10 +296,38 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return value;
             }
 
+            if (value.EndsWithAny(SentenceEndingMarkers))
+            {
+                return ThirdPersonSingularVerbs.GetOrAdd(value, CreateThirdPersonSingularVerbForSentence);
+            }
+
             return ThirdPersonSingularVerbs.GetOrAdd(value, CreateThirdPersonSingularVerb);
+
+            string CreateThirdPersonSingularVerbForSentence(string sentenceEnding)
+            {
+                var word = sentenceEnding.TrimEnd(SentenceEndingMarkers);
+
+                return CreateThirdPersonSingularVerb(word) + sentenceEnding.Substring(word.Length);
+            }
 
             string CreateThirdPersonSingularVerb(string word)
             {
+                if (word.Length > 0)
+                {
+                    const char Apostrophe = '\'';
+                    const char DoubleQuote = '\"';
+
+                    if (word.First() == Apostrophe && word.Last() == Apostrophe)
+                    {
+                        return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
+                    }
+
+                    if (word.First() == DoubleQuote && word.Last() == DoubleQuote)
+                    {
+                        return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
+                    }
+                }
+
                 if (word.EndsWith('y'))
                 {
                     if (word.EndsWith("ay", StringComparison.Ordinal) || word.EndsWith("ey", StringComparison.Ordinal))
@@ -256,9 +356,84 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     }
                 }
 
+                if (word.EndsWith("ed", StringComparison.Ordinal))
+                {
+                    if (word.EndsWith("ated", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("dded", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 2) + 's';
+                    }
+
+                    if (word.EndsWith("dled", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("tted", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 3) + 's';
+                    }
+
+                    if (word.EndsWith("ced", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("eed", StringComparison.Ordinal))
+                    {
+                        return word + 's';
+                    }
+
+                    if (word.EndsWith("ged", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("ied", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("red", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("sed", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    if (word.EndsWith("ved", StringComparison.Ordinal))
+                    {
+                        return word.Substring(0, word.Length - 1) + 's';
+                    }
+
+                    return word.Substring(0, word.Length - 2) + 's';
+                }
+
+                if (word.Equals("be", StringComparison.OrdinalIgnoreCase) || word.Equals("are", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Is" : "is";
+                }
+
+                if (word.Equals("have", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Has" : "has";
+                }
+
                 if (word.Equals("will", StringComparison.OrdinalIgnoreCase))
                 {
                     return word;
+                }
+
+                if (word.Equals("shutdown", StringComparison.OrdinalIgnoreCase))
+                {
+                    return word[0].IsUpperCaseLetter() ? "Shuts down" : "shuts down";
                 }
 
                 var result = word + 's';

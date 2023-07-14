@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (b <= y)
                 {
-                    return true; // axby
+                    return x <= b; // axby
                 }
             }
 
@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers
             {
                 if (y <= b)
                 {
-                    return true; // xayb
+                    return a <= y; // xayb
                 }
 
                 if (b <= y)

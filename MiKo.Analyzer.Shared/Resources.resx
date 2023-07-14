@@ -2127,11 +2127,14 @@ Or with: '{3}'</value>
   <data name="MiKo_2048_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of value converters should have a default starting phrase</value>
   </data>
+  <data name="MiKo_2049_CodeFixTitle" xml:space="preserve">
+    <value>Replace 'will be' with 'is'</value>
+  </data>
   <data name="MiKo_2049_Description" xml:space="preserve">
     <value>The term 'will be' is not explicit enough and it uses the wrong tense. Instead, a term such as 'is' gets to the point and uses present tense.</value>
   </data>
   <data name="MiKo_2049_MessageFormat" xml:space="preserve">
-    <value>Use 'is' instead of 'will be' in documentation</value>
+    <value>Replace '{0}' with '{1}'</value>
   </data>
   <data name="MiKo_2049_Title" xml:space="preserve">
     <value>Documentation should be more explicit and not use 'will be'</value>

@@ -15,10 +15,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
                                                                      {
-                                                                         { "can be used to", "allows to" },
                                                                          { "can be used in order to", "allows to" },
-                                                                         { "could be used to", "allows to" },
+                                                                         { "can be used to", "allows to" },
                                                                          { "could be used in order to", "allows to" },
+                                                                         { "could be used to", "allows to" },
+                                                                         { "are expected to be used to", "allow to" },
+                                                                         { "are intended to be used to", "allow to" },
+                                                                         { "are meant to be used to", "allow to" },
+                                                                         { "are primarily expected to be used to", "allow to" },
+                                                                         { "are primarily intended to be used to", "allow to" },
+                                                                         { "are primarily meant to be used to", "allow to" },
+                                                                         { "is expected to be used to", "allows to" },
+                                                                         { "is intended to be used to", "allows to" },
+                                                                         { "is meant to be used to", "allows to" },
+                                                                         { "is primarily expected to be used to", "allows to" },
+                                                                         { "is primarily intended to be used to", "allows to" },
+                                                                         { "is primarily meant to be used to", "allows to" },
+                                                                         { "may be used to", "allows to" },
+                                                                         { "might be used to", "allows to" },
 
                                                                          // parts starting with 'that'
                                                                          { "that can be used in order to", "that allows to" },
@@ -35,6 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "that shall be used in order to", "to" },
                                                                          { "that should be used to", "to" },
                                                                          { "that should be used in order to", "to" },
+                                                                         { "that should currently be used to", "to" },
+                                                                         { "that should currently be used in order to", "to" },
                                                                          { "that will be used to", "to" },
                                                                          { "that will be used in order to", "to" },
                                                                          { "that would be used to", "to" },
@@ -53,6 +69,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "which shall be used in order to", "to" },
                                                                          { "which should be used to", "to" },
                                                                          { "which should be used in order to", "to" },
+                                                                         { "which should currently be used to", "to" },
+                                                                         { "which should currently be used in order to", "to" },
                                                                          { "which will be used to", "to" },
                                                                          { "which will be used in order to", "to" },
                                                                          { "which would be used to", "to" },
@@ -66,51 +84,127 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          // to be used in case
 
                                                                          // -> suitable for /  made to work with
-                                                                         { "are to be used in", "are suitable for" },
-                                                                         { "are to be used in combination with", "are made to work with" },
-                                                                         { "are to be used in conjunction with", "are made to work with" },
-                                                                         { "are intended to be used in", "are suitable for" },
+                                                                         { "are expected to be used by", "are suitable for" },
+                                                                         { "are expected to be used for", "are suitable for" },
+                                                                         { "are expected to be used in combination with", "are made to work with" },
+                                                                         { "are expected to be used in conjunction with", "are made to work with" },
+                                                                         { "are expected to be used in", "are suitable for" },
+                                                                         { "are intended to be used by", "are suitable for" },
+                                                                         { "are intended to be used for", "are suitable for" },
                                                                          { "are intended to be used in combination with", "are made to work with" },
                                                                          { "are intended to be used in conjunction with", "are made to work with" },
-                                                                         { "are meant to be used in", "are suitable for" },
+                                                                         { "are intended to be used in", "are suitable for" },
+                                                                         { "are meant to be used by", "are suitable for" },
                                                                          { "are meant to be used in combination with", "are made to work with" },
                                                                          { "are meant to be used in conjunction with", "are made to work with" },
-                                                                         { "are primarily meant to be used in", "are suitable for" },
-                                                                         { "are primarily meant to be used in combination with", "are made to work with" },
-                                                                         { "are primarily meant to be used in conjunction with", "are made to work with" },
-                                                                         { "are primarily intended to be used in", "are suitable for" },
+                                                                         { "are meant to be used in", "are suitable for" },
+                                                                         { "are primarily expected to be used by", "are suitable for" },
+                                                                         { "are primarily expected to be used for", "are suitable for" },
+                                                                         { "are primarily expected to be used in combination with", "are made to work with" },
+                                                                         { "are primarily expected to be used in conjunction with", "are made to work with" },
+                                                                         { "are primarily expected to be used in", "are suitable for" },
+                                                                         { "are primarily intended to be used by", "are suitable for" },
+                                                                         { "are primarily intended to be used for", "are suitable for" },
                                                                          { "are primarily intended to be used in combination with", "are made to work with" },
                                                                          { "are primarily intended to be used in conjunction with", "are made to work with" },
-                                                                         { "can be used in", "is suitable for" },
+                                                                         { "are primarily intended to be used in", "are suitable for" },
+                                                                         { "are primarily meant to be used by", "are suitable for" },
+                                                                         { "are primarily meant to be used for", "are suitable for" },
+                                                                         { "are primarily meant to be used in combination with", "are made to work with" },
+                                                                         { "are primarily meant to be used in conjunction with", "are made to work with" },
+                                                                         { "are primarily meant to be used in", "are suitable for" },
+                                                                         { "are to be used by", "are suitable for" },
+                                                                         { "are to be used in combination with", "are made to work with" },
+                                                                         { "are to be used in conjunction with", "are made to work with" },
+                                                                         { "are to be used in", "are suitable for" },
                                                                          { "can be used in combination with", "is made to work with" },
                                                                          { "can be used in conjunction with", "is made to work with" },
-                                                                         { "could be used in", "is suitable for" },
+                                                                         { "can be used in", "is suitable for" },
                                                                          { "could be used in combination with", "is made to work with" },
                                                                          { "could be used in conjunction with", "is made to work with" },
-                                                                         { "has to be used in", "is suitable for" },
+                                                                         { "could be used in", "is suitable for" },
+                                                                         { "expected to be used by", "suitable for" },
+                                                                         { "expected to be used for", "suitable for" },
+                                                                         { "expected to be used in combination with", "made to work with" },
+                                                                         { "expected to be used in conjunction with", "made to work with" },
+                                                                         { "expected to be used in", "suitable for" },
                                                                          { "has to be used in combination with", "is made to work with" },
                                                                          { "has to be used in conjunction with", "is made to work with" },
-                                                                         { "have to be used in", "are suitable for" },
+                                                                         { "has to be used in", "is suitable for" },
                                                                          { "have to be used in combination with", "are made to work with" },
                                                                          { "have to be used in conjunction with", "are made to work with" },
-                                                                         { "is intended to be used in", "is suitable for" },
+                                                                         { "have to be used in", "are suitable for" },
+                                                                         { "intended to be used by", "suitable for" },
+                                                                         { "intended to be used for", "suitable for" },
+                                                                         { "intended to be used in combination with", "made to work with" },
+                                                                         { "intended to be used in conjunction with", "made to work with" },
+                                                                         { "intended to be used in", "suitable for" },
+                                                                         { "is expected to be used by", "is suitable for" },
+                                                                         { "is expected to be used for", "is suitable for" },
+                                                                         { "is expected to be used in combination with", "is made to work with" },
+                                                                         { "is expected to be used in conjunction with", "is made to work with" },
+                                                                         { "is expected to be used in", "is suitable for" },
+                                                                         { "is intended to be used by", "is suitable for" },
+                                                                         { "is intended to be used for", "is suitable for" },
                                                                          { "is intended to be used in combination with", "is made to work with" },
                                                                          { "is intended to be used in conjunction with", "is made to work with" },
-                                                                         { "is meant to be used in", "is suitable for" },
+                                                                         { "is intended to be used in", "is suitable for" },
+                                                                         { "is meant to be used by", "is suitable for" },
+                                                                         { "is meant to be used for", "is suitable for" },
                                                                          { "is meant to be used in combination with", "is made to work with" },
                                                                          { "is meant to be used in conjunction with", "is made to work with" },
-                                                                         { "is primarily meant to be used in", "is suitable for" },
-                                                                         { "is primarily meant to be used in combination with", "is made to work with" },
-                                                                         { "is primarily meant to be used in conjunction with", "is made to work with" },
-                                                                         { "is primarily intended to be used in", "is suitable for" },
+                                                                         { "is meant to be used in", "is suitable for" },
+                                                                         { "is primarily expected to be used by", "is suitable for" },
+                                                                         { "is primarily expected to be used for", "is suitable for" },
+                                                                         { "is primarily expected to be used in combination with", "is made to work with" },
+                                                                         { "is primarily expected to be used in conjunction with", "is made to work with" },
+                                                                         { "is primarily expected to be used in", "is suitable for" },
+                                                                         { "is primarily intended to be used by", "is suitable for" },
+                                                                         { "is primarily intended to be used for", "is suitable for" },
                                                                          { "is primarily intended to be used in combination with", "is made to work with" },
                                                                          { "is primarily intended to be used in conjunction with", "is made to work with" },
-                                                                         { "meant to be used in", "suitable for" },
+                                                                         { "is primarily intended to be used in", "is suitable for" },
+                                                                         { "is primarily meant to be used by", "is suitable for" },
+                                                                         { "is primarily meant to be used for", "is suitable for" },
+                                                                         { "is primarily meant to be used in combination with", "is made to work with" },
+                                                                         { "is primarily meant to be used in conjunction with", "is made to work with" },
+                                                                         { "is primarily meant to be used in", "is suitable for" },
+                                                                         { "is to be used by", "is suitable for" },
+                                                                         { "meant to be used by", "suitable for" },
+                                                                         { "meant to be used for", "suitable for" },
                                                                          { "meant to be used in combination with", "made to work with" },
                                                                          { "meant to be used in conjunction with", "made to work with" },
-                                                                         { "might be used in", "is suitable for" },
+                                                                         { "meant to be used in", "suitable for" },
+                                                                         { "may be used by", "is suitable for" },
+                                                                         { "may be used for", "is suitable for" },
+                                                                         { "may be used in combination with", "is made to work with" },
+                                                                         { "may be used in conjunction with", "is made to work with" },
+                                                                         { "may be used in", "is suitable for" },
+                                                                         { "might be used by", "is suitable for" },
+                                                                         { "might be used for", "is suitable for" },
                                                                          { "might be used in combination with", "is made to work with" },
                                                                          { "might be used in conjunction with", "is made to work with" },
+                                                                         { "might be used in", "is suitable for" },
+                                                                         { "primarily expected to be used by", "suitable for" },
+                                                                         { "primarily expected to be used for", "suitable for" },
+                                                                         { "primarily expected to be used in", "suitable for" },
+                                                                         { "primarily intended to be used by", "suitable for" },
+                                                                         { "primarily intended to be used for", "suitable for" },
+                                                                         { "primarily intended to be used in", "suitable for" },
+                                                                         { "primarily meant to be used by", "suitable for" },
+                                                                         { "primarily meant to be used for", "suitable for" },
+                                                                         { "primarily meant to be used in", "suitable for" },
+                                                                         { "to be used by", "suitable for" },
+                                                                         { "to be used during", "suitable for" },
+                                                                         { "to be used for", "suitable for" },
+                                                                         { "to be used to", "to" },
+                                                                         { "to be used when", "suitable when" },
+                                                                         { "to be used with", "suitable for" },
+
+                                                                         // -> applicable to
+                                                                         { "primarily expected to be used within", "applicable to" },
+                                                                         { "expected to be used within", "applicable to" },
+                                                                         { "to be used within", "applicable to" },
 
                                                                          // it shall be used in
                                                                          // it should be used in
@@ -156,11 +250,20 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_text_in_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_text_in_class_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
 /// It " + phrase + @" do something.
 /// </summary>
 public class TestMe
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_text_in_record_documentation_([ValueSource(nameof(WrongPhrases))] string phrase) => An_issue_is_reported_for(@"
+/// <summary>
+/// It " + phrase + @" do something.
+/// </summary>
+public sealed record TestMe(int primary)
 {
 }");
 
@@ -195,8 +298,15 @@ public class TestMe
         [TestCase("It can be used in order to analyze stuff.", "It allows to analyze stuff.")]
         [TestCase("Markers are used to analyze stuff.", "Markers analyze stuff.")]
         [TestCase("Used to analyze stuff.", "Analyzes stuff.")]
-        [TestCase("To be used by stuff.", "For stuff.")]
-        [TestCase("Something to be used by stuff.", "Something for stuff.")]
+        [TestCase("To be used by stuff.", "Suitable for stuff.")]
+        [TestCase("Something to be used by stuff.", "Something suitable for stuff.")]
+        [TestCase("This object is used to determine whether something has to be done.", "This object defines whether something has to be done.")]
+        [TestCase("These objects are used to determine whether something has to be done.", "These objects define whether something has to be done.")]
+        [TestCase("This object is used to find out whether something has to be done.", "This object defines whether something has to be done.")]
+        [TestCase("These objects are used to find out whether something has to be done.", "These objects define whether something has to be done.")]
+        [TestCase("This object is used to check whether something has to be done.", "This object defines whether something has to be done.")]
+        [TestCase("These objects are used to check whether something has to be done.", "These objects define whether something has to be done.")]
+        [TestCase("This method is intended to be used when you want to do something.", "This method is suitable when you want to do something.")]
         public void Code_gets_fixed_for_special_case_text_(string originalCode, string fixedCode)
         {
             const string Template = @"
@@ -213,7 +323,7 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
-        [TestCase("The information can be used to do something.", "The information to do something.")]
+        [TestCase("The information can be used to do something.", "The information allows to do something.")]
         [TestCase("The information. It can be used to analyze stuff.", "The information. It allows to analyze stuff.")]
         [TestCase("The information. Can be used to analyze stuff.", "The information. Allows to analyze stuff.")]
         [TestCase("The information is used to connect.", "The information connects.")]
@@ -272,6 +382,34 @@ public class TestMe
     public void DoSomething(object o)
     {
     }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_param_text_with_on_record()
+        {
+            const string OriginalCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <param name=""o"">
+/// An object that is used to order this stuff.
+/// </param>
+public sealed record TestMe(object o)
+{
+}";
+
+            const string FixedCode = @"
+/// <summary>
+/// Does something.
+/// </summary>
+/// <param name=""o"">
+/// An object that orders this stuff.
+/// </param>
+public sealed record TestMe(object o)
+{
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);

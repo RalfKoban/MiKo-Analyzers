@@ -13,20 +13,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1088";
 
         private const string InstanceName = "Instance";
-        private const string AllowedName1 = "Empty";
-        private const string AllowedName2 = "Default";
 
-        private static readonly HashSet<string> FieldNames = Enumerable.Empty<string>()
-                                                                       .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName.ToLowerCaseAt(0)))
-                                                                       .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName))
-                                                                       .ToHashSet();
+        private const string AllowedName1 = "Default";
+        private const string AllowedName2 = "Empty";
+        private const string AllowedName3 = "Zero";
 
         private static readonly HashSet<string> AllowedFieldNames = Enumerable.Empty<string>()
+                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName.ToLowerCaseAt(0)))
+                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName))
                                                                               .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName1.ToLowerCaseAt(0)))
                                                                               .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName1))
                                                                               .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName2.ToLowerCaseAt(0)))
                                                                               .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName2))
+                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName3.ToLowerCaseAt(0)))
+                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName3))
                                                                               .ToHashSet();
+
+        private static readonly HashSet<string> AllowedPropertyNames = new HashSet<string> { InstanceName, AllowedName1, AllowedName2, AllowedName3 };
 
         public MiKo_1088_SingletonInstancesShouldBeNamedInstanceAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -49,27 +52,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var property in selfReferencingProperties)
             {
-                switch (property.Name)
+                if (AllowedPropertyNames.Contains(property.Name) is false)
                 {
-                    case InstanceName:
-                    case AllowedName1:
-                    case AllowedName2:
-                    {
-                        continue;
-                    }
-
-                    default:
-                    {
-                        yield return Issue(property);
-
-                        break;
-                    }
+                    yield return Issue(property);
                 }
             }
 
             foreach (var field in selfReferencingFields)
             {
-                if (FieldNames.Contains(field.Name) is false && AllowedFieldNames.Contains(field.Name) is false)
+                if (AllowedFieldNames.Contains(field.Name) is false)
                 {
                     yield return Issue(field);
                 }
