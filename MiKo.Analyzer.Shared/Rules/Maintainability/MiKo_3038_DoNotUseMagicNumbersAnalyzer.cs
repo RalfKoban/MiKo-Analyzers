@@ -310,9 +310,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 yield break;
             }
 
-            yield return node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression)
-                         ? Issue(symbol.Name, prefix, "-" + number)
-                         : Issue(symbol.Name, node, number);
+            if (node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression))
+            {
+                yield return Issue(symbol.Name, prefix, "-" + number);
+            }
+            else
+            {
+                yield return Issue(symbol.Name, node, number);
+            }
         }
     }
 }

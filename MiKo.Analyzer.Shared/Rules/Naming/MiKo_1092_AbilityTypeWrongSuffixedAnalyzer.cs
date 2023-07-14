@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string GetProposedName(string name)
         {
-            var proposedName = name;
+            var proposedName = name.AsSpan();
 
             do
             {
@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
             while (proposedName.EndsWithAny(TypeSuffixes, Comparison));
 
-            return proposedName;
+            return proposedName.ToString();
         }
     }
 }

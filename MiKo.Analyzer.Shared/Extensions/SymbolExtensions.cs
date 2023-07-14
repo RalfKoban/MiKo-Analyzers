@@ -164,9 +164,17 @@ namespace MiKoSolutions.Analyzers
                 switch (symbol)
                 {
                     case null: return null;
-                    case IMethodSymbol method: return method;
-                    case IPropertySymbol property: return property.IsIndexer ? (property.GetMethod ?? property.SetMethod) : property.SetMethod;
                     case ITypeSymbol _: return null;
+                    case IMethodSymbol method: return method;
+                    case IPropertySymbol property:
+                    {
+                        if (property.IsIndexer)
+                        {
+                            return property.GetMethod ?? property.SetMethod;
+                        }
+
+                        return property.SetMethod;
+                    }
 
                     default:
                         symbol = symbol.ContainingSymbol;
@@ -1280,7 +1288,7 @@ namespace MiKoSolutions.Analyzers
         {
             var symbolName = value.Name;
 
-            if (string.Equals(symbolName, type.Name, StringComparison.OrdinalIgnoreCase))
+            if (symbolName.Equals(type.Name, StringComparison.OrdinalIgnoreCase))
             {
                 // ignore all those that have a lower case only
                 return symbolName.HasUpperCaseLettersAbove(minimumUpperCaseLetters);
@@ -1288,7 +1296,7 @@ namespace MiKoSolutions.Analyzers
 
             var typeName = type.GetNameWithoutInterfacePrefix();
 
-            if (string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase))
+            if (symbolName.Equals(typeName, StringComparison.OrdinalIgnoreCase))
             {
                 // there must be at least a minimum of upper case letters (except the first character)
                 if (typeName.HasUpperCaseLettersAbove(minimumUpperCaseLetters))
@@ -1324,13 +1332,16 @@ namespace MiKoSolutions.Analyzers
             return result != null;
         }
 
-        private static string GetNameWithoutInterfacePrefix(this ITypeSymbol value)
+        private static ReadOnlySpan<char> GetNameWithoutInterfacePrefix(this ITypeSymbol value)
         {
-            var typeName = value.Name;
+            var typeName = value.Name.AsSpan();
 
-            return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I')
-                   ? typeName.Substring(1)
-                   : typeName;
+            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I'))
+            {
+                return typeName.Slice(1);
+            }
+
+            return typeName;
         }
 
         private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);

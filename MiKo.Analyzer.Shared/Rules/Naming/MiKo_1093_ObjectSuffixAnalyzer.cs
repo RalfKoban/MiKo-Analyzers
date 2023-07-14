@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -24,20 +23,26 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ISymbol symbol)
         {
-            var newName = symbol.Name;
+            var newName = symbol.Name.AsSpan();
 
-            foreach (var suffix in WrongSuffixes.Where(_ => newName.EndsWith(_, StringComparison.OrdinalIgnoreCase)))
+            foreach (var suffix in WrongSuffixes)
             {
-                newName = newName.WithoutSuffix(suffix);
+                if (newName.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    newName = newName.WithoutSuffix(suffix);
+                }
             }
 
             // do it twice as maybe the name is a combination of both words
-            foreach (var suffix in WrongSuffixes.Where(_ => newName.EndsWith(_, StringComparison.OrdinalIgnoreCase)))
+            foreach (var suffix in WrongSuffixes)
             {
-                newName = newName.WithoutSuffix(suffix);
+                if (newName.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    newName = newName.WithoutSuffix(suffix);
+                }
             }
 
-            return newName;
+            return newName.ToString();
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Namespace, SymbolKind.NamedType, SymbolKind.Property, SymbolKind.Field);

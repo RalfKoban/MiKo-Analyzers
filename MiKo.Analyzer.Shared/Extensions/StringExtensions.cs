@@ -277,6 +277,8 @@ namespace System
 
         public static bool EndsWithNumber(this ReadOnlySpan<char> value) => value.Length > 0 && value[value.Length - 1].IsNumber();
 
+        public static bool Equals(this string value, ReadOnlySpan<char> other, StringComparison comparison) => value != null && value.AsSpan().Equals(other, comparison);
+
         public static bool Equals(this ReadOnlySpan<char> value, string other, StringComparison comparison) => other != null && value.Equals(other.AsSpan(), comparison);
 
         public static bool EqualsAny(this string value, IEnumerable<string> phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
@@ -432,7 +434,9 @@ namespace System
             return hasMarker;
         }
 
-        public static bool HasUpperCaseLettersAbove(this string value, ushort limit)
+        public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
+
+        public static bool HasUpperCaseLettersAbove(this ReadOnlySpan<char> value, ushort limit)
         {
             var count = 0;
 
@@ -601,6 +605,8 @@ namespace System
         public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
         public static bool StartsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[0] == character;
+
+        public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => string.IsNullOrEmpty(characters) is false && value.StartsWith(characters.AsSpan());
 
@@ -890,6 +896,20 @@ namespace System
             }
 
             return value.ToString();
+        }
+
+        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
+        {
+            if (suffix != null && value.EndsWith(suffix))
+            {
+                var length = value.Length - suffix.Length;
+
+                return length > 0
+                       ? value.Slice(0, length)
+                       : ReadOnlySpan<char>.Empty;
+            }
+
+            return value;
         }
 
         public static string WithoutSuffix(this string value, string suffix)

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(ITypeSymbol symbol)
         {
-            var symbolName = symbol.Name;
+            var symbolName = symbol.Name.AsSpan();
 
             foreach (var wrongSuffix in WrongSuffixes)
             {
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return symbolName + Suffix;
+            return symbolName.ToString() + Suffix;
         }
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.ContainsExtensionMethods();
