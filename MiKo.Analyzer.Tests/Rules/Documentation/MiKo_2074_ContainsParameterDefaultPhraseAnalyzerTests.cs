@@ -38,8 +38,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_empty_parameter_on_method_(
-                                                                [Values("Contains", "ContainsKey")] string methodName,
-                                                                [Values(@"<param name=""i""></param>", @"<param name=""i"">     </param>")] string parameter)
+                                                                    [Values("Contains", "ContainsKey")] string methodName,
+                                                                    [Values(@"<param name=""i""></param>", @"<param name=""i"">     </param>")] string parameter)
             => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -71,8 +71,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_documented_method_(
-                                                                    [Values("Contains", "ContainsKey")] string methodName,
-                                                                    [Values("Something to seek.", "Something to locate.")] string comment)
+                                                                      [Values("Contains", "ContainsKey")] string methodName,
+                                                                      [Values("Something to seek.", "Something to locate.")] string comment)
             => No_issue_is_reported_for(@"
 public class TestMe
 {

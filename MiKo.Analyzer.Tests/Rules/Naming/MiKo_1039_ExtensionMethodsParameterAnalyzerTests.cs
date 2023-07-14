@@ -42,9 +42,9 @@ public static class TestMeExtensions
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_extension_method_with_correct_parameter_name_(
-                                                                                    [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-                                                                                    [Values("Something", "")] string methodName,
-                                                                                    [ValueSource(nameof(CorrectConversionParameterNames))] string name)
+                                                                                       [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
+                                                                                       [Values("Something", "")] string methodName,
+                                                                                       [ValueSource(nameof(CorrectConversionParameterNames))] string name)
             => No_issue_is_reported_for(@"
 public static class TestMeExtensions
 {
@@ -70,9 +70,9 @@ public static class TestMeExtensions
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_extension_method_with_incorrect_parameter_name_(
-                                                                                    [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
-                                                                                    [Values("Something", "")] string methodName,
-                                                                                    [ValueSource(nameof(WrongConversionParameterNames))] string name)
+                                                                                         [ValueSource(nameof(ConversionMethodPrefixes))] string prefix,
+                                                                                         [Values("Something", "")] string methodName,
+                                                                                         [ValueSource(nameof(WrongConversionParameterNames))] string name)
             => An_issue_is_reported_for(@"
 public static class TestMeExtensions
 {

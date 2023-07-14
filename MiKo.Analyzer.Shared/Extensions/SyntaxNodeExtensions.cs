@@ -773,6 +773,10 @@ namespace MiKoSolutions.Analyzers
             return result.AsSpan().Trim();
         }
 
+        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
+
+        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
+
         internal static IEnumerable<string> GetTextWithoutTriviaLazy(this XmlTextSyntax text)
         {
             if (text is null)
@@ -790,10 +794,6 @@ namespace MiKoSolutions.Analyzers
                 yield return token.WithoutTrivia().ValueText;
             }
         }
-
-        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
-
-        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
 
         internal static IEnumerable<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Example);
 

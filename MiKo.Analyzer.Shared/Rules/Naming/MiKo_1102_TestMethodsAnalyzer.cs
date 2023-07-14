@@ -25,12 +25,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var symbolName = symbol.Name;
             var marker = GetTestMarker(symbolName);
             var phrases = new[]
-                          {
-                              marker.SurroundedWith("_"),
-                              "_" + marker,
-                              marker + "_",
-                              marker,
-                          };
+                              {
+                                  marker.SurroundedWith("_"),
+                                  "_" + marker,
+                                  marker + "_",
+                                  marker,
+                              };
 
             return symbolName.Without(phrases);
         }

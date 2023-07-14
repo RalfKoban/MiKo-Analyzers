@@ -49,8 +49,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correct_parameter_name_(
-                                                                [ValueSource(nameof(DelegateTypes))] string type,
-                                                                [ValueSource(nameof(CorrectDelegateNames))] string name)
+                                                                 [ValueSource(nameof(DelegateTypes))] string type,
+                                                                 [ValueSource(nameof(CorrectDelegateNames))] string name)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -64,8 +64,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_parameter_with_non_fitting_name_(
-                                                                        [ValueSource(nameof(DelegateTypes))] string type,
-                                                                        [ValueSource(nameof(WrongDelegateNames))] string name)
+                                                                          [ValueSource(nameof(DelegateTypes))] string type,
+                                                                          [ValueSource(nameof(WrongDelegateNames))] string name)
             => An_issue_is_reported_for(@"
 using System;
 

@@ -56,17 +56,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
         {
             var middleParts = new[]
-                              {
-                                  "that can",
-                                  "that will",
-                                  "that",
-                                  "which can",
-                                  "which will",
-                                  "which",
-                                  "will",
-                                  "to",
-                                  "for",
-                              };
+                                  {
+                                      "that can",
+                                      "that will",
+                                      "that",
+                                      "which can",
+                                      "which will",
+                                      "which",
+                                      "will",
+                                      "to",
+                                      "for",
+                                  };
 
             var results = new List<KeyValuePair<string, string>>();
 

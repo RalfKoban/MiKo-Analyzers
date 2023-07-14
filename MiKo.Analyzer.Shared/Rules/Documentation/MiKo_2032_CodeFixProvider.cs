@@ -98,18 +98,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]
-                           {
-                               "bool value",
-                               "Bool value",
-                               "bool",
-                               "Bool",
-                               "boolean value",
-                               "Boolean value",
-                               "boolean",
-                               "Boolean",
-                               "value",
-                               "Value",
-                           };
+                               {
+                                   "bool value",
+                                   "Bool value",
+                                   "bool",
+                                   "Bool",
+                                   "boolean value",
+                                   "Boolean value",
+                                   "boolean",
+                                   "Boolean",
+                                   "value",
+                                   "Value",
+                               };
             var verbs = new[] { "indicating", "that indicates", "which indicates", "indicates", "indicate" };
             var conditions = new[] { "if", "whether", "when" };
 

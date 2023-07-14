@@ -510,9 +510,9 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_to_inheritdoc_for_default_implementation_(
-                                                                        [Values("A", "The", "")] string startPhrase,
-                                                                        [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl", "Implementation")] string text,
-                                                                        [Values("for", "of")] string middlePart)
+                                                                          [Values("A", "The", "")] string startPhrase,
+                                                                          [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl", "Implementation")] string text,
+                                                                          [Values("for", "of")] string middlePart)
         {
             var originalCode = @"
 /// <summary>
@@ -881,36 +881,36 @@ public class TestMeViewModel
         private static string[] CreateMeaninglessPhrases()
         {
             var types = new[]
-                        {
-                            "Attribute",
-                            "Base",
-                            "Class",
-                            "Interface",
-                            "Method",
-                            "Field",
-                            "Property",
-                            "Event",
-                            "EventHandler",
-                            "Handler",
-                            "Component",
-                            "Constructor",
-                            "Ctor",
-                            "Delegate",
-                            "Creator",
-                            "Entity",
-                            "Model",
-                            "View",
-                            "ViewModel",
-                            "Command",
-                            "Action",
-                            "Func",
-                            "Converter",
-                            "Adapter ",
-                            "Builder",
-                            "Factory",
-                            "Proxy ",
-                            "Wrapper ",
-                        };
+                            {
+                                "Attribute",
+                                "Base",
+                                "Class",
+                                "Interface",
+                                "Method",
+                                "Field",
+                                "Property",
+                                "Event",
+                                "EventHandler",
+                                "Handler",
+                                "Component",
+                                "Constructor",
+                                "Ctor",
+                                "Delegate",
+                                "Creator",
+                                "Entity",
+                                "Model",
+                                "View",
+                                "ViewModel",
+                                "Command",
+                                "Action",
+                                "Func",
+                                "Converter",
+                                "Adapter ",
+                                "Builder",
+                                "Factory",
+                                "Proxy ",
+                                "Wrapper ",
+                            };
 
             var phrases = MeaninglessTextPhrases;
 

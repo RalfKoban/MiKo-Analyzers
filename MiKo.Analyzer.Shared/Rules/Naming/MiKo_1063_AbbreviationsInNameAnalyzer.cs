@@ -163,6 +163,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtern is false && base.ShallAnalyze(symbol);
 
+        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsExtern)
+            {
+                return false;
+            }
+
+            return base.ShallAnalyze(symbol);
+        }
+
         protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
@@ -174,16 +184,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
-
-        protected override bool ShallAnalyze(IParameterSymbol symbol)
-        {
-            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsExtern)
-            {
-                return false;
-            }
-
-            return base.ShallAnalyze(symbol);
-        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {

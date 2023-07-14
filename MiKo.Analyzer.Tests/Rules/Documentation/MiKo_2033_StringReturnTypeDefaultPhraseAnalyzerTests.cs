@@ -71,9 +71,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_String_only_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("", " ")] string space,
-                                                                                [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+                                                                                 [Values("returns", "value")] string xmlTag,
+                                                                                 [Values("", " ")] string space,
+                                                                                 [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -92,9 +92,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_consist_String_only_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("", " ")] string space,
-                                                                                [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+                                                                                         [Values("returns", "value")] string xmlTag,
+                                                                                         [Values("", " ")] string space,
+                                                                                         [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -113,9 +113,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_ToString_method_(
-                                                                            [Values("returns")] string xmlTag,
-                                                                            [Values("", " ")] string space,
-                                                                            [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
+                                                                              [Values("returns")] string xmlTag,
+                                                                              [Values("", " ")] string space,
+                                                                              [ValueSource(nameof(StringOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -134,9 +134,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_String_Task_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("", " ")] string space,
-                                                                                [ValueSource(nameof(StringTaskReturnValues))] string returnType)
+                                                                                 [Values("returns", "value")] string xmlTag,
+                                                                                 [Values("", " ")] string space,
+                                                                                 [ValueSource(nameof(StringTaskReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -172,9 +172,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                [ValueSource(nameof(StringReturnValues))] string returnType)
+                                                                 [Values("returns", "value")] string xmlTag,
+                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                 [ValueSource(nameof(StringReturnValues))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;

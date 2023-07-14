@@ -138,11 +138,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected static XmlElementSyntax Comment(
-                                                XmlElementSyntax comment,
-                                                string commentStart,
-                                                XmlNodeSyntax link,
-                                                string commentEnd,
-                                                SyntaxList<XmlNodeSyntax> commendEndNodes)
+                                              XmlElementSyntax comment,
+                                              string commentStart,
+                                              XmlNodeSyntax link,
+                                              string commentEnd,
+                                              SyntaxList<XmlNodeSyntax> commendEndNodes)
         {
             return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
         }
@@ -150,11 +150,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
 
         protected static XmlElementSyntax Comment(
-                                                XmlElementSyntax comment,
-                                                string commentStart,
-                                                XmlNodeSyntax link,
-                                                string commentEnd,
-                                                params XmlNodeSyntax[] commendEndNodes)
+                                              XmlElementSyntax comment,
+                                              string commentStart,
+                                              XmlNodeSyntax link,
+                                              string commentEnd,
+                                              params XmlNodeSyntax[] commendEndNodes)
         {
             var start = new[] { XmlText(commentStart), link };
             var end = CommentEnd(commentEnd, commendEndNodes);
@@ -163,25 +163,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected static XmlElementSyntax Comment(
-                                                XmlElementSyntax comment,
-                                                string commentStart,
-                                                XmlNodeSyntax link1,
-                                                string commentMiddle,
-                                                XmlNodeSyntax link2,
-                                                string commentEnd,
-                                                params XmlNodeSyntax[] commendEndNodes)
+                                              XmlElementSyntax comment,
+                                              string commentStart,
+                                              XmlNodeSyntax link1,
+                                              string commentMiddle,
+                                              XmlNodeSyntax link2,
+                                              string commentEnd,
+                                              params XmlNodeSyntax[] commendEndNodes)
         {
             return Comment(comment, commentStart, link1, new[] { XmlText(commentMiddle) }, link2, commentEnd, commendEndNodes);
         }
 
         protected static XmlElementSyntax Comment(
-                                                XmlElementSyntax comment,
-                                                string commentStart,
-                                                XmlNodeSyntax link1,
-                                                IEnumerable<XmlNodeSyntax> commentMiddle,
-                                                XmlNodeSyntax link2,
-                                                string commentEnd,
-                                                params XmlNodeSyntax[] commendEndNodes)
+                                              XmlElementSyntax comment,
+                                              string commentStart,
+                                              XmlNodeSyntax link1,
+                                              IEnumerable<XmlNodeSyntax> commentMiddle,
+                                              XmlNodeSyntax link2,
+                                              string commentEnd,
+                                              params XmlNodeSyntax[] commendEndNodes)
         {
             var start = new[] { XmlText(commentStart), link1 };
             var middle = new[] { link2 };

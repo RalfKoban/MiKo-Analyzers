@@ -24,10 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case MemberAccessExpressionSyntax maes:
                     AnalyzeNameSyntax(context, maes.Name, invocation.ArgumentList.OpenParenToken);
+
                     break;
 
                 case NameSyntax name:
                     AnalyzeNameSyntax(context, name, invocation.ArgumentList.OpenParenToken);
+
                     break;
             }
         }

@@ -112,86 +112,86 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<string> CreateTypeReplacementMapKeys()
         {
             var phrases = new[]
-                          {
-                              "A factory",
-                              "A factory to provide methods",
-                              "A factory that provides methods",
-                              "A factory which provides methods",
-                              "A factory to provide",
-                              "A factory that provides",
-                              "A factory which provides",
-                              "The factory",
-                              "The factory to provide methods",
-                              "The factory that provides methods",
-                              "The factory which provides methods",
-                              "The factory to provide",
-                              "The factory that provides",
-                              "The factory which provides",
-                              "This factory",
-                              "This factory provides methods",
-                              "A interface for factories",
-                              "An interface for factories",
-                              "The interface for factories",
-                              "A interface that is implemented by factories",
-                              "An interface that is implemented by factories",
-                              "The interface that is implemented by factories",
-                              "A interface which is implemented by factories",
-                              "An interface which is implemented by factories",
-                              "The interface which is implemented by factories",
-                              "A interface implemented by factories",
-                              "An interface implemented by factories",
-                              "The interface implemented by factories",
-                              "A interface",
-                              "An interface",
-                              "The interface",
-                              "Factory",
-                              "Factory to provide methods",
-                              "Factory that provides methods",
-                              "Factory which provides methods",
-                              "Factory to provide",
-                              "Factory that provides",
-                              "Factory which provides",
-                              "Interface for factories",
-                              "Interface",
-                              "Provides methods",
-                              "Provides a method",
-                              "Provides a factory",
-                              "Provides the factory",
-                              "Provides",
-                              "Defines a factory",
-                              "Defines the factory",
-                              "Defines methods",
-                              "Defines a method",
-                              "Represents a factory",
-                              "Represents the factory",
-                              "This interface is implemented by factories",
-                              "Used",
-                              "Uses", // typo in 'Used'
-                              "A implementation of the factory pattern",
-                              "An implementation of the factory pattern",
-                              "The implementation of the factory pattern",
-                              "Implementation of the factory pattern",
-                              "A implementation of the abstract factory pattern",
-                              "An implementation of the abstract factory pattern",
-                              "The implementation of the abstract factory pattern",
-                              "Implementation of the abstract factory pattern",
-                          };
+                              {
+                                  "A factory",
+                                  "A factory to provide methods",
+                                  "A factory that provides methods",
+                                  "A factory which provides methods",
+                                  "A factory to provide",
+                                  "A factory that provides",
+                                  "A factory which provides",
+                                  "The factory",
+                                  "The factory to provide methods",
+                                  "The factory that provides methods",
+                                  "The factory which provides methods",
+                                  "The factory to provide",
+                                  "The factory that provides",
+                                  "The factory which provides",
+                                  "This factory",
+                                  "This factory provides methods",
+                                  "A interface for factories",
+                                  "An interface for factories",
+                                  "The interface for factories",
+                                  "A interface that is implemented by factories",
+                                  "An interface that is implemented by factories",
+                                  "The interface that is implemented by factories",
+                                  "A interface which is implemented by factories",
+                                  "An interface which is implemented by factories",
+                                  "The interface which is implemented by factories",
+                                  "A interface implemented by factories",
+                                  "An interface implemented by factories",
+                                  "The interface implemented by factories",
+                                  "A interface",
+                                  "An interface",
+                                  "The interface",
+                                  "Factory",
+                                  "Factory to provide methods",
+                                  "Factory that provides methods",
+                                  "Factory which provides methods",
+                                  "Factory to provide",
+                                  "Factory that provides",
+                                  "Factory which provides",
+                                  "Interface for factories",
+                                  "Interface",
+                                  "Provides methods",
+                                  "Provides a method",
+                                  "Provides a factory",
+                                  "Provides the factory",
+                                  "Provides",
+                                  "Defines a factory",
+                                  "Defines the factory",
+                                  "Defines methods",
+                                  "Defines a method",
+                                  "Represents a factory",
+                                  "Represents the factory",
+                                  "This interface is implemented by factories",
+                                  "Used",
+                                  "Uses", // typo in 'Used'
+                                  "A implementation of the factory pattern",
+                                  "An implementation of the factory pattern",
+                                  "The implementation of the factory pattern",
+                                  "Implementation of the factory pattern",
+                                  "A implementation of the abstract factory pattern",
+                                  "An implementation of the abstract factory pattern",
+                                  "The implementation of the abstract factory pattern",
+                                  "Implementation of the abstract factory pattern",
+                              };
 
             var articles = new[]
-                           {
-                               "a ",
-                               "an ",
-                               "the ",
-                               string.Empty,
-                           };
+                               {
+                                   "a ",
+                                   "an ",
+                                   "the ",
+                                   string.Empty,
+                               };
 
             var instances = new[]
-                            {
-                                "instance of ",
-                                "instances of ",
-                                "new instance of ",
-                                "new instances of ",
-                            };
+                                {
+                                    "instance of ",
+                                    "instances of ",
+                                    "new instance of ",
+                                    "new instances of ",
+                                };
 
             var continuations = new List<string>();
 
@@ -245,27 +245,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<string> CreateMethodReplacementMapKeys()
         {
             var startingWords = new[]
-                                {
-                                    "Create",
-                                    "Creates",
-                                    "Construct",
-                                    "Constructs",
-                                    "Return",
-                                    "Returns",
-                                    "Get",
-                                    "Gets",
-                                };
+                                    {
+                                        "Create",
+                                        "Creates",
+                                        "Construct",
+                                        "Constructs",
+                                        "Return",
+                                        "Returns",
+                                        "Get",
+                                        "Gets",
+                                    };
 
             var continuations = new[]
-                                {
-                                    string.Empty,
-                                    " and initialize",
-                                    " and initializes",
-                                    " and provide",
-                                    " and provides",
-                                    " and return",
-                                    " and returns",
-                                };
+                                    {
+                                        string.Empty,
+                                        " and initialize",
+                                        " and initializes",
+                                        " and provide",
+                                        " and provides",
+                                        " and return",
+                                        " and returns",
+                                    };
 
             foreach (var word in startingWords)
             {

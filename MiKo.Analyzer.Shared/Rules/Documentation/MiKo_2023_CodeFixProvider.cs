@@ -174,44 +174,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMap(params KeyValuePair<string, string>[] additionalPairs)
         {
             var starts = new[]
-                         {
-                             "A flag",
-                             "A value",
-                             "A (optional) parameter",
-                             "A optional parameter",
-                             "An (optional) parameter",
-                             "An optional parameter",
-                             "The (optional) parameter",
-                             "The flag",
-                             "The optional parameter",
-                             "The value",
-                             "Flag",
-                             "Value",
-                             "Optional parameter",
-                             "(optional) parameter",
-                             "(Optional) parameter",
-                         };
+                             {
+                                 "A flag",
+                                 "A value",
+                                 "A (optional) parameter",
+                                 "A optional parameter",
+                                 "An (optional) parameter",
+                                 "An optional parameter",
+                                 "The (optional) parameter",
+                                 "The flag",
+                                 "The optional parameter",
+                                 "The value",
+                                 "Flag",
+                                 "Value",
+                                 "Optional parameter",
+                                 "(optional) parameter",
+                                 "(Optional) parameter",
+                             };
 
             var conditions = new[] { "if to", "if", "whether to", "whether" };
 
             var verbs = new[]
-                        {
-                            "defining",
-                            "determining",
-                            "indicating",
-                            "that defined",
-                            "that defines",
-                            "that determined",
-                            "that determines",
-                            "that indicated",
-                            "that indicates",
-                            "which defined",
-                            "which defines",
-                            "which determined",
-                            "which determines",
-                            "which indicated",
-                            "which indicates",
-                        };
+                            {
+                                "defining",
+                                "determining",
+                                "indicating",
+                                "that defined",
+                                "that defines",
+                                "that determined",
+                                "that determines",
+                                "that indicated",
+                                "that indicates",
+                                "which defined",
+                                "which defines",
+                                "which determined",
+                                "which determines",
+                                "which indicated",
+                                "which indicates",
+                            };
 
             foreach (var text in from start in starts
                                  from verb in verbs

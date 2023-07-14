@@ -71,10 +71,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
+                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                  [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -93,11 +93,11 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_with_default_phrase_(
-                                                                                                    [Values("returns", "value")] string xmlTag,
-                                                                                                    [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                    [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                    [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
-                                                                                                    [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
+                                                                                                      [Values("returns", "value")] string xmlTag,
+                                                                                                      [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                                      [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                                      [Values("<see langword=\"true\"/>", "<see langword=\"false\"/>")] string defaultValue,
+                                                                                                      [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -116,10 +116,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Boolean_only_method_with_line_break_(
-                                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                                [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                                [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                                [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
+                                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                                  [ValueSource(nameof(BooleanOnlyReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -139,10 +139,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Boolean_Task_method_(
-                                                                                [Values("returns", "value")] string xmlTag,
-                                                                                [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
-                                                                                [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
-                                                                                [ValueSource(nameof(BooleanTaskReturnValues))] string returnType)
+                                                                                  [Values("returns", "value")] string xmlTag,
+                                                                                  [Values("<see langword=\"true\" />", "<see langword=\"true\"/>")] string trueValue,
+                                                                                  [Values("<see langword=\"false\" />", "<see langword=\"false\"/>")] string falseValue,
+                                                                                  [ValueSource(nameof(BooleanTaskReturnValues))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -177,9 +177,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                [ValueSource(nameof(BooleanReturnValues))] string returnType)
+                                                                 [Values("returns", "value")] string xmlTag,
+                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                 [ValueSource(nameof(BooleanReturnValues))] string returnType)
             => An_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;

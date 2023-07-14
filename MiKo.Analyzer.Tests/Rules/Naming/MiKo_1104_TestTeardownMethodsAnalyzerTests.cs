@@ -19,8 +19,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_(
-                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                    [ValueSource(nameof(Tests))] string test)
+                                                      [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                      [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
@@ -32,8 +32,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_setup_method_(
-                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                    [ValueSource(nameof(TestSetUps))] string test)
+                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                            [ValueSource(nameof(TestSetUps))] string test)
             => No_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
@@ -45,8 +45,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_teardown_method_with_correct_name_(
-                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                            [ValueSource(nameof(TestTearDowns))] string test)
+                                                                                 [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                 [ValueSource(nameof(TestTearDowns))] string test)
             => No_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
@@ -73,8 +73,8 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_test_teardown_method_with_wrong_name_(
-                                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                            [ValueSource(nameof(TestTearDowns))] string test)
+                                                                               [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                               [ValueSource(nameof(TestTearDowns))] string test)
             => An_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe

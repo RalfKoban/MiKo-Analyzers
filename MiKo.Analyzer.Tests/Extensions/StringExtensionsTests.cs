@@ -42,13 +42,13 @@ namespace MiKoSolutions.Analyzers.Extensions
             var result = "do split if something is split here.".SplitBy(new[] { "split" });
 
             Assert.That(result, Is.EquivalentTo(new[]
-                                                {
-                                                    "do ",
-                                                    "split",
-                                                    " if something is ",
-                                                    "split",
-                                                    " here.",
-                                                }));
+                                                    {
+                                                        "do ",
+                                                        "split",
+                                                        " if something is ",
+                                                        "split",
+                                                        " here.",
+                                                    }));
         }
 
         [Test]
@@ -57,13 +57,13 @@ namespace MiKoSolutions.Analyzers.Extensions
             var result = "do split_1 if something is split_2 here.".SplitBy(new[] { "split_1", "split_2" });
 
             Assert.That(result, Is.EquivalentTo(new[]
-                                                {
-                                                    "do ",
-                                                    "split_1",
-                                                    " if something is ",
-                                                    "split_2",
-                                                    " here.",
-                                                }));
+                                                    {
+                                                        "do ",
+                                                        "split_1",
+                                                        " if something is ",
+                                                        "split_2",
+                                                        " here.",
+                                                    }));
         }
 
         [Test]
@@ -72,17 +72,17 @@ namespace MiKoSolutions.Analyzers.Extensions
             var result = "do split_1 if something is split_2 here. Also split_1 here because split_2 is contained multiple times.".SplitBy(new[] { "split_1", "split_2" });
 
             Assert.That(result, Is.EquivalentTo(new[]
-                                                {
-                                                    "do ",
-                                                    "split_1",
-                                                    " if something is ",
-                                                    "split_2",
-                                                    " here. Also ",
-                                                    "split_1",
-                                                    " here because ",
-                                                    "split_2",
-                                                    " is contained multiple times.",
-                                                }));
+                                                    {
+                                                        "do ",
+                                                        "split_1",
+                                                        " if something is ",
+                                                        "split_2",
+                                                        " here. Also ",
+                                                        "split_1",
+                                                        " here because ",
+                                                        "split_2",
+                                                        " is contained multiple times.",
+                                                    }));
         }
 
         [Test]

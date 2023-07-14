@@ -222,6 +222,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         // adjust the default to include the brace as it had been trimmed above
                         var i = text.IndexOf(')');
+
                         if (i != -1)
                         {
                             end = i + 1;
