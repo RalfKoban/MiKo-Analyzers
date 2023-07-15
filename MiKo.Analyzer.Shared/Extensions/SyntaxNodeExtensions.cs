@@ -982,9 +982,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsBoolean(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.BoolKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "bool":
                 case nameof(Boolean):
                 case nameof(System) + "." + nameof(Boolean):
                     return true;
@@ -996,9 +1000,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsByte(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.ByteKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "byte":
                 case nameof(Byte):
                 case nameof(System) + "." + nameof(Byte):
                     return true;
@@ -1032,6 +1040,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsCommand(this TypeSyntax value, SemanticModel semanticModel)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var name = value.ToString();
 
             return name.Contains("Command")
@@ -1047,6 +1060,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsException(this TypeSyntax value, Type exceptionType)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var s = value.ToString();
 
             return s == exceptionType.Name || s == exceptionType.FullName;
@@ -1273,6 +1291,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var s = value.ToString();
 
             return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
@@ -1280,6 +1303,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStreamingContext(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var s = value.ToString();
 
             return s == nameof(StreamingContext) || s == TypeNames.StreamingContext;
@@ -1287,21 +1315,40 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.StringKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "string":
                 case nameof(String):
                 case nameof(System) + "." + nameof(String):
                     return true;
-
-                default:
-                    return false;
             }
+
+            return false;
         }
 
-        internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
+        internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel)
+        {
+            if (value.IsStringLiteral())
+            {
+                return true;
+            }
 
-        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
+            return value.GetTypeSymbol(semanticModel).IsString();
+        }
+
+        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel)
+        {
+            if (value.IsStringLiteral())
+            {
+                return true;
+            }
+
+            return value.GetTypeSymbol(semanticModel).IsString();
+        }
 
         internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
 
@@ -1335,9 +1382,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsObject(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.ObjectKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "object":
                 case nameof(Object):
                 case nameof(System) + "." + nameof(Object):
                     return true;
@@ -2329,6 +2380,11 @@ namespace MiKoSolutions.Analyzers
 
         private static bool IsLinqExtensionMethod(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
+            if (node.Expression is MemberAccessExpressionSyntax maes && maes.Expression is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var name = node.Expression.GetName();
 
             if (Constants.Names.LinqMethodNames.Contains(name))
