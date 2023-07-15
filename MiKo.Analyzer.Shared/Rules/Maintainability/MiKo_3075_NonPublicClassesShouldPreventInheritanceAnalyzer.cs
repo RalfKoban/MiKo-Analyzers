@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.DeclaredAccessibility == Accessibility.Private)
             {
                 // find other symbols that inherit from this one
-                var privateClasses = symbol.ContainingType.GetMembers().OfType<INamedTypeSymbol>().Where(_ => _.TypeKind == TypeKind.Class).ToList();
+                var privateClasses = symbol.ContainingType.GetMembers<INamedTypeSymbol>().Where(_ => _.TypeKind == TypeKind.Class).ToList();
                 privateClasses.Remove(symbol);
 
                 foreach (var otherClass in privateClasses)

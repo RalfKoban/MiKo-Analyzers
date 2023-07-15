@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
-        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers().OfType<IMethodSymbol>();
+        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
 
         internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
         {
@@ -76,9 +76,9 @@ namespace MiKoSolutions.Analyzers
         /// </remarks>
         internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.CanBeReferencedByName);
 
-        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers().OfType<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
 
-        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers().OfType<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
 
         internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
@@ -212,7 +212,9 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              .Select(_ => _.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
-        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers().Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>();
+
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
@@ -1005,7 +1007,7 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
             return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
         }

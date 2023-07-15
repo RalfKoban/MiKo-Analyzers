@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var dependencies = 0;
 
-            foreach (var member in symbol.GetMembers())
+            foreach (var member in symbol.GetMembers().Where(_ => _.IsImplicitlyDeclared is false))
             {
                 switch (member)
                 {
@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            return dependencies > MaxDependenciesCount ?
-                       new[] { Issue(symbol, dependencies, MaxDependenciesCount) }
-                       : Enumerable.Empty<Diagnostic>();
+            return dependencies > MaxDependenciesCount
+                   ? new[] { Issue(symbol, dependencies, MaxDependenciesCount) }
+                   : Enumerable.Empty<Diagnostic>();
         }
     }
 }
