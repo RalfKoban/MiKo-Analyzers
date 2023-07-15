@@ -166,19 +166,6 @@ public sealed class BlaBlaException : Exception
 }");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_exception_type() => An_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-/// <summary>
-/// Thrown ...
-/// </summary>
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-}");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_documented_exception_ctor_without_params() => No_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
@@ -229,27 +216,6 @@ public sealed class BlaBlaException : Exception
 }");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_overloads_on_exception_ctor_without_params() => An_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-    /// <overloads>
-    /// <summary>
-    /// Some overload.
-    /// </summary>
-    /// </overloads>
-    /// <summary>
-    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class.
-    /// </summary>
-    public BlaBlaException()
-    {
-    }
-}");
-
-        [Test]
         public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_message_only_param() => No_issue_is_reported_for(@"
 using System;
 using System.Runtime.Serialization;
@@ -279,6 +245,140 @@ public sealed class BlaBlaException : Exception
 {
     public BlaBlaException(string message)
         : base(message)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_message_and_exception_param() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+    /// </summary>
+    /// <param name=""message"">
+    /// The error message that explains the reason for the exception.
+    /// </param>
+    /// <param name=""innerException"">
+    /// The exception that is the cause of the current exception.
+    /// <para />
+    /// If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.
+    /// </param>
+    public BlaBlaException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_non_documented_exception_ctor_with_message_and_exception_param() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    public BlaBlaException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with serialized data.
+    /// </summary>
+    /// <param name=""info"">
+    /// The object that holds the serialized object data.
+    /// </param>
+    /// <param name=""context"">
+    /// The contextual information about the source or destination.
+    /// </param>
+    /// <remarks>
+    /// This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.
+    /// </remarks>
+    private BlaBlaException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_non_documented_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    private BlaBlaException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_documented_but_missing_remarks_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with serialized data.
+    /// </summary>
+    /// <param name=""info"">
+    /// The object that holds the serialized object data.
+    /// </param>
+    /// <param name=""context"">
+    /// The contextual information about the source or destination.
+    /// </param>
+    private BlaBlaException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_exception_type() => An_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// Thrown ...
+/// </summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_overloads_on_exception_ctor_without_params() => An_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <overloads>
+    /// <summary>
+    /// Some overload.
+    /// </summary>
+    /// </overloads>
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class.
+    /// </summary>
+    public BlaBlaException()
     {
     }
 }");
@@ -319,43 +419,6 @@ public sealed class BlaBlaException : Exception
     /// </param>
     public BlaBlaException(string message)
         : base(message)
-    {
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_message_and_exception_param() => No_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-    /// <summary>
-    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with a specified error message and a reference to the inner exception that is the cause of this exception.
-    /// </summary>
-    /// <param name=""message"">
-    /// The error message that explains the reason for the exception.
-    /// </param>
-    /// <param name=""innerException"">
-    /// The exception that is the cause of the current exception.
-    /// <para />
-    /// If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.
-    /// </param>
-    public BlaBlaException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_non_documented_exception_ctor_with_message_and_exception_param() => No_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-    public BlaBlaException(string message, Exception innerException) : base(message, innerException)
     {
     }
 }");
@@ -428,46 +491,6 @@ public sealed class BlaBlaException : Exception
     /// If the <paramref name=""innerException"" /> parameter is not <see langword=""null""/>, the current exception is raised in a <b>catch</b> block that handles the inner exception.
     /// </param>
     public BlaBlaException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-    /// <summary>
-    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with serialized data.
-    /// </summary>
-    /// <param name=""info"">
-    /// The object that holds the serialized object data.
-    /// </param>
-    /// <param name=""context"">
-    /// The contextual information about the source or destination.
-    /// </param>
-    /// <remarks>
-    /// This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.
-    /// </remarks>
-    private BlaBlaException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_non_documented_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-    private BlaBlaException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
     {
     }
 }");
@@ -547,29 +570,6 @@ public sealed class BlaBlaException : Exception
     /// <remarks>
     /// This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.
     /// </remarks>
-    private BlaBlaException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
-    {
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_correctly_documented_but_missing_remarks_exception_ctor_with_serialization_param() => No_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
-public sealed class BlaBlaException : Exception
-{
-    /// <summary>
-    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with serialized data.
-    /// </summary>
-    /// <param name=""info"">
-    /// The object that holds the serialized object data.
-    /// </param>
-    /// <param name=""context"">
-    /// The contextual information about the source or destination.
-    /// </param>
     private BlaBlaException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
@@ -716,7 +716,7 @@ public sealed class BlaBlaException : Exception
         }
 
         [Test]
-        public void Code_gets_fixed_for_message_only_ctor()
+        public void Code_gets_fixed_for_message_only_ctor_lower_case()
         {
             const string OriginalCode = @"
 using System;
@@ -745,6 +745,43 @@ public sealed class BlaBlaException : Exception
     /// The error message that explains the reason for the exception.
     /// </param>
     public BlaBlaException(string message)
+    {
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_message_only_ctor_upper_case()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary></summary>
+    public BlaBlaException(String message)
+    {
+    }
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref=""BlaBlaException""/> class with a specified error message.
+    /// </summary>
+    /// <param name=""message"">
+    /// The error message that explains the reason for the exception.
+    /// </param>
+    public BlaBlaException(String message)
     {
     }
 }";
