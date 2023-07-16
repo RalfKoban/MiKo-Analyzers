@@ -68,12 +68,12 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_test_method()
             => Assert.Multiple(() =>
-                                   {
-                                       foreach (var testFixture in TestFixtures)
-                                       {
-                                           foreach (var test in Tests)
-                                           {
-                                               No_issue_is_reported_for(@"
+                                    {
+                                        foreach (var testFixture in TestFixtures)
+                                        {
+                                            foreach (var test in Tests)
+                                            {
+                                                No_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
@@ -84,9 +84,9 @@ public class TestMe
     public Task DoSomething() => Task.CompletedTask;
 }
 ");
-                                           }
-                                       }
-                                   });
+                                            }
+                                        }
+                                    });
 
         [Test]
         public void No_issue_is_reported_for_TaskFactory_method_([ValueSource(nameof(TaskFactoryMethods))] string methodName) => No_issue_is_reported_for(@"
@@ -164,12 +164,12 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method()
             => Assert.Multiple(() =>
-                                   {
-                                       foreach (var testFixture in TestFixtures)
-                                       {
-                                           foreach (var test in Tests)
-                                           {
-                                               No_issue_is_reported_for(@"
+                                    {
+                                        foreach (var testFixture in TestFixtures)
+                                        {
+                                            foreach (var test in Tests)
+                                            {
+                                                No_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
@@ -183,19 +183,19 @@ public class TestMe
     }
 }
 ");
-                                           }
-                                       }
-                                   });
+                                            }
+                                        }
+                                    });
 
         [Test]
         public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method()
             => Assert.Multiple(() =>
-                                   {
-                                       foreach (var testFixture in TestFixtures)
-                                       {
-                                           foreach (var test in Tests)
-                                           {
-                                               An_issue_is_reported_for(@"
+                                    {
+                                        foreach (var testFixture in TestFixtures)
+                                        {
+                                            foreach (var test in Tests)
+                                            {
+                                                An_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
@@ -209,9 +209,9 @@ public class TestMe
     }
 }
 ");
-                                           }
-                                       }
-                                   });
+                                            }
+                                        }
+                                    });
 
         [Test]
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(

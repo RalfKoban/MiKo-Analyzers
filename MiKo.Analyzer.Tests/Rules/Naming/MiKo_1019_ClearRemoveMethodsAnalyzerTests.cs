@@ -66,10 +66,10 @@ public class TestMe
         public void No_issue_is_reported_for_test_methods()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var test in Tests)
-                                    {
-                                        No_issue_is_reported_for(@"
+                                 {
+                                     foreach (var test in Tests)
+                                     {
+                                         No_issue_is_reported_for(@"
 using System;
 using NUnit.Framework;
 
@@ -86,8 +86,8 @@ public class TestMe
     }
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
@@ -180,10 +180,10 @@ public class TestMe
         public void No_issue_is_reported_for_local_functions_in_test_methods()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var test in Tests)
-                                    {
-                                        No_issue_is_reported_for(@"
+                                 {
+                                     foreach (var test in Tests)
+                                     {
+                                         No_issue_is_reported_for(@"
 using System;
 using NUnit.Framework;
 
@@ -206,8 +206,8 @@ public class TestMe
     }
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]

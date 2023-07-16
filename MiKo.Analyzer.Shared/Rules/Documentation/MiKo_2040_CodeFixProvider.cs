@@ -36,12 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var nodes = comment.DescendantNodes<XmlEmptyElementSyntax>(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
-                                                   {
-                                                       var attribute = rewritten.Attributes.First() as XmlTextAttributeSyntax;
-                                                       var text = attribute.GetTextWithoutTrivia();
+                                                                       {
+                                                                           var attribute = rewritten.Attributes.First() as XmlTextAttributeSyntax;
+                                                                           var text = attribute.GetTextWithoutTrivia();
 
-                                                       return SeeLangword(text.ToLowerCase());
-                                                   });
+                                                                           return SeeLangword(text.ToLowerCase());
+                                                                       });
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongNonEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
@@ -49,12 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var nodes = comment.DescendantNodes<XmlElementSyntax>(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (original, rewritten) =>
-                                                   {
-                                                       var attribute = rewritten.StartTag.Attributes.First() as XmlTextAttributeSyntax;
-                                                       var text = attribute.GetTextWithoutTrivia();
+                                                                       {
+                                                                           var attribute = rewritten.StartTag.Attributes.First() as XmlTextAttributeSyntax;
+                                                                           var text = attribute.GetTextWithoutTrivia();
 
-                                                       return SeeLangword(text.ToLowerCase());
-                                                   });
+                                                                           return SeeLangword(text.ToLowerCase());
+                                                                       });
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongTag(DocumentationCommentTriviaSyntax comment)

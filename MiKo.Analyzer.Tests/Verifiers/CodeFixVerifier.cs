@@ -29,16 +29,16 @@ namespace TestHelper
         protected void Codefix_causes_no_exception_in_folder_(string path)
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
-                                    {
-                                        var oldSource = File.ReadAllText(file);
+                                 {
+                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories))
+                                     {
+                                         var oldSource = File.ReadAllText(file);
 
-                                        var issues = GetDiagnostics(oldSource);
+                                         var issues = GetDiagnostics(oldSource);
 
-                                        if (issues.Any())
-                                        {
-                                            try
+                                         if (issues.Any())
+                                         {
+                                             try
                                             {
                                                 Assert.Multiple(() => VerifyCSharpFix(oldSource, oldSource, allowNewCompilerDiagnostics: true, assertResult: false));
                                             }
@@ -46,9 +46,9 @@ namespace TestHelper
                                             {
                                                 Assert.Fail($"'{file}' failed with {ex}");
                                             }
-                                        }
-                                    }
-                                });
+                                         }
+                                     }
+                                 });
         }
 
         /// <summary>

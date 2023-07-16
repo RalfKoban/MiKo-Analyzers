@@ -111,33 +111,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private IEnumerable<Diagnostic> AnalyzeComment(string symbolName, DocumentationCommentTriviaSyntax comment)
         {
             var descendantNodes = comment.DescendantNodes(descendant =>
-                                                              {
-                                                                  switch (descendant)
-                                                                  {
-                                                                      case DocumentationCommentTriviaSyntax _:
-                                                                          return true;
+                                                                       {
+                                                                           switch (descendant)
+                                                                           {
+                                                                               case DocumentationCommentTriviaSyntax _:
+                                                                                   return true;
 
-                                                                      case XmlTextSyntax _:
-                                                                          return false;
+                                                                               case XmlTextSyntax _:
+                                                                                   return false;
 
-                                                                      case XmlElementSyntax e:
-                                                                      {
-                                                                          switch (e.GetName())
-                                                                          {
-                                                                              case "b":
-                                                                              case Constants.XmlTag.C:
-                                                                              case Constants.XmlTag.Code:
-                                                                                  return false; // do not dig deeper
+                                                                               case XmlElementSyntax e:
+                                                                               {
+                                                                                   switch (e.GetName())
+                                                                                   {
+                                                                                       case "b":
+                                                                                       case Constants.XmlTag.C:
+                                                                                       case Constants.XmlTag.Code:
+                                                                                           return false; // do not dig deeper
 
-                                                                              default:
-                                                                                  return true;
-                                                                          }
-                                                                      }
+                                                                                       default:
+                                                                                           return true;
+                                                                                   }
+                                                                               }
 
-                                                                      default:
-                                                                          return false;
-                                                                  }
-                                                              });
+                                                                               default:
+                                                                                   return false;
+                                                                           }
+                                                                       });
 
             foreach (var descendant in descendantNodes)
             {

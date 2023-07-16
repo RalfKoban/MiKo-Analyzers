@@ -29,12 +29,12 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_only_a_Test_method() => Assert.Multiple(() =>
-                                                                                                           {
-                                                                                                               foreach (var fixture in TestFixtures)
-                                                                                                               {
-                                                                                                                   foreach (var test in Tests)
-                                                                                                                   {
-                                                                                                                       No_issue_is_reported_for(@"
+                                                                                                            {
+                                                                                                                foreach (var fixture in TestFixtures)
+                                                                                                                {
+                                                                                                                    foreach (var test in Tests)
+                                                                                                                    {
+                                                                                                                        No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -46,18 +46,18 @@ public class TestMe
     }
 }
 ");
-                                                                                                                   }
-                                                                                                               }
-                                                                                                           });
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            });
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_only_a_TearDown_method() => Assert.Multiple(() =>
-                                                                                                           {
-                                                                                                               foreach (var fixture in TestFixtures)
-                                                                                                               {
-                                                                                                                   foreach (var tearDown in TestTearDowns)
-                                                                                                                   {
-                                                                                                                       No_issue_is_reported_for(@"
+                                                                                                                {
+                                                                                                                    foreach (var fixture in TestFixtures)
+                                                                                                                    {
+                                                                                                                        foreach (var tearDown in TestTearDowns)
+                                                                                                                        {
+                                                                                                                            No_issue_is_reported_for(@"
 
 using NUnit.Framework;
 
@@ -70,18 +70,18 @@ public class TestMe
     }
 }
 ");
-                                                                                                                   }
-                                                                                                               }
-                                                                                                           });
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                });
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_a_SetUp_method_as_only_method() => Assert.Multiple(() =>
-                                                                                                                    {
-                                                                                                                        foreach (var fixture in TestFixtures)
-                                                                                                                        {
-                                                                                                                            foreach (var setup in TestSetUps)
-                                                                                                                            {
-                                                                                                                                No_issue_is_reported_for(@"
+                                                                                                                       {
+                                                                                                                           foreach (var fixture in TestFixtures)
+                                                                                                                           {
+                                                                                                                               foreach (var setup in TestSetUps)
+                                                                                                                               {
+                                                                                                                                   No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -93,20 +93,20 @@ public class TestMe
     }
 }
 ");
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    });
+                                                                                                                               }
+                                                                                                                           }
+                                                                                                                       });
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_a_SetUp_method_before_a_Test_method() => Assert.Multiple(() =>
-                                                                                                                     {
-                                                                                                                         foreach (var fixture in TestFixtures)
-                                                                                                                         {
-                                                                                                                             foreach (var setup in TestSetUps)
                                                                                                                              {
-                                                                                                                                 foreach (var test in Tests)
+                                                                                                                                 foreach (var fixture in TestFixtures)
                                                                                                                                  {
-                                                                                                                                     No_issue_is_reported_for(@"
+                                                                                                                                     foreach (var setup in TestSetUps)
+                                                                                                                                     {
+                                                                                                                                         foreach (var test in Tests)
+                                                                                                                                         {
+                                                                                                                                             No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -123,10 +123,10 @@ public class TestMe
     }
 }
 ");
+                                                                                                                                         }
+                                                                                                                                     }
                                                                                                                                  }
-                                                                                                                             }
-                                                                                                                         }
-                                                                                                                     });
+                                                                                                                             });
 
         [Test]
         public void No_issue_is_reported_for_a_SetUp_method_after_a_OneTimeSetUp_and_OneTimeTearDown_method() => No_issue_is_reported_for(@"
@@ -158,14 +158,14 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_a_SetUp_method_before_a_OneTimeSetUp_method() => Assert.Multiple(() =>
-                                                                                                                         {
-                                                                                                                             foreach (var fixture in TestFixtures)
-                                                                                                                             {
-                                                                                                                                 foreach (var setup in TestSetUps)
-                                                                                                                                 {
-                                                                                                                                     foreach (var oneTime in TestOneTimeSetUps)
                                                                                                                                      {
-                                                                                                                                         An_issue_is_reported_for(@"
+                                                                                                                                         foreach (var fixture in TestFixtures)
+                                                                                                                                         {
+                                                                                                                                             foreach (var setup in TestSetUps)
+                                                                                                                                             {
+                                                                                                                                                 foreach (var oneTime in TestOneTimeSetUps)
+                                                                                                                                                 {
+                                                                                                                                                     An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -182,21 +182,21 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                     }
-                                                                                                                                 }
-                                                                                                                             }
-                                                                                                                         });
+                                                                                                                                                 }
+                                                                                                                                             }
+                                                                                                                                         }
+                                                                                                                                     });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_a_SetUp_method_before_a_OneTimeTearDown_method() => Assert.Multiple(() =>
-                                                                                                                         {
-                                                                                                                             foreach (var fixture in TestFixtures)
-                                                                                                                             {
-                                                                                                                                 foreach (var setup in TestSetUps)
-                                                                                                                                 {
-                                                                                                                                     foreach (var oneTime in TestOneTimeTearDowns)
-                                                                                                                                     {
-                                                                                                                                         An_issue_is_reported_for(@"
+                                                                                                                                        {
+                                                                                                                                            foreach (var fixture in TestFixtures)
+                                                                                                                                            {
+                                                                                                                                                foreach (var setup in TestSetUps)
+                                                                                                                                                {
+                                                                                                                                                    foreach (var oneTime in TestOneTimeTearDowns)
+                                                                                                                                                    {
+                                                                                                                                                        An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -213,21 +213,21 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                     }
-                                                                                                                                 }
-                                                                                                                             }
-                                                                                                                         });
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_a_SetUp_method_after_a_TearDown_method() => Assert.Multiple(() =>
-                                                                                                                                  {
-                                                                                                                                      foreach (var fixture in TestFixtures)
-                                                                                                                                      {
-                                                                                                                                          foreach (var setup in TestSetUps)
-                                                                                                                                          {
-                                                                                                                                              foreach (var tearDown in TestTearDowns)
-                                                                                                                                              {
-                                                                                                                                                  An_issue_is_reported_for(@"
+                                                                                                                                {
+                                                                                                                                    foreach (var fixture in TestFixtures)
+                                                                                                                                    {
+                                                                                                                                        foreach (var setup in TestSetUps)
+                                                                                                                                        {
+                                                                                                                                            foreach (var tearDown in TestTearDowns)
+                                                                                                                                            {
+                                                                                                                                                An_issue_is_reported_for(@"
 
 using NUnit.Framework;
 
@@ -245,21 +245,21 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                              }
-                                                                                                                                          }
-                                                                                                                                      }
-                                                                                                                                  });
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_a_SetUp_method_after_a_Test_method() => Assert.Multiple(() =>
-                                                                                                                           {
-                                                                                                                               foreach (var fixture in TestFixtures)
-                                                                                                                               {
-                                                                                                                                   foreach (var setup in TestSetUps)
-                                                                                                                                   {
-                                                                                                                                       foreach (var test in Tests)
-                                                                                                                                       {
-                                                                                                                                           An_issue_is_reported_for(@"
+                                                                                                                            {
+                                                                                                                                foreach (var fixture in TestFixtures)
+                                                                                                                                {
+                                                                                                                                    foreach (var setup in TestSetUps)
+                                                                                                                                    {
+                                                                                                                                        foreach (var test in Tests)
+                                                                                                                                        {
+                                                                                                                                            An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -276,19 +276,19 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                       }
-                                                                                                                                   }
-                                                                                                                               }
-                                                                                                                           });
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_a_SetUp_method_after_a_non_Test_method() => Assert.Multiple(() =>
-                                                                                                                             {
-                                                                                                                                 foreach (var fixture in TestFixtures)
-                                                                                                                                 {
-                                                                                                                                     foreach (var setup in TestSetUps)
-                                                                                                                                     {
-                                                                                                                                         An_issue_is_reported_for(@"
+                                                                                                                                {
+                                                                                                                                    foreach (var fixture in TestFixtures)
+                                                                                                                                    {
+                                                                                                                                        foreach (var setup in TestSetUps)
+                                                                                                                                        {
+                                                                                                                                            An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -304,18 +304,18 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                     }
-                                                                                                                                 }
-                                                                                                                             });
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                });
 
         [Test]
         public void An_issue_is_reported_for_a_non_test_class_with_a_SetUp_method_after_a_Test_method() => Assert.Multiple(() =>
-                                                                                                                             {
-                                                                                                                                 foreach (var setup in TestSetUps)
-                                                                                                                                 {
-                                                                                                                                     foreach (var test in Tests)
-                                                                                                                                     {
-                                                                                                                                         An_issue_is_reported_for(@"
+                                                                                                                                {
+                                                                                                                                    foreach (var setup in TestSetUps)
+                                                                                                                                    {
+                                                                                                                                        foreach (var test in Tests)
+                                                                                                                                        {
+                                                                                                                                            An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -331,9 +331,9 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                     }
-                                                                                                                                 }
-                                                                                                                             });
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                });
 
         [Test]
         public void Code_gets_fixed_for_test_method()

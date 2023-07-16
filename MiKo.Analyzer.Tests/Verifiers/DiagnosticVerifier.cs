@@ -38,25 +38,25 @@ namespace TestHelper
         protected void An_issue_is_reported_for(int violations, string fileContent)
         {
             Assert.Multiple(() =>
-                                {
-                                    var results = GetDiagnostics(fileContent);
+                                 {
+                                     var results = GetDiagnostics(fileContent);
 
-                                    Assert.That(results.Length, Is.EqualTo(violations), string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
+                                     Assert.That(results.Length, Is.EqualTo(violations), string.Join(Environment.NewLine, results.Select(_ => _.ToString())));
 
-                                    foreach (var result in results)
-                                    {
-                                        Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
+                                     foreach (var result in results)
+                                     {
+                                         Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
 
-                                        var message = result.GetMessage();
+                                         var message = result.GetMessage();
 
-                                        Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
+                                         Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
 
-                                        foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
-                                        {
-                                            Assert.That(message, Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
-                                        }
-                                    }
-                                });
+                                         foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
+                                         {
+                                             Assert.That(message, Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
+                                         }
+                                     }
+                                 });
         }
 
         protected void An_issue_is_reported_for_file_(string path, int violations) => An_issue_is_reported_for(violations, File.ReadAllText(path));
@@ -73,17 +73,17 @@ namespace TestHelper
         protected void No_issue_is_reported_for_folder_(string path)
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var directory in Directory.EnumerateDirectories(path))
-                                    {
-                                        No_issue_is_reported_for_folder_(directory);
-                                    }
+                                 {
+                                     foreach (var directory in Directory.EnumerateDirectories(path))
+                                     {
+                                         No_issue_is_reported_for_folder_(directory);
+                                     }
 
-                                    foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
-                                    {
-                                        No_issue_is_reported_for_file_(file);
-                                    }
-                                });
+                                     foreach (var file in Directory.EnumerateFiles(path, "*.cs"))
+                                     {
+                                         No_issue_is_reported_for_file_(file);
+                                     }
+                                 });
         }
 
         protected IEnumerable<string> Collect_files_having_issues_in_folder_(string path)

@@ -135,30 +135,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (contents[i] is XmlTextSyntax t1 && contents[i + 1] is XmlTextSyntax t2)
                     {
                         summary = summary.ReplaceNodes(new[] { t1, t2 }, (original, rewritten) =>
-                                                                             {
-                                                                                 if (original == t1)
-                                                                                 {
-                                                                                     var tokens = t1.TextTokens.Concat(t2.TextTokens).ToList();
+                                                                                                 {
+                                                                                                     if (original == t1)
+                                                                                                     {
+                                                                                                         var tokens = t1.TextTokens.Concat(t2.TextTokens).ToList();
 
-                                                                                     for (var index = 0; index < tokens.Count - 1; index++)
-                                                                                     {
-                                                                                         var token1 = tokens[index];
-                                                                                         var token2 = tokens[index + 1];
+                                                                                                         for (var index = 0; index < tokens.Count - 1; index++)
+                                                                                                         {
+                                                                                                             var token1 = tokens[index];
+                                                                                                             var token2 = tokens[index + 1];
 
-                                                                                         if (token1.IsKind(SyntaxKind.XmlTextLiteralToken) && token2.IsKind(SyntaxKind.XmlTextLiteralToken))
-                                                                                         {
-                                                                                             var combinedText = token1.ValueText + token2.ValueText;
-                                                                                             tokens[index] = token1.WithText(combinedText);
-                                                                                             tokens.RemoveAt(index + 1);
-                                                                                             index--;
-                                                                                         }
-                                                                                     }
+                                                                                                             if (token1.IsKind(SyntaxKind.XmlTextLiteralToken) && token2.IsKind(SyntaxKind.XmlTextLiteralToken))
+                                                                                                             {
+                                                                                                                 var combinedText = token1.ValueText + token2.ValueText;
+                                                                                                                 tokens[index] = token1.WithText(combinedText);
+                                                                                                                 tokens.RemoveAt(index + 1);
+                                                                                                                 index--;
+                                                                                                             }
+                                                                                                         }
 
-                                                                                     return XmlText(tokens.ToArray());
-                                                                                 }
+                                                                                                         return XmlText(tokens.ToArray());
+                                                                                                     }
 
-                                                                                 return default;
-                                                                             });
+                                                                                                     return default;
+                                                                                                 });
                     }
                 }
             }

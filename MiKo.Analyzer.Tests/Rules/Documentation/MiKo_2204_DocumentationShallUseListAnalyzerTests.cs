@@ -44,20 +44,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         [Test]
         public void An_issue_is_reported_for_Enumeration_in_Xml_tag() => Assert.Multiple(() =>
-                                                                                             {
-                                                                                                 foreach (var xmlTag in XmlTags)
-                                                                                                 {
-                                                                                                     foreach (var marker in EnumerationMarkers)
-                                                                                                     {
-                                                                                                         An_issue_is_reported_for(@"
+                                                                                              {
+                                                                                                  foreach (var xmlTag in XmlTags)
+                                                                                                  {
+                                                                                                      foreach (var marker in EnumerationMarkers)
+                                                                                                      {
+                                                                                                          An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// " + marker + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                     }
-                                                                                                 }
-                                                                                             });
+                                                                                                      }
+                                                                                                  }
+                                                                                              });
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]

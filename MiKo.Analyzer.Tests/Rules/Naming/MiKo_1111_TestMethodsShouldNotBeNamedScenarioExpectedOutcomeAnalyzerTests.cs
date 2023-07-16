@@ -30,12 +30,12 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_test_method_with_correct_name()
             => Assert.Multiple(() =>
-                                   {
-                                       foreach (var testFixture in TestFixtures)
-                                       {
-                                           foreach (var test in Tests)
-                                           {
-                                               No_issue_is_reported_for(@"
+                                    {
+                                        foreach (var testFixture in TestFixtures)
+                                        {
+                                            foreach (var test in Tests)
+                                            {
+                                                No_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
 {
@@ -43,19 +43,19 @@ public class TestMe
     public void DoSomething_does_something() { }
 }
 ");
-                                           }
-                                       }
-                                   });
+                                            }
+                                        }
+                                    });
 
         [Test]
         public void An_issue_is_reported_for_test_method_with_wrong_name_([ValueSource(nameof(WrongMethodNames))] string methodName)
             => Assert.Multiple(() =>
-                                   {
-                                       foreach (var testFixture in TestFixtures)
-                                       {
-                                           foreach (var test in Tests)
-                                           {
-                                               An_issue_is_reported_for(@"
+                                    {
+                                        foreach (var testFixture in TestFixtures)
+                                        {
+                                            foreach (var test in Tests)
+                                            {
+                                                An_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
 {
@@ -63,9 +63,9 @@ public class TestMe
     public void " + methodName + @"() { }
 }
 ");
-                                           }
-                                       }
-                                   });
+                                            }
+                                        }
+                                    });
 
         [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_does_something")]
         [TestCase("IfLoadFails_ReturnNull", "Returns_null_if_load_fails")]

@@ -49,18 +49,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var found = arguments
                             .Select(_ => _.Expression)
                             .All(_ =>
-                                 {
-                                     switch (_)
                                      {
-                                         case LiteralExpressionSyntax _:
-                                         case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
-                                         case IdentifierNameSyntax i when i.Identifier.GetSymbol(semanticModel) is IParameterSymbol:
-                                             return true;
+                                         switch (_)
+                                         {
+                                             case LiteralExpressionSyntax _:
+                                             case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                                             case IdentifierNameSyntax i when i.Identifier.GetSymbol(semanticModel) is IParameterSymbol:
+                                                 return true;
 
-                                         default:
-                                             return false;
-                                     }
-                                 });
+                                             default:
+                                                 return false;
+                                         }
+                                     });
 
             return found;
         }
