@@ -1,6 +1,11 @@
 # MiKo-Analyzers
 Provides analyzers that are based on the .NET Compiler Platform (Roslyn) and can be used inside Visual Studio 2019 (v16.11) or 2022 (v17.6).
 
+How to install an Roslyn analyzer is described [here](https://learn.microsoft.com/en-us/visualstudio/code-quality/install-roslyn-analyzers?view=vs-2022).
+
+Screenshots on how to use such analyzers can be found [here](https://learn.microsoft.com/en-us/visualstudio/code-quality/use-roslyn-analyzers?view=vs-2022).
+
+
 ## Build / Project status
 [![Maintenance](https://img.shields.io/maintenance/yes/2023.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
 [![Build status](https://ci.appveyor.com/api/projects/status/qanrqn7r4q9frr9m/branch/master?svg=true)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/branch/master)
