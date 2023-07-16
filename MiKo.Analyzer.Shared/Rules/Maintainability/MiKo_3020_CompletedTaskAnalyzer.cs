@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3020";
 
-        private const string Invocation = nameof(Task) + "." + nameof(Task.FromResult);
-
         private static readonly SyntaxKind[] Lambdas =
                                                        {
                                                            SyntaxKind.SimpleLambdaExpression,
@@ -31,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
             foreach (var invocation in symbol.GetSyntax()
-                                             .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == Invocation)
+                                             .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Expression.GetName() == nameof(Task) && _.GetName() == nameof(Task.FromResult))
                                              .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>()))
             {
                 switch (invocation.Parent?.Kind())
@@ -56,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                 }
 
-                yield return Issue(Invocation, invocation);
+                yield return Issue(nameof(Task) + "." + nameof(Task.FromResult), invocation);
             }
         }
     }

@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3021";
 
-        private const string Invocation = nameof(Task) + "." + nameof(Task.Run);
-
         private static readonly SyntaxKind[] EnclosingInvocationSyntaxKinds = { SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause };
 
         public MiKo_3021_TaskRunAnalyzer() : base(Id)
@@ -34,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 switch (node)
                 {
-                    case MemberAccessExpressionSyntax maes when maes.ToCleanedUpString() == Invocation:
+                    case MemberAccessExpressionSyntax maes when maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.Run):
                         taskRunExpressions.Add(maes);
 
                         break;
@@ -81,6 +79,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => Issue(Invocation, expression, methodName);
+        private Diagnostic ReportIssue(CSharpSyntaxNode expression, string methodName) => Issue(nameof(Task) + "." + nameof(Task.Run), expression, methodName);
     }
 }

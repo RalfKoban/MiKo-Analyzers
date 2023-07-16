@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -12,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3103";
-
-        private const string Invocation = nameof(Guid) + "." + nameof(Guid.NewGuid);
 
         public MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -36,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var symbolName = symbol.Name;
 
             return symbol.GetSyntax()
-                         .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == Invocation)
+                         .DescendantNodes<MemberAccessExpressionSyntax>(_ => _.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Expression.GetName() == nameof(Guid) && _.GetName() == nameof(Guid.NewGuid))
                          .Select(_ => Issue(symbolName, _));
         }
     }
