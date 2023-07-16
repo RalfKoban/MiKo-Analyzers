@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
@@ -24,13 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var position = MiKo_6036_OpenBracesAreOnSamePositionLikeArrowOfLambdaAnalyzer.GetStartPosition(lambda);
 
-                var spaces = position.Character;
-                var expressionSpaces = spaces + Constants.Indentation;
-
-                var blockSyntax = lambda.Block;
-                var block = blockSyntax?.WithOpenBraceToken(blockSyntax.OpenBraceToken.WithLeadingSpaces(spaces))
-                                        .WithStatements(SyntaxFactory.List(blockSyntax.Statements.Select(_ => _.WithLeadingSpaces(expressionSpaces))))
-                                        .WithCloseBraceToken(blockSyntax.CloseBraceToken.WithLeadingSpaces(spaces));
+                var block = GetUpdatedBlock(lambda.Block, position.Character);
 
                 return lambda.WithBlock(block);
             }

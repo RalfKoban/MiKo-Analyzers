@@ -219,6 +219,408 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_nested_if_statement_with_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+        {
+            if (true)
+            {
+                GC.Collect();
+            }
+            else
+            {
+                GC.Collect();
+            }
+        });
+    }
+
+    public void DoSomethingCore(Action callback)
+    {
+        callback();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+                             {
+                                 if (true)
+                                 {
+                                     GC.Collect();
+                                 }
+                                 else
+                                 {
+                                     GC.Collect();
+                                 }
+                             });
+    }
+
+    public void DoSomethingCore(Action callback)
+    {
+        callback();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_nested_if_statement_without_block()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+        {
+            if (true)
+                GC.Collect();
+            else
+                GC.Collect();
+        });
+    }
+
+    public void DoSomethingCore(Action callback)
+    {
+        callback();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+                             {
+                                 if (true)
+                                     GC.Collect();
+                                 else
+                                     GC.Collect();
+                             });
+    }
+
+    public void DoSomethingCore(Action callback)
+    {
+        callback();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_nested_switch_statement_with_mixed_blocks()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(mode =>
+        {
+            switch (mode)
+            {
+                case GCCollectionMode.Optimized:
+                {
+                    GC.Collect();
+                    break;
+                }
+
+                case GCCollectionMode.Forced:
+                    GC.Collect();
+                    break;
+
+                default:
+                {
+                    GC.Collect();
+                    break;
+                }
+            }
+        });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(mode =>
+                               {
+                                   switch (mode)
+                                   {
+                                       case GCCollectionMode.Optimized:
+                                       {
+                                           GC.Collect();
+                                           break;
+                                       }
+
+                                       case GCCollectionMode.Forced:
+                                           GC.Collect();
+                                           break;
+
+                                       default:
+                                       {
+                                           GC.Collect();
+                                           break;
+                                       }
+                                   }
+                               });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_for_loop()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                GC.Collect();
+            }
+        });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+                             {
+                                 for (int i = 0; i < 10; i++)
+                                 {
+                                     GC.Collect();
+                                 }
+                             });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_foreach_loop()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+        {
+            foreach (var i in new[] { 1, 2, 3 })
+            {
+                GC.Collect();
+            }
+        });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+                             {
+                                 foreach (var i in new[] { 1, 2, 3 })
+                                 {
+                                     GC.Collect();
+                                 }
+                             });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_while_loop()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+        {
+            while (true)
+            {
+                GC.Collect();
+            }
+        });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+                             {
+                                 while (true)
+                                 {
+                                     GC.Collect();
+                                 }
+                             });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_do_while_loop()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+        {
+            do
+            {
+                GC.Collect();
+            }
+            while (true);
+        });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(() =>
+                             {
+                                 do
+                                 {
+                                     GC.Collect();
+                                 }
+                                 while (true);
+                             });
+    }
+
+    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    {
+        callback(GCCollectionMode.Default);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6036_OpenBracesAreOnSamePositionLikeArrowOfLambdaAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6036_OpenBracesAreOnSamePositionLikeArrowOfLambdaAnalyzer();
