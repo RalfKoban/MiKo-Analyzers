@@ -615,6 +615,10 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
+        internal static LinePosition GetStartPosition(this SyntaxNode value) => value.GetLocation().GetStartPosition();
+
+        internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
+
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode syntaxNode)
         {
             if (syntaxNode is null)

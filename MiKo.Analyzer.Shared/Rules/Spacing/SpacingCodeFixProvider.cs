@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -18,7 +19,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case WhileStatementSyntax @while: return GetUpdatedWhile(@while, spaces);
                 case ForStatementSyntax @for: return GetUpdatedFor(@for, spaces);
                 case ForEachStatementSyntax @foreach: return GetUpdatedForEach(@foreach, spaces);
-                default: return statement.WithLeadingSpaces(spaces);
+
+                default:
+                    var syntax = statement.WithLeadingSpaces(spaces);
+
+                    return syntax.ReplaceNodes(
+                                               syntax.DescendantNodes<ConditionalExpressionSyntax>(),
+                                               (original, rewritten) =>
+                                                                       {
+                                                                           var result = original;
+
+                                                                           var conditionPosition = original.Condition.GetStartPosition();
+                                                                           var questionTokenLine = original.QuestionToken.GetStartingLine();
+                                                                           var colonTokenLine = original.ColonToken.GetStartingLine();
+
+                                                                           var nestedSpaces = conditionPosition.Character;
+
+                                                                           if (conditionPosition.Line != questionTokenLine)
+                                                                           {
+                                                                               result = result.WithQuestionToken(result.QuestionToken.WithLeadingSpaces(nestedSpaces));
+                                                                           }
+
+                                                                           if (conditionPosition.Line != colonTokenLine)
+                                                                           {
+                                                                               result = result.WithColonToken(result.ColonToken.WithLeadingSpaces(nestedSpaces));
+                                                                           }
+
+                                                                           return result;
+                                                                       });
             }
         }
 

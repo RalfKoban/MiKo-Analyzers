@@ -430,9 +430,9 @@ public class TestMe
         });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -453,9 +453,9 @@ public class TestMe
                              });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -482,9 +482,9 @@ public class TestMe
         });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -505,9 +505,9 @@ public class TestMe
                              });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -534,9 +534,9 @@ public class TestMe
         });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -557,9 +557,9 @@ public class TestMe
                              });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -587,9 +587,9 @@ public class TestMe
         });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
     }
 }
 ";
@@ -611,9 +611,59 @@ public class TestMe
                              });
     }
 
-    public void DoSomethingCore(Action<GCCollectionMode> callback)
+    public void DoSomethingCore(Action callback)
     {
-        callback(GCCollectionMode.Default);
+        callback();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_ternary_operator()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+        {
+            return i == 42
+                   ? true
+                   : false;
+        });
+    }
+
+    public void DoSomethingCore(Func<int, bool> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+                            {
+                                return i == 42
+                                       ? true
+                                       : false;
+                            });
+    }
+
+    public void DoSomethingCore(Func<int, bool> callback)
+    {
+        callback(42);
     }
 }
 ";

@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetStartPosition(ConditionalExpressionSyntax expression) => GetStartPosition(expression.Condition);
+        internal static LinePosition GetStartPosition(ConditionalExpressionSyntax expression) => expression.Condition.GetStartPosition();
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ConditionalExpression);
 
@@ -34,12 +34,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var operatorToken = expression.QuestionToken;
 
             var conditionPosition = GetStartPosition(expression);
-            var operatorPosition = GetStartPosition(operatorToken);
+            var operatorPosition = operatorToken.GetStartPosition();
 
             if (conditionPosition.Line != operatorPosition.Line)
             {
                 var colonToken = expression.ColonToken;
-                var colonPosition = GetStartPosition(colonToken);
+                var colonPosition = colonToken.GetStartPosition();
 
                 if (conditionPosition.Character != operatorPosition.Character)
                 {

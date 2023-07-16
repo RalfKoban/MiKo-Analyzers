@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         internal static LinePosition GetOutdentedStartPosition(ParameterListSyntax parameterList)
         {
-            var startPosition = GetStartPosition(parameterList);
+            var startPosition = parameterList.GetStartPosition();
             var characterPosition = startPosition.Character + parameterList.OpenParenToken.Span.Length;
 
             var parameters = parameterList.Parameters;
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (parameters.Count > 0)
             {
                 // hence we have to take the position of that very first parameter
-                if (startPosition.Line != GetStartPosition(parameters[0]).Line)
+                if (startPosition.Line != parameters[0].GetStartPosition().Line)
                 {
                     characterPosition -= Constants.Indentation;
                 }
@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             foreach (var parameter in parameterList.Parameters)
             {
-                var parameterPosition = GetStartPosition(parameter);
+                var parameterPosition = parameter.GetStartPosition();
 
                 if (inspectedLines.Add(parameterPosition.Line))
                 {

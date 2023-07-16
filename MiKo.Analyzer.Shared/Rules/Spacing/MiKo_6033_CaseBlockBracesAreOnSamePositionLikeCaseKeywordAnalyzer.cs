@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var caseKeyword = section.Labels.First().Keyword;
 
-            return GetStartPosition(caseKeyword);
+            return caseKeyword.GetStartPosition();
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Sections);
@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 var openBraceToken = block.OpenBraceToken;
 
-                var openBracePosition = GetStartPosition(openBraceToken);
+                var openBracePosition = openBraceToken.GetStartPosition();
 
                 if (casePosition.Line != openBracePosition.Line)
                 {

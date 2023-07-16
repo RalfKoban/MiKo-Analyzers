@@ -15,9 +15,13 @@ namespace MiKoSolutions.Analyzers
             return node.GetEnclosingSymbol(semanticModel) as T;
         }
 
-        internal static int GetStartingLine(this Location value) => value.GetLineSpan().StartLinePosition.Line;
+        internal static LinePosition GetStartPosition(this Location value) => value.GetLineSpan().StartLinePosition;
 
-        internal static int GetEndingLine(this Location value) => value.GetLineSpan().EndLinePosition.Line;
+        internal static LinePosition GetEndPosition(this Location value) => value.GetLineSpan().EndLinePosition;
+
+        internal static int GetStartingLine(this Location value) => value.GetStartPosition().Line;
+
+        internal static int GetEndingLine(this Location value) => value.GetEndPosition().Line;
 
         internal static string GetText(this Location value) => value.SourceTree?.GetText().ToString(value.SourceSpan);
 

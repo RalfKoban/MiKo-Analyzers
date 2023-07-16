@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var arrowToken = lambda.ArrowToken;
 
-            var position = GetStartPosition(arrowToken);
+            var position = arrowToken.GetStartPosition();
 
             return new LinePosition(position.Line, position.Character + Constants.Indentation - arrowToken.Span.Length);
         }
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var operatorPosition = GetStartPosition(lambda);
 
                 var openBraceToken = block.OpenBraceToken;
-                var openBracePosition = GetStartPosition(openBraceToken);
+                var openBracePosition = openBraceToken.GetStartPosition();
 
                 if (operatorPosition.Line != openBracePosition.Line)
                 {

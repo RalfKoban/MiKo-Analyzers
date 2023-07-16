@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
@@ -17,6 +18,10 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().Where(_ => _.IsKind(kind));
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
+
+        internal static LinePosition GetStartPosition(this SyntaxToken token) => token.GetLocation().GetStartPosition();
+
+        internal static LinePosition GetEndPosition(this SyntaxToken token) => token.GetLocation().GetEndPosition();
 
         internal static int GetStartingLine(this SyntaxToken value) => value.GetLocation().GetStartingLine();
 
