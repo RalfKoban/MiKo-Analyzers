@@ -11,6 +11,7 @@
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
+    <SlidingBuildDelayInMilliseconds>250</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>
