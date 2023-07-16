@@ -12900,7 +12900,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
-        ///Hence, as it is a block similar to the if blocks), the open brace of the block should be positioned directly below the corresponding case keyword..
+        ///Hence, as it is a block similar to the if block(s), the open brace of the block should be positioned directly below the corresponding case keyword..
         /// </summary>
         public static string MiKo_6033_Description {
             get {
@@ -12995,6 +12995,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6035_Title {
             get {
                 return ResourceManager.GetString("MiKo_6035_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place block directly below arrow.
+        /// </summary>
+        public static string MiKo_6036_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6036_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily distinguish lambda blocks from other code blocks, these blocks should be positioned either in line with or directly below the corresponding arrow..
+        /// </summary>
+        public static string MiKo_6036_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6036_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place lambda block directly below arrow.
+        /// </summary>
+        public static string MiKo_6036_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6036_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lambda blocks should be placed directly below the corresponding arrow(s).
+        /// </summary>
+        public static string MiKo_6036_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6036_Title", resourceCulture);
             }
         }
     }
