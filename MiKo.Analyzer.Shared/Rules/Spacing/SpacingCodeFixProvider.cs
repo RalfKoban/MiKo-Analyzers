@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,69 +11,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces)
         {
-            switch (statement)
-            {
-                case BlockSyntax block: return GetUpdatedBlock(block, spaces);
-                case IfStatementSyntax @if: return GetUpdatedIf(@if, spaces);
-                case SwitchStatementSyntax @switch: return GetUpdatedSwitch(@switch, spaces);
-                case DoStatementSyntax @do: return GetUpdatedDo(@do, spaces);
-                case WhileStatementSyntax @while: return GetUpdatedWhile(@while, spaces);
-                case ForStatementSyntax @for: return GetUpdatedFor(@for, spaces);
-                case ForEachStatementSyntax @foreach: return GetUpdatedForEach(@foreach, spaces);
+            var syntax = statement.WithLeadingSpaces(spaces);
 
-                default:
-                    var syntax = statement.WithLeadingSpaces(spaces);
+            var additionalSpaces = syntax.GetStartPosition().Character - statement.GetStartPosition().Character;
 
-                    return syntax.ReplaceNodes(
-                                               syntax.DescendantNodes<ConditionalExpressionSyntax>(),
-                                               (original, rewritten) =>
-                                                                       {
-                                                                           var result = original;
+            // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
+            var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
 
-                                                                           var conditionPosition = original.Condition.GetStartPosition();
-                                                                           var questionTokenLine = original.QuestionToken.GetStartingLine();
-                                                                           var colonTokenLine = original.ColonToken.GetStartingLine();
-
-                                                                           var nestedSpaces = conditionPosition.Character;
-
-                                                                           if (conditionPosition.Line != questionTokenLine)
-                                                                           {
-                                                                               result = result.WithQuestionToken(result.QuestionToken.WithLeadingSpaces(nestedSpaces));
-                                                                           }
-
-                                                                           if (conditionPosition.Line != colonTokenLine)
-                                                                           {
-                                                                               result = result.WithColonToken(result.ColonToken.WithLeadingSpaces(nestedSpaces));
-                                                                           }
-
-                                                                           return result;
-                                                                       });
-            }
-        }
-
-        protected static DoStatementSyntax GetUpdatedDo(DoStatementSyntax @do, int spaces)
-        {
-            return @do.WithLeadingSpaces(spaces)
-                      .WithStatement(GetUpdatedNestedStatement(@do.Statement, spaces))
-                      .WithWhileKeyword(@do.WhileKeyword.WithLeadingSpaces(spaces));
-        }
-
-        protected static WhileStatementSyntax GetUpdatedWhile(WhileStatementSyntax @while, int spaces)
-        {
-            return @while.WithLeadingSpaces(spaces)
-                         .WithStatement(GetUpdatedNestedStatement(@while.Statement, spaces));
-        }
-
-        protected static ForStatementSyntax GetUpdatedFor(ForStatementSyntax @for, int spaces)
-        {
-            return @for.WithLeadingSpaces(spaces)
-                       .WithStatement(GetUpdatedNestedStatement(@for.Statement, spaces));
-        }
-
-        protected static ForEachStatementSyntax GetUpdatedForEach(ForEachStatementSyntax @foreach, int spaces)
-        {
-            return @foreach.WithLeadingSpaces(spaces)
-                           .WithStatement(GetUpdatedNestedStatement(@foreach.Statement, spaces));
+            return syntax.ReplaceSyntax(
+                                        startingNodes.Where(_ => _.IsNode).Select(_ => _.AsNode()),
+                                        (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                        startingNodes.Where(_ => _.IsToken).Select(_ => _.AsToken()),
+                                        (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                        Enumerable.Empty<SyntaxTrivia>(),
+                                        (original, rewritten) => rewritten);
         }
 
         protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)
@@ -89,51 +41,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
         }
 
-        protected static IfStatementSyntax GetUpdatedIf(IfStatementSyntax @if, int spaces)
+        private static IEnumerable<SyntaxNodeOrToken> GetNodesAndTokensStartingOnSeparateLines(SyntaxNode startingNode)
         {
-            var updatedStatement = GetUpdatedNestedStatement(@if.Statement, spaces);
+            var currentLine = startingNode.GetStartingLine();
 
-            return @if.WithLeadingSpaces(spaces)
-                      .WithStatement(updatedStatement)
-                      .WithElse(GetUpdatedElse(@if.Else, spaces));
-        }
-
-        protected static ElseClauseSyntax GetUpdatedElse(ElseClauseSyntax @else, int spaces)
-        {
-            if (@else is null)
+            foreach (var nodeOrToken in startingNode.DescendantNodesAndTokens(_ => true, true))
             {
-                return null;
+                var startingLine = nodeOrToken.GetLocation().GetStartingLine();
+
+                if (startingLine != currentLine)
+                {
+                   currentLine = startingLine;
+
+                   yield return nodeOrToken;
+                }
             }
-
-            var updatedStatement = GetUpdatedNestedStatement(@else.Statement, spaces);
-
-            return @else.WithLeadingSpaces(spaces)
-                        .WithStatement(updatedStatement);
-        }
-
-        protected static SwitchStatementSyntax GetUpdatedSwitch(SwitchStatementSyntax @switch, int spaces)
-        {
-            return @switch.WithLeadingSpaces(spaces)
-                          .WithOpenBraceToken(@switch.OpenBraceToken.WithLeadingSpaces(spaces))
-                          .WithSections(SyntaxFactory.List(@switch.Sections.Select(_ => GetUpdatedSection(_, spaces))))
-                          .WithCloseBraceToken(@switch.CloseBraceToken.WithLeadingSpaces(spaces));
-        }
-
-        private static SwitchSectionSyntax GetUpdatedSection(SwitchSectionSyntax section, int spaces)
-        {
-            var indentation = spaces + Constants.Indentation;
-
-            return section.WithLabels(SyntaxFactory.List(section.Labels.Select(_ => _.WithLeadingSpaces(indentation))))
-                          .WithStatements(SyntaxFactory.List(section.Statements.Select(_ => GetUpdatedNestedStatement(_, indentation))));
-        }
-
-        private static StatementSyntax GetUpdatedNestedStatement(StatementSyntax statement, int spaces)
-        {
-            var indentation = spaces + Constants.Indentation;
-
-            return statement is BlockSyntax block
-                   ? GetUpdatedBlock(block, spaces)
-                   : GetUpdatedStatement(statement, indentation);
         }
     }
 }

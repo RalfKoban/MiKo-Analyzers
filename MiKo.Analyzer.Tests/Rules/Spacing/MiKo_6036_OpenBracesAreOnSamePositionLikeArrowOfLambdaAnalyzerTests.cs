@@ -332,6 +332,60 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_nested_if_statement_with_conditions_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(b =>
+        {
+            if (b is true
+                || b is false)
+            {
+                GC.Collect();
+            }
+        });
+    }
+
+    public void DoSomethingCore(Action<bool> callback)
+    {
+        callback(true);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(b =>
+                            {
+                                if (b is true
+                                    || b is false)
+                                {
+                                    GC.Collect();
+                                }
+                            });
+    }
+
+    public void DoSomethingCore(Action<bool> callback)
+    {
+        callback(true);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_nested_switch_statement_with_mixed_blocks()
         {
             const string OriginalCode = @"
@@ -662,6 +716,158 @@ public class TestMe
     }
 
     public void DoSomethingCore(Func<int, bool> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_call_with_argument_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+        {
+            return i.ToString(
+                       ""D"");
+        });
+    }
+
+    public void DoSomethingCore(Func<int, string> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+                            {
+                                return i.ToString(
+                                           ""D"");
+                            });
+    }
+
+    public void DoSomethingCore(Func<int, string> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_as_cast_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+        {
+            var result = i
+                            as string;
+
+            return result;
+        });
+    }
+
+    public void DoSomethingCore(Func<int, string> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+                            {
+                                var result = i
+                                                as string;
+
+                                return result;
+                            });
+    }
+
+    public void DoSomethingCore(Func<int, string> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_brace_is_on_other_line_than_arrow_token_and_indented_to_method_and_contains_cast_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+        {
+            var result = (string)
+                            i;
+
+            return result;
+        });
+    }
+
+    public void DoSomethingCore(Func<int, string> callback)
+    {
+        callback(42);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(i =>
+                            {
+                                var result = (string)
+                                                i;
+
+                                return result;
+                            });
+    }
+
+    public void DoSomethingCore(Func<int, string> callback)
     {
         callback(42);
     }
