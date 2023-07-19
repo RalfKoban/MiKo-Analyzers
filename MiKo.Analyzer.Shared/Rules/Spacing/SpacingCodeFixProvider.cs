@@ -51,9 +51,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (startingLine != currentLine)
                 {
-                   currentLine = startingLine;
+                    currentLine = startingLine;
 
-                   yield return nodeOrToken;
+                    yield return nodeOrToken;
                 }
             }
         }
