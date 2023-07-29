@@ -79,8 +79,7 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_parameter_of_test_method_in_test_class_with_wrong_name()
-            => Assert.Multiple(
-                               () =>
+            => Assert.Multiple(() =>
                                     {
                                         foreach (var testFixture in TestFixtures)
                                         {
