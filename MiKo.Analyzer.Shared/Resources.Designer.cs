@@ -13033,5 +13033,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6036_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on same line as invocation.
+        /// </summary>
+        public static string MiKo_6037_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6037_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if single arguments are placed on the same line(s) as the invoked methods..
+        /// </summary>
+        public static string MiKo_6037_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6037_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on same line as invocation.
+        /// </summary>
+        public static string MiKo_6037_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6037_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single arguments should be placed on same line(s) as invoked methods.
+        /// </summary>
+        public static string MiKo_6037_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6037_Title", resourceCulture);
+            }
+        }
     }
 }
