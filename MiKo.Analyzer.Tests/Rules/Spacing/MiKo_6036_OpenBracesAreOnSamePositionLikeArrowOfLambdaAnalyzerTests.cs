@@ -877,6 +877,78 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_string_combination_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(s =>
+        {
+            DoSomethingElse(@""
+using NUnit.Framework;
+
+["" + s + @""]
+public class TestMe
+{
+    ["" + s + @""]
+    public void SomeMethod()
+    {
+    }
+}
+"");
+        });
+    }
+
+    public void DoSomethingCore(Action<string> callback)
+    {
+        callback(""something"");
+    }
+
+    private string DoSomethingElse(string input) => input;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(s =>
+                            {
+                                DoSomethingElse(@""
+using NUnit.Framework;
+
+["" + s + @""]
+public class TestMe
+{
+    ["" + s + @""]
+    public void SomeMethod()
+    {
+    }
+}
+"");
+                            });
+    }
+
+    public void DoSomethingCore(Action<string> callback)
+    {
+        callback(""something"");
+    }
+
+    private string DoSomethingElse(string input) => input;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6036_OpenBracesAreOnSamePositionLikeArrowOfLambdaAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6036_OpenBracesAreOnSamePositionLikeArrowOfLambdaAnalyzer();

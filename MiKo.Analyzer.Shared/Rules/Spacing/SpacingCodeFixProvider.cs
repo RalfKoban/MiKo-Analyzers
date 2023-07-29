@@ -53,9 +53,47 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     currentLine = startingLine;
 
+                    if (nodeOrToken.IsToken)
+                    {
+                        var token = nodeOrToken.AsToken();
+
+                        switch (token.Kind())
+                        {
+                            case SyntaxKind.PlusToken when IsStringCreation(token.Parent):
+                            {
+                                // ignore string constructions via add
+                                continue;
+                            }
+
+                            case SyntaxKind.CloseParenToken when token.Parent is ArgumentListSyntax l && IsStringCreation(l.Arguments.Last().Expression):
+                            {
+                                // ignore string constructions via add
+                                continue;
+                            }
+                        }
+                    }
+
                     yield return nodeOrToken;
                 }
             }
+        }
+
+        private static bool IsStringCreation(SyntaxNode node)
+        {
+            if (node is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
+            {
+                if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
+                {
+                    return true;
+                }
+
+                if (IsStringCreation(b.Left) || IsStringCreation(b.Right))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
