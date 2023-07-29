@@ -38,6 +38,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_complete_Linq_call_spanning_multiple_lines_with_single_argument_on_last_line() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var items = new List<int>();
+
+        var results = items.Select(_ => _.ToString())
+                           .OrderBy(_ => _)
+                           .ToList();
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_invocation_and_argument_are_on_different_lines() => An_issue_is_reported_for(@"
 using System;
 

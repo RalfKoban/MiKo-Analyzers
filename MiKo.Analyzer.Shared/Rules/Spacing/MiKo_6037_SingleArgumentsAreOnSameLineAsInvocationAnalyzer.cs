@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -15,6 +16,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
+
+        private static LinePosition GetStartPosition(InvocationExpressionSyntax invocation)
+        {
+            if (invocation.Expression is IdentifierNameSyntax identifier)
+            {
+                return identifier.GetStartPosition();
+            }
+
+            if (invocation.Expression is MemberAccessExpressionSyntax maes)
+            {
+                return maes.Name.GetStartPosition();
+            }
+
+            return invocation.Expression.GetStartPosition();
+        }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -30,10 +46,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeArgument(SyntaxNodeAnalysisContext context, ArgumentSyntax argument, InvocationExpressionSyntax invocation)
         {
-            var invocationPosition = invocation.Expression.GetStartPosition();
+            var startPosition = GetStartPosition(invocation);
             var argumentPosition = argument.GetStartPosition();
 
-            if (invocationPosition.Line != argumentPosition.Line)
+            if (startPosition.Line != argumentPosition.Line)
             {
                 ReportDiagnostics(context, Issue(argument));
             }
