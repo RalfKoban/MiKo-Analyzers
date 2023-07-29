@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1070";
 
+        private static readonly string[] Splitters = { "Of", "With", "To", "In", "From" };
+
         public MiKo_1070_CollectionLocalVariableAnalyzer() : base(Id)
         {
         }
@@ -109,6 +111,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string GetPluralName(string originalName, out string name)
         {
+            var index = originalName.IndexOfAny(Splitters, StringComparison.Ordinal);
+
+            if (index > 0)
+            {
+                var nameToInspect = originalName.Substring(0, index);
+                var remainingPart = originalName.Substring(index);
+
+                var pluralName = GetPluralName(nameToInspect, out name);
+
+                name = string.Concat(name, remainingPart);
+
+                return pluralName + remainingPart;
+            }
+
             name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
 
             if (name.EndsWithAny(Constants.Markers.Collections))

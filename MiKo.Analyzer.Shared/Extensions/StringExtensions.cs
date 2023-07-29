@@ -520,6 +520,16 @@ namespace System
             return -1;
         }
 
+        public static int IndexOfAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
+        {
+            if (value is null)
+            {
+                return -1;
+            }
+
+            return IndexOfAny(value.AsSpan(), phrases, comparison);
+        }
+
         public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;

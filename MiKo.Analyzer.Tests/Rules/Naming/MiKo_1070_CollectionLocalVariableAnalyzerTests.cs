@@ -41,6 +41,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "myList42",
                                                       };
 
+        private static readonly string[] CorrectNamesWithSuffixes =
+                                                                    {
+                                                                        "resultsOfSomething",
+                                                                        "resultsToShow",
+                                                                        "resultsWithData",
+                                                                        "resultsInSomething",
+                                                                        "resultsFromSomething",
+                                                                    };
+
+        private static readonly string[] WrongNamesWithSuffixes =
+                                                                  {
+                                                                      "resultOfSomething",
+                                                                      "resultToShow",
+                                                                      "resultWithData",
+                                                                      "resultInSomething",
+                                                                      "resultFromSomething",
+                                                                  };
+
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
 using System;
@@ -68,6 +86,20 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_method_with_Collection_variable_with_correct_name_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] " + name + @" = new int[0];
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_Collection_variable_with_correct_name_and_additional_suffix_([ValueSource(nameof(CorrectNamesWithSuffixes))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -124,6 +156,20 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] " + name + @" = new int[0];
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_with_Collection_variable_with_incorrect_name_with_suffix_([ValueSource(nameof(WrongNamesWithSuffixes))] string name) => An_issue_is_reported_for(@"
 using System;
 using System.Threading;
 
@@ -230,36 +276,27 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void Code_gets_fixed_for_variable()
+        [TestCase("number", "numbers")]
+        [TestCase("resultOfSomething", "resultsOfSomething")]
+        [TestCase("resultToShow", "resultsToShow")]
+        [TestCase("resultWithData", "resultsWithData")]
+        [TestCase("resultInSomething", "resultsInSomething")]
+        [TestCase("resultFromSomething", "resultsFromSomething")]
+        public void Code_gets_fixed_for_variable_(string originalName, string fixedName)
         {
-            const string OriginalCode = @"
+            const string Template = @"
 using System;
-using System.Threading;
 
 public class TestMe
 {
     public void DoSomething()
     {
-        int[] number = new int[0];
+        int[] ### = new int[0];
     }
 }
 ";
 
-            const string FixedCode = @"
-using System;
-using System.Threading;
-
-public class TestMe
-{
-    public void DoSomething()
-    {
-        int[] numbers = new int[0];
-    }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
         }
 
         [Test]
