@@ -4601,4 +4601,16 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   <data name="MiKo_6038_Title" xml:space="preserve">
     <value>Casts should be placed on same line(s)</value>
   </data>
+  <data name="MiKo_6039_CodeFixTitle" xml:space="preserve">
+    <value>Place return value on same line as return keyword</value>
+  </data>
+  <data name="MiKo_6039_Description" xml:space="preserve">
+    <value>The code is easier to read if return keywords and return values are placed on the same line(s).</value>
+  </data>
+  <data name="MiKo_6039_MessageFormat" xml:space="preserve">
+    <value>Place return value on same line as return keyword</value>
+  </data>
+  <data name="MiKo_6039_Title" xml:space="preserve">
+    <value>Return values should be placed on same line(s) as return keywords</value>
+  </data>
 </root>

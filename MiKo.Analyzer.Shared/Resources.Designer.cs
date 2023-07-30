@@ -13105,5 +13105,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6038_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return value on same line as return keyword.
+        /// </summary>
+        public static string MiKo_6039_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6039_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if return keywords and return values are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6039_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6039_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return value on same line as return keyword.
+        /// </summary>
+        public static string MiKo_6039_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6039_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return values should be placed on same line(s) as return keywords.
+        /// </summary>
+        public static string MiKo_6039_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6039_Title", resourceCulture);
+            }
+        }
     }
 }

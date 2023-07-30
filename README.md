@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 379 rules that are currently provided by the analyzer.
+The following tables list all the 380 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -423,3 +423,4 @@ The following tables list all the 379 rules that are currently provided by the a
 |MiKo_6036|Lambda blocks should be placed directly below the corresponding arrow(s)|&#x2713;|&#x2713;|
 |MiKo_6037|Single arguments should be placed on same line(s) as invoked methods|&#x2713;|&#x2713;|
 |MiKo_6038|Casts should be placed on same line(s)|&#x2713;|&#x2713;|
+|MiKo_6039|Return values should be placed on same line(s) as return keywords|&#x2713;|&#x2713;|
