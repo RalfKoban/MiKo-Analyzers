@@ -91,8 +91,8 @@ public class TestMe
     public object DoSomething(object o)
     {
         var x = o.ToString()
-                  .ToString()
-                 .ToString();
+                  .GetHashCode()
+                 .GetType();
     }
 }
 ";
@@ -105,8 +105,8 @@ public class TestMe
     public object DoSomething(object o)
     {
         var x = o.ToString()
-                 .ToString()
-                 .ToString();
+                 .GetHashCode()
+                 .GetType();
     }
 }
 ";
@@ -125,8 +125,8 @@ public class TestMe
     public object DoSomething(object o)
     {
         var x = o.ToString()
-                .ToString()
-                 .ToString();
+                .GetHashCode()
+                 .GetType();
     }
 }
 ";
@@ -139,8 +139,46 @@ public class TestMe
     public object DoSomething(object o)
     {
         var x = o.ToString()
-                 .ToString()
-                 .ToString();
+                 .GetHashCode()
+                 .GetType();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_multi_line_call_chain_contains_calls_indented_more_to_the_left_and_to_the_right()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object DoSomething(object o)
+    {
+        var x = o.ToString()
+                .GetHashCode()
+             .GetType()
+                  .GetElementType()
+                    .GetEnumName();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object DoSomething(object o)
+    {
+        var x = o.ToString()
+                 .GetHashCode()
+                 .GetType()
+                 .GetElementType()
+                 .GetEnumName();
     }
 }
 ";

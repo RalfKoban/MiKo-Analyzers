@@ -15,31 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6040_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().First();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is InvocationExpressionSyntax invocation)
+            if (syntax is MemberAccessExpressionSyntax m)
             {
-                var topMostInvocation = invocation.Ancestors<InvocationExpressionSyntax>().LastOrDefault();
+                var spaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetSpaces(issue);
 
-                if (topMostInvocation != null)
-                {
-                    var spaces = -1;
-
-                    if (topMostInvocation.Expression is MemberAccessExpressionSyntax topMost)
-                    {
-                        spaces = topMost.OperatorToken.GetStartPosition().Character;
-                    }
-
-                    if (spaces > -1)
-                    {
-                        if (invocation.Expression is MemberAccessExpressionSyntax m)
-                        {
-                            return invocation.WithExpression(m.WithOperatorToken(m.OperatorToken.WithLeadingSpaces(spaces)));
-                        }
-                    }
-                }
+                return m.WithOperatorToken(m.OperatorToken.WithLeadingSpaces(spaces));
             }
 
             return syntax;

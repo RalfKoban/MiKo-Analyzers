@@ -13,9 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6040";
 
+        private const string Spaces = "SPACES";
+
         public MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer() : base(Id)
         {
         }
+
+        internal static int GetSpaces(Diagnostic diagnostic) => int.Parse(diagnostic.Properties[Spaces]);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
 
@@ -73,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (position.Line != startLine && position.Character != startCharacterPosition)
                 {
-                    ReportDiagnostics(context, Issue(dot));
+                    ReportDiagnostics(context, Issue(dot, new Dictionary<string, string> { { Spaces, startCharacterPosition.ToString("D") } }));
                 }
             }
         }
