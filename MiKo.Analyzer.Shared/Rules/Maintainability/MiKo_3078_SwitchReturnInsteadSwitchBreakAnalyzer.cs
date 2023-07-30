@@ -19,10 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
-        }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement);
 
         private static bool HasIssue(SwitchStatementSyntax switchStatement)
         {
@@ -83,10 +80,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (HasIssue(switchStatement))
             {
-                ReportDiagnostics(context, Issue(switchStatement));
+                // keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recursive calls
+                if (switchStatement.Ancestors<WhileStatementSyntax>().None())
+                {
+                    ReportDiagnostics(context, Issue(switchStatement));
+                }
             }
-
-            // TODO RKN: keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recursive calls
         }
     }
 }
