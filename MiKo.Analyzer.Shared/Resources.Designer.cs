@@ -13141,5 +13141,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6039_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dots.
+        /// </summary>
+        public static string MiKo_6040_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6040_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if consequtive invocations that span multiple lines are aligned by their dots..
+        /// </summary>
+        public static string MiKo_6040_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6040_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dots.
+        /// </summary>
+        public static string MiKo_6040_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6040_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive invocations spaning multiple lines should be aligned by their dots.
+        /// </summary>
+        public static string MiKo_6040_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6040_Title", resourceCulture);
+            }
+        }
     }
 }
