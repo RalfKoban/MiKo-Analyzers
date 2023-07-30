@@ -19,17 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static LinePosition GetStartPosition(InvocationExpressionSyntax invocation)
         {
-            if (invocation.Expression is IdentifierNameSyntax identifier)
+            switch (invocation.Expression)
             {
-                return identifier.GetStartPosition();
-            }
+                case IdentifierNameSyntax i: return i.GetStartPosition();
+                case MemberAccessExpressionSyntax m: return m.Name.GetStartPosition();
+                case GenericNameSyntax g: return g.Identifier.GetStartPosition();
 
-            if (invocation.Expression is MemberAccessExpressionSyntax maes)
-            {
-                return maes.Name.GetStartPosition();
+                default:
+                    return invocation.Expression.GetStartPosition();
             }
-
-            return invocation.Expression.GetStartPosition();
         }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
