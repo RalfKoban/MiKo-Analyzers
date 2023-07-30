@@ -13177,5 +13177,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6040_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assignment on same line.
+        /// </summary>
+        public static string MiKo_6041_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6041_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if assignments are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6041_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6041_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assignment on same line.
+        /// </summary>
+        public static string MiKo_6041_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6041_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6041_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6041_Title", resourceCulture);
+            }
+        }
     }
 }

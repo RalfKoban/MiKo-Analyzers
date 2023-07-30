@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 381 rules that are currently provided by the analyzer.
+The following tables list all the 382 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -425,3 +425,4 @@ The following tables list all the 381 rules that are currently provided by the a
 |MiKo_6038|Casts should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6039|Return values should be placed on same line(s) as return keywords|&#x2713;|&#x2713;|
 |MiKo_6040|Consecutive invocations spaning multiple lines should be aligned by their dots|&#x2713;|&#x2713;|
+|MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
