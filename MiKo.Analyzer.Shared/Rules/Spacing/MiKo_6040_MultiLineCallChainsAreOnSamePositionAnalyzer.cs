@@ -34,20 +34,27 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (expression)
                 {
                     case MemberAccessExpressionSyntax s:
+                    {
                         dots.Push(s.OperatorToken);
+
                         expression = s.Expression;
 
                         break;
+                    }
 
                     case InvocationExpressionSyntax i:
+                    {
                         expression = i.Expression;
 
                         break;
+                    }
 
                     default:
+                    {
                         expression = null;
 
                         break;
+                    }
                 }
             }
 
@@ -65,6 +72,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             var dots = CollectDots(node);
+
+            if (dots.None())
+            {
+                // no dots found for whatever reason, hence we do not need to report anything
+                return;
+            }
+
             var firstDot = dots.Pop();
             var startPosition = firstDot.GetStartPosition();
             var startLine = startPosition.Line;
@@ -73,6 +87,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             while (dots.Count > 0)
             {
                 var dot = dots.Pop();
+
+                if (dot.HasLeadingTrivia is false)
+                {
+                    // dot seems to have no leading spaces, most probably it is on the same line
+                    continue;
+                }
+
                 var position = dot.GetStartPosition();
 
                 if (position.Line != startLine && position.Character != startCharacterPosition)

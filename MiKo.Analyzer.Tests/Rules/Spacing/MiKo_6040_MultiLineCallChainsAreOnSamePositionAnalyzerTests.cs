@@ -51,6 +51,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_multi_line_call_chain_is_mixed_but_indented_correctly() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o.ToString()
+                 .ToString().ToString()
+                 .ToString();
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_multi_line_call_chain_contains_calls_indented_more_to_the_right() => An_issue_is_reported_for(@"
 using System;
 

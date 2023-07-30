@@ -1445,8 +1445,8 @@ namespace MiKoSolutions.Analyzers
 
             // avoid lost trivia, such as #endregion
             var closeBraceToken = value.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
-                                                        .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
-                                                        .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
+                                       .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
+                                       .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
 
             return value.Without(node)
                         .WithOpenBraceToken(openBraceToken)
@@ -1460,8 +1460,8 @@ namespace MiKoSolutions.Analyzers
 
             // avoid lost trivia, such as #endregion
             var closeBraceToken = value.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
-                                                        .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
-                                                        .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
+                                       .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
+                                       .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
 
             return value.Without(nodes)
                         .WithOpenBraceToken(openBraceToken)
