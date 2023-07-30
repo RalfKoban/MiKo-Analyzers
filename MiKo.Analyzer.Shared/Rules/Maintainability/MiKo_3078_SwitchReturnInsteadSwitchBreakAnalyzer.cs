@@ -86,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 ReportDiagnostics(context, Issue(switchStatement));
             }
 
-            // TODO RKN: keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recurisve calls
+            // TODO RKN: keep in mind that 'while(true) { switch ... }' is a performance optimization to avoid recursive calls
         }
     }
 }

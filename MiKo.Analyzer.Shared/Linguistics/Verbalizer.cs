@@ -130,8 +130,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Write",
                                                                    "Zoom",
                                                                }.OrderBy(_ => _.Length)
-                                                            .ThenBy(_ => _)
-                                                            .ToArray();
+                                                                .ThenBy(_ => _)
+                                                                .ToArray();
 
         private static readonly string[] MiddlePhrases = new[]
                                                              {
@@ -140,8 +140,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "InformedAbout",
                                                                  "BelongsTo",
                                                              }.OrderBy(_ => _.Length)
-                                                          .ThenBy(_ => _)
-                                                          .ToArray();
+                                                              .ThenBy(_ => _)
+                                                              .ToArray();
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
