@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
@@ -17,6 +18,10 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().Where(_ => _.IsKind(kind));
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
+
+        internal static LinePosition GetStartPosition(this SyntaxToken token) => token.GetLocation().GetStartPosition();
+
+        internal static LinePosition GetEndPosition(this SyntaxToken token) => token.GetLocation().GetEndPosition();
 
         internal static int GetStartingLine(this SyntaxToken value) => value.GetLocation().GetStartingLine();
 
@@ -75,7 +80,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace);
+        internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
+        {
+            var currentSpaces = value.GetStartPosition().Character;
+
+            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
 
         internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count) => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically
 
@@ -118,6 +130,16 @@ namespace MiKoSolutions.Analyzers
             }
 
             return tokens;
+        }
+
+        internal static SyntaxToken WithoutLeadingTrivia(this SyntaxToken token)
+        {
+            return token.WithoutTrivia().WithTrailingTrivia(token.TrailingTrivia);
+        }
+
+        internal static SyntaxToken WithoutTrailingTrivia(this SyntaxToken token)
+        {
+            return token.WithoutTrivia().WithLeadingTrivia(token.LeadingTrivia);
         }
 
         internal static SyntaxTokenList WithoutEmptyText(this SyntaxTokenList tokens, SyntaxToken token)

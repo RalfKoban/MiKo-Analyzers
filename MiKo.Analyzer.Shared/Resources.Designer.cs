@@ -12900,7 +12900,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
-        ///Hence, as it is a block similar to the if blocks), the open brace of the block should be positioned directly below the corresponding case keyword..
+        ///Hence, as it is a block similar to the if block(s), the open brace of the block should be positioned directly below the corresponding case keyword..
         /// </summary>
         public static string MiKo_6033_Description {
             get {
@@ -12995,6 +12995,150 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6035_Title {
             get {
                 return ResourceManager.GetString("MiKo_6035_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place block directly below arrow.
+        /// </summary>
+        public static string MiKo_6036_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6036_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily distinguish lambda blocks from other code blocks, these blocks should be positioned either in line with or directly below the corresponding arrow..
+        /// </summary>
+        public static string MiKo_6036_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6036_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place lambda block directly below arrow.
+        /// </summary>
+        public static string MiKo_6036_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6036_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lambda blocks should be placed directly below the corresponding arrow(s).
+        /// </summary>
+        public static string MiKo_6036_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6036_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on same line as invocation.
+        /// </summary>
+        public static string MiKo_6037_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6037_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if single arguments are placed on the same line(s) as the invoked methods..
+        /// </summary>
+        public static string MiKo_6037_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6037_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on same line as invocation.
+        /// </summary>
+        public static string MiKo_6037_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6037_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single arguments should be placed on same line(s) as invoked methods.
+        /// </summary>
+        public static string MiKo_6037_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6037_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place cast on same line.
+        /// </summary>
+        public static string MiKo_6038_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6038_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if casts are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6038_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6038_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place cast on same line.
+        /// </summary>
+        public static string MiKo_6038_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6038_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Casts should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6038_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6038_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return value on same line as return keyword.
+        /// </summary>
+        public static string MiKo_6039_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6039_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if return keywords and return values are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6039_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6039_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place return value on same line as return keyword.
+        /// </summary>
+        public static string MiKo_6039_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6039_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return values should be placed on same line(s) as return keywords.
+        /// </summary>
+        public static string MiKo_6039_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6039_Title", resourceCulture);
             }
         }
     }

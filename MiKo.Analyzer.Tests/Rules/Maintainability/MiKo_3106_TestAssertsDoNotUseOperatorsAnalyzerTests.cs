@@ -104,14 +104,14 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_an_operator_in_a_test_method() => Assert.Multiple(() =>
-                                                                                                   {
-                                                                                                       foreach (var methodName in AssertionMethods)
-                                                                                                       {
-                                                                                                           foreach (var test in Tests)
-                                                                                                           {
-                                                                                                               foreach (var @operator in Operators)
-                                                                                                               {
-                                                                                                                   An_issue_is_reported_for(@"
+                                                                                                    {
+                                                                                                        foreach (var methodName in AssertionMethods)
+                                                                                                        {
+                                                                                                            foreach (var test in Tests)
+                                                                                                            {
+                                                                                                                foreach (var @operator in Operators)
+                                                                                                                {
+                                                                                                                    An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -126,21 +126,21 @@ namespace Bla
     }
 }
 ");
-                                                                                                               }
-                                                                                                           }
-                                                                                                       }
-                                                                                                   });
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    });
 
         [Test]
         public void An_issue_is_reported_for_an_operator_in_a_non_test_method_inside_a_test() => Assert.Multiple(() =>
-                                                                                                                     {
-                                                                                                                         foreach (var methodName in AssertionMethods)
-                                                                                                                         {
-                                                                                                                             foreach (var testFixture in TestFixtures)
-                                                                                                                             {
-                                                                                                                                 foreach (var @operator in Operators)
-                                                                                                                                 {
-                                                                                                                                     An_issue_is_reported_for(@"
+                                                                                                                      {
+                                                                                                                          foreach (var methodName in AssertionMethods)
+                                                                                                                          {
+                                                                                                                              foreach (var testFixture in TestFixtures)
+                                                                                                                              {
+                                                                                                                                  foreach (var @operator in Operators)
+                                                                                                                                  {
+                                                                                                                                      An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -155,10 +155,10 @@ namespace Bla
     }
 }
 ");
-                                                                                                                                 }
-                                                                                                                             }
-                                                                                                                         }
-                                                                                                                     });
+                                                                                                                                  }
+                                                                                                                              }
+                                                                                                                          }
+                                                                                                                      });
 
         [Test]
         public void An_issue_is_reported_for_an_operator_in_a_non_test_class_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"

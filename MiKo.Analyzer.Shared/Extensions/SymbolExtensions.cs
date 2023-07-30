@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
-        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers().OfType<IMethodSymbol>();
+        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
 
         internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
         {
@@ -76,9 +76,9 @@ namespace MiKoSolutions.Analyzers
         /// </remarks>
         internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.CanBeReferencedByName);
 
-        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers().OfType<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
 
-        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers().OfType<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
 
         internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
@@ -164,9 +164,17 @@ namespace MiKoSolutions.Analyzers
                 switch (symbol)
                 {
                     case null: return null;
-                    case IMethodSymbol method: return method;
-                    case IPropertySymbol property: return property.IsIndexer ? (property.GetMethod ?? property.SetMethod) : property.SetMethod;
                     case ITypeSymbol _: return null;
+                    case IMethodSymbol method: return method;
+                    case IPropertySymbol property:
+                    {
+                        if (property.IsIndexer)
+                        {
+                            return property.GetMethod ?? property.SetMethod;
+                        }
+
+                        return property.SetMethod;
+                    }
 
                     default:
                         symbol = symbol.ContainingSymbol;
@@ -204,7 +212,9 @@ namespace MiKoSolutions.Analyzers
                                                                                                                                              .Select(_ => _.Arguments)
                                                                                                                                              .FirstOrDefault(_ => _.Count > 0);
 
-        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers().Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>();
+
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
@@ -388,7 +398,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
 
-        internal static IEnumerable<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
+        internal static IReadOnlyList<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
@@ -396,7 +406,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>();
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>().ToList();
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
@@ -997,7 +1007,7 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers().OfType<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
             return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
         }
@@ -1280,7 +1290,7 @@ namespace MiKoSolutions.Analyzers
         {
             var symbolName = value.Name;
 
-            if (string.Equals(symbolName, type.Name, StringComparison.OrdinalIgnoreCase))
+            if (symbolName.Equals(type.Name, StringComparison.OrdinalIgnoreCase))
             {
                 // ignore all those that have a lower case only
                 return symbolName.HasUpperCaseLettersAbove(minimumUpperCaseLetters);
@@ -1288,7 +1298,7 @@ namespace MiKoSolutions.Analyzers
 
             var typeName = type.GetNameWithoutInterfacePrefix();
 
-            if (string.Equals(symbolName, typeName, StringComparison.OrdinalIgnoreCase))
+            if (symbolName.Equals(typeName, StringComparison.OrdinalIgnoreCase))
             {
                 // there must be at least a minimum of upper case letters (except the first character)
                 if (typeName.HasUpperCaseLettersAbove(minimumUpperCaseLetters))
@@ -1324,13 +1334,16 @@ namespace MiKoSolutions.Analyzers
             return result != null;
         }
 
-        private static string GetNameWithoutInterfacePrefix(this ITypeSymbol value)
+        private static ReadOnlySpan<char> GetNameWithoutInterfacePrefix(this ITypeSymbol value)
         {
-            var typeName = value.Name;
+            var typeName = value.Name.AsSpan();
 
-            return value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I')
-                   ? typeName.Substring(1)
-                   : typeName;
+            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I'))
+            {
+                return typeName.Slice(1);
+            }
+
+            return typeName;
         }
 
         private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);

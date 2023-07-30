@@ -615,6 +615,10 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
+        internal static LinePosition GetStartPosition(this SyntaxNode value) => value.GetLocation().GetStartPosition();
+
+        internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
+
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode syntaxNode)
         {
             if (syntaxNode is null)
@@ -773,6 +777,10 @@ namespace MiKoSolutions.Analyzers
             return result.AsSpan().Trim();
         }
 
+        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
+
+        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
+
         internal static IEnumerable<string> GetTextWithoutTriviaLazy(this XmlTextSyntax text)
         {
             if (text is null)
@@ -790,10 +798,6 @@ namespace MiKoSolutions.Analyzers
                 yield return token.WithoutTrivia().ValueText;
             }
         }
-
-        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax element) => new StringBuilder(element.Content.ToString()).WithoutXmlCommentExterior();
-
-        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax element) => element.WithoutXmlCommentExterior();
 
         internal static IEnumerable<XmlElementSyntax> GetExampleXmls(this DocumentationCommentTriviaSyntax comment) => comment.GetXmlSyntax(Constants.XmlTag.Example);
 
@@ -982,9 +986,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsBoolean(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.BoolKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "bool":
                 case nameof(Boolean):
                 case nameof(System) + "." + nameof(Boolean):
                     return true;
@@ -996,9 +1004,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsByte(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.ByteKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "byte":
                 case nameof(Byte):
                 case nameof(System) + "." + nameof(Byte):
                     return true;
@@ -1032,6 +1044,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsCommand(this TypeSyntax value, SemanticModel semanticModel)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var name = value.ToString();
 
             return name.Contains("Command")
@@ -1047,6 +1064,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsException(this TypeSyntax value, Type exceptionType)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var s = value.ToString();
 
             return s == exceptionType.Name || s == exceptionType.FullName;
@@ -1273,6 +1295,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSerializationInfo(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var s = value.ToString();
 
             return s == nameof(SerializationInfo) || s == TypeNames.SerializationInfo;
@@ -1280,6 +1307,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStreamingContext(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var s = value.ToString();
 
             return s == nameof(StreamingContext) || s == TypeNames.StreamingContext;
@@ -1287,21 +1319,40 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsString(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.StringKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "string":
                 case nameof(String):
                 case nameof(System) + "." + nameof(String):
                     return true;
-
-                default:
-                    return false;
             }
+
+            return false;
         }
 
-        internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
+        internal static bool IsString(this ArgumentSyntax value, SemanticModel semanticModel)
+        {
+            if (value.IsStringLiteral())
+            {
+                return true;
+            }
 
-        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel) => value.GetTypeSymbol(semanticModel).IsString();
+            return value.GetTypeSymbol(semanticModel).IsString();
+        }
+
+        internal static bool IsString(this ExpressionSyntax value, SemanticModel semanticModel)
+        {
+            if (value.IsStringLiteral())
+            {
+                return true;
+            }
+
+            return value.GetTypeSymbol(semanticModel).IsString();
+        }
 
         internal static bool IsStringLiteral(this ArgumentSyntax value) => value?.Expression.IsStringLiteral() is true;
 
@@ -1335,9 +1386,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsObject(this TypeSyntax value)
         {
+            if (value is PredefinedTypeSyntax predefined)
+            {
+                return predefined.Keyword.IsKind(SyntaxKind.ObjectKeyword);
+            }
+
             switch (value.ToString())
             {
-                case "object":
                 case nameof(Object):
                 case nameof(System) + "." + nameof(Object):
                     return true;
@@ -1671,6 +1726,15 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
 
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithAdditionalLeadingSpaces<T>(this T value, int additionalSpaces) where T : SyntaxNode
+        {
+            var currentSpaces = value.GetStartPosition().Character;
+
+            return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
 
         internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode
         {
@@ -2329,6 +2393,11 @@ namespace MiKoSolutions.Analyzers
 
         private static bool IsLinqExtensionMethod(InvocationExpressionSyntax node, SemanticModel semanticModel)
         {
+            if (node.Expression is MemberAccessExpressionSyntax maes && maes.Expression is PredefinedTypeSyntax)
+            {
+                return false;
+            }
+
             var name = node.Expression.GetName();
 
             if (Constants.Names.LinqMethodNames.Contains(name))

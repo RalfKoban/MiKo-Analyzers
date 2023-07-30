@@ -20,8 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var maes = (MemberAccessExpressionSyntax)context.Node;
 
-            var dotPosition = GetStartPosition(maes.OperatorToken);
-            var memberPosition = GetStartPosition(maes.Name);
+            var dotPosition = maes.OperatorToken.GetStartPosition();
+            var memberPosition = maes.Name.GetStartPosition();
 
             if (dotPosition.Line != memberPosition.Line)
             {

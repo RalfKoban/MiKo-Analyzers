@@ -13,8 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_type_with_fitting_length_(
-            [ValueSource(nameof(FittingTypes))] string type,
-            [ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
+                                                                   [ValueSource(nameof(FittingTypes))] string type,
+                                                                   [ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
 
 public " + type + " " + name + @"
 {
@@ -23,8 +23,8 @@ public " + type + " " + name + @"
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_type_with_exceeding_length_(
-            [ValueSource(nameof(FittingTypes))] string type,
-            [ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
+                                                                     [ValueSource(nameof(FittingTypes))] string type,
+                                                                     [ValueSource(nameof(NonFitting))] string name) => An_issue_is_reported_for(@"
 
 public " + type + " " + name + @"
 {

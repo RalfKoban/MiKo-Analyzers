@@ -42,8 +42,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_using_(
-                                                        [ValueSource(nameof(Tests))] string test,
-                                                        [Values("new Guid()", @"Guid.Parse(""62AD86A4-3F05-403E-B53F-B2B21A62D6C7"")")] string call)
+                                                            [ValueSource(nameof(Tests))] string test,
+                                                            [Values("new Guid()", @"Guid.Parse(""62AD86A4-3F05-403E-B53F-B2B21A62D6C7"")")] string call)
             => No_issue_is_reported_for(@"
 using NUnit.Framework;
 

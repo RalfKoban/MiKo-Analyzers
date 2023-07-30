@@ -31,8 +31,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_nested_tests_(
-                                                                [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                [ValueSource(nameof(Tests))] string test)
+                                                                       [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                       [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe
@@ -80,8 +80,8 @@ public partial class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_class_with_multiple_base_classes_with_tests_(
-                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                        [ValueSource(nameof(Tests))] string test)
+                                                                                           [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                           [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 [" + testFixture + @"]
 public class TestMe3 : TestMe2

@@ -108,21 +108,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] BadPostfixes = BadMidTerms
                                                         .Concat(new[]
-                                                                {
-                                                                    "BL",
-                                                                    "Bl",
-                                                                    "Err",
-                                                                    "Param",
-                                                                    "Params",
-                                                                    "Proc",
-                                                                    "Prop",
-                                                                    "Props",
-                                                                    "PropName",
-                                                                    "PropNames",
-                                                                    "Pos",
-                                                                    "VM",
-                                                                    "Vm",
-                                                                })
+                                                                    {
+                                                                        "BL",
+                                                                        "Bl",
+                                                                        "Err",
+                                                                        "Param",
+                                                                        "Params",
+                                                                        "Proc",
+                                                                        "Prop",
+                                                                        "Props",
+                                                                        "PropName",
+                                                                        "PropNames",
+                                                                        "Pos",
+                                                                        "VM",
+                                                                        "Vm",
+                                                                    })
                                                         .Distinct()
                                                         .ToArray();
 

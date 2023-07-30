@@ -40,9 +40,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_method_that_returns_a_(
-                                                            [Values("returns", "value")] string xmlTag,
-                                                            [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                            [Values("string", "bool", "Task", "Task<string>", "Task<bool>", nameof(String), nameof(Boolean))] string returnType)
+                                                                [Values("returns", "value")] string xmlTag,
+                                                                [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                [Values("string", "bool", "Task", "Task<string>", "Task<bool>", nameof(String), nameof(Boolean))] string returnType)
             => No_issue_is_reported_for(@"
 using System;
 using System.Threading.Tasks;
@@ -61,8 +61,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_method_(
-                                                                    [Values("returns", "value")] string xmlTag,
-                                                                    [Values("A whatever", "An whatever", "The whatever")] string comment)
+                                                                     [Values("returns", "value")] string xmlTag,
+                                                                     [Values("A whatever", "An whatever", "The whatever")] string comment)
             => No_issue_is_reported_for(@"
 using System;
 
@@ -80,8 +80,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("Whatever")] string comment)
+                                                                 [Values("returns", "value")] string xmlTag,
+                                                                 [Values("Whatever")] string comment)
             => An_issue_is_reported_for(@"
 using System;
 

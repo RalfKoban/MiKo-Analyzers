@@ -58,12 +58,12 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_struct_field_in_test_class() => Assert.Multiple(() =>
-                                                                                          {
-                                                                                              foreach (var testFixture in TestFixtures)
-                                                                                              {
-                                                                                                  foreach (var number in Enumerable.Range(0, 10))
                                                                                                   {
-                                                                                                      No_issue_is_reported_for(@"
+                                                                                                      foreach (var testFixture in TestFixtures)
+                                                                                                      {
+                                                                                                          foreach (var number in Enumerable.Range(0, 10))
+                                                                                                          {
+                                                                                                              No_issue_is_reported_for(@"
 using System;
 
 [" + testFixture + @"]
@@ -72,18 +72,18 @@ public class TestMe
     public Int32 Field" + number + @";
 }
 ");
-                                                                                                  }
-                                                                                              }
-                                                                                          });
+                                                                                                          }
+                                                                                                      }
+                                                                                                  });
 
         [Test]
         public void An_issue_is_reported_for_non_struct_field_in_test_class() => Assert.Multiple(() =>
-                                                                                          {
-                                                                                              foreach (var testFixture in TestFixtures)
-                                                                                              {
-                                                                                                  foreach (var number in Enumerable.Range(0, 10))
-                                                                                                  {
-                                                                                                      An_issue_is_reported_for(@"
+                                                                                                      {
+                                                                                                          foreach (var testFixture in TestFixtures)
+                                                                                                          {
+                                                                                                              foreach (var number in Enumerable.Range(0, 10))
+                                                                                                              {
+                                                                                                                  An_issue_is_reported_for(@"
 public class T123
 {
 }
@@ -94,9 +94,9 @@ public class TestMe
     public T123 Field" + number + @";
 }
 ");
-                                                                                                  }
-                                                                                              }
-                                                                                          });
+                                                                                                              }
+                                                                                                          }
+                                                                                                      });
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(

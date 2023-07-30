@@ -28,15 +28,13 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_only_a_Test_method()
-        {
-            Assert.Multiple(() =>
-                                {
-                                    foreach (var fixture in TestFixtures)
-                                    {
-                                        foreach (var test in Tests)
-                                        {
-                                            No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_class_with_only_a_Test_method() => Assert.Multiple(() =>
+                                                                                                            {
+                                                                                                                foreach (var fixture in TestFixtures)
+                                                                                                                {
+                                                                                                                    foreach (var test in Tests)
+                                                                                                                    {
+                                                                                                                        No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -48,21 +46,18 @@ public class TestMe
     }
 }
 ");
-                                        }
-                                    }
-                                });
-        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            });
 
         [Test]
-        public void No_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_as_only_method()
-        {
-            Assert.Multiple(() =>
-                                {
-                                    foreach (var fixture in TestFixtures)
-                                    {
-                                        foreach (var tearDown in TestOneTimeTearDowns)
-                                        {
-                                            No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_as_only_method() => Assert.Multiple(() =>
+                                                                                                                               {
+                                                                                                                                   foreach (var fixture in TestFixtures)
+                                                                                                                                   {
+                                                                                                                                       foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                       {
+                                                                                                                                           No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -74,21 +69,20 @@ public class TestMe
     }
 }
 ");
-                                        }
-                                    }
-                                });
-        }
+                                                                                                                                       }
+                                                                                                                                   }
+                                                                                                                               });
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_before_a_Test_method() => Assert.Multiple(() =>
-        {
-            foreach (var fixture in TestFixtures)
-            {
-                foreach (var tearDown in TestOneTimeTearDowns)
-                {
-                    foreach (var test in Tests)
-                    {
-                        No_issue_is_reported_for(@"
+                                                                                                                                     {
+                                                                                                                                         foreach (var fixture in TestFixtures)
+                                                                                                                                         {
+                                                                                                                                             foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                             {
+                                                                                                                                                 foreach (var test in Tests)
+                                                                                                                                                 {
+                                                                                                                                                     No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -105,21 +99,21 @@ public class TestMe
     }
 }
 ");
-                    }
-                }
-            }
-        });
+                                                                                                                                                 }
+                                                                                                                                             }
+                                                                                                                                         }
+                                                                                                                                     });
 
         [Test]
         public void No_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_after_a_OneTimeSetUp_method() => Assert.Multiple(() =>
-                                                                                                                                           {
-                                                                                                                                               foreach (var fixture in TestFixtures)
-                                                                                                                                               {
-                                                                                                                                                   foreach (var setup in TestOneTimeSetUps)
-                                                                                                                                                   {
-                                                                                                                                                       foreach (var tearDown in TestOneTimeTearDowns)
-                                                                                                                                                       {
-                                                                                                                                                           No_issue_is_reported_for(@"
+                                                                                                                                            {
+                                                                                                                                                foreach (var fixture in TestFixtures)
+                                                                                                                                                {
+                                                                                                                                                    foreach (var setup in TestOneTimeSetUps)
+                                                                                                                                                    {
+                                                                                                                                                        foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                                        {
+                                                                                                                                                            No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -136,10 +130,10 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                                       }
-                                                                                                                                                   }
-                                                                                                                                               }
-                                                                                                                                           });
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            });
 
         [Test]
         public void No_issue_is_reported_for_a_TearDown_method_after_a_OneTimeSetUp_and_OneTimeTearDown_and_SetUp_method() => No_issue_is_reported_for(@"
@@ -170,16 +164,15 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_before_a_OneTimeSetUp_method() => Assert.Multiple(
-                                                                                                                                 () =>
-                                                                                                                                 {
-                                                                                                                                     foreach (var fixture in TestFixtures)
-                                                                                                                                     {
-                                                                                                                                         foreach (var oneTimeTearDown in TestOneTimeTearDowns)
-                                                                                                                                         {
-                                                                                                                                             foreach (var oneTimeSetUp in TestOneTimeSetUps)
+        public void An_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_before_a_OneTimeSetUp_method() => Assert.Multiple(() =>
                                                                                                                                              {
-                                                                                                                                                 An_issue_is_reported_for(@"
+                                                                                                                                                 foreach (var fixture in TestFixtures)
+                                                                                                                                                 {
+                                                                                                                                                     foreach (var oneTimeTearDown in TestOneTimeTearDowns)
+                                                                                                                                                     {
+                                                                                                                                                         foreach (var oneTimeSetUp in TestOneTimeSetUps)
+                                                                                                                                                         {
+                                                                                                                                                             An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -196,21 +189,21 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                             }
-                                                                                                                                         }
-                                                                                                                                     }
-                                                                                                                                 });
+                                                                                                                                                         }
+                                                                                                                                                     }
+                                                                                                                                                 }
+                                                                                                                                             });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_after_a_SetUp_method() => Assert.Multiple(() =>
-                                                                                                                                       {
-                                                                                                                                           foreach (var fixture in TestFixtures)
-                                                                                                                                           {
-                                                                                                                                               foreach (var setup in TestSetUps)
-                                                                                                                                               {
-                                                                                                                                                   foreach (var tearDown in TestOneTimeTearDowns)
-                                                                                                                                                   {
-                                                                                                                                                       An_issue_is_reported_for(@"
+                                                                                                                                     {
+                                                                                                                                         foreach (var fixture in TestFixtures)
+                                                                                                                                         {
+                                                                                                                                             foreach (var setup in TestSetUps)
+                                                                                                                                             {
+                                                                                                                                                 foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                                 {
+                                                                                                                                                     An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -227,21 +220,21 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                                   }
-                                                                                                                                               }
-                                                                                                                                           }
-                                                                                                                                       });
+                                                                                                                                                 }
+                                                                                                                                             }
+                                                                                                                                         }
+                                                                                                                                     });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_after_a_TearDown_method() => Assert.Multiple(() =>
-                                                                                                                                       {
-                                                                                                                                           foreach (var fixture in TestFixtures)
-                                                                                                                                           {
-                                                                                                                                               foreach (var tearDown in TestTearDowns)
-                                                                                                                                               {
-                                                                                                                                                   foreach (var oneTime in TestOneTimeTearDowns)
-                                                                                                                                                   {
-                                                                                                                                                       An_issue_is_reported_for(@"
+                                                                                                                                        {
+                                                                                                                                            foreach (var fixture in TestFixtures)
+                                                                                                                                            {
+                                                                                                                                                foreach (var tearDown in TestTearDowns)
+                                                                                                                                                {
+                                                                                                                                                    foreach (var oneTime in TestOneTimeTearDowns)
+                                                                                                                                                    {
+                                                                                                                                                        An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -258,21 +251,21 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                                   }
-                                                                                                                                               }
-                                                                                                                                           }
-                                                                                                                                       });
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_after_a_Test_method() => Assert.Multiple(() =>
-                                                                                                                                   {
-                                                                                                                                       foreach (var fixture in TestFixtures)
-                                                                                                                                       {
-                                                                                                                                           foreach (var tearDown in TestOneTimeTearDowns)
-                                                                                                                                           {
-                                                                                                                                               foreach (var test in Tests)
-                                                                                                                                               {
-                                                                                                                                                   An_issue_is_reported_for(@"
+                                                                                                                                    {
+                                                                                                                                        foreach (var fixture in TestFixtures)
+                                                                                                                                        {
+                                                                                                                                            foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                            {
+                                                                                                                                                foreach (var test in Tests)
+                                                                                                                                                {
+                                                                                                                                                    An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -289,19 +282,19 @@ public class TestMe
     }
 }
 ");
-                                                                                                                                               }
-                                                                                                                                           }
-                                                                                                                                       }
-                                                                                                                                   });
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    });
 
         [Test]
         public void An_issue_is_reported_for_a_test_class_with_OneTimeTearDown_method_after_a_non_Test_method() => Assert.Multiple(() =>
-        {
-            foreach (var fixture in TestFixtures)
-            {
-                foreach (var tearDown in TestOneTimeTearDowns)
-                {
-                    An_issue_is_reported_for(@"
+                                                                                                                                        {
+                                                                                                                                            foreach (var fixture in TestFixtures)
+                                                                                                                                            {
+                                                                                                                                                foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                                {
+                                                                                                                                                    An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 [" + fixture + @"]
@@ -316,18 +309,18 @@ public class TestMe
     {
     }
 }");
-                }
-            }
-        });
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
 
         [Test]
         public void An_issue_is_reported_for_a_non_test_class_with_OneTimeTearDown_method_after_a_Test_method() => Assert.Multiple(() =>
-        {
-            foreach (var tearDown in TestOneTimeTearDowns)
-            {
-                foreach (var test in Tests)
-                {
-                    An_issue_is_reported_for(@"
+                                                                                                                                        {
+                                                                                                                                            foreach (var tearDown in TestOneTimeTearDowns)
+                                                                                                                                            {
+                                                                                                                                                foreach (var test in Tests)
+                                                                                                                                                {
+                                                                                                                                                    An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 public class TestMe
@@ -343,9 +336,9 @@ public class TestMe
     }
 }
 ");
-                }
-            }
-        });
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        });
 
         [Test]
         public void Code_gets_fixed_for_test_method()

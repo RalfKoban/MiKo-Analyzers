@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3085";
 
-        private const int MaxExpressionLength = 35;
+        private const int MaxExpressionLength = 60;
 
         private static readonly SyntaxKind[] IsExpressions =
                                                              {
@@ -48,8 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // inspect arguments to see only simple ones
             var found = arguments
                             .Select(_ => _.Expression)
-                            .All(
-                                 _ =>
+                            .All(_ =>
                                      {
                                          switch (_)
                                          {

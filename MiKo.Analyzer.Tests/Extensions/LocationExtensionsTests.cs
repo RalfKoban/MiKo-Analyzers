@@ -20,22 +20,22 @@ namespace MiKoSolutions.Analyzers.Extensions
             var location4 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(25, 28));
 
             Assert.Multiple(() =>
-                                    {
-                                        Assert.That(location1.IntersectsWith(location1), Is.True);
-                                        Assert.That(location1.IntersectsWith(location2), Is.True);
-                                        Assert.That(location1.IntersectsWith(location3), Is.True);
+                                 {
+                                     Assert.That(location1.IntersectsWith(location1), Is.True);
+                                     Assert.That(location1.IntersectsWith(location2), Is.True);
+                                     Assert.That(location1.IntersectsWith(location3), Is.True);
 
-                                        Assert.That(location2.IntersectsWith(location1), Is.True);
-                                        Assert.That(location2.IntersectsWith(location2), Is.True);
-                                        Assert.That(location2.IntersectsWith(location3), Is.True);
-                                        Assert.That(location2.IntersectsWith(location4), Is.True);
+                                     Assert.That(location2.IntersectsWith(location1), Is.True);
+                                     Assert.That(location2.IntersectsWith(location2), Is.True);
+                                     Assert.That(location2.IntersectsWith(location3), Is.True);
+                                     Assert.That(location2.IntersectsWith(location4), Is.True);
 
-                                        Assert.That(location3.IntersectsWith(location1), Is.True);
-                                        Assert.That(location3.IntersectsWith(location2), Is.True);
-                                        Assert.That(location3.IntersectsWith(location3), Is.True);
+                                     Assert.That(location3.IntersectsWith(location1), Is.True);
+                                     Assert.That(location3.IntersectsWith(location2), Is.True);
+                                     Assert.That(location3.IntersectsWith(location3), Is.True);
 
-                                        Assert.That(location4.IntersectsWith(location2), Is.True);
-                                    });
+                                     Assert.That(location4.IntersectsWith(location2), Is.True);
+                                 });
         }
 
         [Test]
@@ -48,16 +48,16 @@ namespace MiKoSolutions.Analyzers.Extensions
             var location3 = Location.Create(result.SyntaxTree, TextSpan.FromBounds(31, 37));
 
             Assert.Multiple(() =>
-                                    {
-                                        Assert.That(location1.IntersectsWith(location2), Is.False);
-                                        Assert.That(location1.IntersectsWith(location3), Is.False);
+                                 {
+                                     Assert.That(location1.IntersectsWith(location2), Is.False);
+                                     Assert.That(location1.IntersectsWith(location3), Is.False);
 
-                                        Assert.That(location2.IntersectsWith(location1), Is.False);
-                                        Assert.That(location2.IntersectsWith(location3), Is.False);
+                                     Assert.That(location2.IntersectsWith(location1), Is.False);
+                                     Assert.That(location2.IntersectsWith(location3), Is.False);
 
-                                        Assert.That(location3.IntersectsWith(location1), Is.False);
-                                        Assert.That(location3.IntersectsWith(location2), Is.False);
-                                    });
+                                     Assert.That(location3.IntersectsWith(location1), Is.False);
+                                     Assert.That(location3.IntersectsWith(location2), Is.False);
+                                 });
         }
     }
 }

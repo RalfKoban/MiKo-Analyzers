@@ -97,12 +97,12 @@ namespace Bla
 
         [Test]
         public void An_issue_is_reported_for_Length_in_an_Assert_test_method() => Assert.Multiple(() =>
-                                                                                                      {
-                                                                                                          foreach (var culprit in Culprits)
-                                                                                                          {
-                                                                                                              foreach (var assertion in AssertionMethods)
-                                                                                                              {
-                                                                                                                  An_issue_is_reported_for(@"
+                                                                                                       {
+                                                                                                           foreach (var culprit in Culprits)
+                                                                                                           {
+                                                                                                               foreach (var assertion in AssertionMethods)
+                                                                                                               {
+                                                                                                                   An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -117,9 +117,9 @@ namespace Bla
     }
 }
 ");
-                                                                                                              }
-                                                                                                          }
-                                                                                                      });
+                                                                                                               }
+                                                                                                           }
+                                                                                                       });
 
         [TestCase("Assert.That(values.Length, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.That(values.Length, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]

@@ -1,7 +1,6 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
-    <FastLaneThreads>4</FastLaneThreads>
     <HotSpotsExclusionList>
       <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </HotSpotsExclusionList>
@@ -11,6 +10,7 @@
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
+    <SlidingBuildDelayInMilliseconds>250</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
 </SolutionConfiguration>

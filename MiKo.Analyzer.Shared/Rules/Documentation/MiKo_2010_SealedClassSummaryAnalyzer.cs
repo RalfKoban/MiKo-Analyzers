@@ -21,9 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
-            return symbol.IsSealed && summaries.None(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal))
-                   ? new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) }
-                   : Enumerable.Empty<Diagnostic>();
+            if (symbol.IsSealed && summaries.None(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal)))
+            {
+                yield return Issue(symbol, Constants.Comments.SealedClassPhrase);
+            }
         }
     }
 }

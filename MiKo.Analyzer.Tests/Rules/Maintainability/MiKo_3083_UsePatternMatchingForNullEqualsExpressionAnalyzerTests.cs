@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_comparisons_of_2_variables_of_type_(
-                                                                            [Values("int", "string", "object")] string type,
-                                                                            [ValueSource(nameof(Operators))] string @operator)
+                                                                             [Values("int", "string", "object")] string type,
+                                                                             [ValueSource(nameof(Operators))] string @operator)
             => No_issue_is_reported_for(@"
 using System;
 

@@ -94,8 +94,8 @@ public class TestMe
 
         [Test]
         public void No_issue_is_reported_for_type_with_correctly_named_static_singleton_field_(
-                                                                                            [ValueSource(nameof(FieldPrefixes))] string prefix,
-                                                                                            [Values("instance", "empty", "default", "zero", "Instance", "Empty", "Default", "Zero")] string fieldName)
+                                                                                           [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                                                                           [Values("instance", "empty", "default", "zero", "Instance", "Empty", "Default", "Zero")] string fieldName)
             => No_issue_is_reported_for(@"
 public class TestMe
 {

@@ -111,8 +111,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_only_method_(
-                                                                                    [Values("returns", "value")] string xmlTag,
-                                                                                    [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
+                                                                                     [Values("returns", "value")] string xmlTag,
+                                                                                     [ValueSource(nameof(EnumerableOnlyReturnValues))] string returnType) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -132,8 +132,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_List_method_(
-                                                                        [Values("returns", "value")] string xmlTag,
-                                                                        [Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
+                                                                          [Values("returns", "value")] string xmlTag,
+                                                                          [Values("A", "An")] string startingWord) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -153,9 +153,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_correctly_commented_Enumerable_Task_method_(
-                                                                                    [Values("returns", "value")] string xmlTag,
-                                                                                    [Values("", " ")] string space,
-                                                                                    [ValueSource(nameof(EnumerableTaskReturnValues))] string returnType) => No_issue_is_reported_for(@"
+                                                                                     [Values("returns", "value")] string xmlTag,
+                                                                                     [Values("", " ")] string space,
+                                                                                     [ValueSource(nameof(EnumerableTaskReturnValues))] string returnType) => No_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -175,9 +175,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_wrong_commented_method_(
-                                                                [Values("returns", "value")] string xmlTag,
-                                                                [Values("A whatever", "An whatever", "The whatever")] string comment,
-                                                                [ValueSource(nameof(EnumerableReturnValues))] string returnType) => An_issue_is_reported_for(@"
+                                                                 [Values("returns", "value")] string xmlTag,
+                                                                 [Values("A whatever", "An whatever", "The whatever")] string comment,
+                                                                 [ValueSource(nameof(EnumerableReturnValues))] string returnType) => An_issue_is_reported_for(@"
 using System;
 using System.Collections;
 using System.Collections.Generic;

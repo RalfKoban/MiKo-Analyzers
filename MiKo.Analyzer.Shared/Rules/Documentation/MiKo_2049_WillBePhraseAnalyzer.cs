@@ -89,10 +89,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var properties = new Dictionary<string, string>
-                             {
-                                 { TextKey, text },
-                                 { TextReplacementKey, replacement },
-                             };
+                                 {
+                                     { TextKey, text },
+                                     { TextReplacementKey, replacement },
+                                 };
 
             return Issue(location, replacement, properties);
         }

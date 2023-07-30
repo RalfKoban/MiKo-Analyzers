@@ -71,11 +71,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var finalContent = commentWithoutObsoleteNodes.ReplaceNodes(
                                                                         commentWithoutObsoleteNodes.GetExceptionXmls(),
                                                                         (original, rewritten) =>
-                                                                            {
-                                                                                var exceptionName = GetReferencedExceptionName(original);
+                                                                                                {
+                                                                                                    var exceptionName = GetReferencedExceptionName(original);
 
-                                                                                return newNodes.TryGetValue(exceptionName, out var replacement) ? replacement : rewritten;
-                                                                            });
+                                                                                                    return newNodes.TryGetValue(exceptionName, out var replacement) ? replacement : rewritten;
+                                                                                                });
 
             return finalContent;
         }

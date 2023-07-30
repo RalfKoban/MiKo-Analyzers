@@ -21,21 +21,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (initializer.Parent)
             {
-                case ArrayCreationExpressionSyntax a: return GetStartPosition(a.Type);
-                case ObjectCreationExpressionSyntax o: return GetStartPosition(o.Type);
-                case ImplicitArrayCreationExpressionSyntax ia: return GetStartPosition(ia.CloseBracketToken);
+                case ArrayCreationExpressionSyntax a: return a.Type.GetStartPosition();
+                case ObjectCreationExpressionSyntax o: return o.Type.GetStartPosition();
+                case ImplicitArrayCreationExpressionSyntax ia: return ia.CloseBracketToken.GetStartPosition();
 
                 // consider reduced array initializers
                 case EqualsValueClauseSyntax e:
                 {
-                    var position = e.EqualsToken.GetLocation().GetLineSpan().EndLinePosition;
+                    var position = e.EqualsToken.GetEndPosition();
 
                     return new LinePosition(position.Line, position.Character + 1);
                 }
 
                 default:
                 {
-                    return GetStartPosition(initializer.Parent);
+                    return initializer.Parent.GetStartPosition();
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var openBraceToken = initializer.OpenBraceToken;
 
                 var typePosition = GetStartPosition(initializer);
-                var openBracePosition = GetStartPosition(openBraceToken);
+                var openBracePosition = openBraceToken.GetStartPosition();
 
                 if (typePosition.Line != openBracePosition.Line)
                 {

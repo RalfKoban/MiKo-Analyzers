@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var typesUnderTest = symbol.GetTypeUnderTestTypes().ToList();
+            var typesUnderTest = symbol.GetTypeUnderTestTypes();
 
             if (typesUnderTest.Any())
             {

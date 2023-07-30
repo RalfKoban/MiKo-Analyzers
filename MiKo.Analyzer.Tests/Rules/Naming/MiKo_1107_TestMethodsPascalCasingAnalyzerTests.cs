@@ -34,8 +34,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_with_correct_upper_and_lower_case_name_(
-                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                        [ValueSource(nameof(Tests))] string test)
+                                                                                             [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                                             [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
 
 [" + testFixture + @"]
@@ -63,9 +63,9 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_test_method_with_wrong_name_(
-                                                                    [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                    [ValueSource(nameof(Tests))] string test,
-                                                                    [Values("DoSomethingDoesSomething", "DoSomething_DoesSomething", "DoSomething_Expect_DoSomething")] string name)
+                                                                      [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                                      [ValueSource(nameof(Tests))] string test,
+                                                                      [Values("DoSomethingDoesSomething", "DoSomething_DoesSomething", "DoSomething_Expect_DoSomething")] string name)
             => An_issue_is_reported_for(@"
 
 [" + testFixture + @"]

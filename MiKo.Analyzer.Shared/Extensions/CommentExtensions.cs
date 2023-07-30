@@ -12,20 +12,20 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
-        internal static string GetComment(this ISymbol symbol)
+        internal static string GetComment(this ISymbol value)
         {
-            if (symbol is IParameterSymbol p)
+            if (value is IParameterSymbol p)
             {
                 // parameter might be method or property (setter or indexer)
                 return GetComment(p, p.ContainingSymbol?.GetDocumentationCommentXml());
             }
 
-            return Cleaned(GetCommentElement(symbol)).ConcatenatedWith();
+            return Cleaned(GetCommentElement(value)).ConcatenatedWith();
         }
 
-        internal static string GetComment(this IParameterSymbol parameter, string commentXml)
+        internal static string GetComment(this IParameterSymbol value, string commentXml)
         {
-            var parameterName = parameter.Name;
+            var parameterName = value.Name;
 
             return FlattenComment(GetCommentElements(commentXml, Constants.XmlTag.Param).Where(_ => _.Attribute("name")?.Value == parameterName));
         }
@@ -36,30 +36,30 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyCollection<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
 
-        internal static IEnumerable<string> GetOverloadSummaries(this IMethodSymbol symbol) => GetOverloadSummaries(symbol.GetDocumentationCommentXml());
+        internal static IEnumerable<string> GetOverloadSummaries(this IMethodSymbol value) => GetOverloadSummaries(value.GetDocumentationCommentXml());
 
         internal static IEnumerable<string> GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
 
-        internal static IEnumerable<string> GetRemarks(this ISymbol symbol) => GetRemarks(symbol.GetDocumentationCommentXml());
+        internal static IEnumerable<string> GetRemarks(this ISymbol value) => GetRemarks(value.GetDocumentationCommentXml());
 
         internal static IEnumerable<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
-        internal static IEnumerable<string> GetReturns(this IMethodSymbol symbol) => GetReturns(symbol.GetDocumentationCommentXml());
+        internal static IEnumerable<string> GetReturns(this IMethodSymbol value) => GetReturns(value.GetDocumentationCommentXml());
 
         internal static IEnumerable<string> GetReturns(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Returns));
 
-        internal static IEnumerable<string> GetValue(this IMethodSymbol symbol) => GetValue(symbol.GetDocumentationCommentXml());
+        internal static IEnumerable<string> GetValue(this IMethodSymbol value) => GetValue(value.GetDocumentationCommentXml());
 
         internal static IEnumerable<string> GetValue(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Value));
 
         internal static IEnumerable<string> GetExamples(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Example));
 
-        internal static XElement GetCommentElement(this ISymbol symbol) => GetCommentElement(symbol.GetDocumentationCommentXml());
+        internal static XElement GetCommentElement(this ISymbol value) => GetCommentElement(value.GetDocumentationCommentXml());
 
-        internal static XElement GetCommentElement(this string commentXml)
+        internal static XElement GetCommentElement(this string value)
         {
             // just to be sure that we always have a root element (malformed XMLs are reported as comment but without a root element)
-            var xml = string.Concat("<root>", commentXml, "</root>");
+            var xml = string.Concat("<root>", value, "</root>");
 
             try
             {
@@ -72,18 +72,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<XElement> GetCommentElements(this string commentXml, string xmlTag)
+        internal static IEnumerable<XElement> GetCommentElements(this string value, string xmlTag)
         {
-            var element = GetCommentElement(commentXml);
+            var element = GetCommentElement(value);
 
             return GetCommentElements(element, xmlTag);
         }
 
-        internal static IEnumerable<XElement> GetCommentElements(this XElement commentXml, string xmlTag)
+        internal static IEnumerable<XElement> GetCommentElements(this XElement value, string xmlTag)
         {
-            return commentXml is null
+            return value is null
                    ? Enumerable.Empty<XElement>() // happens in case of an invalid character
-                   : commentXml.Descendants(xmlTag);
+                   : value.Descendants(xmlTag);
         }
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)

@@ -82,8 +82,8 @@ public class TestMe
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_variable_with_non_fitting_name_(
-                                                                        [ValueSource(nameof(DelegateTypes))] string type,
-                                                                        [ValueSource(nameof(WrongDelegateNames))] string name)
+                                                                         [ValueSource(nameof(DelegateTypes))] string type,
+                                                                         [ValueSource(nameof(WrongDelegateNames))] string name)
             => An_issue_is_reported_for(@"
 using System;
 

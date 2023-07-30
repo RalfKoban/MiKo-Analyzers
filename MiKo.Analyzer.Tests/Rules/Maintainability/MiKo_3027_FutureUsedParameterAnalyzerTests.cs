@@ -53,8 +53,8 @@ namespace Bla
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_method_that_has_a_reserved_parameter_(
-                                                                                [Values("ref", "out", "")] string modifier,
-                                                                                [ValueSource(nameof(ReservedForFuturePhrases))] string phrase)
+                                                                               [Values("ref", "out", "")] string modifier,
+                                                                               [ValueSource(nameof(ReservedForFuturePhrases))] string phrase)
             => An_issue_is_reported_for(@"
 using System;
 

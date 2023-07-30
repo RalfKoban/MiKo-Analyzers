@@ -12,16 +12,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1404_NonsenseNamespacesAnalyzerTests : CodeFixVerifier
     {
         private static readonly IEnumerable<string> ForbiddenNamespaceNames = new[]
-                                                                              {
-                                                                                  "Helper",
-                                                                                  "Helpers",
-                                                                                  "Misc",
-                                                                                  "Miscellaneous",
-                                                                                  "Util",
-                                                                                  "Utils",
-                                                                                  "Utility",
-                                                                                  "Utilities",
-                                                                              };
+                                                                                  {
+                                                                                      "Helper",
+                                                                                      "Helpers",
+                                                                                      "Misc",
+                                                                                      "Miscellaneous",
+                                                                                      "Util",
+                                                                                      "Utils",
+                                                                                      "Utility",
+                                                                                      "Utilities",
+                                                                                  };
 
         [TestCase("MiKoSolutions")]
         public void No_issue_is_reported_for_proper_namespace_(string ns) => No_issue_is_reported_for(@"

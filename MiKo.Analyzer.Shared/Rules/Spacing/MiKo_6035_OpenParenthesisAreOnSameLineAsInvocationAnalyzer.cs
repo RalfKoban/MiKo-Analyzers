@@ -24,18 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case MemberAccessExpressionSyntax maes:
                     AnalyzeNameSyntax(context, maes.Name, invocation.ArgumentList.OpenParenToken);
+
                     break;
 
                 case NameSyntax name:
                     AnalyzeNameSyntax(context, name, invocation.ArgumentList.OpenParenToken);
+
                     break;
             }
         }
 
         private void AnalyzeNameSyntax(SyntaxNodeAnalysisContext context, NameSyntax name, SyntaxToken parenthesis)
         {
-            var parenthesisPosition = GetStartPosition(parenthesis);
-            var memberPosition = GetStartPosition(name);
+            var parenthesisPosition = parenthesis.GetStartPosition();
+            var memberPosition = name.GetStartPosition();
 
             if (parenthesisPosition.Line != memberPosition.Line)
             {

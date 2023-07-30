@@ -4,7 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
@@ -23,12 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is BlockSyntax block && block.Parent is SwitchSectionSyntax section)
             {
                 var position = MiKo_6033_CaseBlockBracesAreOnSamePositionLikeCaseKeywordAnalyzer.GetStartPosition(section);
-                var spaces = position.Character;
-                var nested = spaces + Constants.Indentation;
 
-                return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
-                            .WithStatements(SyntaxFactory.List(block.Statements.Select(_ => _.WithLeadingSpaces(nested))))
-                            .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
+                return GetUpdatedBlock(block, position.Character);
             }
 
             return syntax;

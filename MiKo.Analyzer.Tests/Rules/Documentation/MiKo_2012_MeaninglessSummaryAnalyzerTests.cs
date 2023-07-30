@@ -77,10 +77,10 @@ public class TestMe
         public void An_issue_is_reported_for_class_with_meaningless_phrase()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var phrase in MeaninglessPhrases)
-                                    {
-                                        An_issue_is_reported_for(@"
+                                 {
+                                     foreach (var phrase in MeaninglessPhrases)
+                                     {
+                                         An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -92,8 +92,8 @@ public class TestMe : ITestMe
 {
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
@@ -121,10 +121,10 @@ public class TestMe
         public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var phrase in MeaninglessPhrases)
-                                    {
-                                        An_issue_is_reported_for(@"
+                                 {
+                                     foreach (var phrase in MeaninglessPhrases)
+                                     {
+                                         An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -138,8 +138,8 @@ public class TestMe : ITestMe
 {
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
@@ -178,10 +178,10 @@ public class TestMe
         public void An_issue_is_reported_for_method_with_meaningless_phrase()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var phrase in MeaninglessPhrases)
-                                    {
-                                        An_issue_is_reported_for(@"
+                                 {
+                                     foreach (var phrase in MeaninglessPhrases)
+                                     {
+                                         An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -194,18 +194,18 @@ public class TestMe : ITestMe
     public void DoSomething() { }
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
         public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var phrase in MeaninglessPhrases)
-                                    {
-                                        An_issue_is_reported_for(@"
+                                 {
+                                     foreach (var phrase in MeaninglessPhrases)
+                                     {
+                                         An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -220,8 +220,8 @@ public class TestMe : ITestMe
     public void DoSomething() { }
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
@@ -287,10 +287,10 @@ public enum TestMe
         public void An_issue_is_reported_for_field_with_meaningless_phrase()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var phrase in MeaninglessFieldPhrases)
-                                    {
-                                        An_issue_is_reported_for(@"
+                                 {
+                                     foreach (var phrase in MeaninglessFieldPhrases)
+                                     {
+                                         An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -303,18 +303,18 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
         public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag()
         {
             Assert.Multiple(() =>
-                                {
-                                    foreach (var phrase in MeaninglessFieldPhrases)
-                                    {
-                                        An_issue_is_reported_for(@"
+                                 {
+                                     foreach (var phrase in MeaninglessFieldPhrases)
+                                     {
+                                         An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -329,8 +329,8 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
-                                    }
-                                });
+                                     }
+                                 });
         }
 
         [Test]
@@ -510,9 +510,9 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_to_inheritdoc_for_default_implementation_(
-                                                                        [Values("A", "The", "")] string startPhrase,
-                                                                        [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl", "Implementation")] string text,
-                                                                        [Values("for", "of")] string middlePart)
+                                                                          [Values("A", "The", "")] string startPhrase,
+                                                                          [Values("Default implementation", "Default-implementation", "Default impl", "Default-impl", "Implementation")] string text,
+                                                                          [Values("for", "of")] string middlePart)
         {
             var originalCode = @"
 /// <summary>
@@ -881,36 +881,36 @@ public class TestMeViewModel
         private static string[] CreateMeaninglessPhrases()
         {
             var types = new[]
-                        {
-                            "Attribute",
-                            "Base",
-                            "Class",
-                            "Interface",
-                            "Method",
-                            "Field",
-                            "Property",
-                            "Event",
-                            "EventHandler",
-                            "Handler",
-                            "Component",
-                            "Constructor",
-                            "Ctor",
-                            "Delegate",
-                            "Creator",
-                            "Entity",
-                            "Model",
-                            "View",
-                            "ViewModel",
-                            "Command",
-                            "Action",
-                            "Func",
-                            "Converter",
-                            "Adapter ",
-                            "Builder",
-                            "Factory",
-                            "Proxy ",
-                            "Wrapper ",
-                        };
+                            {
+                                "Attribute",
+                                "Base",
+                                "Class",
+                                "Interface",
+                                "Method",
+                                "Field",
+                                "Property",
+                                "Event",
+                                "EventHandler",
+                                "Handler",
+                                "Component",
+                                "Constructor",
+                                "Ctor",
+                                "Delegate",
+                                "Creator",
+                                "Entity",
+                                "Model",
+                                "View",
+                                "ViewModel",
+                                "Command",
+                                "Action",
+                                "Func",
+                                "Converter",
+                                "Adapter ",
+                                "Builder",
+                                "Factory",
+                                "Proxy ",
+                                "Wrapper ",
+                            };
 
             var phrases = MeaninglessTextPhrases;
 
