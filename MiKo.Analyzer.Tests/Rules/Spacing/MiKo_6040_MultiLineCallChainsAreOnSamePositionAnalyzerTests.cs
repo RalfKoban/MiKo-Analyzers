@@ -28,7 +28,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString().ToString().ToString();
     }
@@ -41,7 +41,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                  .ToString()
@@ -56,7 +56,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                   .ToString()
@@ -71,11 +71,41 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                 .ToString()
                  .ToString();
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_multi_line_call_chain_contains_members_indented_more_to_the_left() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(Type type)
+    {
+        var x = type.Assembly
+             .EntryPoint
+                    .ReturnParameter;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_multi_line_call_chain_contains_members_indented_more_to_the_right() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(Type type)
+    {
+        var x = type.Assembly
+                        .EntryPoint
+                    .ReturnParameter;
     }
 }
 ");
@@ -88,7 +118,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                   .GetHashCode()
@@ -102,7 +132,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                  .GetHashCode()
@@ -122,7 +152,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                 .GetHashCode()
@@ -136,7 +166,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                  .GetHashCode()
@@ -156,7 +186,7 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                 .GetHashCode()
@@ -172,13 +202,49 @@ using System;
 
 public class TestMe
 {
-    public object DoSomething(object o)
+    public void DoSomething(object o)
     {
         var x = o.ToString()
                  .GetHashCode()
                  .GetType()
                  .GetElementType()
                  .GetEnumName();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_multi_line_call_chain_contains_members_indented_more_to_the_left_and_to_the_right()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(Type type)
+    {
+        var x = type.Assembly
+             .EntryPoint
+                  .ReturnParameter
+                    .Attributes;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(Type type)
+    {
+        var x = type.Assembly
+                    .EntryPoint
+                    .ReturnParameter
+                    .Attributes;
     }
 }
 ";

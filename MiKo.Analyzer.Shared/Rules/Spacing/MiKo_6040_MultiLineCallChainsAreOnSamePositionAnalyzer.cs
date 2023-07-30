@@ -21,13 +21,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         internal static int GetSpaces(Diagnostic diagnostic) => int.Parse(diagnostic.Properties[Spaces]);
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.InvocationExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SimpleMemberAccessExpression);
 
-        private static IReadOnlyCollection<SyntaxToken> CollectDots(InvocationExpressionSyntax invocation)
+        private static Stack<SyntaxToken> CollectDots(ExpressionSyntax startingExpression)
         {
             var dots = new Stack<SyntaxToken>();
 
-            var expression = invocation.Expression;
+            var expression = startingExpression;
 
             while (expression != null)
             {
@@ -56,23 +56,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var invocation = (InvocationExpressionSyntax)context.Node;
+            var node = (MemberAccessExpressionSyntax)context.Node;
 
-            if (invocation.Ancestors<InvocationExpressionSyntax>().Any())
+            if (node.Ancestors<MemberAccessExpressionSyntax>().Any())
             {
-                // we are a nested invocation, hence we do not need to calculate and report again
+                // we are a nested one, hence we do not need to calculate and report again
                 return;
             }
 
-            var dots = CollectDots(invocation);
-
-            var startPosition = dots.First().GetStartPosition();
-
+            var dots = CollectDots(node);
+            var firstDot = dots.Pop();
+            var startPosition = firstDot.GetStartPosition();
             var startLine = startPosition.Line;
             var startCharacterPosition = startPosition.Character;
 
-            foreach (var dot in dots)
+            while (dots.Count > 0)
             {
+                var dot = dots.Pop();
                 var position = dot.GetStartPosition();
 
                 if (position.Line != startLine && position.Character != startCharacterPosition)
