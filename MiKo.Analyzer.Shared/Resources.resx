@@ -4589,4 +4589,16 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   <data name="MiKo_6037_Title" xml:space="preserve">
     <value>Single arguments should be placed on same line(s) as invoked methods</value>
   </data>
+  <data name="MiKo_6038_CodeFixTitle" xml:space="preserve">
+    <value>Place cast on same line</value>
+  </data>
+  <data name="MiKo_6038_Description" xml:space="preserve">
+    <value>The code is easier to read if casts are placed on the same line(s).</value>
+  </data>
+  <data name="MiKo_6038_MessageFormat" xml:space="preserve">
+    <value>Place cast on same line</value>
+  </data>
+  <data name="MiKo_6038_Title" xml:space="preserve">
+    <value>Casts should be placed on same line(s)</value>
+  </data>
 </root>

@@ -13069,5 +13069,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6037_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place cast on same line.
+        /// </summary>
+        public static string MiKo_6038_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6038_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if casts are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6038_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6038_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place cast on same line.
+        /// </summary>
+        public static string MiKo_6038_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6038_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Casts should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6038_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6038_Title", resourceCulture);
+            }
+        }
     }
 }
