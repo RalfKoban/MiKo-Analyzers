@@ -132,6 +132,16 @@ namespace MiKoSolutions.Analyzers
             return tokens;
         }
 
+        internal static SyntaxToken WithoutLeadingTrivia(this SyntaxToken token)
+        {
+            return token.WithoutTrivia().WithTrailingTrivia(token.TrailingTrivia);
+        }
+
+        internal static SyntaxToken WithoutTrailingTrivia(this SyntaxToken token)
+        {
+            return token.WithoutTrivia().WithLeadingTrivia(token.LeadingTrivia);
+        }
+
         internal static SyntaxTokenList WithoutEmptyText(this SyntaxTokenList tokens, SyntaxToken token)
         {
             if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.ValueText.IsNullOrWhiteSpace())

@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return argumentList.WithArguments(SyntaxFactory.SeparatedList(new[] { argumentSyntax.WithoutTrivia() }))
                                .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
-                               .WithCloseParenToken(argumentList.CloseParenToken.WithoutTrivia());
+                               .WithCloseParenToken(argumentList.CloseParenToken.WithoutLeadingTrivia());
         }
     }
 }

@@ -133,6 +133,49 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_complete_Linq_call_spanning_multiple_lines_with_single_argument_on_separate_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var items = new List<int>();
+
+        var results = items.Select(_ => _.ToString())
+                           .OrderBy(
+                                _ => _)
+                           .ToList();
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var items = new List<int>();
+
+        var results = items.Select(_ => _.ToString())
+                           .OrderBy(_ => _)
+                           .ToList();
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6037_SingleArgumentsAreOnSameLineAsInvocationAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6037_SingleArgumentsAreOnSameLineAsInvocationAnalyzer();
