@@ -1,7 +1,6 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
-    <FastLaneThreads>4</FastLaneThreads>
     <HotSpotsExclusionList>
       <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </HotSpotsExclusionList>
