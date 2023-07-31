@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { @"element1.Equals(element2).Should().BeFalse(""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
                                                                                new object[] { "element1.Should().BeNull()", "Assert.That(element1, Is.Null)" },
                                                                                new object[] { @"element1.Should().BeNull(""some message"")", @"Assert.That(element1, Is.Null, ""some message"")" },
+                                                                               new object[] { "element1.Should().Be(null)", "Assert.That(element1, Is.Null)" },
+                                                                               new object[] { @"element1.Should().Be(null, ""some message"")", @"Assert.That(element1, Is.Null, ""some message"")" },
                                                                                new object[] { "element1.Should().NotBeNull()", "Assert.That(element1, Is.Not.Null)" },
                                                                                new object[] { @"element1.Should().NotBeNull(""some message"")", @"Assert.That(element1, Is.Not.Null, ""some message"")" },
                                                                                new object[] { "element1.Should().NotBe(null)", "Assert.That(element1, Is.Not.Null)" },

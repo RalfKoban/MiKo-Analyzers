@@ -102,7 +102,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case "BeNullOrEmpty": return AssertThat(expression, Is("Null", "Or", "Empty"), arguments, 0, removeNameColon: true);
                 case "NotBeNullOrEmpty": return AssertThat(expression, Is("Not", "Null", "And", "Not", "Empty"), arguments, 0, removeNameColon: true);
-                case "Be": return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "Be":
+                {
+                    var argument = arguments.First();
+
+                    if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NullLiteralExpression))
+                    {
+                        return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
+                    }
+
+                    return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
+                }
+
                 case "NotBe":
                 {
                     var argument = arguments.First();
