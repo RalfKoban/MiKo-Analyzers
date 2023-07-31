@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             foreach (var nodeOrToken in startingNode.DescendantNodesAndTokens(_ => true, true))
             {
-                var startingLine = nodeOrToken.GetLocation().GetStartingLine();
+                var startingLine = nodeOrToken.GetStartingLine();
 
                 if (startingLine != currentLine)
                 {
