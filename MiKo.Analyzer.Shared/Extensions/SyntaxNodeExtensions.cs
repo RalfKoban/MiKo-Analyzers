@@ -848,7 +848,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
-                         .Where(_ => _.GetName() == tag);
+                        .Where(_ => _.GetName() == tag);
         }
 
         /// <summary>
@@ -870,7 +870,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
-                         .Where(_ => tags.Contains(_.GetName()));
+                        .Where(_ => tags.Contains(_.GetName()));
         }
 
         /// <summary>
@@ -892,7 +892,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
-                         .Where(_ => _.GetName() == tag);
+                        .Where(_ => _.GetName() == tag);
         }
 
         /// <summary>
@@ -914,7 +914,7 @@ namespace MiKoSolutions.Analyzers
         {
             // we have to delve into the trivias to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
-                             .Where(_ => tags.Contains(_.GetName()));
+                        .Where(_ => tags.Contains(_.GetName()));
         }
 
         internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value)
