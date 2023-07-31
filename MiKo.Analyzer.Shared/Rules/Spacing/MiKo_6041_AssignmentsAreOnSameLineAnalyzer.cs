@@ -25,18 +25,29 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (startLine != expressionLine)
             {
-                ReportDiagnostics(context, Issue(node.EqualsToken));
+                ReportIssue(context, node);
             }
             else
             {
                 var sibling = node.PreviousSiblingNodeOrToken();
-
                 var siblingStartLine = sibling.GetStartingLine();
 
                 if (startLine != siblingStartLine)
                 {
-                    ReportDiagnostics(context, Issue(node.EqualsToken));
+                    ReportIssue(context, node);
                 }
+            }
+        }
+
+        private void ReportIssue(SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
+        {
+            if (node.Value is InitializerExpressionSyntax initializer && initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine())
+            {
+                // arrays and collections spanning multiple lines are allowed
+            }
+            else
+            {
+                ReportDiagnostics(context, Issue(node.EqualsToken));
             }
         }
     }

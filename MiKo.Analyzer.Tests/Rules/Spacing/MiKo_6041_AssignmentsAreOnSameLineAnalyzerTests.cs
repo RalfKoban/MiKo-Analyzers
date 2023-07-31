@@ -24,6 +24,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_assignment_to_array_is_on_other_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x =
+                  {
+                    1,
+                    2,
+                    3,
+                  };
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_assignment_of_value_is_on_different_line() => An_issue_is_reported_for(@"
 using System;
 
