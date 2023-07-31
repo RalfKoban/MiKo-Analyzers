@@ -25,7 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (startLine != expressionLine)
             {
-                ReportDiagnostics(context, Issue(cast));
+                // underline only the cast itself, not the complete expression
+                var location = CreateLocation(cast, cast.OpenParenToken.SpanStart, cast.CloseParenToken.Span.End);
+
+                ReportDiagnostics(context, Issue(location));
             }
         }
     }
