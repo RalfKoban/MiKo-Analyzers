@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
-        internal static LinePosition GetStartPosition(this SyntaxToken token) => token.GetLocation().GetStartPosition();
+        internal static LinePosition GetStartPosition(this SyntaxToken value) => value.GetLocation().GetStartPosition();
 
-        internal static LinePosition GetEndPosition(this SyntaxToken token) => token.GetLocation().GetEndPosition();
+        internal static LinePosition GetEndPosition(this SyntaxToken value) => value.GetLocation().GetEndPosition();
 
         internal static int GetStartingLine(this SyntaxToken value) => value.GetLocation().GetStartingLine();
 
@@ -93,9 +93,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingXmlComment(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
-        internal static SyntaxTokenList WithoutFirstXmlNewLine(this SyntaxTokenList textTokens)
+        internal static SyntaxTokenList WithoutFirstXmlNewLine(this SyntaxTokenList values)
         {
-            var tokens = textTokens;
+            var tokens = values;
 
             if (tokens.Count > 0)
             {
@@ -115,9 +115,9 @@ namespace MiKoSolutions.Analyzers
             return tokens;
         }
 
-        internal static SyntaxTokenList WithoutLastXmlNewLine(this SyntaxTokenList textTokens)
+        internal static SyntaxTokenList WithoutLastXmlNewLine(this SyntaxTokenList values)
         {
-            var tokens = textTokens;
+            var tokens = values;
 
             if (tokens.Count > 0)
             {
@@ -132,43 +132,43 @@ namespace MiKoSolutions.Analyzers
             return tokens;
         }
 
-        internal static SyntaxToken WithoutLeadingTrivia(this SyntaxToken token)
+        internal static SyntaxToken WithoutLeadingTrivia(this SyntaxToken value)
         {
-            return token.WithoutTrivia().WithTrailingTrivia(token.TrailingTrivia);
+            return value.WithoutTrivia().WithTrailingTrivia(value.TrailingTrivia);
         }
 
-        internal static SyntaxToken WithoutTrailingTrivia(this SyntaxToken token)
+        internal static SyntaxToken WithoutTrailingTrivia(this SyntaxToken value)
         {
-            return token.WithoutTrivia().WithLeadingTrivia(token.LeadingTrivia);
+            return value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
         }
 
-        internal static SyntaxTokenList WithoutEmptyText(this SyntaxTokenList tokens, SyntaxToken token)
+        internal static SyntaxTokenList WithoutEmptyText(this SyntaxTokenList values, SyntaxToken token)
         {
             if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.ValueText.IsNullOrWhiteSpace())
             {
-                return tokens.Remove(token);
+                return values.Remove(token);
             }
 
-            return tokens;
+            return values;
         }
 
-        internal static SyntaxTokenList WithoutNewLine(this SyntaxTokenList tokens, SyntaxToken token)
+        internal static SyntaxTokenList WithoutNewLine(this SyntaxTokenList values, SyntaxToken token)
         {
             if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
             {
-                tokens = tokens.Remove(token);
+                values = values.Remove(token);
             }
 
-            return tokens;
+            return values;
         }
 
         internal static SyntaxToken WithSurroundingSpace(this SyntaxToken value) => value.WithLeadingSpace().WithTrailingSpace();
 
-        internal static SyntaxToken WithText(this SyntaxToken token, string text) => SyntaxFactory.Token(token.LeadingTrivia, token.Kind(), text, text, token.TrailingTrivia);
+        internal static SyntaxToken WithText(this SyntaxToken value, string text) => SyntaxFactory.Token(value.LeadingTrivia, value.Kind(), text, text, value.TrailingTrivia);
 
-        internal static SyntaxToken WithText(this SyntaxToken token, StringBuilder text) => WithText(token, text.ToString());
+        internal static SyntaxToken WithText(this SyntaxToken value, StringBuilder text) => WithText(value, text.ToString());
 
-        internal static SyntaxToken WithText(this SyntaxToken token, ReadOnlySpan<char> text) => token.WithText(text.ToString());
+        internal static SyntaxToken WithText(this SyntaxToken value, ReadOnlySpan<char> text) => value.WithText(text.ToString());
 
         internal static SyntaxToken WithTrailingEmptyLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
@@ -178,15 +178,15 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
 
-        internal static SyntaxToken ToSyntaxToken(this string text, SyntaxKind kind = SyntaxKind.StringLiteralToken)
+        internal static SyntaxToken ToSyntaxToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
             switch (kind)
             {
                 case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(text);
+                    return SyntaxFactory.Identifier(source);
 
                 default:
-                    return SyntaxFactory.Token(default, kind, text, text, default);
+                    return SyntaxFactory.Token(default, kind, source, source, default);
             }
         }
     }
