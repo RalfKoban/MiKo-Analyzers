@@ -4637,4 +4637,16 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   <data name="MiKo_6041_Title" xml:space="preserve">
     <value>Assignments should be placed on same line(s)</value>
   </data>
+  <data name="MiKo_6042_CodeFixTitle" xml:space="preserve">
+    <value>Place new keyword on same line as type</value>
+  </data>
+  <data name="MiKo_6042_Description" xml:space="preserve">
+    <value>The code is easier to read if object creations are placed on the same line(s).</value>
+  </data>
+  <data name="MiKo_6042_MessageFormat" xml:space="preserve">
+    <value>Place new keyword on same line as type</value>
+  </data>
+  <data name="MiKo_6042_Title" xml:space="preserve">
+    <value>'new' keywords should be placed on same line(s) as the types</value>
+  </data>
 </root>

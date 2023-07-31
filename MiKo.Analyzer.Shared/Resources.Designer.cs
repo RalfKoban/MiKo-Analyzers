@@ -13213,5 +13213,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6041_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place new keyword on same line as type.
+        /// </summary>
+        public static string MiKo_6042_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6042_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if object creations are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6042_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6042_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place new keyword on same line as type.
+        /// </summary>
+        public static string MiKo_6042_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6042_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;new&apos; keywords should be placed on same line(s) as the types.
+        /// </summary>
+        public static string MiKo_6042_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6042_Title", resourceCulture);
+            }
+        }
     }
 }
