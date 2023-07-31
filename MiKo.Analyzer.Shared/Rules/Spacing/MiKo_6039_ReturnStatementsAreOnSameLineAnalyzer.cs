@@ -24,10 +24,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (returnValue != null)
             {
-                var startPosition = node.ReturnKeyword.GetStartPosition();
-                var returnValueStartPosition = returnValue.GetStartPosition();
+                var startLine = node.ReturnKeyword.GetStartingLine();
+                var returnValueLine = returnValue.GetStartingLine();
 
-                if (startPosition.Line != returnValueStartPosition.Line)
+                if (startLine != returnValueLine)
                 {
                     ReportDiagnostics(context, Issue(node.ReturnKeyword));
                 }

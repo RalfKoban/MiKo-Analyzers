@@ -36,10 +36,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNameSyntax(SyntaxNodeAnalysisContext context, NameSyntax name, SyntaxToken parenthesis)
         {
-            var parenthesisPosition = parenthesis.GetStartPosition();
-            var memberPosition = name.GetStartPosition();
+            var parenthesisLine = parenthesis.GetStartingLine();
+            var memberLine = name.GetStartingLine();
 
-            if (parenthesisPosition.Line != memberPosition.Line)
+            if (parenthesisLine != memberLine)
             {
                 ReportDiagnostics(context, Issue(parenthesis));
             }

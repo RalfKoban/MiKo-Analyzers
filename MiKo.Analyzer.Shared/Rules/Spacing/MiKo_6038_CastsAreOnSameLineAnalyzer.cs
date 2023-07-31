@@ -20,10 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var cast = (CastExpressionSyntax)context.Node;
 
-            var startPosition = cast.OpenParenToken.GetStartPosition();
-            var expressionStartPosition = cast.Expression.GetStartPosition();
+            var startLine = cast.OpenParenToken.GetStartingLine();
+            var expressionLine = cast.Expression.GetStartingLine();
 
-            if (startPosition.Line != expressionStartPosition.Line)
+            if (startLine != expressionLine)
             {
                 ReportDiagnostics(context, Issue(cast));
             }

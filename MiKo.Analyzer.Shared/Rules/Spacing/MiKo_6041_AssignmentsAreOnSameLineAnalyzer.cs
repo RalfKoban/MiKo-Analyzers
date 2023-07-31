@@ -20,10 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var node = (EqualsValueClauseSyntax)context.Node;
 
-            var startPosition = node.EqualsToken.GetStartPosition();
-            var expressionStartPosition = node.Value.GetStartPosition();
+            var startLine = node.EqualsToken.GetStartingLine();
+            var expressionLine = node.Value.GetStartingLine();
 
-            if (startPosition.Line != expressionStartPosition.Line)
+            if (startLine != expressionLine)
             {
                 ReportDiagnostics(context, Issue(node.EqualsToken));
             }
