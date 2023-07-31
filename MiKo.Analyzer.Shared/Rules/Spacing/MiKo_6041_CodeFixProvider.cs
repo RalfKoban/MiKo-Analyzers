@@ -15,17 +15,28 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6041_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<EqualsValueClauseSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<EqualsValueClauseSyntax>().First().Parent;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is EqualsValueClauseSyntax node)
+            var claus = syntax.FirstChild<EqualsValueClauseSyntax>();
+
+            var updatedClause = claus.WithEqualsToken(claus.EqualsToken.WithoutTrivia())
+                                     .WithValue(claus.Value.WithLeadingSpace());
+
+            var updatedSyntax = syntax.ReplaceNode(claus, updatedClause);
+
+            var sibling = updatedSyntax.FirstChild<EqualsValueClauseSyntax>().PreviousSiblingNodeOrToken();
+
+            if (sibling.IsToken)
             {
-                return node.WithEqualsToken(node.EqualsToken.WithoutTrivia())
-                           .WithValue(node.Value.WithLeadingSpace());
+                var token = sibling.AsToken();
+                var updatedToken = token.WithoutTrailingTrivia().WithTrailingSpace();
+
+                return updatedSyntax.ReplaceToken(token, updatedToken);
             }
 
-            return syntax;
+            return updatedSyntax;
         }
     }
 }

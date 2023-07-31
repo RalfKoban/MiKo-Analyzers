@@ -1605,6 +1605,30 @@ namespace MiKoSolutions.Analyzers
             return default;
         }
 
+        internal static SyntaxNodeOrToken PreviousSiblingNodeOrToken(this SyntaxNode value)
+        {
+            var parent = value?.Parent;
+
+            if (parent is null)
+            {
+                return default;
+            }
+
+            SyntaxNodeOrToken previousChild = default;
+
+            foreach (var child in parent.ChildNodesAndTokens())
+            {
+                if (child == value)
+                {
+                    return previousChild;
+                }
+
+                previousChild = child;
+            }
+
+            return default;
+        }
+
         internal static SyntaxNode NextSibling(this SyntaxNode value)
         {
             var parent = value?.Parent;

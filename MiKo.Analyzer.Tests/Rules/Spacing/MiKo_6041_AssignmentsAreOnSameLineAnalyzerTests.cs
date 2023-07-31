@@ -24,7 +24,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_if_assignment_is_on_different_line() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_if_assignment_of_value_is_on_different_line() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -38,7 +38,21 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_if_assignment_is_on_different_line()
+        public void An_issue_is_reported_if_assignment_with_equals_is_on_different_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x 
+              = o;
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_if_assignment_of_value_is_on_different_line()
         {
             const string OriginalCode = @"
 using System;
@@ -48,6 +62,69 @@ public class TestMe
     public void DoSomething(object o)
     {
         var x = 
+                o;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_assignment_with_equals_is_on_different_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x 
+              = o;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x = o;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_complete_assignment_is_spread_over_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        var x 
+              =
                 o;
     }
 }

@@ -27,6 +27,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 ReportDiagnostics(context, Issue(node.EqualsToken));
             }
+            else
+            {
+                var sibling = node.PreviousSiblingNodeOrToken();
+
+                var siblingStartLine = sibling.GetStartingLine();
+
+                if (startLine != siblingStartLine)
+                {
+                    ReportDiagnostics(context, Issue(node.EqualsToken));
+                }
+            }
         }
     }
 }
