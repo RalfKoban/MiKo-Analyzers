@@ -80,8 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return oces.WithoutTrivia()
                                .WithNewKeyword(oces.NewKeyword.WithoutTrivia().WithTrailingSpace())
                                .WithType(GetUpdatedSyntax(oces.Type))
-                               .WithArgumentList(GetUpdatedSyntax(oces.ArgumentList))
-                               .WithInitializer(oces.Initializer);
+                               .WithArgumentList(GetUpdatedSyntax(oces.ArgumentList));
 
                 case ParenthesizedLambdaExpressionSyntax p: return GetUpdatedSyntax(p);
                 case SimpleLambdaExpressionSyntax s: return GetUpdatedSyntax(s);
@@ -93,22 +92,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ArgumentListSyntax GetUpdatedSyntax(ArgumentListSyntax syntax)
         {
+            if (syntax is null)
+            {
+                return null;
+            }
+
             var arguments = syntax.Arguments;
 
-            return syntax?.WithoutTrivia()
-                          .WithOpenParenToken(syntax.OpenParenToken.WithoutTrivia()) // remove the spaces or line breaks around the opening parenthesis
-                          .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
-                          .WithCloseParenToken(syntax.CloseParenToken.WithoutTrivia()); // remove the spaces or line breaks around the closing parenthesis
+            return syntax.WithoutTrivia()
+                         .WithOpenParenToken(syntax.OpenParenToken.WithoutTrivia()) // remove the spaces or line breaks around the opening parenthesis
+                         .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
+                         .WithCloseParenToken(syntax.CloseParenToken.WithoutTrivia()); // remove the spaces or line breaks around the closing parenthesis
         }
 
         private static TypeArgumentListSyntax GetUpdatedSyntax(TypeArgumentListSyntax syntax)
         {
+            if (syntax is null)
+            {
+                return null;
+            }
+
             var arguments = syntax.Arguments;
 
-            return syntax?.WithoutTrivia()
-                          .WithLessThanToken(syntax.LessThanToken.WithoutTrivia()) // remove the spaces or line breaks around the opening bracket
-                          .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
-                          .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia());  // remove the spaces or line breaks around the closing bracket
+            return syntax.WithoutTrivia()
+                         .WithLessThanToken(syntax.LessThanToken.WithoutTrivia()) // remove the spaces or line breaks around the opening bracket
+                         .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
+                         .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia());  // remove the spaces or line breaks around the closing bracket
         }
 
         private static ArgumentSyntax GetUpdatedSyntax(ArgumentSyntax syntax) => syntax.WithoutTrivia()

@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeParenthesizedLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
 
         private static bool CanAnalyzeBody(SyntaxNode lambda)
         {
@@ -28,26 +28,66 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             bool CanAnalyze(SyntaxNode body)
             {
-                if (body is ObjectCreationExpressionSyntax o)
+                switch (body)
                 {
-                    if (o.Initializer?.Expressions.Count > 0)
-                    {
-                        // initializers are allowed to span multiple lines, so nothing to analyze here
-                        return false;
-                    }
+                    case ObjectCreationExpressionSyntax o: return CanAnalyzeObjectCreationExpressionSyntax(o);
+                    case InvocationExpressionSyntax i: return CanAnalyzeInvocationExpressionSyntax(i);
+                    default:
+                        return true;
+                }
+            }
 
-                    if (o.ArgumentList?.Arguments.Count > 1)
-                    {
-                        // a lot of arguments are allowed to span multiple lines, so nothing to analyze here
-                        return false;
-                    }
+            bool CanAnalyzeObjectCreationExpressionSyntax(ObjectCreationExpressionSyntax syntax)
+            {
+                if (syntax.Initializer?.Expressions.Count > 0)
+                {
+                    // initializers are allowed to span multiple lines, so nothing to analyze here
+                    return false;
+                }
+
+                if (syntax.ArgumentList?.Arguments.Count > 1)
+                {
+                    // a lot of arguments are allowed to span multiple lines, so nothing to analyze here
+                    return false;
                 }
 
                 return true;
             }
+
+            bool CanAnalyzeInvocationExpressionSyntax(InvocationExpressionSyntax syntax)
+            {
+                var argumentList = syntax.ArgumentList;
+
+                if (argumentList is null)
+                {
+                    return true;
+                }
+
+                var arguments = argumentList.Arguments;
+
+                switch (arguments.Count)
+                {
+                    case 0:
+                        return true;
+
+                    case 1:
+                    {
+                        if (arguments[0].Expression is ObjectCreationExpressionSyntax o && o.Initializer?.Expressions.Count > 0)
+                        {
+                            // initializers are allowed to span multiple lines, so nothing to analyze here
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    default:
+                        return true; // TODO RKN: return false; // a lot of arguments are allowed to span multiple lines, so nothing to analyze here
+                }
+            }
         }
 
-        private void AnalyzeParenthesizedLambdaExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var lambda = context.Node;
 
