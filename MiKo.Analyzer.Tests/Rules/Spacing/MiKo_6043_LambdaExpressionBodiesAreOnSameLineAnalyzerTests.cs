@@ -5,10 +5,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public sealed class MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_simple_lambda_body_that_spans_single_line() => No_issue_is_reported_for(@"
@@ -793,10 +793,10 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3303_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6043_CodeFixProvider();
     }
 }

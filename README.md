@@ -361,7 +361,6 @@ The following tables list all the 383 rules that are currently provided by the a
 |MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
-|MiKo_3303|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 
 ### Ordering
@@ -427,3 +426,4 @@ The following tables list all the 383 rules that are currently provided by the a
 |MiKo_6040|Consecutive invocations spaning multiple lines should be aligned by their dots|&#x2713;|&#x2713;|
 |MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
+|MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|

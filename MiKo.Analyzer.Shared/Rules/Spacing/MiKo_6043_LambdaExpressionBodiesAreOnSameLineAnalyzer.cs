@@ -5,16 +5,16 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer : SpacingAnalyzer
     {
-        public const string Id = "MiKo_3303";
+        public const string Id = "MiKo_6043";
 
         private static readonly SyntaxKind[] LogicalExpressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
 
-        public MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer() : base(Id)
+        public MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer() : base(Id)
         {
         }
 

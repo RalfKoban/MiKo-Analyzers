@@ -7,14 +7,14 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3303_CodeFixProvider)), Shared]
-    public sealed class MiKo_3303_CodeFixProvider : MaintainabilityCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6043_CodeFixProvider)), Shared]
+    public sealed class MiKo_6043_CodeFixProvider : SpacingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
 
-        protected override string Title => Resources.MiKo_3303_CodeFixTitle;
+        protected override string Title => Resources.MiKo_6043_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {

@@ -4001,18 +4001,6 @@ In contrast, the failure would be much easier to understand if the test would im
   <data name="MiKo_3302_Title" xml:space="preserve">
     <value>Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters</value>
   </data>
-  <data name="MiKo_3303_CodeFixTitle" xml:space="preserve">
-    <value>Place on single line</value>
-  </data>
-  <data name="MiKo_3303_Description" xml:space="preserve">
-    <value>To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines.</value>
-  </data>
-  <data name="MiKo_3303_MessageFormat" xml:space="preserve">
-    <value>Place lambda on single line</value>
-  </data>
-  <data name="MiKo_3303_Title" xml:space="preserve">
-    <value>Expression bodies of lambdas should be placed on same line as lambda itself</value>
-  </data>
   <data name="MiKo_3401_Description" xml:space="preserve">
     <value>Namespaces should have only a limited depth. If a namespace hierarchy becomes too deep, then the namespaces are probably too concrete or special to make sense.
 Such namespaces should be flattened.</value>
@@ -4648,5 +4636,17 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   </data>
   <data name="MiKo_6042_Title" xml:space="preserve">
     <value>'new' keywords should be placed on same line(s) as the types</value>
+  </data>
+  <data name="MiKo_6043_CodeFixTitle" xml:space="preserve">
+    <value>Place on single line</value>
+  </data>
+  <data name="MiKo_6043_Description" xml:space="preserve">
+    <value>To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines.</value>
+  </data>
+  <data name="MiKo_6043_MessageFormat" xml:space="preserve">
+    <value>Place lambda on single line</value>
+  </data>
+  <data name="MiKo_6043_Title" xml:space="preserve">
+    <value>Expression bodies of lambdas should be placed on same line as lambda itself</value>
   </data>
 </root>
