@@ -223,6 +223,29 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_logical_expressions_that_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool a, bool b, bool c)
+        {
+            return DoSomethingCore(() => a
+                                         && b
+                                         || c);
+        }
+
+        private int DoSomethingCore(Func<int> callback)
+        {
+            return callback();
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
 using System;
 

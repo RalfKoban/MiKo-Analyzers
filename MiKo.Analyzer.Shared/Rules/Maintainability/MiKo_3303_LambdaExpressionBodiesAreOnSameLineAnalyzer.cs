@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -9,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3303";
+
+        private static readonly SyntaxKind[] LogicalExpressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
 
         public MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer() : base(Id)
         {
@@ -32,9 +36,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case ObjectCreationExpressionSyntax o: return CanAnalyzeObjectCreationExpressionSyntax(o);
                     case InvocationExpressionSyntax i: return CanAnalyzeInvocationExpressionSyntax(i);
+                    case BinaryExpressionSyntax b: return CanAnalyzeBinaryExpressionSyntax(b);
                     default:
                         return true;
                 }
+            }
+
+            bool CanAnalyzeBinaryExpressionSyntax(BinaryExpressionSyntax syntax)
+            {
+                if (syntax.IsAnyKind(LogicalExpressions) && syntax.DescendantNodes<BinaryExpressionSyntax>().Any(_ => _.IsAnyKind(LogicalExpressions)))
+                {
+                    // multiple binary expressions such as && or || are allowed to span multiple lines, so nothing to analyze here
+                    return false;
+                }
+
+                return true;
             }
 
             bool CanAnalyzeObjectCreationExpressionSyntax(ObjectCreationExpressionSyntax syntax)
