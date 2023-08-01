@@ -721,6 +721,55 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_nested_lambda_expression_body_with_invocation_whose_parameters_span_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y) => TestMe.DoSomethingCore((d, e) => TestMe.DoSomething(
+                                                                                                e,
+                                                                                                d,
+                                                                                                y))));
+        }
+
+        private static int DoSomethingCore(Func<int, int, int> callback)
+        {
+            return callback(1, 2);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y) => TestMe.DoSomethingCore((d, e) => TestMe.DoSomething(e, d, y))));
+        }
+
+        private static int DoSomethingCore(Func<int, int, int> callback)
+        {
+            return callback(1, 2);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer();

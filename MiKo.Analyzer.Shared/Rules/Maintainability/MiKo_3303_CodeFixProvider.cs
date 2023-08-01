@@ -73,18 +73,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                .WithOperatorToken(maes.OperatorToken.WithoutTrivia()) // remove the spaces or line breaks around the dot
                                .WithExpression(GetUpdatedSyntax(maes.Expression));
 
-                case IdentifierNameSyntax identifier:
-                    return GetUpdatedSyntax(identifier);
+                case SimpleNameSyntax name:
+                    return GetUpdatedSyntax(name);
+
+                case ObjectCreationExpressionSyntax oces:
+                    return oces.WithoutTrivia()
+                               .WithNewKeyword(oces.NewKeyword.WithoutTrivia().WithTrailingSpace())
+                               .WithType(GetUpdatedSyntax(oces.Type))
+                               .WithArgumentList(GetUpdatedSyntax(oces.ArgumentList))
+                               .WithInitializer(oces.Initializer);
+
+                case ParenthesizedLambdaExpressionSyntax p: return GetUpdatedSyntax(p);
+                case SimpleLambdaExpressionSyntax s: return GetUpdatedSyntax(s);
 
                 default:
-                    return syntax.WithoutTrivia();
+                    return syntax?.WithoutTrivia();
             }
         }
 
-        private static ArgumentListSyntax GetUpdatedSyntax(ArgumentListSyntax syntax) => syntax?.WithoutTrivia()
-                                                                                               .WithOpenParenToken(syntax.OpenParenToken.WithoutTrivia()) // remove the spaces or line breaks around the opening parenthesis
-                                                                                               .WithArguments(SyntaxFactory.SeparatedList(syntax.Arguments.Select(GetUpdatedSyntax)))
-                                                                                               .WithCloseParenToken(syntax.CloseParenToken.WithoutTrivia()); // remove the spaces or line breaks around the closing parenthesis
+        private static ArgumentListSyntax GetUpdatedSyntax(ArgumentListSyntax syntax)
+        {
+            var arguments = syntax.Arguments;
+
+            return syntax?.WithoutTrivia()
+                          .WithOpenParenToken(syntax.OpenParenToken.WithoutTrivia()) // remove the spaces or line breaks around the opening parenthesis
+                          .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
+                          .WithCloseParenToken(syntax.CloseParenToken.WithoutTrivia()); // remove the spaces or line breaks around the closing parenthesis
+        }
+
+        private static TypeArgumentListSyntax GetUpdatedSyntax(TypeArgumentListSyntax syntax)
+        {
+            var arguments = syntax.Arguments;
+
+            return syntax?.WithoutTrivia()
+                          .WithLessThanToken(syntax.LessThanToken.WithoutTrivia()) // remove the spaces or line breaks around the opening bracket
+                          .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
+                          .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia());  // remove the spaces or line breaks around the closing bracket
+        }
 
         private static ArgumentSyntax GetUpdatedSyntax(ArgumentSyntax syntax) => syntax.WithoutTrivia()
                                                                                        .WithExpression(GetUpdatedSyntax(syntax.Expression));
@@ -93,7 +118,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ParameterSyntax GetUpdatedSyntax(ParameterSyntax syntax) => syntax.WithoutTrivia();
 
-        private static T GetUpdatedSyntax<T>(T syntax) where T : NameSyntax => syntax?.WithoutTrivia();
+        private static TypeSyntax GetUpdatedSyntax(TypeSyntax syntax) => syntax.WithoutTrivia();
+
+        private static SimpleNameSyntax GetUpdatedSyntax(SimpleNameSyntax syntax)
+        {
+            switch (syntax)
+            {
+                case IdentifierNameSyntax identifier: return GetUpdatedSyntax(identifier);
+                case GenericNameSyntax generic: return GetUpdatedSyntax(generic);
+                default:
+                    return syntax?.WithoutTrivia();
+            }
+        }
+
+        private static GenericNameSyntax GetUpdatedSyntax(GenericNameSyntax syntax) => syntax.WithIdentifier(syntax.Identifier)
+                                                                                             .WithTypeArgumentList(GetUpdatedSyntax(syntax.TypeArgumentList));
+
+        private static IdentifierNameSyntax GetUpdatedSyntax(IdentifierNameSyntax syntax) => syntax?.WithoutTrivia();
 
         private static SyntaxToken GetUpdatedSyntax(SyntaxToken token) => token.WithSurroundingSpace();
     }
