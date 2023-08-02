@@ -13249,5 +13249,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6043_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place operator on same line as right operand.
+        /// </summary>
+        public static string MiKo_6044_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6044_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; are placed on the same line(s) as their operands on the right side..
+        /// </summary>
+        public static string MiKo_6044_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6044_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place operator on same line as right operand.
+        /// </summary>
+        public static string MiKo_6044_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6044_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; should be placed on same line(s) as their right operands.
+        /// </summary>
+        public static string MiKo_6044_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6044_Title", resourceCulture);
+            }
+        }
     }
 }

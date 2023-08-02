@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 383 rules that are currently provided by the analyzer.
+The following tables list all the 384 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -427,3 +427,4 @@ The following tables list all the 383 rules that are currently provided by the a
 |MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
 |MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
+|MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|

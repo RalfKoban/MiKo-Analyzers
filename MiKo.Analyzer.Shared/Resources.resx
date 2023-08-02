@@ -4649,4 +4649,16 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   <data name="MiKo_6043_Title" xml:space="preserve">
     <value>Expression bodies of lambdas should be placed on same line as lambda itself</value>
   </data>
+  <data name="MiKo_6044_CodeFixTitle" xml:space="preserve">
+    <value>Place operator on same line as right operand</value>
+  </data>
+  <data name="MiKo_6044_Description" xml:space="preserve">
+    <value>The code is easier to read if binary operators such as '&amp;&amp;' or '||' are placed on the same line(s) as their operands on the right side.</value>
+  </data>
+  <data name="MiKo_6044_MessageFormat" xml:space="preserve">
+    <value>Place operator on same line as right operand</value>
+  </data>
+  <data name="MiKo_6044_Title" xml:space="preserve">
+    <value>Binary operators such as '&amp;&amp;' or '||' should be placed on same line(s) as their right operands</value>
+  </data>
 </root>
