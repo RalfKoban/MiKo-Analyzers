@@ -15,16 +15,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6041_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<EqualsValueClauseSyntax>().First().Parent;
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            var syntaxNode = syntaxNodes.First();
+
+            switch (syntaxNode)
+            {
+                case EqualsValueClauseSyntax clause: return clause.Parent;
+                case AssignmentExpressionSyntax assignment: return assignment;
+                default:
+                    return null;
+            }
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var claus = syntax.FirstChild<EqualsValueClauseSyntax>();
+            if (syntax is AssignmentExpressionSyntax assignment)
+            {
+                return assignment.WithLeft(assignment.Left.WithoutTrailingTrivia())
+                                 .WithOperatorToken(assignment.OperatorToken.WithLeadingSpace().WithTrailingSpace())
+                                 .WithRight(assignment.Right.WithoutLeadingTrivia());
+            }
 
-            var updatedClause = claus.WithEqualsToken(claus.EqualsToken.WithoutTrivia())
-                                     .WithValue(claus.Value.WithLeadingSpace());
+            var clause = syntax.FirstChild<EqualsValueClauseSyntax>();
 
-            var updatedSyntax = syntax.ReplaceNode(claus, updatedClause);
+            var updatedClause = clause.WithEqualsToken(clause.EqualsToken.WithoutTrivia())
+                                      .WithValue(clause.Value.WithLeadingSpace());
+
+            var updatedSyntax = syntax.ReplaceNode(clause, updatedClause);
 
             var sibling = updatedSyntax.FirstChild<EqualsValueClauseSyntax>().PreviousSiblingNodeOrToken();
 

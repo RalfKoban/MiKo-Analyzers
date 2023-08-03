@@ -10,16 +10,61 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6041";
 
+        private static readonly SyntaxKind[] SimpleAssignmentExpressions =
+                                                                           {
+                                                                               // AssignmentExpressionSyntax
+                                                                               SyntaxKind.AddAssignmentExpression,
+                                                                               SyntaxKind.SubtractAssignmentExpression,
+                                                                               SyntaxKind.MultiplyAssignmentExpression,
+                                                                               SyntaxKind.DivideAssignmentExpression,
+                                                                               SyntaxKind.ModuloAssignmentExpression,
+                                                                               SyntaxKind.AndAssignmentExpression,
+                                                                               SyntaxKind.ExclusiveOrAssignmentExpression,
+                                                                               SyntaxKind.OrAssignmentExpression,
+                                                                               SyntaxKind.LeftShiftAssignmentExpression,
+                                                                               SyntaxKind.RightShiftAssignmentExpression,
+                                                                               SyntaxKind.CoalesceAssignmentExpression,
+
+                                                                               // EqualsValueClauseSyntax
+                                                                               SyntaxKind.EqualsValueClause,
+                                                                           };
+
         public MiKo_6041_AssignmentsAreOnSameLineAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.EqualsValueClause);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SimpleAssignmentExpressions);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            var node = (EqualsValueClauseSyntax)context.Node;
+            switch (context.Node)
+            {
+                case AssignmentExpressionSyntax assignment:
+                    AnalyzeAssignmentExpression(context, assignment);
+                    break;
 
+                case EqualsValueClauseSyntax clause:
+                    AnalyzeEqualsValueClause(context, clause);
+                    break;
+            }
+        }
+
+        private void AnalyzeAssignmentExpression(SyntaxNodeAnalysisContext context, AssignmentExpressionSyntax node)
+        {
+            var operatorToken = node.OperatorToken;
+
+            var startLine = operatorToken.GetStartingLine();
+            var leftLine = node.Left.GetStartingLine();
+            var rightLine = node.Right.GetStartingLine();
+
+            if (startLine != leftLine || startLine != rightLine)
+            {
+                ReportIssue(context, operatorToken);
+            }
+        }
+
+        private void AnalyzeEqualsValueClause(SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
+        {
             var startLine = node.EqualsToken.GetStartingLine();
             var expressionLine = node.Value.GetStartingLine();
 
@@ -47,8 +92,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
             else
             {
-                ReportDiagnostics(context, Issue(node.EqualsToken));
+                ReportIssue(context, node.EqualsToken);
             }
         }
+
+        private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxToken token) => ReportDiagnostics(context, Issue(token));
     }
 }

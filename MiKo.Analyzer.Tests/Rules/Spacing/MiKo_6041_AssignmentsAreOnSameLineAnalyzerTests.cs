@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [TestFixture]
     public sealed class MiKo_6041_AssignmentsAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] AssignmentOperators = { "+=", "-=" };
+
         [Test]
         public void No_issue_is_reported_if_assignment_is_on_same_line() => No_issue_is_reported_for(@"
 using System;
@@ -65,6 +67,53 @@ public class TestMe
     {
         var x 
               = o;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_specific_assignment_is_on_same_line_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @" 1;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_specific_assignment_of_value_is_on_different_line_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @"
+                1;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_specific_assignment_with_equals_is_on_different_line_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i
+          " + assignmentOperator + @" 1;
     }
 }
 ");
@@ -161,6 +210,112 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_specific_assignment_of_value_is_on_different_line_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @"
+                1;
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @" 1;
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_specific_assignment_with_equals_is_on_different_line_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @"
+                1;
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @" 1;
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_specific__assignment_is_spread_over_different_lines_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i 
+          " + assignmentOperator + @"
+                1; // some comment
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0;
+
+        i " + assignmentOperator + @" 1; // some comment
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_6041_AssignmentsAreOnSameLineAnalyzer.Id;
