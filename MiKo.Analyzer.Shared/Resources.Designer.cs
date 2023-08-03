@@ -13285,5 +13285,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6044_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place comparison on same line.
+        /// </summary>
+        public static string MiKo_6045_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6045_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if comparison operators such as &apos;==&apos; or &apos;!=&apos; are placed on the same line(s) as their operands..
+        /// </summary>
+        public static string MiKo_6045_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6045_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place comparison on same line.
+        /// </summary>
+        public static string MiKo_6045_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6045_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comparisons using operators such as &apos;==&apos; or &apos;!=&apos; should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6045_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6045_Title", resourceCulture);
+            }
+        }
     }
 }
