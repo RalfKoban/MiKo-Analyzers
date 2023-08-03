@@ -13321,5 +13321,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6045_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place calculation on same line.
+        /// </summary>
+        public static string MiKo_6046_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6046_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if calculations operators such as &apos;+&apos; or &apos;%&apos; are placed on the same line(s) as their operands..
+        /// </summary>
+        public static string MiKo_6046_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6046_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place calculation on same line.
+        /// </summary>
+        public static string MiKo_6046_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6046_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculations using operators such as &apos;+&apos; or &apos;%&apos; should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6046_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6046_Title", resourceCulture);
+            }
+        }
     }
 }

@@ -4673,4 +4673,16 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   <data name="MiKo_6045_Title" xml:space="preserve">
     <value>Comparisons using operators such as '==' or '!=' should be placed on same line(s)</value>
   </data>
+  <data name="MiKo_6046_CodeFixTitle" xml:space="preserve">
+    <value>Place calculation on same line</value>
+  </data>
+  <data name="MiKo_6046_Description" xml:space="preserve">
+    <value>The code is easier to read if calculations operators such as '+' or '%' are placed on the same line(s) as their operands.</value>
+  </data>
+  <data name="MiKo_6046_MessageFormat" xml:space="preserve">
+    <value>Place calculation on same line</value>
+  </data>
+  <data name="MiKo_6046_Title" xml:space="preserve">
+    <value>Calculations using operators such as '+' or '%' should be placed on same line(s)</value>
+  </data>
 </root>
