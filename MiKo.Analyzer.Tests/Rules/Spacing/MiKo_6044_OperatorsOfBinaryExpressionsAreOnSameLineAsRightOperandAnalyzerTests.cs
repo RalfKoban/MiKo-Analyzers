@@ -131,6 +131,47 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_complex_operators_with_comments_are_on_different_lines_than_right_operands()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int a, int b, int c, int d, int e)
+    {
+        if (a <= 1 || // comment 1
+            (b == 0 || c <= 0) // comment 2
+            &&
+            (d > 1 || e < 0) // comment 3
+           )
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int a, int b, int c, int d, int e)
+    {
+        if (a <= 1 // comment 1
+            || (b == 0 || c <= 0) // comment 2
+            && (d > 1 || e < 0) // comment 3
+           )
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer();

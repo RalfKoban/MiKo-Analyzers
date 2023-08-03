@@ -21,12 +21,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is BinaryExpressionSyntax binary)
             {
-                var spaces = binary.Right.GetStartPosition().Character;
+                var spaces = MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer.GetSpaces(issue);
 
-                // copy comments by applying the trailing trivia from the corresponding items
-                return binary.WithLeft(binary.Left.WithTrailingTrivia(binary.OperatorToken.TrailingTrivia))
-                             .WithOperatorToken(binary.OperatorToken.WithLeadingSpaces(spaces).WithTrailingTrivia(binary.Right.GetTrailingTrivia()))
-                             .WithRight(binary.Right.WithoutTrivia().WithLeadingSpace());
+                var left = binary.Left;
+                var operatorToken = binary.OperatorToken;
+                var right = binary.Right;
+
+                var updatedLeft = left.GetStartingLine() != operatorToken.GetStartingLine() && left.HasTrailingComment()
+                                  ? left // there is already a comment, so nothing to do here
+                                  : left.WithTrailingTriviaFrom(operatorToken); // copy comment or line break
+
+                var updatedToken = operatorToken.WithLeadingSpaces(spaces).WithTrailingSpace();
+                var updatedRight = right.WithoutLeadingTrivia();
+
+                return binary.WithLeft(updatedLeft)
+                             .WithOperatorToken(updatedToken)
+                             .WithRight(updatedRight);
             }
 
             return syntax;
