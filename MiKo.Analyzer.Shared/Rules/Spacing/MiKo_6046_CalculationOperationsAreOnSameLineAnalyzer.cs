@@ -11,15 +11,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         public const string Id = "MiKo_6046";
 
         private static readonly SyntaxKind[] BinaryExpressions =
-        {
-            SyntaxKind.AddExpression,
-            SyntaxKind.SubtractExpression,
-            SyntaxKind.MultiplyExpression,
-            SyntaxKind.DivideExpression,
-            SyntaxKind.ModuloExpression,
-            SyntaxKind.LeftShiftExpression,
-            SyntaxKind.RightShiftExpression,
-        };
+                                                                 {
+                                                                     SyntaxKind.AddExpression,
+                                                                     SyntaxKind.SubtractExpression,
+                                                                     SyntaxKind.MultiplyExpression,
+                                                                     SyntaxKind.DivideExpression,
+                                                                     SyntaxKind.ModuloExpression,
+                                                                     SyntaxKind.LeftShiftExpression,
+                                                                     SyntaxKind.RightShiftExpression,
+                                                                 };
 
         public MiKo_6046_CalculationOperationsAreOnSameLineAnalyzer() : base(Id)
         {
@@ -37,7 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (leftLine != startLine || startLine != rightLine)
             {
-                ReportDiagnostics(context, Issue(node.OperatorToken));
+                if (node.IsStringConcatenation())
+                {
+                    // ignore string concatenations
+                }
+                else
+                {
+                    ReportDiagnostics(context, Issue(node.OperatorToken));
+                }
             }
         }
     }

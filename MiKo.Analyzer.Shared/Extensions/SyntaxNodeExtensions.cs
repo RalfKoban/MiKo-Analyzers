@@ -1371,6 +1371,24 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsStringConcatenation(this ExpressionSyntax value)
+        {
+            if (value is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
+            {
+                if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
+                {
+                    return true;
+                }
+
+                if (b.Left.IsStringConcatenation() || b.Right.IsStringConcatenation())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsStruct(this ExpressionSyntax value, SemanticModel semanticModel)
         {
             var type = value.GetTypeSymbol(semanticModel);

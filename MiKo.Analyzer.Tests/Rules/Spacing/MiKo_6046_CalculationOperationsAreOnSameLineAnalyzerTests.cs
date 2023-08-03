@@ -26,6 +26,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_if_add_operation_of_strings_spans_multiple_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var result = ""some text""
+                   + ""with some other text""
+                   + ""and even more text"";
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_if_operator_is_on_different_line_than_left_operand_([ValueSource(nameof(CalculationOperators))] string calculationOperator) => An_issue_is_reported_for(@"
 using System;
 
