@@ -41,10 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case AssignmentExpressionSyntax assignment:
                     AnalyzeAssignmentExpression(context, assignment);
+
                     break;
 
                 case EqualsValueClauseSyntax clause:
                     AnalyzeEqualsValueClause(context, clause);
+
                     break;
             }
         }
