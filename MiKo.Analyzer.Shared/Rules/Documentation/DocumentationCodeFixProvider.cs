@@ -766,8 +766,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var firstToken = text2.TextTokens.First();
 
                     var token = lastToken.WithText(lastToken.Text + firstToken.Text)
-                                         .WithLeadingTrivia(lastToken.LeadingTrivia)
-                                         .WithTrailingTrivia(firstToken.TrailingTrivia);
+                                         .WithLeadingTriviaFrom(lastToken)
+                                         .WithTrailingTriviaFrom(firstToken);
 
                     var tokens = text1.TextTokens.Replace(lastToken, token).AddRange(text2.TextTokens.Skip(1));
                     var newText = text1.WithTextTokens(tokens);

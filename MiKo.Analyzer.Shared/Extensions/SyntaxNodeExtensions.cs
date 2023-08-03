@@ -951,6 +951,8 @@ namespace MiKoSolutions.Analyzers
             return null;
         }
 
+        internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsComment());
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
@@ -1443,14 +1445,8 @@ namespace MiKoSolutions.Analyzers
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
             var openBraceToken = value.OpenBraceToken.WithoutTrivia().WithEndOfLine();
 
-            // avoid lost trivia, such as #endregion
-            var closeBraceToken = value.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
-                                       .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
-                                       .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
-
             return value.Without(node)
-                        .WithOpenBraceToken(openBraceToken)
-                        .WithCloseBraceToken(closeBraceToken);
+                        .WithOpenBraceToken(openBraceToken);
         }
 
         internal static BaseTypeDeclarationSyntax RemoveNodesAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, IEnumerable<SyntaxNode> nodes)
@@ -1458,14 +1454,8 @@ namespace MiKoSolutions.Analyzers
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
             var openBraceToken = value.OpenBraceToken.WithoutTrivia().WithEndOfLine();
 
-            // avoid lost trivia, such as #endregion
-            var closeBraceToken = value.CloseBraceToken.WithoutTrivia().WithLeadingEndOfLine()
-                                       .WithLeadingTrivia(value.CloseBraceToken.LeadingTrivia)
-                                       .WithTrailingTrivia(value.CloseBraceToken.TrailingTrivia);
-
             return value.Without(nodes)
-                        .WithOpenBraceToken(openBraceToken)
-                        .WithCloseBraceToken(closeBraceToken);
+                        .WithOpenBraceToken(openBraceToken);
         }
 
         internal static T ReplaceNodes<T, TNode>(this T value, IEnumerable<TNode> nodes, Func<TNode, IEnumerable<SyntaxNode>> computeReplacementNodes)
@@ -1838,26 +1828,27 @@ namespace MiKoSolutions.Analyzers
             return value.WithTextTokens(textTokens);
         }
 
-        internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
-        {
-            return value
-                    .WithLeadingTriviaFrom(node)
-                    .WithTrailingTriviaFrom(node);
-        }
+        internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.WithLeadingTriviaFrom(node)
+                                                                                                        .WithTrailingTriviaFrom(node);
 
-        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
-        {
-            return node.HasLeadingTrivia
-                   ? value.WithLeadingTrivia(node.GetLeadingTrivia())
-                   : value;
-        }
+        internal static T WithTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
+                                                                                                          .WithTrailingTriviaFrom(token);
 
-        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
-        {
-            return node.HasTrailingTrivia
-                   ? value.WithTrailingTrivia(node.GetTrailingTrivia())
-                   : value;
-        }
+        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => node.HasLeadingTrivia
+                                                                                                          ? value.WithLeadingTrivia(node.GetLeadingTrivia())
+                                                                                                          : value;
+
+        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => token.HasLeadingTrivia
+                                                                                                            ? value.WithLeadingTrivia(token.LeadingTrivia)
+                                                                                                            : value;
+
+        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => node.HasTrailingTrivia
+                                                                                                           ? value.WithTrailingTrivia(node.GetTrailingTrivia())
+                                                                                                           : value;
+
+        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => token.HasTrailingTrivia
+                                                                                                             ? value.WithTrailingTrivia(token.TrailingTrivia)
+                                                                                                             : value;
 
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
 
