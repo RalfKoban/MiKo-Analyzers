@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6044_CodeFixProvider)), Shared]
     public sealed class MiKo_6044_CodeFixProvider : SpacingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_6044_CodeFixTitle;
 
@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is BinaryExpressionSyntax binary)
             {
-                var spaces = MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer.GetSpaces(issue);
+                var spaces = MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.GetSpaces(issue);
 
                 var left = binary.Left;
                 var operatorToken = binary.OperatorToken;

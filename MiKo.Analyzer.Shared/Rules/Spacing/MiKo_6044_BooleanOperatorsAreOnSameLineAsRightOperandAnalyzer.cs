@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6044";
 
@@ -16,30 +16,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static readonly SyntaxKind[] BinaryExpressions =
                                                                  {
-                                                                     SyntaxKind.AddExpression,
-                                                                     SyntaxKind.SubtractExpression,
-                                                                     SyntaxKind.MultiplyExpression,
-                                                                     SyntaxKind.DivideExpression,
-                                                                     SyntaxKind.ModuloExpression,
-                                                                     SyntaxKind.LeftShiftExpression,
-                                                                     SyntaxKind.RightShiftExpression,
                                                                      SyntaxKind.LogicalOrExpression,
                                                                      SyntaxKind.LogicalAndExpression,
                                                                      SyntaxKind.BitwiseOrExpression,
                                                                      SyntaxKind.BitwiseAndExpression,
                                                                      SyntaxKind.ExclusiveOrExpression,
-                                                                     SyntaxKind.EqualsExpression,
-                                                                     SyntaxKind.NotEqualsExpression,
-                                                                     SyntaxKind.LessThanExpression,
-                                                                     SyntaxKind.LessThanOrEqualExpression,
-                                                                     SyntaxKind.GreaterThanExpression,
-                                                                     SyntaxKind.GreaterThanOrEqualExpression,
-                                                                     SyntaxKind.IsExpression,
-                                                                     SyntaxKind.AsExpression,
-                                                                     SyntaxKind.CoalesceExpression,
                                                                  };
 
-        public MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer() : base(Id)
+        public MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer() : base(Id)
         {
         }
 

@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public class MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzerTests : CodeFixVerifier
+    public class MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
@@ -172,9 +172,9 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6044_OperatorsOfBinaryExpressionsAreOnSameLineAsRightOperandAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6044_CodeFixProvider();
     }
