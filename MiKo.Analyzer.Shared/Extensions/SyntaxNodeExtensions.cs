@@ -1371,7 +1371,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsStringConcatenation(this ExpressionSyntax value)
+        internal static bool IsStringConcatenation(this ExpressionSyntax value, SemanticModel semanticModel = null)
         {
             if (value is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
             {
@@ -1380,9 +1380,17 @@ namespace MiKoSolutions.Analyzers
                     return true;
                 }
 
-                if (b.Left.IsStringConcatenation() || b.Right.IsStringConcatenation())
+                if (b.Left.IsStringConcatenation(semanticModel) || b.Right.IsStringConcatenation(semanticModel))
                 {
                     return true;
+                }
+
+                if (semanticModel != null)
+                {
+                    if (b.Left.IsString(semanticModel) || b.Right.IsString(semanticModel))
+                    {
+                        return true;
+                    }
                 }
             }
 

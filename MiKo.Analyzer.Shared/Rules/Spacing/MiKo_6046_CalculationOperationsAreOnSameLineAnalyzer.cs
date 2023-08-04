@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (leftLine != startLine || startLine != rightLine)
             {
-                if (node.IsStringConcatenation())
+                if (node.IsStringConcatenation(context.SemanticModel))
                 {
                     // ignore string concatenations
                 }

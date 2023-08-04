@@ -26,7 +26,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_add_operation_of_strings_spans_multiple_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_if_add_operation_of_string_constants_spans_multiple_lines() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -36,6 +36,25 @@ public class TestMe
         var result = ""some text""
                    + ""with some other text""
                    + ""and even more text"";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_add_operation_of_string_variables_spans_multiple_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var text1 = ""some text"";
+        var text2 = ""some other text"";
+
+        var result = text
+                   + Environment.NewLine
+                   + Environment.NewLine
+                   + text2;
     }
 }
 ");
