@@ -351,6 +351,33 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_field_assignment_with_comment_spans_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private int m_field =
+
+                            // some comment
+                            0;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private int m_field = 0; // some comment
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6041_AssignmentsAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6041_AssignmentsAreOnSameLineAnalyzer();

@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var updatedSyntax = syntax.ReplaceNode(clause, updatedClause);
 
             // move comment to the end if it is a leading one
-            if (syntax is StatementSyntax)
+            if (syntax is StatementSyntax || syntax is MemberDeclarationSyntax)
             {
                 var leadingComment = clause.GetLeadingComment();
 
