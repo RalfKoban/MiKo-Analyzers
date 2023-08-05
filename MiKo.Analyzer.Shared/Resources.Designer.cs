@@ -10709,6 +10709,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To avoid deadlocks, methods or properties of parameters should never be invoked inside of lock statements..
+        /// </summary>
+        public static string MiKo_3094_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3094_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not invoke method or property inside lock.
+        /// </summary>
+        public static string MiKo_3094_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3094_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not invoke methods or properties of parameters inside locks.
+        /// </summary>
+        public static string MiKo_3094_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3094_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty..
         /// </summary>
         public static string MiKo_3095_Description {

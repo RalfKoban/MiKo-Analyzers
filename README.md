@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 386 rules that are currently provided by the analyzer.
+The following tables list all the 387 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -343,6 +343,7 @@ The following tables list all the 386 rules that are currently provided by the a
 |MiKo_3091|Do not raise events in finally blocks|&#x2713;|\-|
 |MiKo_3092|Do not raise events in locks|&#x2713;|\-|
 |MiKo_3093|Do not invoke delegates inside locks|&#x2713;|\-|
+|MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|

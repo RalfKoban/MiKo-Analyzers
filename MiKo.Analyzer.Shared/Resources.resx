@@ -3785,6 +3785,15 @@ Those finally blocks are intended for cleaning stuff up.</value>
   <data name="MiKo_3093_Title" xml:space="preserve">
     <value>Do not invoke delegates inside locks</value>
   </data>
+  <data name="MiKo_3094_Description" xml:space="preserve">
+    <value>To avoid deadlocks, methods or properties of parameters should never be invoked inside of lock statements.</value>
+  </data>
+  <data name="MiKo_3094_MessageFormat" xml:space="preserve">
+    <value>Do not invoke method or property inside lock</value>
+  </data>
+  <data name="MiKo_3094_Title" xml:space="preserve">
+    <value>Do not invoke methods or properties of parameters inside locks</value>
+  </data>
   <data name="MiKo_3095_Description" xml:space="preserve">
     <value>Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty.</value>
   </data>
