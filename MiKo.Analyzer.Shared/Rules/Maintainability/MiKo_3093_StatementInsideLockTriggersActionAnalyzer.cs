@@ -51,9 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // only warn if it is an invocation
                     if (IsInvocation(identifier))
                     {
-                        var method = context.GetEnclosingMethod();
-
-                        yield return Issue(method.Name, token);
+                        yield return Issue(token);
                     }
                 }
             }

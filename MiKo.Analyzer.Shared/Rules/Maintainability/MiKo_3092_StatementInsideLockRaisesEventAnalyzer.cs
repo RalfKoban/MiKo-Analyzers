@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
             {
-                return Issue(method.Name, token);
+                return Issue(token);
             }
 
             return null;

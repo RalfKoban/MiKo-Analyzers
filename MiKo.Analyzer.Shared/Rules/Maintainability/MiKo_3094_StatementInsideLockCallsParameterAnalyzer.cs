@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeLockStatement, SyntaxKind.LockStatement);
 
-        private static bool IsAccessOrInvocation(SyntaxNode identifier) => identifier.Parent?.IsAnyKind(AccessOrInvocations) is true;
+        private static bool IsAccessOrInvocation(SyntaxNode node) => node?.IsAnyKind(AccessOrInvocations) is true;
 
         private void AnalyzeLockStatement(SyntaxNodeAnalysisContext context)
         {
@@ -57,8 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (parameterNames.Contains(token.ValueText))
                 {
                     var identifier = token.Parent;
+                    var parent = identifier?.Parent;
 
-                    if (IsAccessOrInvocation(identifier))
+                    if (IsAccessOrInvocation(parent))
                     {
                         var type = identifier.GetTypeSymbol(semanticModel);
 
@@ -68,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             continue;
                         }
 
-                        yield return Issue(method.Name, token);
+                        yield return Issue(parent);
                     }
                 }
             }
