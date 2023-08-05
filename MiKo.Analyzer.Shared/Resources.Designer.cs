@@ -10711,27 +10711,27 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty..
         /// </summary>
-        public static string MiKo_3094_Description {
+        public static string MiKo_3095_Description {
             get {
-                return ResourceManager.GetString("MiKo_3094_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_3095_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Provide a comment that reasons why the block is empty.
         /// </summary>
-        public static string MiKo_3094_MessageFormat {
+        public static string MiKo_3095_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_3094_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_3095_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Code blocks should not be empty.
         /// </summary>
-        public static string MiKo_3094_Title {
+        public static string MiKo_3095_Title {
             get {
-                return ResourceManager.GetString("MiKo_3094_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_3095_Title", resourceCulture);
             }
         }
         

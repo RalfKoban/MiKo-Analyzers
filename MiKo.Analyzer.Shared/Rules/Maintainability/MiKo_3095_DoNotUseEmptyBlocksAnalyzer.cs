@@ -8,11 +8,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3094_DoNotUseEmptyBlocksAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3095_DoNotUseEmptyBlocksAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3094";
+        public const string Id = "MiKo_3095";
 
-        public MiKo_3094_DoNotUseEmptyBlocksAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3095_DoNotUseEmptyBlocksAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
