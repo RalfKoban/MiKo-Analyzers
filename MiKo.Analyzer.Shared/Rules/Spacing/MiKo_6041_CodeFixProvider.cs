@@ -4,6 +4,7 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
@@ -21,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             switch (syntaxNode)
             {
-                case EqualsValueClauseSyntax clause: return clause.Parent;
+                case EqualsValueClauseSyntax clause: return clause.Parent?.Parent?.Parent;
                 case AssignmentExpressionSyntax assignment: return assignment;
                 default:
                     return null;
@@ -37,14 +38,25 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                  .WithRight(assignment.Right.WithoutLeadingTrivia());
             }
 
-            var clause = syntax.FirstChild<EqualsValueClauseSyntax>();
+            var clause = GetEqualsValueClause(syntax);
 
             var updatedClause = clause.WithEqualsToken(clause.EqualsToken.WithoutTrivia())
                                       .WithValue(clause.Value.WithLeadingSpace());
 
             var updatedSyntax = syntax.ReplaceNode(clause, updatedClause);
 
-            var sibling = updatedSyntax.FirstChild<EqualsValueClauseSyntax>().PreviousSiblingNodeOrToken();
+            // move comment to the end if it is a leading one
+            if (syntax is StatementSyntax)
+            {
+                var leadingComment = clause.GetLeadingComment();
+
+                if (leadingComment.IsComment())
+                {
+                    updatedSyntax = updatedSyntax.WithTrailingTrivia(SyntaxFactory.Space, leadingComment, SyntaxFactory.CarriageReturnLineFeed);
+                }
+            }
+
+            var sibling = GetEqualsValueClause(updatedSyntax).PreviousSiblingNodeOrToken();
 
             if (sibling.IsToken)
             {
@@ -56,5 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return updatedSyntax;
         }
+
+        private static EqualsValueClauseSyntax GetEqualsValueClause(SyntaxNode syntax) => syntax.FirstDescendant<EqualsValueClauseSyntax>();
     }
 }

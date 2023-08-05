@@ -283,7 +283,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_specific__assignment_is_spread_over_different_lines_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator)
+        public void Code_gets_fixed_if_specific_assignment_is_spread_over_different_lines_([ValueSource(nameof(AssignmentOperators))] string assignmentOperator)
         {
             var originalCode = @"
 using System;
@@ -316,6 +316,39 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_assignment_with_comment_spans_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i =
+
+                // some comment
+                0;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        int i = 0; // some comment
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_6041_AssignmentsAreOnSameLineAnalyzer.Id;

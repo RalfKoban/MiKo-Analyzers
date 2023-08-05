@@ -330,6 +330,27 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static SyntaxTrivia GetLeadingComment(this SyntaxNode value)
+        {
+            while (true)
+            {
+                if (value is null)
+                {
+                    return default;
+                }
+
+                foreach (var trivia in value.GetLeadingTrivia())
+                {
+                    if (trivia.IsComment())
+                    {
+                        return trivia;
+                    }
+                }
+
+                value = value.FirstChild();
+            }
+        }
+
         internal static string GetMethodName(this ParameterSyntax value)
         {
             var enclosingNode = value.GetEnclosing(MethodNameSyntaxKinds);
