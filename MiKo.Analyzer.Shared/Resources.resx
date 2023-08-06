@@ -1063,6 +1063,15 @@ Example:
   <data name="MiKo_1073_Title" xml:space="preserve">
     <value>Boolean fields should be named as statements and not as questions</value>
   </data>
+  <data name="MiKo_1074_Description" xml:space="preserve">
+    <value>In case an object is used for synchronizing threads via lock statements, that object should be named with a suffix "Lock". So it's easy to spot whether an object is used as synchronization mechanism for a lock.</value>
+  </data>
+  <data name="MiKo_1074_MessageFormat" xml:space="preserve">
+    <value>Suffix field with 'Lock' because it is used as lock object</value>
+  </data>
+  <data name="MiKo_1074_Title" xml:space="preserve">
+    <value>Objects used to lock on should be suffixed with 'Lock'</value>
+  </data>
   <data name="MiKo_1080_Description" xml:space="preserve">
     <value>It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. 'issue42' in contrast to 'issueFortyTwo').</value>
   </data>

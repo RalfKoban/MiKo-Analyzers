@@ -2801,6 +2801,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case an object is used for synchronizing threads via lock statements, that object should be named with a suffix &quot;Lock&quot;. So it&apos;s easy to spot whether an object is used as synchronization mechanism for a lock..
+        /// </summary>
+        public static string MiKo_1074_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1074_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix field with &apos;Lock&apos; because it is used as lock object.
+        /// </summary>
+        public static string MiKo_1074_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1074_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Objects used to lock on should be suffixed with &apos;Lock&apos;.
+        /// </summary>
+        public static string MiKo_1074_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1074_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         public static string MiKo_1080_Description {
