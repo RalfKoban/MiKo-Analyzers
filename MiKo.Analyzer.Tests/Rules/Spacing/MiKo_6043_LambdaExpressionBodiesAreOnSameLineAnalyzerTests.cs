@@ -145,7 +145,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_ann_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -157,14 +157,44 @@ namespace Bla
         public TestMe DoSomething()
         {
             return DoSomethingCore(i => DoSomethingCore(j => new TestMe
-                                                             {
-                                                                 SomeProperty = j,
-                                                             }));
+                                                                 {
+                                                                       SomeProperty = j,
+                                                                 }));
         }
 
         private TestMe DoSomethingCore(Func<int, TestMe> callback)
         {
             return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_deeply_nested_lambda_with_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            var items = new List<int>();
+
+            return DoSomethingCore(i => items.Select(x => new TestMe
+                                                          {
+                                                              SomeProperty = i + x,
+                                                          })
+                                             .ToList());
+        }
+
+        private TestMe DoSomethingCore(Func<int, IEnumerable<TestMe>> callback)
+        {
+            return callback(42).FirstOrDefault();
         }
     }
 }

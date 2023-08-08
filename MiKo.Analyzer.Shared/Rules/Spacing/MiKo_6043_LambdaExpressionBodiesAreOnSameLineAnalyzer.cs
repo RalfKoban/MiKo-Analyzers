@@ -79,6 +79,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return true;
                 }
 
+                if (syntax.DescendantNodes<LambdaExpressionSyntax>().Any())
+                {
+                    // the other lambda get inspected itself, so nothing to analyze here
+                    return false;
+                }
+
                 var arguments = argumentList.Arguments;
 
                 switch (arguments.Count)
@@ -93,12 +99,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         if (expression is ObjectCreationExpressionSyntax o && o.Initializer?.Expressions.Count > 0)
                         {
                             // initializers are allowed to span multiple lines, so nothing to analyze here
-                            return false;
-                        }
-
-                        if (expression is LambdaExpressionSyntax)
-                        {
-                            // the other lambda get inspected itself, so nothing to analyze here
                             return false;
                         }
 
