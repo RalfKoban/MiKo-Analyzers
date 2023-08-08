@@ -128,7 +128,7 @@ namespace Bla
     {
         public int SomeProperty { get; set; }
 
-        public int DoSomething()
+        public TestMe DoSomething()
         {
             return DoSomethingCore(i => new TestMe
                                             {
@@ -136,7 +136,33 @@ namespace Bla
                                             });
         }
 
-        private int DoSomethingCore(Func<int, int> callback)
+        private TestMe DoSomethingCore(Func<int, TestMe> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_ann_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            return DoSomethingCore(i => DoSomethingCore(j => new TestMe
+                                                             {
+                                                                 SomeProperty = j,
+                                                             }));
+        }
+
+        private TestMe DoSomethingCore(Func<int, TestMe> callback)
         {
             return callback(42);
         }

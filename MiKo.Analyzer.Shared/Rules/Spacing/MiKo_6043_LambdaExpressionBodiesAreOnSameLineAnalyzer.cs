@@ -88,9 +88,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case 1:
                     {
-                        if (arguments[0].Expression is ObjectCreationExpressionSyntax o && o.Initializer?.Expressions.Count > 0)
+                        var expression = arguments[0].Expression;
+
+                        if (expression is ObjectCreationExpressionSyntax o && o.Initializer?.Expressions.Count > 0)
                         {
                             // initializers are allowed to span multiple lines, so nothing to analyze here
+                            return false;
+                        }
+
+                        if (expression is LambdaExpressionSyntax)
+                        {
+                            // the other lambda get inspected itself, so nothing to analyze here
                             return false;
                         }
 
