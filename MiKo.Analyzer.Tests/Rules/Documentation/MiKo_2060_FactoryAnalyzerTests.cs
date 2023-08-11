@@ -370,7 +370,7 @@ public class TestMeFactory
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("Create a factory")]
+        [TestCase("Creates a factory")]
         [TestCase("Create a factory")]
         [TestCase("Creates an instance of <see cref=\"string\"/>")]
         [TestCase("Create an instance of <see cref=\"string\"/>")]
