@@ -713,6 +713,11 @@ namespace System
                 return value;
             }
 
+            if (value[index].IsLowerCase())
+            {
+                return value;
+            }
+
             var characters = value.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
@@ -767,6 +772,11 @@ namespace System
             }
 
             if (index >= value.Length)
+            {
+                return value;
+            }
+
+            if (value[index].IsUpperCase())
             {
                 return value;
             }
