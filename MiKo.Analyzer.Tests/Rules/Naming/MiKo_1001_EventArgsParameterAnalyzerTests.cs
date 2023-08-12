@@ -183,6 +183,45 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_contains_parameter_names() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void OnWhatever(object sender, EventArgs e)
+    {
+        void LocalFunction(object s, EventArgs args)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_is_event_handling_method() => No_issue_is_reported_for(@"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            void SomeLocal(DependencyObject dep, DependencyPropertyChangedEventArgs args) { }
+        }
+    }
+}
+");
+
         [TestCase("EventArgs args", "EventArgs e")]
         [TestCase("EventArgs args, EventArgs eventArgs", "EventArgs e0, EventArgs e1")]
         [TestCase("EventArgs args, int i", "EventArgs e, int i")]

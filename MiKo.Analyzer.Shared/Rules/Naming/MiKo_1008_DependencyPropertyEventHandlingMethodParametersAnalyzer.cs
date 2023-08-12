@@ -28,7 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsDependencyObjectEventHandler();
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsDependencyObjectEventHandler();
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsDependencyObjectEventHandler()
+                                                                                && symbol.ContainingSymbol is IMethodSymbol method
+                                                                                && method.IsDependencyObjectEventHandler() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

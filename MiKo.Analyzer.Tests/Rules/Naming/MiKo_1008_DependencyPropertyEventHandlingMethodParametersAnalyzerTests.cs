@@ -82,6 +82,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_is_event_handling_method() => No_issue_is_reported_for(@"
+namespace System.Windows
+{
+    public struct DependencyPropertyChangedEventArgs
+    {
+    }
+}
+
+namespace Bla
+{
+    using System;
+    using System.Windows;
+
+    public class TestMe
+    {
+        public void OnWhatever(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            void SomeLocal(DependencyObject dep, DependencyPropertyChangedEventArgs args) { }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_DependencyObject_on_method() => An_issue_is_reported_for(@"
 namespace System.Windows
 {
