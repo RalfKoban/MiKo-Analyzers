@@ -207,10 +207,10 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol value, string invocation) => value.GetAssignmentsVia(invocation)
-                                                                                                                                             .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                                                             .Select(_ => _.ArgumentList)
-                                                                                                                                             .Select(_ => _.Arguments)
-                                                                                                                                             .FirstOrDefault(_ => _.Count > 0);
+                                                                                                                                           .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
+                                                                                                                                           .Select(_ => _.ArgumentList)
+                                                                                                                                           .Select(_ => _.Arguments)
+                                                                                                                                           .FirstOrDefault(_ => _.Count > 0);
 
         internal static IEnumerable<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers().Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>();
 

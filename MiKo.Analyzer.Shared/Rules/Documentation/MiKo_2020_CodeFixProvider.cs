@@ -16,8 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             return syntax.WithoutTrivia()
-                          .WithContent(Inheritdoc().WithEndOfLine())
-                          .WithLeadingXmlCommentExterior();
+                         .WithContent(Inheritdoc().WithEndOfLine())
+                         .WithLeadingXmlCommentExterior();
         }
     }
 }

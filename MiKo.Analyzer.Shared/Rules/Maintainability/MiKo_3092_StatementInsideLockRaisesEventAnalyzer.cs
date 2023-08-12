@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     //// <seealso cref="MiKo_3093_StatementInsideLockTriggersActionAnalyzer"/>
+    //// <seealso cref="MiKo_3094_StatementInsideLockCallsParameterAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3092_StatementInsideLockRaisesEventAnalyzer : MaintainabilityAnalyzer
     {
@@ -62,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (events.Contains(eventName) && token.GetSymbol(context.SemanticModel) is IEventSymbol)
             {
-                return Issue(method.Name, token);
+                return Issue(token);
             }
 
             return null;

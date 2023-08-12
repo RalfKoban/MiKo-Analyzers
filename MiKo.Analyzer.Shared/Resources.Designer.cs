@@ -2801,6 +2801,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case an object is used for synchronizing threads via lock statements, that object should be named with a suffix &quot;Lock&quot;. So it&apos;s easy to spot whether an object is used as synchronization mechanism for a lock..
+        /// </summary>
+        public static string MiKo_1074_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1074_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix field with &apos;Lock&apos; because it is used as lock object.
+        /// </summary>
+        public static string MiKo_1074_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1074_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Objects used to lock on should be suffixed with &apos;Lock&apos;.
+        /// </summary>
+        public static string MiKo_1074_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1074_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         public static string MiKo_1080_Description {
@@ -10709,7 +10736,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty..
+        ///   Looks up a localized string similar to To avoid deadlocks, methods or properties of parameters should never be invoked inside of lock statements..
         /// </summary>
         public static string MiKo_3094_Description {
             get {
@@ -10718,7 +10745,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide a comment that reasons why the block is empty.
+        ///   Looks up a localized string similar to Do not invoke method or property inside lock.
         /// </summary>
         public static string MiKo_3094_MessageFormat {
             get {
@@ -10727,11 +10754,38 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code blocks should not be empty.
+        ///   Looks up a localized string similar to Do not invoke methods or properties of parameters inside locks.
         /// </summary>
         public static string MiKo_3094_Title {
             get {
                 return ResourceManager.GetString("MiKo_3094_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty code blocks should contain at least a reasoning comment why the block is empty. This helps developers to understand the reasoning behind and they know for sure that the block is not just accidentally empty..
+        /// </summary>
+        public static string MiKo_3095_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3095_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide a comment that reasons why the block is empty.
+        /// </summary>
+        public static string MiKo_3095_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3095_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code blocks should not be empty.
+        /// </summary>
+        public static string MiKo_3095_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3095_Title", resourceCulture);
             }
         }
         
@@ -11321,42 +11375,6 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3302_Title {
             get {
                 return ResourceManager.GetString("MiKo_3302_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Place on single line.
-        /// </summary>
-        public static string MiKo_3303_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3303_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines..
-        /// </summary>
-        public static string MiKo_3303_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3303_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Place lambda on single line.
-        /// </summary>
-        public static string MiKo_3303_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3303_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Expression bodies of lambdas should be placed on same line as lambda itself.
-        /// </summary>
-        public static string MiKo_3303_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3303_Title", resourceCulture);
             }
         }
         
@@ -13139,6 +13157,258 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6039_Title {
             get {
                 return ResourceManager.GetString("MiKo_6039_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dots.
+        /// </summary>
+        public static string MiKo_6040_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6040_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if consequtive invocations that span multiple lines are aligned by their dots..
+        /// </summary>
+        public static string MiKo_6040_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6040_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indent dots.
+        /// </summary>
+        public static string MiKo_6040_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6040_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consecutive invocations spaning multiple lines should be aligned by their dots.
+        /// </summary>
+        public static string MiKo_6040_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6040_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assignment on same line.
+        /// </summary>
+        public static string MiKo_6041_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6041_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if assignments are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6041_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6041_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place assignment on same line.
+        /// </summary>
+        public static string MiKo_6041_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6041_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6041_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6041_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place new keyword on same line as type.
+        /// </summary>
+        public static string MiKo_6042_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6042_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if object creations are placed on the same line(s)..
+        /// </summary>
+        public static string MiKo_6042_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6042_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place new keyword on same line as type.
+        /// </summary>
+        public static string MiKo_6042_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6042_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;new&apos; keywords should be placed on same line(s) as the types.
+        /// </summary>
+        public static string MiKo_6042_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6042_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place on single line.
+        /// </summary>
+        public static string MiKo_6043_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6043_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines..
+        /// </summary>
+        public static string MiKo_6043_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6043_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place lambda on single line.
+        /// </summary>
+        public static string MiKo_6043_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6043_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expression bodies of lambdas should be placed on same line as lambda itself.
+        /// </summary>
+        public static string MiKo_6043_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6043_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place operator on same line as right operand.
+        /// </summary>
+        public static string MiKo_6044_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6044_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; are placed on the same line(s) as their operands on the right side..
+        /// </summary>
+        public static string MiKo_6044_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6044_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place operator on same line as right operand.
+        /// </summary>
+        public static string MiKo_6044_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6044_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; should be placed on same line(s) as their right operands.
+        /// </summary>
+        public static string MiKo_6044_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6044_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place comparison on same line.
+        /// </summary>
+        public static string MiKo_6045_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6045_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if comparison operators such as &apos;==&apos; or &apos;!=&apos; are placed on the same line(s) as their operands..
+        /// </summary>
+        public static string MiKo_6045_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6045_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place comparison on same line.
+        /// </summary>
+        public static string MiKo_6045_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6045_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comparisons using operators such as &apos;==&apos; or &apos;!=&apos; should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6045_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6045_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place calculation on same line.
+        /// </summary>
+        public static string MiKo_6046_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6046_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if calculations operators such as &apos;+&apos; or &apos;%&apos; are placed on the same line(s) as their operands..
+        /// </summary>
+        public static string MiKo_6046_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6046_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place calculation on same line.
+        /// </summary>
+        public static string MiKo_6046_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6046_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculations using operators such as &apos;+&apos; or &apos;%&apos; should be placed on same line(s).
+        /// </summary>
+        public static string MiKo_6046_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6046_Title", resourceCulture);
             }
         }
     }

@@ -13,13 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3113_CodeFixProvider)), Shared]
     public sealed class MiKo_3113_CodeFixProvider : UnitTestCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.Id;
 
-        protected sealed override string Title => Resources.MiKo_3113_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3113_CodeFixTitle;
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var statement = (ExpressionStatementSyntax)syntax;
 
@@ -102,8 +102,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case "BeNullOrEmpty": return AssertThat(expression, Is("Null", "Or", "Empty"), arguments, 0, removeNameColon: true);
                 case "NotBeNullOrEmpty": return AssertThat(expression, Is("Not", "Null", "And", "Not", "Empty"), arguments, 0, removeNameColon: true);
-                case "Be": return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "NotBe": return AssertThat(expression, Is("Not", "EqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "Be":
+                {
+                    var argument = arguments.First();
+
+                    if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NullLiteralExpression))
+                    {
+                        return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
+                    }
+
+                    return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
+                }
+
+                case "NotBe":
+                {
+                    var argument = arguments.First();
+
+                    if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NullLiteralExpression))
+                    {
+                        return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
+                    }
+
+                    return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
+                }
+
                 case "Equal": return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
                 case "BeEquivalentTo":
                 {

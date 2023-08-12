@@ -5,10 +5,10 @@ using NUnit.Framework;
 
 using TestHelper;
 
-namespace MiKoSolutions.Analyzers.Rules.Maintainability
+namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public sealed class MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_simple_lambda_body_that_spans_single_line() => No_issue_is_reported_for(@"
@@ -128,7 +128,7 @@ namespace Bla
     {
         public int SomeProperty { get; set; }
 
-        public int DoSomething()
+        public TestMe DoSomething()
         {
             return DoSomethingCore(i => new TestMe
                                             {
@@ -136,9 +136,65 @@ namespace Bla
                                             });
         }
 
-        private int DoSomethingCore(Func<int, int> callback)
+        private TestMe DoSomethingCore(Func<int, TestMe> callback)
         {
             return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            return DoSomethingCore(i => DoSomethingCore(j => new TestMe
+                                                                 {
+                                                                       SomeProperty = j,
+                                                                 }));
+        }
+
+        private TestMe DoSomethingCore(Func<int, TestMe> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_deeply_nested_lambda_with_an_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            var items = new List<int>();
+
+            return DoSomethingCore(i => items.Select(x => new TestMe
+                                                          {
+                                                              SomeProperty = i + x,
+                                                          })
+                                             .ToList());
+        }
+
+        private TestMe DoSomethingCore(Func<int, IEnumerable<TestMe>> callback)
+        {
+            return callback(42).FirstOrDefault();
         }
     }
 }
@@ -215,6 +271,29 @@ namespace Bla
         }
 
         private TestMe DoSomethingCore(Func<TestMe> callback)
+        {
+            return callback();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_logical_expressions_that_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(bool a, bool b, bool c)
+        {
+            return DoSomethingCore(() => a
+                                         && b
+                                         || c);
+        }
+
+        private int DoSomethingCore(Func<int> callback)
         {
             return callback();
         }
@@ -721,10 +800,59 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
+        [Test]
+        public void Code_gets_fixed_for_nested_lambda_expression_body_with_invocation_whose_parameters_span_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer();
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y) => TestMe.DoSomethingCore((d, e) => TestMe.DoSomething(
+                                                                                                e,
+                                                                                                d,
+                                                                                                y))));
+        }
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3303_CodeFixProvider();
+        private static int DoSomethingCore(Func<int, int, int> callback)
+        {
+            return callback(1, 2);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore((x, y) => TestMe.DoSomethingCore((d, e) => TestMe.DoSomething(e, d, y))));
+        }
+
+        private static int DoSomethingCore(Func<int, int, int> callback)
+        {
+            return callback(1, 2);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        protected override string GetDiagnosticId() => MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6043_CodeFixProvider();
     }
 }

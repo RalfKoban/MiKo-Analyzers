@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 380 rules that are currently provided by the analyzer.
+The following tables list all the 388 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -104,6 +104,7 @@ The following tables list all the 380 rules that are currently provided by the a
 |MiKo_1071|Local boolean variables should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1073|Boolean fields should be named as statements and not as questions|&#x2713;|\-|
+|MiKo_1074|Objects used to lock on should be suffixed with 'Lock'|&#x2713;|\-|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
@@ -343,7 +344,8 @@ The following tables list all the 380 rules that are currently provided by the a
 |MiKo_3091|Do not raise events in finally blocks|&#x2713;|\-|
 |MiKo_3092|Do not raise events in locks|&#x2713;|\-|
 |MiKo_3093|Do not invoke delegates inside locks|&#x2713;|\-|
-|MiKo_3094|Code blocks should not be empty|&#x2713;|\-|
+|MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
+|MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -361,7 +363,6 @@ The following tables list all the 380 rules that are currently provided by the a
 |MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
-|MiKo_3303|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
 
 ### Ordering
@@ -424,3 +425,10 @@ The following tables list all the 380 rules that are currently provided by the a
 |MiKo_6037|Single arguments should be placed on same line(s) as invoked methods|&#x2713;|&#x2713;|
 |MiKo_6038|Casts should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6039|Return values should be placed on same line(s) as return keywords|&#x2713;|&#x2713;|
+|MiKo_6040|Consecutive invocations spaning multiple lines should be aligned by their dots|&#x2713;|&#x2713;|
+|MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
+|MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
+|MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
+|MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
+|MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
+|MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|

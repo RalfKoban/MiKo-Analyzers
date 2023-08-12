@@ -63,9 +63,25 @@ using System;
 
 public class TestMe
 {
-    public void OnWhatever(object sender, EventArgs e)
+    public void SomeMethod()
     {
         void LocalFunction(object sender, EventArgs e)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incorrectly_named_local_function_if_surrounding_method_contains_parameter_names() => No_issue_is_reported_for(@"
+
+using System;
+
+public class TestMe
+{
+    public void OnWhatever(object sender, EventArgs e)
+    {
+        void LocalFunction(object s, EventArgs args)
         {
         }
     }
@@ -101,7 +117,7 @@ using System;
 
 public class TestMe
 {
-    public void OnWhatever(object sender, EventArgs e)
+    public void SomeMethod()
     {
         void LocalFunction(object s, EventArgs e)
         {
@@ -139,7 +155,7 @@ using System;
 
 public class TestMe
 {
-    public void OnWhatever(object sender, EventArgs e)
+    public void SomeMethod()
     {
         void LocalFunction(object sender, EventArgs args)
         {

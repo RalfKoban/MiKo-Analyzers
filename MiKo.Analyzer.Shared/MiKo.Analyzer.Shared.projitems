@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringSplitExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SymbolExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeOrTokenExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTokenExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\FirstWordHandling.cs" />
@@ -356,7 +357,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3091_FinallyBlockRaisesEventAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3092_StatementInsideLockRaisesEventAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3093_StatementInsideLockTriggersActionAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3094_DoNotUseEmptyBlocksAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3094_StatementInsideLockCallsParameterAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3095_DoNotUseEmptyBlocksAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3101_TestClassesHaveTestsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3102_TestMethodsHaveNoConditionsAnalyzer.cs" />
@@ -386,8 +388,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3303_CodeFixProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3303_LambdaExpressionBodiesAreOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3401_NamespaceDepthAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityCodeFixProvider.cs" />
@@ -528,6 +528,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1071_BooleanLocalVariableNamedAsQuestionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1073_BooleanFieldNamedAsQuestionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1074_LockIdentifiersAreSuffixedWithLockAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1080_UseNumbersInsteadOfWordingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1081_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1081_MethodsWithNumberSuffixAnalyzer.cs" />
@@ -709,6 +710,20 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6038_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6039_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6039_ReturnStatementsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6040_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6041_AssignmentsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6041_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6042_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6042_CreationsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6043_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6044_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6045_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6045_ComparisonsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6046_CalculationOperationsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6046_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\StatementSurroundedByBlankLinesAnalyzer.cs" />

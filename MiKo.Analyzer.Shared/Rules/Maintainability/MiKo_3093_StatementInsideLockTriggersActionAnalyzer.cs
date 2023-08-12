@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     //// <seealso cref="MiKo_3092_StatementInsideLockRaisesEventAnalyzer"/>
+    //// <seealso cref="MiKo_3094_StatementInsideLockCallsParameterAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3093_StatementInsideLockTriggersActionAnalyzer : MaintainabilityAnalyzer
     {
@@ -50,9 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // only warn if it is an invocation
                     if (IsInvocation(identifier))
                     {
-                        var method = context.GetEnclosingMethod();
-
-                        yield return Issue(method.Name, token);
+                        yield return Issue(token);
                     }
                 }
             }

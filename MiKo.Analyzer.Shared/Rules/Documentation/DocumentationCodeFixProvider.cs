@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
         {
             var result = comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
-                                          .WithContent(content)
-                                          .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+                                .WithContent(content)
+                                .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
 
             return CombineTexts(result);
         }
@@ -349,8 +349,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var newContent = content.Insert(index, startText)
-                                     .Insert(index + 1, seeCref)
-                                     .Insert(index + 2, continueText);
+                                    .Insert(index + 1, seeCref)
+                                    .Insert(index + 2, continueText);
 
             return SyntaxFactory.XmlElement(comment.StartTag, newContent, comment.EndTag);
         }
@@ -766,8 +766,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var firstToken = text2.TextTokens.First();
 
                     var token = lastToken.WithText(lastToken.Text + firstToken.Text)
-                                         .WithLeadingTrivia(lastToken.LeadingTrivia)
-                                         .WithTrailingTrivia(firstToken.TrailingTrivia);
+                                         .WithLeadingTriviaFrom(lastToken)
+                                         .WithTrailingTriviaFrom(firstToken);
 
                     var tokens = text1.TextTokens.Replace(lastToken, token).AddRange(text2.TextTokens.Skip(1));
                     var newText = text1.WithTextTokens(tokens);

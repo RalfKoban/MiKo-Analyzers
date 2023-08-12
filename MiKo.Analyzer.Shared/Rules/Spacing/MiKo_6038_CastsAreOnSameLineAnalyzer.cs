@@ -20,12 +20,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var cast = (CastExpressionSyntax)context.Node;
 
-            var startPosition = cast.OpenParenToken.GetStartPosition();
-            var expressionStartPosition = cast.Expression.GetStartPosition();
+            var startLine = cast.OpenParenToken.GetStartingLine();
+            var expressionLine = cast.Expression.GetStartingLine();
 
-            if (startPosition.Line != expressionStartPosition.Line)
+            if (startLine != expressionLine)
             {
-                ReportDiagnostics(context, Issue(cast));
+                // underline only the cast itself, not the complete expression
+                var location = CreateLocation(cast, cast.OpenParenToken.SpanStart, cast.CloseParenToken.Span.End);
+
+                ReportDiagnostics(context, Issue(location));
             }
         }
     }

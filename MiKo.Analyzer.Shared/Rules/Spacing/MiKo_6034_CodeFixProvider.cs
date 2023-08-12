@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var name = maes.Name;
 
-                return maes.WithOperatorToken(maes.OperatorToken.WithoutTrivia().WithLeadingTrivia(name.GetLeadingTrivia()).WithLeadingEmptyLine())
+                return maes.WithOperatorToken(maes.OperatorToken.WithoutTrivia().WithLeadingTriviaFrom(name).WithLeadingEmptyLine())
                            .WithName(name.WithoutLeadingTrivia());
             }
 

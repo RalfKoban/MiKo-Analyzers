@@ -66,7 +66,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method)
+            {
+                if (method.IsEventHandler())
+                {
+                    return false; // ignore the method as it is handled by MiKo_1002_EventHandlingMethodParametersAnalyzer
+                }
+
+                if (method.IsDependencyObjectEventHandler())
+                {
+                    return false; // ignore the method as it is handled by MiKo_1008_DependencyPropertyEventHandlingMethodParametersAnalyzer
+                }
+            }
+
+            return true;
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

@@ -7,7 +7,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3094_DoNotUseEmptyBlocksAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3095_DoNotUseEmptyBlocksAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
@@ -210,8 +210,8 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3094_DoNotUseEmptyBlocksAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3095_DoNotUseEmptyBlocksAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3094_DoNotUseEmptyBlocksAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3095_DoNotUseEmptyBlocksAnalyzer();
     }
 }
