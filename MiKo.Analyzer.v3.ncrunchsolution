@@ -8,6 +8,7 @@
       <Value>Resources.Designer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
       <Value>MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj</Value>
     </MetricsExclusionList>
+    <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
     <SlidingBuildDelayInMilliseconds>500</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
