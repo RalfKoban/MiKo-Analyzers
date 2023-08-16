@@ -234,6 +234,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     yield return phrase + " that is able to create " + continuation;
                     yield return phrase + " which is able to create " + continuation;
+                    yield return phrase + " that is capable to create " + continuation;
+                    yield return phrase + " which is capable to create " + continuation;
                     yield return phrase + " to create " + continuation;
                     yield return phrase + " to " + continuation;
 

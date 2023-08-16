@@ -63,29 +63,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          {
                                                              "Attribute that ",
                                                              "A class to ",
+                                                             "A class used to ",
                                                              "A class that is used to ",
                                                              "A class which is used to ",
                                                              "An class to ",
+                                                             "An class used to ",
                                                              "An class that is used to ",
                                                              "An class which is used to ",
                                                              "Class to ",
                                                              "Class used to ",
+                                                             "Class that is used to ",
+                                                             "Class which is used to ",
+                                                             "The class used to ",
                                                              "The class is used to ",
                                                              "The class that is used to ",
                                                              "This class is used to ",
                                                              "A interface to ",
                                                              "An interface to ",
+                                                             "A interface used to ",
+                                                             "An interface used to ",
                                                              "A interface that is used to ",
                                                              "A interface which is used to ",
                                                              "An interface that is used to ",
                                                              "An interface which is used to ",
                                                              "Interface to ",
                                                              "Interface used to ",
+                                                             "Interface that is used to ",
+                                                             "Interface which is used to ",
+                                                             "The interface used to ",
                                                              "The interface is used to ",
                                                              "The interface that is used to ",
+                                                             "The interface which is used to ",
                                                              "This interface is used to ",
                                                              "Used to ",
                                                          };
+
+        private static readonly string[] ComponentPhrases = CreateComponentPhrases().ToArray();
 
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
@@ -139,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Comment(comment, ReplacementMap.Keys, ReplacementMap);
                 }
 
-                foreach (var phrase in UsedToPhrases)
+                foreach (var phrase in ComponentPhrases.Concat(UsedToPhrases))
                 {
                     if (text.StartsWith(phrase, StringComparison.Ordinal))
                     {
@@ -408,6 +421,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return new KeyValuePair<string, string>($"{start} {verb} ", fix);
                     yield return new KeyValuePair<string, string>($"{start} {thirdPersonVerb} ", fix);
                     yield return new KeyValuePair<string, string>($"{start} {gerundVerb} ", fix);
+                }
+            }
+        }
+
+        private static IEnumerable<string> CreateComponentPhrases()
+        {
+            var starts = new[] { "A component", "An component", "The component", "This component", "Component" };
+            var middles = new[] { string.Empty, "is ", "that is ", "which is " };
+            var lasts = new[] { "to", "able to", "capable to", "used to" };
+
+            foreach (var start in starts)
+            {
+                foreach (var middle in middles)
+                {
+                    foreach (var last in lasts)
+                    {
+                        yield return $"{start} {middle}{last} ";
+                    }
                 }
             }
         }
