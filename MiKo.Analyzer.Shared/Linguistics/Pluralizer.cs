@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] AllowedListNames =
                                                             {
                                                                 "map",
-                                                                "array",
-                                                                "collection",
-                                                                "dictionary",
                                                                 "list",
+                                                                "array",
+                                                                "stack",
+                                                                "playList",
                                                                 "blackList",
                                                                 "whiteList",
-                                                                "playList",
-                                                                "stack",
+                                                                "collection",
+                                                                "dictionary",
                                                             };
 
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
