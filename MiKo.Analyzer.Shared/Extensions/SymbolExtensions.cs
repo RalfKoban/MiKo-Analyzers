@@ -325,29 +325,34 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetStartingLine();
 
-        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value)
+        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value) => value.GetSyntaxNodes<SyntaxNode>();
+
+        internal static IEnumerable<TSyntaxNode> GetSyntaxNodes<TSyntaxNode>(this ISymbol value) where TSyntaxNode : SyntaxNode
         {
-            foreach (var node in value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
+            foreach (var reference in value.DeclaringSyntaxReferences)
             {
-                var location = node.GetLocation();
-
-                var sourceTree = location.SourceTree;
-
-                // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
-                if (sourceTree is null)
+                if (reference.GetSyntax() is TSyntaxNode node)
                 {
-                    continue;
-                }
+                    var location = node.GetLocation();
 
-                var filePath = sourceTree.FilePath;
+                    var sourceTree = location.SourceTree;
 
-                // ignore non C# code (might be part of partial classes, e.g. for XAML)
-                if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
-                {
-                    // ignore generated code (might be part of partial classes)
-                    if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                    // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
+                    if (sourceTree is null)
                     {
-                        yield return node;
+                        continue;
+                    }
+
+                    var filePath = sourceTree.FilePath;
+
+                    // ignore non C# code (might be part of partial classes, e.g. for XAML)
+                    if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // ignore generated code (might be part of partial classes)
+                        if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                        {
+                            yield return node;
+                        }
                     }
                 }
             }
@@ -359,15 +364,13 @@ namespace MiKoSolutions.Analyzers
             {
                 case IFieldSymbol field:
                 {
-                    var fieldNode = GetSyntax<FieldDeclarationSyntax>(field);
-
-                    if (fieldNode != null)
+                    // maybe it is an enum member
+                    if (field.ContainingType.IsEnum())
                     {
-                        return fieldNode;
+                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
                     }
 
-                    // maybe it is an enum member
-                    return GetSyntax<EnumMemberDeclarationSyntax>(field);
+                    return GetSyntax<FieldDeclarationSyntax>(field);
                 }
 
                 case IEventSymbol @event:
@@ -390,7 +393,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodes().OfType<ParameterSyntax>().FirstOrDefault();
+        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodes<ParameterSyntax>().FirstOrDefault();
 
         internal static T GetSyntax<T>(this ISymbol value) where T : SyntaxNode => value.GetSyntaxNodes()
                                                                                         .Select(_ => _.GetEnclosing<T>())
