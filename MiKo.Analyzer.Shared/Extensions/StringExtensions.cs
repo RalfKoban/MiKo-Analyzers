@@ -184,14 +184,61 @@ namespace System
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => value.ContainsAny((IEnumerable<string>)phrases, comparison);
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison) => value.ContainsAny((IEnumerable<string>)phrases, comparison);
+            for (var index = 0; index < phrases.Length; index++)
+            {
+                if (value.Contains(phrases[index], comparison))
+                {
+                    return true;
+                }
+            }
 
-        public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Contains(_, comparison));
+            return false;
+        }
+
+        public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
+        {
+            var index = value.IndexOfAny(phrases, comparison);
+
+            return index > -1;
+        }
+
+        public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
+        {
+            if (phrases is string[] array)
+            {
+                return value.ContainsAny(array, comparison);
+            }
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            foreach (var phrase in phrases)
+            {
+                if (value.Contains(phrase, comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
         {
+            if (phrases is string[] array)
+            {
+                return value.ContainsAny(array, comparison);
+            }
+
             var index = value.IndexOfAny(phrases, comparison);
 
             return index > -1;
@@ -249,9 +296,46 @@ namespace System
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison) => value.EndsWithAny((IEnumerable<string>)suffixes, comparison);
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
 
-        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && suffixes.Any(_ => value.EndsWith(_, comparison));
+            for (var index = 0; index < suffixes.Length; index++)
+            {
+                if (value.EndsWith(suffixes[index], comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison)
+        {
+            if (suffixes is string[] array)
+            {
+                return value.EndsWithAny(array, comparison);
+            }
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            foreach (var suffix in suffixes)
+            {
+                if (value.EndsWith(suffix, comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes, StringComparison comparison)
         {
@@ -285,7 +369,46 @@ namespace System
 
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EqualsAny(this string value, IEnumerable<string> phrases, StringComparison comparison) => string.IsNullOrEmpty(value) is false && phrases.Any(_ => value.Equals(_, comparison));
+        public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            for (var index = 0; index < phrases.Length; index++)
+            {
+                if (value.Equals(phrases[index], comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool EqualsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
+        {
+            if (phrases is string[] array)
+            {
+                return value.EqualsAny(array, comparison);
+            }
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            foreach (var phrase in phrases)
+            {
+                if (value.Equals(phrase, comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
         {
@@ -502,8 +625,33 @@ namespace System
             return new string(chars);
         }
 
+        public static int IndexOfAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
+        {
+            if (value.Length > 0)
+            {
+                for (var i = 0; i < phrases.Length; i++)
+                {
+                    var phrase = phrases[i];
+
+                    var index = value.IndexOf(phrase.AsSpan(), comparison);
+
+                    if (index > -1)
+                    {
+                        return index;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
         public static int IndexOfAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
         {
+            if (phrases is string[] array)
+            {
+                return value.IndexOfAny(array, comparison);
+            }
+
             if (value.Length > 0)
             {
                 foreach (var phrase in phrases)
@@ -520,7 +668,7 @@ namespace System
             return -1;
         }
 
-        public static int IndexOfAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
+        public static int IndexOfAny(this string value, string[] phrases, StringComparison comparison)
         {
             if (value is null)
             {
@@ -630,9 +778,46 @@ namespace System
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison) => value.StartsWithAny((IEnumerable<string>)prefixes, comparison);
+        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
 
-        public static bool StartsWithAny(this string value, IEnumerable<string> prefixes, StringComparison comparison) => string.IsNullOrEmpty(value) is false && prefixes.Any(_ => value.StartsWith(_, comparison));
+            for (var index = 0; index < prefixes.Length; index++)
+            {
+                if (value.StartsWith(prefixes[index], comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool StartsWithAny(this string value, IEnumerable<string> prefixes, StringComparison comparison)
+        {
+            if (prefixes is string[] array)
+            {
+                return value.StartsWithAny(array, comparison);
+            }
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            foreach (var prefix in prefixes)
+            {
+                if (value.StartsWith(prefix, comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes, StringComparison comparison)
         {
