@@ -5,15 +5,13 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture, Isolated]
+    [TestFixture]
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MeaninglessTextPhrases =
