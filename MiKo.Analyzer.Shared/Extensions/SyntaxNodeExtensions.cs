@@ -1188,7 +1188,9 @@ namespace MiKoSolutions.Analyzers
                 {
                     case IdentifierNameSyntax ins when Constants.Names.ObjectUnderTestNames.Contains(ins.GetName()):
                     case InvocationExpressionSyntax i when i.IsInvocationOnObjectUnderTest():
+                    {
                         return true;
+                    }
                 }
             }
 
