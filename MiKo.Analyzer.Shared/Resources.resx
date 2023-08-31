@@ -1588,6 +1588,15 @@ That allows an easy detection and use via IntelliSense.</value>
   <data name="MiKo_1408_Title" xml:space="preserve">
     <value>Extension methods should be placed in same namespace as the extended types</value>
   </data>
+  <data name="MiKo_1409_Description" xml:space="preserve">
+    <value>Namespaces should consist of complete words and should therefore not have leading or trailing underscore(s).</value>
+  </data>
+  <data name="MiKo_1409_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1409_Title" xml:space="preserve">
+    <value>Do not prefix or suffix namespaces with underscores</value>
+  </data>
   <data name="MiKo_2000_CodeFixTitle" xml:space="preserve">
     <value>Fix malformed XML</value>
   </data>

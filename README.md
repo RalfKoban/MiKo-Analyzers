@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 388 rules that are currently provided by the analyzer.
+The following tables list all the 389 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -150,6 +150,7 @@ The following tables list all the 388 rules that are currently provided by the a
 |MiKo_1406|Value converters should be placed in 'Converters' namespace|&#x2713;|\-|
 |MiKo_1407|Test namespaces should not contain 'Test'|&#x2713;|\-|
 |MiKo_1408|Extension methods should be placed in same namespace as the extended types|&#x2713;|\-|
+|MiKo_1409|Do not prefix or suffix namespaces with underscores|&#x2713;|\-|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|

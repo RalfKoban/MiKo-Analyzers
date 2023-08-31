@@ -4316,6 +4316,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Namespaces should consist of complete words and should therefore not have leading or trailing underscore(s)..
+        /// </summary>
+        public static string MiKo_1409_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1409_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1409_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1409_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix namespaces with underscores.
+        /// </summary>
+        public static string MiKo_1409_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1409_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         public static string MiKo_2000_CodeFixTitle {
