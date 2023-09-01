@@ -487,14 +487,28 @@ namespace System
 
             if (genericIndexStart > 0 && genericIndexEnd > 0)
             {
-                var namePart = fullName.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
-
                 var indexAfterGenericStart = genericIndexStart + 1;
-                var genericArguments = fullName.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart).ToString();
-                var genericNameParts = genericArguments.Split(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries).Select(_ => _.GetPartAfterLastDot());
-                var genericPart = string.Join(",", genericNameParts);
 
-                return string.Concat(namePart, "<", genericPart, ">");
+                var namePart = fullName.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
+                var genericParts = fullName.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart)
+                                           .SplitBy(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
+                var count = genericParts.Count();
+
+                if (count > 0)
+                {
+                    var i = 0;
+
+                    var genericNameParts = new string[count];
+
+                    foreach (ReadOnlySpan<char> part in genericParts)
+                    {
+                        genericNameParts[i++] = part.GetPartAfterLastDot().ToString();
+                    }
+
+                    var genericPart = string.Join(",", genericNameParts);
+
+                    return string.Concat(namePart, "<", genericPart, ">");
+                }
             }
 
             return fullName.GetPartAfterLastDot().ToString();
