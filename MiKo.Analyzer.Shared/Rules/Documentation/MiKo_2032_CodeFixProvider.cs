@@ -186,7 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (firstNode.IsPara())
             {
-                // get rid of first node (and any empty comment if the 1st node was the only one)
+                // clean up comment and remove first node (and any empty comment if the 1st node was the only one)
                 comment = comment.Without(firstNode).WithoutWhitespaceOnlyComment();
 
                 if (firstNode is XmlElementSyntax element)
@@ -223,7 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string OrIfPhrase = " or if ";
             const string OrIfReplacementPhrase = " orif ";
 
-            // remove boolean <see langword="..."/> and <c>...</c>
+            // clean up comment and remove boolean <see langword="..."/> and <c>...</c>
             var adjustedComment = RemoveBooleansTags(comment);
 
             var nodes = adjustedComment.WithoutStartText(DelimiterPhrases)
@@ -232,10 +232,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
                                        .WithoutText(Phrases)
                                        .WithoutFirstXmlNewLine()
-                                       .WithStartText(startingPhrase) // add starting text and ensure that first character of original text is now lower-case
+                                       .WithStartText(startingPhrase) // keep starting text and ensure that first character of original text is now lower-case
                                        .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
 
-            // remove last node if it is ending with a dot
+            // clean up comment and remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
                 var ending = sentenceEnding.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
@@ -247,7 +247,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            // remove middle parts before the <see langword=""false""/>
+            // clean up comment and remove middle parts before the <see langword=""false""/>
             if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
                 var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
@@ -258,7 +258,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     nodes = nodes.Remove(last);
 
-                    // remove left-over trailing sentence marker on the middle string
+                    // clean up comment and remove left-over trailing sentence marker on the middle string
                     if (nodes.LastOrDefault() is XmlTextSyntax newLast)
                     {
                         nodes = nodes.Replace(newLast, newLast.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers));
