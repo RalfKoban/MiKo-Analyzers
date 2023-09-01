@@ -20,6 +20,17 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_namespace_starting_with_underscore_and_followed_by_number() => No_issue_is_reported_for(@"
+namespace _123Test.Bla
+{
+  public static class TestMe
+  {
+      public static void DoSomething(this int i) { }
+  }
+}
+");
+
         [TestCase("_Abc")]
         [TestCase("_Abc_")]
         [TestCase("Abc_")]
