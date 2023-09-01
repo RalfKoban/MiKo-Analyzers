@@ -140,6 +140,11 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // ignore '// ReSharper' comments
                 }
 
+                if (line.Contains("///"))
+                {
+                    return false; // allow triplets such as '///'
+                }
+
                 return true;
             }
 

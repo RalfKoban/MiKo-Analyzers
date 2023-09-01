@@ -63,6 +63,18 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_correctly_commented_method_that_contains_a_triple_slash() => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment that is long enough and contains a '///'
+    }
+}
+");
+
         [Test, Combinatorial]
         public void An_issue_is_reported_for_commented_out_code_in_method_([Values("", " ")] string gap, [ValueSource(nameof(Comments))] string comment) => An_issue_is_reported_for(@"
 
