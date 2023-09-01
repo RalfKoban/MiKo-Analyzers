@@ -186,16 +186,14 @@ namespace System
 
         public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            for (var index = 0; index < phrases.Length; index++)
-            {
-                if (value.Contains(phrases[index], comparison))
+                for (var index = 0; index < phrases.Length; index++)
                 {
-                    return true;
+                    if (value.Contains(phrases[index], comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -216,16 +214,14 @@ namespace System
                 return value.ContainsAny(array, comparison);
             }
 
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            foreach (var phrase in phrases)
-            {
-                if (value.Contains(phrase, comparison))
+                foreach (var phrase in phrases)
                 {
-                    return true;
+                    if (value.Contains(phrase, comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -244,17 +240,17 @@ namespace System
             return index > -1;
         }
 
-        public static bool EndsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[value.Length - 1] == character;
+        public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
         public static bool EndsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[value.Length - 1] == character;
 
-        public static bool EndsWith(this ReadOnlySpan<char> value, string characters) => string.IsNullOrEmpty(characters) is false && value.EndsWith(characters.AsSpan());
+        public static bool EndsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.EndsWith(characters.AsSpan());
 
-        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => string.IsNullOrEmpty(characters) is false && value.EndsWith(characters.AsSpan(), comparison);
+        public static bool EndsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.EndsWith(characters.AsSpan(), comparison);
 
-        public static bool EndsWithAny(this string value, string suffixCharacters) => string.IsNullOrEmpty(value) is false && suffixCharacters.Contains(value[value.Length - 1]);
+        public static bool EndsWithAny(this string value, string suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
-        public static bool EndsWithAny(this string value, char[] suffixCharacters) => string.IsNullOrEmpty(value) is false && suffixCharacters.Contains(value[value.Length - 1]);
+        public static bool EndsWithAny(this string value, char[] suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
@@ -298,16 +294,14 @@ namespace System
 
         public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            for (var index = 0; index < suffixes.Length; index++)
-            {
-                if (value.EndsWith(suffixes[index], comparison))
+                for (var index = 0; index < suffixes.Length; index++)
                 {
-                    return true;
+                    if (value.EndsWith(suffixes[index], comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -321,16 +315,14 @@ namespace System
                 return value.EndsWithAny(array, comparison);
             }
 
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            foreach (var suffix in suffixes)
-            {
-                if (value.EndsWith(suffix, comparison))
+                foreach (var suffix in suffixes)
                 {
-                    return true;
+                    if (value.EndsWith(suffix, comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -357,7 +349,7 @@ namespace System
 
         public static bool EndsWithCommonNumber(this ReadOnlySpan<char> value) => value.EndsWithNumber() && value.EndsWithAny(Constants.Markers.OSBitNumbers) is false;
 
-        public static bool EndsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[value.Length - 1].IsNumber();
+        public static bool EndsWithNumber(this string value) => value.HasCharacters() && value[value.Length - 1].IsNumber();
 
         public static bool EndsWithNumber(this ReadOnlySpan<char> value) => value.Length > 0 && value[value.Length - 1].IsNumber();
 
@@ -371,16 +363,14 @@ namespace System
 
         public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            for (var index = 0; index < phrases.Length; index++)
-            {
-                if (value.Equals(phrases[index], comparison))
+                for (var index = 0; index < phrases.Length; index++)
                 {
-                    return true;
+                    if (value.Equals(phrases[index], comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -394,16 +384,14 @@ namespace System
                 return value.EqualsAny(array, comparison);
             }
 
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            foreach (var phrase in phrases)
-            {
-                if (value.Equals(phrase, comparison))
+                foreach (var phrase in phrases)
                 {
-                    return true;
+                    if (value.Equals(phrase, comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -525,12 +513,12 @@ namespace System
 
         public static string GetPartAfterLastDot(this string value)
         {
-            if (value is null)
+            if (value.HasCharacters())
             {
-                return null;
+                return GetPartAfterLastDot(value.AsSpan()).ToString();
             }
 
-            return GetPartAfterLastDot(value.AsSpan()).ToString();
+            return null;
         }
 
         public static ReadOnlySpan<char> GetPartAfterLastDot(this ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
@@ -556,6 +544,8 @@ namespace System
 
             return hasMarker;
         }
+
+        public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false;
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
@@ -678,7 +668,7 @@ namespace System
             return IndexOfAny(value.AsSpan(), phrases, comparison);
         }
 
-        public static bool IsAcronym(this string value) => string.IsNullOrEmpty(value) is false && value.None(_ => _.IsLowerCaseLetter());
+        public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
 
@@ -762,15 +752,15 @@ namespace System
 
         public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
-        public static bool StartsWith(this string value, char character) => string.IsNullOrEmpty(value) is false && value[0] == character;
+        public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
         public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
 
-        public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => string.IsNullOrEmpty(characters) is false && value.StartsWith(characters.AsSpan());
+        public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
-        public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => string.IsNullOrEmpty(characters) is false && value.StartsWith(characters.AsSpan(), comparison);
+        public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.StartsWith(characters.AsSpan(), comparison);
 
-        public static bool StartsWithAny(this string value, IEnumerable<char> characters) => string.IsNullOrEmpty(value) is false && characters.Contains(value[0]);
+        public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, IEnumerable<char> characters) => value.Length > 0 && characters.Contains(value[0]);
 
@@ -780,16 +770,14 @@ namespace System
 
         public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            for (var index = 0; index < prefixes.Length; index++)
-            {
-                if (value.StartsWith(prefixes[index], comparison))
+                for (var index = 0; index < prefixes.Length; index++)
                 {
-                    return true;
+                    if (value.StartsWith(prefixes[index], comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -803,16 +791,14 @@ namespace System
                 return value.StartsWithAny(array, comparison);
             }
 
-            if (string.IsNullOrEmpty(value))
+            if (value.HasCharacters())
             {
-                return false;
-            }
-
-            foreach (var prefix in prefixes)
-            {
-                if (value.StartsWith(prefix, comparison))
+                foreach (var prefix in prefixes)
                 {
-                    return true;
+                    if (value.StartsWith(prefix, comparison))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -836,7 +822,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWithNumber(this string value) => string.IsNullOrEmpty(value) is false && value[0].IsNumber();
+        public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
