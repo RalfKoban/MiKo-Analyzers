@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3108";
 
+        private const int MaximumNestingLevel = 5;
+
         public MiKo_3108_TestMethodsContainAssertsAnalyzer() : base(Id)
         {
         }
@@ -23,14 +25,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            if (ContainsAssertion(symbol, compilation) is false)
+            if (ContainsAssertion(symbol, compilation, 0) is false)
             {
                 yield return Issue(symbol);
             }
         }
 
-        private static bool ContainsAssertion(IMethodSymbol method, Compilation compilation)
+        private static bool ContainsAssertion(IMethodSymbol method, Compilation compilation, int nestingLevel)
         {
+            if (nestingLevel > MaximumNestingLevel)
+            {
+                // we did not find any and break up because call tree is too deep
+                return false;
+            }
+
+            // increase level
+            nestingLevel++;
+
             if (method.GetSyntax() is MethodDeclarationSyntax syntax)
             {
                 if (ContainsAssertionDirectly(syntax))
@@ -45,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (arrowClause != null)
                 {
-                    return arrowClause.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i);
+                    return arrowClause.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i, nestingLevel);
                 }
 
                 var body = syntax.Body;
@@ -54,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     foreach (var statement in body.DescendantNodes<ExpressionStatementSyntax>())
                     {
-                        if (statement.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i))
+                        if (statement.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i, nestingLevel))
                         {
                             return true;
                         }
@@ -69,7 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return true;
         }
 
-        private static bool ContainsAssertion(ITypeSymbol type, Compilation compilation, InvocationExpressionSyntax invocation)
+        private static bool ContainsAssertion(ITypeSymbol type, Compilation compilation, InvocationExpressionSyntax invocation, int nestingLevel)
         {
             var name = invocation.GetName();
 
@@ -82,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (allMethods.Contains(invokedMethod, SymbolEqualityComparer.Default))
                     {
                         // search for the method
-                        return ContainsAssertion(invokedMethod, compilation);
+                        return ContainsAssertion(invokedMethod, compilation, nestingLevel);
                     }
 
                     // we might have a method that has been constructed from another method, so inspect that one
@@ -91,7 +102,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (allMethods.Contains(constructed, SymbolEqualityComparer.Default))
                     {
                         // search for the method
-                        return ContainsAssertion(constructed, compilation);
+                        return ContainsAssertion(constructed, compilation, nestingLevel);
                     }
                 }
             }
