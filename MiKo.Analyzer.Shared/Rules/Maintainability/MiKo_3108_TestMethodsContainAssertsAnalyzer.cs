@@ -21,14 +21,86 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
 
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => ContainsAssertion(symbol)
-                                                                                                             ? Enumerable.Empty<Diagnostic>()
-                                                                                                             : new[] { Issue(symbol) };
-
-        private static bool ContainsAssertion(IMethodSymbol symbol)
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            var syntax = symbol.GetSyntax();
+            if (ContainsAssertion(symbol, compilation) is false)
+            {
+                yield return Issue(symbol);
+            }
+        }
 
+        private static bool ContainsAssertion(IMethodSymbol method, Compilation compilation)
+        {
+            if (method.GetSyntax() is MethodDeclarationSyntax syntax)
+            {
+                if (ContainsAssertionDirectly(syntax))
+                {
+                    return true;
+                }
+
+                var type = method.ContainingType;
+
+                // maybe it is a nested call, so check for invocation expressions or expression statements
+                var arrowClause = syntax.ExpressionBody;
+
+                if (arrowClause != null)
+                {
+                    return arrowClause.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i);
+                }
+
+                var body = syntax.Body;
+
+                if (body != null)
+                {
+                    foreach (var statement in body.DescendantNodes<ExpressionStatementSyntax>())
+                    {
+                        if (statement.Expression is InvocationExpressionSyntax i && ContainsAssertion(type, compilation, i))
+                        {
+                            return true;
+                        }
+                    }
+
+                    // we did not find any assertion
+                    return false;
+                }
+            }
+
+            // no method, so ignore
+            return true;
+        }
+
+        private static bool ContainsAssertion(ITypeSymbol type, Compilation compilation, InvocationExpressionSyntax invocation)
+        {
+            var name = invocation.GetName();
+
+            var allMethods = type.GetMembersIncludingInherited<IMethodSymbol>(name).ToList();
+
+            if (allMethods.Count > 0)
+            {
+                if (invocation.GetSymbol(compilation) is IMethodSymbol invokedMethod)
+                {
+                    if (allMethods.Contains(invokedMethod, SymbolEqualityComparer.Default))
+                    {
+                        // search for the method
+                        return ContainsAssertion(invokedMethod, compilation);
+                    }
+
+                    // we might have a method that has been constructed from another method, so inspect that one
+                    var constructed = invokedMethod.ConstructedFrom;
+
+                    if (allMethods.Contains(constructed, SymbolEqualityComparer.Default))
+                    {
+                        // search for the method
+                        return ContainsAssertion(constructed, compilation);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ContainsAssertionDirectly(MethodDeclarationSyntax syntax)
+        {
             var nodes = syntax.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
 
             foreach (var node in nodes)

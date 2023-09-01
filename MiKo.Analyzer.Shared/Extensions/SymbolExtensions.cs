@@ -216,6 +216,22 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
 
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value, string name) where TSymbol : ISymbol
+        {
+            foreach (var type in value.IncludingAllBaseTypes())
+            {
+                var members = type.GetMembers(name);
+
+                if (members.Length > 0)
+                {
+                    foreach (var member in members.Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>())
+                    {
+                        yield return member;
+                    }
+                }
+            }
+        }
+
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
             var builder = new StringBuilder();

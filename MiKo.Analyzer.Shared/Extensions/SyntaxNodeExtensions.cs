@@ -546,7 +546,18 @@ namespace MiKoSolutions.Analyzers
         {
             var symbolInfo = GetSymbolInfo();
 
-            return symbolInfo.Symbol;
+            var symbol = symbolInfo.Symbol;
+
+            if (symbol is null)
+            {
+                if (symbolInfo.CandidateReason == CandidateReason.OverloadResolutionFailure)
+                {
+                    // we did not find the symbol, so we take the first one, assuming that this is the right one
+                    return symbolInfo.CandidateSymbols.FirstOrDefault();
+                }
+            }
+
+            return symbol;
 
             SymbolInfo GetSymbolInfo()
             {
