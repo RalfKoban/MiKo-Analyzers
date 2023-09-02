@@ -65,8 +65,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "Multiple":
                     return args; // do not adjust
 
-                case "That": return AssertThatFixer.FixThat(args);
-                default: return OldAssertFixer.Fix(args);
+                case "Less":
+                case "LessOrEqual":
+                case "Greater":
+                case "GreaterOrEqual":
+                    return OldAssertFixer.Fix(args, 0);
+
+                case "That":
+                    return AssertThatFixer.FixThat(args);
+
+                default:
+                    return OldAssertFixer.Fix(args, args.Arguments.Count - 1);
             }
         }
 
@@ -177,11 +186,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static class OldAssertFixer
         {
-            internal static ArgumentListSyntax Fix(ArgumentListSyntax args)
+            internal static ArgumentListSyntax Fix(ArgumentListSyntax args, int index)
             {
                 var arguments = args.Arguments;
 
-                var finalText = GetFinalText(arguments, arguments.Count - 1, out var suffix);
+                var finalText = GetFinalText(arguments, index, out var suffix);
                 finalText.Insert(0, "wrong"); // TODO RKN: Let's see if we have to distinguish based on the call itself
 
                 if (suffix.HasCharacters())

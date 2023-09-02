@@ -270,6 +270,10 @@ namespace Bla
 
         [TestCase("Assert.AreEqual(42, values.Length)", @"Assert.AreEqual(42, values.Length, ""wrong length"")")]
         [TestCase("Assert.AreEqual(42, _objectUnderTest)", @"Assert.AreEqual(42, _objectUnderTest, ""wrong object under test"")")]
+        [TestCase("Assert.Less(values.Length, 42)", @"Assert.Less(values.Length, 42, ""wrong length"")")]
+        [TestCase("Assert.LessOrEqual(values.Length, 42)", @"Assert.LessOrEqual(values.Length, 42, ""wrong length"")")]
+        [TestCase("Assert.Greater(values.Length, 42)", @"Assert.Greater(values.Length, 42, ""wrong length"")")]
+        [TestCase("Assert.GreaterOrEqual(values.Length, 42)", @"Assert.GreaterOrEqual(values.Length, 42, ""wrong length"")")]
         [TestCase("CollectionAssert.AreEqual(new[] { 42 }, values)", @"CollectionAssert.AreEqual(new[] { 42 }, values, ""wrong values"")")]
         [TestCase(@"StringAssert.AreEqual(""some text"", values.Length)", @"StringAssert.AreEqual(""some text"", values.Length, ""wrong length"")")]
         public void Code_gets_fixed_for_old_assertion_(string originalCode, string fixedCode)
