@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                       .Except("Contains") // special handling
                                                                                       .ToHashSet();
 
+        private static char[] Underscores = { '_' };
+
         public override string FixableDiagnosticId => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3109_CodeFixTitle;
@@ -31,14 +33,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var typeName = type.GetName();
 
-                if (typeName == "Assert")
+                switch (typeName)
                 {
-                    var args = original.ArgumentList;
-                    var fixedArgs = UpdatedSyntax(maes, args);
-
-                    if (fixedArgs != args)
+                    case "Assert":
+                    case "CollectionAssert":
+                    case "StringAssert":
                     {
-                        return original.ReplaceNode(args, fixedArgs);
+                        var args = original.ArgumentList;
+                        var fixedArgs = UpdatedSyntax(maes, args);
+
+                        if (fixedArgs != args)
+                        {
+                            return original.ReplaceNode(args, fixedArgs);
+                        }
+
+                        break;
                     }
                 }
             }
@@ -52,8 +61,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             switch (methodName)
             {
+                case "Fail":
+                case "Inconclusive":
+                case "Ignore":
+                case "Multiple":
+                    return args; // do not adjust
+
                 case "That": return AssertThatFixer.FixThat(args);
-                default: return args;
+                default: return OldAssertFixer.Fix(args);
             }
         }
 
@@ -83,14 +98,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static List<string> GetFinalText(SeparatedSyntaxList<ArgumentSyntax> arguments, out string suffix)
+        private static List<string> GetFinalText(SeparatedSyntaxList<ArgumentSyntax> arguments, int index, out string suffix)
         {
             var foundSuffix = string.Empty;
 
-            var text = GetText(arguments[0].Expression);
+            var text = GetText(arguments[index].Expression);
             var finalText = text.AsSpan()
                                 .Words()
-                                .Select(_ => _.ToLowerCaseAt(0))
+                                .Select(_ => _.Trim(Underscores).ToLowerCaseAt(0))
                                 .Select(_ =>
                                             {
                                                 switch (_)
@@ -137,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = args.Arguments;
 
-                var finalText = GetFinalText(arguments, out var suffix);
+                var finalText = GetFinalText(arguments, 0, out var suffix);
                 var firstWord = GetStartingWord(arguments);
 
                 finalText.Insert(0, firstWord);
@@ -159,6 +174,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
 
                 return "wrong";
+            }
+        }
+
+        private static class OldAssertFixer
+        {
+            internal static ArgumentListSyntax Fix(ArgumentListSyntax args)
+            {
+                var arguments = args.Arguments;
+
+                var finalText = GetFinalText(arguments, arguments.Count - 1, out var suffix);
+                finalText.Insert(0, "wrong"); // TODO RKN: Let's see if we have to distinguish based on the call itself
+
+                if (suffix.HasCharacters())
+                {
+                    finalText.Add(suffix);
+                }
+
+                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
             }
         }
     }
