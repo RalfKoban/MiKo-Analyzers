@@ -74,12 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = new StringBuilder(originalText);
-
-                        foreach (var pair in replacementMap)
-                        {
-                            replacedText.ReplaceWithCheck(pair.Key, pair.Value);
-                        }
+                        var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap);
 
                         var newToken = token.WithText(replacedText);
 

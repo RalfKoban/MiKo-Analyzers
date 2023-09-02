@@ -1155,9 +1155,19 @@ namespace MiKoSolutions.Analyzers
             if (value is IMethodSymbol method)
             {
                 // this is an extension method !
-                if (method.IsExtensionMethod && method.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                if (method.IsExtensionMethod)
                 {
-                    return true;
+                    var ns = method.ContainingNamespace;
+
+                    if (ns.Name == "Linq" && ns.ContainingNamespace.Name == "System")
+                    {
+                        return true;
+                    }
+
+                    if (ns.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
                 }
             }
 

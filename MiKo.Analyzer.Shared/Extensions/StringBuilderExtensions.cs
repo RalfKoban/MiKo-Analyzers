@@ -5,11 +5,19 @@ namespace System.Text
 {
     public static class StringBuilderExtensions
     {
-        public static StringBuilder ReplaceAll(this StringBuilder value, IEnumerable<string> texts, string replacement)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
         {
-            foreach (var text in texts)
+            for (var index = 0; index < texts.Length; index++)
             {
-                value.ReplaceWithCheck(text, replacement);
+                var text = texts[index];
+
+                if (text.Length > value.Length)
+                {
+                    // cannot be part in the replacement as value is too big
+                    continue;
+                }
+
+                value.Replace(text, replacement);
             }
 
             return value;

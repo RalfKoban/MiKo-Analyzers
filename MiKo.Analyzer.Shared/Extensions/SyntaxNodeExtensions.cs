@@ -2479,7 +2479,14 @@ namespace MiKoSolutions.Analyzers
             {
                 var info = semanticModel.GetSymbolInfo(node);
 
-                return info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+                if (info.CandidateReason == CandidateReason.None)
+                {
+                    return info.Symbol.IsLinqExtensionMethod();
+                }
+                else
+                {
+                    return info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+                }
             }
 
             return false;
