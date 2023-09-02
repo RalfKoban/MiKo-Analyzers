@@ -250,7 +250,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyGet() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyGet_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -275,7 +275,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifySet() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifySet_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -300,7 +300,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyAll() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyAll_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -315,6 +315,30 @@ namespace Bla
             var mock = new Mock<IDisposable>();
 
             mock.VerifyAll();
+        }
+    }
+}");
+
+        [TestCase("Received()")]
+        [TestCase("Received(42)")]
+        [TestCase("ReceivedWithAnyArgs()")]
+        [TestCase("DidNotReceive()")]
+        [TestCase("DidNotReceiveWithAnyArgs()")]
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_NSubstitute_call(string call) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+using NSubstitute;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock = Substitute.For<IDisposable>();
+
+            mock." + call + @".Dispose();
         }
     }
 }");
@@ -474,6 +498,24 @@ namespace Bla
             mock2.Setup(_ => _.Dispose()).Verifiable(""test message"");
 
             mock1.Verify();
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_invokes_no_NSubstitute_Received_or_DidNotReceive_call() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+using NSubstitute;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock = Substitute.For<IDisposable>();
         }
     }
 }");

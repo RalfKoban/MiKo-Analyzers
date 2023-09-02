@@ -116,10 +116,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var node in nodes)
             {
+                var argumentsCount = node.Parent is InvocationExpressionSyntax i
+                                     ? i.ArgumentList.Arguments.Count
+                                     : -1;
+
                 switch (node.GetName())
                 {
                     // we assume that this is an fluent assertion
-                    case "Should" when node.Parent is InvocationExpressionSyntax i && i.ArgumentList.Arguments.Count == 0:
+                    case "Should" when argumentsCount == 0:
                     case "ShouldNotRaise":
                     case "ShouldRaise":
                     case "ShouldRaisePropertyChangeFor":
@@ -129,15 +133,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // we assume that this is a Moq call
-                    case "Verify" when node.Parent is InvocationExpressionSyntax i:
+                    case "VerifyGet" when argumentsCount > 0:
+                    case "VerifySet" when argumentsCount > 0:
+                    case "VerifyAll" when argumentsCount == 0:
+                    case "Verify" when argumentsCount > 0:
                     {
-                        var argumentsCount = i.ArgumentList.Arguments.Count;
+                        return true;
+                    }
 
-                        if (argumentsCount > 0)
-                        {
-                            return true;
-                        }
-
+                    case "Verify" when argumentsCount == 0:
+                    {
                         if (node.Expression is IdentifierNameSyntax ins)
                         {
                             var mockName = ins.GetName();
@@ -148,12 +153,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                         .Any(_ => _.Expression is IdentifierNameSyntax e && e.GetName() == mockName);
                         }
 
-                        return false;
+                        // seems like another call, so investigate further
+                        continue;
                     }
 
-                    case "VerifyGet" when node.Parent is InvocationExpressionSyntax i1 && i1.ArgumentList.Arguments.Count > 0:
-                    case "VerifySet" when node.Parent is InvocationExpressionSyntax i2 && i2.ArgumentList.Arguments.Count > 0:
-                    case "VerifyAll" when node.Parent is InvocationExpressionSyntax i3 && i3.ArgumentList.Arguments.Count == 0:
+                    // we assume that this is a NSubstitute call
+                    case "Received" when argumentsCount == 0 || argumentsCount == 1:
+                    case "ReceivedWithAnyArgs" when argumentsCount == 0:
+                    case "DidNotReceive" when argumentsCount == 0:
+                    case "DidNotReceiveWithAnyArgs" when argumentsCount == 0:
                     {
                         return true;
                     }
