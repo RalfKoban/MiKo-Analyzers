@@ -35,9 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (Regex.IsMatch(symbolName, PascalCasingRegex))
             {
-                if (symbolName.Contains("_"))
+                if (symbolName.Contains(Constants.Underscore))
                 {
-                    var underlinesNr = symbolName.Count(_ => _ is '_');
+                    var underlinesNr = symbolName.Count(_ => _ is Constants.Underscore);
                     var upperCasesNr = symbolName.Count(_ => _.IsUpperCase());
 
                     var diff = underlinesNr - upperCasesNr;

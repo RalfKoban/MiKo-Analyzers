@@ -835,6 +835,9 @@ namespace System
         public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string SurroundedWith(this string value, char surrounding) => string.Concat(surrounding, value, surrounding);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -996,6 +999,9 @@ namespace System
 
             return string.Intern(new string(characters));
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string Without(this string value, char character) => value.Without(character.ToString());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);

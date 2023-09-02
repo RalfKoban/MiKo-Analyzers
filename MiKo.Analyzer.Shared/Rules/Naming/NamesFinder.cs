@@ -92,7 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var c = characters[index];
 
-                if (c == '_')
+                if (c == Constants.Underscore)
                 {
                     // keep the existing underline
                     continue;
@@ -133,14 +133,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         nextC = c;
                     }
 
-                    if (characters[index - 1] == '_')
+                    if (characters[index - 1] == Constants.Underscore)
                     {
                         characters[index] = nextC;
                     }
                     else
                     {
                         // only add an underline if we not already have one
-                        characters[index] = '_';
+                        characters[index] = Constants.Underscore;
                         index++;
                         characters.Insert(index, nextC);
                     }
@@ -150,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     if (multipleUpperCases && characters[index - 1].IsUpperCase())
                     {
                         // we are behind multiple upper cases in a line, so add an underline
-                        characters[index++] = '_';
+                        characters[index++] = Constants.Underscore;
                         characters.Insert(index, c);
                     }
 

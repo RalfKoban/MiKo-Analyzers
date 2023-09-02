@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                       .Except("Contains") // special handling
                                                                                       .ToHashSet();
 
-        private static char[] Underscores = { '_' };
-
         public override string FixableDiagnosticId => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3109_CodeFixTitle;
@@ -105,7 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var text = GetText(arguments[index].Expression);
             var finalText = text.AsSpan()
                                 .Words()
-                                .Select(_ => _.Trim(Underscores).ToLowerCaseAt(0))
+                                .Select(_ => _.Trim(Constants.Underscores).ToLowerCaseAt(0))
                                 .Select(_ =>
                                             {
                                                 switch (_)

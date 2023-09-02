@@ -26,6 +26,8 @@ namespace MiKoSolutions.Analyzers
 
         internal const string EnvironmentNewLine = "\r\n";
 
+        internal const char Underscore = '_';
+
         internal static readonly char[] SentenceMarkers = ".?!;:".ToCharArray();
         internal static readonly char[] SentenceClauseMarkers = ",".ToCharArray();
         internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
@@ -34,6 +36,8 @@ namespace MiKoSolutions.Analyzers
         internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
+
+        internal static readonly char[] Underscores = { Underscore };
 
         internal static class ILog
         {

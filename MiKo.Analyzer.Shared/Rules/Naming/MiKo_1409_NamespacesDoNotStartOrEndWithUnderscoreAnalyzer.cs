@@ -12,15 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1409";
 
-        private const char Underscore = '_';
-
-        private static readonly char[] Underscores = { Underscore };
-
         public MiKo_1409_NamespacesDoNotStartOrEndWithUnderscoreAnalyzer() : base(Id)
         {
         }
 
-        internal static string FindBetterName(string name) => name.Trim(Underscores);
+        internal static string FindBetterName(string name) => name.Trim(Constants.Underscores);
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
@@ -28,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = namePart.ValueText;
 
-                if (HasIssue(name, Underscore))
+                if (HasIssue(name, Constants.Underscore))
                 {
                     yield return Issue(name, namePart, FindBetterName(name));
                 }

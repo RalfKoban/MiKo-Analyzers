@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var nameFits = methodName.StartsWith(Prefix, StringComparison.Ordinal)
                         && methodName.EndsWith(suffix, StringComparison.Ordinal)
-                        && methodName.Contains("_") is false;
+                        && methodName.Contains(Constants.Underscore) is false;
 
             if (nameFits is false)
             {
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                        : method.Name;
             }
 
-            return name.Without("_").ToUpperCaseAt(0);
+            return name.Without(Constants.Underscore).ToUpperCaseAt(0);
         }
 
         private static string FindProperNameInClass(IMethodSymbol method)
