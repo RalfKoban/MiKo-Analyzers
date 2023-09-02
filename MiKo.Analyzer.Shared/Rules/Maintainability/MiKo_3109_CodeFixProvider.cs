@@ -111,8 +111,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var text = GetText(arguments[index].Expression);
             var finalText = text.AsSpan()
-                                .Words()
-                                .Select(_ => _.Trim(Constants.Underscores).ToLowerCaseAt(0))
+                                .WordsAsSpan()
+                                .Select(_ => _.Text.Trim(Constants.Underscores).ToLowerCaseAt(0))
                                 .Select(_ =>
                                             {
                                                 switch (_)

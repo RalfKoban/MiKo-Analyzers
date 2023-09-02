@@ -1137,38 +1137,6 @@ namespace System
                    : value.Substring(0, length);
         }
 
-        public static IEnumerable<string> Words(this string text) => Words(text.AsSpan());
-
-        public static IEnumerable<string> Words(this ReadOnlySpan<char> text)
-        {
-            var words = new List<string>();
-
-            var startIndex = 0;
-
-            // start at index 1 to skip first upper case character (and avoid return of empty word)
-            var index = 1;
-
-            for (; index < text.Length; index++)
-            {
-                var c = text[index];
-
-                if (c.IsUpperCase())
-                {
-                    var word = text.Slice(startIndex, index - startIndex);
-
-                    startIndex = index;
-
-                    words.Add(word.ToString());
-                }
-            }
-
-            // return the remaining word
-            if (index == text.Length)
-            {
-                words.Add(text.Slice(startIndex).ToString());
-            }
-
-            return words;
-        }
+        public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> text) => new WordsReadOnlySpanEnumerator(text);
     }
 }

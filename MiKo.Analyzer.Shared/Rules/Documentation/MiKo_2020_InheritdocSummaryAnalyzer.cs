@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -66,10 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             else
                             {
                                 // inspect first and last word
-                                var words = text.Words();
+                                var words = text.WordsAsSpan();
 
-                                if (words.First().StartsWithAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase)
-                                    || words.Last().ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
+                                if (words.First().Text.StartsWithAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase)
+                                 || words.Last().Text.ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
                                 {
                                     yield return Issue(xmlTag);
                                 }

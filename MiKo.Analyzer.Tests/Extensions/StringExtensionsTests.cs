@@ -125,6 +125,6 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void Words() => Assert.That("GetHashCode".Words(), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
+        public static void WordsAsSpan() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
     }
 }
