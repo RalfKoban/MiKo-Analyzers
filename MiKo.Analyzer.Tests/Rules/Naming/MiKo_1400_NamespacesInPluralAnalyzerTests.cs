@@ -113,7 +113,7 @@ namespace Abc." + ns + @"
 ");
 
         [Test]
-        public void An_issue_is_reported_for_singular_namespace_([ValueSource(nameof(SingularNamespaceNames))] string ns) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_top_level_singular_namespace_([ValueSource(nameof(SingularNamespaceNames))] string ns) => No_issue_is_reported_for(@"
 namespace " + ns + @"
 {
 }

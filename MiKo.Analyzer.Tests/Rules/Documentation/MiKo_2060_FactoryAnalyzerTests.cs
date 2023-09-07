@@ -180,7 +180,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_inccorrectly_documented_factory_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_factory_class() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

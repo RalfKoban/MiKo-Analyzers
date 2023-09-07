@@ -4712,4 +4712,17 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
   <data name="MiKo_6046_Title" xml:space="preserve">
     <value>Calculations using operators such as '+' or '%' should be placed on same line(s)</value>
   </data>
+  <data name="MiKo_6047_CodeFixTitle" xml:space="preserve">
+    <value>Place open brace directly below switch</value>
+  </data>
+  <data name="MiKo_6047_Description" xml:space="preserve">
+    <value>Switch expressions are very similar to switch statements.
+Hence, the open brace of the expression should be positioned directly below the corresponding switch keyword.</value>
+  </data>
+  <data name="MiKo_6047_MessageFormat" xml:space="preserve">
+    <value>Place open brace directly below switch</value>
+  </data>
+  <data name="MiKo_6047_Title" xml:space="preserve">
+    <value>Braces of switch expressions should be placed directly below the corresponding switch keyword</value>
+  </data>
 </root>

@@ -38,6 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 yield break;
             }
 
+            if (symbol.Name == "<Program>$") // TODO RKN: What about "$Program" ?
+            {
+                // nothing to report as we cannot use it anyway (such as the 'Program' class in the new C# global statement style)
+                yield break;
+            }
+
             if (symbol.DeclaredAccessibility == Accessibility.Private)
             {
                 // find other symbols that inherit from this one
