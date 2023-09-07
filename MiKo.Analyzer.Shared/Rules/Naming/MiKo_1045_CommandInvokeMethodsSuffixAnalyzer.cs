@@ -16,11 +16,70 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal const string Suffix = "Command";
 
+        private const string IsPrefix = "Is";
+        private static readonly string[] HasArePrefix = { "Has", "Are" };
+
         public MiKo_1045_CommandInvokeMethodsSuffixAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => symbol.Name.WithoutSuffix(Suffix);
+        internal static string FindBetterName(ISymbol symbol)
+        {
+            // remove any starting 'Is' / 'Has' / 'Are'
+            var betterName = WithoutIsHasArePrefix(symbol.Name.AsSpan().WithoutSuffix(Suffix));
+
+            if (symbol is IMethodSymbol method)
+            {
+                if (method.ReturnType.IsBoolean())
+                {
+                    if (StartsWithCan(betterName))
+                    {
+                        // already starts correctly
+                        return betterName.ToString();
+                    }
+
+                    return "Can" + betterName.ToString();
+                }
+
+                // remove 'Can' at the beginning as the name already fits
+                if (StartsWithCan(betterName))
+                {
+                    return betterName.Slice(3).ToString();
+                }
+            }
+
+            return betterName.ToString();
+
+            bool StartsWithCan(ReadOnlySpan<char> name) => name.Length > 4 && name[3].IsUpperCaseLetter() && name.StartsWith("Can", StringComparison.Ordinal);
+
+            ReadOnlySpan<char> WithoutIsHasArePrefix(ReadOnlySpan<char> name)
+            {
+                var nameLength = name.Length;
+
+                switch (nameLength)
+                {
+                    case 0:
+                    case 1:
+                    case 2:
+                        return name;
+
+                    default:
+                    {
+                        if (name[IsPrefix.Length].IsUpperCaseLetter() && name.Slice(0, IsPrefix.Length).Equals(IsPrefix, StringComparison.Ordinal))
+                        {
+                            return name.Slice(IsPrefix.Length);
+                        }
+
+                        if (nameLength > 3 && name[3].IsUpperCaseLetter() && name.Slice(0, 3).EqualsAny(HasArePrefix))
+                        {
+                            return name.Slice(3);
+                        }
+
+                        return name;
+                    }
+                }
+            }
+        }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
 
@@ -70,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (symbol != null)
                 {
-                    return Issue(symbol, argumentName.WithoutSuffix(Suffix));
+                    return Issue(symbol, FindBetterName(symbol));
                 }
             }
 
