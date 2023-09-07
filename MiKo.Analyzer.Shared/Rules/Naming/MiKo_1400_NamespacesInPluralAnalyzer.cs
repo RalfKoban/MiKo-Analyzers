@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (name == "Model")
             {
-                return Pluralizer.GetPluralName("Entity");
+                return Pluralizer.GetPluralName(Constants.Entity);
             }
 
             // maybe it's a number, so we have to check for that
@@ -80,14 +80,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
-            var namePart = names.Last();
+            var namespaceNames = names.ToList();
 
-            var name = namePart.ValueText;
-            var betterName = FindBetterName(name);
-
-            if (betterName != null && name != betterName)
+            if (namespaceNames.Count > 1)
             {
-                yield return Issue(name, namePart, betterName);
+                var namePart = namespaceNames.Last();
+
+                var name = namePart.ValueText;
+                var betterName = FindBetterName(name);
+
+                if (betterName != null && name != betterName)
+                {
+                    yield return Issue(name, namePart, betterName);
+                }
             }
         }
     }
