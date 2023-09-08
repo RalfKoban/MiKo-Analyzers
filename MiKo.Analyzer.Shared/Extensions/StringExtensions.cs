@@ -684,8 +684,6 @@ namespace System
 
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
-        public static bool IsEntityMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Entities) && symbolName.EndsWithAny(Constants.Markers.ViewModels) is false;
-
         public static bool IsHyperlink(this string text)
         {
             if (text.IsNullOrWhiteSpace())
@@ -1113,6 +1111,31 @@ namespace System
             }
 
             return value;
+        }
+
+        public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
+        {
+            return RemoveSuffixes(RemoveSuffixes(value)); // do it twice to remove consecutive suffixes
+
+            ReadOnlySpan<char> RemoveSuffixes(ReadOnlySpan<char> slice)
+            {
+                foreach (var suffix in suffixes)
+                {
+                    if (suffix != null && slice.EndsWith(suffix))
+                    {
+                        var length = slice.Length - suffix.Length;
+
+                        if (length <= 0)
+                        {
+                            return ReadOnlySpan<char>.Empty;
+                        }
+
+                        slice = slice.Slice(0, length);
+                    }
+                }
+
+                return slice;
+            }
         }
 
         public static string WithoutSuffix(this string value, string suffix)
