@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers
                 case 5: return "T1,T2,T3,T4,T5";
                 case 6: return "T1,T2,T3,T4,T5,T6";
                 case 7: return "T1,T2,T3,T4,T5,T6,T7";
-                default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
+                default: return Enumerable.Range(1, count).Select(_ => string.Concat("T", _.ToString())).ConcatenatedWith(",");
             }
         }
 
@@ -417,7 +417,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
 
-        internal static IReadOnlyList<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
+        internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
@@ -425,7 +425,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>().ToList();
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
@@ -589,7 +589,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
+        internal static IReadOnlyCollection<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
             var symbol = value;
 
@@ -613,7 +613,7 @@ namespace MiKoSolutions.Analyzers
             return baseTypes;
         }
 
-        internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
+        internal static IReadOnlyCollection<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
         {
             var types = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
 
@@ -1155,9 +1155,19 @@ namespace MiKoSolutions.Analyzers
             if (value is IMethodSymbol method)
             {
                 // this is an extension method !
-                if (method.IsExtensionMethod && method.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                if (method.IsExtensionMethod)
                 {
-                    return true;
+                    var ns = method.ContainingNamespace;
+
+                    if (ns.Name == "Linq" && ns.ContainingNamespace.Name == "System")
+                    {
+                        return true;
+                    }
+
+                    if (ns.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -1262,7 +1272,9 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Determines whether a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
-        /// <param name="value">The symbol to inspect.</param>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IFieldSymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>
@@ -1292,7 +1304,9 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Determines whether a <see cref="IPropertySymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
-        /// <param name="value">The symbol to inspect.</param>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>

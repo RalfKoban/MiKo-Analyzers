@@ -14,6 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CommentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LocationExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ReadOnlySpanEnumeratorEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SplitReadOnlySpanEnumerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringSplitExtensions.cs" />
@@ -22,6 +24,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxNodeOrTokenExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTokenExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SyntaxTriviaExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\WordsReadOnlySpanEnumeratorSelectDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\FirstWordHandling.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Pluralizer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Linguistics\Verbalizer.cs" />

@@ -108,36 +108,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return token.ValueText;
         }
 
+        private static bool DescendIntoChildren(SyntaxNode descendant)
+        {
+            switch (descendant)
+            {
+                case DocumentationCommentTriviaSyntax _:
+                    return true;
+
+                case XmlTextSyntax _:
+                    return false;
+
+                case XmlElementSyntax e:
+                {
+                    switch (e.GetName())
+                    {
+                        case "b":
+                        case Constants.XmlTag.C:
+                        case Constants.XmlTag.Code:
+                            return false; // do not dig deeper
+
+                        default:
+                            return true;
+                    }
+                }
+
+                default:
+                    return false;
+            }
+        }
+
         private IEnumerable<Diagnostic> AnalyzeComment(string symbolName, DocumentationCommentTriviaSyntax comment)
         {
-            var descendantNodes = comment.DescendantNodes(descendant =>
-                                                                       {
-                                                                           switch (descendant)
-                                                                           {
-                                                                               case DocumentationCommentTriviaSyntax _:
-                                                                                   return true;
-
-                                                                               case XmlTextSyntax _:
-                                                                                   return false;
-
-                                                                               case XmlElementSyntax e:
-                                                                               {
-                                                                                   switch (e.GetName())
-                                                                                   {
-                                                                                       case "b":
-                                                                                       case Constants.XmlTag.C:
-                                                                                       case Constants.XmlTag.Code:
-                                                                                           return false; // do not dig deeper
-
-                                                                                       default:
-                                                                                           return true;
-                                                                                   }
-                                                                               }
-
-                                                                               default:
-                                                                                   return false;
-                                                                           }
-                                                                       });
+            var descendantNodes = comment.DescendantNodes(DescendIntoChildren);
 
             foreach (var descendant in descendantNodes)
             {
@@ -188,9 +190,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeTextTokens(string symbolName, XmlTextSyntax textNode)
         {
-            var aldreadyFoundLocations = new HashSet<Location>();
+            var alreadyFoundLocations = new HashSet<Location>();
 
-            foreach (var textToken in textNode.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var textToken in textNode.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken))
             {
                 var text = textToken.ValueText;
 
@@ -218,7 +221,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     foreach (var location in GetAllLocations(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset))
                     {
-                        if (aldreadyFoundLocations.Add(location))
+                        if (alreadyFoundLocations.Add(location))
                         {
                             yield return Issue(symbolName, location, wrongText, proposal);
                         }
@@ -236,7 +239,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var location = GetFirstLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
 
-                    if (location != null && aldreadyFoundLocations.Add(location))
+                    if (location != null && alreadyFoundLocations.Add(location))
                     {
                         yield return Issue(symbolName, location, wrongText, proposal);
                     }
@@ -253,7 +256,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var location = GetLastLocation(textToken, wrongText, StringComparison.OrdinalIgnoreCase, StartOffset, EndOffset);
 
-                    if (location != null && aldreadyFoundLocations.Add(location))
+                    if (location != null && alreadyFoundLocations.Add(location))
                     {
                         yield return Issue(symbolName, location, wrongText, proposal);
                     }

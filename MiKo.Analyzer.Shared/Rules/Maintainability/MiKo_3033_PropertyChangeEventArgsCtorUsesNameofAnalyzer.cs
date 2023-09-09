@@ -89,9 +89,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // verify that nameof uses a property if the type
-            var propertySymbols = containingType.GetMembersIncludingInherited<IPropertySymbol>();
-
-            if (propertySymbols.Any(_ => _.Name == propertyName))
+            if (containingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => _.Name == propertyName))
             {
                 return false;
             }

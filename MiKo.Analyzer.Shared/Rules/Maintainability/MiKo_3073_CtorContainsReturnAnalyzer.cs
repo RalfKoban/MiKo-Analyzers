@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var methodName = symbol.Name;
 
             return symbol.GetSyntax()
-                         .DescendantNodes<ReturnStatementSyntax>(_ => _.Ancestors().OfType<ParenthesizedLambdaExpressionSyntax>().None()) // filter callbacks inside constructors
+                         .DescendantNodes<ReturnStatementSyntax>(_ => _.Ancestors<ParenthesizedLambdaExpressionSyntax>().None()) // filter callbacks inside constructors
                          .Select(_ => Issue(methodName, _));
         }
     }

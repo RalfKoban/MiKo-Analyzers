@@ -833,7 +833,7 @@ namespace System
         public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWith(this string value, char surrounding) => string.Concat(surrounding, value, surrounding);
+        public static string SurroundedWith(this string value, char surrounding) => value?.SurroundedWith(surrounding.ToString());
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
@@ -929,6 +929,11 @@ namespace System
                 return string.Intern(value.ToString());
             }
 
+            if (value[index].IsLowerCase())
+            {
+                return string.Intern(value.ToString());
+            }
+
             var characters = value.ToArray();
             characters[index] = value[index].ToLowerCase();
 
@@ -992,6 +997,11 @@ namespace System
                 return string.Intern(value.ToString());
             }
 
+            if (value[index].IsUpperCase())
+            {
+                return string.Intern(value.ToString());
+            }
+
             var characters = value.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
@@ -1008,15 +1018,7 @@ namespace System
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
 
-        public static StringBuilder Without(this StringBuilder value, string[] phrases)
-        {
-            for (var index = 0; index < phrases.Length; index++)
-            {
-                value.Without(phrases[index]);
-            }
-
-            return value;
-        }
+        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty);
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -1160,38 +1162,6 @@ namespace System
                    : value.Substring(0, length);
         }
 
-        public static IEnumerable<string> Words(this string text) => Words(text.AsSpan());
-
-        public static IEnumerable<string> Words(this ReadOnlySpan<char> text)
-        {
-            var words = new List<string>();
-
-            var startIndex = 0;
-
-            // start at index 1 to skip first upper case character (and avoid return of empty word)
-            var index = 1;
-
-            for (; index < text.Length; index++)
-            {
-                var c = text[index];
-
-                if (c.IsUpperCase())
-                {
-                    var word = text.Slice(startIndex, index - startIndex);
-
-                    startIndex = index;
-
-                    words.Add(word.ToString());
-                }
-            }
-
-            // return the remaining word
-            if (index == text.Length)
-            {
-                words.Add(text.Slice(startIndex).ToString());
-            }
-
-            return words;
-        }
+        public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> text) => new WordsReadOnlySpanEnumerator(text);
     }
 }

@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes().OfType<T>();
 
-        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes<T>(_ => _.IsKind(kind));
+        internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).Cast<T>();
 
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().Where(predicate);
 
@@ -70,17 +70,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxNode FirstChild(this SyntaxNode value, Func<SyntaxNode, bool> predicate) => value.ChildNodes().FirstOrDefault(predicate);
 
-        internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.FirstChild<T>(_ => _.IsKind(kind));
+        internal static T FirstChild<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.ChildNodes().OfKind(kind).FirstOrDefault() as T;
 
         internal static T FirstChild<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault(predicate);
 
         internal static SyntaxToken FirstChildToken(this SyntaxNode value) => value.ChildTokens().FirstOrDefault();
 
-        internal static SyntaxToken FirstChildToken(this SyntaxNode value, SyntaxKind kind) => value.ChildTokens().First(_ => _.IsKind(kind));
+        internal static SyntaxToken FirstChildToken(this SyntaxNode value, SyntaxKind kind) => value.ChildTokens().OfKind(kind).First();
 
         internal static T FirstDescendant<T>(this SyntaxNode value) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault();
 
-        internal static T FirstDescendant<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.FirstDescendant<T>(_ => _.IsKind(kind));
+        internal static T FirstDescendant<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).FirstOrDefault() as T;
 
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
@@ -275,9 +275,9 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) => value?.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
+        internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax => value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
 
-        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) => value?.StartTag.Attributes.OfType<T>() ?? Enumerable.Empty<T>();
+        internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax => value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode => value.FirstAncestorOrSelf<T>();
 
@@ -410,7 +410,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var text = identifier.GetName();
 
-                    if (text == "nameof" && value.Ancestors().OfType<MemberAccessExpressionSyntax>().None())
+                    if (text == "nameof" && value.Ancestors<MemberAccessExpressionSyntax>().None())
                     {
                         // nameof
                         var arguments = value.ArgumentList.Arguments;
@@ -1119,7 +1119,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsExpression(this SyntaxNode value, SemanticModel semanticModel)
         {
-            foreach (var a in value.Ancestors().OfType<ArgumentSyntax>())
+            foreach (var a in value.Ancestors<ArgumentSyntax>())
             {
                 var convertedType = semanticModel.GetTypeInfo(a.Expression).ConvertedType;
                 var isExpression = convertedType?.InheritsFrom<Expression>() is true;
@@ -1133,7 +1133,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsGenerated(this TypeDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.GeneratedAttributeNames.Contains);
+        internal static bool IsGenerated(this TypeDeclarationSyntax value) => value.HasAttributeName(Constants.Names.GeneratedAttributeNames);
 
         internal static bool IsInsideIfStatementWithCallTo(this SyntaxNode value, string methodName)
         {
@@ -1476,17 +1476,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTestClass(this TypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
 
-        internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
+        internal static bool IsTestClass(this ClassDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestClassAttributeNames);
 
-        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestMethodAttributeNames.Contains);
+        internal static bool IsTestMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestMethodAttributeNames);
 
-        internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestOneTimeSetupAttributeNames.Contains);
+        internal static bool IsTestOneTimeSetUpMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestOneTimeSetupAttributeNames);
 
-        internal static bool IsTestOneTimeTearDownMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestOneTimeTearDownAttributeNames.Contains);
+        internal static bool IsTestOneTimeTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestOneTimeTearDownAttributeNames);
 
-        internal static bool IsTestSetUpMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestSetupAttributeNames.Contains);
+        internal static bool IsTestSetUpMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestSetupAttributeNames);
 
-        internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax value) => value.GetAttributeNames().Any(Constants.Names.TestTearDownAttributeNames.Contains);
+        internal static bool IsTestTearDownMethod(this MethodDeclarationSyntax value) => value.HasAttributeName(Constants.Names.TestTearDownAttributeNames);
 
         internal static bool IsTypeUnderTestCreationMethod(this MethodDeclarationSyntax value) => Constants.Names.TypeUnderTestMethodNames.Contains(value.GetName());
 
@@ -1499,6 +1499,102 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
 
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
+
+        internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this SeparatedSyntaxList<TSyntaxNode> source, SyntaxKind kind) where TSyntaxNode : SyntaxNode where TResult : TSyntaxNode
+        {
+            if (source.Count == 0)
+            {
+                return Array.Empty<TResult>();
+            }
+
+            var results = new List<TResult>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < source.Count; index++)
+            {
+                var item = source[index];
+
+                if (item.IsKind(kind))
+                {
+                    results.Add((TResult)item);
+                }
+            }
+
+            return results;
+        }
+
+        internal static IReadOnlyList<T> OfKind<T>(this IReadOnlyList<T> source, SyntaxKind kind) where T : SyntaxNode
+        {
+            if (source.Count == 0)
+            {
+                return Array.Empty<T>();
+            }
+
+            var results = new List<T>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < source.Count; index++)
+            {
+                var item = source[index];
+
+                if (item.IsKind(kind))
+                {
+                    results.Add(item);
+                }
+            }
+
+            return results;
+        }
+
+        internal static IEnumerable<T> OfKind<T>(this IEnumerable<T> source, SyntaxKind kind) where T : SyntaxNode
+        {
+            if (source is IReadOnlyList<T> list)
+            {
+                return list.OfKind(kind);
+            }
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            return OfKindLocal();
+
+            IEnumerable<T> OfKindLocal()
+            {
+                foreach (var item in source)
+                {
+                    if (item.IsKind(kind))
+                    {
+                        yield return item;
+                    }
+                }
+            }
+        }
+
+        internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlNodeSyntax> source) where TResult : XmlNodeSyntax => source.OfType<XmlNodeSyntax, TResult>();
+
+        internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
+
+        internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode where TResult : T
+        {
+            if (source.Count == 0)
+            {
+                return Array.Empty<TResult>();
+            }
+
+            var results = new List<TResult>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < source.Count; index++)
+            {
+                if (source[index] is TResult result)
+                {
+                    results.Add(result);
+                }
+            }
+
+            return results;
+        }
 
         internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, SyntaxNode node)
         {
@@ -2081,7 +2177,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlElementSyntax WithoutWhitespaceOnlyComment(this XmlElementSyntax value)
         {
-            var texts = value.Content.OfType<XmlTextSyntax>().ToList();
+            var texts = value.Content.OfType<XmlTextSyntax>();
 
             if (texts.Count > 0)
             {
@@ -2311,7 +2407,7 @@ namespace MiKoSolutions.Analyzers
                        .FirstOrDefault();
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this TypeDeclarationSyntax value)
+        internal static bool HasAttributeName(this TypeDeclarationSyntax value, IEnumerable<string> names)
         {
             // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var attributeList in value.AttributeLists)
@@ -2321,29 +2417,36 @@ namespace MiKoSolutions.Analyzers
                 {
                     var name = attribute.GetName();
 
-                    if (string.IsNullOrWhiteSpace(name))
+                    if (names.Contains(name))
                     {
-                        continue;
+                        return true;
                     }
-
-                    yield return name;
                 }
             }
+
+            return false;
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this MethodDeclarationSyntax value)
+        internal static bool HasAttributeName(this MethodDeclarationSyntax value, IEnumerable<string> names)
         {
             // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var attributeList in value.AttributeLists)
             {
                 foreach (var attribute in attributeList.Attributes)
                 {
-                    yield return attribute.GetName();
+                    var name = attribute.GetName();
+
+                    if (names.Contains(name))
+                    {
+                        return true;
+                    }
                 }
             }
+
+            return false;
         }
 
-        private static IEnumerable<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
+        private static SeparatedSyntaxList<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
             var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();
 
@@ -2356,28 +2459,35 @@ namespace MiKoSolutions.Analyzers
 
             if (indexer != null)
             {
-                var parameters = indexer.ParameterList.Parameters.ToList();
+                var parameters = indexer.ParameterList.Parameters;
 
                 // 'value' is a special parameter that is not part of the parameter list
-                parameters.Insert(0, Parameter(indexer.Type));
-
-                return parameters;
+                return parameters.Insert(0, Parameter(indexer.Type));
             }
 
             var property = syntax.GetEnclosing<PropertyDeclarationSyntax>();
 
-            if (property != null)
-            {
-                // 'value' is a special parameter that is not part of the parameter list
-                return new[] { Parameter(property.Type) };
-            }
+            var result = SyntaxFactory.SeparatedList<ParameterSyntax>();
 
-            return Enumerable.Empty<ParameterSyntax>();
+            return property is null
+                   ? result
+                   : result.Add(Parameter(property.Type)); // 'value' is a special parameter that is not part of the parameter list
 
             ParameterSyntax Parameter(TypeSyntax type) => SyntaxFactory.Parameter(default, default, type, SyntaxFactory.Identifier(Constants.Names.DefaultPropertyParameterName), default);
         }
 
-        private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax) => syntax.OfType<XmlCrefAttributeSyntax>().FirstOrDefault();
+        private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax)
+        {
+            foreach (var s in syntax)
+            {
+                if (s is XmlCrefAttributeSyntax a)
+                {
+                    return a;
+                }
+            }
+
+            return default;
+        }
 
         private static bool Is(this SyntaxNode value, string tagName, params string[] contents)
         {
@@ -2479,7 +2589,14 @@ namespace MiKoSolutions.Analyzers
             {
                 var info = semanticModel.GetSymbolInfo(node);
 
-                return info.Symbol.IsLinqExtensionMethod() || info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+                if (info.CandidateReason == CandidateReason.None)
+                {
+                    return info.Symbol.IsLinqExtensionMethod();
+                }
+                else
+                {
+                    return info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+                }
             }
 
             return false;

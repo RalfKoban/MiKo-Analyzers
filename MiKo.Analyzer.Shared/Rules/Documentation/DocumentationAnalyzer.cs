@@ -505,7 +505,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlTextSyntax text:
                     {
                         // report the location of the first word(s) via the corresponding text token
-                        foreach (var textToken in text.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
+                        foreach (var textToken in text.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken))
                         {
                             var valueText = textToken.ValueText;
 

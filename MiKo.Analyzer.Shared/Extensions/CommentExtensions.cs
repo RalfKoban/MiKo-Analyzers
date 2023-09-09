@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
+        private static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
+
         internal static string GetComment(this ISymbol value)
         {
             if (value is IParameterSymbol p)
@@ -148,7 +150,7 @@ namespace MiKoSolutions.Analyzers
 
             return new StringBuilder(value).WithoutParaTags()
                                            .Without(Constants.Markers.SymbolsAndLineBreaks)
-                                           .ReplaceAll(new[] { "    ", "   ", "  " }, " ")
+                                           .ReplaceAllWithCheck(MultiWhitespaceStrings, " ")
                                            .ToString()
                                            .Trim();
         }

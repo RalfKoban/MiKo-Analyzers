@@ -74,12 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (originalText.ContainsAny(terms))
                     {
-                        var replacedText = new StringBuilder(originalText);
-
-                        foreach (var pair in replacementMap)
-                        {
-                            replacedText.ReplaceWithCheck(pair.Key, pair.Value);
-                        }
+                        var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap);
 
                         var newToken = token.WithText(replacedText);
 
@@ -369,7 +364,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
 
-        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlNameAttributeSyntax>().First().Identifier.GetName();
+        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlAttributeSyntax, XmlNameAttributeSyntax>().First().Identifier.GetName();
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
