@@ -929,6 +929,11 @@ namespace System
                 return string.Intern(value.ToString());
             }
 
+            if (value[index].IsLowerCase())
+            {
+                return string.Intern(value.ToString());
+            }
+
             var characters = value.ToArray();
             characters[index] = value[index].ToLowerCase();
 
@@ -988,6 +993,11 @@ namespace System
         public static string ToUpperCaseAt(this ReadOnlySpan<char> value, int index)
         {
             if (index >= value.Length)
+            {
+                return string.Intern(value.ToString());
+            }
+
+            if (value[index].IsUpperCase())
             {
                 return string.Intern(value.ToString());
             }
