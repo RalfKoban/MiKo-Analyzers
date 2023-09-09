@@ -26,6 +26,8 @@ namespace MiKoSolutions.Analyzers
 
         internal const string EnvironmentNewLine = "\r\n";
 
+        internal const char Underscore = '_';
+
         internal static readonly char[] SentenceMarkers = ".?!;:".ToCharArray();
         internal static readonly char[] SentenceClauseMarkers = ",".ToCharArray();
         internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
@@ -34,6 +36,8 @@ namespace MiKoSolutions.Analyzers
         internal static readonly char[] WhiteSpaceCharacters = { ' ', '\t', '\r', '\n' };
 
         internal static readonly string[] ParaTags = { "<para>", "<para />", "<para/>", "</para>" };
+
+        internal static readonly char[] Underscores = { Underscore };
 
         internal static class ILog
         {
@@ -284,7 +288,20 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] MeaninglessTypeStartingPhrase = MeaninglessStartingPhrase.Concat(new[] { "Contains", "Contain", "Has" }).OrderBy(_ => _.Length).ToArray();
 
-            internal static readonly string[] MeaninglessPhrase = { "does implement", "implements", "that is called", "that is used", "used for", "used to", "which is called", "which is used", };
+            internal static readonly string[] MeaninglessPhrase =
+            {
+                "does implement",
+                "implements",
+                "that is called",
+                "that is capable",
+                "that is used",
+                "used for",
+                "used to",
+                "capable to",
+                "which is called",
+                "which is capable",
+                "which is used",
+            };
 
             internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).OrderBy(_ => _.Length).ToArray();
 

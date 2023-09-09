@@ -4316,6 +4316,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Namespaces should consist of complete words and should therefore not have leading or trailing underscore(s)..
+        /// </summary>
+        public static string MiKo_1409_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1409_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1409_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1409_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not prefix or suffix namespaces with underscores.
+        /// </summary>
+        public static string MiKo_1409_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1409_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fix malformed XML.
         /// </summary>
         public static string MiKo_2000_CodeFixTitle {
@@ -13409,6 +13436,43 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6046_Title {
             get {
                 return ResourceManager.GetString("MiKo_6046_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open brace directly below switch.
+        /// </summary>
+        public static string MiKo_6047_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6047_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch expressions are very similar to switch statements.
+        ///Hence, the open brace of the expression should be positioned directly below the corresponding switch keyword..
+        /// </summary>
+        public static string MiKo_6047_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6047_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place open brace directly below switch.
+        /// </summary>
+        public static string MiKo_6047_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6047_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Braces of switch expressions should be placed directly below the corresponding switch keyword.
+        /// </summary>
+        public static string MiKo_6047_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6047_Title", resourceCulture);
             }
         }
     }

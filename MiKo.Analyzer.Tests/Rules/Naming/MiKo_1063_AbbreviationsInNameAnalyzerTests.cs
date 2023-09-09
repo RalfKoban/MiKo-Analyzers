@@ -3,15 +3,13 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [TestFixture, Isolated]
+    [TestFixture]
     public sealed partial class MiKo_1063_AbbreviationsInNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BadPrefixes =

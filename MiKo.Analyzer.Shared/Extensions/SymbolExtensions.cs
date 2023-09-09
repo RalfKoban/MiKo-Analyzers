@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers
                 case 5: return "T1,T2,T3,T4,T5";
                 case 6: return "T1,T2,T3,T4,T5,T6";
                 case 7: return "T1,T2,T3,T4,T5,T6,T7";
-                default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
+                default: return Enumerable.Range(1, count).Select(_ => string.Concat("T", _.ToString())).ConcatenatedWith(",");
             }
         }
 
@@ -215,6 +215,22 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers().Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>();
 
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value, string name) where TSymbol : ISymbol
+        {
+            foreach (var type in value.IncludingAllBaseTypes())
+            {
+                var members = type.GetMembers(name);
+
+                if (members.Length > 0)
+                {
+                    foreach (var member in members.Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>())
+                    {
+                        yield return member;
+                    }
+                }
+            }
+        }
 
         internal static string GetMethodSignature(this IMethodSymbol value)
         {
@@ -325,29 +341,34 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetStartingLine();
 
-        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value)
+        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value) => value.GetSyntaxNodes<SyntaxNode>();
+
+        internal static IEnumerable<TSyntaxNode> GetSyntaxNodes<TSyntaxNode>(this ISymbol value) where TSyntaxNode : SyntaxNode
         {
-            foreach (var node in value.DeclaringSyntaxReferences.Select(_ => _.GetSyntax()))
+            foreach (var reference in value.DeclaringSyntaxReferences)
             {
-                var location = node.GetLocation();
-
-                var sourceTree = location.SourceTree;
-
-                // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
-                if (sourceTree is null)
+                if (reference.GetSyntax() is TSyntaxNode node)
                 {
-                    continue;
-                }
+                    var location = node.GetLocation();
 
-                var filePath = sourceTree.FilePath;
+                    var sourceTree = location.SourceTree;
 
-                // ignore non C# code (might be part of partial classes, e.g. for XAML)
-                if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
-                {
-                    // ignore generated code (might be part of partial classes)
-                    if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                    // "location.IsInSource" also checks SourceTree for null but ReSharper is not aware of it
+                    if (sourceTree is null)
                     {
-                        yield return node;
+                        continue;
+                    }
+
+                    var filePath = sourceTree.FilePath;
+
+                    // ignore non C# code (might be part of partial classes, e.g. for XAML)
+                    if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // ignore generated code (might be part of partial classes)
+                        if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                        {
+                            yield return node;
+                        }
                     }
                 }
             }
@@ -359,15 +380,13 @@ namespace MiKoSolutions.Analyzers
             {
                 case IFieldSymbol field:
                 {
-                    var fieldNode = GetSyntax<FieldDeclarationSyntax>(field);
-
-                    if (fieldNode != null)
+                    // maybe it is an enum member
+                    if (field.ContainingType.IsEnum())
                     {
-                        return fieldNode;
+                        return GetSyntax<EnumMemberDeclarationSyntax>(field);
                     }
 
-                    // maybe it is an enum member
-                    return GetSyntax<EnumMemberDeclarationSyntax>(field);
+                    return GetSyntax<FieldDeclarationSyntax>(field);
                 }
 
                 case IEventSymbol @event:
@@ -390,7 +409,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodes().OfType<ParameterSyntax>().FirstOrDefault();
+        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodes<ParameterSyntax>().FirstOrDefault();
 
         internal static T GetSyntax<T>(this ISymbol value) where T : SyntaxNode => value.GetSyntaxNodes()
                                                                                         .Select(_ => _.GetEnclosing<T>())
@@ -398,7 +417,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
 
-        internal static IReadOnlyList<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
+        internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
@@ -406,7 +425,7 @@ namespace MiKoSolutions.Analyzers
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).Distinct(SymbolEqualityComparer.Default).Cast<ITypeSymbol>().ToList();
+            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
@@ -570,7 +589,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
+        internal static IReadOnlyCollection<ITypeSymbol> IncludingAllBaseTypes(this ITypeSymbol value)
         {
             var symbol = value;
 
@@ -594,7 +613,7 @@ namespace MiKoSolutions.Analyzers
             return baseTypes;
         }
 
-        internal static IEnumerable<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
+        internal static IReadOnlyCollection<ITypeSymbol> IncludingAllNestedTypes(this ITypeSymbol value)
         {
             var types = new Queue<ITypeSymbol>(value.IsValueType ? 1 : 2); // probably an object, so increase by 1 to skip re-allocation
 
@@ -1136,9 +1155,19 @@ namespace MiKoSolutions.Analyzers
             if (value is IMethodSymbol method)
             {
                 // this is an extension method !
-                if (method.IsExtensionMethod && method.ContainingNamespace.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                if (method.IsExtensionMethod)
                 {
-                    return true;
+                    var ns = method.ContainingNamespace;
+
+                    if (ns.Name == "Linq" && ns.ContainingNamespace.Name == "System")
+                    {
+                        return true;
+                    }
+
+                    if (ns.FullyQualifiedName().StartsWith("System.Linq", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -1243,7 +1272,9 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Determines whether a <see cref="IFieldSymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
-        /// <param name="value">The symbol to inspect.</param>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IFieldSymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>
@@ -1273,7 +1304,9 @@ namespace MiKoSolutions.Analyzers
         /// <summary>
         /// Determines whether a <see cref="IPropertySymbol"/> of the containing type has the same name as the given <see cref="IParameterSymbol"/>.
         /// </summary>
-        /// <param name="value">The symbol to inspect.</param>
+        /// <param name="value">
+        /// The symbol to inspect.
+        /// </param>
         /// <returns>
         /// <see langword="true"/> if the containing <see cref="INamedTypeSymbol"/> contains a <see cref="IPropertySymbol"/> that matches the name of <paramref name="value"/>; otherwise, <see langword="false"/>.
         /// </returns>

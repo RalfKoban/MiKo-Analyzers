@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 388 rules that are currently provided by the analyzer.
+The following tables list all the 390 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -150,6 +150,7 @@ The following tables list all the 388 rules that are currently provided by the a
 |MiKo_1406|Value converters should be placed in 'Converters' namespace|&#x2713;|\-|
 |MiKo_1407|Test namespaces should not contain 'Test'|&#x2713;|\-|
 |MiKo_1408|Extension methods should be placed in same namespace as the extended types|&#x2713;|\-|
+|MiKo_1409|Do not prefix or suffix namespaces with underscores|&#x2713;|\-|
 
 ### Documentation
 |ID|Title|Enabled by default|CodeFix available|
@@ -432,3 +433,4 @@ The following tables list all the 388 rules that are currently provided by the a
 |MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
+|MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|

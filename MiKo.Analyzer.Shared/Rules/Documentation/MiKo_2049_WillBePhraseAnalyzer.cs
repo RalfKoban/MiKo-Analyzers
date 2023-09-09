@@ -25,6 +25,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string NeverPhrase = "never";
         private const string WillNeverPhrase = WillPhrase + " " + NeverPhrase;
 
+        private static readonly string WillPhraseStartUpperCase = WillPhrase.ToUpperCaseAt(0);
+        private static readonly string WillNeverPhraseStartUpperCase = WillNeverPhrase.ToUpperCaseAt(0);
+        private static readonly string NeverPhraseStartUpperCase = NeverPhrase.ToUpperCaseAt(0);
+
         private static readonly IDictionary<string, string> PhrasesMap = new Dictionary<string, string>
                                                                              {
                                                                                  { "will be", "is" },
@@ -49,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
         {
-            var tokens = node.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
+            var tokens = node.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken);
 
             var properties = issue.Properties;
             var textToReplace = properties[TextKey];
@@ -135,7 +139,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, WillPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     var text = issue.Location.GetText().ToLowerInvariant();
 
@@ -155,7 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhrase.ToUpperCaseAt(0), _ => NeverPhrase.ToUpperCaseAt(0) + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, WillNeverPhraseStartUpperCase, _ => NeverPhraseStartUpperCase + " " + Verbalizer.MakeThirdPersonSingularVerb(_)))
                 {
                     yield return issue;
                 }

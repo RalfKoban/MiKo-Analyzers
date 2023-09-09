@@ -180,7 +180,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void An_issue_is_reported_for_inccorrectly_documented_factory_class() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_factory_class() => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>
@@ -595,11 +595,13 @@ internal interface IFactory
                                           "Defines a factory that creates",
                                           "Defines a factory that provides",
                                           "Defines a factory that is able to create",
+                                          "Defines a factory that is capable to create",
                                           "Defines a factory to create",
                                           "Defines a factory which can create",
                                           "Defines a factory which creates",
                                           "Defines a factory which provides",
                                           "Defines a factory which is able to create",
+                                          "Defines a factory which is capable to create",
                                           "Defines a factory for",
                                           "Defines a method to create",
                                           "Defines methods to create",
@@ -607,11 +609,13 @@ internal interface IFactory
                                           "Defines the factory that creates",
                                           "Defines the factory that provides",
                                           "Defines the factory that is able to create",
+                                          "Defines the factory that is capable to create",
                                           "Defines the factory to create",
                                           "Defines the factory which can create",
                                           "Defines the factory which creates",
                                           "Defines the factory which provides",
                                           "Defines the factory which is able to create",
+                                          "Defines the factory which is capable to create",
                                           "Defines the factory for",
                                           "Factory for providing",
                                           "Factory for creating",

@@ -121,8 +121,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (symbol.IsSerializationConstructor())
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray())
-                    .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
+                return Enumerable.Empty<Diagnostic>()
+                                 .Concat(AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray()))
+                                 .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
             }
 
             return Enumerable.Empty<Diagnostic>();

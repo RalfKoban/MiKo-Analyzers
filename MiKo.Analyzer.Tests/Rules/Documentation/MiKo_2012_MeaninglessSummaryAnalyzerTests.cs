@@ -5,15 +5,13 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture, Isolated]
+    [TestFixture]
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MeaninglessTextPhrases =
@@ -97,7 +95,7 @@ public class TestMe : ITestMe
         }
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_special_phrase_([Values("Contains", "Contain", "Has")] string phrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_special_phrase_([Values("Contains", "Contain", "Has", "Is")] string phrase) => An_issue_is_reported_for(@"
 /// <summary>
 /// " + phrase + @" whatever
 /// </summary>
@@ -864,6 +862,66 @@ public class TestMeAttribute : System.Attribute
 /// ###.
 /// </summary>
 public class TestMeViewModel
+{
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+        }
+
+        [TestCase("A component to render something", "Renders something")]
+        [TestCase("A component that is used to render something", "Renders something")]
+        [TestCase("A component which is used to render something", "Renders something")]
+        [TestCase("A component used to render something", "Renders something")]
+        [TestCase("A component that is able to render something", "Renders something")]
+        [TestCase("A component which is able to render something", "Renders something")]
+        [TestCase("A component that is capable to render something", "Renders something")]
+        [TestCase("A component which is capable to render something", "Renders something")]
+        [TestCase("A component able to render something", "Renders something")]
+        [TestCase("A component capable to render something", "Renders something")]
+        [TestCase("An component to render something", "Renders something")]
+        [TestCase("An component that is used to render something", "Renders something")]
+        [TestCase("An component which is used to render something", "Renders something")]
+        [TestCase("An component used to render something", "Renders something")]
+        [TestCase("An component that is able to render something", "Renders something")]
+        [TestCase("An component which is able to render something", "Renders something")]
+        [TestCase("An component that is capable to render something", "Renders something")]
+        [TestCase("An component which is capable to render something", "Renders something")]
+        [TestCase("An component able to render something", "Renders something")]
+        [TestCase("An component capable to render something", "Renders something")]
+        [TestCase("Component to render something", "Renders something")]
+        [TestCase("Component that is used to render something", "Renders something")]
+        [TestCase("Component which is used to render something", "Renders something")]
+        [TestCase("Component used to render something", "Renders something")]
+        [TestCase("Component that is able to render something", "Renders something")]
+        [TestCase("Component which is able to render something", "Renders something")]
+        [TestCase("Component that is capable to render something", "Renders something")]
+        [TestCase("Component which is capable to render something", "Renders something")]
+        [TestCase("Component able to render something", "Renders something")]
+        [TestCase("Component capable to render something", "Renders something")]
+        [TestCase("The component to render something", "Renders something")]
+        [TestCase("The component that is used to render something", "Renders something")]
+        [TestCase("The component which is used to render something", "Renders something")]
+        [TestCase("The component used to render something", "Renders something")]
+        [TestCase("The component is used to render something", "Renders something")]
+        [TestCase("The component is able to render something", "Renders something")]
+        [TestCase("The component is capable to render something", "Renders something")]
+        [TestCase("The component that is able to render something", "Renders something")]
+        [TestCase("The component which is able to render something", "Renders something")]
+        [TestCase("The component that is capable to render something", "Renders something")]
+        [TestCase("The component which is capable to render something", "Renders something")]
+        [TestCase("The component able to render something", "Renders something")]
+        [TestCase("The component capable to render something", "Renders something")]
+        [TestCase("This component is used to render something", "Renders something")]
+        [TestCase("This component is able to render something", "Renders something")]
+        [TestCase("This component is capable to render something", "Renders something")]
+        public void Code_gets_fixed_for_component_text_(string originalComment, string fixedComment)
+        {
+            const string Template = @"
+/// <summary>
+/// ###.
+/// </summary>
+public class TestMe
 {
 }
 ";

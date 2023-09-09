@@ -186,7 +186,10 @@ namespace Bla
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
-        public void Exactly_2_issues_are_reported_for_a_test_method_that_uses_AssertMultiple_and_2_assertions_with_no_messages_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion) => An_issue_is_reported_for(2, @"
+        public void Exactly_2_issues_are_reported_for_a_test_method_that_uses_AssertMultiple_and_2_assertions_with_no_messages_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion)
+            => An_issue_is_reported_for(
+                                        2, // 1 issue for each assertion
+                                        @"
 using NUnit.Framework;
 
 namespace Bla
@@ -203,7 +206,7 @@ namespace Bla
                             });
         }
     }
-}"); // 1 issue for each assertion
+}");
 
         [TestCase("Assert.That(values.Length, Is.EqualTo(42))", @"Assert.That(values.Length, Is.EqualTo(42), ""wrong length"")")]
         [TestCase("Assert.That(values.GetHashCode(), Is.EqualTo(42))", @"Assert.That(values.GetHashCode(), Is.EqualTo(42), ""wrong hash code"")")]
@@ -213,6 +216,7 @@ namespace Bla
         [TestCase("Assert.That(values.CanSave(), Is.True)", @"Assert.That(values.CanSave(), Is.True, ""wrong save state"")")]
         [TestCase("Assert.That(values.Contains(42), Is.True)", @"Assert.That(values.Contains(42), Is.True, ""wrong value"")")]
         [TestCase("Assert.That(value.CanExecute(null), Is.True)", @"Assert.That(value.CanExecute(null), Is.True, ""wrong executable state"")")]
+        [TestCase("Assert.That(values, Is.Null)", @"Assert.That(values, Is.Null, ""wrong values"")")]
         [TestCase("Assert.That(values, Is.Not.Null)", @"Assert.That(values, Is.Not.Null, ""missing values"")")]
         [TestCase("Assert.That(Guid.Parse(values), Is.EqualTo(42))", @"Assert.That(Guid.Parse(values), Is.EqualTo(42), ""wrong values"")")]
         [TestCase("Assert.That(new Guid(values), Is.EqualTo(42))", @"Assert.That(new Guid(values), Is.EqualTo(42), ""wrong guid"")")]
@@ -245,6 +249,63 @@ namespace Bla
             const string Template = @"
 using System;
 using System.Linq;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
+            Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.AreEqual(42, values.Length)", @"Assert.AreEqual(42, values.Length, ""wrong length"")")]
+        [TestCase("Assert.AreEqual(42, _objectUnderTest)", @"Assert.AreEqual(42, _objectUnderTest, ""wrong object under test"")")]
+        [TestCase("Assert.Less(values.Length, 42)", @"Assert.Less(values.Length, 42, ""wrong length"")")]
+        [TestCase("Assert.LessOrEqual(values.Length, 42)", @"Assert.LessOrEqual(values.Length, 42, ""wrong length"")")]
+        [TestCase("Assert.Greater(values.Length, 42)", @"Assert.Greater(values.Length, 42, ""wrong length"")")]
+        [TestCase("Assert.GreaterOrEqual(values.Length, 42)", @"Assert.GreaterOrEqual(values.Length, 42, ""wrong length"")")]
+        [TestCase("CollectionAssert.AreEqual(new[] { 42 }, values)", @"CollectionAssert.AreEqual(new[] { 42 }, values, ""wrong values"")")]
+        [TestCase(@"StringAssert.AreEqual(""some text"", values.Length)", @"StringAssert.AreEqual(""some text"", values.Length, ""wrong length"")")]
+        public void Code_gets_fixed_for_old_assertion_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(int[] values)
+        {
+            ###;
+            Assert.Fail(""some error reason"");
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.Ignore()", @"Assert.Ignore()")]
+        [TestCase("Assert.Inconclusive()", @"Assert.Inconclusive()")]
+        [TestCase("Assert.Fail()", @"Assert.Fail()")]
+        public void Code_is_not_fixed_for_assertion_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
 
 using NUnit.Framework;
 

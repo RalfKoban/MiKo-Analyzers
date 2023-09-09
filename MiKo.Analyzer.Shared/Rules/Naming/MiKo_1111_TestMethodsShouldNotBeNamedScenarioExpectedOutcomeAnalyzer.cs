@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string When = "When";
         private const string And = "And";
 
-        private static readonly char[] Underscores = { '_' };
-
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
                                                                       "Actual",
@@ -71,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string methodName)
         {
-            var parts = methodName.SplitBy(Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = methodName.SplitBy(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
             var count = parts.Count();
 
             if (count >= 1)
@@ -95,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool TryGetInOrder(string name, out string result)
         {
-            var parts = name.Split(Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = name.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
 
             switch (parts.Length)
             {

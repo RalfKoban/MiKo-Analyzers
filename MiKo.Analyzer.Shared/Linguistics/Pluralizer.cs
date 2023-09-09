@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] AllowedListNames =
                                                             {
                                                                 "map",
-                                                                "array",
-                                                                "collection",
-                                                                "dictionary",
                                                                 "list",
+                                                                "array",
+                                                                "stack",
+                                                                "playList",
                                                                 "blackList",
                                                                 "whiteList",
-                                                                "playList",
-                                                                "stack",
+                                                                "collection",
+                                                                "dictionary",
                                                             };
 
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
@@ -39,19 +39,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return null;
             }
 
-            foreach (var suffix in suffixes)
+            var proposedName = name.AsSpan().WithoutSuffixes(suffixes);
+
+            if (proposedName.EndsWithAny(Constants.Markers.Entities) && proposedName.EndsWithAny(Constants.Markers.ViewModels) is false)
             {
-                if (name.EndsWith(suffix, comparison))
-                {
-                    var proposedName = name.WithoutSuffix(suffix);
+                proposedName = proposedName.WithoutSuffixes(Constants.Markers.Entities);
+            }
 
-                    if (name.IsEntityMarker())
-                    {
-                        proposedName = proposedName.Without(Constants.Markers.Entities);
-                    }
-
-                    return GetPluralName(name, proposedName, comparison);
-                }
+            if (name.Length != proposedName.Length)
+            {
+                return GetPluralName(name, proposedName.ToString(), comparison);
             }
 
             return null;

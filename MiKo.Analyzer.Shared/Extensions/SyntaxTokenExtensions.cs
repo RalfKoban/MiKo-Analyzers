@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers
     {
         internal static IEnumerable<T> Ancestors<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
 
-        internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().Where(_ => _.IsKind(kind));
+        internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
@@ -38,8 +38,6 @@ namespace MiKoSolutions.Analyzers
 
             return value.GetSymbol(semanticModel);
         }
-
-        internal static bool HasTrailingComment(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsComment());
 
         internal static ISymbol GetSymbol(this SyntaxToken value, SemanticModel semanticModel)
         {
@@ -74,6 +72,56 @@ namespace MiKoSolutions.Analyzers
             }
 
             return symbol;
+        }
+
+        internal static bool HasTrailingComment(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsComment());
+
+        internal static IEnumerable<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
+        {
+            if (source.Count == 0)
+            {
+                return Array.Empty<SyntaxToken>();
+            }
+
+            var results = new List<SyntaxToken>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < source.Count; index++)
+            {
+                var item = source[index];
+
+                if (item.IsKind(kind))
+                {
+                    results.Add(item);
+                }
+            }
+
+            return results;
+        }
+
+        internal static IEnumerable<SyntaxToken> OfKind(this IEnumerable<SyntaxToken> source, SyntaxKind kind)
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var item in source)
+            {
+                if (item.IsKind(kind))
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        internal static SyntaxToken ToSyntaxToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.IdentifierToken:
+                    return SyntaxFactory.Identifier(source);
+
+                default:
+                    return SyntaxFactory.Token(default, kind, source, source, default);
+            }
         }
 
         internal static SyntaxToken WithEndOfLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
@@ -180,7 +228,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
             {
-                values = values.Remove(token);
+                return values.Remove(token);
             }
 
             return values;
@@ -201,17 +249,5 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxToken WithTrailingSpace(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.Space); // use non-elastic one to prevent formatting to be done automatically
 
         internal static SyntaxToken WithTrailingXmlComment(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxNodeExtensions.XmlCommentStart);
-
-        internal static SyntaxToken ToSyntaxToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
-        {
-            switch (kind)
-            {
-                case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(source);
-
-                default:
-                    return SyntaxFactory.Token(default, kind, source, source, default);
-            }
-        }
     }
 }

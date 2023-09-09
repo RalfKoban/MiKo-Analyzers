@@ -45,6 +45,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string UsedToDetermineInSingularReplacement = "defines";
         private const string UsedToDetermineInPluralReplacement = "define";
 
+        private static readonly string IsUsedToPhraseStartUpperCase = IsUsedToPhrase.ToUpperCaseAt(0);
+        private static readonly string AreUsedToPhraseStartUpperCase = AreUsedToPhrase.ToUpperCaseAt(0);
+        private static readonly string UsedToPhraseStartUpperCase = UsedToPhrase.ToUpperCaseAt(0);
+
         private static readonly string[] CanPhrases =
                                                       {
                                                           "can be used in order to",
@@ -273,7 +277,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
         {
-            var tokens = node.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
+            var tokens = node.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken);
 
             var properties = issue.Properties;
             var textToReplace = properties[TextKey];
@@ -372,17 +376,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return Issue(location, UsedToDetermineInPluralReplacement);
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, IsUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     yield return issue;
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, AreUsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     yield return issue;
                 }
 
-                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhrase.ToUpperCaseAt(0), _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
+                foreach (var issue in AnalyzeForSpecialPhrase(token, UsedToPhraseStartUpperCase, _ => Verbalizer.MakeThirdPersonSingularVerb(_).ToUpperCaseAt(0)))
                 {
                     yield return issue;
                 }

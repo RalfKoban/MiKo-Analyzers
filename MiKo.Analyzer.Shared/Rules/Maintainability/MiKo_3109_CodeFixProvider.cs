@@ -31,14 +31,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var typeName = type.GetName();
 
-                if (typeName == "Assert")
+                switch (typeName)
                 {
-                    var args = original.ArgumentList;
-                    var fixedArgs = UpdatedSyntax(maes, args);
-
-                    if (fixedArgs != args)
+                    case "Assert":
+                    case "CollectionAssert":
+                    case "StringAssert":
                     {
-                        return original.ReplaceNode(args, fixedArgs);
+                        var args = original.ArgumentList;
+                        var fixedArgs = UpdatedSyntax(maes, args);
+
+                        if (fixedArgs != args)
+                        {
+                            return original.ReplaceNode(args, fixedArgs);
+                        }
+
+                        break;
                     }
                 }
             }
@@ -52,21 +59,60 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             switch (methodName)
             {
-                case "That": return FixThat(args);
-                default: return args;
+                case "Fail":
+                case "Inconclusive":
+                case "Ignore":
+                case "Multiple":
+                    return args; // do not adjust
+
+                case "Less":
+                case "LessOrEqual":
+                case "Greater":
+                case "GreaterOrEqual":
+                    return OldAssertFixer.Fix(args, 0);
+
+                case "That":
+                    return AssertThatFixer.FixThat(args);
+
+                default:
+                    return OldAssertFixer.Fix(args, args.Arguments.Count - 1);
             }
         }
 
-        private static ArgumentListSyntax FixThat(ArgumentListSyntax args)
+        private static string GetText(ExpressionSyntax expression)
         {
-            var arguments = args.Arguments;
-            var text = GetText(arguments[0].Expression);
+            switch (expression)
+            {
+                case MemberAccessExpressionSyntax m: return m.GetName();
+                case ObjectCreationExpressionSyntax o: return o.Type.GetNameOnlyPart();
 
-            string suffix = null;
+                case InvocationExpressionSyntax method:
+                {
+                    var name = method.Expression.GetName();
 
+                    if (name == "Parse")
+                    {
+                        return method.ArgumentList?.Arguments.FirstOrDefault()?.GetName();
+                    }
+
+                    return EnumerableMethods.Contains(name)
+                           ? method.GetName()
+                           : name;
+                }
+
+                default:
+                    return expression.GetName();
+            }
+        }
+
+        private static List<string> GetFinalText(SeparatedSyntaxList<ArgumentSyntax> arguments, int index, out string suffix)
+        {
+            var foundSuffix = string.Empty;
+
+            var text = GetText(arguments[index].Expression);
             var finalText = text.AsSpan()
-                                .Words()
-                                .Select(_ => _.ToLowerCaseAt(0))
+                                .WordsAsSpan()
+                                .Select(_ => _.Text.Trim(Constants.Underscores).ToLowerCaseAt(0))
                                 .Select(_ =>
                                             {
                                                 switch (_)
@@ -87,7 +133,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                                                     case "can":
                                                     {
-                                                        suffix = "state";
+                                                        foundSuffix = "state";
 
                                                         return string.Empty;
                                                     }
@@ -99,62 +145,61 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                         return _;
                                                 }
                                             })
-                                .Where(_ => string.IsNullOrEmpty(_) is false)
+                                .Where(_ => _.HasCharacters())
                                 .ToList();
 
-            var firstWord = GetStartingWord(arguments);
+            suffix = foundSuffix;
 
-            finalText.Insert(0, firstWord);
-
-            if (suffix != null)
-            {
-                finalText.Add(suffix);
-            }
-
-            return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
+            return finalText;
         }
 
-        private static string GetText(ExpressionSyntax expression)
+        private static class AssertThatFixer
         {
-            switch (expression)
+            internal static ArgumentListSyntax FixThat(ArgumentListSyntax args)
             {
-                case MemberAccessExpressionSyntax member:
+                var arguments = args.Arguments;
+
+                var finalText = GetFinalText(arguments, 0, out var suffix);
+                var firstWord = GetStartingWord(arguments);
+
+                finalText.Insert(0, firstWord);
+
+                if (suffix.HasCharacters())
                 {
-                    return member.GetName();
+                    finalText.Add(suffix);
                 }
 
-                case InvocationExpressionSyntax method:
+                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
+            }
+
+            // let's see if we have the special case 'Is.Not.Null'
+            private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments)
+            {
+                if (arguments.Count > 1 && arguments[1].Expression.ToString() == "Is.Not.Null")
                 {
-                    var name = method.Expression.GetName();
-
-                    if (name == "Parse")
-                    {
-                        return method.ArgumentList?.Arguments.FirstOrDefault()?.GetName();
-                    }
-
-                    if (EnumerableMethods.Contains(name))
-                    {
-                        return method.GetName();
-                    }
-
-                    return name;
+                    return "missing";
                 }
 
-                case ObjectCreationExpressionSyntax creation:
-                {
-                    return creation.Type.GetNameOnlyPart();
-                }
-
-                default:
-                {
-                    return expression.GetName();
-                }
+                return "wrong";
             }
         }
 
-        // let's see if we have the special case 'Is.Not.Null'
-        private static string GetStartingWord(SeparatedSyntaxList<ArgumentSyntax> arguments) => arguments.Count > 1 && arguments[1].Expression.ToString() == "Is.Not.Null"
-                                                                                                ? "missing"
-                                                                                                : "wrong";
+        private static class OldAssertFixer
+        {
+            internal static ArgumentListSyntax Fix(ArgumentListSyntax args, int index)
+            {
+                var arguments = args.Arguments;
+
+                var finalText = GetFinalText(arguments, index, out var suffix);
+                finalText.Insert(0, "wrong"); // TODO RKN: Let's see if we have to distinguish based on the call itself
+
+                if (suffix.HasCharacters())
+                {
+                    finalText.Add(suffix);
+                }
+
+                return args.WithArguments(arguments.Add(Argument(StringLiteral(finalText.ConcatenatedWith(" ")))));
+            }
+        }
     }
 }

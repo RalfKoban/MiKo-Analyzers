@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var value in values.Concat(additionalValues))
             {
                 results.Add(value);
-                results.Add(value + "_");
+                results.Add(value + Constants.Underscore);
             }
 
             return results.ToArray();

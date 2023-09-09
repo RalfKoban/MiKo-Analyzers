@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name + "_";
+        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name + Constants.Underscore;
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Parameters.Length > 0 && symbol.IsTestMethod();
 
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var endsWithUnderscore = symbol.Name.EndsWith('_');
+            var endsWithUnderscore = symbol.Name.EndsWith(Constants.Underscore);
 
             return endsWithUnderscore
                    ? Enumerable.Empty<Diagnostic>()

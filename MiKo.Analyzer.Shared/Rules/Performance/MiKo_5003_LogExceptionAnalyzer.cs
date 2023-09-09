@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     case Constants.ILog.Fatal:
                     {
                         return arguments.Count == 1
-                               ? AnalyzeCall(methodCall, new[] { arguments[0] }, semanticModel, methodName)
+                               ? AnalyzeCall(methodCall, arguments, semanticModel, methodName)
                                : null;
                     }
 
@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return null;
         }
 
-        private Diagnostic AnalyzeCall(MemberAccessExpressionSyntax methodCall, IEnumerable<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
+        private Diagnostic AnalyzeCall(MemberAccessExpressionSyntax methodCall, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel, string proposedMethodName)
         {
             // only ILog methods shall be reported
             var type = methodCall.GetTypeSymbol(semanticModel);

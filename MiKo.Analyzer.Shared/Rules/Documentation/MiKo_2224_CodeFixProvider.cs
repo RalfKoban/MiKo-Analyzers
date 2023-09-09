@@ -39,9 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax.Parent is XmlElementSyntax element)
             {
-                var updatedContent = element.Content.Insert(0, NewLineXmlText());
-
-                return element.WithContent(updatedContent);
+                return element.WithContent(element.Content.Insert(0, NewLineXmlText()));
             }
 
             return syntax;
@@ -51,9 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax.Parent is XmlElementSyntax element)
             {
-                var updatedContent = element.Content.Add(NewLineXmlText());
-
-                return element.WithContent(updatedContent);
+                return element.WithContent(element.Content.Add(NewLineXmlText()));
             }
 
             return syntax;

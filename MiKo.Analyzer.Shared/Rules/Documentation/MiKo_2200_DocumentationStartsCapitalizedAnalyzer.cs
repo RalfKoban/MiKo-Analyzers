@@ -47,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private Diagnostic AnalyzeText(XmlTextSyntax syntax, string xmlTag)
         {
-            foreach (var token in syntax.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
+            foreach (var token in syntax.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken))
             {
                 var text = token.ValueText.Without(Constants.Comments.SpecialOrPhrase);
                 var trimmedText = text.TrimStart();

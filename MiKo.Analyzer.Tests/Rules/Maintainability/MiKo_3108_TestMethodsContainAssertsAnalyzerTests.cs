@@ -43,6 +43,90 @@ namespace Bla
 }");
 
         [Test]
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_private_method_which_uses_an_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            DoSomethingCore();
+        }
+
+        private void DoSomethingCore()
+        {
+            Assert.That(42, Is.Not.EqualTo(0815));
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_private_static_generic_method_which_uses_an_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            DoSomethingCore(42);
+        }
+
+        private static void DoSomethingCore<T>(T value) where T : struct, IEquatable<T>
+        {
+            Assert.That(value, Is.Not.EqualTo(0815));
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_method_body_that_invokes_a_private_method_which_uses_an_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething() => DoSomethingCore();
+
+        private void DoSomethingCore()
+        {
+            Assert.That(42, Is.Not.EqualTo(0815));
+        }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_a_test_method_that_invokes_an_inherited_method_which_uses_an_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public abstract class TestMeCore
+    {
+        protected void DoSomethingCore()
+        {
+            Assert.That(42, Is.Not.EqualTo(0815));
+        }
+    }
+
+    public class TestMe : TestMeCore
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            DoSomethingCore();
+        }
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_a_test_method_that_uses_an_fluent_assertion_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -166,7 +250,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyGet() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyGet_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -191,7 +275,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifySet() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifySet_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -216,7 +300,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyAll() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_Moq_VerifyAll_call() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using Moq;
 using System;
@@ -231,6 +315,30 @@ namespace Bla
             var mock = new Mock<IDisposable>();
 
             mock.VerifyAll();
+        }
+    }
+}");
+
+        [TestCase("Received()")]
+        [TestCase("Received(42)")]
+        [TestCase("ReceivedWithAnyArgs()")]
+        [TestCase("DidNotReceive()")]
+        [TestCase("DidNotReceiveWithAnyArgs()")]
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_NSubstitute_call(string call) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+using NSubstitute;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock = Substitute.For<IDisposable>();
+
+            mock." + call + @".Dispose();
         }
     }
 }");
@@ -282,6 +390,48 @@ namespace Bla
         public Task DoSomething()
         {
             return Task.CompletedTask;
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_body_that_invokes_a_private_method_which_does_not_use_an_assertion_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [" + test + @"]
+        public void DoSomething() => DoSomethingCore();
+
+        private void DoSomethingCore()
+        {
+            // missing assertion
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_invokes_an_inherited_method_which_does_not_use_an_assertion_([ValueSource(nameof(Tests))] string test) => An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public abstract class TestMeCore
+    {
+        protected void DoSomethingCore()
+        {
+            // missing assertion
+        }
+    }
+
+    public class TestMe : TestMeCore
+    {
+        [" + test + @"]
+        public void DoSomething()
+        {
+            DoSomethingCore();
         }
     }
 }");
@@ -348,6 +498,24 @@ namespace Bla
             mock2.Setup(_ => _.Dispose()).Verifiable(""test message"");
 
             mock1.Verify();
+        }
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_a_test_method_that_invokes_no_NSubstitute_Received_or_DidNotReceive_call() => An_issue_is_reported_for(@"
+using NUnit.Framework;
+using NSubstitute;
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [TestCase]
+        public void DoSomething()
+        {
+            var mock = Substitute.For<IDisposable>();
         }
     }
 }");

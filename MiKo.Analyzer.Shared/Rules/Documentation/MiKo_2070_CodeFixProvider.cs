@@ -14,6 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2070_CodeFixProvider)), Shared]
     public sealed class MiKo_2070_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+        private static readonly string[] BeginningConditions = { "true", "if", "whether" };
+        private static readonly string[] MiddleConditions = { "if", "whether" };
+
+        private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { $"{marker}.", $"{marker} ." }).ToArray();
+
         public override string FixableDiagnosticId => MiKo_2070_ReturnsSummaryAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2070_CodeFixTitle;
@@ -79,7 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
                     {
                         var startText = GetCorrectStartText(summary);
-                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords("true", "if", "whether").ToString();
+                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString();
 
                         var newText = string.Concat(" ", startText, " ", remainingText);
 
@@ -118,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var token in followUpText.TextTokens)
                         {
                             var valueText = token.WithoutTrivia().ValueText;
-                            var newText = valueText.WithoutFirstWords("if", "whether");
+                            var newText = valueText.WithoutFirstWords(MiddleConditions);
 
                             summary = summary.ReplaceToken(token, token.WithText(newText));
 
@@ -191,10 +196,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (valueText.Length > newText.Length)
                     {
-                        foreach (var marker in Constants.TrailingSentenceMarkers)
-                        {
-                            newText = newText.ReplaceAll(new[] { $"{marker}.", $"{marker} ." }, ".");
-                        }
+                        newText = newText.ReplaceAllWithCheck(TrailingSentenceMarkers, ".");
 
                         summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));
                     }

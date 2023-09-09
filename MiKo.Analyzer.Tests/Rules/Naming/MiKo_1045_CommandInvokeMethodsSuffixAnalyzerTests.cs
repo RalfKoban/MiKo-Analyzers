@@ -239,6 +239,86 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_CanExecute_and_Execute_methods_that_do_not_match_a_proper_name_pattern()
+        {
+            const string Template = @"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute, Func<bool> canExecute)
+    {
+        _execute = execute;
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => _canExecute();
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void Initialize()
+    {
+        var testMeCommand = new TestMeCommand(#1#, #2#);
+    }
+
+    private void #1#() { }
+
+    private bool #2#() => true;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", "CanDoSomethingCommand").Replace("#2#", "DoSomethingCommand"), Template.Replace("#1#", "DoSomething").Replace("#2#", "CanDoSomething"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_CanExecute_and_Execute_methods_that_start_with_prefix_([Values("Is", "Has", "Are")] string prefix)
+        {
+            const string Template = @"
+using System;
+using System.Windows.Input;
+
+public class TestMeCommand : ICommand
+{
+    public TestMeCommand(Action execute, Func<bool> canExecute)
+    {
+        _execute = execute;
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler CanExecuteChanged;
+
+    public bool CanExecute(object parameter) => _canExecute();
+
+    public void Execute(object parameter) _execute();
+
+    private Action _execute;
+}
+
+public class TestMe
+{
+    public void Initialize()
+    {
+        var testMeCommand = new TestMeCommand(#1#, #2#);
+    }
+
+    private void #1#() { }
+
+    private bool #2#() => true;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", "DoSomethingCommand").Replace("#2#", prefix + "DoSomethingCommand"), Template.Replace("#1#", "DoSomething").Replace("#2#", "CanDoSomething"));
+        }
+
+        [Test]
         public void Code_gets_fixed_for_Execute_local_function()
         {
             const string Template = @"
