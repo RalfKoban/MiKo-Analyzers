@@ -674,6 +674,8 @@ namespace System.Linq
 
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
 
+        internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer) => new HashSet<T>(source, comparer);
+
         internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
 
         internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();

@@ -42,9 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return ExceptionIssue(exceptionComment, Constants.Comments.ObjectDisposedExceptionEndingPhrase);
         }
 
-        private static bool HasCloseMethod(ISymbol symbol) => symbol
-                                                              .FindContainingType()
-                                                              .GetMembersIncludingInherited<IMethodSymbol>()
-                                                              .Any(_ => _.Name == "Close");
+        private static bool HasCloseMethod(ISymbol symbol) => symbol.FindContainingType()
+                                                                    .GetMembersIncludingInherited<IMethodSymbol>()
+                                                                    .Any(_ => _.Name == "Close");
     }
 }
