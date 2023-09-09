@@ -277,7 +277,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
         {
-            var tokens = node.TextTokens.Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken));
+            var tokens = node.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken);
 
             var properties = issue.Properties;
             var textToReplace = properties[TextKey];

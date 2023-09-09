@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static int GetNamespaceDepth(NamespaceDeclarationSyntax declaration)
         {
-            var parentNamespaces = declaration.Ancestors().OfType<NamespaceDeclarationSyntax>().ToList();
+            var parentNamespaces = declaration.Ancestors<NamespaceDeclarationSyntax>().ToList();
 
             if (parentNamespaces.Any())
             {

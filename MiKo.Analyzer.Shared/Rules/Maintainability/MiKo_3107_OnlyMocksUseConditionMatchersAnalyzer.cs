@@ -119,10 +119,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> AnalyzeInitializerExpression(InitializerExpressionSyntax node, SemanticModel semanticModel)
         {
             var symbol = node.GetEnclosingSymbol(semanticModel);
+            var symbolName = symbol?.Name;
 
-            return node.Expressions.OfType<AssignmentExpressionSyntax>()
-                       .Where(_ => _.IsKind(SyntaxKind.SimpleAssignmentExpression))
-                       .SelectMany(_ => AnalyzeExpression(_.Right, symbol.Name, _.GetLocation()));
+            return node.Expressions.OfKind<AssignmentExpressionSyntax, ExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
+                       .SelectMany(_ => AnalyzeExpression(_.Right, symbolName, _.GetLocation()));
         }
 
         private IEnumerable<Diagnostic> AnalyzeArguments(IMethodSymbol method, ArgumentListSyntax argumentList)
@@ -132,7 +132,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            return argumentList.Arguments.SelectMany(_ => AnalyzeExpression(_.Expression, method.Name, _.GetLocation()));
+            var methodName = method.Name;
+
+            return argumentList.Arguments.SelectMany(_ => AnalyzeExpression(_.Expression, methodName, _.GetLocation()));
         }
 
         private IEnumerable<Diagnostic> AnalyzeExpression(ExpressionSyntax expression, string methodName, Location location)

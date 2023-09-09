@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers
                 case 5: return "T1,T2,T3,T4,T5";
                 case 6: return "T1,T2,T3,T4,T5,T6";
                 case 7: return "T1,T2,T3,T4,T5,T6,T7";
-                default: return Enumerable.Range(1, count).Select(_ => "T" + _).ConcatenatedWith(",");
+                default: return Enumerable.Range(1, count).Select(_ => string.Concat("T", _.ToString())).ConcatenatedWith(",");
             }
         }
 

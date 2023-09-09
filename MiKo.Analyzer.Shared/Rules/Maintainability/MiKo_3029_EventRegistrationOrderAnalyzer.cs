@@ -56,8 +56,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (assignments.Count > 0)
             {
-                var addAssignments = assignments.Where(_ => _.IsKind(SyntaxKind.AddAssignmentExpression)).ToList();
-                var subtractAssignments = assignments.Where(_ => _.IsKind(SyntaxKind.SubtractAssignmentExpression)).ToList();
+                var addAssignments = assignments.OfKind(SyntaxKind.AddAssignmentExpression);
+                var subtractAssignments = assignments.OfKind(SyntaxKind.SubtractAssignmentExpression);
 
                 foreach (var assignment in addAssignments.Concat(subtractAssignments).Where(_ => _.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression) && _.Right is ParenthesizedLambdaExpressionSyntax))
                 {

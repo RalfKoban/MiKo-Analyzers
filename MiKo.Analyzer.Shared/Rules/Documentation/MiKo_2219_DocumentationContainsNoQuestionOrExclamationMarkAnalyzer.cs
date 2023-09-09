@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.DescendantNodes<XmlTextSyntax>(_ => _.Ancestors<XmlElementSyntax>().None(__ => AllowedTags.Contains(__.GetName())))
                                          .SelectMany(_ => _.TextTokens)
-                                         .Where(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken)))
+                                         .OfKind(SyntaxKind.XmlTextLiteralToken))
             {
                 foreach (var location in GetAllLocations(token, Terms))
                 {
