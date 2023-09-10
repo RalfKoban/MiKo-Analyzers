@@ -202,9 +202,14 @@ namespace System
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
         {
-            var index = value.IndexOfAny(phrases, comparison);
+            if (value.Length > 0)
+            {
+                // use 'ToString' here for performance reasons
+                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
+                return value.ToString().ContainsAny(phrases, comparison);
+            }
 
-            return index > -1;
+            return false;
         }
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
@@ -230,14 +235,14 @@ namespace System
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
         {
-            if (phrases is string[] array)
+            if (value.Length > 0)
             {
-                return value.ContainsAny(array, comparison);
+                // use 'ToString' here for performance reasons
+                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
+                return value.ToString().ContainsAny(phrases, comparison);
             }
 
-            var index = value.IndexOfAny(phrases, comparison);
-
-            return index > -1;
+            return false;
         }
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
@@ -633,39 +638,25 @@ namespace System
         {
             if (value.Length > 0)
             {
-                for (var i = 0; i < phrases.Length; i++)
+                // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
+                if (comparison == StringComparison.Ordinal)
                 {
-                    var phrase = phrases[i];
-
-                    var index = value.IndexOf(phrase.AsSpan(), comparison);
-
-                    if (index > -1)
+                    for (var i = 0; i < phrases.Length; i++)
                     {
-                        return index;
+                        var phrase = phrases[i];
+
+                        var index = value.IndexOf(phrase.AsSpan(), comparison);
+
+                        if (index > -1)
+                        {
+                            return index;
+                        }
                     }
                 }
-            }
-
-            return -1;
-        }
-
-        public static int IndexOfAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
-        {
-            if (phrases is string[] array)
-            {
-                return value.IndexOfAny(array, comparison);
-            }
-
-            if (value.Length > 0)
-            {
-                foreach (var phrase in phrases)
+                else
                 {
-                    var index = value.IndexOf(phrase.AsSpan(), comparison);
-
-                    if (index > -1)
-                    {
-                        return index;
-                    }
+                    // use string to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
+                    return value.ToString().IndexOfAny(phrases, comparison);
                 }
             }
 
@@ -674,12 +665,52 @@ namespace System
 
         public static int IndexOfAny(this string value, string[] phrases, StringComparison comparison)
         {
+            if (value.HasCharacters())
+            {
+                if (comparison == StringComparison.Ordinal)
+                {
+                    return IndexOfAny(value.AsSpan(), phrases, comparison);
+                }
+
+                for (var i = 0; i < phrases.Length; i++)
+                {
+                    var phrase = phrases[i];
+
+                    var index = value.IndexOf(phrase, comparison);
+
+                    if (index > -1)
+                    {
+                        return index;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        public static int LastIndexOfAny(this string value, string[] phrases, StringComparison comparison)
+        {
             if (value is null)
             {
                 return -1;
             }
 
-            return IndexOfAny(value.AsSpan(), phrases, comparison);
+            if (value.Length > 0)
+            {
+                for (var i = 0; i < phrases.Length; i++)
+                {
+                    var phrase = phrases[i];
+
+                    var index = value.LastIndexOf(phrase, comparison);
+
+                    if (index > -1)
+                    {
+                        return index;
+                    }
+                }
+            }
+
+            return -1;
         }
 
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());

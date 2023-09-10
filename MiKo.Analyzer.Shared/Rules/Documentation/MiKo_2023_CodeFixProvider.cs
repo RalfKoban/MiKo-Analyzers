@@ -74,8 +74,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                      new KeyValuePair<string, string>(" that to ", " that "),
                                                                                                      new KeyValuePair<string, string>(",  otherwise", ";  otherwise"),
                                                                                                      new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
-                                                                                                     new KeyValuePair<string, string>("; otherwise ", string.Empty),
-                                                                                                     new KeyValuePair<string, string>(". Otherwise ", string.Empty),
                                                                                                      new KeyValuePair<string, string>(". ", "; "))
                                                                                 .Distinct()
                                                                                 .ToArray();
@@ -173,7 +171,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return comment;
             }
 
-            var token = followUpText.TextTokens.LastOrDefault(_ => _.ValueText.Contains(','));
+            var token = followUpText.TextTokens.LastOrDefault(_ => _.ValueText.ContainsAny(Constants.TrailingSentenceMarkers));
 
             if (token.IsDefaultValue())
             {
@@ -184,11 +182,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var text = token.ValueText;
 
             // seems we could not fix the part
-            var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
+            var otherPhraseStart = text.LastIndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
 
             if (otherPhraseStart > -1)
             {
-                var subText = text.AsSpan(0, otherPhraseStart)
+                var subText = text.Substring(0, otherPhraseStart)
                                   .TrimStart(Constants.TrailingSentenceMarkers)
                                   .TrimEnd(Constants.TrailingSentenceMarkers);
 
