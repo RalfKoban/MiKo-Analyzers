@@ -16,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether" };
+        private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap(
                                                                                                      new KeyValuePair<string, string>("'true'", string.Empty),
@@ -112,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 // seems we could not fix the part
-                var otherPhraseStart = text.IndexOfAny(new[] { "else", "otherwise" }, StringComparison.OrdinalIgnoreCase);
+                var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
 
                 if (otherPhraseStart > -1)
                 {
@@ -124,11 +125,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            // TODO RKN: Split text on else/otherwise part
             var preparedComment = PrepareComment(comment);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
+            var preparedComment3 = ModifyElseOtherwisePart(preparedComment2);
 
-            var startFixed = CommentStartingWith(preparedComment2, StartPhraseParts[0], SeeLangword_True(), StartPhraseParts[1]);
+            var startFixed = CommentStartingWith(preparedComment3, StartPhraseParts[0], SeeLangword_True(), StartPhraseParts[1]);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
 
             var fixedComment = Comment(bothFixed, ReplacementMapKeys, ReplacementMap);
@@ -152,14 +153,49 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
-            var commentContinue = new StringBuilder(replacement + MakeFirstWordInfiniteVerb(subText.ToString()))
-                                  .ReplaceAllWithCheck(ReplacementMap)
-                                  .ToString();
+            var commentContinue = new StringBuilder(replacement).Append(MakeFirstWordInfiniteVerb(subText.ToString()))
+                                                                .ReplaceAllWithCheck(ReplacementMap)
+                                                                .ToString();
 
             var newStart = CommentStartingWith(prepared, StartPhraseParts[0], SeeLangword_True(), commentContinue);
             var newEnd = CommentEndingWith(newStart, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
 
             return newEnd;
+        }
+
+        private static XmlElementSyntax ModifyElseOtherwisePart(XmlElementSyntax comment)
+        {
+            // TODO RKN: Split text on else/otherwise part
+            var followUpText = comment.Content.OfType<XmlTextSyntax>().FirstOrDefault();
+
+            if (followUpText is null)
+            {
+                return comment;
+            }
+
+            var token = followUpText.TextTokens.LastOrDefault(_ => _.ValueText.Contains(','));
+
+            if (token.IsDefaultValue())
+            {
+                // we did not find any
+                return comment;
+            }
+
+            var text = token.ValueText;
+
+            // seems we could not fix the part
+            var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
+
+            if (otherPhraseStart > -1)
+            {
+                var subText = text.AsSpan(0, otherPhraseStart)
+                                  .TrimStart(Constants.TrailingSentenceMarkers)
+                                  .TrimEnd(Constants.TrailingSentenceMarkers);
+
+                return comment.ReplaceToken(token, token.WithText(subText));
+            }
+
+            return comment;
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)

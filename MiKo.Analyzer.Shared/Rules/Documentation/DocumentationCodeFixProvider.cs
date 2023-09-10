@@ -202,7 +202,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var textTokens = t.TextTokens;
                 var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
 
-                if (lastToken.IsKind(SyntaxKind.None))
+                if (lastToken.IsDefaultValue())
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
                     var token = ending.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken);
@@ -239,7 +239,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // we have a text at the end, so we have to find the text
                 var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
 
-                if (lastToken.IsKind(SyntaxKind.None))
+                if (lastToken.IsDefaultValue())
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
                 }
