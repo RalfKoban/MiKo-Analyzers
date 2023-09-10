@@ -14,33 +14,7 @@ namespace System
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
-        public static IEnumerable<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                yield break;
-            }
-
-            if (finding.Length > value.Length)
-            {
-                yield break;
-            }
-
-            for (var index = 0; ; index += finding.Length)
-            {
-                index = value.IndexOf(finding, index, comparison);
-
-                if (index == -1)
-                {
-                    // nothing more to find
-                    yield break;
-                }
-
-                yield return index;
-            }
-        }
-
-        public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -56,20 +30,61 @@ namespace System
 
             for (var index = 0; ; index += finding.Length)
             {
-                var newIndex = value.Slice(index).IndexOf(finding, comparison);
+                index = value.IndexOf(finding, index, comparison);
 
-                if (newIndex == -1)
+                if (index == -1)
                 {
                     // nothing more to find
                     break;
                 }
 
-                index += newIndex;
-
                 indices.Add(index);
             }
 
             return indices;
+        }
+
+        public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return Array.Empty<int>();
+            }
+
+            if (finding.Length > value.Length)
+            {
+                return Array.Empty<int>();
+            }
+
+            if (comparison == StringComparison.Ordinal)
+            {
+                // performance optimization for 'StringComparison.Ordinal' to avoid multiple strings from being created (see 'IndexOf' method inside 'MemoryExtensions')
+                return AllIndicesOrdinal(value, finding.AsSpan());
+            }
+
+            return AllIndicesOf(value.ToString(), finding, comparison);
+
+            IReadOnlyList<int> AllIndicesOrdinal(ReadOnlySpan<char> span, ReadOnlySpan<char> other)
+            {
+                var indices = new List<int>();
+
+                for (var index = 0; ; index += other.Length)
+                {
+                    var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
+
+                    if (newIndex == -1)
+                    {
+                        // nothing more to find
+                        break;
+                    }
+
+                    index += newIndex;
+
+                    indices.Add(index);
+                }
+
+                return indices;
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
