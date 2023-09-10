@@ -1998,21 +1998,41 @@ namespace MiKoSolutions.Analyzers
         internal static T WithTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
                                                                                                           .WithTrailingTriviaFrom(token);
 
-        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => node.HasLeadingTrivia
-                                                                                                          ? value.WithLeadingTrivia(node.GetLeadingTrivia())
-                                                                                                          : value;
+        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            var trivia = node.GetLeadingTrivia();
 
-        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => token.HasLeadingTrivia
-                                                                                                            ? value.WithLeadingTrivia(token.LeadingTrivia)
-                                                                                                            : value;
+            return trivia.Count > 0
+                   ? value.WithLeadingTrivia(trivia)
+                   : value;
+        }
 
-        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => node.HasTrailingTrivia
-                                                                                                           ? value.WithTrailingTrivia(node.GetTrailingTrivia())
-                                                                                                           : value;
+        internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode
+        {
+            var trivia = token.LeadingTrivia;
 
-        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => token.HasTrailingTrivia
-                                                                                                             ? value.WithTrailingTrivia(token.TrailingTrivia)
-                                                                                                             : value;
+            return trivia.Count > 0
+                   ? value.WithLeadingTrivia(trivia)
+                   : value;
+        }
+
+        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            var trivia = node.GetTrailingTrivia();
+
+            return trivia.Count > 0
+                   ? value.WithTrailingTrivia(trivia)
+                   : value;
+        }
+
+        internal static T WithTrailingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode
+        {
+            var trivia = token.TrailingTrivia;
+
+            return trivia.Count > 0
+                   ? value.WithTrailingTrivia(trivia)
+                   : value;
+        }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
 
