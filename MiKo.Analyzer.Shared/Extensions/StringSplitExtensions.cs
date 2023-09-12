@@ -27,7 +27,7 @@ namespace System
 
             foreach (var finding in findings)
             {
-                var indices = value.AllIndicesOf(finding.AsSpan(), comparison);
+                var indices = value.AllIndicesOf(finding, comparison);
 
                 tuples.Capacity += indices.Count;
 

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers
         internal const char Underscore = '_';
 
         internal static readonly char[] SentenceMarkers = ".?!;:".ToCharArray();
-        internal static readonly char[] SentenceClauseMarkers = ",".ToCharArray();
+        internal static readonly char[] SentenceClauseMarkers = ",;".ToCharArray();
         internal static readonly char[] TrailingSentenceMarkers = " \t.?!;:,".ToCharArray();
 
         internal static readonly string[] WhiteSpaces = { " ", "\t", "\r", "\n" };

@@ -165,11 +165,19 @@ namespace MiKoSolutions.Analyzers
                 if (last is XmlTextSyntax lastText)
                 {
                     var token = lastText.TextTokens.LastOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
-                    var text = token.Text;
 
-                    var offset = text.Length - text.TrimEnd().Length;
+                    if (token.IsDefaultValue())
+                    {
+                        // we did not find it
+                    }
+                    else
+                    {
+                        var text = token.Text;
 
-                    end = token.Span.End - offset;
+                        var offset = text.Length - text.TrimEnd().Length;
+
+                        end = token.Span.End - offset;
+                    }
                 }
 
                 return end;
