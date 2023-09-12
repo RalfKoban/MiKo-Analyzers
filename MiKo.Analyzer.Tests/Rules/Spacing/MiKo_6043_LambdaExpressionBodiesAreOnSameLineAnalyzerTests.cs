@@ -302,6 +302,36 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_parenthesized_lambda_expression_body_with_multiple_invocation_expressions_that_span_multiple_line_and_would_be_too_long_when_placed_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(TestMe other)
+        {
+            return DoSomethingCore(() => other.SomethingVeryLongThatReturnsMe()
+                                              .SomethingVeryLongThatReturnsMe()
+                                              .SomethingVeryLongThatReturnsMe()
+                                              .SomethingVeryLongThatReturnsMe()
+                                              .SomethingVeryLongThatReturnsMe()
+                                              .SomeValue);
+        }
+
+        private int DoSomethingCore(Func<int> callback)
+        {
+            return callback();
+        }
+
+        private TestMe SomethingVeryLongThatReturnsMe() => this;
+
+        private int SomeValue { get; }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_simple_lambda_expression_body_that_spans_multiple_lines_if_line_break_is_before_arrow() => An_issue_is_reported_for(@"
 using System;
 
