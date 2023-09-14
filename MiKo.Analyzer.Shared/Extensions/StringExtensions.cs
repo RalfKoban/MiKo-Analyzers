@@ -617,7 +617,7 @@ namespace System
 
             const string Separator = ", ";
 
-            var separatorForLast = string.Intern(" " + lastSeparator + " ");
+            var separatorForLast = Intern(" " + lastSeparator + " ");
 
             switch (count)
             {
@@ -802,7 +802,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
 
-        public static string SecondWord(this string text) => string.Intern(SecondWord(text.AsSpan()).ToString());
+        public static string SecondWord(this string text) => Intern(SecondWord(text.AsSpan()).ToString());
 
         public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
 
@@ -890,7 +890,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
 
-        public static string ThirdWord(this string text) => string.Intern(ThirdWord(text.AsSpan()).ToString());
+        public static string ThirdWord(this string text) => Intern(ThirdWord(text.AsSpan()).ToString());
 
         public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
@@ -918,7 +918,7 @@ namespace System
                 characters[index] = value[index].ToLowerCase();
             }
 
-            return string.Intern(new string(characters));
+            return Intern(new string(characters));
         }
 
         /// <summary>
@@ -953,7 +953,7 @@ namespace System
             var characters = value.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
-            return string.Intern(new string(characters));
+            return Intern(new string(characters));
         }
 
         /// <summary>
@@ -972,18 +972,18 @@ namespace System
         {
             if (index >= value.Length)
             {
-                return string.Intern(value.ToString());
+                return Intern(value.ToString());
             }
 
             if (value[index].IsLowerCase())
             {
-                return string.Intern(value.ToString());
+                return Intern(value.ToString());
             }
 
             var characters = value.ToArray();
             characters[index] = value[index].ToLowerCase();
 
-            return string.Intern(new string(characters));
+            return Intern(new string(characters));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1021,7 +1021,7 @@ namespace System
             var characters = value.ToCharArray();
             characters[index] = characters[index].ToUpperCase();
 
-            return string.Intern(new string(characters));
+            return Intern(new string(characters));
         }
 
         /// <summary>
@@ -1040,18 +1040,18 @@ namespace System
         {
             if (index >= value.Length)
             {
-                return string.Intern(value.ToString());
+                return Intern(value.ToString());
             }
 
             if (value[index].IsUpperCase())
             {
-                return string.Intern(value.ToString());
+                return Intern(value.ToString());
             }
 
             var characters = value.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
-            return string.Intern(new string(characters));
+            return Intern(new string(characters));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1209,5 +1209,7 @@ namespace System
         }
 
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> text) => new WordsReadOnlySpanEnumerator(text);
+
+        private static string Intern(string value) => value; // string.Intern(value);
     }
 }

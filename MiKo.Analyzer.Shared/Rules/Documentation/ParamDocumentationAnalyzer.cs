@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                ? phrase.HumanizedConcatenated()
                                : phrase[0].SurroundedWithApostrophe();
 
-                yield return Issue(parameter.Name, GetIssueLocation(parameterComment), string.Intern(proposal));
+                yield return Issue(parameter.Name, GetIssueLocation(parameterComment), proposal);
             }
         }
 
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            ? phrases.HumanizedConcatenated()
                            : phrases[0].SurroundedWithApostrophe();
 
-            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), string.Intern(proposal)) };
+            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), proposal) };
         }
 
         protected virtual Location GetIssueLocation(XmlElementSyntax parameterComment) => parameterComment.GetContentsLocation();
