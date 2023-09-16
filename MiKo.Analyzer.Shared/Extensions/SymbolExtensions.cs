@@ -269,11 +269,11 @@ namespace MiKoSolutions.Analyzers
                     {
                         var returnType = method.ReturnType.MinimalTypeName();
 
-                        sb.Append(returnType).Append(" ").Append(method.Name);
+                        sb.Append(returnType).Append(' ').Append(method.Name);
 
                         if (method.IsGenericMethod)
                         {
-                            sb.Append("<");
+                            sb.Append('<');
 
                             var typeParameters = method.TypeParameters;
                             var count = typeParameters.Length - 1;
@@ -284,11 +284,11 @@ namespace MiKoSolutions.Analyzers
 
                                 if (i < count)
                                 {
-                                    sb.Append(",");
+                                    sb.Append(',');
                                 }
                             }
 
-                            sb.Append(">");
+                            sb.Append('>');
                         }
 
                         break;
@@ -298,7 +298,7 @@ namespace MiKoSolutions.Analyzers
 
             void AppendParameters(ImmutableArray<IParameterSymbol> parameters, StringBuilder sb)
             {
-                sb.Append("(");
+                sb.Append('(');
 
                 var count = parameters.Length - 1;
 
@@ -308,11 +308,11 @@ namespace MiKoSolutions.Analyzers
 
                     if (i < count)
                     {
-                        sb.Append(",");
+                        sb.Append(',');
                     }
                 }
 
-                sb.Append(")");
+                sb.Append(')');
             }
 
             void AppendParameterSignature(IParameterSymbol parameter, StringBuilder sb)
