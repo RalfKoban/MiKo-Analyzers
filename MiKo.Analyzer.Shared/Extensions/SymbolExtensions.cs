@@ -269,11 +269,11 @@ namespace MiKoSolutions.Analyzers
                     {
                         var returnType = method.ReturnType.MinimalTypeName();
 
-                        sb.Append(returnType).Append(" ").Append(method.Name);
+                        sb.Append(returnType).Append(' ').Append(method.Name);
 
                         if (method.IsGenericMethod)
                         {
-                            sb.Append("<");
+                            sb.Append('<');
 
                             var typeParameters = method.TypeParameters;
                             var count = typeParameters.Length - 1;
@@ -284,11 +284,11 @@ namespace MiKoSolutions.Analyzers
 
                                 if (i < count)
                                 {
-                                    sb.Append(",");
+                                    sb.Append(',');
                                 }
                             }
 
-                            sb.Append(">");
+                            sb.Append('>');
                         }
 
                         break;
@@ -298,7 +298,7 @@ namespace MiKoSolutions.Analyzers
 
             void AppendParameters(ImmutableArray<IParameterSymbol> parameters, StringBuilder sb)
             {
-                sb.Append("(");
+                sb.Append('(');
 
                 var count = parameters.Length - 1;
 
@@ -308,11 +308,11 @@ namespace MiKoSolutions.Analyzers
 
                     if (i < count)
                     {
-                        sb.Append(",");
+                        sb.Append(',');
                     }
                 }
 
-                sb.Append(")");
+                sb.Append(')');
             }
 
             void AppendParameterSignature(IParameterSymbol parameter, StringBuilder sb)
@@ -432,7 +432,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
 
-        internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, string.Intern(typeof(T).FullName));
+        internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, Intern(typeof(T).FullName));
 
         internal static bool Implements(this ITypeSymbol value, string interfaceType)
         {
@@ -476,7 +476,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            var fullName = string.Intern(value.ToString());
+            var fullName = Intern(value.ToString());
 
             if (fullName == interfaceType)
             {
@@ -485,7 +485,7 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var implementedInterface in value.AllInterfaces)
             {
-                var fullInterfaceName = string.Intern(implementedInterface.ToString());
+                var fullInterfaceName = Intern(implementedInterface.ToString());
 
                 if (fullInterfaceName == interfaceType)
                 {
@@ -547,7 +547,7 @@ namespace MiKoSolutions.Analyzers
                                               ? interfaceType.Substring(0, index)
                                               : interfaceType;
 
-            var fullName = string.Intern(value.ToString());
+            var fullName = Intern(value.ToString());
 
             if (fullName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
             {
@@ -556,7 +556,7 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var implementedInterface in value.AllInterfaces)
             {
-                var fullInterfaceName = string.Intern(implementedInterface.ToString());
+                var fullInterfaceName = Intern(implementedInterface.ToString());
 
                 if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
                 {
@@ -633,7 +633,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, string.Intern(typeof(T).FullName));
+        internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, Intern(typeof(T).FullName));
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
         {
@@ -672,7 +672,7 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
-                    return value.AnyBaseType(_ => baseClass == string.Intern(_.ToString()));
+                    return value.AnyBaseType(_ => baseClass == Intern(_.ToString()));
                 }
 
                 default:
@@ -716,7 +716,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     return value.AnyBaseType(_ =>
                                                  {
-                                                     var fullName = string.Intern(_.ToString());
+                                                     var fullName = Intern(_.ToString());
 
                                                      return baseClassName == fullName || baseClassFullQualifiedName == fullName;
                                                  });
@@ -774,7 +774,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && string.Intern(value.ToString()) == TypeNames.CancellationToken;
+        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && Intern(value.ToString()) == TypeNames.CancellationToken;
 
         internal static bool IsCoerceValueCallback(this IMethodSymbol value)
         {
@@ -1134,7 +1134,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             // ReSharper disable once AssignNullToNotNullAttribute
-            var interfaceTypeName = string.Intern(typeof(T).FullName);
+            var interfaceTypeName = Intern(typeof(T).FullName);
 
             if (typeSymbol.Implements(interfaceTypeName))
             {
@@ -1380,5 +1380,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);
+
+        private static string Intern(string value) => value; // string.Intern(value);
     }
 }

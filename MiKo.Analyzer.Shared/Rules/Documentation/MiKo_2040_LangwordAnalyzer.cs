@@ -98,7 +98,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results.ToArray();
         }
 
-        private static string Proposal(string phrase) => string.Intern($"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>");
+        private static string Proposal(string phrase) => $"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>";
 
         private static string GetWrongText(SyntaxList<XmlAttributeSyntax> attributes)
         {

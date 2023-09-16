@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             .ReplaceWithCheck("T_ype", "_type")
                                                             .ToString();
 
-            return string.Intern(result);
+            return result;
         }
 
         internal static string FindDescribingWord(char c, string defaultValue = null)
