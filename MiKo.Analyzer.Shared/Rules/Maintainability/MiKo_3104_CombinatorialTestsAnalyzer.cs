@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -12,7 +11,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3104";
 
-        private static readonly string[] AttributeNames = { "ValueSource", "ValueSourceAttribute", "Values", "ValuesAttribute", "Range", "RangeAttribute", "Random", "RandomAttribute", };
+        private static readonly HashSet<string> AttributeNames = new HashSet<string>
+                                                                     {
+                                                                         "ValueSource",
+                                                                         "ValueSourceAttribute",
+                                                                         "Values",
+                                                                         "ValuesAttribute",
+                                                                         "Range",
+                                                                         "RangeAttribute",
+                                                                         "Random",
+                                                                         "RandomAttribute",
+                                                                     };
+
+        private static readonly HashSet<string> CombinatorialAttributes = new HashSet<string>
+                                                                              {
+                                                                                  "Combinatorial",
+                                                                                  "CombinatorialAttribute",
+                                                                              };
+
+        private static readonly HashSet<string> PairwiseAttributes = new HashSet<string>
+                                                                         {
+                                                                             "Pairwise",
+                                                                             "PairwiseAttribute",
+                                                                         };
+
+        private static readonly HashSet<string> SequentialAttributes = new HashSet<string>
+                                                                           {
+                                                                               "Sequential",
+                                                                               "SequentialAttribute",
+                                                                           };
 
         public MiKo_3104_CombinatorialTestsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -59,56 +86,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool IsCombinatorial(IMethodSymbol method)
-        {
-            foreach (var name in method.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "Combinatorial":
-                    case "CombinatorialAttribute":
-                        return true;
-                }
-            }
+        private static bool IsCombinatorial(IMethodSymbol method) => method.HasAttribute(CombinatorialAttributes);
 
-            return false;
-        }
+        private static bool IsPairwise(IMethodSymbol method) => method.HasAttribute(PairwiseAttributes);
 
-        private static bool IsPairwise(IMethodSymbol method)
-        {
-            foreach (var name in method.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "Pairwise":
-                    case "PairwiseAttribute":
-                        return true;
-                }
-            }
+        private static bool IsSequential(IMethodSymbol method) => method.HasAttribute(SequentialAttributes);
 
-            return false;
-        }
-
-        private static bool IsSequential(IMethodSymbol method)
-        {
-            foreach (var name in method.GetAttributeNames())
-            {
-                switch (name)
-                {
-                    case "Sequential":
-                    case "SequentialAttribute":
-                        return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static int CountApplicableParameters(IMethodSymbol method)
-        {
-            return method.Parameters
-                         .SelectMany(_ => _.GetAttributeNames())
-                         .Count(_ => _.EqualsAny(AttributeNames));
-        }
+        private static int CountApplicableParameters(IMethodSymbol method) => method.Parameters.SelectMany(_ => _.GetAttributeNames()).Count(AttributeNames.Contains);
     }
 }
