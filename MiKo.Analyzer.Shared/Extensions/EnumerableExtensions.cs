@@ -10,6 +10,8 @@ namespace System.Linq
     {
         internal static bool All(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < value.Count; index++)
             {
                 if (filter(value[index]) is false)
@@ -23,6 +25,8 @@ namespace System.Linq
 
         internal static bool All<T>(this SyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 if (predicate(source[index]) is false)
@@ -36,6 +40,8 @@ namespace System.Linq
 
         internal static bool All<T>(this SeparatedSyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 if (predicate(source[index]) is false)
@@ -49,9 +55,11 @@ namespace System.Linq
 
         internal static bool All(this ReadOnlySpan<char> source, Func<char, bool> callback)
         {
-            foreach (var c in source)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (var index = 0; index < source.Length; index++)
             {
-                if (callback(c) is false)
+                if (callback(source[index]) is false)
                 {
                     return false;
                 }
@@ -62,6 +70,8 @@ namespace System.Linq
 
         internal static bool All(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 if (predicate(source[index]) is false)
@@ -75,6 +85,8 @@ namespace System.Linq
 
         internal static bool Any(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < value.Count; index++)
             {
                 if (filter(value[index]))
@@ -88,6 +100,8 @@ namespace System.Linq
 
         internal static bool Any<T>(this SyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 if (predicate(source[index]))
@@ -101,6 +115,8 @@ namespace System.Linq
 
         internal static bool Any<T>(this SeparatedSyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 if (predicate(source[index]))
@@ -114,9 +130,11 @@ namespace System.Linq
 
         internal static bool Any(this ReadOnlySpan<char> value, Predicate<char> filter)
         {
-            for (var i = 0; i < value.Length; i++)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (var index = 0; index < value.Length; index++)
             {
-                if (filter(value[i]))
+                if (filter(value[index]))
                 {
                     return true;
                 }
@@ -127,6 +145,8 @@ namespace System.Linq
 
         internal static bool Any(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 if (predicate(source[index]))
@@ -167,6 +187,8 @@ namespace System.Linq
         internal static bool Contains<TSource, TTarget>(this ImmutableArray<TSource> source, TTarget value, SymbolEqualityComparer comparer) where TSource : class, ISymbol
                                                                                                                                              where TTarget : class, ISymbol
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Length; index++)
             {
                 if (comparer.Equals(source[index], value))
@@ -180,6 +202,7 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this IEnumerable<T> source, T value) where T : class
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var item in source)
             {
                 if (ReferenceEquals(item, value) || Equals(item, value))
@@ -193,6 +216,8 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this SyntaxList<T> source, T value) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var item = source[index];
@@ -208,6 +233,8 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> source, T value) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var item = source[index];
@@ -223,6 +250,8 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> first, List<T> second) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < first.Count; index++)
             {
                 var item = first[index];
@@ -238,6 +267,8 @@ namespace System.Linq
 
         internal static SyntaxToken First(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -253,6 +284,8 @@ namespace System.Linq
 
         internal static T First<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -268,6 +301,8 @@ namespace System.Linq
 
         internal static T First<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -283,6 +318,8 @@ namespace System.Linq
 
         internal static SyntaxToken FirstOrDefault(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -298,6 +335,7 @@ namespace System.Linq
 
         internal static SyntaxToken FirstOrDefault(this SyntaxTokenList.Reversed source, Func<SyntaxToken, bool> predicate)
         {
+            // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
             foreach (var value in source)
             {
                 if (predicate(value))
@@ -311,6 +349,8 @@ namespace System.Linq
 
         internal static T FirstOrDefault<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -326,6 +366,8 @@ namespace System.Linq
 
         internal static T FirstOrDefault<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -374,7 +416,7 @@ namespace System.Linq
 
                     using (var enumerator = source.GetEnumerator())
                     {
-                        for (var i = 0; i <= count; i++)
+                        for (var index = 0; index <= count; index++)
                         {
                             if (enumerator.MoveNext() is false)
                             {
@@ -479,6 +521,8 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Select(this SyntaxTokenList source, Func<SyntaxToken, SyntaxToken> predicate)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -490,6 +534,8 @@ namespace System.Linq
         internal static IEnumerable<TResult> Select<T, TResult>(this SyntaxList<T> source, Func<T, TResult> selector) where T : SyntaxNode
                                                                                                                       where TResult : class
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 yield return selector(source[index]);
@@ -499,6 +545,8 @@ namespace System.Linq
         internal static IEnumerable<TResult> Select<T, TResult>(this SeparatedSyntaxList<T> source, Func<T, TResult> selector) where T : SyntaxNode
                                                                                                                                where TResult : class
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 yield return selector(source[index]);
@@ -507,6 +555,8 @@ namespace System.Linq
 
         internal static IEnumerable<string> Select<T>(this SeparatedSyntaxList<T> source, Func<T, string> selector) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 yield return selector(source[index]);
@@ -515,6 +565,8 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Select<T>(this SyntaxList<T> source, Func<T, SyntaxToken> selector) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 yield return selector(source[index]);
@@ -523,6 +575,8 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Select<T>(this SeparatedSyntaxList<T> source, Func<T, SyntaxToken> selector) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 yield return selector(source[index]);
@@ -531,13 +585,16 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> SelectMany<T>(this IEnumerable<T> source, Func<T, SyntaxTokenList> selector) where T : SyntaxNode
         {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var value in source)
             {
                 var list = selector(value);
 
-                for (var i = 0; i < list.Count; i++)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                for (var index = 0; index < list.Count; index++)
                 {
-                    yield return list[i];
+                    yield return list[index];
                 }
             }
         }
@@ -545,13 +602,16 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this IEnumerable<T> source, Func<T, SeparatedSyntaxList<TResult>> selector) where T : SyntaxNode
                                                                                                                                                 where TResult : SyntaxNode
         {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var value in source)
             {
                 var list = selector(value);
 
-                for (var i = 0; i < list.Count; i++)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                for (var index = 0; index < list.Count; index++)
                 {
-                    yield return list[i];
+                    yield return list[index];
                 }
             }
         }
@@ -559,6 +619,8 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this ImmutableArray<T> source, Func<T, IEnumerable<TResult>> selector) where T : ISymbol
                                                                                                                                            where TResult : class
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Length; index++)
             {
                 var value = source[index];
@@ -573,6 +635,8 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this SyntaxList<T> source, Func<T, IEnumerable<TResult>> selector) where T : SyntaxNode
                                                                                                                                        where TResult : class
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -587,6 +651,8 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this SeparatedSyntaxList<T> source, Func<T, IEnumerable<TResult>> selector) where T : SyntaxNode
                                                                                                                                                 where TResult : class
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -601,39 +667,75 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this IEnumerable<T> source, Func<T, ImmutableArray<TResult>> selector) where T : ISymbol
                                                                                                                                            where TResult : ISymbol
         {
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var value in source)
             {
                 var array = selector(value);
 
-                for (var i = 0; i < array.Length; i++)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                for (var index = 0; index < array.Length; index++)
                 {
-                    yield return array[i];
+                    yield return array[index];
                 }
             }
         }
 
         internal static IEnumerable<T> Skip<T>(this SyntaxList<T> source, int count) where T : SyntaxNode
         {
+            var difference = source.Count - count;
+
+            if (difference <= 0)
+            {
+                return Enumerable.Empty<T>();
+            }
+
+            var result = new T[difference];
+
             for (var index = count; index < source.Count; index++)
             {
-                yield return source[index];
+                result[index - count] = source[index];
             }
+
+            return result;
         }
 
         internal static IEnumerable<T> Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
         {
+            var difference = source.Count - count;
+
+            if (difference <= 0)
+            {
+                return Enumerable.Empty<T>();
+            }
+
+            var result = new T[difference];
+
             for (var index = count; index < source.Count; index++)
             {
-                yield return source[index];
+                result[index - count] = source[index];
             }
+
+            return result;
         }
 
         internal static IEnumerable<SyntaxToken> Skip(this SyntaxTokenList source, int count)
         {
+            var difference = source.Count - count;
+
+            if (difference <= 0)
+            {
+                return Enumerable.Empty<SyntaxToken>();
+            }
+
+            var result = new SyntaxToken[difference];
+
             for (var index = count; index < source.Count; index++)
             {
-                yield return source[index];
+                result[index - count] = source[index];
             }
+
+            return result;
         }
 
         internal static SyntaxToken[] ToArray(this SyntaxTokenList source)
@@ -684,6 +786,8 @@ namespace System.Linq
         {
             var target = new List<SyntaxToken>(source.Count);
 
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 target.Add(source[index]);
@@ -696,6 +800,8 @@ namespace System.Linq
         {
             var target = new List<T>(source.Count);
 
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 target.Add(source[index]);
@@ -708,6 +814,8 @@ namespace System.Linq
         {
             var target = new List<T>(source.Count);
 
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 target.Add(source[index]);
@@ -718,6 +826,8 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Where(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -753,6 +863,8 @@ namespace System.Linq
 
         internal static IEnumerable<T> Where<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
@@ -766,6 +878,8 @@ namespace System.Linq
 
         internal static IEnumerable<T> Where<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < source.Count; index++)
             {
                 var value = source[index];
