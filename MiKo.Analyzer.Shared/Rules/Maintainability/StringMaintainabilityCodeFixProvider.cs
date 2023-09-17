@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -15,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (syntax)
             {
                 case LiteralExpressionSyntax literal when literal.IsKind(SyntaxKind.StringLiteralExpression):
-                    return literal.WithToken(literal.Token.WithText($"\"{GetFixedText(literal.Token, ending)}\""));
+                    return literal.WithToken(literal.Token.WithText(GetFixedText(literal.Token, ending).SurroundedWithDoubleQuote()));
 
                 case InterpolatedStringExpressionSyntax interpolated: // it's no text at the end, so add some
                     return interpolated.AddContents(SyntaxFactory.InterpolatedStringText(ending.ToSyntaxToken(SyntaxKind.InterpolatedStringTextToken)));
@@ -47,15 +48,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static string GetFixedText(SyntaxToken token, string ending) => GetFixedText(token.ValueText, ending);
 
-        private static string GetFixedText(string text, string ending) => GetCleanedText(text.TrimEnd()) + ending;
+        private static string GetFixedText(string text, string ending) => GetCleanedText(text.AsSpan().TrimEnd()).ToString() + ending;
 
-        private static string GetCleanedText(string text)
+        private static ReadOnlySpan<char> GetCleanedText(ReadOnlySpan<char> text)
         {
             var lastCharIndex = text.Length - 1;
 
-            if (lastCharIndex >= 0 && Constants.TrailingSentenceMarkers.Any(_ => _ == text[lastCharIndex]))
+            if (lastCharIndex >= 0)
             {
-                return text.Substring(0, lastCharIndex);
+                foreach (var marker in Constants.TrailingSentenceMarkers)
+                {
+                    if (marker == text[lastCharIndex])
+                    {
+                        return text.Slice(0, lastCharIndex);
+                    }
+                }
             }
 
             return text;
