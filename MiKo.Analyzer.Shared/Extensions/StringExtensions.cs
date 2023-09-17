@@ -217,6 +217,24 @@ namespace System
             return false;
         }
 
+        public static bool ContainsAnyWithSpans(this string value, Span<string> phrases, StringComparison comparison)
+        {
+            if (value.HasCharacters())
+            {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                for (var index = 0; index < phrases.Length; index++)
+                {
+                    if (value.Contains(phrases[index], comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
         {
             if (value.Length > 0)

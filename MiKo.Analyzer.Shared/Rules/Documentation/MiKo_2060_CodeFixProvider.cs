@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet()
+        public static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet()
                                                                                                                    .OrderBy(_ => _.Length)
                                                                                                                    .ThenBy(_ => _)
                                                                                                                    .ToArray();

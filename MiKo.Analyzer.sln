@@ -39,12 +39,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzer", "Analyzer", "{7B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setups", "Setups", "{6884DFBE-B811-4B89-B435-1D2125AE9E7A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{B658B736-08EF-475F-AF22-AC205FB949A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkConsole", "BenchmarkConsole\BenchmarkConsole.csproj", "{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{0e08768e-eb1c-4673-be1d-b396b28bba69}*SharedItemsImports = 5
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{8a34d670-6bbf-4d20-b18b-dd95bf3a9f71}*SharedItemsImports = 13
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{cb799a10-4c44-498d-a682-0555347c207a}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
@@ -92,6 +91,14 @@ Global
 		{CB799A10-4C44-498D-A682-0555347C207A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CB799A10-4C44-498D-A682-0555347C207A}.Release|x86.ActiveCfg = Release|Any CPU
 		{CB799A10-4C44-498D-A682-0555347C207A}.Release|x86.Build.0 = Release|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Debug|x86.Build.0 = Debug|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Release|x86.ActiveCfg = Release|Any CPU
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,8 +113,16 @@ Global
 		{CB799A10-4C44-498D-A682-0555347C207A} = {6884DFBE-B811-4B89-B435-1D2125AE9E7A}
 		{7B001D8C-F260-4E63-9ECA-A3574CBD3AFF} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
 		{6884DFBE-B811-4B89-B435-1D2125AE9E7A} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
+		{B658B736-08EF-475F-AF22-AC205FB949A4} = {E8DA3417-4698-4F8E-9D6A-715988F81B7A}
+		{AD3D32DB-6F7F-487B-BDBE-E6DF9EB92252} = {B658B736-08EF-475F-AF22-AC205FB949A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7625E68D-A5A2-4509-A414-C33EB474E87C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{0e08768e-eb1c-4673-be1d-b396b28bba69}*SharedItemsImports = 5
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{8a34d670-6bbf-4d20-b18b-dd95bf3a9f71}*SharedItemsImports = 13
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{ad3d32db-6f7f-487b-bdbe-e6df9eb92252}*SharedItemsImports = 5
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{cb799a10-4c44-498d-a682-0555347c207a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
