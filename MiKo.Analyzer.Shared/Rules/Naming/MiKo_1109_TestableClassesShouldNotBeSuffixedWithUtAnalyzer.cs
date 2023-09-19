@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         internal static string FindBetterName(INamedTypeSymbol symbol) => FindBetterName(symbol.Name);
 
-        internal static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix)
+        internal static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
                                                                     ? symbolName.WithoutSuffix(Suffix)
                                                                     : Prefix + symbolName.WithoutSuffix(Suffix);
 

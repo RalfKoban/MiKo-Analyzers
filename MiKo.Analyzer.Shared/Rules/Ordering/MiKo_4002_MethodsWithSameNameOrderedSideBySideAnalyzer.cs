@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -65,9 +66,17 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                     {
                         var method = allMethods[index];
 
-                        var signatures = methodsWithSameName.Except(method)
-                                                            .Select(_ => "   " + _.GetMethodSignature())
-                                                            .ConcatenatedWith(Constants.EnvironmentNewLine);
+                        var builder = new StringBuilder();
+
+                        foreach (var other in methodsWithSameName)
+                        {
+                            if (ReferenceEquals(method, other) is false)
+                            {
+                                other.GetMethodSignature(builder.Append("   ")).AppendLine();
+                            }
+                        }
+
+                        var signatures = builder.ToString();
 
                         yield return Issue(method, signatures);
                     }

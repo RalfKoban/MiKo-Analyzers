@@ -234,10 +234,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetMethodSignature(this IMethodSymbol value)
+        internal static StringBuilder GetMethodSignature(this IMethodSymbol value, StringBuilder builder)
         {
-            var builder = new StringBuilder();
-
             if (value.IsStatic)
             {
                 builder.Append("static ");
@@ -251,9 +249,7 @@ namespace MiKoSolutions.Analyzers
             AppendMethodNameForKind(value, builder);
             AppendParameters(value.Parameters, builder);
 
-            var signature = builder.ToString();
-
-            return signature;
+            return builder;
 
             void AppendMethodNameForKind(IMethodSymbol method, StringBuilder sb)
             {
@@ -1291,7 +1287,13 @@ namespace MiKoSolutions.Analyzers
                     // performance optimization as it is likely that there is more than a single field(s)
                     var parameterName = value.Name;
 
-                    fieldNames = Constants.Markers.FieldPrefixes.Select(_ => _ + parameterName).ToArray();
+                    var prefixes = Constants.Markers.FieldPrefixes;
+                    fieldNames = new string[prefixes.Length];
+
+                    for (var index = 0; index < prefixes.Length; index++)
+                    {
+                        fieldNames[index] = prefixes[index] + parameterName;
+                    }
                 }
 
                 if (field.Name.EqualsAny(fieldNames))
