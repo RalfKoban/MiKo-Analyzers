@@ -1,5 +1,7 @@
 *.user
 /.vs/
+/BenchmarkConsole/bin/
+/BenchmarkConsole/obj/
 /MiKo.Analyzer/bin/
 /MiKo.Analyzer/obj/
 /MiKo.Analyzer.2019/bin/

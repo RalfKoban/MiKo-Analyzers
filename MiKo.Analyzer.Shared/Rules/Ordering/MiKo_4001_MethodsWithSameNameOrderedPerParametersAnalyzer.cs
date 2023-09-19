@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -56,7 +56,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                         continue;
                     }
 
-                    var order = similarMethods.Select(_ => "   " + _.GetMethodSignature()).ConcatenatedWith(Constants.EnvironmentNewLine);
+                    var builder = new StringBuilder();
+
+                    foreach (var similarMethod in similarMethods)
+                    {
+                        similarMethod.GetMethodSignature(builder.Append("   ")).AppendLine();
+                    }
+
+                    var order = builder.ToString();
 
                     // check for locations
                     var lastLine = similarMethods.First().GetStartingLine();
