@@ -1199,6 +1199,23 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInvocationOnObjectUnderTest(this InvocationExpressionSyntax value) => value.Expression.IsAccessOnObjectUnderTest();
 
+        internal static bool IsAbstract(this MethodDeclarationSyntax value)
+        {
+            var modifiers = value.Modifiers;
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < modifiers.Count; index++)
+            {
+                if (modifiers[index].IsKind(SyntaxKind.AbstractKeyword))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
         {
             if (value is MemberAccessExpressionSyntax mae)
@@ -1218,10 +1235,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
         {
-            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
-            foreach (var modifier in value.Modifiers)
+            var modifiers = value.Modifiers;
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < modifiers.Count; index++)
             {
-                if (modifier.IsKind(SyntaxKind.AsyncKeyword))
+                if (modifiers[index].IsKind(SyntaxKind.AsyncKeyword))
                 {
                     return true;
                 }
@@ -1232,10 +1252,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsync(this MethodDeclarationSyntax value)
         {
-            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
-            foreach (var modifier in value.Modifiers)
+            var modifiers = value.Modifiers;
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < modifiers.Count; index++)
             {
-                if (modifier.IsKind(SyntaxKind.AsyncKeyword))
+                if (modifiers[index].IsKind(SyntaxKind.AsyncKeyword))
                 {
                     return true;
                 }
