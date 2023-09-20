@@ -15,9 +15,11 @@ namespace MiKoSolutions.Analyzers
         {
             var foundLine = false;
 
-            foreach (var syntaxTrivia in value.Token.LeadingTrivia)
+            var leadingTrivia = value.Token.LeadingTrivia;
+
+            for (var index = 0; index < leadingTrivia.Count; index++)
             {
-                if (syntaxTrivia.IsComment())
+                if (leadingTrivia[index].IsComment())
                 {
                     if (foundLine)
                     {
@@ -76,8 +78,14 @@ namespace MiKoSolutions.Analyzers
         {
             if (value != null)
             {
-                foreach (var token in value.TextTokens)
+                var textTokens = value.TextTokens;
+
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < textTokens.Count; index++)
                 {
+                    var token = textTokens[index];
+
                     if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                     {
                         yield return token;
