@@ -126,6 +126,7 @@ namespace Bla
         [TestCase("Assert.That(values.Count, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.That(values.Count, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
         [TestCase("Assert.That(values.Length, Is.EqualTo(Random.Next()))", "Assert.That(values, Has.Exactly(Random.Next()).Items)")]
+        [TestCase("Assert.That(values.Count, Is.Zero)", "Assert.That(values, Is.Empty)")]
         [TestCase("Assert.AreEqual(42, values.Length)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(42, values.Count)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(values.Length, 42)", "Assert.That(values, Has.Exactly(42).Items)")]

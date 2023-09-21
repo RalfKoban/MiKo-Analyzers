@@ -112,6 +112,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var args1 = args[1];
 
+            if (args1.Expression is MemberAccessExpressionSyntax maes && maes.ToString() == "Is.Zero")
+            {
+                return AssertThat(GetFixedArgument(args[0]), Is("Empty"));
+            }
+
             foreach (var descendant in args1.DescendantNodes())
             {
                 switch (descendant)
