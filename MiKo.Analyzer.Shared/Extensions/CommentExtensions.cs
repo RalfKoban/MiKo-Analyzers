@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class CommentExtensions
     {
+        private const string SingleWhitespaceString = " ";
+
         private static readonly string[] MultiWhitespaceStrings = { "    ", "   ", "  " };
 
         internal static string GetComment(this ISymbol value)
@@ -141,18 +143,18 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        private static string Cleaned(string value)
+        private static string Cleaned(StringBuilder builder)
         {
-            if (value is null)
+            if (builder.Length == 0)
             {
                 return string.Empty;
             }
 
-            return new StringBuilder(value).WithoutParaTags()
-                                           .Without(Constants.Markers.SymbolsAndLineBreaks)
-                                           .ReplaceAllWithCheck(MultiWhitespaceStrings, " ")
-                                           .ToString()
-                                           .Trim();
+            return builder.WithoutParaTags()
+                          .Without(Constants.Markers.SymbolsAndLineBreaks)
+                          .ReplaceAllWithCheck(MultiWhitespaceStrings, SingleWhitespaceString)
+                          .ToString()
+                          .Trim();
         }
     }
 }

@@ -88,10 +88,25 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T : class => string.Concat(values.Where(_ => _ != null));
+        public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
+
+        public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
+        {
+            var builder = new StringBuilder();
+
+            foreach (var value in values)
+            {
+                if (value != null)
+                {
+                    builder.Append(value);
+                }
+            }
+
+            return builder;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+        public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
 
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
