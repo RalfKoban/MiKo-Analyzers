@@ -21,6 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "CalculateLocation",
                                                                                "CancelOperation",
                                                                                "CanRemoveConnection",
+                                                                               "CollectInstallationInformation",
+                                                                               "CollectSystemInformation",
                                                                                "ClearDocumentation",
                                                                                "CloneDocumentation",
                                                                                "CloseConnection",

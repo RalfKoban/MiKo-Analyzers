@@ -56,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Clear",
                                                                    "Clone",
                                                                    "Close",
+                                                                   "Collect",
                                                                    "CompileTimeValidate",
                                                                    "Continue",
                                                                    "Create",
@@ -468,9 +469,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var pair in Endings)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < Endings.Length; index++)
             {
+                var pair = Endings[index];
+
                 if (word.EndsWith(pair.Key, StringComparison.Ordinal))
                 {
                     result = word.Slice(0, word.Length - pair.Key.Length).ToString() + pair.Value;
@@ -484,9 +487,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableStartingPhrase(ReadOnlySpan<char> value)
         {
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var phrase in StartingPhrases)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < StartingPhrases.Length; index++)
             {
+                var phrase = StartingPhrases[index];
+
                 if (value.StartsWith(phrase, StringComparison.Ordinal))
                 {
                     var remaining = value.Slice(phrase.Length);
