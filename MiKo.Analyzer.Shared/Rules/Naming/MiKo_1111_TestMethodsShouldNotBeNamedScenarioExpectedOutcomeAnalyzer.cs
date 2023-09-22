@@ -32,6 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Will",
                                                                   };
 
+        private static readonly string[] SpecialFirstPhrases =
+                                                               {
+                                                                   "Returns",
+                                                                   "Throws",
+                                                               };
+
         public MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {
         }
@@ -74,12 +80,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (count >= 1)
             {
+                var first = true;
+
                 foreach (ReadOnlySpan<char> part in parts)
                 {
                     if (part[0].IsUpperCase() is false)
                     {
                         return false;
                     }
+
+                    // jump over first part
+                    if (first && part.StartsWithAny(SpecialFirstPhrases, StringComparison.Ordinal))
+                    {
+                        first = false;
+
+                        continue;
+                    }
+
+                    first = false;
 
                     if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
                     {
