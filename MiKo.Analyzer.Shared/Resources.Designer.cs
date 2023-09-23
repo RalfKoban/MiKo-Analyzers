@@ -11172,7 +11172,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in assertion.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in assertion.
         /// </summary>
         public static string MiKo_3110_MessageFormat {
             get {
