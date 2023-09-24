@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var args = invocation.ArgumentList.Arguments;
 
-                    var fixedInvocation = UpdatedSyntax(maes, args, issue.Location.GetText());
+                    var fixedInvocation = UpdatedSyntax(maes, args, issue.Properties[MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Marker]);
 
                     if (fixedInvocation != null)
                     {
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "GreaterOrEqual": return FixGreaterOrEqual(args, text);
                 case "Less": return FixLess(args, text);
                 case "LessOrEqual": return FixLessOrEqual(args, text);
-                case "That": return FixThat(args, text);
+                case "That": return FixThat(args);
                 default: return null;
             }
         }
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax FixLessOrEqual(SeparatedSyntaxList<ArgumentSyntax> args, string text) => AssertThat(args[0], Has(text, "LessThanOrEqualTo", args[1]), args);
 
-        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args, string text)
+        private static InvocationExpressionSyntax FixThat(SeparatedSyntaxList<ArgumentSyntax> args)
         {
             var args1 = args[1];
 

@@ -212,9 +212,13 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected Diagnostic Issue<T>(ISymbol symbol, T arg1, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol), arg1.ToString());
 
-        protected Diagnostic Issue<T>(Location location, T arg1, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText(), arg1.ToString());
+        protected Diagnostic Issue<T>(SyntaxNode node, T arg1, Dictionary<string, string> properties = null) => CreateIssue(node.GetLocation(), properties, arg1.ToString());
 
         protected Diagnostic Issue<T>(SyntaxToken token, T arg1, Dictionary<string, string> properties = null) => CreateIssue(token.GetLocation(), properties, arg1.ToString());
+
+        protected Diagnostic Issue<T>(SyntaxTrivia trivia, T arg1, Dictionary<string, string> properties = null) => CreateIssue(trivia.GetLocation(), properties, arg1.ToString());
+
+        protected Diagnostic Issue<T>(Location location, T arg1, Dictionary<string, string> properties = null) => CreateIssue(location, properties, location.GetText(), arg1.ToString());
 
         protected Diagnostic Issue(string name, ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, name);
 

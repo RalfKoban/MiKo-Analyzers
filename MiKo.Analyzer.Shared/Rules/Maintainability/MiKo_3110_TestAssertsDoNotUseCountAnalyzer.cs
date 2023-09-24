@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3110";
 
+        public const string Marker = "Value";
+
         private static readonly HashSet<string> AssertionMethods = new HashSet<string>
                                                                        {
                                                                            "That",
@@ -32,7 +34,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+        // For yet (2023-09-24) unknown reason the compiler warnings will not show up when running inside the CompilationStartAnalysisContext context, so we use the symbol context instead
+        ////    protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+
+        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
+        {
+            foreach (var node in symbol.GetSyntax().DescendantNodes<MemberAccessExpressionSyntax>())
+            {
+                if (node.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+                {
+                    var issues = AnalyzeSimpleMemberAccessExpression(node);
+
+                    foreach (var issue in issues)
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
                                                                                     && node.Expression is IdentifierNameSyntax invokedType
@@ -71,15 +90,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
-        {
-            var node = (MemberAccessExpressionSyntax)context.Node;
-
-            var issues = AnalyzeSimpleMemberAccessExpression(node);
-
-            ReportDiagnostics(context, issues);
-        }
-
         private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node)
         {
             if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
@@ -105,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case MemberAccessExpressionSyntax m when HasIssue(m, out var token):
                 {
                     // 'values.Count' or 'values.Length' call
-                    return Issue(token, token.ValueText);
+                    return Issue(token);
                 }
 
                 case InvocationExpressionSyntax i when i.Expression is MemberAccessExpressionSyntax m && HasIssue(m, out var token):
@@ -115,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         case "AreEqual":
                         {
-                            return Issue(token, token.ValueText);
+                            return Issue(token);
                         }
 
                         case "That" when arguments.Count >= 2:
@@ -125,13 +135,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                             if (expression is InvocationExpressionSyntax ai && IsFixableAssertionForLinqCall(ai))
                             {
                                 // we can only fix "Assert.That(xyz.Count(), Is.EqualTo(42)"
-                                return Issue(token, token.ValueText);
+                                return Issue(token);
                             }
 
                             if (expression is MemberAccessExpressionSyntax am && am.GetName() == "Zero")
                             {
                                 // we can only fix "Assert.That(xyz.Count(), Is.Zero"
-                                return Issue(token, token.ValueText);
+                                return Issue(token);
                             }
 
                             break;
@@ -144,5 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return null;
         }
+
+        private Diagnostic Issue(SyntaxToken token) => Issue(token, token.ValueText, new Dictionary<string, string> { { Marker, token.ValueText } });
     }
 }
