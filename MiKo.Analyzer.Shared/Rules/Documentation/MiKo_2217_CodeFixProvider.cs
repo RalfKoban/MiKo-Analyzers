@@ -80,10 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // problem on parent, so get ancestor list and replace all description with term nodes
                     var list = GetListElement(node);
-                    var itemsToReplace = list.DescendantNodes()
-                                             .OfType<XmlElementSyntax>()
-                                             .Where(_ => _.GetName() == Constants.XmlTag.Description)
-                                             .ToList();
+                    var itemsToReplace = list.DescendantNodes<XmlElementSyntax>().Where(_ => _.GetName() == Constants.XmlTag.Description);
 
                     return syntax.ReplaceNodes(itemsToReplace, (original, rewritten) => SyntaxFactory.XmlElement(Constants.XmlTag.Term, original.Content));
                 }
