@@ -125,13 +125,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Argument(appendixCall);
         }
 
-        protected static ArgumentSyntax Has(string name, string name1, ArgumentSyntax argument, params TypeSyntax[] types) => Argument(SimpleMemberAccess("Has", name, name1, types), argument);
-
         protected static ArgumentSyntax Has(string name, string name1, ArgumentSyntax argument) => Argument(MemberHas(name, name1), argument);
 
         protected static ArgumentSyntax Has(string name, string name1, string name2, ArgumentSyntax argument) => Argument(MemberHas(name, name1, name2), argument);
 
         protected static ArgumentSyntax Has(string name, string name1, string name2, ExpressionSyntax expression) => Argument(MemberHas(name, name1, name2), Argument(expression));
+
+        protected static ArgumentSyntax Has(string name, string name1, ArgumentSyntax argument, params TypeSyntax[] types) => Argument(SimpleMemberAccess("Has", name, name1, types), argument);
 
         protected static MemberAccessExpressionSyntax MemberDoes(params string[] names) => SimpleMemberAccess("Does", names);
 
