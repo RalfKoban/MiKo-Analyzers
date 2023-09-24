@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
             {
-                var arguments = methodCall.ArgumentList.Arguments.ToList();
+                var arguments = methodCall.ArgumentList.Arguments;
 
                 foreach (var argument in arguments)
                 {
@@ -108,7 +108,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic AnalyzeArgument(MemberAccessExpressionSyntax node, ArgumentSyntax argument, IReadOnlyList<ArgumentSyntax> arguments)
+        private Diagnostic AnalyzeArgument(MemberAccessExpressionSyntax node, ArgumentSyntax argument, SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
             switch (argument.Expression)
             {
