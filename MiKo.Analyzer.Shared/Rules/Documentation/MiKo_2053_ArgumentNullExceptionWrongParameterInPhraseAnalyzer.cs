@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // get rid of the para tags as we are not interested into them
             var comment = exceptionComment.GetTextTrimmed();
 
-            var parameterIndicators = parameters.ToDictionary(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name));
+            var parameterIndicators = parameters.ToDictionary<IParameterSymbol, IParameterSymbol, string>(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name), SymbolEqualityComparer.Default);
 
             foreach (var indicator in parameterIndicators)
             {
