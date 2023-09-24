@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var typeUnderTestNames = typesUnderTest.Select(_ => GetTypeUnderTestName(symbol, _))
                                                        .Where(_ => _ != null) // ignore generic class or struct constraint
+                                                       .Distinct()
                                                        .ToList();
 
                 if (typeUnderTestNames.Any(_ => TestClassStartsWithName(symbol, _)))

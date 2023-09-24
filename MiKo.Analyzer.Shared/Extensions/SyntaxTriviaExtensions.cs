@@ -17,7 +17,10 @@ namespace MiKoSolutions.Analyzers
 
             var leadingTrivia = value.Token.LeadingTrivia;
 
-            for (var index = 0; index < leadingTrivia.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var count = leadingTrivia.Count;
+
+            for (var index = 0; index < count; index++)
             {
                 if (leadingTrivia[index].IsComment())
                 {
@@ -80,9 +83,12 @@ namespace MiKoSolutions.Analyzers
             {
                 var textTokens = value.TextTokens;
 
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var tokensCount = textTokens.Count;
+
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < textTokens.Count; index++)
+                for (var index = 0; index < tokensCount; index++)
                 {
                     var token = textTokens[index];
 

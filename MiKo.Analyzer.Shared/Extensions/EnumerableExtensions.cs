@@ -10,9 +10,12 @@ namespace System.Linq
     {
         internal static bool All(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < value.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
                 if (filter(value[index]) is false)
                 {
@@ -23,13 +26,16 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All<T>(this SyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool All<T>(this SyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
-                if (predicate(source[index]) is false)
+                if (predicate(value[index]) is false)
                 {
                     return false;
                 }
@@ -38,13 +44,16 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All<T>(this SeparatedSyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool All<T>(this SeparatedSyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
-                if (predicate(source[index]) is false)
+                if (predicate(value[index]) is false)
                 {
                     return false;
                 }
@@ -68,13 +77,16 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
+        internal static bool All(this SyntaxTokenList value, Predicate<SyntaxToken> predicate)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
-                if (predicate(source[index]) is false)
+                if (predicate(value[index]) is false)
                 {
                     return false;
                 }
@@ -85,9 +97,12 @@ namespace System.Linq
 
         internal static bool Any(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < value.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
                 if (filter(value[index]))
                 {
@@ -98,13 +113,16 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any<T>(this SyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool Any<T>(this SyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
-                if (predicate(source[index]))
+                if (predicate(value[index]))
                 {
                     return true;
                 }
@@ -113,13 +131,16 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any<T>(this SeparatedSyntaxList<T> source, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool Any<T>(this SeparatedSyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
-                if (predicate(source[index]))
+                if (predicate(value[index]))
                 {
                     return true;
                 }
@@ -143,13 +164,16 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any(this SyntaxTokenList source, Predicate<SyntaxToken> predicate)
+        internal static bool Any(this SyntaxTokenList value, Predicate<SyntaxToken> predicate)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < valueCount; index++)
             {
-                if (predicate(source[index]))
+                if (predicate(value[index]))
                 {
                     return true;
                 }
@@ -216,9 +240,12 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this SyntaxList<T> source, T value) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
 
@@ -233,9 +260,12 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> source, T value) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
 
@@ -250,9 +280,12 @@ namespace System.Linq
 
         internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> first, List<T> second) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var firstCount = first.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < first.Count; index++)
+            for (var index = 0; index < firstCount; index++)
             {
                 var item = first[index];
 
@@ -267,9 +300,12 @@ namespace System.Linq
 
         internal static SyntaxToken First(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -284,9 +320,12 @@ namespace System.Linq
 
         internal static T First<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -301,9 +340,12 @@ namespace System.Linq
 
         internal static T First<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -318,9 +360,12 @@ namespace System.Linq
 
         internal static SyntaxToken FirstOrDefault(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -349,9 +394,12 @@ namespace System.Linq
 
         internal static T FirstOrDefault<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -366,9 +414,12 @@ namespace System.Linq
 
         internal static T FirstOrDefault<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -521,9 +572,12 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Select(this SyntaxTokenList source, Func<SyntaxToken, SyntaxToken> predicate)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -534,9 +588,12 @@ namespace System.Linq
         internal static IEnumerable<TResult> Select<T, TResult>(this SyntaxList<T> source, Func<T, TResult> selector) where T : SyntaxNode
                                                                                                                       where TResult : class
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
             }
@@ -545,9 +602,12 @@ namespace System.Linq
         internal static IEnumerable<TResult> Select<T, TResult>(this SeparatedSyntaxList<T> source, Func<T, TResult> selector) where T : SyntaxNode
                                                                                                                                where TResult : class
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
             }
@@ -555,9 +615,12 @@ namespace System.Linq
 
         internal static IEnumerable<string> Select<T>(this SeparatedSyntaxList<T> source, Func<T, string> selector) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
             }
@@ -565,9 +628,12 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Select<T>(this SyntaxList<T> source, Func<T, SyntaxToken> selector) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
             }
@@ -575,9 +641,12 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Select<T>(this SeparatedSyntaxList<T> source, Func<T, SyntaxToken> selector) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
             }
@@ -590,9 +659,12 @@ namespace System.Linq
             {
                 var list = selector(value);
 
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var listCount = list.Count;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < list.Count; index++)
+                for (var index = 0; index < listCount; index++)
                 {
                     yield return list[index];
                 }
@@ -607,9 +679,12 @@ namespace System.Linq
             {
                 var list = selector(value);
 
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var listCount = list.Count;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < list.Count; index++)
+                for (var index = 0; index < listCount; index++)
                 {
                     yield return list[index];
                 }
@@ -635,9 +710,12 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this SyntaxList<T> source, Func<T, IEnumerable<TResult>> selector) where T : SyntaxNode
                                                                                                                                        where TResult : class
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -651,9 +729,12 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this SeparatedSyntaxList<T> source, Func<T, IEnumerable<TResult>> selector) where T : SyntaxNode
                                                                                                                                                 where TResult : class
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -683,7 +764,10 @@ namespace System.Linq
 
         internal static IEnumerable<T> Skip<T>(this SyntaxList<T> source, int count) where T : SyntaxNode
         {
-            var difference = source.Count - count;
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            var difference = sourceCount - count;
 
             if (difference <= 0)
             {
@@ -692,7 +776,7 @@ namespace System.Linq
 
             var result = new T[difference];
 
-            for (var index = count; index < source.Count; index++)
+            for (var index = count; index < sourceCount; index++)
             {
                 result[index - count] = source[index];
             }
@@ -702,7 +786,10 @@ namespace System.Linq
 
         internal static IEnumerable<T> Skip<T>(this SeparatedSyntaxList<T> source, int count) where T : SyntaxNode
         {
-            var difference = source.Count - count;
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            var difference = sourceCount - count;
 
             if (difference <= 0)
             {
@@ -711,7 +798,7 @@ namespace System.Linq
 
             var result = new T[difference];
 
-            for (var index = count; index < source.Count; index++)
+            for (var index = count; index < sourceCount; index++)
             {
                 result[index - count] = source[index];
             }
@@ -721,7 +808,10 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Skip(this SyntaxTokenList source, int count)
         {
-            var difference = source.Count - count;
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            var difference = sourceCount - count;
 
             if (difference <= 0)
             {
@@ -730,7 +820,7 @@ namespace System.Linq
 
             var result = new SyntaxToken[difference];
 
-            for (var index = count; index < source.Count; index++)
+            for (var index = count; index < sourceCount; index++)
             {
                 result[index - count] = source[index];
             }
@@ -740,9 +830,12 @@ namespace System.Linq
 
         internal static SyntaxToken[] ToArray(this SyntaxTokenList source)
         {
-            var target = new SyntaxToken[source.Count];
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
 
-            for (var index = 0; index < source.Count; index++)
+            var target = new SyntaxToken[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
             {
                 target[index] = source[index];
             }
@@ -752,9 +845,12 @@ namespace System.Linq
 
         internal static T[] ToArray<T>(this SyntaxList<T> source) where T : SyntaxNode
         {
-            var target = new T[source.Count];
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
 
-            for (var index = 0; index < source.Count; index++)
+            var target = new T[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
             {
                 target[index] = source[index];
             }
@@ -764,9 +860,12 @@ namespace System.Linq
 
         internal static T[] ToArray<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode
         {
-            var target = new T[source.Count];
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
 
-            for (var index = 0; index < source.Count; index++)
+            var target = new T[sourceCount];
+
+            for (var index = 0; index < sourceCount; index++)
             {
                 target[index] = source[index];
             }
@@ -788,11 +887,14 @@ namespace System.Linq
 
         internal static List<SyntaxToken> ToList(this SyntaxTokenList source)
         {
-            var target = new List<SyntaxToken>(source.Count);
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            var target = new List<SyntaxToken>(sourceCount);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 target.Add(source[index]);
             }
@@ -802,11 +904,14 @@ namespace System.Linq
 
         internal static List<T> ToList<T>(this SyntaxList<T> source) where T : SyntaxNode
         {
-            var target = new List<T>(source.Count);
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            var target = new List<T>(sourceCount);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 target.Add(source[index]);
             }
@@ -816,11 +921,14 @@ namespace System.Linq
 
         internal static List<T> ToList<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode
         {
-            var target = new List<T>(source.Count);
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            var target = new List<T>(sourceCount);
 
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 target.Add(source[index]);
             }
@@ -830,9 +938,12 @@ namespace System.Linq
 
         internal static IEnumerable<SyntaxToken> Where(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -867,9 +978,12 @@ namespace System.Linq
 
         internal static IEnumerable<T> Where<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 
@@ -882,9 +996,12 @@ namespace System.Linq
 
         internal static IEnumerable<T> Where<T>(this SeparatedSyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode
         {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
 

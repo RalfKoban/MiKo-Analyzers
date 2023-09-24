@@ -113,10 +113,12 @@ namespace MiKoSolutions.Analyzers
             {
                 XmlNodeSyntax first = null;
 
+                var listCount = list.Count;
+
                 // try to find the first syntax that is not only an XmlCommentExterior
-                for (var i = 0; i < list.Count; i++)
+                for (var index = 0; index < listCount; index++)
                 {
-                    first = list[i];
+                    first = list[index];
 
                     if (first is XmlTextSyntax t && t.IsWhiteSpaceOnlyText())
                     {
@@ -746,15 +748,15 @@ namespace MiKoSolutions.Analyzers
                         // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
                         // so we can save some time and memory by doing it by ourselves
                         var leadingTrivia = childToken.LeadingTrivia;
+                        var count = leadingTrivia.Count;
 
-                        if (leadingTrivia.Count > 0)
+                        for (var index = 0; index < count; index++)
                         {
-                            foreach (var trivia in leadingTrivia)
+                            var trivia = leadingTrivia[index];
+
+                            if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                             {
-                                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                                {
-                                    return syntax;
-                                }
+                                return syntax;
                             }
                         }
                     }
@@ -1093,9 +1095,12 @@ namespace MiKoSolutions.Analyzers
 
             var name = value.ToString();
 
-            return name.Contains("Command")
-                && semanticModel.LookupSymbols(value.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol
-                && symbol.IsCommand();
+            if (name.Contains("Command") && name.Contains("CommandManager") is false)
+            {
+                return semanticModel.LookupSymbols(value.GetLocation().SourceSpan.Start, name: name).FirstOrDefault() is ITypeSymbol symbol && symbol.IsCommand();
+            }
+
+            return false;
         }
 
         internal static bool IsException(this TypeSyntax value) => value.IsException<Exception>();
@@ -1533,7 +1538,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this SeparatedSyntaxList<TSyntaxNode> source, SyntaxKind kind) where TSyntaxNode : SyntaxNode where TResult : TSyntaxNode
         {
-            if (source.Count == 0)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount == 0)
             {
                 return Array.Empty<TResult>();
             }
@@ -1542,7 +1550,7 @@ namespace MiKoSolutions.Analyzers
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
 
@@ -1557,7 +1565,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyList<T> OfKind<T>(this IReadOnlyList<T> source, SyntaxKind kind) where T : SyntaxNode
         {
-            if (source.Count == 0)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount == 0)
             {
                 return Array.Empty<T>();
             }
@@ -1566,7 +1577,7 @@ namespace MiKoSolutions.Analyzers
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
 
@@ -1607,7 +1618,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode where TResult : T
         {
-            if (source.Count == 0)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount == 0)
             {
                 return Array.Empty<TResult>();
             }
@@ -1616,7 +1630,7 @@ namespace MiKoSolutions.Analyzers
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 if (source[index] is TResult result)
                 {
@@ -2086,16 +2100,28 @@ namespace MiKoSolutions.Analyzers
         {
             var contents = values.ToList();
 
-            for (var index = 0; index < values.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valuesCount = values.Count;
+
+            for (var index = 0; index < valuesCount; index++)
             {
                 if (values[index] is XmlTextSyntax s)
                 {
                     var originalTextTokens = s.TextTokens;
+
+                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                    var originalTextTokensCount = originalTextTokens.Count;
+
+                    if (originalTextTokensCount == 0)
+                    {
+                        continue;
+                    }
+
                     var textTokens = originalTextTokens.ToList();
 
                     var modified = false;
 
-                    for (var i = 0; i < originalTextTokens.Count; i++)
+                    for (var i = 0; i < originalTextTokensCount; i++)
                     {
                         var token = originalTextTokens[i];
 
@@ -2283,7 +2309,14 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var textTokens = value.TextTokens.ToList();
+            var tokens = value.TextTokens;
+
+            if (tokens.Count == 0)
+            {
+                return value;
+            }
+
+            var textTokens = tokens.ToList();
 
             for (var i = 0; i < textTokens.Count; i++)
             {
@@ -2332,7 +2365,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
-            var textTokens = value.TextTokens.ToList();
+            var tokens = value.TextTokens;
+
+            if (tokens.Count == 0)
+            {
+                return XmlText(startText);
+            }
+
+            var textTokens = tokens.ToList();
 
             var replaced = false;
 

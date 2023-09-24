@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -36,16 +36,16 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                      (int)SyntaxKind.ConditionalAccessExpression,
                                                                  };
 
-        public static int CountCyclomaticComplexity(BlockSyntax body, Predicate<SyntaxNode> predicate = null)
+        public static int CountCyclomaticComplexity(BlockSyntax body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
-            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, predicate).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
 
             return 1 + count;
         }
 
-        internal static int CountLinesOfCode(SyntaxNode body, Predicate<SyntaxNode> predicate = null)
+        internal static int CountLinesOfCode(SyntaxNode body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
-            var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, predicate);
+            var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, syntaxKindToIgnore);
 
             var lines = new HashSet<int>();
 
@@ -161,12 +161,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => CountLinesOfCode(position.Line, lines);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(Location location, ISet<int> lines)
         {
             CountLinesOfCode(location.GetStartingLine(), lines);
             CountLinesOfCode(location.GetEndingLine(), lines);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(int line, ISet<int> lines) => lines.Add(line);
     }
 }
