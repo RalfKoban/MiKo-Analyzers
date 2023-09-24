@@ -80,7 +80,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
         {
-            if (source.Count == 0)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+
+            if (sourceCount == 0)
             {
                 return Array.Empty<SyntaxToken>();
             }
@@ -89,7 +92,7 @@ namespace MiKoSolutions.Analyzers
 
             // ReSharper disable once LoopCanBeConvertedToQuery
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < source.Count; index++)
+            for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
 
@@ -213,14 +216,20 @@ namespace MiKoSolutions.Analyzers
         {
             var tokens = values;
 
-            if (tokens.Count > 0)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var tokensCount = values.Count;
+
+            if (tokensCount > 0)
             {
-                tokens = WithoutEmptyText(tokens, tokens[tokens.Count - 1]);
+                tokens = WithoutEmptyText(tokens, tokens[tokensCount - 1]);
+
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                tokensCount = tokens.Count;
             }
 
-            if (tokens.Count > 0)
+            if (tokensCount > 0)
             {
-                tokens = WithoutNewLine(tokens, tokens[tokens.Count - 1]);
+                tokens = WithoutNewLine(tokens, tokens[tokensCount - 1]);
             }
 
             return tokens;

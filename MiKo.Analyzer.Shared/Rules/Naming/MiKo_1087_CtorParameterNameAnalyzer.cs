@@ -46,11 +46,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 yield break;
             }
 
-            var mapping = new Dictionary<string, int>();
-
             var arguments = baseCall.ArgumentList.Arguments;
 
-            for (var i = 0; i < arguments.Count; i++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var argumentsCount = arguments.Count;
+
+            if (argumentsCount == 0)
+            {
+                // no arguments to check for
+                yield break;
+            }
+
+            var mapping = new Dictionary<string, int>();
+
+            for (var i = 0; i < argumentsCount; i++)
             {
                 var argument = arguments[i];
 
@@ -64,6 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // symbol parameters
             if (baseCall.GetSymbol(compilation) is IMethodSymbol baseCtor)
             {
+                var baseCtorParameters = baseCtor.Parameters;
+
                 foreach (var parameter in symbol.Parameters)
                 {
                     var parameterName = parameter.Name;
@@ -71,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     if (mapping.TryGetValue(parameterName, out var argumentPosition))
                     {
                         // we found a parameter, hence we check the name on the base ctor
-                        var baseParameter = baseCtor.Parameters[argumentPosition];
+                        var baseParameter = baseCtorParameters[argumentPosition];
                         var baseParameterName = baseParameter.Name;
 
                         if (baseParameterName != parameterName)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -161,12 +162,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => CountLinesOfCode(position.Line, lines);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(Location location, ISet<int> lines)
         {
             CountLinesOfCode(location.GetStartingLine(), lines);
             CountLinesOfCode(location.GetEndingLine(), lines);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(int line, ISet<int> lines) => lines.Add(line);
     }
 }
