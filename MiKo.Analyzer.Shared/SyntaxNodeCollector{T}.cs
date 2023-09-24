@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers
             m_syntaxKindToIgnore = syntaxKindToIgnore;
         }
 
-        public IEnumerable<T> Nodes => m_nodes;
+        public IReadOnlyList<T> Nodes => m_nodes;
 
         public override void Visit(SyntaxNode node)
         {
