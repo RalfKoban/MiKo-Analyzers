@@ -56,27 +56,37 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             return lines.Count;
         }
 
-        private static void CountLinesOfCode(IEnumerable<SyntaxNode> nodes, ISet<int> lines)
+        private static void CountLinesOfCode(IReadOnlyList<SyntaxNode> nodes, ISet<int> lines)
         {
-            foreach (var node in nodes)
+            for (var index = 0; index < nodes.Count; index++)
             {
-                CountLinesOfCode(node, lines);
+                CountLinesOfCode(nodes[index], lines);
             }
         }
 
         private static void CountLinesOfCode<T>(SeparatedSyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
         {
-            foreach (var node in nodes)
+            var count = nodes.Count;
+
+            if (count > 0)
             {
-                CountLinesOfCode(node, lines);
+                for (var index = 0; index < count; index++)
+                {
+                    CountLinesOfCode(nodes[index], lines);
+                }
             }
         }
 
         private static void CountLinesOfCode<T>(SyntaxList<T> nodes, ISet<int> lines) where T : SyntaxNode
         {
-            foreach (var node in nodes)
+            var count = nodes.Count;
+
+            if (count > 0)
             {
-                CountLinesOfCode(node, lines);
+                for (var index = 0; index < count; index++)
+                {
+                    CountLinesOfCode(nodes[index], lines);
+                }
             }
         }
 
@@ -87,85 +97,124 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                 switch (node)
                 {
                     case BlockSyntax _:
+                    {
                         break;
+                    }
 
                     case IfStatementSyntax s:
+                    {
                         node = s.Condition;
 
                         continue;
+                    }
 
                     case LocalDeclarationStatementSyntax s:
-                        CountLinesOfCode(s.Declaration.GetStartingLine(), lines);
+                    {
+                        var declaration = s.Declaration;
 
-                        // get normal initializers and object initializers
-                        foreach (var variable in s.Declaration.Variables)
+                        CountLinesOfCode(declaration.GetStartingLine(), lines);
+
+                        var variables = declaration.Variables;
+
+                        var count = variables.Count;
+
+                        if (count > 0)
                         {
-                            if (variable.Initializer?.Value is ObjectCreationExpressionSyntax syntax)
+                            // get normal initializers and object initializers
+                            for (var index = 0; index < count; index++)
                             {
-                                CountLinesOfCode(syntax, lines);
+                                var variable = variables[index];
+
+                                if (variable.Initializer?.Value is ObjectCreationExpressionSyntax syntax)
+                                {
+                                    CountLinesOfCode(syntax, lines);
+                                }
                             }
                         }
 
                         break;
+                    }
 
                     case ObjectCreationExpressionSyntax s:
+                    {
+                        var initializer = s.Initializer;
 
-                        if (s.Initializer is null)
+                        if (initializer is null)
                         {
                             // it's a single line
                             CountLinesOfCode(s.GetLocation(), lines);
                         }
                         else
                         {
-                            CountLinesOfCode(s.Initializer.Expressions, lines);
+                            CountLinesOfCode(initializer.Expressions, lines);
                         }
 
                         break;
+                    }
 
                     case ReturnStatementSyntax s:
+                    {
                         CountLinesOfCode(s.GetStartingLine(), lines);
 
-                        if (s.Expression != null)
-                        {
-                            node = s.Expression;
+                        var expression = s.Expression;
 
-                            continue;
+                        if (expression is null)
+                        {
+                            break;
                         }
 
-                        break;
+                        node = expression;
+
+                        continue;
+                    }
 
                     case ForEachStatementSyntax s:
+                    {
                         node = s.Expression;
 
                         continue;
+                    }
 
                     case SwitchStatementSyntax s:
+                    {
                         CountLinesOfCode(s.Expression, lines);
 
-                        foreach (var section in s.Sections)
+                        var sections = s.Sections;
+                        var count = sections.Count;
+
+                        if (count > 0)
                         {
-                            CountLinesOfCode(section.Labels, lines);
+                            for (var index = 0; index < count; index++)
+                            {
+                                CountLinesOfCode(sections[index].Labels, lines);
+                            }
                         }
 
                         break;
+                    }
 
                     default:
+                    {
                         CountLinesOfCode(node.GetLocation(), lines);
 
                         break;
+                    }
                 }
 
                 break;
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(LinePosition position, ISet<int> lines) => CountLinesOfCode(position.Line, lines);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static void CountLinesOfCode(Location location, ISet<int> lines)
         {
-            CountLinesOfCode(location.GetStartingLine(), lines);
-            CountLinesOfCode(location.GetEndingLine(), lines);
+            var lineSpan = location.GetLineSpan();
+
+            CountLinesOfCode(lineSpan.StartLinePosition, lines);
+            CountLinesOfCode(lineSpan.EndLinePosition, lines);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
