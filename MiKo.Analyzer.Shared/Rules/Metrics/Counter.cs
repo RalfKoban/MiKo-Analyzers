@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
@@ -37,16 +36,16 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                      (int)SyntaxKind.ConditionalAccessExpression,
                                                                  };
 
-        public static int CountCyclomaticComplexity(BlockSyntax body, Predicate<SyntaxNode> predicate = null)
+        public static int CountCyclomaticComplexity(BlockSyntax body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
-            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, predicate).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
 
             return 1 + count;
         }
 
-        internal static int CountLinesOfCode(SyntaxNode body, Predicate<SyntaxNode> predicate = null)
+        internal static int CountLinesOfCode(SyntaxNode body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
-            var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, predicate);
+            var nodes = SyntaxNodeCollector.Collect<StatementSyntax>(body, syntaxKindToIgnore);
 
             var lines = new HashSet<int>();
 
