@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<ITypeSymbol>();
             }
 
-            var typesUnderTest = new HashSet<ITypeSymbol>();
+            var typesUnderTest = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
 
             // Idea:
             // 1. Collect created types of objects (ObjectCreationExpression) that are either directly returned (or assigned to variable that is returned)

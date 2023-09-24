@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                            .Select(_ => m_exceptionPhrases[0].FormatWith(_.Name) + (m_addDotsToProposal ? "..." : string.Empty) + Constants.EnvironmentNewLine)
                            .ConcatenatedWith(Constants.Comments.ExceptionSplittingParaPhrase + Constants.EnvironmentNewLine);
 
-            var parameterIndicators = parameters.ToDictionary(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name));
+            var parameterIndicators = parameters.ToDictionary<IParameterSymbol, IParameterSymbol, string>(_ => _, _ => Constants.Comments.ParamRefBeginningPhrase.FormatWith(_.Name), SymbolEqualityComparer.Default);
             var allParameterIndicatorPhrases = parameterIndicators.Values.ToArray();
 
             const StringComparison Comparison = StringComparison.Ordinal;

@@ -205,12 +205,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "NotBeSameAs": return AssertThat(expression, Is("Not", "SameAs", arguments.First()), arguments, removeNameColon: true);
                 case "HaveValue": return AssertThat(expression, Is("Not", "Null"), arguments, 0, removeNameColon: true);
                 case "NotHaveValue": return AssertThat(expression, Is("Null"), arguments, 0, removeNameColon: true);
-                case "HaveCount": return AssertThat(expression, HasCount("EqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountGreaterThan": return AssertThat(expression, HasCount("GreaterThan", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountGreaterThanOrEqualTo": return AssertThat(expression, HasCount("GreaterThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountLessThan": return AssertThat(expression, HasCount("LessThan", arguments.First()), arguments, removeNameColon: true);
-                case "HaveCountLessThanOrEqualTo": return AssertThat(expression, HasCount("LessThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
-                case "NotHaveCount": return AssertThat(expression, HasCount("Not", "EqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "HaveCount": return AssertThat(expression, Has("Count", "EqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "HaveCountGreaterThan": return AssertThat(expression, Has("Count", "GreaterThan", arguments.First()), arguments, removeNameColon: true);
+                case "HaveCountGreaterThanOrEqualTo": return AssertThat(expression, Has("Count", "GreaterThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "HaveCountLessThan": return AssertThat(expression, Has("Count", "LessThan", arguments.First()), arguments, removeNameColon: true);
+                case "HaveCountLessThanOrEqualTo": return AssertThat(expression, Has("Count", "LessThanOrEqualTo", arguments.First()), arguments, removeNameColon: true);
+                case "NotHaveCount": return AssertThat(expression, Has("Count", "Not", "EqualTo", arguments.First()), arguments, removeNameColon: true);
                 case "BeInRange": return AssertThat(expression, Is("InRange", arguments[0], arguments[1]), arguments, 2, removeNameColon: true);
                 case "NotBeInRange": return AssertThat(expression, Is("Not", "InRange", arguments[0], arguments[1]), arguments, 2, removeNameColon: true);
                 case "BeOneOf": return AssertThat(expression, Is("AnyOf", arguments.First()), arguments, removeNameColon: true);
