@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,19 +8,22 @@ namespace MiKoSolutions.Analyzers
     public sealed class SyntaxNodeCollector<T> : CSharpSyntaxWalker where T : SyntaxNode
     {
         private readonly List<T> m_nodes;
-        private readonly Predicate<SyntaxNode> m_predicate;
+        private readonly SyntaxKind m_syntaxKindToIgnore;
 
-        public SyntaxNodeCollector(Predicate<SyntaxNode> predicate)
+        public SyntaxNodeCollector(SyntaxKind syntaxKindToIgnore)
         {
             m_nodes = new List<T>();
-            m_predicate = predicate;
+            m_syntaxKindToIgnore = syntaxKindToIgnore;
         }
 
-        public IEnumerable<T> Nodes => m_nodes;
+        public IReadOnlyList<T> Nodes => m_nodes;
 
         public override void Visit(SyntaxNode node)
         {
-            if (m_predicate is null || m_predicate(node))
+            // duplicate negative, we accept all except the one to ignore
+            var acceptNode = node.IsKind(m_syntaxKindToIgnore) is false;
+
+            if (acceptNode)
             {
                 if (node is T t)
                 {

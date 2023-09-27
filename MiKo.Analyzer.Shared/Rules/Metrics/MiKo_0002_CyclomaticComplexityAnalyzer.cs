@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol)
         {
-            var cc = Counter.CountCyclomaticComplexity(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
+            var cc = Counter.CountCyclomaticComplexity(body, SyntaxKind.LocalFunctionStatement);
 
             return cc > MaxCyclomaticComplexity
                    ? Issue(containingSymbol, cc, MaxCyclomaticComplexity)

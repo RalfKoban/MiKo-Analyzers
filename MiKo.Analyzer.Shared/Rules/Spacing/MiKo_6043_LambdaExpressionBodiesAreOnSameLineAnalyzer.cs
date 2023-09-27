@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6043";
+
+        private const int MaxLineLength = 180;
 
         private static readonly SyntaxKind[] LogicalExpressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
 
@@ -111,6 +114,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
+        private static bool FitsOnSingleLine(SyntaxNode lambda)
+        {
+            var text = lambda.ToFullString().Without(Constants.WhiteSpaces);
+
+            var completeLength = lambda.GetStartPosition().Character + text.Length;
+
+            return completeLength <= MaxLineLength;
+        }
+
         private void AnalyzeLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var lambda = context.Node;
@@ -126,7 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var startingLine = lambda.GetStartingLine();
             var endingLine = lambda.GetEndingLine();
 
-            if (startingLine != endingLine)
+            if (startingLine != endingLine && FitsOnSingleLine(lambda))
             {
                 ReportDiagnostics(context, Issue(lambda));
             }

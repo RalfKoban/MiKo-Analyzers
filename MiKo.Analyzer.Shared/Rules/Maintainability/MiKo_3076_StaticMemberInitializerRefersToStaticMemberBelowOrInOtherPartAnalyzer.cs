@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var name = identifier.GetName();
 
-                    if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType == symbol.ContainingType)
+                    if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType.Equals(symbol.ContainingType, SymbolEqualityComparer.Default))
                     {
                         wrongReferences.Add(name);
                     }

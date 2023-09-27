@@ -11172,7 +11172,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos; in assertion.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos; in assertion.
         /// </summary>
         public static string MiKo_3110_MessageFormat {
             get {
@@ -11330,6 +11330,36 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3114_Title {
             get {
                 return ResourceManager.GetString("MiKo_3114_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that are marked as tests but are empty are considered to be kidding developers.
+        ///People may think that such methods test something but instead they do not test anything at all. This tricks them into a wrong feeling of &quot;having it tested&quot;.
+        ///
+        ///It may even be that the contained code is commented out, leading to the question why it is commented out at all. If that code would lead to a failing test, then either the test code is wrong or it would actually have found a bug that should to be adressed..
+        /// </summary>
+        public static string MiKo_3115_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3115_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete empty test method or implement a test.
+        /// </summary>
+        public static string MiKo_3115_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3115_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should contain code.
+        /// </summary>
+        public static string MiKo_3115_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3115_Title", resourceCulture);
             }
         }
         

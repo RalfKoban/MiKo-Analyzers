@@ -88,10 +88,25 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values) where T : class => string.Concat(values.Where(_ => _ != null));
+        public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
+
+        public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
+        {
+            var builder = new StringBuilder();
+
+            foreach (var value in values)
+            {
+                if (value != null)
+                {
+                    builder.Append(value);
+                }
+            }
+
+            return builder;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ConcatenatedWith<T>(this IEnumerable<T> values, string separator) => string.Join(separator, values);
+        public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
 
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
@@ -203,6 +218,8 @@ namespace System
         {
             if (value.HasCharacters())
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrases.Length; index++)
                 {
                     if (value.Contains(phrases[index], comparison))
@@ -280,6 +297,8 @@ namespace System
             {
                 var lastChar = value[value.Length - 1];
 
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixCharacters.Length; index++)
                 {
                     if (lastChar == suffixCharacters[index])
@@ -298,6 +317,8 @@ namespace System
             {
                 var lastChar = value[value.Length - 1];
 
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixCharacters.Length; index++)
                 {
                     if (lastChar == suffixCharacters[index])
@@ -316,6 +337,8 @@ namespace System
         {
             if (value.HasCharacters())
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixes.Length; index++)
                 {
                     if (value.EndsWith(suffixes[index], comparison))
@@ -353,6 +376,8 @@ namespace System
         {
             if (value.Length > 0)
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixes.Length; index++)
                 {
                     if (value.EndsWith(suffixes[index], comparison))
@@ -385,6 +410,8 @@ namespace System
         {
             if (value.HasCharacters())
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrases.Length; index++)
                 {
                     if (value.Equals(phrases[index], comparison))
@@ -617,7 +644,7 @@ namespace System
 
             const string Separator = ", ";
 
-            var separatorForLast = string.Intern(" " + lastSeparator + " ");
+            var separatorForLast = " " + lastSeparator + " ";
 
             switch (count)
             {
@@ -656,6 +683,7 @@ namespace System
                 // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
                 if (comparison == StringComparison.Ordinal)
                 {
+                    // ReSharper disable once ForCanBeConvertedToForeach
                     for (var i = 0; i < phrases.Length; i++)
                     {
                         var phrase = phrases[i];
@@ -670,7 +698,7 @@ namespace System
                 }
                 else
                 {
-                    // use string to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
+                    // use string here to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
                     return value.ToString().IndexOfAny(phrases, comparison);
                 }
             }
@@ -687,6 +715,7 @@ namespace System
                     return IndexOfAny(value.AsSpan(), phrases, comparison);
                 }
 
+                // ReSharper disable once ForCanBeConvertedToForeach
                 for (var i = 0; i < phrases.Length; i++)
                 {
                     var phrase = phrases[i];
@@ -712,6 +741,7 @@ namespace System
 
             if (value.Length > 0)
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
                 for (var i = 0; i < phrases.Length; i++)
                 {
                     var phrase = phrases[i];
@@ -802,7 +832,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
 
-        public static string SecondWord(this string text) => string.Intern(SecondWord(text.AsSpan()).ToString());
+        public static string SecondWord(this string text) => SecondWord(text.AsSpan()).ToString();
 
         public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
 
@@ -826,6 +856,8 @@ namespace System
         {
             if (value.HasCharacters())
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixes.Length; index++)
                 {
                     if (value.StartsWith(prefixes[index], comparison))
@@ -863,6 +895,8 @@ namespace System
         {
             if (value.Length > 0)
             {
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixes.Length; index++)
                 {
                     if (value.StartsWith(prefixes[index], comparison))
@@ -890,7 +924,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
 
-        public static string ThirdWord(this string text) => string.Intern(ThirdWord(text.AsSpan()).ToString());
+        public static string ThirdWord(this string text) => ThirdWord(text.AsSpan()).ToString();
 
         public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
@@ -918,7 +952,7 @@ namespace System
                 characters[index] = value[index].ToLowerCase();
             }
 
-            return string.Intern(new string(characters));
+            return new string(characters);
         }
 
         /// <summary>
@@ -953,7 +987,7 @@ namespace System
             var characters = value.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
-            return string.Intern(new string(characters));
+            return new string(characters);
         }
 
         /// <summary>
@@ -972,18 +1006,18 @@ namespace System
         {
             if (index >= value.Length)
             {
-                return string.Intern(value.ToString());
+                return value.ToString();
             }
 
             if (value[index].IsLowerCase())
             {
-                return string.Intern(value.ToString());
+                return value.ToString();
             }
 
             var characters = value.ToArray();
             characters[index] = value[index].ToLowerCase();
 
-            return string.Intern(new string(characters));
+            return new string(characters);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1021,7 +1055,7 @@ namespace System
             var characters = value.ToCharArray();
             characters[index] = characters[index].ToUpperCase();
 
-            return string.Intern(new string(characters));
+            return new string(characters);
         }
 
         /// <summary>
@@ -1040,18 +1074,18 @@ namespace System
         {
             if (index >= value.Length)
             {
-                return string.Intern(value.ToString());
+                return value.ToString();
             }
 
             if (value[index].IsUpperCase())
             {
-                return string.Intern(value.ToString());
+                return value.ToString();
             }
 
             var characters = value.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
-            return string.Intern(new string(characters));
+            return new string(characters);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1089,6 +1123,7 @@ namespace System
         {
             var text = value.TrimStart();
 
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < words.Length; index++)
             {
                 var word = words[index];
@@ -1175,8 +1210,11 @@ namespace System
 
             ReadOnlySpan<char> RemoveSuffixes(ReadOnlySpan<char> slice)
             {
-                foreach (var suffix in suffixes)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < suffixes.Length; index++)
                 {
+                    var suffix = suffixes[index];
+
                     if (suffix != null && slice.EndsWith(suffix))
                     {
                         var length = slice.Length - suffix.Length;

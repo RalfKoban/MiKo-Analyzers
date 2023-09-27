@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol)
         {
-            var loc = Counter.CountLinesOfCode(body, _ => _.IsKind(SyntaxKind.LocalFunctionStatement) is false);
+            var loc = Counter.CountLinesOfCode(body, SyntaxKind.LocalFunctionStatement);
 
             return loc > MaxLinesOfCode
                    ? Issue(containingSymbol, loc, MaxLinesOfCode)

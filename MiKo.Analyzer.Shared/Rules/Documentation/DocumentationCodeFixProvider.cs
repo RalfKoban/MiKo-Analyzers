@@ -48,61 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
         {
-            Dictionary<XmlTextSyntax, XmlTextSyntax> textMap = null;
-
-            var minLength = terms.Min(_ => _.Length);
-
-            foreach (var text in syntax.DescendantNodes<XmlTextSyntax>())
-            {
-                Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
-
-                // replace token in text
-                foreach (var token in text.TextTokens)
-                {
-                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                    {
-                        continue;
-                    }
-
-                    var originalText = token.Text;
-
-                    if (originalText.Length < minLength)
-                    {
-                        // length is smaller than minimum provided, so no replacement possible
-                        continue;
-                    }
-
-                    if (originalText.ContainsAny(terms))
-                    {
-                        var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap);
-
-                        var newToken = token.WithText(replacedText);
-
-                        if (tokenMap is null)
-                        {
-                            tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
-                        }
-
-                        tokenMap.Add(token, newToken);
-                    }
-                }
-
-                if (tokenMap is null)
-                {
-                    // nothing found, so nothing to replace
-                }
-                else
-                {
-                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
-
-                    if (textMap is null)
-                    {
-                        textMap = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
-                    }
-
-                    textMap.Add(text, newText);
-                }
-            }
+            var textMap = CreateReplacementTextMap(terms.Min(_ => _.Length));
 
             if (textMap is null)
             {
@@ -113,6 +59,65 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var result = syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
             return result;
+
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength)
+            {
+                Dictionary<XmlTextSyntax, XmlTextSyntax> map = null;
+
+                foreach (var text in syntax.DescendantNodes<XmlTextSyntax>())
+                {
+                    Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
+
+                    // replace token in text
+                    foreach (var token in text.TextTokens)
+                    {
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                        {
+                            continue;
+                        }
+
+                        var originalText = token.Text;
+
+                        if (originalText.Length < minLength)
+                        {
+                            // length is smaller than minimum provided, so no replacement possible
+                            continue;
+                        }
+
+                        if (originalText.ContainsAny(terms))
+                        {
+                            var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap);
+
+                            var newToken = token.WithText(replacedText);
+
+                            if (tokenMap is null)
+                            {
+                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
+                            }
+
+                            tokenMap.Add(token, newToken);
+                        }
+                    }
+
+                    if (tokenMap is null)
+                    {
+                        // nothing found, so nothing to replace
+                    }
+                    else
+                    {
+                        var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+
+                        if (map is null)
+                        {
+                            map = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
+                        }
+
+                        map.Add(text, newText);
+                    }
+                }
+
+                return map;
+            }
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
@@ -715,9 +720,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var arguments1 = g1.TypeArgumentList.Arguments;
                     var arguments2 = g2.TypeArgumentList.Arguments;
 
-                    if (arguments1.Count == arguments2.Count)
+                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                    var arguments1Count = arguments1.Count;
+                    var arguments2Count = arguments2.Count;
+
+                    if (arguments1Count == arguments2Count)
                     {
-                        for (var i = 0; i < arguments1.Count; i++)
+                        for (var i = 0; i < arguments1Count; i++)
                         {
                             if (IsSameName(arguments1[i], arguments2[i]) is false)
                             {
@@ -748,11 +757,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var modified = false;
             var contents = comment.Content;
 
-            for (var i = 0; i <= contents.Count - 2; i++)
+            for (var index = 0; index <= contents.Count - 2; index++)
             {
-                var nextIndex = i + 1;
+                var nextIndex = index + 1;
 
-                var content1 = contents[i];
+                var content1 = contents[index];
                 var content2 = contents[nextIndex];
 
                 if (content1 is XmlTextSyntax text1 && content2 is XmlTextSyntax text2)

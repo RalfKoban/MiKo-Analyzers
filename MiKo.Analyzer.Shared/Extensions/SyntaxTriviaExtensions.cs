@@ -15,9 +15,14 @@ namespace MiKoSolutions.Analyzers
         {
             var foundLine = false;
 
-            foreach (var syntaxTrivia in value.Token.LeadingTrivia)
+            var leadingTrivia = value.Token.LeadingTrivia;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var count = leadingTrivia.Count;
+
+            for (var index = 0; index < count; index++)
             {
-                if (syntaxTrivia.IsComment())
+                if (leadingTrivia[index].IsComment())
                 {
                     if (foundLine)
                     {
@@ -76,8 +81,17 @@ namespace MiKoSolutions.Analyzers
         {
             if (value != null)
             {
-                foreach (var token in value.TextTokens)
+                var textTokens = value.TextTokens;
+
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var tokensCount = textTokens.Count;
+
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < tokensCount; index++)
                 {
+                    var token = textTokens[index];
+
                     if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                     {
                         yield return token;

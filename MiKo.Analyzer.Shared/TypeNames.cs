@@ -29,6 +29,6 @@ namespace MiKoSolutions.Analyzers
         internal static readonly string SerializationInfo = string.Intern(typeof(SerializationInfo).FullName);
         internal static readonly string StreamingContext = string.Intern(typeof(StreamingContext).FullName);
 
-        internal static readonly string TimeSpan = typeof(TimeSpan).FullName;
+        internal static readonly string TimeSpan = string.Intern(typeof(TimeSpan).FullName);
     }
 }

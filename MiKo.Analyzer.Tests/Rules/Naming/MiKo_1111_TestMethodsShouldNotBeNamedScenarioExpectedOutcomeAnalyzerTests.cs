@@ -27,8 +27,11 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_test_method_with_correct_name()
+        [TestCase("DoSomething_does_something")]
+        [TestCase("Returns_null_if_load_fails")]
+        [TestCase("Throws_ArgumentNullException_under_some_conditions")]
+        [TestCase("Method_name_returns_false_if_load_fails_and_some_condition")]
+        public void No_issue_is_reported_for_test_method_with_correct_name_(string methodName)
             => Assert.Multiple(() =>
                                     {
                                         foreach (var testFixture in TestFixtures)
@@ -40,7 +43,7 @@ public class TestMe
 public class TestMe
 {
     [" + test + @"]
-    public void DoSomething_does_something() { }
+    public void " + methodName + @"() { }
 }
 ");
                                             }

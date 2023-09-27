@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WrongNames = { "Enums", "Enum" }; // order is important because of remove order
 
+        private static readonly string[] FlagsAttributes = { nameof(FlagsAttribute) };
+
         public MiKo_1037_EnumSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -31,8 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (betterName.IsNullOrWhiteSpace() is false)
             {
-                if (symbol.IsEnum() && symbol.GetAttributeNames().Any(_ => _ == nameof(FlagsAttribute))
-                                    && betterName.EndsWith('s') is false)
+                if (symbol.IsEnum() && betterName.EndsWith('s') is false && symbol.HasAttribute(FlagsAttributes))
                 {
                     betterName = Pluralizer.GetPluralName(symbolName, betterName);
                 }

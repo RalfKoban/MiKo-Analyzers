@@ -32,6 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Will",
                                                                   };
 
+        private static readonly string[] SpecialFirstPhrases =
+                                                               {
+                                                                   "Returns",
+                                                                   "Throws",
+                                                               };
+
         public MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
         {
         }
@@ -74,12 +80,24 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (count >= 1)
             {
+                var first = true;
+
                 foreach (ReadOnlySpan<char> part in parts)
                 {
                     if (part[0].IsUpperCase() is false)
                     {
                         return false;
                     }
+
+                    // jump over first part
+                    if (first && part.StartsWithAny(SpecialFirstPhrases, StringComparison.Ordinal))
+                    {
+                        first = false;
+
+                        continue;
+                    }
+
+                    first = false;
 
                     if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
                     {
@@ -109,14 +127,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     var addIf = IsIfRequired(parts[0], parts[1]);
 
-                    var builder = new StringBuilder(FixReturn(parts[1]));
+                    var builder = new StringBuilder(name.Length);
+                    FixReturn(builder, parts[1]);
 
                     if (addIf)
                     {
                         builder.Append(If);
                     }
 
-                    builder.Append(FixReturn(parts[0]));
+                    FixReturn(builder, parts[0]);
 
                     builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
@@ -129,14 +148,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var addIf = IsIfRequired(parts[1], parts[2]);
 
-                    var builder = new StringBuilder(FixReturn(parts[0])).Append(FixReturn(parts[2]));
+                    var builder = new StringBuilder(name.Length);
+                    FixReturn(builder, parts[0]);
+                    FixReturn(builder, parts[2]);
 
                     if (addIf)
                     {
                         builder.Append(If);
                     }
 
-                    builder.Append(FixReturn(parts[1]));
+                    FixReturn(builder, parts[1]);
 
                     builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
@@ -165,7 +186,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         capacity += If.Length;
                     }
 
-                    var builder = new StringBuilder(capacity).Append(FixReturn(parts[0])).Append(FixReturn(parts[3]));
+                    var builder = new StringBuilder(capacity);
+                    FixReturn(builder, parts[0]);
+                    FixReturn(builder, parts[3]);
 
                     if (addIf)
                     {
@@ -174,11 +197,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     if (useWhen)
                     {
-                        builder.Append(FixReturn(parts[1])).Append(FixReturn(parts[2]));
+                        FixReturn(builder, parts[1]);
+                        FixReturn(builder, parts[2]);
                     }
                     else
                     {
-                        builder.Append(FixReturn(parts[2])).Append(And).Append(FixReturn(parts[1]));
+                        FixReturn(builder, parts[2]);
+                        builder.Append(And);
+                        FixReturn(builder, parts[1]);
                     }
 
                     builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
@@ -200,14 +226,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool IsIfRequired(string part1, string part2) => part1.StartsWith(If, StringComparison.Ordinal) is false
                                                                      && part2.Equals(Returned, StringComparison.OrdinalIgnoreCase) is false;
 
-        private static string FixReturn(string original)
+        private static void FixReturn(StringBuilder builder, string original)
         {
             if (original.EndsWith(Returned, StringComparison.OrdinalIgnoreCase))
             {
-                return "Returns" + original.Substring(0, original.Length - Returned.Length);
+                builder.Append("Returns").Append(original, 0, original.Length - Returned.Length);
             }
-
-            return original;
+            else
+            {
+                builder.Append(original);
+            }
         }
     }
 }

@@ -30,11 +30,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static SyntaxNode CommentWithStartingPhrase(XmlElementSyntax comment, string startingPhrase)
         {
-            if (comment.Content[0] is XmlTextSyntax text)
+            var originalContent = comment.Content;
+
+            if (originalContent[0] is XmlTextSyntax text)
             {
-                var contents = new List<XmlNodeSyntax>(comment.Content.Count);
+                var contents = new List<XmlNodeSyntax>(originalContent.Count);
                 contents.Add(NewXmlComment(text, startingPhrase));
-                contents.AddRange(comment.Content.Skip(1));
+                contents.AddRange(originalContent.Skip(1));
 
                 // fix last item's CRLF
                 if (contents[contents.Count - 1] is XmlTextSyntax last)
@@ -51,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // happens if we start e.g. with a <see link
             return SyntaxFactory.XmlElement(
                                             comment.StartTag,
-                                            comment.Content.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
+                                            originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
                                             comment.EndTag.WithLeadingXmlComment());
         }
 

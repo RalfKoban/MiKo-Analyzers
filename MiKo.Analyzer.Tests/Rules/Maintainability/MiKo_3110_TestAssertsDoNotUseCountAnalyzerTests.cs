@@ -22,13 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                 nameof(Assert.GreaterOrEqual),
                                                             };
 
-        private static readonly string[] Culprits =
-                                                    {
-                                                        "Length",
-                                                        "Count",
-                                                        "Count()",
-                                                    };
-
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -78,8 +71,74 @@ namespace Bla
     }
 }");
 
+        [TestCase("Assert.That(values.Count(), Is.Not.EqualTo(42))")]
+        [TestCase("Assert.AreNotEqual(42, values.Count())")]
+        [TestCase("Assert.AreNotEqual(values.Count(), 42)")]
+        [TestCase("Assert.That(values.Count(), Is.GreaterThan(42))")]
+        public void No_issue_is_reported_for_Linq_call_(string assertion) => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Linq;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
         [Test]
-        public void An_issue_is_reported_for_Length_in_an_Assert_That_test_method_([ValueSource(nameof(Culprits))] string culprit) => An_issue_is_reported_for(@"
+        public void DoSomething(IEnumerable<int> values)
+        {
+            " + assertion + @";
+        }
+    }
+}
+");
+
+        [TestCase("Assert.AreEqual(42, values.Count())")]
+        [TestCase("Assert.AreEqual(values.Count(), 42)")]
+        [TestCase("Assert.That(values.Count(), Is.EqualTo(42))")]
+        [TestCase("Assert.That(values.Count(), Is.EqualTo(0))")]
+        [TestCase("Assert.That(values.Count(), Is.Zero)")]
+        public void An_issue_is_reported_for_Linq_call_(string assertion) => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Linq;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(IEnumerable<int> values)
+        {
+            " + assertion + @";
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Count_property_in_an_Assert_That_test_method_() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(List<int> values)
+        {
+            Assert.That(values.Count, Is.EqualTo(42));
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Length_property_in_an_Assert_That_test_method_() => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -89,20 +148,41 @@ namespace Bla
         [Test]
         public void DoSomething(int[] values)
         {
-            Assert.That(values." + culprit + @", Is.EqualTo(42));
+            Assert.That(values.Length, Is.EqualTo(42));
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Length_in_an_Assert_test_method() => Assert.Multiple(() =>
-                                                                                                       {
-                                                                                                           foreach (var culprit in Culprits)
-                                                                                                           {
-                                                                                                               foreach (var assertion in AssertionMethods)
+        public void An_issue_is_reported_for_Count_property_in_an_Assert_test_method() => Assert.Multiple(() =>
                                                                                                                {
-                                                                                                                   An_issue_is_reported_for(@"
+                                                                                                                   foreach (var assertion in AssertionMethods)
+                                                                                                                   {
+                                                                                                                       An_issue_is_reported_for(@"
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(List<int> values)
+        {
+            Assert." + assertion + @"(values.Count, Is.EqualTo(42));
+        }
+    }
+}
+");
+                                                                                                                   }
+                                                                                                               });
+
+        [Test]
+        public void An_issue_is_reported_for_Length_property_in_an_Assert_test_method() => Assert.Multiple(() =>
+                                                                                                                {
+                                                                                                                    foreach (var assertion in AssertionMethods)
+                                                                                                                    {
+                                                                                                                        An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
@@ -112,31 +192,64 @@ namespace Bla
         [Test]
         public void DoSomething(int[] values)
         {
-            Assert." + assertion + "(values." + culprit + @", Is.EqualTo(42));
+            Assert." + assertion + @"(values.Length, Is.EqualTo(42));
         }
     }
 }
 ");
-                                                                                                               }
-                                                                                                           }
-                                                                                                       });
+                                                                                                                    }
+                                                                                                                });
 
-        [TestCase("Assert.That(values.Length, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
-        [TestCase("Assert.That(values.Length, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
+        [TestCase("Assert.That(values.Count, Is.Zero)", "Assert.That(values, Is.Empty)")]
+        [TestCase("Assert.That(values.Count, Is.EqualTo(0))", "Assert.That(values, Is.Empty)")]
         [TestCase("Assert.That(values.Count, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.That(values.Count, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
+        [TestCase("Assert.That(values.Count, Is.EqualTo(Random.Next()))", "Assert.That(values, Has.Exactly(Random.Next()).Items)")]
+        [TestCase("Assert.AreEqual(42, values.Count)", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.AreEqual(values.Count, 42)", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.AreNotEqual(42, values.Count)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
+        [TestCase("Assert.AreNotEqual(values.Count, 42)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
+        [TestCase("Assert.Less(values.Count, 42)", "Assert.That(values, Has.Count.LessThan(42))")]
+        [TestCase("Assert.LessOrEqual(values.Count, 42)", "Assert.That(values, Has.Count.LessThanOrEqualTo(42))")]
+        [TestCase("Assert.Greater(values.Count, 42)", "Assert.That(values, Has.Count.GreaterThan(42))")]
+        [TestCase("Assert.GreaterOrEqual(values.Count, 42)", "Assert.That(values, Has.Count.GreaterThanOrEqualTo(42))")]
+        public void Code_gets_fixed_for_Count_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+using NUnit.Framework;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Test]
+        public void DoSomething(List<int> values)
+        {
+            ###;
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("Assert.That(values.Length, Is.Zero)", "Assert.That(values, Is.Empty)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(0))", "Assert.That(values, Is.Empty)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
+        [TestCase("Assert.That(values.Length, Is.EqualTo(Int16.MaxValue))", "Assert.That(values, Has.Exactly(Int16.MaxValue).Items)")]
         [TestCase("Assert.That(values.Length, Is.EqualTo(Random.Next()))", "Assert.That(values, Has.Exactly(Random.Next()).Items)")]
         [TestCase("Assert.AreEqual(42, values.Length)", "Assert.That(values, Has.Exactly(42).Items)")]
-        [TestCase("Assert.AreEqual(42, values.Count)", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(values.Length, 42)", "Assert.That(values, Has.Exactly(42).Items)")]
-        [TestCase("Assert.AreNotEqual(42, values.Length)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
-        [TestCase("Assert.AreNotEqual(42, values.Count)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
-        [TestCase("Assert.AreNotEqual(values.Length, 42)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
-        [TestCase("Assert.Less(values.Length, 42)", "Assert.That(values, Has.Count.LessThan(42))")]
-        [TestCase("Assert.LessOrEqual(values.Length, 42)", "Assert.That(values, Has.Count.LessThanOrEqualTo(42))")]
-        [TestCase("Assert.Greater(values.Length, 42)", "Assert.That(values, Has.Count.GreaterThan(42))")]
-        [TestCase("Assert.GreaterOrEqual(values.Length, 42)", "Assert.That(values, Has.Count.GreaterThanOrEqualTo(42))")]
-        public void Code_gets_fixed_for_(string originalCode, string fixedCode)
+        [TestCase("Assert.AreNotEqual(42, values.Length)", "Assert.That(values, Has.Length.Not.EqualTo(42))")]
+        [TestCase("Assert.AreNotEqual(values.Length, 42)", "Assert.That(values, Has.Length.Not.EqualTo(42))")]
+        [TestCase("Assert.Less(values.Length, 42)", "Assert.That(values, Has.Length.LessThan(42))")]
+        [TestCase("Assert.LessOrEqual(values.Length, 42)", "Assert.That(values, Has.Length.LessThanOrEqualTo(42))")]
+        [TestCase("Assert.Greater(values.Length, 42)", "Assert.That(values, Has.Length.GreaterThan(42))")]
+        [TestCase("Assert.GreaterOrEqual(values.Length, 42)", "Assert.That(values, Has.Length.GreaterThanOrEqualTo(42))")]
+        public void Code_gets_fixed_for_Length_(string originalCode, string fixedCode)
         {
             const string Template = @"
 using System;
@@ -158,11 +271,11 @@ namespace Bla
             VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
         }
 
-        [TestCase("Assert.That(values.Count(), Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(42, values.Count())", "Assert.That(values, Has.Exactly(42).Items)")]
         [TestCase("Assert.AreEqual(values.Count(), 42)", "Assert.That(values, Has.Exactly(42).Items)")]
-        [TestCase("Assert.AreNotEqual(42, values.Count())", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
-        [TestCase("Assert.AreNotEqual(values.Count(), 42)", "Assert.That(values, Has.Count.Not.EqualTo(42))")]
+        [TestCase("Assert.That(values.Count(), Is.Zero)", "Assert.That(values, Is.Empty)")]
+        [TestCase("Assert.That(values.Count(), Is.EqualTo(0))", "Assert.That(values, Is.Empty)")]
+        [TestCase("Assert.That(values.Count(), Is.EqualTo(42))", "Assert.That(values, Has.Exactly(42).Items)")]
         public void Code_gets_fixed_for_Linq_call_(string originalCode, string fixedCode)
         {
             const string OriginalTemplate = @"

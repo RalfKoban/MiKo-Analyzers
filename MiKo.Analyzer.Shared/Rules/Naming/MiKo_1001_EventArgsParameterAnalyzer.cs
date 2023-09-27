@@ -90,22 +90,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var count = parameters.Count;
 
-            if (count > 0)
+            for (var index = 0; index < count; index++)
             {
-                var i = 0;
+                var parameter = parameters[index];
 
-                foreach (var parameter in parameters)
+                var expected = count == 1
+                               ? symbol.Name == nameof(Equals) ? "other" : "e"
+                               : GetNameForIndex(index);
+
+                if (parameter.Name != expected)
                 {
-                    var expected = count == 1
-                                   ? symbol.Name == nameof(Equals) ? "other" : "e"
-                                   : GetNameForIndex(i);
-
-                    i++;
-
-                    if (parameter.Name != expected)
-                    {
-                        yield return Issue(parameter, expected);
-                    }
+                    yield return Issue(parameter, expected);
                 }
             }
         }

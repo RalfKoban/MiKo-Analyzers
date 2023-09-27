@@ -128,6 +128,8 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
+        internal static bool HasAttribute(this ISymbol value, IEnumerable<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
+
         internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
 
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
@@ -232,10 +234,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static string GetMethodSignature(this IMethodSymbol value)
+        internal static StringBuilder GetMethodSignature(this IMethodSymbol value, StringBuilder builder)
         {
-            var builder = new StringBuilder();
-
             if (value.IsStatic)
             {
                 builder.Append("static ");
@@ -249,9 +249,7 @@ namespace MiKoSolutions.Analyzers
             AppendMethodNameForKind(value, builder);
             AppendParameters(value.Parameters, builder);
 
-            var signature = builder.ToString();
-
-            return signature;
+            return builder;
 
             void AppendMethodNameForKind(IMethodSymbol method, StringBuilder sb)
             {
@@ -269,11 +267,11 @@ namespace MiKoSolutions.Analyzers
                     {
                         var returnType = method.ReturnType.MinimalTypeName();
 
-                        sb.Append(returnType).Append(" ").Append(method.Name);
+                        sb.Append(returnType).Append(' ').Append(method.Name);
 
                         if (method.IsGenericMethod)
                         {
-                            sb.Append("<");
+                            sb.Append('<');
 
                             var typeParameters = method.TypeParameters;
                             var count = typeParameters.Length - 1;
@@ -284,11 +282,11 @@ namespace MiKoSolutions.Analyzers
 
                                 if (i < count)
                                 {
-                                    sb.Append(",");
+                                    sb.Append(',');
                                 }
                             }
 
-                            sb.Append(">");
+                            sb.Append('>');
                         }
 
                         break;
@@ -298,7 +296,7 @@ namespace MiKoSolutions.Analyzers
 
             void AppendParameters(ImmutableArray<IParameterSymbol> parameters, StringBuilder sb)
             {
-                sb.Append("(");
+                sb.Append('(');
 
                 var count = parameters.Length - 1;
 
@@ -308,11 +306,11 @@ namespace MiKoSolutions.Analyzers
 
                     if (i < count)
                     {
-                        sb.Append(",");
+                        sb.Append(',');
                     }
                 }
 
-                sb.Append(")");
+                sb.Append(')');
             }
 
             void AppendParameterSignature(IParameterSymbol parameter, StringBuilder sb)
@@ -432,7 +430,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
 
-        internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, string.Intern(typeof(T).FullName));
+        internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
 
         internal static bool Implements(this ITypeSymbol value, string interfaceType)
         {
@@ -476,7 +474,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            var fullName = string.Intern(value.ToString());
+            var fullName = value.ToString();
 
             if (fullName == interfaceType)
             {
@@ -485,7 +483,7 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var implementedInterface in value.AllInterfaces)
             {
-                var fullInterfaceName = string.Intern(implementedInterface.ToString());
+                var fullInterfaceName = implementedInterface.ToString();
 
                 if (fullInterfaceName == interfaceType)
                 {
@@ -547,7 +545,7 @@ namespace MiKoSolutions.Analyzers
                                               ? interfaceType.Substring(0, index)
                                               : interfaceType;
 
-            var fullName = string.Intern(value.ToString());
+            var fullName = value.ToString();
 
             if (fullName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
             {
@@ -556,7 +554,7 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var implementedInterface in value.AllInterfaces)
             {
-                var fullInterfaceName = string.Intern(implementedInterface.ToString());
+                var fullInterfaceName = implementedInterface.ToString();
 
                 if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
                 {
@@ -633,7 +631,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, string.Intern(typeof(T).FullName));
+        internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, typeof(T).FullName);
 
         internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
         {
@@ -672,7 +670,7 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
-                    return value.AnyBaseType(_ => baseClass == string.Intern(_.ToString()));
+                    return value.AnyBaseType(_ => baseClass == _.ToString());
                 }
 
                 default:
@@ -716,7 +714,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     return value.AnyBaseType(_ =>
                                                  {
-                                                     var fullName = string.Intern(_.ToString());
+                                                     var fullName = _.ToString();
 
                                                      return baseClassName == fullName || baseClassFullQualifiedName == fullName;
                                                  });
@@ -774,7 +772,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && string.Intern(value.ToString()) == TypeNames.CancellationToken;
+        internal static bool IsCancellationToken(this ITypeSymbol value) => value.TypeKind == TypeKind.Struct && value.ToString() == TypeNames.CancellationToken;
 
         internal static bool IsCoerceValueCallback(this IMethodSymbol value)
         {
@@ -974,15 +972,15 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsFactory(this ITypeSymbol value) => value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
 
-        internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.GetAttributeNames().Any(Constants.Names.GeneratedAttributeNames.Contains);
+        internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
         internal static bool IsGeneric(this ITypeSymbol value) => value is INamedTypeSymbol type && type.TypeArguments.Length > 0;
 
         internal static bool IsGuid(this ITypeSymbol value) => value.IsValueType && value.Name == nameof(Guid);
 
-        internal static bool IsImport(this ISymbol value) => value.GetAttributeNames().Any(Constants.Names.ImportAttributeNames.Contains);
+        internal static bool IsImport(this ISymbol value) => value.HasAttribute(Constants.Names.ImportAttributeNames);
 
-        internal static bool IsImportingConstructor(this ISymbol value) => value.IsConstructor() && value.GetAttributeNames().Any(Constants.Names.ImportingConstructorAttributeNames.Contains);
+        internal static bool IsImportingConstructor(this ISymbol value) => value.IsConstructor() && value.HasAttribute(Constants.Names.ImportingConstructorAttributeNames);
 
         internal static bool IsInterfaceImplementation<TSymbol>(this TSymbol value) where TSymbol : class, ISymbol
         {
@@ -1134,7 +1132,7 @@ namespace MiKoSolutions.Analyzers
             }
 
             // ReSharper disable once AssignNullToNotNullAttribute
-            var interfaceTypeName = string.Intern(typeof(T).FullName);
+            var interfaceTypeName = typeof(T).FullName;
 
             if (typeSymbol.Implements(interfaceTypeName))
             {
@@ -1240,7 +1238,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
-        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.GetAttributeNames().Any(Constants.Names.TestClassAttributeNames.Contains);
+        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.TestClassAttributeNames);
 
         internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
@@ -1289,7 +1287,13 @@ namespace MiKoSolutions.Analyzers
                     // performance optimization as it is likely that there is more than a single field(s)
                     var parameterName = value.Name;
 
-                    fieldNames = Constants.Markers.FieldPrefixes.Select(_ => _ + parameterName).ToArray();
+                    var prefixes = Constants.Markers.FieldPrefixes;
+                    fieldNames = new string[prefixes.Length];
+
+                    for (var index = 0; index < prefixes.Length; index++)
+                    {
+                        fieldNames[index] = prefixes[index] + parameterName;
+                    }
                 }
 
                 if (field.Name.EqualsAny(fieldNames))
@@ -1379,6 +1383,6 @@ namespace MiKoSolutions.Analyzers
             return typeName;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.GetAttributeNames().Any(attributeNames.Contains);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
     }
 }
