@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartingBooleanDefaultPhrase = "Indicates whether ";
         private const string StartingGuidDefaultPhrase = "The unique identifier for ";
 
-        private const StringComparison Comparison = StringComparison.Ordinal;
+        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
 
         public MiKo_2080_FieldSummaryDefaultPhraseAnalyzer() : base(Id, SymbolKind.Field)
         {
