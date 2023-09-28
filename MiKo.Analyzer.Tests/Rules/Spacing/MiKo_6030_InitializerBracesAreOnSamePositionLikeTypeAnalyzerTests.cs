@@ -541,6 +541,40 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_field_collection_initializer_when_some_values_are_on_same_lines_and_initializer_is_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new HashSet<int>
+                                            {
+                                                1, 2, 3,
+                                                4, 5, 6,
+                                           };
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new HashSet<int>
+                                           {
+                                               1, 2, 3,
+                                               4, 5, 6,
+                                           };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_field_object_initializer_when_placed_on_position_before_position_of_type()
         {
             const string OriginalCode = @"
@@ -650,6 +684,37 @@ public class TestMe
                                     1,
                                     2,
                                     3,
+                                };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_complete_field_array_initializer_when_some_values_are_on_same_lines_and_initializer_is_placed_on_position_before_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new int[]
+                            {
+                                1, 2, 3,
+                                4, 5, 6,
+                            };
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = new int[]
+                                {
+                                    1, 2, 3,
+                                    4, 5, 6,
                                 };
 }
 ";
