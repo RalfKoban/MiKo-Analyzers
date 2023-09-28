@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -83,7 +84,49 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> CreateBooleanReplacementMapKeys()
         {
-            string[] starts = { "Flag", "A flag", "The flag" };
+            string[] booleans =
+                              {
+                                  "A bool value",
+                                  "A bool",
+                                  "A boolean value",
+                                  "A Boolean value",
+                                  "A boolean",
+                                  "A Boolean",
+                                  "A flag",
+                                  "A value",
+                                  "The bool value",
+                                  "The bool",
+                                  "The boolean value",
+                                  "The Boolean value",
+                                  "The boolean",
+                                  "The Boolean",
+                                  "The flag",
+                                  "The value",
+                              };
+
+            var starts = new List<string>(booleans)
+                             {
+                                 "boolean value",
+                                 "Boolean value",
+                                 "bool value",
+                                 "Bool value",
+                                 "boolean",
+                                 "Boolean",
+                                 "bool",
+                                 "Bool",
+                                 "flag",
+                                 "Flag",
+                                 "value",
+                                 "Value",
+                             };
+
+            // build up the "contains xyz" terms
+            foreach (var s in booleans)
+            {
+                starts.Add("Contains " + s.ToLowerCaseAt(0));
+                starts.Add("contains " + s.ToLowerCaseAt(0));
+            }
+
             string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating" };
             string[] continuations = { "if", "whether", "that" };
 
