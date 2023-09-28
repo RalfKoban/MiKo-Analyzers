@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -10,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2080_FieldSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] WrongBooleanPhrases = CreateWrongBooleanPhrases().Distinct().ToArray();
+
         [Test]
         public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
 using System;
@@ -217,61 +223,40 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
         }
 
-        [TestCase("A flag indicating if some comment", "Indicates whether some comment")]
-        [TestCase("A flag indicating that some comment", "Indicates whether some comment")]
-        [TestCase("A flag indicating whether some comment", "Indicates whether some comment")]
-        [TestCase("A flag that indicates if some comment", "Indicates whether some comment")]
-        [TestCase("A flag that indicates that some comment", "Indicates whether some comment")]
-        [TestCase("A flag that indicates whether some comment", "Indicates whether some comment")]
-        [TestCase("A flag to indicate if some comment", "Indicates whether some comment")]
-        [TestCase("A flag to indicate that some comment", "Indicates whether some comment")]
-        [TestCase("A flag to indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("A flag which indicates if some comment", "Indicates whether some comment")]
-        [TestCase("A flag which indicates that some comment", "Indicates whether some comment")]
-        [TestCase("A flag which indicates whether some comment", "Indicates whether some comment")]
-        [TestCase("Flag indicating if some comment", "Indicates whether some comment")]
-        [TestCase("Flag indicating that some comment", "Indicates whether some comment")]
-        [TestCase("Flag indicating whether some comment", "Indicates whether some comment")]
-        [TestCase("Flag that indicates if some comment", "Indicates whether some comment")]
-        [TestCase("Flag that indicates that some comment", "Indicates whether some comment")]
-        [TestCase("Flag that indicates whether some comment", "Indicates whether some comment")]
-        [TestCase("Flag to indicate if some comment", "Indicates whether some comment")]
-        [TestCase("Flag to indicate that some comment", "Indicates whether some comment")]
-        [TestCase("Flag to indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("Flag which indicates if some comment", "Indicates whether some comment")]
-        [TestCase("Flag which indicates that some comment", "Indicates whether some comment")]
-        [TestCase("Flag which indicates whether some comment", "Indicates whether some comment")]
-        [TestCase("Indicates if some comment", "Indicates whether some comment")]
-        [TestCase("Indicates that some comment", "Indicates whether some comment")]
-        [TestCase("Indicating if some comment", "Indicates whether some comment")]
-        [TestCase("Indicating that some comment", "Indicates whether some comment")]
-        [TestCase("Indicating whether some comment", "Indicates whether some comment")]
-        [TestCase("Shall indicate if some comment", "Indicates whether some comment")]
-        [TestCase("Shall indicate that some comment", "Indicates whether some comment")]
-        [TestCase("Shall indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("Should indicate if some comment", "Indicates whether some comment")]
-        [TestCase("Should indicate that some comment", "Indicates whether some comment")]
-        [TestCase("Should indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("Some comment", "Indicates whether some comment")]
-        [TestCase("The flag that indicates if some comment", "Indicates whether some comment")]
-        [TestCase("The flag that indicates that some comment", "Indicates whether some comment")]
-        [TestCase("The flag that indicates whether some comment", "Indicates whether some comment")]
-        [TestCase("The flag to indicate if some comment", "Indicates whether some comment")]
-        [TestCase("The flag to indicate that some comment", "Indicates whether some comment")]
-        [TestCase("The flag to indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("The flag which indicates if some comment", "Indicates whether some comment")]
-        [TestCase("The flag which indicates that some comment", "Indicates whether some comment")]
-        [TestCase("The flag which indicates whether some comment", "Indicates whether some comment")]
-        [TestCase("To indicate if some comment", "Indicates whether some comment")]
-        [TestCase("To indicate that some comment", "Indicates whether some comment")]
-        [TestCase("To indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("Will indicate if some comment", "Indicates whether some comment")]
-        [TestCase("Will indicate that some comment", "Indicates whether some comment")]
-        [TestCase("Will indicate whether some comment", "Indicates whether some comment")]
-        [TestCase("Would indicate if some comment", "Indicates whether some comment")]
-        [TestCase("Would indicate that some comment", "Indicates whether some comment")]
-        [TestCase("Would indicate whether some comment", "Indicates whether some comment")]
-        public void Code_gets_fixed_for_non_constant_boolean_field_(string originalComment, string fixedComment)
+        [Test]
+        public void Code_gets_fixed_for_non_constant_boolean_field()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Some comment.
+    /// </summary>
+    private bool m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Indicates whether some comment.
+    /// </summary>
+    private bool m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_constant_boolean_field_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
         {
             const string Template = @"
 using System;
@@ -280,13 +265,13 @@ using System.Collections.Generic;
 public class TestMe
 {
     /// <summary>
-    /// ###.
+    /// ### some comment.
     /// </summary>
     private bool m_field;
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", "Indicates whether"));
         }
 
         [TestCase("A Guid of some comment", "The unique identifier for some comment")]
@@ -411,5 +396,56 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2080_FieldSummaryDefaultPhraseAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2080_CodeFixProvider();
+
+        [ExcludeFromCodeCoverage]
+        private static IEnumerable<string> CreateWrongBooleanPhrases()
+        {
+            var starts = new[]
+                         {
+                             "Flag", "flag", "A flag", "The flag", "Value", "value", "A value", "The value",
+                             "Boolean", "A Boolean", "A boolean", "The Boolean", "The boolean", "Boolean value", "A Boolean value", "A boolean value", "The Boolean value", "The boolean value",
+                             "Bool", "Bool value", "A bool", "A bool value", "The bool", "The bool value",
+                             "Contains a value", "Contains a flag", "Contains the value", "Contains the flag",
+                             "contains a value", "contains a flag", "contains the value", "contains the flag",
+                             "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
+                             "contains a boolean", "contains a Boolean", "contains a boolean value", "contains the boolean value",
+                             "Contains a bool", "Contains a bool value", "Contains the bool value",
+                             "contains a bool", "contains a bool value", "contains the bool value",
+                         };
+            var middles = new[] { "indicating", "that indicates", "to indicate", "which indicates" };
+            var ends = new[] { "if", "that", "whether" };
+
+            foreach (var start in starts)
+            {
+                foreach (var middle in middles)
+                {
+                    foreach (var end in ends)
+                    {
+                        yield return $"{start} {middle} {end}";
+                    }
+                }
+            }
+
+            yield return "Indicates if";
+            yield return "Indicates that";
+            yield return "Indicating if";
+            yield return "Indicating that";
+            yield return "Indicating whether";
+            yield return "Shall indicate if";
+            yield return "Shall indicate that";
+            yield return "Shall indicate whether";
+            yield return "Should indicate if";
+            yield return "Should indicate that";
+            yield return "Should indicate whether";
+            yield return "To indicate if";
+            yield return "To indicate that";
+            yield return "To indicate whether";
+            yield return "Will indicate if";
+            yield return "Will indicate that";
+            yield return "Will indicate whether";
+            yield return "Would indicate if";
+            yield return "Would indicate that";
+            yield return "Would indicate whether";
+        }
     }
 }

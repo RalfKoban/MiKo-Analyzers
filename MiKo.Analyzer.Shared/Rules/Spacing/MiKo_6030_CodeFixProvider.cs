@@ -25,16 +25,40 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var position = MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.GetStartPosition(initializer);
 
                 var spaces = position.Character;
-                var expressionSpaces = spaces + Constants.Indentation;
 
                 return initializer.WithOpenBraceToken(initializer.OpenBraceToken.WithLeadingSpaces(spaces))
-                                  .WithExpressions(SyntaxFactory.SeparatedList(
-                                                                           initializer.Expressions.Select(_ => _.WithLeadingSpaces(expressionSpaces)),
-                                                                           initializer.Expressions.GetSeparators()))
+                                  .WithExpressions(GetUpdatedSyntax(initializer.Expressions, spaces + Constants.Indentation))
                                   .WithCloseBraceToken(initializer.CloseBraceToken.WithLeadingSpaces(spaces));
             }
 
             return syntax;
+        }
+
+        private static SeparatedSyntaxList<ExpressionSyntax> GetUpdatedSyntax(SeparatedSyntaxList<ExpressionSyntax> expressions, int leadingSpaces)
+        {
+            int? currentLine = null;
+
+            var updatedExpressions = new List<ExpressionSyntax>();
+
+            foreach (var expression in expressions)
+            {
+                var startingLine = expression.GetStartingLine();
+
+                if (currentLine == startingLine)
+                {
+                    // it is on same line, so do not add any additional space
+                    updatedExpressions.Add(expression);
+                }
+                else
+                {
+                    currentLine = startingLine;
+
+                    // it seems to be on a different line, so add with spaces
+                    updatedExpressions.Add(expression.WithLeadingSpaces(leadingSpaces));
+                }
+            }
+
+            return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
         }
     }
 }
