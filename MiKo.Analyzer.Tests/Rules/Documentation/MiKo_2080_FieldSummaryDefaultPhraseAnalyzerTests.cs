@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -205,6 +206,10 @@ public class TestMe
 ");
 
         [TestCase("Some comment", "The some comment")]
+        [TestCase("Specifies a flag that indicates whether some comment", "The some comment")]
+        [TestCase("specifies a flag that indicates whether some comment", "The some comment")]
+        [TestCase("Specifies a flag that indicates some comment", "The some comment")]
+        [TestCase("specifies a flag that indicates some comment", "The some comment")]
         public void Code_gets_fixed_for_constant_boolean_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -214,7 +219,7 @@ using System.Collections.Generic;
 public class TestMe
 {
     /// <summary>
-        /// ###.
+    /// ###.
     /// </summary>
     private const bool m_field;
 }
@@ -278,6 +283,7 @@ public class TestMe
         [TestCase("A GUID of some comment", "The unique identifier for some comment")]
         [TestCase("A unique identifier for some comment", "The unique identifier for some comment")]
         [TestCase("An unique identifier for some comment", "The unique identifier for some comment")]
+        [TestCase("Get some comment", "The unique identifier for some comment")]
         [TestCase("Gets some comment", "The unique identifier for some comment")]
         [TestCase("Gets the some comment", "The unique identifier for the some comment")]
         [TestCase("Guid of some comment", "The unique identifier for some comment")]
@@ -373,6 +379,8 @@ public class TestMe
 
         [TestCase("Some comment", "The some comment")]
         [TestCase("Shall indicate some comment", "The some comment")]
+        [TestCase("Specifies a specific value. The range is a value between 1 and 254", "The specific value. The range is a value between 1 and 254")]
+        [TestCase("Specifies the specific value. A valid value is between 1 and 254", "The specific value. A valid value is between 1 and 254")]
         public void Code_gets_fixed_for_normal_field_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -402,15 +410,12 @@ public class TestMe
         {
             var starts = new[]
                          {
-                             "Flag", "flag", "A flag", "The flag", "Value", "value", "A value", "The value",
+                             "Flag", "A flag", "The flag", "Value", "A value", "The value",
                              "Boolean", "A Boolean", "A boolean", "The Boolean", "The boolean", "Boolean value", "A Boolean value", "A boolean value", "The Boolean value", "The boolean value",
                              "Bool", "Bool value", "A bool", "A bool value", "The bool", "The bool value",
                              "Contains a value", "Contains a flag", "Contains the value", "Contains the flag",
-                             "contains a value", "contains a flag", "contains the value", "contains the flag",
                              "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
-                             "contains a boolean", "contains a Boolean", "contains a boolean value", "contains the boolean value",
                              "Contains a bool", "Contains a bool value", "Contains the bool value",
-                             "contains a bool", "contains a bool value", "contains the bool value",
                          };
             var middles = new[] { "indicating", "that indicates", "to indicate", "which indicates" };
             var ends = new[] { "if", "that", "whether" };
@@ -421,7 +426,9 @@ public class TestMe
                 {
                     foreach (var end in ends)
                     {
-                        yield return $"{start} {middle} {end}";
+                        var phrase = $"{start} {middle} {end}";
+                        yield return phrase;
+                        yield return phrase.ToLowerCaseAt(0);
                     }
                 }
             }
