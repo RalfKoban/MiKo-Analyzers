@@ -56,6 +56,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, "The unique identifier for the type of "))
                                                                                                                                      .ToArray();
 
+        private static readonly IReadOnlyCollection<string> CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
+
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
+
         public override string FixableDiagnosticId => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2080_CodeFixTitle;
@@ -72,63 +76,70 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var preparedComment = Comment(comment, TypeGuidReplacementMapKeys, TypeGuidReplacementMap);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
 
-            return CommentStartingWith(preparedComment2, phrase);
+            var fixedComment = CommentStartingWith(preparedComment2, phrase);
+
+            return Comment(fixedComment, CleanupMapKeys, CleanupMap);
         }
 
-        private static IEnumerable<string> CreateReplacementMapKeys() => Enumerable.Empty<string>()
-                                                                                   .Concat(CreateBooleanReplacementMapKeys())
-                                                                                   .Concat(CreateGuidReplacementMapKeys())
-                                                                                   .Concat(CreateCollectionReplacementMapKeys())
-                                                                                   .Concat(CreateGetReplacementMapKeys())
-                                                                                   .Concat(CreateOtherReplacementMapKeys());
+        private static IEnumerable<string> CreateReplacementMapKeys()
+        {
+            var keys = Enumerable.Empty<string>()
+                                 .Concat(CreateBooleanReplacementMapKeys())
+                                 .Concat(CreateGuidReplacementMapKeys())
+                                 .Concat(CreateCollectionReplacementMapKeys())
+                                 .Concat(CreateGetReplacementMapKeys())
+                                 .Concat(CreateOtherReplacementMapKeys());
+
+            foreach (var key in keys)
+            {
+                yield return key;
+                yield return key.ToLowerCaseAt(0);
+            }
+        }
 
         private static IEnumerable<string> CreateBooleanReplacementMapKeys()
         {
             string[] booleans =
-                              {
-                                  "A bool value",
-                                  "A bool",
-                                  "A boolean value",
-                                  "A Boolean value",
-                                  "A boolean",
-                                  "A Boolean",
-                                  "A flag",
-                                  "A value",
-                                  "The bool value",
-                                  "The bool",
-                                  "The boolean value",
-                                  "The Boolean value",
-                                  "The boolean",
-                                  "The Boolean",
-                                  "The flag",
-                                  "The value",
-                              };
+                                {
+                                    "A bool value",
+                                    "A bool",
+                                    "A boolean value",
+                                    "A Boolean value",
+                                    "A boolean",
+                                    "A Boolean",
+                                    "A flag",
+                                    "A value",
+                                    "The bool value",
+                                    "The bool",
+                                    "The boolean value",
+                                    "The Boolean value",
+                                    "The boolean",
+                                    "The Boolean",
+                                    "The flag",
+                                    "The value",
+                                };
 
             var starts = new List<string>(booleans)
                              {
-                                 "boolean value",
                                  "Boolean value",
-                                 "bool value",
                                  "Bool value",
-                                 "boolean",
                                  "Boolean",
-                                 "bool",
                                  "Bool",
-                                 "flag",
                                  "Flag",
-                                 "value",
                                  "Value",
                              };
 
             // build up the "contains xyz" terms
-            foreach (var s in booleans)
+            foreach (var text in booleans)
             {
-                starts.Add("Contains " + s.ToLowerCaseAt(0));
-                starts.Add("contains " + s.ToLowerCaseAt(0));
+                var lowerText = text.ToLowerCaseAt(0);
+
+                starts.Add("Contains " + lowerText);
+                starts.Add("Specifies " + lowerText);
             }
 
             string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating" };
-            string[] continuations = { "if", "whether", "that" };
+            string[] continuations = { " if", " whether", " that", string.Empty };
 
             foreach (var start in starts)
             {
@@ -136,7 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var continuation in continuations)
                     {
-                        yield return $"{start} {verb} {continuation} ";
+                        yield return $"{start} {verb}{continuation} ";
                     }
                 }
             }
@@ -145,10 +156,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var continuation in continuations)
                 {
-                    yield return $"{start} indicate {continuation} ";
+                    yield return $"{start} indicate{continuation} ";
                 }
-
-                yield return $"{start} indicate ";
             }
 
             yield return "Indicating if ";
@@ -193,13 +202,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static IEnumerable<string> CreateGetReplacementMapKeys()
         {
             yield return "Gets ";
+            yield return "Get ";
         }
 
         private static IEnumerable<string> CreateOtherReplacementMapKeys()
         {
-            yield return "A ";
-            yield return "An ";
-            yield return "The ";
+            yield return "Specifies the ";
+            yield return "Specifies an ";
+            yield return "Specifies a ";
         }
     }
 }
