@@ -65,6 +65,15 @@ namespace MiKoSolutions.Analyzers.Rules
             return Invocation(member);
         }
 
+        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+
+        protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
+        {
+            var identifierName = SyntaxFactory.IdentifierName(name);
+
+            return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, syntax, identifierName);
+        }
+
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(string typeName, string methodName, TypeSyntax[] items)
         {
             var type = SyntaxFactory.IdentifierName(typeName);

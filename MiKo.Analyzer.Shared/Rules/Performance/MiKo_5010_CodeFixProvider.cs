@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 case SyntaxKind.LogicalNotExpression:
                 case SyntaxKind.EqualsExpression:
                 case SyntaxKind.NotEqualsExpression:
+                case SyntaxKind.IsPatternExpression:
                     return parent;
 
                 default:
@@ -39,11 +40,28 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
+            if (syntax is IsPatternExpressionSyntax pattern)
+            {
+                var isFalsePattern = pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
+
+                return GetUpdatedSyntax(pattern.Expression, issue, isFalsePattern ? SyntaxKind.NotEqualsExpression : SyntaxKind.None).WithoutTrailingTrivia();
+            }
+
+            return GetUpdatedSyntax(syntax, issue, SyntaxKind.None);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax, Diagnostic issue, SyntaxKind predefined)
+        {
             var invocation = GetInvocationExpressionSyntax(syntax, out var kind);
 
             if (invocation is null)
             {
                 return syntax;
+            }
+
+            if (predefined != SyntaxKind.None)
+            {
+                kind = predefined;
             }
 
             var arguments = invocation.ArgumentList.Arguments;
@@ -60,18 +78,27 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         right = cast.Expression;
                     }
 
-                    var expression = SyntaxFactory.BinaryExpression(kind, left, right);
-
-                    return expression.WithTrailingTriviaFrom(syntax);
+                    return SyntaxFactory.BinaryExpression(kind, left, right).WithTrailingTriviaFrom(syntax);
                 }
 
                 case 2:
                 {
                     var left = arguments[0].Expression;
                     var right = arguments[1].Expression;
-                    var expression = SyntaxFactory.BinaryExpression(kind, left, right);
 
-                    return expression.WithTrailingTriviaFrom(syntax);
+                    if (issue.Properties.IsEmpty)
+                    {
+                        return SyntaxFactory.BinaryExpression(kind, left, right).WithTrailingTriviaFrom(syntax);
+                    }
+
+                    var operand = Invocation(SimpleMemberAccess(left, nameof(Equals)), arguments[1]);
+
+                    if (kind == SyntaxKind.NotEqualsExpression)
+                    {
+                        return IsPattern(operand, SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression));
+                    }
+
+                    return operand;
                 }
             }
 

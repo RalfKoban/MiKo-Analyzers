@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -95,19 +96,109 @@ public class TestMe
 }
 ");
 
-        [TestCase("==")]
-        [TestCase("!=")]
-        [TestCase(">=")]
-        [TestCase("<=")]
-        [TestCase("+")]
-        [TestCase("-")]
-        [TestCase("whatever")]
-        public void No_issue_is_reported_for_operator_(string operatorName) => No_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_IEquatable_equals_method_inside_equality_operator_of_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public static bool operator ==(TestMe left, TestMe right) => Equals(left, right);
+
+    public static bool operator !=(TestMe left, TestMe right) => !Equals(left, right);
+
+    public bool Equals(TestMe other) => throw new NotImplementedException();
+
+    public override bool Equals(object obj) => ReferenceEquals(this, obj) || Equals(obj as TestMe);
+
+    public override int GetHashCode() => throw new NotImplementedException();
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_IEquatable_equals_method_inside_equality_operator_of_struct() => No_issue_is_reported_for(@"
+using System;
+
+public struct TestMe : IEquatable<TestMe>
+{
+    public static bool operator ==(TestMe left, TestMe right) => left.Equals(right);
+
+    public static bool operator !=(TestMe left, TestMe right) => !left.Equals(right);
+
+    public bool Equals(TestMe other) => throw new NotImplementedException();
+
+    public override bool Equals(object obj) => obj is TestMe other && Equals(other);
+
+    public override int GetHashCode() => throw new NotImplementedException();
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_IEquatable_equals_method_inside_equality_operator_of_struct_that_invokes_object_Equals() => An_issue_is_reported_for(2, @"
+using System;
+
+public struct TestMe : IEquatable<TestMe>
+{
+    public static bool operator ==(TestMe left, TestMe right) => Equals(left, right);
+
+    public static bool operator !=(TestMe left, TestMe right) => !Equals(left, right);
+
+    public bool Equals(TestMe other) => throw new NotImplementedException();
+
+    public override bool Equals(object obj) => obj is TestMe other && Equals(other);
+
+    public override int GetHashCode() => throw new NotImplementedException();
+}
+");
+
+        [TestCase("5", "4")]
+        [TestCase("Guid.Empty", "new Guid()")]
+        public void An_issue_is_reported_for_negative_IEquatable_equals_method_on_structs_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    public static bool operator " + operatorName + @" (TestMe left, TestMe right) => Equals(left, right);
+    public void DoSomething()
+    {
+        var x = " + x + @";
+        var y = " + y + @";
+
+        if (!x.Equals(y)) throw new NotSupportedException();
+    }
+}
+");
+
+        [TestCase("5", "4")]
+        [TestCase("Guid.Empty", "new Guid()")]
+        public void An_issue_is_reported_for_negative_IEquatable_equals_method_with_parenthesis_on_structs_(string x, string y) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = " + x + @";
+        var y = " + y + @";
+
+        if (!(x.Equals(y))) throw new NotSupportedException();
+    }
+}
+");
+
+        [TestCase("5", "4")]
+        [TestCase("Guid.Empty", "new Guid()")]
+        public void An_issue_is_reported_for_negative_IEquatable_equals_method_using_pattern_on_structs_(string x, string y) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        var x = " + x + @";
+        var y = " + y + @";
+
+        if (x.Equals(y) is false) throw new NotSupportedException();
+    }
 }
 ");
 
@@ -270,6 +361,12 @@ public class TestMe
              "using System; class TestMe { void Do(Guid x, Guid y) { if (object.Equals(x, y)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x, Guid y) { if (x == y) throw new NotSupportedException(); } }")]
         [TestCase(
+             "using System; class TestMe { void Do(Guid x, bool b) { if (b && Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, bool b) { if (b && x == Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x, bool b) { if (Equals(x, Guid.Empty) && b) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x, bool b) { if (x == Guid.Empty && b) throw new NotSupportedException(); } }")]
+        [TestCase(
              "using System; class TestMe { void Do(Guid x) { if (object.Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x) { if (x == Guid.Empty) throw new NotSupportedException(); } }")]
         [TestCase(
@@ -291,17 +388,26 @@ public class TestMe
              "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) == true) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x) { if (x == Guid.Empty) throw new NotSupportedException(); } }")]
         [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) is false) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) is true) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x == Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
              "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) != false) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x) { if (x == Guid.Empty) throw new NotSupportedException(); } }")]
         [TestCase(
              "using System; class TestMe { void Do(Guid x) { if (Equals(x, Guid.Empty) != true) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
         [TestCase(
-             "using System; class TestMe { void Do(Guid x, bool b) { if (Equals(x, Guid.Empty) && b) throw new NotSupportedException(); } }",
-             "using System; class TestMe { void Do(Guid x, bool b) { if (x == Guid.Empty && b) throw new NotSupportedException(); } }")]
+             "using System; class TestMe { void Do(Guid x) { if (!(x.Equals(Guid.Empty))) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
         [TestCase(
-             "using System; class TestMe { void Do(Guid x, bool b) { if (b && Equals(x, Guid.Empty)) throw new NotSupportedException(); } }",
-             "using System; class TestMe { void Do(Guid x, bool b) { if (b && x == Guid.Empty) throw new NotSupportedException(); } }")]
+             "using System; class TestMe { void Do(Guid x) { if (!x.Equals(Guid.Empty)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(Guid x) { if (x.Equals(Guid.Empty) is false) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(Guid x) { if (x != Guid.Empty) throw new NotSupportedException(); } }")]
         [TestCase(
              "using System; class TestMe { void Do(StringComparison x) { if (Equals(x, StringComparison.Ordinal)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(StringComparison x) { if (x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
@@ -315,6 +421,9 @@ public class TestMe
              "using System; class TestMe { void Do(StringComparison x) { if (Equals(x, StringComparison.Ordinal) != true) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(StringComparison x) { if (x != StringComparison.Ordinal) throw new NotSupportedException(); } }")]
         [TestCase(
+             "using System; class TestMe { void Do(StringComparison x) { if (Equals(x, StringComparison.Ordinal) is false) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(StringComparison x) { if (x != StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
              "using System; class TestMe { void Do(StringComparison x, bool b) { if (b && Equals(x, StringComparison.Ordinal)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(StringComparison x, bool b) { if (b && x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
         [TestCase(
@@ -323,7 +432,56 @@ public class TestMe
         [TestCase(
              "using System; class TestMe { void Do(StringComparison x) { if (x.Equals(StringComparison.Ordinal)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(StringComparison x) { if (x == StringComparison.Ordinal) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(int x) { if (!(x.Equals(42))) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(int x) { if (x != 42) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(int x) { if (!x.Equals(42)) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(int x) { if (x != 42) throw new NotSupportedException(); } }")]
+        [TestCase(
+             "using System; class TestMe { void Do(int x) { if (x.Equals(42) is false) throw new NotSupportedException(); } }",
+             "using System; class TestMe { void Do(int x) { if (x != 42) throw new NotSupportedException(); } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
+        [Test]
+        public void Code_gets_fixed_for_IEquatable_equals_method_inside_equality_operator_of_struct_that_invokes_object_Equals()
+        {
+            const string OriginalCode = @"
+using System;
+
+public struct TestMe : IEquatable<TestMe>
+{
+    public static bool operator ==(TestMe left, TestMe right) => Equals(left, right);
+
+    public static bool operator !=(TestMe left, TestMe right) => !Equals(left, right);
+
+    public bool Equals(TestMe other) => throw new NotImplementedException();
+
+    public override bool Equals(object obj) => obj is TestMe other && Equals(other);
+
+    public override int GetHashCode() => throw new NotImplementedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public struct TestMe : IEquatable<TestMe>
+{
+    public static bool operator ==(TestMe left, TestMe right) => left.Equals(right);
+
+    public static bool operator !=(TestMe left, TestMe right) => left.Equals(right) is false;
+
+    public bool Equals(TestMe other) => throw new NotImplementedException();
+
+    public override bool Equals(object obj) => obj is TestMe other && Equals(other);
+
+    public override int GetHashCode() => throw new NotImplementedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_5010_EqualsAnalyzer.Id;
 
