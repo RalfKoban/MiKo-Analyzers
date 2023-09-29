@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -451,6 +452,8 @@ public class TestMe
 
         [TestCase("Whether to do something.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
         [TestCase("<value>true</value>: Activates some stuff.", @"<see langword=""true""/> to activate some stuff; otherwise, <see langword=""false""/>.")]
+        [TestCase("A flag that indicates whether items shall be updated.", @"<see langword=""true""/> to indicate that items shall be updated; otherwise, <see langword=""false""/>.")]
+
         [TestCase(@"Set to <see langword=""true""/> if you want to do something, <see langword=""false""/> otherwise.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"some data if <see langword=""true""/>, some other data if <see langword=""false""/>. Default value is <see langword=""false""/>.", @"<see langword=""true""/> to some data; otherwise, <see langword=""false""/>. Default value is <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"<see langword=""true""/> if the items shall be selected.<see langword=""false""/> otherwise.", @"<see langword=""true""/> to select the items; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
@@ -526,6 +529,7 @@ public class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2023_CodeFixProvider();
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateIndicatePhrases()
         {
             var starts = new[] { "A flag", "The flag", "A value", "The value", "Flag", "Value" };
@@ -570,6 +574,7 @@ public class TestMe
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateOptionalPhrases()
         {
             var starts = new[] { "A optional", "An optional", "The optional", "A (optional)", "An (optional)", "The (optional)", "Optional", "(Optional)", "(optional)" };
@@ -604,6 +609,7 @@ public class TestMe
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateConditionalStartPhrases()
         {
             var starts = new[] { "If set to", "If given", "If", "When set to", "When given", "When", "In case set to", "In case" };
