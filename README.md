@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 393 rules that are currently provided by the analyzer.
+The following tables list all the 394 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -313,6 +313,7 @@ The following tables list all the 393 rules that are currently provided by the a
 |MiKo_3043|Use 'nameof' for WeakEventManager event (de-)registrations|&#x2713;|&#x2713;|
 |MiKo_3044|Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'|&#x2713;|&#x2713;|
 |MiKo_3045|Use 'nameof' for EventManager event registrations|&#x2713;|&#x2713;|
+|MiKo_3046|Use 'nameof' for property names of property raising methods|&#x2713;|&#x2713;|
 |MiKo_3047|Use 'nameof' for applied [ContentProperty] attributes|&#x2713;|&#x2713;|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied|&#x2713;|\-|
 |MiKo_3049|Enum members shall have the [Description] attribute applied|&#x2713;|\-|
