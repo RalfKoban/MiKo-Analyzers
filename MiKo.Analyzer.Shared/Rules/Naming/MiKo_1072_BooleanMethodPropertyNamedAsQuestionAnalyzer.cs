@@ -19,20 +19,46 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                         "Are",
                                                     };
 
-        private static readonly string[] AllowedNames =
-                                                        {
-                                                            nameof(string.IsNullOrEmpty),
-                                                            nameof(string.IsNullOrWhiteSpace),
-                                                            "IsReadOnly",
-                                                            "IsReadWrite",
-                                                            "IsWriteProtected",
-                                                        };
+        private static readonly HashSet<string> WellKnownNames = new HashSet<string>
+                                                                     {
+                                                                         nameof(string.IsNullOrEmpty),
+                                                                         nameof(string.IsNullOrWhiteSpace),
+                                                                         "IsCompleted",
+                                                                         "IsDigitsOnly",
+                                                                         "IsDragSource",
+                                                                         "IsDropTarget",
+                                                                         "IsLowerCase",
+                                                                         "IsLowerCaseLetter",
+                                                                         "IsNavigationTarget",
+                                                                         "IsNotCompleted",
+                                                                         "IsReadOnly",
+                                                                         "IsReadWrite",
+                                                                         "IsSolutionWide",
+                                                                         "IsUpperCase",
+                                                                         "IsUpperCaseLetter",
+                                                                         "IsValueConverter",
+                                                                         "IsWhiteSpace",
+                                                                         "IsWhiteSpaceOnly",
+                                                                         "IsWriteProtected",
+                                                                         "IsZipFile",
+                                                                     };
 
         private static readonly string[] WellKnownPrefixes =
                                                              {
-                                                                 "IsSame",
+                                                                 "IsDefault",
                                                                  "IsInDesign",
+                                                                 "IsOfType",
+                                                                 "IsSame",
+                                                                 "IsShownAs",
+                                                                 "IsShownIn",
+                                                                 "IsTest",
                                                              };
+
+        private static readonly string[] WellKnownPostfixes =
+                                                              {
+                                                                  "Code",
+                                                                  "Line",
+                                                              };
 
         public MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzer() : base(Id)
         {
@@ -60,19 +86,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.Length <= 5)
             {
                 // skip all short names (such as isIP)
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2))
             {
-                // skip all well known names
-                if (name.StartsWithAny(WellKnownPrefixes, StringComparison.Ordinal) || AllowedNames.Contains(name))
+                if (WellKnownNames.Contains(name) || name.StartsWithAny(WellKnownPrefixes, StringComparison.Ordinal) || name.EndsWithAny(WellKnownPostfixes, StringComparison.Ordinal))
                 {
-                    yield break;
+                    // skip all well known names
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
-                yield return Issue(symbol);
+                return new[] { Issue(symbol) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }
