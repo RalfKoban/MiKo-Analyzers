@@ -147,11 +147,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
-            var commentContinue = new StringBuilder(replacement).Append(MakeFirstWordInfiniteVerb(subText).ToString())
-                                                                .ReplaceAllWithCheck(ReplacementMap)
-                                                                .ToString();
+            var continuation = replacement == Replacement
+                               ? subText.TrimStart().ToLowerCaseAt(0) // do not try to make the first word a verb as it might not be one
+                               : MakeFirstWordInfiniteVerb(subText).ToString();
 
-            return FixComment(prepared, commentContinue);
+            var commentContinuation = new StringBuilder(replacement).Append(continuation)
+                                                                    .ReplaceAllWithCheck(ReplacementMap)
+                                                                    .ToString();
+
+            return FixComment(prepared, commentContinuation);
         }
 
         private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string commentContinue = null)

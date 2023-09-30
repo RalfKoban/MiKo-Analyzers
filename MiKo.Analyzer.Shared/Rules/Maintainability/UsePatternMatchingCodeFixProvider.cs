@@ -18,14 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var operand = GetOperand(binary);
             var literal = GetLiteral(binary).WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
 
-            var pattern = SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
-
-            return pattern;
+            return IsPattern(operand, literal);
         }
 
         private static ExpressionSyntax GetOperand(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax
-                                                                                     ? binary.Left
-                                                                                     : binary.Right;
+                                                                                         ? binary.Left
+                                                                                         : binary.Right;
 
         private static LiteralExpressionSyntax GetLiteral(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax literal
                                                                                             ? literal
