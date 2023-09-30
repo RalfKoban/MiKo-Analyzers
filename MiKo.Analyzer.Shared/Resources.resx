@@ -3427,6 +3427,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3045_Title" xml:space="preserve">
     <value>Use 'nameof' for EventManager event registrations</value>
   </data>
+  <data name="MiKo_3046_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3046_Description" xml:space="preserve">
+    <value>To prevent typos, any property raising method like 'OnPropertyChanged' shall use 'nameof' to define the property.</value>
+  </data>
+  <data name="MiKo_3046_MessageFormat" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3046_Title" xml:space="preserve">
+    <value>Use 'nameof' for property names of property raising methods</value>
+  </data>
   <data name="MiKo_3047_CodeFixTitle" xml:space="preserve">
     <value>Use 'nameof'</value>
   </data>

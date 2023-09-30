@@ -9695,6 +9695,42 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Use &apos;nameof&apos;.
         /// </summary>
+        public static string MiKo_3046_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3046_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To prevent typos, any property raising method like &apos;OnPropertyChanged&apos; shall use &apos;nameof&apos; to define the property..
+        /// </summary>
+        public static string MiKo_3046_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3046_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3046_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3046_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for property names of property raising methods.
+        /// </summary>
+        public static string MiKo_3046_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3046_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
         public static string MiKo_3047_CodeFixTitle {
             get {
                 return ResourceManager.GetString("MiKo_3047_CodeFixTitle", resourceCulture);
