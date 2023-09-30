@@ -45,9 +45,13 @@ using System;
 
 public class TestMe
 {
-    public void DoSomething()
+    public void DoSomething(string s1, string s2)
     {
         if (string.Equals(""A"", ""B"")) throw new NotSupportedException();
+
+        if (string.Equals(s1, s2, StringComparison.Ordinal)) throw new NotSupportedException();
+
+        if (s1.Equals(s2, StringComparison.Ordinal)) throw new NotSupportedException();
     }
 }
 ");
@@ -58,9 +62,11 @@ using System;
 
 public class TestMe
 {
-    public void DoSomething()
+    public void DoSomething(object o1, object o2)
     {
         if (object.Equals(""A"", ""B"")) throw new NotSupportedException();
+
+        if (object.Equals(o1, o2)) throw new NotSupportedException();
     }
 }
 ");
@@ -75,6 +81,80 @@ public class TestMe
     private static bool IsUnsetValue(dynamic itemToCheck)
     {
         return Equals(itemToCheck, DependencyProperty.UnsetValue);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_Equals_method_on_generic() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe<T>
+{
+    private static bool IsUnsetValue(T itemToCheck)
+    {
+        return Equals(itemToCheck, DependencyProperty.UnsetValue);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_negative_non_object_Equals_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(string s1, string s2)
+    {
+        if (!string.Equals(""A"", ""B"")) throw new NotSupportedException();
+
+        if (string.Equals(s1, s2, StringComparison.Ordinal) is false) throw new NotSupportedException();
+
+        if (s1.Equals(s1, StringComparison.Ordinal) is false) throw new NotSupportedException();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_negative_object_Equals_method_on_classes() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o1, object o2)
+    {
+        if (!object.Equals(""A"", ""B"")) throw new NotSupportedException();
+
+        if (object.Equals(o1, o2) is false) throw new NotSupportedException();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_negative_object_Equals_method_on_dynamic() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe
+{
+    private static bool IsUnsetValue(dynamic itemToCheck)
+    {
+        return Equals(itemToCheck, DependencyProperty.UnsetValue) is false || !Equals(itemToCheck, DependencyProperty.UnsetValue);
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_negative_object_Equals_method_on_generic() => No_issue_is_reported_for(@"
+using System;
+using System.Windows;
+
+public class TestMe<T>
+{
+    private static bool IsUnsetValue(T itemToCheck)
+    {
+        return Equals(itemToCheck, DependencyProperty.UnsetValue) is false || !Equals(itemToCheck, DependencyProperty.UnsetValue);
     }
 }
 ");
@@ -129,6 +209,19 @@ public struct TestMe : IEquatable<TestMe>
     public override bool Equals(object obj) => obj is TestMe other && Equals(other);
 
     public override int GetHashCode() => throw new NotImplementedException();
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_Equals_method_with_object_and_null_as_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (Equals(null, o)) throw new ArgumentNullException();
+    }
 }
 ");
 
@@ -357,6 +450,19 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_object_Equals_method_with_struct_and_null_as_parameter() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int i)
+    {
+        if (Equals(null, i)) throw new ArgumentNullException();
+    }
+}
+");
+
         [TestCase(
              "using System; class TestMe { void Do(Guid x, Guid y) { if (object.Equals(x, y)) throw new NotSupportedException(); } }",
              "using System; class TestMe { void Do(Guid x, Guid y) { if (x == y) throw new NotSupportedException(); } }")]
@@ -477,6 +583,78 @@ public struct TestMe : IEquatable<TestMe>
     public override bool Equals(object obj) => obj is TestMe other && Equals(other);
 
     public override int GetHashCode() => throw new NotImplementedException();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_negative_Equals_on_struct_and_keeps_indentation()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool SomeProperty { get; set; }
+
+    public void DoSomething(string s, StringComparison comparison)
+    {
+        SomeProperty = string.IsNullOrEmpty(s) &&
+                       !Equals(comparison, StringComparison.Ordinal);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool SomeProperty { get; set; }
+
+    public void DoSomething(string s, StringComparison comparison)
+    {
+        SomeProperty = string.IsNullOrEmpty(s) &&
+                       comparison != StringComparison.Ordinal;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_false_pattern_Equals_on_struct_and_keeps_indentation()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool SomeProperty { get; set; }
+
+    public void DoSomething(string s, StringComparison comparison)
+    {
+        SomeProperty = string.IsNullOrEmpty(s) &&
+                       Equals(comparison, StringComparison.Ordinal) is false;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool SomeProperty { get; set; }
+
+    public void DoSomething(string s, StringComparison comparison)
+    {
+        SomeProperty = string.IsNullOrEmpty(s) &&
+                       comparison != StringComparison.Ordinal;
+    }
 }
 ";
 

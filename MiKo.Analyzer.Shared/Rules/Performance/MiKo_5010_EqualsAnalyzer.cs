@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
 
-        private static bool IsObjectEqualsStaticMethod(IMethodSymbol method) => method.IsStatic && method.ContainingType.SpecialType == SpecialType.System_Object;
+        private static bool IsObjectEqualsStaticMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Object && method.IsStatic;
 
         private static bool IsObjectEqualsOnStructMethod(IMethodSymbol method)
         {
@@ -56,9 +56,29 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             return false;
         }
 
+        private static bool IsDynamicOrGeneric(SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ =>
+                                                                                                                                                {
+                                                                                                                                                    switch (_.GetTypeSymbol(semanticModel)?.TypeKind)
+                                                                                                                                                    {
+                                                                                                                                                        case TypeKind.Dynamic:
+                                                                                                                                                        case TypeKind.TypeParameter:
+                                                                                                                                                            return true;
+
+                                                                                                                                                        default:
+                                                                                                                                                            return false;
+                                                                                                                                                    }
+                                                                                                                                                });
+
         private static bool IsEnumEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Enum;
 
-        private static bool IsStruct(SemanticModel semanticModel, SeparatedSyntaxList<ArgumentSyntax> arguments) => arguments.Any(_ => _.Expression.IsStruct(semanticModel));
+        private static bool IsStringEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_String && method.Parameters.All(_ =>
+                                                                                                                                                                      {
+                                                                                                                                                                          var type = _.Type;
+
+                                                                                                                                                                          return type.SpecialType == SpecialType.System_String || type.TypeKind == TypeKind.Enum;
+                                                                                                                                                                      });
+
+        private static bool IsStruct(SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ => _.Expression.IsStruct(semanticModel));
 
         private static bool IsSameType(ArgumentSyntax argument, SemanticModel semanticModel, IMethodSymbol method) => method.ContainingType.Equals(argument.GetTypeSymbol(semanticModel), SymbolEqualityComparer.Default);
 
@@ -138,15 +158,32 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 }
             }
 
-            if (IsObjectEqualsStaticMethod(nodeSymbol) && IsStruct(semanticModel, arguments))
+            if (IsStringEqualsMethod(nodeSymbol))
             {
-                // let's see who this method is that invokes Equals
-                if (containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
+                return null;
+            }
+
+            if (IsDynamicOrGeneric(arguments, semanticModel))
+            {
+                // we cannot handle dynamics or generics
+                return null;
+            }
+
+            if (IsObjectEqualsStaticMethod(nodeSymbol))
+            {
+                if (IsStruct(arguments, semanticModel))
                 {
-                    return Issue(nodeSymbol.Name, node.Expression, "object.Equals", new Dictionary<string, string> { { "key", "value" } });
+                    // let's see who this method is that invokes Equals
+                    if (containingSymbol is IMethodSymbol enclosingMethod && enclosingMethod.MethodKind == MethodKind.UserDefinedOperator)
+                    {
+                        return Issue(nodeSymbol.Name, node.Expression, "object.Equals", new Dictionary<string, string> { { "dummy", "dummy" } }); // marker to see that we have to handle an operator
+                    }
+
+                    return Issue(nodeSymbol.Name, node.Expression, "object.Equals");
                 }
 
-                return Issue(nodeSymbol.Name, node.Expression, "object.Equals");
+                // no struct, so no boxing
+                return null;
             }
 
             if (IsObjectEqualsOnStructMethod(nodeSymbol))
@@ -156,21 +193,21 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 {
                     return Issue(nodeSymbol.Name, syntax.Name, "object.Equals");
                 }
-            }
-            else
-            {
-                // let's see who this method is that invokes Equals
-                if (IsObjectEqualsInsideOwnOperator(containingSymbol, semanticModel, arguments))
-                {
-                    // operator on same type, so we do not report it
-                    return null;
-                }
 
-                // seems specific Equals, so let's see if it is the negative one
-                if (node.Parent.IsAnyKind(StrangeMarkers))
-                {
-                    return Issue(nodeSymbol.Name, node.Expression, "Equals");
-                }
+                return null;
+            }
+
+            // let's see who this method is that invokes Equals
+            if (IsObjectEqualsInsideOwnOperator(containingSymbol, semanticModel, arguments))
+            {
+                // operator on same type, so we do not report it
+                return null;
+            }
+
+            // seems specific Equals, so let's see if it is the negative one
+            if (node.Parent.IsAnyKind(StrangeMarkers))
+            {
+                return Issue(nodeSymbol.Name, node.Expression, "Equals");
             }
 
             return null;

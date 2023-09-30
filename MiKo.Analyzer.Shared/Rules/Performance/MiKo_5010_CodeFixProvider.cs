@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         right = cast.Expression;
                     }
 
-                    return SyntaxFactory.BinaryExpression(kind, left, right).WithTrailingTriviaFrom(syntax);
+                    return SyntaxFactory.BinaryExpression(kind, left, right).WithTriviaFrom(syntax);
                 }
 
                 case 2:
@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     if (issue.Properties.IsEmpty)
                     {
-                        return SyntaxFactory.BinaryExpression(kind, left, right).WithTrailingTriviaFrom(syntax);
+                        return SyntaxFactory.BinaryExpression(kind, left, right).WithTriviaFrom(syntax);
                     }
 
                     var operand = Invocation(SimpleMemberAccess(left, nameof(Equals)), arguments[1]);
