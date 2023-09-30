@@ -157,12 +157,48 @@ public class TestMe
     public bool DoSomething(Expression<Func<bool, bool>> expression) => expression != null;
 }");
 
+        [TestCase(
+             "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
+             "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }")]
+        [TestCase(
+             "class TestMe { bool DoSomething(bool a) { return !a; } }",
+             "class TestMe { bool DoSomething(bool a) { return a is false; } }")]
+        public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_and_keeps_indentation()
         {
-            VerifyCSharpFix(
-                            "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
-                            "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }");
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool SomeProperty { get; set; }
+
+    public void DoSomething(int i, bool flag)
+    {
+        SomeProperty = i > 0 &&
+                       !flag;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool SomeProperty { get; set; }
+
+    public void DoSomething(int i, bool flag)
+    {
+        SomeProperty = i > 0 &&
+                       flag is false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzer.Id;

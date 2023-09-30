@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var falsePattern = SyntaxFactory.ConstantPattern(Literal(SyntaxKind.FalseLiteralExpression));
             var pattern = SyntaxFactory.IsPatternExpression(unary.Operand, falsePattern);
 
-            return pattern;
+            return pattern.WithTriviaFrom(syntax);
         }
     }
 }
