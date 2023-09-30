@@ -11364,6 +11364,60 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear..
+        /// </summary>
+        public static string MiKo_3116_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3116_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete empty test initialization method.
+        /// </summary>
+        public static string MiKo_3116_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3116_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test initialization methods should contain code.
+        /// </summary>
+        public static string MiKo_3116_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3116_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear..
+        /// </summary>
+        public static string MiKo_3117_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3117_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete empty test cleanup method.
+        /// </summary>
+        public static string MiKo_3117_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3117_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods should contain code.
+        /// </summary>
+        public static string MiKo_3117_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3117_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

@@ -4016,6 +4016,24 @@ It may even be that the contained code is commented out, leading to the question
   <data name="MiKo_3115_Title" xml:space="preserve">
     <value>Test methods should contain code</value>
   </data>
+  <data name="MiKo_3116_Description" xml:space="preserve">
+    <value>Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+  </data>
+  <data name="MiKo_3116_MessageFormat" xml:space="preserve">
+    <value>Delete empty test initialization method</value>
+  </data>
+  <data name="MiKo_3116_Title" xml:space="preserve">
+    <value>Test initialization methods should contain code</value>
+  </data>
+  <data name="MiKo_3117_Description" xml:space="preserve">
+    <value>Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+  </data>
+  <data name="MiKo_3117_MessageFormat" xml:space="preserve">
+    <value>Delete empty test cleanup method</value>
+  </data>
+  <data name="MiKo_3117_Title" xml:space="preserve">
+    <value>Test cleanup methods should contain code</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
