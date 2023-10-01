@@ -209,7 +209,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 if (node.Expression is MemberAccessExpressionSyntax syntax)
                 {
-                    return Issue(nodeSymbol.Name, syntax, "Equals");
+                    return Issue(nodeSymbol.Name, syntax.Name, "Equals");
                 }
             }
 
