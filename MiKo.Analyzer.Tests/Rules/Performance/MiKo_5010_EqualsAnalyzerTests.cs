@@ -225,6 +225,23 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_non_object_Equals_method_with_multiple_parameters() => No_issue_is_reported_for(@"
+using System;
+using Microsoft.CodeAnalysis;
+
+public class TestMe
+{
+    public void DoSomething(IParameterSymbol parameter, ITypeSymbol argumentType)
+    {
+        if (parameter.Type.Equals(argumentType, SymbolEqualityComparer.Default) is false)
+        {
+            throw new ArgumentException();
+        }
+    }
+}
+");
+
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_IEquatable_equals_method_inside_equality_operator_of_struct_that_invokes_object_Equals() => An_issue_is_reported_for(2, @"
