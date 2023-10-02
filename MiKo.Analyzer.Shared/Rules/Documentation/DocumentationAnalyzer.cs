@@ -330,8 +330,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (item is XmlTextSyntax text)
             {
-                foreach (var token in text.TextTokens)
+                var textTokens = text.TextTokens;
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < textTokens.Count; index++)
                 {
+                    var token = textTokens[index];
+
                     if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                     {
                         return token.GetLocation();
@@ -505,9 +510,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlTextSyntax text:
                     {
                         // report the location of the first word(s) via the corresponding text token
-                        foreach (var textToken in text.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken))
+                        var textTokens = text.TextTokens;
+
+                        // ReSharper disable once ForCanBeConvertedToForeach
+                        for (var index = 0; index < textTokens.Count; index++)
                         {
-                            var valueText = textToken.ValueText;
+                            var token = textTokens[index];
+
+                            if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                continue;
+                            }
+
+                            var valueText = token.ValueText;
 
                             if (valueText.IsNullOrWhiteSpace())
                             {
@@ -527,10 +542,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 // it's no valid text, so we have an issue
                                 var position = valueText.IndexOf(problematicText, comparison);
 
-                                var start = textToken.SpanStart + position; // find start position for underlining
+                                var start = token.SpanStart + position; // find start position for underlining
                                 var end = start + problematicText.Length; // find end position for underlining
 
-                                var location = CreateLocation(textToken, start, end);
+                                var location = CreateLocation(token, start, end);
 
                                 return StartIssue(symbol, location);
                             }

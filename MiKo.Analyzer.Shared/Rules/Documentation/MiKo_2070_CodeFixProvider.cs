@@ -77,8 +77,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (contents[0] is XmlTextSyntax text)
             {
-                foreach (var token in text.TextTokens)
+                var textTokens = text.TextTokens;
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < textTokens.Count; index++)
                 {
+                    var token = textTokens[index];
                     var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
 
                     if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
@@ -120,14 +124,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // remove follow up contents ' if ' or ' whether '
                     if (summary.Content.Count > 1 && summary.Content[1] is XmlTextSyntax followUpText)
                     {
-                        foreach (var token in followUpText.TextTokens)
+                        var textTokens = followUpText.TextTokens;
+
+                        if (textTokens.Count > 0)
                         {
+                            var token = textTokens[0];
                             var valueText = token.WithoutTrivia().ValueText;
                             var newText = valueText.WithoutFirstWords(MiddleConditions);
 
                             summary = summary.ReplaceToken(token, token.WithText(newText));
-
-                            break;
                         }
                     }
                 }
@@ -181,8 +186,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // remove last node if it is ending with a dot
             if (contents.LastOrDefault() is XmlTextSyntax sentenceEnding)
             {
-                foreach (var token in sentenceEnding.TextTokens)
+                var textTokens = sentenceEnding.TextTokens;
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < textTokens.Count; index++)
                 {
+                    var token = textTokens[index];
+
                     if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                     {
                         continue;

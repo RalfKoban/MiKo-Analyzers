@@ -192,9 +192,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var alreadyFoundLocations = new HashSet<Location>();
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var textToken in textNode.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken))
+            var textTokens = textNode.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var textToken = textTokens[index];
+
+                if (textToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
                 var text = textToken.ValueText;
 
                 if (text.IsNullOrWhiteSpace())

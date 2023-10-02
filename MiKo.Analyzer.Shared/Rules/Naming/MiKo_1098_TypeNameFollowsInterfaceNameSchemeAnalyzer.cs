@@ -37,8 +37,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var names = new List<string>();
 
-            foreach (var implementedInterface in directlyImplementedInterfaces)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < directlyImplementedInterfaces.Length; index++)
             {
+                var implementedInterface = directlyImplementedInterfaces[index];
                 var name = implementedInterface.Name
                                                .WithoutNumberSuffix() // ignore number suffixes as they normally indicate only another version of the specific interface
                                                .Without("Internal"); // ignore internal markers
