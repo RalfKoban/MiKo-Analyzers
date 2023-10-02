@@ -32,8 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (baseList != null)
                     {
-                        foreach (var type in baseList.Types)
+                        var baseTypes = baseList.Types;
+
+                        // ReSharper disable once ForCanBeConvertedToForeach
+                        for (var index = 0; index < baseTypes.Count; index++)
                         {
+                            var type = baseTypes[index];
                             var typeName = type.Type.GetName();
 
                             if (names.Contains(typeName))

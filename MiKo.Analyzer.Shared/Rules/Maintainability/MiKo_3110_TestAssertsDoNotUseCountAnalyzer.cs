@@ -96,8 +96,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = methodCall.ArgumentList.Arguments;
 
-                foreach (var argument in arguments)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < arguments.Count; index++)
                 {
+                    var argument = arguments[index];
                     var issue = AnalyzeArgument(node, argument, arguments);
 
                     if (issue != null)

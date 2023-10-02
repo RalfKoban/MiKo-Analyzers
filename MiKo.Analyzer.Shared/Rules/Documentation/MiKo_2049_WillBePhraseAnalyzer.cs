@@ -53,28 +53,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
         {
-            var tokens = node.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken);
-
             var properties = issue.Properties;
             var textToReplace = properties[TextKey];
             var textToReplaceWith = properties[TextReplacementKey];
 
             var tokensToReplace = new Dictionary<SyntaxToken, SyntaxToken>();
 
-            foreach (var token in tokens)
+            var textTokens = node.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < textTokens.Count; index++)
             {
-                var text = token.Text;
+                var token = textTokens[index];
 
-                if (text.Length <= Constants.EnvironmentNewLine.Length && text.IsNullOrWhiteSpace())
+                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
                 {
-                    // do not bother with only empty text
-                    continue;
-                }
+                    var text = token.Text;
 
-                tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
+                    if (text.Length <= Constants.EnvironmentNewLine.Length && text.IsNullOrWhiteSpace())
+                    {
+                        // do not bother with only empty text
+                        continue;
+                    }
+
+                    tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
+                }
             }
 
-            if (tokensToReplace.Any())
+            if (tokensToReplace.Count > 0)
             {
                 return node.ReplaceTokens(tokensToReplace.Keys, (original, rewritten) => tokensToReplace[original]);
             }

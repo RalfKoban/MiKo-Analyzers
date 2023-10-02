@@ -21,8 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var commentXml = symbol.GetComment();
 
-            foreach (var parameter in symbol.Parameters)
+            var parameters = symbol.Parameters;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < parameters.Length; index++)
             {
+                var parameter = parameters[index];
                 var comment = parameter.GetComment(commentXml);
 
                 if (comment.ContainsAny(Constants.Comments.FuturePhrase))

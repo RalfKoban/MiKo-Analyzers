@@ -69,8 +69,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     Dictionary<SyntaxToken, SyntaxToken> tokenMap = null;
 
                     // replace token in text
-                    foreach (var token in text.TextTokens)
+                    var textTokens = text.TextTokens;
+
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (var index = 0; index < textTokens.Count; index++)
                     {
+                        var token = textTokens[index];
+
                         if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                         {
                             continue;
@@ -518,8 +523,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
         {
-            foreach (var token in text.TextTokens)
+            var textTokens = text.TextTokens;
+
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var token = textTokens[index];
+
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     continue;
