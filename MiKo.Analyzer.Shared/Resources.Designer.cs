@@ -10689,6 +10689,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading..
+        /// </summary>
+        public static string MiKo_3087_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3087_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition is difficult to understand, simplify or convert to positive logic.
+        /// </summary>
+        public static string MiKo_3087_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3087_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use negative complex conditions.
+        /// </summary>
+        public static string MiKo_3087_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3087_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
         ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
         /// </summary>
