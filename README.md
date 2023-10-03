@@ -342,7 +342,7 @@ The following tables list all the 395 rules that are currently provided by the a
 |MiKo_3084|Do not place constants on the left side for comparisons|&#x2713;|&#x2713;|
 |MiKo_3085|Conditional statements should be short|&#x2713;|\-|
 |MiKo_3086|Do not nest conditional statements|&#x2713;|\-|
-|MiKo_3086|Do not use negative complex conditions|&#x2713;|\-|
+|MiKo_3087|Do not use negative complex conditions|&#x2713;|\-|
 |MiKo_3090|Do not throw exceptions in finally blocks|&#x2713;|\-|
 |MiKo_3091|Do not raise events in finally blocks|&#x2713;|\-|
 |MiKo_3092|Do not raise events in locks|&#x2713;|\-|
