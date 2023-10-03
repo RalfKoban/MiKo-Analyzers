@@ -3777,6 +3777,15 @@ They should be either short (to see at a glance what's going on) or refactored i
   <data name="MiKo_3086_Title" xml:space="preserve">
     <value>Do not nest conditional statements</value>
   </data>
+  <data name="MiKo_3087_Description" xml:space="preserve">
+    <value>Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading.</value>
+  </data>
+  <data name="MiKo_3087_MessageFormat" xml:space="preserve">
+    <value>Invert to positive logic</value>
+  </data>
+  <data name="MiKo_3087_Title" xml:space="preserve">
+    <value>Do not use negative complex conditions</value>
+  </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
     <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
 Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations.</value>
