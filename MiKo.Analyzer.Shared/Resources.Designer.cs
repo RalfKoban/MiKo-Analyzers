@@ -10698,7 +10698,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert to positive logic.
+        ///   Looks up a localized string similar to Condition is difficult to understand, simplify or convert to positive logic.
         /// </summary>
         public static string MiKo_3087_MessageFormat {
             get {
