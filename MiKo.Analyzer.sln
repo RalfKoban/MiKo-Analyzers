@@ -21,6 +21,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code", "Code", "{E8DA3417-4698-4F8E-9D6A-715988F81B7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D373AFD7-B57A-4448-9D82-B9881A4F2350}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{65D8ACB8-FDD0-48FF-8FE9-1C8669BC750A}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,11 +43,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setups", "Setups", "{6884DFBE-B811-4B89-B435-1D2125AE9E7A}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{0e08768e-eb1c-4673-be1d-b396b28bba69}*SharedItemsImports = 5
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{8a34d670-6bbf-4d20-b18b-dd95bf3a9f71}*SharedItemsImports = 13
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{cb799a10-4c44-498d-a682-0555347c207a}*SharedItemsImports = 5
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
@@ -109,5 +107,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7625E68D-A5A2-4509-A414-C33EB474E87C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{0e08768e-eb1c-4673-be1d-b396b28bba69}*SharedItemsImports = 5
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{8a34d670-6bbf-4d20-b18b-dd95bf3a9f71}*SharedItemsImports = 13
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{cb799a10-4c44-498d-a682-0555347c207a}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
