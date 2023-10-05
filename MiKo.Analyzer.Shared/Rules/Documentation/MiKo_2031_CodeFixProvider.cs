@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return HandleSpecialMethod(comment, method) ?? base.Comment(document, comment, method);
         }
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
         {
             comment = PrepareGenericComment(comment);
 
@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], comment.Content);
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
         {
             return Comment(comment, Constants.Comments.NonGenericTaskReturnTypePhrase);
         }
