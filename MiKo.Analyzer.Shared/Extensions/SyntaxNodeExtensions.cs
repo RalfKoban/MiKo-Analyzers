@@ -349,8 +349,13 @@ namespace MiKoSolutions.Analyzers
                     return default;
                 }
 
-                foreach (var trivia in value.GetLeadingTrivia())
+                var list = value.GetLeadingTrivia();
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < list.Count; index++)
                 {
+                    var trivia = list[index];
+
                     if (trivia.IsComment())
                     {
                         return trivia;
@@ -785,8 +790,13 @@ namespace MiKoSolutions.Analyzers
 
             var builder = new StringBuilder();
 
-            foreach (var token in value.TextTokens)
+            var textTokens = value.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var token = textTokens[index];
+
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     continue;
@@ -830,8 +840,13 @@ namespace MiKoSolutions.Analyzers
                 yield break;
             }
 
-            foreach (var token in value.TextTokens)
+            var textTokens = value.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var token = textTokens[index];
+
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     continue;
@@ -1717,8 +1732,12 @@ namespace MiKoSolutions.Analyzers
         {
             var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
-            foreach (var token in value.TextTokens)
+            var textTokens = value.TextTokens;
+
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var token = textTokens[index];
+
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     continue;
@@ -1750,8 +1769,13 @@ namespace MiKoSolutions.Analyzers
         {
             var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
-            foreach (var token in value.TextTokens)
+            var textTokens = value.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < textTokens.Count; i++)
             {
+                var token = textTokens[i];
+
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     continue;
@@ -2173,24 +2197,26 @@ namespace MiKoSolutions.Analyzers
                 var token = textTokens[i];
 
                 // ignore trivia such as " /// "
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
-                    var originalText = token.Text;
+                    continue;
+                }
 
-                    if (originalText.IsNullOrWhiteSpace())
-                    {
-                        continue;
-                    }
+                var originalText = token.Text;
 
-                    if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
-                    {
-                        var modifiedText = originalText.WithoutSuffix(text);
+                if (originalText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
 
-                        textTokens[i] = token.WithText(modifiedText);
-                        replaced = true;
+                if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
+                {
+                    var modifiedText = originalText.WithoutSuffix(text);
 
-                        break;
-                    }
+                    textTokens[i] = token.WithText(modifiedText);
+                    replaced = true;
+
+                    break;
                 }
             }
 
@@ -2215,22 +2241,24 @@ namespace MiKoSolutions.Analyzers
                 var token = textTokens[i];
 
                 // ignore trivia such as " /// "
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
-                    var originalText = token.Text;
-
-                    if (originalText.IsNullOrWhiteSpace())
-                    {
-                        continue;
-                    }
-
-                    var modifiedText = originalText.TrimEnd(characters);
-
-                    textTokens[i] = token.WithText(modifiedText);
-                    replaced = true;
-
-                    break;
+                    continue;
                 }
+
+                var originalText = token.Text;
+
+                if (originalText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                var modifiedText = originalText.TrimEnd(characters);
+
+                textTokens[i] = token.WithText(modifiedText);
+                replaced = true;
+
+                break;
             }
 
             if (replaced)
@@ -2323,25 +2351,27 @@ namespace MiKoSolutions.Analyzers
                 var token = textTokens[i];
 
                 // ignore trivia such as " /// "
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
-                    var originalText = token.Text.AsSpan().TrimStart();
+                    continue;
+                }
 
-                    if (originalText.IsNullOrWhiteSpace())
+                var originalText = token.Text.AsSpan().TrimStart();
+
+                if (originalText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                foreach (var startText in startTexts)
+                {
+                    if (originalText.StartsWith(startText, StringComparison.Ordinal))
                     {
-                        continue;
-                    }
+                        var modifiedText = originalText.Slice(startText.Length);
 
-                    foreach (var startText in startTexts)
-                    {
-                        if (originalText.StartsWith(startText, StringComparison.Ordinal))
-                        {
-                            var modifiedText = originalText.Slice(startText.Length);
+                        textTokens[i] = token.WithText(modifiedText);
 
-                            textTokens[i] = token.WithText(modifiedText);
-
-                            return XmlText(textTokens);
-                        }
+                        return XmlText(textTokens);
                     }
                 }
             }
@@ -2392,38 +2422,40 @@ namespace MiKoSolutions.Analyzers
                 var token = textTokens[i];
 
                 // ignore trivia such as " /// "
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
-                    var originalText = token.Text.AsSpan();
-
-                    if (originalText.IsNullOrWhiteSpace())
-                    {
-                        continue;
-                    }
-
-                    var space = i == 0 ? string.Empty : " ";
-
-                    var continuation = originalText.TrimStart().ToLowerCaseAt(0);
-
-                    // replace 3rd person word by infinite word if configured
-                    if (firstWordHandling == FirstWordHandling.MakeInfinite)
-                    {
-                        if (continuation[0] != '<')
-                        {
-                            var word = continuation.FirstWord();
-
-                            continuation = Verbalizer.MakeInfiniteVerb(word) + continuation.Substring(word.Length);
-                        }
-                    }
-
-                    var modifiedText = space + startText + continuation;
-
-                    textTokens[i] = token.WithText(modifiedText);
-
-                    replaced = true;
-
-                    break;
+                    continue;
                 }
+
+                var originalText = token.Text.AsSpan();
+
+                if (originalText.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                var space = i == 0 ? string.Empty : " ";
+
+                var continuation = originalText.TrimStart().ToLowerCaseAt(0);
+
+                // replace 3rd person word by infinite word if configured
+                if (firstWordHandling == FirstWordHandling.MakeInfinite)
+                {
+                    if (continuation[0] != '<')
+                    {
+                        var word = continuation.FirstWord();
+
+                        continuation = Verbalizer.MakeInfiniteVerb(word) + continuation.Substring(word.Length);
+                    }
+                }
+
+                var modifiedText = space + startText + continuation;
+
+                textTokens[i] = token.WithText(modifiedText);
+
+                replaced = true;
+
+                break;
             }
 
             if (replaced)
@@ -2450,7 +2482,7 @@ namespace MiKoSolutions.Analyzers
         {
             var usings = value.DescendantNodes<UsingDirectiveSyntax>().ToList();
 
-            if (usings.Any(_ => _.Name.ToFullString() == usingNamespace))
+            if (usings.Any(_ => _.Name?.ToFullString() == usingNamespace))
             {
                 // already set
                 return value;
@@ -2463,9 +2495,11 @@ namespace MiKoSolutions.Analyzers
                 return value.InsertNodeBefore(value.FirstChild(), directive);
             }
 
-            foreach (var usingDirective in usings)
+            for (var index = 0; index < usings.Count; index++)
             {
-                var usingName = usingDirective.Name.ToFullString();
+                var usingDirective = usings[index];
+
+                var usingName = usingDirective.Name?.ToFullString();
 
                 if (usingName == "System")
                 {
@@ -2473,7 +2507,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                if (usingName.StartsWith("System.", StringComparison.Ordinal))
+                if (usingName?.StartsWith("System.", StringComparison.Ordinal) is true)
                 {
                     // skip all 'System' sub-namespaces
                     continue;
@@ -2493,7 +2527,7 @@ namespace MiKoSolutions.Analyzers
         {
             var root = value.SyntaxTree.GetRoot();
 
-            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name.ToFullString() == usingNamespace)
+            return root.DescendantNodes<UsingDirectiveSyntax>(_ => _.Name?.ToFullString() == usingNamespace)
                        .Select(root.Without)
                        .FirstOrDefault();
         }

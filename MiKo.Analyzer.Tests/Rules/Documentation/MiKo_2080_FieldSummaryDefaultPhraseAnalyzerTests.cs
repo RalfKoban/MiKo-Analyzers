@@ -409,14 +409,14 @@ public class TestMe
         private static IEnumerable<string> CreateWrongBooleanPhrases()
         {
             var starts = new[]
-                         {
-                             "Flag", "A flag", "The flag", "Value", "A value", "The value",
-                             "Boolean", "A Boolean", "A boolean", "The Boolean", "The boolean", "Boolean value", "A Boolean value", "A boolean value", "The Boolean value", "The boolean value",
-                             "Bool", "Bool value", "A bool", "A bool value", "The bool", "The bool value",
-                             "Contains a value", "Contains a flag", "Contains the value", "Contains the flag",
-                             "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
-                             "Contains a bool", "Contains a bool value", "Contains the bool value",
-                         };
+                             {
+                                 "Flag", "A flag", "The flag", "Value", "A value", "The value",
+                                 "Boolean", "A Boolean", "A boolean", "The Boolean", "The boolean", "Boolean value", "A Boolean value", "A boolean value", "The Boolean value", "The boolean value",
+                                 "Bool", "Bool value", "A bool", "A bool value", "The bool", "The bool value",
+                                 "Contains a value", "Contains a flag", "Contains the value", "Contains the flag",
+                                 "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
+                                 "Contains a bool", "Contains a bool value", "Contains the bool value",
+                             };
             var middles = new[] { "indicating", "that indicates", "to indicate", "which indicates" };
             var ends = new[] { "if", "that", "whether" };
 
@@ -427,6 +427,7 @@ public class TestMe
                     foreach (var end in ends)
                     {
                         var phrase = $"{start} {middle} {end}";
+
                         yield return phrase;
                         yield return phrase.ToLowerCaseAt(0);
                     }

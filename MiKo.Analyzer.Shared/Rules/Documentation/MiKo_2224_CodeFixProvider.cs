@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,7 +14,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2224_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<XmlElementSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                switch (node)
+                {
+                    case XmlElementSyntax _:
+                    case XmlEmptyElementSyntax _:
+                        return node;
+                }
+            }
+
+            return null;
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -32,7 +44,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
+            if (syntax is XmlEmptyElementSyntax)
+            {
+                return syntax;
+            }
+
             return base.GetUpdatedSyntax(document, syntax, issue);
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        {
+            if (syntax is XmlEmptyElementSyntax element)
+            {
+                var nodes = new List<SyntaxNode> { syntax };
+
+                if (issue.Properties.ContainsKey(MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer.AddSpaceBefore))
+                {
+                    nodes.Insert(0, NewLineXmlText());
+                }
+
+                if (issue.Properties.ContainsKey(MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer.AddSpaceAfter))
+                {
+                    nodes.Add(NewLineXmlText());
+                }
+
+                return root.ReplaceNode(element, nodes);
+            }
+
+            return base.GetUpdatedSyntaxRoot(document, root, syntax, issue);
         }
 
         private static SyntaxNode GetUpdatedSyntax(XmlElementStartTagSyntax syntax)

@@ -120,8 +120,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (IsAssertionMethod(node) && node.Parent is InvocationExpressionSyntax methodCall)
             {
-                foreach (var argument in methodCall.ArgumentList.Arguments)
+                var arguments = methodCall.ArgumentList.Arguments;
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < arguments.Count; index++)
                 {
+                    var argument = arguments[index];
                     var expression = argument.Expression;
 
                     if (HasIssue(expression, out var token))

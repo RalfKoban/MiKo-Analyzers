@@ -33,12 +33,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeLockStatement(SyntaxNodeAnalysisContext context, SyntaxNode lockStatement)
         {
-            var semanticModel = context.SemanticModel;
-
             var method = context.GetEnclosingMethod();
+
             if (method is null)
             {
-                // no method
+                // nothing to analyze because it is no method
                 yield break;
             }
 
@@ -48,9 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (parameterNames.None())
             {
-                // no parameters
+                // nothing to analyze because there are no parameters
                 yield break;
             }
+
+            var semanticModel = context.SemanticModel;
 
             foreach (var token in lockStatement.DescendantTokens(SyntaxKind.IdentifierToken))
             {

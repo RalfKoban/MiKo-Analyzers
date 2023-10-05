@@ -9695,6 +9695,42 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Use &apos;nameof&apos;.
         /// </summary>
+        public static string MiKo_3046_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3046_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To prevent typos, any property raising method like &apos;OnPropertyChanged&apos; shall use &apos;nameof&apos; to define the property..
+        /// </summary>
+        public static string MiKo_3046_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3046_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
+        public static string MiKo_3046_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3046_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos; for property names of property raising methods.
+        /// </summary>
+        public static string MiKo_3046_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3046_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;nameof&apos;.
+        /// </summary>
         public static string MiKo_3047_CodeFixTitle {
             get {
                 return ResourceManager.GetString("MiKo_3047_CodeFixTitle", resourceCulture);
@@ -10653,6 +10689,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading..
+        /// </summary>
+        public static string MiKo_3087_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3087_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition is difficult to understand, simplify or convert to positive logic.
+        /// </summary>
+        public static string MiKo_3087_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3087_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use negative complex conditions.
+        /// </summary>
+        public static string MiKo_3087_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3087_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
         ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
         /// </summary>
@@ -11360,6 +11423,60 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3115_Title {
             get {
                 return ResourceManager.GetString("MiKo_3115_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear..
+        /// </summary>
+        public static string MiKo_3116_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3116_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete empty test initialization method.
+        /// </summary>
+        public static string MiKo_3116_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3116_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test initialization methods should contain code.
+        /// </summary>
+        public static string MiKo_3116_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3116_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear..
+        /// </summary>
+        public static string MiKo_3117_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3117_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete empty test cleanup method.
+        /// </summary>
+        public static string MiKo_3117_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3117_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test cleanup methods should contain code.
+        /// </summary>
+        public static string MiKo_3117_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3117_Title", resourceCulture);
             }
         }
         

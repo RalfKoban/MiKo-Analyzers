@@ -3427,6 +3427,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3045_Title" xml:space="preserve">
     <value>Use 'nameof' for EventManager event registrations</value>
   </data>
+  <data name="MiKo_3046_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3046_Description" xml:space="preserve">
+    <value>To prevent typos, any property raising method like 'OnPropertyChanged' shall use 'nameof' to define the property.</value>
+  </data>
+  <data name="MiKo_3046_MessageFormat" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3046_Title" xml:space="preserve">
+    <value>Use 'nameof' for property names of property raising methods</value>
+  </data>
   <data name="MiKo_3047_CodeFixTitle" xml:space="preserve">
     <value>Use 'nameof'</value>
   </data>
@@ -3765,6 +3777,15 @@ They should be either short (to see at a glance what's going on) or refactored i
   <data name="MiKo_3086_Title" xml:space="preserve">
     <value>Do not nest conditional statements</value>
   </data>
+  <data name="MiKo_3087_Description" xml:space="preserve">
+    <value>Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading.</value>
+  </data>
+  <data name="MiKo_3087_MessageFormat" xml:space="preserve">
+    <value>Condition is difficult to understand, simplify or convert to positive logic</value>
+  </data>
+  <data name="MiKo_3087_Title" xml:space="preserve">
+    <value>Do not use negative complex conditions</value>
+  </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
     <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
 Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations.</value>
@@ -4015,6 +4036,24 @@ It may even be that the contained code is commented out, leading to the question
   </data>
   <data name="MiKo_3115_Title" xml:space="preserve">
     <value>Test methods should contain code</value>
+  </data>
+  <data name="MiKo_3116_Description" xml:space="preserve">
+    <value>Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+  </data>
+  <data name="MiKo_3116_MessageFormat" xml:space="preserve">
+    <value>Delete empty test initialization method</value>
+  </data>
+  <data name="MiKo_3116_Title" xml:space="preserve">
+    <value>Test initialization methods should contain code</value>
+  </data>
+  <data name="MiKo_3117_Description" xml:space="preserve">
+    <value>Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+  </data>
+  <data name="MiKo_3117_MessageFormat" xml:space="preserve">
+    <value>Delete empty test cleanup method</value>
+  </data>
+  <data name="MiKo_3117_Title" xml:space="preserve">
+    <value>Test cleanup methods should contain code</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>

@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 391 rules that are currently provided by the analyzer.
+The following tables list all the 395 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -313,6 +313,7 @@ The following tables list all the 391 rules that are currently provided by the a
 |MiKo_3043|Use 'nameof' for WeakEventManager event (de-)registrations|&#x2713;|&#x2713;|
 |MiKo_3044|Use 'nameof' to compare property names of 'PropertyChangingEventArgs' and 'PropertyChangedEventArgs'|&#x2713;|&#x2713;|
 |MiKo_3045|Use 'nameof' for EventManager event registrations|&#x2713;|&#x2713;|
+|MiKo_3046|Use 'nameof' for property names of property raising methods|&#x2713;|&#x2713;|
 |MiKo_3047|Use 'nameof' for applied [ContentProperty] attributes|&#x2713;|&#x2713;|
 |MiKo_3048|ValueConverters shall have the [ValueConversion] attribute applied|&#x2713;|\-|
 |MiKo_3049|Enum members shall have the [Description] attribute applied|&#x2713;|\-|
@@ -341,6 +342,7 @@ The following tables list all the 391 rules that are currently provided by the a
 |MiKo_3084|Do not place constants on the left side for comparisons|&#x2713;|&#x2713;|
 |MiKo_3085|Conditional statements should be short|&#x2713;|\-|
 |MiKo_3086|Do not nest conditional statements|&#x2713;|\-|
+|MiKo_3087|Do not use negative complex conditions|&#x2713;|\-|
 |MiKo_3090|Do not throw exceptions in finally blocks|&#x2713;|\-|
 |MiKo_3091|Do not raise events in finally blocks|&#x2713;|\-|
 |MiKo_3092|Do not raise events in locks|&#x2713;|\-|
@@ -363,6 +365,8 @@ The following tables list all the 391 rules that are currently provided by the a
 |MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
 |MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
 |MiKo_3115|Test methods should contain code|&#x2713;|\-|
+|MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
+|MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

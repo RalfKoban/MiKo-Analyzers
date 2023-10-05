@@ -23,8 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var list = new List<XmlTextSyntax>();
 
-            foreach (var node in example.Content)
+            var contents = example.Content;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < contents.Count; index++)
             {
+                var node = contents[index];
+
                 if (node.IsCode())
                 {
                     // ignore code blocks
@@ -49,8 +54,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var normalText = new List<SyntaxToken>();
 
             // we have some text, so let's see if this is some commented out code
-            foreach (var token in text.TextTokens)
+            var textTokens = text.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var token = textTokens[index];
+
                 if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                 {
                     // skip empty lines in commented out code, but keep normal lines
