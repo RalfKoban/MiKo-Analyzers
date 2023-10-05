@@ -83,16 +83,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType);
+        protected abstract XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType);
 
-        protected abstract XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType);
+        protected abstract XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType);
 
-        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.ReturnType);
+        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.GetName(), method.ReturnType);
 
-        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax propertySyntax) => Comment(document, comment, propertySyntax.Type);
+        protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
 
-        private SyntaxNode Comment(Document document, XmlElementSyntax comment, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
-                                                                                                          ? GenericComment(document, comment, genericReturnType)
-                                                                                                          : NonGenericComment(document, comment, returnType);
+        private SyntaxNode Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
+                                                                                                                             ? GenericComment(document, comment, memberName, genericReturnType)
+                                                                                                                             : NonGenericComment(document, comment, memberName, returnType);
     }
 }
