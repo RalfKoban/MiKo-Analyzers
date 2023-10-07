@@ -19,19 +19,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                      {
                                                          "containing",
                                                          "returning",
+                                                         "representing",
                                                          "that contains",
+                                                         "that represents",
                                                          "that returns",
                                                          "which contains",
+                                                         "which represents",
                                                          "which returns",
+                                                         "with",
                                                      };
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
+
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
+                                                                                                                     .ThenBy(_ => _)
+                                                                                                                     .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                     .ToArray();
 
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2033_CodeFixTitle;
 
-        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, GenericNameSyntax returnType)
+        protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
         {
             if (comment.Content.Count > 5)
             {
@@ -64,12 +73,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1], SeeCref("string"), TaskParts[2], comment.Content.ToArray());
         }
 
-        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, TypeSyntax returnType)
+        protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType)
         {
             var commentStart = StringParts[0];
             var commentEnd = StringParts[1];
 
             var contents = comment.Content;
+
+            if (memberName == nameof(ToString))
+            {
+                return Comment(comment, "A ", SeeCref("string"), " that represents the current object.");
+            }
 
             if (contents.Count == 1)
             {
@@ -97,17 +111,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
-            var starts = new[] { "a", "A" };
+            var starts = new[] { "a ", "A ", string.Empty };
             var middles = new[] { "string", "String" };
 
-            return from start in starts
-                   from middle in middles
-                   from text in TextParts
-                   select string.Concat(start, " ", middle, " ", text);
+            foreach (var start in starts)
+            {
+                foreach (var middle in middles)
+                {
+                    foreach (var text in TextParts)
+                    {
+                        yield return string.Concat(start, middle, " ", text);
+                    }
+                }
+            }
+
+            yield return "Contains ";
+            yield return "Contain ";
+            yield return "Returns ";
+            yield return "Return ";
+            yield return "returns ";
+            yield return "return ";
         }
     }
 }

@@ -224,7 +224,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_method_with_linebreak()
+        public void Code_gets_fixed_for_non_generic_method_with_line_break()
         {
             const string OriginalCode = @"
 using System;
@@ -257,6 +257,60 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("Return")]
+        [TestCase("Returns")]
+        [TestCase("return")]
+        [TestCase("returns")]
+        [TestCase("Contains")]
+        [TestCase("Contain")]
+        [TestCase("A string with")]
+        [TestCase("A string that represents")]
+        [TestCase("A string which represents")]
+        [TestCase("A string that contains")]
+        [TestCase("A string which contains")]
+        [TestCase("A string containing")]
+        [TestCase("A string representing")]
+        [TestCase("String with")]
+        [TestCase("String that represents")]
+        [TestCase("String which represents")]
+        [TestCase("String that contains")]
+        [TestCase("String which contains")]
+        [TestCase("String representing")]
+        [TestCase("String containing")]
+        [TestCase("Returns a string with")]
+        public void Code_gets_fixed_for_non_generic_method_starting_with_(string phrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + phrase + @" the text.</returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that contains the text.
+    /// </returns>
+    public string DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
@@ -624,6 +678,40 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_overridden_ToString_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// </summary>
+    /// <returns>A string that represents the current object.</returns>
+    public override string ToString() => base.ToString();
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// </summary>
+    /// <returns>
+    /// A <see cref=""string""/> that represents the current object.
+    /// </returns>
+    public override string ToString() => base.ToString();
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;

@@ -10039,6 +10039,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In WPF view models are used for bindings. In case a view model does not implement the INotifyPropertyChanged interface, the binding is created via reflection. This is done by WPF to be able to detect changes of property values. But due to that a memory leak occurs as the binding instance (called descriptor) is hold in a static hash table for as long as the application runs.
+        ///To avoid that &quot;by design&quot; memory leak in WPF, types should implement INotifyPropertyChanged and raise the corresponding events wheneve [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3055_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3055_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement INotifyPropertyChanged to avoid WPF binding memory leaks.
+        /// </summary>
+        public static string MiKo_3055_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3055_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ViewModels should implement INotifyPropertyChanged.
+        /// </summary>
+        public static string MiKo_3055_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3055_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Assert call.
         /// </summary>
         public static string MiKo_3060_CodeFixTitle {

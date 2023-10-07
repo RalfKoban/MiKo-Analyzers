@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 396 rules that are currently provided by the analyzer.
+The following tables list all the 397 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -322,6 +322,7 @@ The following tables list all the 396 rules that are currently provided by the a
 |MiKo_3052|DependencyPropertyKey fields should be non-public 'static readonly'|&#x2713;|&#x2713;|
 |MiKo_3053|DependencyPropertyKey fields should be properly registered|&#x2713;|\-|
 |MiKo_3054|A read-only DependencyProperty should have an exposed DependencyProperty identifier|&#x2713;|&#x2713;|
+|MiKo_3055|ViewModels should implement INotifyPropertyChanged|&#x2713;|\-|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
 |MiKo_3062|Do end log messages for exceptions with a colon|&#x2713;|&#x2713;|
