@@ -10049,7 +10049,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implement INotifyPropertyChanged.
+        ///   Looks up a localized string similar to Implement INotifyPropertyChanged to avoid WPF binding memory leaks.
         /// </summary>
         public static string MiKo_3055_MessageFormat {
             get {
