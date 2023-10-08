@@ -13,6 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] CorrectNames =
                                                         {
                                                             "map",
+                                                            "mapping",
                                                             "array",
                                                             "buffer",
                                                             "collection",
@@ -30,6 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "variablesWritten",
                                                             "gateways",
                                                             "someTrivia",
+                                                            "textTokens",
                                                         };
 
         private static readonly string[] WrongNames =
@@ -48,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                         "resultsWithData",
                                                                         "resultsInSomething",
                                                                         "resultsFromSomething",
+                                                                        "fieldInitializers",
                                                                     };
 
         private static readonly string[] WrongNamesWithSuffixes =

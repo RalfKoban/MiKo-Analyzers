@@ -7857,6 +7857,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ReSharper allows to suppress some rules by applying an inline comment &apos;// ReSharper disable&apos; or &apos;// ReSharper disable once&apos;.
+        ///When defined, ReSharper disables the specific rule once or until the document end is reached or the rule is re-enabled. However, those suppressions should be defined as inline comments and should not be accidentally part of any&quot;official&quot; documentation..
+        /// </summary>
+        public static string MiKo_2227_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2227_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove from documentation and use inline comment instead.
+        /// </summary>
+        public static string MiKo_2227_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2227_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not contain ReSharper suppressions.
+        /// </summary>
+        public static string MiKo_2227_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2227_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
