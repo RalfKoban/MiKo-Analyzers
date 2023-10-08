@@ -4786,4 +4786,16 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6047_Title" xml:space="preserve">
     <value>Braces of switch expressions should be placed directly below the corresponding switch keyword</value>
   </data>
+  <data name="MiKo_6048_CodeFixTitle" xml:space="preserve">
+    <value>Place condition on single line</value>
+  </data>
+  <data name="MiKo_6048_Description" xml:space="preserve">
+    <value>Logical conditions that span multiple lines are hard to read and understand. To be easier to understand they should span a single line only.</value>
+  </data>
+  <data name="MiKo_6048_MessageFormat" xml:space="preserve">
+    <value>Place condition on single line</value>
+  </data>
+  <data name="MiKo_6048_Title" xml:space="preserve">
+    <value>Logical conditions should be placed on a single line</value>
+  </data>
 </root>

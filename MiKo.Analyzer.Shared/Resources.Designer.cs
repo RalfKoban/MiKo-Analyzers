@@ -13650,5 +13650,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6047_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place condition on single line.
+        /// </summary>
+        public static string MiKo_6048_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6048_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical conditions that span multiple lines are hard to read and understand. To be easier to understand they should span a single line only..
+        /// </summary>
+        public static string MiKo_6048_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6048_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place condition on single line.
+        /// </summary>
+        public static string MiKo_6048_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6048_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical conditions should be placed on a single line.
+        /// </summary>
+        public static string MiKo_6048_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6048_Title", resourceCulture);
+            }
+        }
     }
 }
