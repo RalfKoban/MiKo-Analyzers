@@ -3545,6 +3545,16 @@ That can be done by exposing the value of 'DependencyPropertyKey.DependencyPrope
   <data name="MiKo_3054_Title" xml:space="preserve">
     <value>A read-only DependencyProperty should have an exposed DependencyProperty identifier</value>
   </data>
+  <data name="MiKo_3055_Description" xml:space="preserve">
+    <value>In WPF view models are used for bindings. In case a view model does not implement the INotifyPropertyChanged interface, the binding is created via reflection. This is done by WPF to be able to detect changes of property values. But due to that a memory leak occurs as the binding instance (called descriptor) is hold in a static hash table for as long as the application runs.
+To avoid that "by design" memory leak in WPF, types should implement INotifyPropertyChanged and raise the corresponding events whenever changes occur.</value>
+  </data>
+  <data name="MiKo_3055_MessageFormat" xml:space="preserve">
+    <value>Implement INotifyPropertyChanged to avoid WPF binding memory leaks</value>
+  </data>
+  <data name="MiKo_3055_Title" xml:space="preserve">
+    <value>ViewModels should implement INotifyPropertyChanged</value>
+  </data>
   <data name="MiKo_3060_CodeFixTitle" xml:space="preserve">
     <value>Remove Assert call</value>
   </data>
@@ -4775,5 +4785,17 @@ Hence, the open brace of the expression should be positioned directly below the 
   </data>
   <data name="MiKo_6047_Title" xml:space="preserve">
     <value>Braces of switch expressions should be placed directly below the corresponding switch keyword</value>
+  </data>
+  <data name="MiKo_6048_CodeFixTitle" xml:space="preserve">
+    <value>Place condition on single line</value>
+  </data>
+  <data name="MiKo_6048_Description" xml:space="preserve">
+    <value>Logical conditions that span multiple lines are hard to read and understand. To be easier to understand they should span a single line only.</value>
+  </data>
+  <data name="MiKo_6048_MessageFormat" xml:space="preserve">
+    <value>Place condition on single line</value>
+  </data>
+  <data name="MiKo_6048_Title" xml:space="preserve">
+    <value>Logical conditions should be placed on a single line</value>
   </data>
 </root>
