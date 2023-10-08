@@ -63,12 +63,6 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                 "protected ",
                                                             };
 
-        private static readonly string[] ReSharperMarkers =
-                                                            {
-                                                                "ReSharper disable ",
-                                                                "ReSharper restore ",
-                                                            };
-
         private static readonly string[] FrameMarkers =
                                                         {
                                                             "===",
@@ -135,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // ignore all framed comments
                 }
 
-                if (line.ContainsAny(ReSharperMarkers))
+                if (line.ContainsAny(Constants.Markers.ReSharper))
                 {
                     return false; // ignore '// ReSharper' comments
                 }
