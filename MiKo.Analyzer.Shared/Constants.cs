@@ -111,6 +111,8 @@ namespace MiKoSolutions.Analyzers
                                                               };
 
             internal static readonly string[] OSBitNumbers = { "32", "64" };
+
+            internal static readonly string[] ReSharper = { "ReSharper disable", "ReSharper restore" };
         }
 
         internal static class Comments
