@@ -100,6 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case "queue":
                 case "buffer":
                 case "result":
+                case "mapping":
                 {
                     return true;
                 }
@@ -111,6 +112,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string GetPluralName(string originalName, out string name)
         {
+            if (originalName.EndsWith('s'))
+            {
+                name = originalName;
+
+                return originalName;
+            }
+
             var index = originalName.IndexOfAny(Splitters, StringComparison.Ordinal);
 
             if (index > 0)

@@ -71,12 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool IsEnumEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_Enum;
 
-        private static bool IsStringEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_String && method.Parameters.All(_ =>
-                                                                                                                                                                      {
-                                                                                                                                                                          var type = _.Type;
-
-                                                                                                                                                                          return type.SpecialType == SpecialType.System_String || type.TypeKind == TypeKind.Enum;
-                                                                                                                                                                      });
+        private static bool IsStringEqualsMethod(IMethodSymbol method) => method.ContainingType.SpecialType == SpecialType.System_String && method.Parameters.All(_ => _.Type.SpecialType == SpecialType.System_String || _.Type.TypeKind == TypeKind.Enum);
 
         private static bool IsStruct(SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel) => arguments.Any(_ => _.Expression.IsStruct(semanticModel));
 
