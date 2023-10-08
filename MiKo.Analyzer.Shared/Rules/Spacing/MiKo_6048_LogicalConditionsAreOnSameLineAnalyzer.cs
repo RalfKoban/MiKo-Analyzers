@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -22,23 +23,62 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static bool IsOnSingleLine(SyntaxNode syntax)
         {
-            while (true)
+            if (syntax is BinaryExpressionSyntax binary)
             {
-                if (syntax is BinaryExpressionSyntax)
+                if (IsOnSingleLineLocal(binary))
                 {
-                    return true; // ignore combined binaries
+                    return true;
                 }
 
-                if (syntax is ParenthesizedExpressionSyntax parenthesized)
-                {
-                    syntax = parenthesized.Expression;
+                var leftCondition = binary.Left;
+                var rightCondition = binary.Right;
 
-                    continue;
+                var leftSpan = leftCondition.GetLocation().GetLineSpan();
+                var rightSpan = rightCondition.GetLocation().GetLineSpan();
+
+                // let's see if both conditions are on same line
+                if (leftSpan.EndLinePosition.Line == rightSpan.StartLinePosition.Line)
+                {
+                    if (leftSpan.StartLinePosition.Line == rightSpan.EndLinePosition.Line)
+                    {
+                        // both are on same line
+                        return true;
+                    }
+
+                    // at least one condition spans multiple lines
+                    return false;
                 }
 
-                var span = syntax.GetLocation().GetLineSpan();
+                // they span different lines
+                return IsOnSingleLine(leftCondition) && IsOnSingleLine(rightCondition);
+            }
+
+            if (syntax is ParenthesizedExpressionSyntax parenthesized)
+            {
+                // we have a parenthesized one, so let's check
+                return IsOnSingleLine(parenthesized.Expression);
+            }
+
+            return IsOnSingleLineLocal(syntax);
+
+            bool IsOnSingleLineLocal(SyntaxNode s)
+            {
+                var span = s.GetLocation().GetLineSpan();
 
                 return span.StartLinePosition.Line == span.EndLinePosition.Line;
+            }
+        }
+
+        private static bool ShallAnalyzeNode(BinaryExpressionSyntax syntax)
+        {
+            switch (syntax.Parent)
+            {
+                case BinaryExpressionSyntax parent when parent.IsAnyKind(Expressions):
+                case ParenthesizedExpressionSyntax parenthesized when parenthesized.Parent.IsAnyKind(Expressions):
+                    return false; // ignore as the parent gets investigated already
+
+                default:
+                    return true;
             }
         }
 
@@ -46,21 +86,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (context.Node is BinaryExpressionSyntax syntax)
             {
-                ReportDiagnostics(context, AnalyzeNode(syntax));
+                if (ShallAnalyzeNode(syntax))
+                {
+                    var issues = AnalyzeNode(syntax);
+
+                    ReportDiagnostics(context, issues);
+                }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeNode(BinaryExpressionSyntax syntax)
-        {
-            if (IsOnSingleLine(syntax.Left) is false)
-            {
-                yield return Issue(syntax.Left);
-            }
-
-            if (IsOnSingleLine(syntax.Right) is false)
-            {
-                yield return Issue(syntax.Right);
-            }
-        }
+        private IEnumerable<Diagnostic> AnalyzeNode(BinaryExpressionSyntax syntax) => IsOnSingleLine(syntax)
+                                                                                      ? Enumerable.Empty<Diagnostic>()
+                                                                                      : new[] { Issue(syntax) };
     }
 }
