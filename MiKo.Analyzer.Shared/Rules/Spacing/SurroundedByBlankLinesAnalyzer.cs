@@ -15,8 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected static Location GetLocationOfNodeOrLeadingComment(SyntaxNode node)
         {
-            foreach (var trivia in node.GetLeadingTrivia())
+            var list = node.GetLeadingTrivia();
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < list.Count; index++)
             {
+                var trivia = list[index];
+
                 if (trivia.IsComment())
                 {
                     return trivia.GetLocation();
@@ -28,8 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected static Location GetLocationOfNodeOrTrailingComment(SyntaxNode node)
         {
-            foreach (var trivia in node.GetTrailingTrivia().Reverse())
+            var list = node.GetTrailingTrivia();
+
+            for (var index = list.Count - 1; index > -1; index--)
             {
+                var trivia = list[index];
+
                 if (trivia.IsComment())
                 {
                     return trivia.GetLocation();

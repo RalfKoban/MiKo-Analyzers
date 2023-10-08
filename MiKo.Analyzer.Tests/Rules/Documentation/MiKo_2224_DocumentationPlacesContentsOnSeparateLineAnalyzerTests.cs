@@ -107,6 +107,23 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_empty_para_tag() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_empty_documented_method_when_start_and_end_tag_are_on_same_lines_([ValueSource(nameof(Tags))] string tag, [Values("", " ", "  ")] string gap) => An_issue_is_reported_for(@"
 using System;
 
@@ -250,6 +267,87 @@ public class TestMe
     public object DoSomething()
     {
         return null;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_text_after_it() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/> This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_XML_element_after_it() => An_issue_is_reported_for(2, @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/></summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_text_before_it() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text. <para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_element_before_it() => An_issue_is_reported_for(2, @"
+using System;
+
+public class TestMe
+{
+    /// <summary><para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_another_empty_element() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/><para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
     }
 }
 ");
@@ -440,6 +538,225 @@ public class TestMe
 {
     /// <summary>
     /// <see cref=""TestMe""/>
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_same_line_with_text_after()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_with_text_before()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.<para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_with_text_before_and_after()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.<para/>This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_as_start_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary><para/>
+    /// This is some text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// <para/>
+    /// This is some text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_as_end_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/></summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_method_if_empty_para_tag_is_on_line_as_another_empty_tag()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/><para/>
+    /// This is some other text.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// This is some text.
+    /// <para/>
+    /// <para/>
+    /// This is some other text.
     /// </summary>
     public void DoSomething()
     {

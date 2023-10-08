@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         private static ExpressionSyntax GetOperand(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax
-                                                                                         ? binary.Left
-                                                                                         : binary.Right;
+                                                                                     ? binary.Left
+                                                                                     : binary.Right;
 
         private static LiteralExpressionSyntax GetLiteral(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax literal
                                                                                             ? literal

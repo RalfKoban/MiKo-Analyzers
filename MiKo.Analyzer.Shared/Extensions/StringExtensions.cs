@@ -1246,6 +1246,20 @@ namespace System
             return value;
         }
 
+        public static string WithoutSuffix(this string value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length <= 0
+                   ? string.Empty
+                   : value.Substring(0, length);
+        }
+
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
         {
             return RemoveSuffixes(RemoveSuffixes(value)); // do it twice to remove consecutive suffixes
@@ -1272,20 +1286,6 @@ namespace System
 
                 return slice;
             }
-        }
-
-        public static string WithoutSuffix(this string value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? string.Empty
-                   : value.Substring(0, length);
         }
 
         public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)

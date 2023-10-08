@@ -205,9 +205,12 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
 
             // seems specific Equals, so let's see if it is the negative one
-            if (node.Parent.IsAnyKind(StrangeMarkers))
+            if (node.Parent.IsAnyKind(StrangeMarkers) && node.ArgumentList.Arguments.Count == 1)
             {
-                return Issue(nodeSymbol.Name, node.Expression, "Equals");
+                if (node.Expression is MemberAccessExpressionSyntax syntax)
+                {
+                    return Issue(nodeSymbol.Name, syntax.Name, "Equals");
+                }
             }
 
             return null;

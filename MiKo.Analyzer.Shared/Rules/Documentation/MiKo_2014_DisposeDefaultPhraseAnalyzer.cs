@@ -33,8 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 // check for parameter
-                foreach (var parameter in symbol.Parameters)
+                var parameters = symbol.Parameters;
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < parameters.Length; index++)
                 {
+                    var parameter = parameters[index];
                     var parameterComment = comment.GetParameterComment(parameter.Name);
 
                     if (parameterComment != null)

@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDefaultValue(this SyntaxToken value) => value.IsKind(SyntaxKind.None);
 
-        internal static IEnumerable<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
+        internal static IReadOnlyList<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;

@@ -38,8 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var normalText = new List<SyntaxToken>();
 
-            foreach (var token in text.TextTokens)
+            var textTokens = text.TextTokens;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < textTokens.Count; index++)
             {
+                var token = textTokens[index];
                 var valueText = token.ValueText.AsSpan().Trim();
 
                 if (valueText.IsNullOrWhiteSpace())

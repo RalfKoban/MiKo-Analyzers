@@ -3427,6 +3427,18 @@ Failures inside the delegate(s) are really hard to tackle down because an except
   <data name="MiKo_3045_Title" xml:space="preserve">
     <value>Use 'nameof' for EventManager event registrations</value>
   </data>
+  <data name="MiKo_3046_CodeFixTitle" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3046_Description" xml:space="preserve">
+    <value>To prevent typos, any property raising method like 'OnPropertyChanged' shall use 'nameof' to define the property.</value>
+  </data>
+  <data name="MiKo_3046_MessageFormat" xml:space="preserve">
+    <value>Use 'nameof'</value>
+  </data>
+  <data name="MiKo_3046_Title" xml:space="preserve">
+    <value>Use 'nameof' for property names of property raising methods</value>
+  </data>
   <data name="MiKo_3047_CodeFixTitle" xml:space="preserve">
     <value>Use 'nameof'</value>
   </data>
@@ -3532,6 +3544,16 @@ That can be done by exposing the value of 'DependencyPropertyKey.DependencyPrope
   </data>
   <data name="MiKo_3054_Title" xml:space="preserve">
     <value>A read-only DependencyProperty should have an exposed DependencyProperty identifier</value>
+  </data>
+  <data name="MiKo_3055_Description" xml:space="preserve">
+    <value>In WPF view models are used for bindings. In case a view model does not implement the INotifyPropertyChanged interface, the binding is created via reflection. This is done by WPF to be able to detect changes of property values. But due to that a memory leak occurs as the binding instance (called descriptor) is hold in a static hash table for as long as the application runs.
+To avoid that "by design" memory leak in WPF, types should implement INotifyPropertyChanged and raise the corresponding events whenever changes occur.</value>
+  </data>
+  <data name="MiKo_3055_MessageFormat" xml:space="preserve">
+    <value>Implement INotifyPropertyChanged to avoid WPF binding memory leaks</value>
+  </data>
+  <data name="MiKo_3055_Title" xml:space="preserve">
+    <value>ViewModels should implement INotifyPropertyChanged</value>
   </data>
   <data name="MiKo_3060_CodeFixTitle" xml:space="preserve">
     <value>Remove Assert call</value>
@@ -3764,6 +3786,15 @@ They should be either short (to see at a glance what's going on) or refactored i
   </data>
   <data name="MiKo_3086_Title" xml:space="preserve">
     <value>Do not nest conditional statements</value>
+  </data>
+  <data name="MiKo_3087_Description" xml:space="preserve">
+    <value>Complex conditions that use negative logic are difficult to understand. Therefore, these should be changed into positiv logic to ease reading.</value>
+  </data>
+  <data name="MiKo_3087_MessageFormat" xml:space="preserve">
+    <value>Condition is difficult to understand, simplify or convert to positive logic</value>
+  </data>
+  <data name="MiKo_3087_Title" xml:space="preserve">
+    <value>Do not use negative complex conditions</value>
   </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
     <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
@@ -4015,6 +4046,24 @@ It may even be that the contained code is commented out, leading to the question
   </data>
   <data name="MiKo_3115_Title" xml:space="preserve">
     <value>Test methods should contain code</value>
+  </data>
+  <data name="MiKo_3116_Description" xml:space="preserve">
+    <value>Methods that are marked as unit test initialization methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+  </data>
+  <data name="MiKo_3116_MessageFormat" xml:space="preserve">
+    <value>Delete empty test initialization method</value>
+  </data>
+  <data name="MiKo_3116_Title" xml:space="preserve">
+    <value>Test initialization methods should contain code</value>
+  </data>
+  <data name="MiKo_3117_Description" xml:space="preserve">
+    <value>Methods that are marked as unit test cleanup methods but are empty are not needed and clutter only the code base. Hence such methods can be removed without fear.</value>
+  </data>
+  <data name="MiKo_3117_MessageFormat" xml:space="preserve">
+    <value>Delete empty test cleanup method</value>
+  </data>
+  <data name="MiKo_3117_Title" xml:space="preserve">
+    <value>Test cleanup methods should contain code</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
@@ -4736,5 +4785,17 @@ Hence, the open brace of the expression should be positioned directly below the 
   </data>
   <data name="MiKo_6047_Title" xml:space="preserve">
     <value>Braces of switch expressions should be placed directly below the corresponding switch keyword</value>
+  </data>
+  <data name="MiKo_6048_CodeFixTitle" xml:space="preserve">
+    <value>Place condition on single line</value>
+  </data>
+  <data name="MiKo_6048_Description" xml:space="preserve">
+    <value>Logical conditions that span multiple lines are hard to read and understand. To be easier to understand they should span a single line only.</value>
+  </data>
+  <data name="MiKo_6048_MessageFormat" xml:space="preserve">
+    <value>Place condition on single line</value>
+  </data>
+  <data name="MiKo_6048_Title" xml:space="preserve">
+    <value>Logical conditions should be placed on a single line</value>
   </data>
 </root>
