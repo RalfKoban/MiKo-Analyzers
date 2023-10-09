@@ -12238,6 +12238,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove unneeded call to string.Intern().
+        /// </summary>
+        public static string MiKo_5015_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5015_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interning string literals does not make sense as these literals are already interned..
+        /// </summary>
+        public static string MiKo_5015_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5015_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not intern string literal.
+        /// </summary>
+        public static string MiKo_5015_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5015_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not intern string literals.
+        /// </summary>
+        public static string MiKo_5015_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5015_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_6001_CodeFixTitle {
