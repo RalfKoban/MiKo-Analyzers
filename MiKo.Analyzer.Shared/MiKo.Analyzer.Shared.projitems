@@ -656,6 +656,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5013_EmptyArrayAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5014_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5014_MethodReturnsEmptyListAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5015_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5015_StringLiteralGetsInternedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\PerformanceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\PerformanceCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\CallSurroundedByBlankLinesAnalyzer.cs" />
