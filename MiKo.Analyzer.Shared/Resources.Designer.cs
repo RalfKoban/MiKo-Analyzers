@@ -11426,7 +11426,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and increase readability,  &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
+        ///   Looks up a localized string similar to To ease maintenance and increase readability, &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
         /// </summary>
         public static string MiKo_3114_Description {
             get {
