@@ -139,6 +139,11 @@ namespace MiKoSolutions.Analyzers.Rules
                     return false; // allow triplets such as '///'
                 }
 
+                if (line.Contains("ncrunch:"))
+                {
+                    return false; // ignore '//ncrunch: ' markers
+                }
+
                 return true;
             }
 

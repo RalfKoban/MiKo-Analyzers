@@ -137,6 +137,18 @@ public class TestMe
 }
 ");
 
+        [Test, Combinatorial]
+        public void No_issue_is_reported_for_NCrunch_comment_([Values("", " ", "//", "// ")] string gap, [Values("ncrunch: no coverage start", "ncrunch: no coverage end", "ncrunch: whatever")] string ncrunchText) => No_issue_is_reported_for(@"
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        //" + gap + ncrunchText + @"
+    }
+}
+");
+
         [TestCase("///////////////////")]
         [TestCase("===================")]
         [TestCase("*******************")]
