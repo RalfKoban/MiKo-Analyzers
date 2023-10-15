@@ -128,6 +128,21 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_in_past_tense_case() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something inside MEFed parts that is very important.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_method_with_upper_case_only_abbreviation_and_additional_information() => No_issue_is_reported_for(@"
 using System;
 

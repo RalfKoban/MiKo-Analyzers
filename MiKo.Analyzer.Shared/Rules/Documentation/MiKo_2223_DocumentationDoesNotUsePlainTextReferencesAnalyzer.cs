@@ -165,6 +165,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return false;
                 }
             }
+            else if (trimmed.EndsWith('d'))
+            {
+                var characters = trimmed.EndsWith("ed", StringComparison.Ordinal) ? 2 : 1;
+
+                var part = trimmed.Slice(0, trimmed.Length - characters).ToString();
+
+                if (part.All(char.IsUpper))
+                {
+                    // seems like an abbreviation in past tense (such as MEFed), so do not report
+                    return false;
+                }
+            }
             else if (WellKnownWords.Contains(trimmed.ToString()))
             {
                 return false;
