@@ -4037,7 +4037,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Mock.Of&lt;T&gt;()'</value>
   </data>
   <data name="MiKo_3114_Description" xml:space="preserve">
-    <value>To ease maintenance and increase readability,  'Mock.Of&lt;T&gt;()' is easier to identify as some necessary but unimportant mock than 'new Mock&lt;T&gt;().Object'.</value>
+    <value>To ease maintenance and increase readability, 'Mock.Of&lt;T&gt;()' is easier to identify as some necessary but unimportant mock than 'new Mock&lt;T&gt;().Object'.</value>
   </data>
   <data name="MiKo_3114_MessageFormat" xml:space="preserve">
     <value>Use 'Mock.Of&lt;T&gt;()' instead</value>
