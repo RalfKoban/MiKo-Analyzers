@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Analyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ArgumentExceptionPhraseAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\CommentCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ExampleDocumentationAnalyzer.cs" />
@@ -248,7 +249,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ReturnTypeDefaultPhraseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ReturnTypeDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SingleLineCommentAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SingleLineCommentCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SummaryDocumentationAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\SummaryDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\DependencyPropertyRegisterMaintainabilityAnalyzer.cs" />
@@ -733,8 +733,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6042_CreationsAreOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6043_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6044_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6044_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6045_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6045_ComparisonsAreOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6046_CalculationOperationsAreOnSameLineAnalyzer.cs" />
