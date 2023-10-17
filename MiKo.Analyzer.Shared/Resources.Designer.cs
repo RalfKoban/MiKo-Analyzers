@@ -10936,6 +10936,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case switch statements with a lot of cases perform a mapping from one type to the other, it is easier to read when a dictionary is used instead..
+        /// </summary>
+        public static string MiKo_3096_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3096_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use dictionary instead of switch.
+        /// </summary>
+        public static string MiKo_3096_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3096_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dictionaries are used instead of large switch statements.
+        /// </summary>
+        public static string MiKo_3096_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3096_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>

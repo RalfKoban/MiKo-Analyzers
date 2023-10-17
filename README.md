@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 399 rules that are currently provided by the analyzer.
+The following tables list all the 400 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -351,6 +351,7 @@ The following tables list all the 399 rules that are currently provided by the a
 |MiKo_3093|Do not invoke delegates inside locks|&#x2713;|\-|
 |MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
+|MiKo_3096|Dictionaries are used instead of large switch statements|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
