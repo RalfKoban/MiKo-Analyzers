@@ -265,7 +265,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_switch_that_has_too_many_cases() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_switch_that_has_too_many_cases_and_maps_enums_to_enums() => An_issue_is_reported_for(@"
 using System;
 
 public enum MappingKind
@@ -322,7 +322,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_switch_expression_that_has_too_many_cases() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_switch_expression_that_has_too_many_cases_and_maps_enums_to_enums() => An_issue_is_reported_for(@"
 using System;
 
 public enum MappingKind
@@ -372,6 +372,87 @@ public class TestMe
                                                                MappingKind.Value9 => MappedKind.Value9,
                                                                _ => throw new ArgumentOutOfRangeException(),
                                                            };
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_has_too_many_cases_and_maps_enums_to_literals() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public int Map(MappingKind kind)
+    {
+        switch (kind)
+        {
+            case MappingKind.None: return -1;
+            case MappingKind.Value0: return 0;
+            case MappingKind.Value1: return 1;
+            case MappingKind.Value2: return 2;
+            case MappingKind.Value3: return 3;
+            case MappingKind.Value4: return 4;
+            case MappingKind.Value5: return 5;
+            case MappingKind.Value6: return 6;
+            case MappingKind.Value7: return 7;
+            case MappingKind.Value8: return 8;
+            case MappingKind.Value9: return 9;
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_expression_that_has_too_many_cases_and_maps_enums_to_literals() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public int Map(MappingKind kind) => kind switch
+                                                   {
+                                                       MappingKind.None => -1,
+                                                       MappingKind.Value0 => 0,
+                                                       MappingKind.Value1 => 1,
+                                                       MappingKind.Value2 => 2,
+                                                       MappingKind.Value3 => 3,
+                                                       MappingKind.Value4 => 4,
+                                                       MappingKind.Value5 => 5,
+                                                       MappingKind.Value6 => 6,
+                                                       MappingKind.Value7 => 7,
+                                                       MappingKind.Value8 => 8,
+                                                       MappingKind.Value9 => 9,
+                                                       _ => throw new ArgumentOutOfRangeException(),
+                                                   };
 }
 ");
 

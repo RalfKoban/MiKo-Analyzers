@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private const int MinimumCases = 7;
 
-        private static readonly SyntaxKind[] AllowedSwitchExpressionArmKinds = { SyntaxKind.SimpleMemberAccessExpression, SyntaxKind.ThrowExpression };
-
         public MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -26,10 +24,31 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (syntax)
             {
-                case ReturnStatementSyntax statement when statement.Expression?.IsKind(SyntaxKind.SimpleMemberAccessExpression) is true:
+                case ReturnStatementSyntax statement when IsAcceptable(statement.Expression):
                     return true;
 
                 case ThrowStatementSyntax _:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        private static bool IsAcceptable(ExpressionSyntax syntax)
+        {
+            switch (syntax)
+            {
+                case MemberAccessExpressionSyntax member when member.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                    return true;
+
+                case LiteralExpressionSyntax _:
+                    return true;
+
+                case PrefixUnaryExpressionSyntax prefixed when prefixed.Operand is LiteralExpressionSyntax:
+                    return true;
+
+                case ThrowExpressionSyntax _:
                     return true;
 
                 default:
@@ -67,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arms = syntax.Arms;
 
-            if (arms.Count > MinimumCases && arms.All(_ => _.Expression.IsAnyKind(AllowedSwitchExpressionArmKinds)))
+            if (arms.Count > MinimumCases && arms.All(_ => IsAcceptable(_.Expression)))
             {
                 ReportDiagnostics(context, Issue(syntax));
             }
