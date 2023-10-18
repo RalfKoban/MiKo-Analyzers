@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -29,6 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case ThrowStatementSyntax _:
                     return true;
+
+                case BlockSyntax block:
+                {
+                    var statements = block.Statements;
+
+                    return statements.Count == 1 && IsAcceptable(context, statements[0]);
+                }
 
                 default:
                     return false;
@@ -76,6 +81,85 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
+        private static bool HasIssue(SyntaxNodeAnalysisContext context, SyntaxList<SwitchSectionSyntax> sections)
+        {
+            var sectionsCount = sections.Count;
+
+            if (sectionsCount <= MinimumCases)
+            {
+                return false;
+            }
+
+            var throws = 0;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < sectionsCount; index++)
+            {
+                var statements = sections[index].Statements;
+
+                if (statements.Count != 1)
+                {
+                    return false;
+                }
+
+                var statement = statements[0];
+
+                if (IsAcceptable(context, statement) is false)
+                {
+                    return false;
+                }
+
+                if (statement.IsKind(SyntaxKind.ThrowStatement))
+                {
+                    throws++;
+                }
+            }
+
+            if (throws > 1)
+            {
+                // cannot be converted
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool HasIssue(SyntaxNodeAnalysisContext context, SeparatedSyntaxList<SwitchExpressionArmSyntax> arms)
+        {
+            var armsCount = arms.Count;
+
+            if (armsCount <= MinimumCases)
+            {
+                return false;
+            }
+
+            var throws = 0;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < armsCount; index++)
+            {
+                var expression = arms[index].Expression;
+
+                if (IsAcceptable(context, expression) is false)
+                {
+                    return false;
+                }
+
+                if (expression.IsKind(SyntaxKind.ThrowExpression))
+                {
+                    throws++;
+                }
+            }
+
+            if (throws > 1)
+            {
+                // cannot be converted
+                return false;
+            }
+
+            return true;
+        }
+
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
             switch (context.Node)
@@ -94,9 +178,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context, SwitchStatementSyntax syntax)
         {
-            var sections = syntax.Sections;
-
-            if (sections.Count > MinimumCases && sections.All(_ => _.Statements.Count == 1 && IsAcceptable(context, _.Statements[0])))
+            if (HasIssue(context, syntax.Sections))
             {
                 ReportDiagnostics(context, Issue(syntax));
             }
@@ -104,9 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeSwitchExpression(SyntaxNodeAnalysisContext context, SwitchExpressionSyntax syntax)
         {
-            var arms = syntax.Arms;
-
-            if (arms.Count > MinimumCases && arms.All(_ => IsAcceptable(context, _.Expression)))
+            if (HasIssue(context, syntax.Arms))
             {
                 ReportDiagnostics(context, Issue(syntax));
             }

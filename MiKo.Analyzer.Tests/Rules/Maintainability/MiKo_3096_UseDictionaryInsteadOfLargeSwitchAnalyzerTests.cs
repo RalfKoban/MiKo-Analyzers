@@ -265,6 +265,186 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_switch_with_multiple_throws() => No_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public enum MappedKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public MappedKind Map(MappingKind kind)
+    {
+        switch (kind)
+        {
+            case MappingKind.Value0: return MappedKind.Value0;
+            case MappingKind.Value1: return MappedKind.Value1;
+            case MappingKind.Value2: return MappedKind.Value2;
+            case MappingKind.Value3: return MappedKind.Value3;
+            case MappingKind.Value4: return MappedKind.Value4;
+            case MappingKind.Value5: return MappedKind.Value5;
+            case MappingKind.Value6: return MappedKind.Value6;
+            case MappingKind.Value7: return MappedKind.Value7;
+            case MappingKind.Value8: return MappedKind.Value8;
+            case MappingKind.Value9: return MappedKind.Value9;
+
+            case MappingKind.None:
+                throw new NotSupportedException();
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_switch_with_variable_declaration_inside() => No_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public enum MappedKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public MappedKind Map(MappingKind kind)
+    {
+        switch (kind)
+        {
+            case MappingKind.Value0: return MappedKind.Value0;
+            case MappingKind.Value1: return MappedKind.Value1;
+            case MappingKind.Value2: return MappedKind.Value2;
+            case MappingKind.Value3: return MappedKind.Value3;
+            case MappingKind.Value4: return MappedKind.Value4;
+            case MappingKind.Value5: return MappedKind.Value5;
+            case MappingKind.Value6: return MappedKind.Value6;
+            case MappingKind.Value7: return MappedKind.Value7;
+            case MappingKind.Value8: return MappedKind.Value8;
+            case MappingKind.Value9: return MappedKind.Value9;
+
+            case MappingKind.None:
+            {
+                var x = MappedKind.None;
+
+                return x;
+            }
+
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_switch_expression_with_multiple_throws() => No_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public enum MappedKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public MappedKind Map(MappingKind kind) => kind switch
+                                                           {
+                                                               MappingKind.None => throw new NotSupportedException(),
+                                                               MappingKind.Value0 => MappedKind.Value0,
+                                                               MappingKind.Value1 => MappedKind.Value1,
+                                                               MappingKind.Value2 => MappedKind.Value2,
+                                                               MappingKind.Value3 => MappedKind.Value3,
+                                                               MappingKind.Value4 => MappedKind.Value4,
+                                                               MappingKind.Value5 => MappedKind.Value5,
+                                                               MappingKind.Value6 => MappedKind.Value6,
+                                                               MappingKind.Value7 => MappedKind.Value7,
+                                                               MappingKind.Value8 => MappedKind.Value8,
+                                                               MappingKind.Value9 => MappedKind.Value9,
+                                                               _ => throw new ArgumentOutOfRangeException(),
+                                                           };
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_switch_that_has_too_many_cases_and_maps_enums_to_enums() => An_issue_is_reported_for(@"
 using System;
 
@@ -315,6 +495,63 @@ public class TestMe
             case MappingKind.Value7: return MappedKind.Value7;
             case MappingKind.Value8: return MappedKind.Value8;
             case MappingKind.Value9: return MappedKind.Value9;
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_that_has_too_many_cases_using_blocks_and_maps_enums_to_enums() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public enum MappedKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public MappedKind Map(MappingKind kind)
+    {
+        switch (kind)
+        {
+            case MappingKind.None:   { return MappedKind.None;   }
+            case MappingKind.Value0: { return MappedKind.Value0; }
+            case MappingKind.Value1: { return MappedKind.Value1; }
+            case MappingKind.Value2: { return MappedKind.Value2; }
+            case MappingKind.Value3: { return MappedKind.Value3; }
+            case MappingKind.Value4: { return MappedKind.Value4; }
+            case MappingKind.Value5: { return MappedKind.Value5; }
+            case MappingKind.Value6: { return MappedKind.Value6; }
+            case MappingKind.Value7: { return MappedKind.Value7; }
+            case MappingKind.Value8: { return MappedKind.Value8; }
+            case MappingKind.Value9: { return MappedKind.Value9; }
             default: throw new ArgumentOutOfRangeException();
         }
     }
