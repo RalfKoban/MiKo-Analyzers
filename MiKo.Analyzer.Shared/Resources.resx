@@ -2362,6 +2362,15 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2076_Title" xml:space="preserve">
     <value>Documentation should document default values of optional parameters</value>
   </data>
+  <data name="MiKo_2077_Description" xml:space="preserve">
+    <value>The summary documentation should be short. Code snippets most often act as examples, so they should be places in &lt;example&gt; instead of &lt;summary&gt;.</value>
+  </data>
+  <data name="MiKo_2077_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should not contain &lt;code&gt;</value>
+  </data>
+  <data name="MiKo_2077_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not contain &lt;code&gt;</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>
