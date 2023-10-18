@@ -3875,7 +3875,7 @@ Those finally blocks are intended for cleaning stuff up.</value>
     <value>In case switch statements with a lot of cases perform a mapping from one type to the other, it is easier to read when a dictionary is used instead.</value>
   </data>
   <data name="MiKo_3096_MessageFormat" xml:space="preserve">
-    <value>Use dictionary instead of switch</value>
+    <value>Use dictionary as map instead of switch</value>
   </data>
   <data name="MiKo_3096_Title" xml:space="preserve">
     <value>Dictionaries are used instead of large switch statements</value>

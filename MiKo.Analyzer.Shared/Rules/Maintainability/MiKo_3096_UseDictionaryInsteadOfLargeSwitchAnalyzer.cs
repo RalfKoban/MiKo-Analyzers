@@ -22,11 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement, SyntaxKind.SwitchExpression);
 
-        private static bool IsAcceptableStatement(StatementSyntax syntax)
+        private static bool IsAcceptable(StatementSyntax syntax)
         {
             switch (syntax)
             {
-                case ReturnStatementSyntax returnStatement when returnStatement.Expression?.IsKind(SyntaxKind.SimpleMemberAccessExpression) is true:
+                case ReturnStatementSyntax statement when statement.Expression?.IsKind(SyntaxKind.SimpleMemberAccessExpression) is true:
                     return true;
 
                 case ThrowStatementSyntax _:
@@ -57,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var sections = syntax.Sections;
 
-            if (sections.Count > MinimumCases && sections.All(_ => _.Statements.Count == 1 && IsAcceptableStatement(_.Statements[0])))
+            if (sections.Count > MinimumCases && sections.All(_ => _.Statements.Count == 1 && IsAcceptable(_.Statements[0])))
             {
                 ReportDiagnostics(context, Issue(syntax));
             }

@@ -10972,7 +10972,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use dictionary instead of switch.
+        ///   Looks up a localized string similar to Use dictionary as map instead of switch.
         /// </summary>
         public static string MiKo_3096_MessageFormat {
             get {
