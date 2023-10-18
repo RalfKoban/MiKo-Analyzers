@@ -10963,7 +10963,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case switch statements with a lot of cases perform a mapping from one type to the other, it is easier to read when a dictionary is used instead..
+        ///   Looks up a localized string similar to In case switch statements with a lot of cases simply perform a mapping from one value to the other, the code is easier to read and maintain when a dictionary is used instead of the switch..
         /// </summary>
         public static string MiKo_3096_Description {
             get {

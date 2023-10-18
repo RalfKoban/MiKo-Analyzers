@@ -51,6 +51,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case ThrowExpressionSyntax _:
                     return true;
 
+                case TypeOfExpressionSyntax _:
+                    return true;
+
                 default:
                     return false;
             }

@@ -537,6 +537,87 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_switch_that_has_too_many_cases_and_maps_enums_to_type() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public Type Map(MappingKind kind)
+    {
+        switch (kind)
+        {
+            case MappingKind.None: return null;
+            case MappingKind.Value0: return typeof(double);
+            case MappingKind.Value1: return typeof(float);
+            case MappingKind.Value2: return typeof(string);
+            case MappingKind.Value3: return typeof(int);
+            case MappingKind.Value4: return typeof(uint);
+            case MappingKind.Value5: return typeof(long);
+            case MappingKind.Value6: return typeof(ulong);
+            case MappingKind.Value7: return typeof(byte);
+            case MappingKind.Value8: return typeof(sbyte);
+            case MappingKind.Value9: return typeof(short);
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_expression_that_has_too_many_cases_and_maps_enums_to_type() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public Type Map(MappingKind kind) => kind switch
+                                                   {
+                                                       MappingKind.None => null,
+                                                       MappingKind.Value0 => typeof(double),
+                                                       MappingKind.Value1 => typeof(float),
+                                                       MappingKind.Value2 => typeof(string),
+                                                       MappingKind.Value3 => typeof(int),
+                                                       MappingKind.Value4 => typeof(uint),
+                                                       MappingKind.Value5 => typeof(long),
+                                                       MappingKind.Value6 => typeof(ulong),
+                                                       MappingKind.Value7 => typeof(byte),
+                                                       MappingKind.Value8 => typeof(sbyte),
+                                                       MappingKind.Value9 => typeof(short),
+                                                       _ => throw new ArgumentOutOfRangeException(),
+                                                   };
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer();
