@@ -20,11 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSwitchStatement, SyntaxKind.SwitchStatement, SyntaxKind.SwitchExpression);
 
-        private static bool IsAcceptable(StatementSyntax syntax)
+        private static bool IsAcceptable(SyntaxNodeAnalysisContext context, StatementSyntax syntax)
         {
             switch (syntax)
             {
-                case ReturnStatementSyntax statement when IsAcceptable(statement.Expression):
+                case ReturnStatementSyntax statement when IsAcceptable(context, statement.Expression):
                     return true;
 
                 case ThrowStatementSyntax _:
@@ -35,11 +35,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool IsAcceptable(ExpressionSyntax syntax)
+        private static bool IsAcceptable(SyntaxNodeAnalysisContext context, ExpressionSyntax syntax)
         {
             switch (syntax)
             {
-                case MemberAccessExpressionSyntax member when member.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                case MemberAccessExpressionSyntax member when IsAcceptable(context, member):
                     return true;
 
                 case LiteralExpressionSyntax _:
@@ -54,6 +54,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 default:
                     return false;
             }
+        }
+
+        private static bool IsAcceptable(SyntaxNodeAnalysisContext context, MemberAccessExpressionSyntax member)
+        {
+            if (member.IsKind(SyntaxKind.SimpleMemberAccessExpression))
+            {
+                switch (member.Expression)
+                {
+                    case PredefinedTypeSyntax _:
+                        return true;
+
+                    case IdentifierNameSyntax identifier:
+                        return identifier.GetTypeSymbol(context.SemanticModel).IsEnum();
+                }
+            }
+
+            return false;
         }
 
         private void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
@@ -76,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var sections = syntax.Sections;
 
-            if (sections.Count > MinimumCases && sections.All(_ => _.Statements.Count == 1 && IsAcceptable(_.Statements[0])))
+            if (sections.Count > MinimumCases && sections.All(_ => _.Statements.Count == 1 && IsAcceptable(context, _.Statements[0])))
             {
                 ReportDiagnostics(context, Issue(syntax));
             }
@@ -86,7 +103,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var arms = syntax.Arms;
 
-            if (arms.Count > MinimumCases && arms.All(_ => IsAcceptable(_.Expression)))
+            if (arms.Count > MinimumCases && arms.All(_ => IsAcceptable(context, _.Expression)))
             {
                 ReportDiagnostics(context, Issue(syntax));
             }

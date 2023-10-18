@@ -456,6 +456,87 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_switch_that_has_too_many_cases_and_maps_enums_to_predefined_type_members() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public object Map(MappingKind kind)
+    {
+        switch (kind)
+        {
+            case MappingKind.None: return -1;
+            case MappingKind.Value0: return double.MinValue;
+            case MappingKind.Value1: return float.MaxValue;
+            case MappingKind.Value2: return string.Empty;
+            case MappingKind.Value3: return int.MinValue;
+            case MappingKind.Value4: return uint.MaxValue;
+            case MappingKind.Value5: return long.MinValue;
+            case MappingKind.Value6: return ulong.MaxValue;
+            case MappingKind.Value7: return byte.MinValue;
+            case MappingKind.Value8: return sbyte.MaxValue;
+            case MappingKind.Value9: return short.MinValue;
+            default: throw new ArgumentOutOfRangeException();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_switch_expression_that_has_too_many_cases_and_maps_enums_to_predefined_type_members() => An_issue_is_reported_for(@"
+using System;
+
+public enum MappingKind
+{
+    None = 0,
+    Value0,
+    Value1,
+    Value2,
+    Value3,
+    Value4,
+    Value5,
+    Value6,
+    Value7,
+    Value8,
+    Value9,
+}
+
+public class TestMe
+{
+    public object Map(MappingKind kind) => kind switch
+                                                   {
+                                                       MappingKind.None => -1,
+                                                       MappingKind.Value0 => double.MinValue,
+                                                       MappingKind.Value1 => float.MaxValue,
+                                                       MappingKind.Value2 => string.Empty,
+                                                       MappingKind.Value3 => int.MinValue,
+                                                       MappingKind.Value4 => uint.MaxValue,
+                                                       MappingKind.Value5 => long.MinValue,
+                                                       MappingKind.Value6 => ulong.MaxValue,
+                                                       MappingKind.Value7 => byte.MinValue,
+                                                       MappingKind.Value8 => sbyte.MaxValue,
+                                                       MappingKind.Value9 => short.MinValue,
+                                                       _ => throw new ArgumentOutOfRangeException(),
+                                                   };
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer();
