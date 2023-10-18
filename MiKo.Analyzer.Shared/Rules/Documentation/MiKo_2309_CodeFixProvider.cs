@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2309_CodeFixProvider)), Shared]
-    public sealed class MiKo_2309_CodeFixProvider : SingleLineCommentCodeFixProvider
+    public sealed class MiKo_2309_CodeFixProvider : CommentCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2309_CommentContainsNtContradictionAnalyzer.Id;
 

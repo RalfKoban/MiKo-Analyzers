@@ -17,8 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.MethodDeclaration);
-            context.RegisterSyntaxNodeAction(AnalyzeMethod, SyntaxKind.ConstructorDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.MethodDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.ConstructorDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.DestructorDeclaration);
+
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.OperatorDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.ConversionOperatorDeclaration);
+
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.GetAccessorDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.SetAccessorDeclaration);
+
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.AddAccessorDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.RemoveAccessorDeclaration);
         }
 
         protected abstract bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel);
@@ -40,28 +50,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => true;
 
-        private void AnalyzeMethod(SyntaxNodeAnalysisContext context)
+        protected virtual bool ShallAnalyze(SyntaxTrivia trivia) => trivia.IsSingleLineComment();
+
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context)
         {
             if (ShallAnalyze(context.GetEnclosingMethod()))
             {
-                var node = (BaseMethodDeclarationSyntax)context.Node;
-
-                AnalyzeMethod(context, node);
+                if (context.Node is BaseMethodDeclarationSyntax method)
+                {
+                    AnalyzeComment(context, method);
+                }
+                else if (context.Node is AccessorDeclarationSyntax accessor)
+                {
+                    AnalyzeComment(context, accessor);
+                }
             }
         }
 
-        private void AnalyzeMethod(SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
         {
-            var issues = AnalyzeSingleLineCommentTrivia(node, context.SemanticModel);
+            var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSingleLineCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context, AccessorDeclarationSyntax node)
         {
-            foreach (var trivia in node.DescendantTrivia().Where(_ => _.IsSingleLineComment()))
+            var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
+
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
             {
-                var hasIssue = AnalyzeSingleLineComment(trivia, semanticModel);
+                var hasIssue = AnalyzeComment(trivia, semanticModel);
 
                 if (hasIssue)
                 {
@@ -75,7 +99,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private bool AnalyzeSingleLineComment(SyntaxTrivia trivia, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
+            {
+                var hasIssue = AnalyzeComment(trivia, semanticModel);
+
+                if (hasIssue)
+                {
+                    var name = GetName();
+
+                    foreach (var issue in CollectIssues(name, trivia))
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+
+            string GetName()
+            {
+                var syntaxNode = node.Parent?.Parent;
+
+                switch (syntaxNode)
+                {
+                    case BasePropertyDeclarationSyntax b:
+                        return b.GetName();
+
+                    // TODO RKN:
+                    // case EventFieldDeclarationSyntax ef:
+                    //     return ef.GetName();
+                }
+
+                return string.Empty;
+            }
+        }
+
+        private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
         {
             if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
             {
