@@ -374,6 +374,9 @@ namespace MiKoSolutions.Analyzers
             {
                 case MethodDeclarationSyntax m: return m.GetName();
                 case ConstructorDeclarationSyntax c: return c.GetName();
+                case ConversionOperatorDeclarationSyntax c: return c.GetName();
+                case DestructorDeclarationSyntax d: return d.GetName();
+                case OperatorDeclarationSyntax o: return o.GetName();
                 default:
                     return null;
             }
@@ -397,12 +400,33 @@ namespace MiKoSolutions.Analyzers
             {
                 case MethodDeclarationSyntax m: return m.GetName();
                 case ConstructorDeclarationSyntax c: return c.GetName();
+                case ConversionOperatorDeclarationSyntax c: return c.GetName();
+                case DestructorDeclarationSyntax d: return d.GetName();
+                case OperatorDeclarationSyntax o: return o.GetName();
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static string GetName(this BasePropertyDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case IndexerDeclarationSyntax i: return i.GetName();
+                case PropertyDeclarationSyntax p: return p.GetName();
+                case EventDeclarationSyntax e: return e.GetName();
                 default:
                     return string.Empty;
             }
         }
 
         internal static string GetName(this ConstructorDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this ConversionOperatorDeclarationSyntax value) => value?.OperatorKeyword.ValueText;
+
+        internal static string GetName(this DestructorDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this EventDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this ExpressionSyntax value)
         {
@@ -450,6 +474,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this IndexerDeclarationSyntax value) => value?.ThisKeyword.ValueText;
+
         internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
 
         internal static string GetName(this LocalFunctionStatementSyntax value) => value?.Identifier.ValueText;
@@ -459,6 +485,8 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this OperatorDeclarationSyntax value) => value?.OperatorToken.ValueText;
 
         internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
 

@@ -99,7 +99,7 @@ public class TestMe
 
         [TestCase("some comment")]
         [TestCase("some parent")]
-        public void No_issue_is_reported_for_correct_comment_(string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correct_single_line_comment_(string comment) => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -108,8 +108,19 @@ public class TestMe
     }
 }");
 
+        [TestCase("some comment")]
+        [TestCase("some parent")]
+        public void No_issue_is_reported_for_correct_multi_line_comment_(string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        /* " + comment + @" */
+    }
+}");
+
         [Test]
-        public void An_issue_is_reported_for_wrong_documentation() => Assert.Multiple(() =>
+        public void An_issue_is_reported_for_wrong_single_line_comment() => Assert.Multiple(() =>
                                                                                            {
                                                                                                foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
                                                                                                {
@@ -121,6 +132,25 @@ public class TestMe
     public void DoSomething()
     {
         // This " + wrongPhrase + delimiter + @"
+    }
+}");
+                                                                                                   }
+                                                                                               }
+                                                                                           });
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_multi_line_comment() => Assert.Multiple(() =>
+                                                                                           {
+                                                                                               foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
+                                                                                               {
+                                                                                                   foreach (var wrongPhrase in WrongPhrases)
+                                                                                                   {
+                                                                                                       An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        /* This " + wrongPhrase + delimiter + @" */
     }
 }");
                                                                                                    }
@@ -156,7 +186,35 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_end_of_line_([ValueSource(nameof(WrongPhrases))] string wrongPhrase)
+        public void Code_gets_fixed_for_single_multi_line_([ValueSource(nameof(WrongPhrases))] string wrongPhrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        /* " + wrongPhrase + @" */
+        DoSomething();
+    }
+}
+";
+
+            var fixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        /* " + Map[wrongPhrase] + @" */
+        DoSomething();
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_single_line_comment_on_end_of_line_([ValueSource(nameof(WrongPhrases))] string wrongPhrase)
         {
             var originalCode = @"
 public class TestMe
@@ -174,6 +232,32 @@ public class TestMe
     public bool DoSomething()
     {
         return true; // " + Map[wrongPhrase] + @"
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multi_line_comment_on_end_of_line_([ValueSource(nameof(WrongPhrases))] string wrongPhrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    public bool DoSomething()
+    {
+        return true; /* " + wrongPhrase + @" */
+    }
+}
+";
+
+            var fixedCode = @"
+public class TestMe
+{
+    public bool DoSomething()
+    {
+        return true; /* " + Map[wrongPhrase] + @" */
     }
 }
 ";
