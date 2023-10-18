@@ -10981,7 +10981,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dictionaries are used instead of large switch statements.
+        ///   Looks up a localized string similar to Use dictionaries instead of large switch statements.
         /// </summary>
         public static string MiKo_3096_Title {
             get {
