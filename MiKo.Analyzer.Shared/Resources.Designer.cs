@@ -6620,6 +6620,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The summary documentation should be short. Code snippets most often act as examples, so they should be places in &lt;example&gt; instead of &lt;summary&gt;..
+        /// </summary>
+        public static string MiKo_2077_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2077_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain &lt;code&gt;.
+        /// </summary>
+        public static string MiKo_2077_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2077_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain &lt;code&gt;.
+        /// </summary>
+        public static string MiKo_2077_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2077_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         public static string MiKo_2080_CodeFixTitle {
