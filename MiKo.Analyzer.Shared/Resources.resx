@@ -3871,6 +3871,15 @@ Those finally blocks are intended for cleaning stuff up.</value>
   <data name="MiKo_3095_Title" xml:space="preserve">
     <value>Code blocks should not be empty</value>
   </data>
+  <data name="MiKo_3096_Description" xml:space="preserve">
+    <value>In case switch statements with a lot of cases simply perform a mapping from one value to the other, the code is easier to read and maintain when a dictionary is used instead of the switch.</value>
+  </data>
+  <data name="MiKo_3096_MessageFormat" xml:space="preserve">
+    <value>Use dictionary as map instead of switch</value>
+  </data>
+  <data name="MiKo_3096_Title" xml:space="preserve">
+    <value>Use dictionaries instead of large switch statements</value>
+  </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
