@@ -10,13 +10,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3031_ICloneableCloneAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_non_Clone_method_on_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_Clone_method_on_class_that_returns_void() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething()
     {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_non_Clone_method_on_class_that_returns_object() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public object DoSomething()
+    {
+        return null;
     }
 }
 ");
