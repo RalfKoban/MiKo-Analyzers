@@ -35,6 +35,45 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_custom_static_Clone_method_on_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static TestMe Clone()
+    {
+        return new TestMe();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_custom_static_generic_Clone_method_on_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static T Clone<T>()
+    {
+        return new T();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_strange_custom_static_generic_Clone_method_on_class() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static object Clone<T>()
+    {
+        return new T();
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_object_Clone_method_on_class() => An_issue_is_reported_for(@"
 using System;
 
