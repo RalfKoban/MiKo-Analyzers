@@ -112,6 +112,18 @@ public class TestMe : ICloneable
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_explicit_full_qualified_interface_ICloneable_Clone_method_on_class() => An_issue_is_reported_for(@"
+
+public class TestMe : System.ICloneable
+{
+    object System.ICloneable.Clone()
+    {
+        return new TestMe();
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3031_ICloneableCloneAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3031_ICloneableCloneAnalyzer();

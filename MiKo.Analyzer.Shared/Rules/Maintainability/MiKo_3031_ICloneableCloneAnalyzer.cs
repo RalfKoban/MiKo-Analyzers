@@ -23,7 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (symbol.Name)
             {
                 case nameof(ICloneable.Clone):
-                case nameof(ICloneable) + "." + nameof(ICloneable.Clone):
                 case nameof(System) + "." + nameof(ICloneable) + "." + nameof(ICloneable.Clone):
                     return new[] { Issue(symbol) };
 
