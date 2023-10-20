@@ -152,21 +152,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "corrupts",
                                                             "corruptsNumber",
                                                             "declared",
+                                                            "decrypt",
                                                             "doctor",
                                                             "document",
+                                                            "encrypt",
                                                             "enum",
-                                                            "Enum",
                                                             "enumeration",
-                                                            "Enumeration",
                                                             "except",
                                                             "firmwares",
                                                             "firstNumber",
                                                             "fixtures",
                                                             "httpRequest",
-                                                            "HttpRequest",
                                                             "httpResponse",
-                                                            "HttpResponse",
-                                                            "Identifiable",
+                                                            "identifiable",
                                                             "identification",
                                                             "Identification",
                                                             "identifier",
@@ -182,13 +180,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "number",
                                                             "prompt",
                                                             "requestTime",
-                                                            "RequestTime",
                                                             "responseTime",
-                                                            "ResponseTime",
                                                             "script",
                                                             "scripts",
                                                             "signCertificate",
-                                                            "SignCertificate",
                                                             "tires",
                                                         };
 
@@ -268,6 +263,19 @@ namespace Bla
         {
             return 42;
         }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedTerms))] string propertyName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int " + propertyName.ToUpperCaseAt(0) + @" { get; set; }
     }
 }
 ");

@@ -128,6 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                {
                                                                    "cept", // accept
                                                                    "cepts", // accepts
+                                                                   "crypt", // decrypt/encrypt
                                                                    "dopt", // adopt
                                                                    "dopts", // adopts
                                                                    "ires",
