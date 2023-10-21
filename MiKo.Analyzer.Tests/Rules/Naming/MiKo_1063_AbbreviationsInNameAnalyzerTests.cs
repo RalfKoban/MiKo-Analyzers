@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] BadPrefixes =
                                                        {
+                                                           "assoc",
                                                            "btn",
                                                            "cb",
                                                            "cmb",
@@ -65,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] BadMidTerms =
                                                        {
+                                                           "Assoc",
                                                            "Btn",
                                                            "Cb",
                                                            "Cert",

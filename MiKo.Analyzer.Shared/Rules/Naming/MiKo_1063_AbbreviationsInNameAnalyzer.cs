@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
                                                                                    {
+                                                                                       { "assoc", "association" },
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
                                                                                        { "cert", "certificate" },
@@ -65,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
                                                                                    {
+                                                                                       { "Assoc", "Association" },
                                                                                        { "Btn", "Button" },
                                                                                        { "Cb", "CheckBox" },
                                                                                        { "Cert", "Certificate" },
