@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private static readonly string[] BadPrefixes =
                                                        {
+                                                           "app",
+                                                           "apps",
                                                            "assoc",
                                                            "btn",
                                                            "cb",
@@ -23,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "chk",
                                                            "conf",
                                                            "config",
+                                                           "configs",
                                                            "ctx",
                                                            "ddl",
                                                            "decl",
@@ -38,6 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "init",
                                                            "itf",
                                                            "lbl",
+                                                           "lib",
+                                                           "libs",
                                                            "lv",
                                                            "max",
                                                            "methName",
@@ -67,6 +72,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] BadMidTerms =
                                                        {
+                                                           "App",
+                                                           "Apps",
                                                            "Assoc",
                                                            "Btn",
                                                            "Cb",
@@ -76,6 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Chk",
                                                            "Conf",
                                                            "Config",
+                                                           "Configs",
                                                            "Ctx",
                                                            "Ddl",
                                                            "Decl",
@@ -91,6 +99,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Idx",
                                                            "Itf",
                                                            "Lbl",
+                                                           "Lib",
+                                                           "Libs",
                                                            "Lv",
                                                            "Max",
                                                            "MethName",

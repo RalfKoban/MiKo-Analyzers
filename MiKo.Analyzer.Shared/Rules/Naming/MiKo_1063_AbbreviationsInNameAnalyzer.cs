@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
                                                                                    {
+                                                                                       { "app", "application" },
+                                                                                       { "apps", "applications" },
                                                                                        { "assoc", "association" },
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
@@ -23,6 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "cmd", "command" },
                                                                                        { "conf", "configuration" },
                                                                                        { "config", "configuration" },
+                                                                                       { "configs", "configurations" },
                                                                                        { "ctx", "context" },
                                                                                        { "ddl", "dropDownList" },
                                                                                        { "decl", "declaration" },
@@ -38,6 +41,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "init", "initialize" },
                                                                                        { "itf", "interface" },
                                                                                        { "lbl", "label" },
+                                                                                       { "lib", "library" },
+                                                                                       { "libs", "libraries" },
                                                                                        { "lv", "listView" },
                                                                                        { "max", "maximum" },
                                                                                        { "meth", "method" },
@@ -67,6 +72,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
                                                                                    {
+                                                                                       { "App", "Application" },
+                                                                                       { "Apps", "Applications" },
                                                                                        { "Assoc", "Association" },
                                                                                        { "Btn", "Button" },
                                                                                        { "Cb", "CheckBox" },
@@ -76,6 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Cmd", "Command" },
                                                                                        { "Conf", "Configuration" },
                                                                                        { "Config", "Configuration" },
+                                                                                       { "Configs", "Configurations" },
                                                                                        { "Ctx", "Context" },
                                                                                        { "Ddl", "DropDownList" },
                                                                                        { "Decl", "Declaration" },
@@ -91,6 +99,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Init", "Initialize" },
                                                                                        { "Itf", "Interface" },
                                                                                        { "Lbl", "Label" },
+                                                                                       { "Lib", "Library" },
+                                                                                       { "Libs", "Libraries" },
                                                                                        { "Lv", "ListView" },
                                                                                        { "Max", "Maximum" },
                                                                                        { "Meth", "Method" },
