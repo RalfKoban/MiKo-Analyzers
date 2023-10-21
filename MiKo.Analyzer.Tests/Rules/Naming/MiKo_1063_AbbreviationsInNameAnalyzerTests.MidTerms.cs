@@ -51,6 +51,20 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_enum_member_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public enum TestMe
+    {
+        None = 0,
+        Some_" + midterm + @"_Something = 1,
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_property_with_midterm_([ValueSource(nameof(BadMidTerms))] string midterm) => An_issue_is_reported_for(@"
 using System;
 

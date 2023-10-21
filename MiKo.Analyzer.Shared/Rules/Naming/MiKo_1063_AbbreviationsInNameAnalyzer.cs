@@ -208,7 +208,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase() && symbolName.StartsWith(key, StringComparison.Ordinal);
+        private static bool IndicatesNewWord(char c) => c == '_' || c.IsUpperCase();
+
+        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && IndicatesNewWord(symbolName[key.Length]) && symbolName.StartsWith(key, StringComparison.Ordinal);
 
         private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
@@ -231,7 +233,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var positionAfterCharacter = index + keyLength;
 
-                if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
+                if (positionAfterCharacter < symbolNameLength && IndicatesNewWord(symbolName[positionAfterCharacter]))
                 {
                     if (keyStartsUpperCase)
                     {
@@ -240,7 +242,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     var positionBeforeText = index - 1;
 
-                    if (positionBeforeText >= 0 && symbolName[positionBeforeText].IsUpperCase())
+                    if (positionBeforeText >= 0 && IndicatesNewWord(symbolName[positionBeforeText]))
                     {
                         return true;
                     }

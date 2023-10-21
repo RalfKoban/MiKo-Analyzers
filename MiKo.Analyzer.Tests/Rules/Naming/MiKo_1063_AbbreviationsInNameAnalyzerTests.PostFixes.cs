@@ -51,6 +51,20 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_enum_member_with_postfix_([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public enum TestMe
+    {
+        None = 0,
+        Something_" + postfix + @" = 1,
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_property_with_postfix_([ValueSource(nameof(BadPostfixes))] string postfix) => An_issue_is_reported_for(@"
 using System;
 
