@@ -65,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "resp", "response" },
                                                                                        { "std", "standard" },
                                                                                        { "str", "string" },
+                                                                                       { "sync", "synchronization" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
                                                                                        { "vol", "volume" },
@@ -124,6 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Resp", "Response" },
                                                                                        { "Std", "Standard" },
                                                                                        { "Str", "String" },
+                                                                                       { "Sync", "Synchronization" },
                                                                                        { "Tmp", "Temp" },
                                                                                        { "Txt", "Text" },
                                                                                        { "Vol", "Volume" },
@@ -161,6 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedNames =
                                                         {
+                                                            "Async",
                                                             "Enumerable",
                                                             "Enumeration",
                                                             "Enum", // must be after the others so that those get properly replaced
