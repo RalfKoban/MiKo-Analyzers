@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+
+using NUnit.Framework;
 
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
@@ -49,6 +51,20 @@ namespace Bla
         private int " + fieldMarker + prefix + @"Field = 42;
     }
 }");
+
+        [Test]
+        public void An_issue_is_reported_for_enum_member_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public enum TestMe
+    {
+        None = 0,
+        " + prefix.ToUpperCaseAt(0) + @"_Something = 1,
+    }
+}
+");
 
         [Test]
         public void An_issue_is_reported_for_property_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
