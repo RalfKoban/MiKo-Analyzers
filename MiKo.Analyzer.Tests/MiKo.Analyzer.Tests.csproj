@@ -6,7 +6,8 @@
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
     
     <!-- needed for ReSharper tests and others, see https://github.com/dotnet/sdk/issues/10506 -->
-	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles> 
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <IsTestProject>true</IsTestProject>	
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

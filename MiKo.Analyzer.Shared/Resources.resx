@@ -4344,6 +4344,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_5015_Title" xml:space="preserve">
     <value>Do not intern string literals</value>
   </data>
+  <data name="MiKo_5016_Description" xml:space="preserve">
+    <value>For performance reasons, when using a '.Contains()' call inside an call of 'List.RemoveAll(...)', that 'Contains' call should be done on a HashSet. This is because that call has a complexity of O(1) for the lookup.
+When used e.g. on a list, that 'Contains' call has to loop over that list again and again for each single element to look up, leading to a much worse runtime experience.</value>
+  </data>
+  <data name="MiKo_5016_MessageFormat" xml:space="preserve">
+    <value>Use a HashSet for the lookup</value>
+  </data>
+  <data name="MiKo_5016_Title" xml:space="preserve">
+    <value>Use a HashSet for lookups in 'List.RemoveAll'</value>
+  </data>
   <data name="MiKo_6001_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
