@@ -14,12 +14,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> Prefixes = new Dictionary<string, string>
                                                                                    {
+                                                                                       { "app", "application" },
+                                                                                       { "apps", "applications" },
+                                                                                       { "assoc", "association" },
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
                                                                                        { "cert", "certificate" },
                                                                                        { "chk", "checkBox" },
                                                                                        { "cmb", "comboBox" },
                                                                                        { "cmd", "command" },
+                                                                                       { "conf", "configuration" },
+                                                                                       { "config", "configuration" },
+                                                                                       { "configs", "configurations" },
                                                                                        { "ctx", "context" },
                                                                                        { "ddl", "dropDownList" },
                                                                                        { "decl", "declaration" },
@@ -28,13 +34,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "dir", "directory" },
                                                                                        { "dlg", "dialog" },
                                                                                        { "doc", "document" },
+                                                                                       { "ext", "extension" },
                                                                                        { "frm", "form" },
                                                                                        { "ident", "identification" },
                                                                                        { "idx", "index" },
+                                                                                       { "init", "initialize" },
                                                                                        { "itf", "interface" },
                                                                                        { "lbl", "label" },
+                                                                                       { "lib", "library" },
+                                                                                       { "libs", "libraries" },
                                                                                        { "lv", "listView" },
                                                                                        { "max", "maximum" },
+                                                                                       { "meth", "method" },
                                                                                        { "mgr", "manager" },
                                                                                        { "min", "minimum" },
                                                                                        { "mngr", "manager" },
@@ -54,6 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "resp", "response" },
                                                                                        { "std", "standard" },
                                                                                        { "str", "string" },
+                                                                                       { "sync", "synchronization" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
                                                                                        { "vol", "volume" },
@@ -61,12 +73,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> MidTerms = new Dictionary<string, string>((IDictionary<string, string>)Prefixes)
                                                                                    {
+                                                                                       { "App", "Application" },
+                                                                                       { "Apps", "Applications" },
+                                                                                       { "Assoc", "Association" },
                                                                                        { "Btn", "Button" },
                                                                                        { "Cb", "CheckBox" },
                                                                                        { "Cert", "Certificate" },
                                                                                        { "Chk", "CheckBox" },
                                                                                        { "Cmb", "ComboBox" },
                                                                                        { "Cmd", "Command" },
+                                                                                       { "Conf", "Configuration" },
+                                                                                       { "Config", "Configuration" },
+                                                                                       { "Configs", "Configurations" },
                                                                                        { "Ctx", "Context" },
                                                                                        { "Ddl", "DropDownList" },
                                                                                        { "Decl", "Declaration" },
@@ -75,13 +93,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Dir", "Directory" },
                                                                                        { "Dlg", "Dialog" },
                                                                                        { "Doc", "Document" },
+                                                                                       { "Ext", "Extension" },
                                                                                        { "Frm", "Form" },
                                                                                        { "Ident", "Identification" },
                                                                                        { "Idx", "Index" },
+                                                                                       { "Init", "Initialize" },
                                                                                        { "Itf", "Interface" },
                                                                                        { "Lbl", "Label" },
+                                                                                       { "Lib", "Library" },
+                                                                                       { "Libs", "Libraries" },
                                                                                        { "Lv", "ListView" },
                                                                                        { "Max", "Maximum" },
+                                                                                       { "Meth", "Method" },
                                                                                        { "Mgr", "Manager" },
                                                                                        { "Min", "Minimum" },
                                                                                        { "Mngr", "Manager" },
@@ -102,6 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Resp", "Response" },
                                                                                        { "Std", "Standard" },
                                                                                        { "Str", "String" },
+                                                                                       { "Sync", "Synchronization" },
                                                                                        { "Tmp", "Temp" },
                                                                                        { "Txt", "Text" },
                                                                                        { "Vol", "Volume" },
@@ -120,6 +144,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                {
                                                                    "cept", // accept
                                                                    "cepts", // accepts
+                                                                   "crypt", // decrypt/encrypt
                                                                    "dopt", // adopt
                                                                    "dopts", // adopts
                                                                    "ires",
@@ -138,6 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AllowedNames =
                                                         {
+                                                            "Async",
                                                             "Enumerable",
                                                             "Enumeration",
                                                             "Enum", // must be after the others so that those get properly replaced
@@ -199,7 +225,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && symbolName[key.Length].IsUpperCase() && symbolName.StartsWith(key, StringComparison.Ordinal);
+        private static bool IndicatesNewWord(char c) => c == '_' || c.IsUpperCase();
+
+        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && IndicatesNewWord(symbolName[key.Length]) && symbolName.StartsWith(key, StringComparison.Ordinal);
 
         private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
@@ -222,7 +250,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var positionAfterCharacter = index + keyLength;
 
-                if (positionAfterCharacter < symbolNameLength && symbolName[positionAfterCharacter].IsUpperCase())
+                if (positionAfterCharacter < symbolNameLength && IndicatesNewWord(symbolName[positionAfterCharacter]))
                 {
                     if (keyStartsUpperCase)
                     {
@@ -231,7 +259,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     var positionBeforeText = index - 1;
 
-                    if (positionBeforeText >= 0 && symbolName[positionBeforeText].IsUpperCase())
+                    if (positionBeforeText >= 0 && IndicatesNewWord(symbolName[positionBeforeText]))
                     {
                         return true;
                     }

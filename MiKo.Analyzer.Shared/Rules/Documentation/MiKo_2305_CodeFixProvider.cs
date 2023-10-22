@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2305_CodeFixProvider)), Shared]
-    public sealed class MiKo_2305_CodeFixProvider : SingleLineCommentCodeFixProvider
+    public sealed class MiKo_2305_CodeFixProvider : CommentCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_2305_CommentDoesNotContainDoublePeriodAnalyzer.Id;
 

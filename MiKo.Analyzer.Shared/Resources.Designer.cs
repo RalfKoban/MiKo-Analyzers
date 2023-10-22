@@ -6620,6 +6620,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The summary documentation should be short. Code snippets most often act as examples, so they should be places in &lt;example&gt; instead of &lt;summary&gt;..
+        /// </summary>
+        public static string MiKo_2077_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2077_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; should not contain &lt;code&gt;.
+        /// </summary>
+        public static string MiKo_2077_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2077_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not contain &lt;code&gt;.
+        /// </summary>
+        public static string MiKo_2077_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2077_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         public static string MiKo_2080_CodeFixTitle {
@@ -10936,6 +10963,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case switch statements with a lot of cases simply perform a mapping from one value to the other, the code is easier to read and maintain when a dictionary is used instead of the switch..
+        /// </summary>
+        public static string MiKo_3096_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3096_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use dictionary as map instead of switch.
+        /// </summary>
+        public static string MiKo_3096_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3096_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use dictionaries instead of large switch statements.
+        /// </summary>
+        public static string MiKo_3096_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3096_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
@@ -11426,7 +11480,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance and increase readability,  &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
+        ///   Looks up a localized string similar to To ease maintenance and increase readability, &apos;Mock.Of&lt;T&gt;()&apos; is easier to identify as some necessary but unimportant mock than &apos;new Mock&lt;T&gt;().Object&apos;..
         /// </summary>
         public static string MiKo_3114_Description {
             get {
@@ -12234,6 +12288,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_5014_Title {
             get {
                 return ResourceManager.GetString("MiKo_5014_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove unneeded call to string.Intern().
+        /// </summary>
+        public static string MiKo_5015_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5015_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interning string literals does not make sense as these literals are already interned..
+        /// </summary>
+        public static string MiKo_5015_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5015_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not intern string literal.
+        /// </summary>
+        public static string MiKo_5015_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5015_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not intern string literals.
+        /// </summary>
+        public static string MiKo_5015_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5015_Title", resourceCulture);
             }
         }
         

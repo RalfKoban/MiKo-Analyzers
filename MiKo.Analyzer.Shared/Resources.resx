@@ -2362,6 +2362,15 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2076_Title" xml:space="preserve">
     <value>Documentation should document default values of optional parameters</value>
   </data>
+  <data name="MiKo_2077_Description" xml:space="preserve">
+    <value>The summary documentation should be short. Code snippets most often act as examples, so they should be places in &lt;example&gt; instead of &lt;summary&gt;.</value>
+  </data>
+  <data name="MiKo_2077_MessageFormat" xml:space="preserve">
+    <value>&lt;summary&gt; should not contain &lt;code&gt;</value>
+  </data>
+  <data name="MiKo_2077_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not contain &lt;code&gt;</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>
@@ -3862,6 +3871,15 @@ Those finally blocks are intended for cleaning stuff up.</value>
   <data name="MiKo_3095_Title" xml:space="preserve">
     <value>Code blocks should not be empty</value>
   </data>
+  <data name="MiKo_3096_Description" xml:space="preserve">
+    <value>In case switch statements with a lot of cases simply perform a mapping from one value to the other, the code is easier to read and maintain when a dictionary is used instead of the switch.</value>
+  </data>
+  <data name="MiKo_3096_MessageFormat" xml:space="preserve">
+    <value>Use dictionary as map instead of switch</value>
+  </data>
+  <data name="MiKo_3096_Title" xml:space="preserve">
+    <value>Use dictionaries instead of large switch statements</value>
+  </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
@@ -4037,7 +4055,7 @@ In contrast, the failure would be much easier to understand if the test would im
     <value>Use 'Mock.Of&lt;T&gt;()'</value>
   </data>
   <data name="MiKo_3114_Description" xml:space="preserve">
-    <value>To ease maintenance and increase readability,  'Mock.Of&lt;T&gt;()' is easier to identify as some necessary but unimportant mock than 'new Mock&lt;T&gt;().Object'.</value>
+    <value>To ease maintenance and increase readability, 'Mock.Of&lt;T&gt;()' is easier to identify as some necessary but unimportant mock than 'new Mock&lt;T&gt;().Object'.</value>
   </data>
   <data name="MiKo_3114_MessageFormat" xml:space="preserve">
     <value>Use 'Mock.Of&lt;T&gt;()' instead</value>
@@ -4313,6 +4331,18 @@ Instead the equality operator should be used to compare value types.</value>
   </data>
   <data name="MiKo_5014_Title" xml:space="preserve">
     <value>Do not create empty lists if the return value is read-only</value>
+  </data>
+  <data name="MiKo_5015_CodeFixTitle" xml:space="preserve">
+    <value>Remove unneeded call to string.Intern()</value>
+  </data>
+  <data name="MiKo_5015_Description" xml:space="preserve">
+    <value>Interning string literals does not make sense as these literals are already interned.</value>
+  </data>
+  <data name="MiKo_5015_MessageFormat" xml:space="preserve">
+    <value>Do not intern string literal</value>
+  </data>
+  <data name="MiKo_5015_Title" xml:space="preserve">
+    <value>Do not intern string literals</value>
   </data>
   <data name="MiKo_6001_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

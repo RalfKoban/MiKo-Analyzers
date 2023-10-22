@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 398 rules that are currently provided by the analyzer.
+The following tables list all the 401 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -219,6 +219,7 @@ The following tables list all the 398 rules that are currently provided by the a
 |MiKo_2074|Documentation of parameter of 'Contains' method should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2075|Documentation should use the term 'callback' instead of 'action', 'func' or 'function'|&#x2713;|&#x2713;|
 |MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|&#x2713;|
+|MiKo_2077|&lt;summary&gt; documentation should not contain &lt;code&gt;|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|
@@ -351,6 +352,7 @@ The following tables list all the 398 rules that are currently provided by the a
 |MiKo_3093|Do not invoke delegates inside locks|&#x2713;|\-|
 |MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
+|MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -397,6 +399,7 @@ The following tables list all the 398 rules that are currently provided by the a
 |MiKo_5012|Do not use 'yield return' for recursively defined structures|&#x2713;|\-|
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
 |MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
+|MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|

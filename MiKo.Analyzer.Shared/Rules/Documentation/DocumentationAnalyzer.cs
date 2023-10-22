@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
         /// </param>
         /// <returns>
-        /// The encapsulated terms.
+        /// An array of encapsulated terms.
         /// </returns>
         protected static string[] GetWithDelimiters(params string[] values)
         {
@@ -385,9 +385,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual bool ShallAnalyze(IEventSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
-        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentId() != null;
-
         protected virtual bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetDocumentationCommentId() != null;
+
+        protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.GetDocumentationCommentId() != null;
 
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
@@ -440,6 +440,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
+        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation)
+        {
+            if (ShallAnalyze(symbol))
+            {
+                var comment = symbol.GetDocumentationCommentTriviaSyntax();
+
+                if (comment != null)
+                {
+                    return AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                }
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
+
+        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation)
         {
             if (ShallAnalyze(symbol))
@@ -456,23 +473,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
-
-        protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation)
-        {
-            if (ShallAnalyze(symbol))
-            {
-                var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-                if (comment != null)
-                {
-                    return AnalyzeProperty(symbol, compilation, comment, symbol.GetDocumentationCommentXml());
-                }
-            }
-
-            return Enumerable.Empty<Diagnostic>();
-        }
-
-        protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, DocumentationCommentTriviaSyntax comment, string commentXml) => AnalyzeComment(symbol, compilation, commentXml, comment);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => Enumerable.Empty<Diagnostic>();
 

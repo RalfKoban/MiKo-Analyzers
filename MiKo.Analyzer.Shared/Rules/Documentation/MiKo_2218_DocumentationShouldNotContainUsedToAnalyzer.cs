@@ -31,6 +31,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string UsedInSingularReplacement = "is suitable for";
         private const string UsedInUnclearReplacement = "suitable for";
 
+        private const string UsedInternallyPluralReplacement = "are suitable for internal use";
+        private const string UsedInternallySingularReplacement = "is suitable for internal use";
+        private const string UsedInternallyUnclearReplacement = "suitable for internal use";
+
         private const string UsedToPhrase = "used to";
         private const string IsUsedToPhrase = "is used to";
         private const string AreUsedToPhrase = "are used to";
@@ -244,6 +248,43 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                     "to be used with",
                                                                 };
 
+        private static readonly string[] UsedInternallyPluralPhrases =
+                                                                       {
+                                                                           "are primarily expected to be used internally",
+                                                                           "are primarily intended to be used internally",
+                                                                           "are primarily meant to be used internally",
+                                                                           "are expected to be used internally",
+                                                                           "are intended to be used internally",
+                                                                           "are meant to be used internally",
+                                                                           "are to be used internally",
+                                                                           "have to be used internally",
+                                                                       };
+
+        private static readonly string[] UsedInternallySingularPhrases =
+                                                                         {
+                                                                             "can be used internally",
+                                                                             "could be used internally",
+                                                                             "has to be used internally",
+                                                                             "is primarily expected to be used internally",
+                                                                             "is primarily intended to be used internally",
+                                                                             "is primarily meant to be used internally",
+                                                                             "is expected to be used internally",
+                                                                             "is intended to be used internally",
+                                                                             "is meant to be used internally",
+                                                                             "may be used internally",
+                                                                             "might be used internally",
+                                                                         };
+
+        private static readonly string[] UsedInternallyUnclearPhrases =
+                                                                        {
+                                                                            "primarily expected to be used internally",
+                                                                            "primarily intended to be used internally",
+                                                                            "primarily meant to be used internally",
+                                                                            "expected to be used internally",
+                                                                            "intended to be used internally",
+                                                                            "meant to be used internally",
+                                                                        };
+
         private static readonly string[] UsedWithinPhrases =
                                                              {
                                                                  "primarily expected to be used within",
@@ -419,6 +460,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var location in GetAllLocations(token, UsedInCombinationUnclearPhrases, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return Issue(location, UsedInCombinationUnclearReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInternallyPluralPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedInternallyPluralReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInternallySingularPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedInternallySingularReplacement);
+                }
+
+                foreach (var location in GetAllLocations(token, UsedInternallyUnclearPhrases, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(location, UsedInternallyUnclearReplacement);
                 }
 
                 foreach (var location in GetAllLocations(token, UsedInPluralPhrases, StringComparison.OrdinalIgnoreCase))
