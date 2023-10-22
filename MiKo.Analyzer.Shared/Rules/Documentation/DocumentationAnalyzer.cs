@@ -63,265 +63,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
-            var text = textToken.ValueText;
-
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            if (text.Length < value.Length)
-            {
-                // nothing to inspect as the text is too short
-                yield break;
-            }
-
-            var syntaxTree = textToken.SyntaxTree;
-            var spanStart = textToken.SpanStart;
-
-            List<Location> alreadyReportedLocations = null;
-
-            foreach (var position in text.AllIndicesOf(value, comparison))
-            {
-                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
-
-                if (location is null)
-                {
-                    continue;
-                }
-
-                if (alreadyReportedLocations is null)
-                {
-                    alreadyReportedLocations = new List<Location>();
-                }
-                else
-                {
-                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                    {
-                        // already reported, so ignore it
-                        continue;
-                    }
-                }
-
-                alreadyReportedLocations.Add(location);
-
-                yield return location;
-            }
+            return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, comparison, startOffset, endOffset);
         }
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
-            var text = textToken.ValueText;
-
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            var syntaxTree = textToken.SyntaxTree;
-            var spanStart = textToken.SpanStart;
-
-            List<Location> alreadyReportedLocations = null;
-
-            foreach (var value in values)
-            {
-                if (text.Length < value.Length)
-                {
-                    // nothing to inspect as the text is too short
-                    continue;
-                }
-
-                foreach (var position in text.AllIndicesOf(value, comparison))
-                {
-                    var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
-
-                    if (location is null)
-                    {
-                        continue;
-                    }
-
-                    if (alreadyReportedLocations is null)
-                    {
-                        alreadyReportedLocations = new List<Location>();
-                    }
-                    else
-                    {
-                        if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                        {
-                            // already reported, so ignore it
-                            continue;
-                        }
-                    }
-
-                    alreadyReportedLocations.Add(location);
-
-                    yield return location;
-                }
-            }
+            return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, values, comparison, startOffset, endOffset);
         }
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
-            var text = trivia.ToFullString();
-
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            if (text.Length < value.Length)
-            {
-                // nothing to inspect as the text is too short
-                yield break;
-            }
-
-            var syntaxTree = trivia.SyntaxTree;
-            var spanStart = trivia.SpanStart;
-
-            List<Location> alreadyReportedLocations = null;
-
-            foreach (var position in text.AllIndicesOf(value, comparison))
-            {
-                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
-
-                if (location is null)
-                {
-                    continue;
-                }
-
-                if (alreadyReportedLocations is null)
-                {
-                    alreadyReportedLocations = new List<Location>();
-                }
-                else
-                {
-                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                    {
-                        // already reported, so ignore it
-                        continue;
-                    }
-                }
-
-                alreadyReportedLocations.Add(location);
-
-                yield return location;
-            }
+            return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, value, comparison, startOffset, endOffset);
         }
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxTrivia trivia, IEnumerable<string> values, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
-            var text = trivia.ToFullString();
-
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            var syntaxTree = trivia.SyntaxTree;
-            var spanStart = trivia.SpanStart;
-
-            List<Location> alreadyReportedLocations = null;
-
-            foreach (var value in values)
-            {
-                if (text.Length < value.Length)
-                {
-                    // nothing to inspect as the text is too short
-                    continue;
-                }
-
-                foreach (var position in text.AllIndicesOf(value, comparison))
-                {
-                    var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
-
-                    if (location is null)
-                    {
-                        continue;
-                    }
-
-                    if (alreadyReportedLocations is null)
-                    {
-                        alreadyReportedLocations = new List<Location>();
-                    }
-                    else
-                    {
-                        if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                        {
-                            // already reported, so ignore it
-                            continue;
-                        }
-                    }
-
-                    alreadyReportedLocations.Add(location);
-
-                    yield return location;
-                }
-            }
+            return GetAllLocations(trivia.ToFullString(), trivia.SyntaxTree, trivia.SpanStart, values, comparison, startOffset, endOffset);
         }
 
         protected static IEnumerable<Location> GetAllLocations(SyntaxToken textToken, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {
-            var text = textToken.ValueText;
-
-            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
-            {
-                // nothing to inspect as the text is too short and consists of whitespaces only
-                yield break;
-            }
-
-            if (text.Length < value.Length)
-            {
-                // nothing to inspect as the text is too short
-                yield break;
-            }
-
-            var syntaxTree = textToken.SyntaxTree;
-            var spanStart = textToken.SpanStart;
-
-            var lastPosition = text.Length - 1;
-
-            List<Location> alreadyReportedLocations = null;
-
-            foreach (var position in text.AllIndicesOf(value, comparison))
-            {
-                var afterPosition = position + value.Length;
-
-                if (afterPosition <= lastPosition)
-                {
-                    if (nextCharValidationCallback(text[afterPosition]) is false)
-                    {
-                        continue;
-                    }
-                }
-
-                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
-
-                if (location is null)
-                {
-                    continue;
-                }
-
-                if (alreadyReportedLocations is null)
-                {
-                    alreadyReportedLocations = new List<Location>();
-                }
-                else
-                {
-                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
-                    {
-                        // already reported, so ignore it
-                        continue;
-                    }
-                }
-
-                alreadyReportedLocations.Add(location);
-
-                yield return location;
-            }
+            return GetAllLocations(textToken.ValueText, textToken.SyntaxTree, textToken.SpanStart, value, nextCharValidationCallback, comparison, startOffset, endOffset);
         }
 
         protected static Location GetFirstTextIssueLocation(SyntaxList<XmlNodeSyntax> content)
@@ -586,6 +348,153 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var end = start + value.Length - startOffset - endOffset; // find end position
 
             return CreateLocation(syntaxTree, start, end);
+        }
+
+        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, StringComparison comparison, int startOffset, int endOffset)
+        {
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
+            if (text.Length < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                yield break;
+            }
+
+            List<Location> alreadyReportedLocations = null;
+
+            foreach (var position in text.AllIndicesOf(value, comparison))
+            {
+                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
+                if (location is null)
+                {
+                    continue;
+                }
+
+                if (alreadyReportedLocations is null)
+                {
+                    alreadyReportedLocations = new List<Location>();
+                }
+                else
+                {
+                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    {
+                        // already reported, so ignore it
+                        continue;
+                    }
+                }
+
+                alreadyReportedLocations.Add(location);
+
+                yield return location;
+            }
+        }
+
+        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, IEnumerable<string> values, StringComparison comparison, int startOffset, int endOffset)
+        {
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
+            List<Location> alreadyReportedLocations = null;
+
+            foreach (var value in values)
+            {
+                if (text.Length < value.Length)
+                {
+                    // nothing to inspect as the text is too short
+                    continue;
+                }
+
+                foreach (var position in text.AllIndicesOf(value, comparison))
+                {
+                    var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
+                    if (location is null)
+                    {
+                        continue;
+                    }
+
+                    if (alreadyReportedLocations is null)
+                    {
+                        alreadyReportedLocations = new List<Location>();
+                    }
+                    else
+                    {
+                        if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                        {
+                            // already reported, so ignore it
+                            continue;
+                        }
+                    }
+
+                    alreadyReportedLocations.Add(location);
+
+                    yield return location;
+                }
+            }
+        }
+
+        private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, Func<char, bool> nextCharValidationCallback, StringComparison comparison, int startOffset, int endOffset)
+        {
+            if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+            {
+                // nothing to inspect as the text is too short and consists of whitespaces only
+                yield break;
+            }
+
+            if (text.Length < value.Length)
+            {
+                // nothing to inspect as the text is too short
+                yield break;
+            }
+
+            var lastPosition = text.Length - 1;
+
+            List<Location> alreadyReportedLocations = null;
+
+            foreach (var position in text.AllIndicesOf(value, comparison))
+            {
+                var afterPosition = position + value.Length;
+
+                if (afterPosition <= lastPosition)
+                {
+                    if (nextCharValidationCallback(text[afterPosition]) is false)
+                    {
+                        continue;
+                    }
+                }
+
+                var location = CreateLocation(value, syntaxTree, spanStart, position, startOffset, endOffset);
+
+                if (location is null)
+                {
+                    continue;
+                }
+
+                if (alreadyReportedLocations is null)
+                {
+                    alreadyReportedLocations = new List<Location>();
+                }
+                else
+                {
+                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    {
+                        // already reported, so ignore it
+                        continue;
+                    }
+                }
+
+                alreadyReportedLocations.Add(location);
+
+                yield return location;
+            }
         }
     }
 }
