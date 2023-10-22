@@ -223,6 +223,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2225_SpecialCodeTagCIsOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2226_DocumentationContainsIntentionallyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2227_DocumentationDoesNotContainReSharperMarkerAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2228_DocumentationIsNotNegativeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2300_MeaninglessCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_TestArrangeActAssertCommentAnalyzer.cs" />

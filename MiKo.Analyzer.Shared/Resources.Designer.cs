@@ -7912,6 +7912,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (eg. &quot;You cannot do this if it is not empty&quot;).
+        ///Positive wording is much easier to understand as it is straight forward and comes to the point..
+        /// </summary>
+        public static string MiKo_2228_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2228_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use positive wording instead of negative.
+        /// </summary>
+        public static string MiKo_2228_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2228_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use positive wording instead of negative.
+        /// </summary>
+        public static string MiKo_2228_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2228_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
