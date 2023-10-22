@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 401 rules that are currently provided by the analyzer.
+The following tables list all the 402 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -400,6 +400,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
 |MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
+|MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|

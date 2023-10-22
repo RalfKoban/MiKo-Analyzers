@@ -12328,6 +12328,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to For performance reasons, when using a &apos;.Contains()&apos; call inside an call of &apos;List.RemoveAll(...)&apos;, that &apos;Contains&apos; call should be done on a HashSet. This is because that call has a complexity of O(1) for the lookup.
+        ///When used e.g. on a list, that &apos;Contains&apos; call has to loop over that list again and again for each single element to look up, leading to a much worse runtime experience..
+        /// </summary>
+        public static string MiKo_5016_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5016_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a HashSet for the lookup.
+        /// </summary>
+        public static string MiKo_5016_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5016_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use a HashSet for lookups in &apos;List.RemoveAll&apos;.
+        /// </summary>
+        public static string MiKo_5016_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5016_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_6001_CodeFixTitle {
