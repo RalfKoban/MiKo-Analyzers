@@ -8,6 +8,14 @@ namespace System.Linq
 {
     internal static class EnumerableExtensions
     {
+        internal static void AddRange<T>(this ISet<T> set, IEnumerable<T> values)
+        {
+            foreach (var value in values)
+            {
+                set.Add(value);
+            }
+        }
+
         internal static bool All(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)

@@ -19,8 +19,22 @@ public class TestMe
 }
 ");
 
+        [TestCase("Cannot be used.")]
+        [TestCase("The annotation is here to have something annotated.")]
+        public void No_issue_is_reported_for_type_with_documentation_(string text) => No_issue_is_reported_for(@"
+/// <summary>
+/// " + text + @"
+/// This class cannot be inherited.
+/// </summary>
+public class TestMe
+{
+}
+");
+
         [TestCase("Can be invoked.")]
         [TestCase("Cannot be invoked.")]
+        [TestCase("Can not be invoked.")]
+        [TestCase("The annotation is here to have something annotated.")]
         public void No_issue_is_reported_for_method_with_documentation_(string text) => No_issue_is_reported_for(@"
 public class TestMe
 {
