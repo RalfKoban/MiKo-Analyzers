@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2228";
 
-        private static readonly string[] ProblematicWords = { " not ", "cannot", "Cannot", "Can't", " cant ", " can't", " wont ", "won't", "Won't", "shouldnt", "shouldn't", "Shouldnt", "Shouldn't" };
+        private static readonly string[] ProblematicWords = { " not ", "cannot", "Cannot", "Can't", " cant ", " can't", " wont ", "won't", "Won't", "shouldnt", "shouldn't", "Shouldnt", "Shouldn't", "Isn't", "isn't", "aren't" };
 
         public MiKo_2228_DocumentationIsNotNegativeAnalyzer() : base(Id)
         {
