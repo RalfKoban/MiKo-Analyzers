@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -22,26 +21,42 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
-        protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment) => summaries.Any(HasIssue)
-                                                                                                                                                                                       ? new[] { Issue(symbol) }
-                                                                                                                                                                                       : Enumerable.Empty<Diagnostic>();
+        // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            foreach (var xml in comment.GetSummaryXmls())
+            {
+                var summary = xml.GetTextWithoutTrivia();
 
-        private static bool HasIssue(string summary)
+                if (HasIssue(summary))
+                {
+                    yield return Issue(xml.StartTag);
+                }
+            }
+        }
+
+        private static bool HasIssue(StringBuilder builder)
+        {
+            var clearedSummary = builder.ReplaceWithCheck(" - ", " ")
+                                        .ReplaceWithCheck(" />", "/>")
+                                        .ReplaceWithCheck(" </", "</")
+                                        .ReplaceWithCheck("> <", "><")
+                                        .ReplaceWithCheck(" cref=", "cref=")
+                                        .ReplaceWithCheck(" href=", "href=")
+                                        .ReplaceWithCheck(" type=", "type=")
+                                        .ReplaceWithCheck(" langword=", "langword=")
+                                        .ToString()
+                                        .AsSpan()
+                                        .Trim();
+
+            return HasIssue(clearedSummary);
+        }
+
+        private static bool HasIssue(ReadOnlySpan<char> summary)
         {
             var whitespaces = 0;
 
-            var clearedSummary = new StringBuilder(summary).ReplaceWithCheck(" - ", " ")
-                                                           .ReplaceWithCheck(" />", "/>")
-                                                           .ReplaceWithCheck(" </", "</")
-                                                           .ReplaceWithCheck("> <", "><")
-                                                           .ReplaceWithCheck(" cref=", "cref=")
-                                                           .ReplaceWithCheck(" href=", "href=")
-                                                           .ReplaceWithCheck(" type=", "type=")
-                                                           .ReplaceWithCheck(" langword=", "langword=")
-                                                           .ToString()
-                                                           .Trim();
-
-            foreach (var c in clearedSummary)
+            foreach (var c in summary)
             {
                 if (c.IsWhiteSpace())
                 {
