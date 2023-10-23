@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var results = DiagnosticVerifier.GetDiagnostics(sources, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray());
 
-            Assert.That(results.Count, Is.EqualTo(0));
+            Assert.That(results.Count, Is.Zero);
 
             static IEnumerable<string> GetDocuments(string path)
             {
@@ -103,10 +103,10 @@ namespace MiKoSolutions.Analyzers.Rules
             var title = ResourceManager.GetString(key);
 
             Assert.Multiple(() =>
-                                {
-                                    Assert.That(title, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
-                                    Assert.That(title, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
-                                });
+                                 {
+                                     Assert.That(title, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
+                                     Assert.That(title, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
+                                 });
         }
 
         [Test]
@@ -125,10 +125,10 @@ namespace MiKoSolutions.Analyzers.Rules
             var message = ResourceManager.GetString(key);
 
             Assert.Multiple(() =>
-                                {
-                                    Assert.That(message, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
-                                    Assert.That(message, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
-                                });
+                                 {
+                                     Assert.That(message, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
+                                     Assert.That(message, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
+                                 });
         }
 
         [Test]
@@ -139,10 +139,10 @@ namespace MiKoSolutions.Analyzers.Rules
             var codefixTitle = ResourceManager.GetString(key);
 
             Assert.Multiple(() =>
-                                {
-                                    Assert.That(codefixTitle, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
-                                    Assert.That(codefixTitle, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
-                                });
+                                 {
+                                     Assert.That(codefixTitle, Does.Not.StartWith(" "), $"'{key}' should not start with whitespace.");
+                                     Assert.That(codefixTitle, Does.Not.EndWith(".").And.Not.EndWith(" "), $"'{key}' should not end with a dot or whitespace.");
+                                 });
         }
 
         [Test, Combinatorial, Ignore("Just to check from time to time whether the texts are acceptable or need to be rephrased.")]
@@ -207,12 +207,12 @@ namespace MiKoSolutions.Analyzers.Rules
             var map = AllAnalyzers.ToDictionary(_ => _.DiagnosticId);
 
             Assert.Multiple(() =>
-                                {
-                                    foreach (var id in AllCodeFixProviders.Select(_ => _.FixableDiagnosticIds.First()))
-                                    {
-                                        Assert.That(map.ContainsKey(id), Is.True, $"Analyzer for '{id}' missing");
-                                    }
-                                });
+                                 {
+                                     foreach (var id in AllCodeFixProviders.Select(_ => _.FixableDiagnosticIds.First()))
+                                     {
+                                         Assert.That(map.ContainsKey(id), Is.True, $"Analyzer for '{id}' missing");
+                                     }
+                                 });
         }
 
         [Test]
@@ -327,16 +327,16 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         private static int GetDiagnosticIdStartingNumber(Analyzer analyzer) => analyzer.GetType().Namespace switch
-                                                                                                                    {
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Documentation" => 2,
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Maintainability" => 3,
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Metrics" => 0,
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Naming" => 1,
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Ordering" => 4,
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Performance" => 5,
-                                                                                                                        "MiKoSolutions.Analyzers.Rules.Spacing" => 6,
-                                                                                                                        _ => -1,
-                                                                                                                    };
+                                                                                                                   {
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Documentation" => 2,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Maintainability" => 3,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Metrics" => 0,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Naming" => 1,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Ordering" => 4,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Performance" => 5,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Spacing" => 6,
+                                                                                                                       _ => -1,
+                                                                                                                   };
 
         private static Analyzer[] CreateAllAnalyzers()
         {

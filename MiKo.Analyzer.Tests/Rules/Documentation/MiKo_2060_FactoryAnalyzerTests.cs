@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Distinct().ToArray();
+        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Distinct().OrderBy(_ => _.Length).ThenBy(_ => _).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
