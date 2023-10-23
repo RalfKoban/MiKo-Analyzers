@@ -772,30 +772,39 @@ namespace MiKoSolutions.Analyzers
 
             DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
             {
-                if (node.HasStructuredTrivia)
+                while (true)
                 {
-                    var childToken = node.FirstChildToken();
-
-                    if (childToken.HasStructuredTrivia)
+                    if (node is ArrayTypeSyntax array)
                     {
-                        // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero
-                        // so we can save some time and memory by doing it by ourselves
-                        var leadingTrivia = childToken.LeadingTrivia;
-                        var count = leadingTrivia.Count;
+                        node = array.ElementType;
 
-                        for (var index = 0; index < count; index++)
+                        continue;
+                    }
+
+                    if (node.HasStructuredTrivia)
+                    {
+                        var childToken = node.FirstChildToken();
+
+                        if (childToken.HasStructuredTrivia)
                         {
-                            var trivia = leadingTrivia[index];
+                            // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero so we can save some time and memory by doing it by ourselves
+                            var leadingTrivia = childToken.LeadingTrivia;
+                            var count = leadingTrivia.Count;
 
-                            if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                            for (var index = 0; index < count; index++)
                             {
-                                return syntax;
+                                var trivia = leadingTrivia[index];
+
+                                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                                {
+                                    return syntax;
+                                }
                             }
                         }
                     }
-                }
 
-                return null;
+                    return null;
+                }
             }
         }
 

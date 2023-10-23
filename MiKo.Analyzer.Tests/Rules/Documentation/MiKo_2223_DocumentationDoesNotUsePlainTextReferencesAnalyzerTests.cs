@@ -519,6 +519,60 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface() => An_issue_is_reported_for(@"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    void DoSomething();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_array_return_type() => An_issue_is_reported_for(@"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    byte[] DoSomething();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_generic_return_value_that_contains_an_array() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    IEnumerable<byte[]> DoSomething();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_generic_array_return_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    IEnumerable<int>[] DoSomething();
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2223_DocumentationDoesNotUsePlainTextReferencesAnalyzer();
