@@ -2810,6 +2810,16 @@ When defined, ReSharper disables the specific rule once or until the document en
   <data name="MiKo_2227_Title" xml:space="preserve">
     <value>Documentation should not contain ReSharper suppressions</value>
   </data>
+  <data name="MiKo_2228_Description" xml:space="preserve">
+    <value>Negative wording is difficult to understand, especially when being combined (eg. "You cannot do this if it is not empty").
+Positive wording is much easier to understand as it is straight forward and comes to the point.</value>
+  </data>
+  <data name="MiKo_2228_MessageFormat" xml:space="preserve">
+    <value>Use positive wording instead of negative</value>
+  </data>
+  <data name="MiKo_2228_Title" xml:space="preserve">
+    <value>Documentation should use positive wording instead of negative</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
