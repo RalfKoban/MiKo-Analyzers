@@ -121,12 +121,12 @@ public class TestMe
 
         [Test]
         public void An_issue_is_reported_for_wrong_single_line_comment() => Assert.Multiple(() =>
-                                                                                           {
-                                                                                               foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
-                                                                                               {
-                                                                                                   foreach (var wrongPhrase in WrongPhrases)
-                                                                                                   {
-                                                                                                       An_issue_is_reported_for(@"
+                                                                                                 {
+                                                                                                     foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
+                                                                                                     {
+                                                                                                         foreach (var wrongPhrase in WrongPhrases)
+                                                                                                         {
+                                                                                                             An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -134,18 +134,18 @@ public class TestMe
         // This " + wrongPhrase + delimiter + @"
     }
 }");
-                                                                                                   }
-                                                                                               }
-                                                                                           });
+                                                                                                         }
+                                                                                                     }
+                                                                                                 });
 
         [Test]
         public void An_issue_is_reported_for_wrong_multi_line_comment() => Assert.Multiple(() =>
-                                                                                           {
-                                                                                               foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
-                                                                                               {
-                                                                                                   foreach (var wrongPhrase in WrongPhrases)
-                                                                                                   {
-                                                                                                       An_issue_is_reported_for(@"
+                                                                                                {
+                                                                                                    foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
+                                                                                                    {
+                                                                                                        foreach (var wrongPhrase in WrongPhrases)
+                                                                                                        {
+                                                                                                            An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -153,9 +153,9 @@ public class TestMe
         /* This " + wrongPhrase + delimiter + @" */
     }
 }");
-                                                                                                   }
-                                                                                               }
-                                                                                           });
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
 
         [Test]
         public void Code_gets_fixed_for_single_line_([ValueSource(nameof(WrongPhrases))] string wrongPhrase)

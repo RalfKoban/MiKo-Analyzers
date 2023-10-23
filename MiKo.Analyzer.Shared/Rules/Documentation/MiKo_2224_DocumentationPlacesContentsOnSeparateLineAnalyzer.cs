@@ -74,8 +74,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines) => IsOnSameLine(text, (ICollection<int>)lines);
-
         private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, ICollection<int> lines)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
@@ -104,6 +102,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return false;
         }
+
+        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines) => IsOnSameLine(text, (ICollection<int>)lines);
 
         private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines) => IsOnSameLine(contents, (ICollection<int>)lines);
 
@@ -137,10 +137,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case XmlEmptyElementSyntax emptyElement:
                         emptyElements.Add(emptyElement);
+
                         break;
 
                     case XmlElementSyntax element:
                         elements.Add(element);
+
                         break;
                 }
             }

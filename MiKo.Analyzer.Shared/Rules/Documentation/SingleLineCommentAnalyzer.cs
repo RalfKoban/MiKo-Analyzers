@@ -81,6 +81,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             ReportDiagnostics(context, issues);
         }
 
+        private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
+        {
+            if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
+            {
+                return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
+            }
+
+            return CommentHasIssue(trivia, semanticModel);
+        }
+
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
         {
             foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
@@ -132,16 +142,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 return string.Empty;
             }
-        }
-
-        private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
-        {
-            if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
-            {
-                return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
-            }
-
-            return CommentHasIssue(trivia, semanticModel);
         }
     }
 }
