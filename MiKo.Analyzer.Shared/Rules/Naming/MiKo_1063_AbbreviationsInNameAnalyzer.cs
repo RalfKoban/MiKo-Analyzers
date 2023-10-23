@@ -172,6 +172,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Identifier",
                                                             "Identity",
                                                             "Identities",
+                                                            "next",
+                                                            "Next",
                                                             "text",
                                                             "Text",
                                                         };

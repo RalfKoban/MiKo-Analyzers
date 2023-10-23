@@ -190,6 +190,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "kept",
                                                             "measures",
                                                             "mixtures",
+                                                            "next",
                                                             "number",
                                                             "prompt",
                                                             "requestTime",
