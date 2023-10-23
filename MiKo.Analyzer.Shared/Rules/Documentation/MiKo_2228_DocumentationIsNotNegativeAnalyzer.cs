@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -12,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2228";
 
-        private static readonly string[] ProblematicWords = { " not ", "cannot", "Cannot", "Can't", " cant ", " can't", " wont ", "won't", "Won't", "shouldnt", "shouldn't", "Shouldnt", "Shouldn't", "Isn't", "isn't", "aren't" };
+        private static readonly string[] ProblematicWords = { "n't", " not ", "cannot", "Cannot", " cant ", " wont ", "ouldnt" };
 
         public MiKo_2228_DocumentationIsNotNegativeAnalyzer() : base(Id)
         {
@@ -25,25 +26,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                              .Concat(AnalyzeXml(comment.GetRemarksXmls()));
         }
 
+        private static bool SentenceHasIssue(XmlElementSyntax xml)
+        {
+            var text = xml.GetTextTrimmed();
+
+            foreach (var sentence in text.SplitBy(Constants.SentenceMarkers))
+            {
+                var indices = new HashSet<int>();
+
+                foreach (var problematicWord in ProblematicWords)
+                {
+                    indices.AddRange(sentence.Text.AllIndicesOf(problematicWord, StringComparison.Ordinal));
+
+                    if (indices.Count > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private IEnumerable<Diagnostic> AnalyzeXml(IEnumerable<XmlElementSyntax> xmls)
         {
             foreach (var xml in xmls)
             {
-                var counts = 0;
-
-                foreach (var token in xml.GetXmlTextTokens())
-                {
-                    if (counts > 1)
-                    {
-                        break;
-                    }
-
-                    var locations = GetAllLocations(token, ProblematicWords);
-
-                    counts += locations.Count();
-                }
-
-                if (counts > 1)
+                if (SentenceHasIssue(xml))
                 {
                     yield return Issue(xml.StartTag);
                 }
