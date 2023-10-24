@@ -7931,7 +7931,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use positive wording instead of negative.
+        ///   Looks up a localized string similar to Documentation should use positive wording instead of negative.
         /// </summary>
         public static string MiKo_2228_Title {
             get {
@@ -11615,6 +11615,35 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3117_Title {
             get {
                 return ResourceManager.GetString("MiKo_3117_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tests should be as explicit as possible.
+        ///Different Linq calls such as &apos;Skip&apos; or &apos;Take&apos; or &apos;FirstOrDefault&apos; help in production code but are not clear enough when used inside a tests.
+        ///For example, if the test uses &apos;Skip&apos;, it is unclear for the reader why the code should skip some values. Hence the reader needs to find out, which costs some time and could be easily avoided when the test would be more explicit here about the outcome..
+        /// </summary>
+        public static string MiKo_3118_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3118_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use ambiguous Linq call &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3118_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3118_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not use ambiguous Linq calls.
+        /// </summary>
+        public static string MiKo_3118_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3118_Title", resourceCulture);
             }
         }
         

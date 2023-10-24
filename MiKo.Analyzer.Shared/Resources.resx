@@ -4103,6 +4103,17 @@ It may even be that the contained code is commented out, leading to the question
   <data name="MiKo_3117_Title" xml:space="preserve">
     <value>Test cleanup methods should contain code</value>
   </data>
+  <data name="MiKo_3118_Description" xml:space="preserve">
+    <value>Tests should be as explicit as possible.
+Different Linq calls such as 'Skip' or 'Take' or 'FirstOrDefault' help in production code but are not clear enough when used inside a tests.
+For example, if the test uses 'Skip', it is unclear for the reader why the code should skip some values. Hence the reader needs to find out, which costs some time and could be easily avoided when the test would be more explicit here about the outcome.</value>
+  </data>
+  <data name="MiKo_3118_MessageFormat" xml:space="preserve">
+    <value>Do not use ambiguous Linq call '{0}'</value>
+  </data>
+  <data name="MiKo_3118_Title" xml:space="preserve">
+    <value>Test methods should not use ambiguous Linq calls</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
