@@ -894,6 +894,62 @@ namespace log4net
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_in_callback()
+        {
+            const string OriginalCode = @"
+using System.Threading;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.Token.Register(() => Log.DebugFormat(""some text""));
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.Token.Register(() => { if (Log.IsDebugEnabled) { Log.DebugFormat(""some text""); } });
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();
