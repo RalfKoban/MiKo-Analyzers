@@ -566,6 +566,61 @@ namespace log4net
         }
 
         [Test]
+        public void Code_gets_fixed_when_surrounded_by_other_statements()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = true;
+            Log.Debug(""something"");
+            something = false;
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = true;
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""something"");
+            }
+            something = false;
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_local_function()
         {
             const string OriginalCode = @"

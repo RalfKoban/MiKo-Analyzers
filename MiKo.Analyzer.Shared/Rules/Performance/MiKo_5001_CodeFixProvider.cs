@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             // nest call in block
             var block = SyntaxFactory.Block(SyntaxFactory.ExpressionStatement(call));
 
-            return SyntaxFactory.IfStatement(condition, block);
+            return SyntaxFactory.IfStatement(condition, block).WithTriviaFrom(statement);
         }
 
         private static ExpressionSyntax CreateCondition(MemberAccessExpressionSyntax expression)
