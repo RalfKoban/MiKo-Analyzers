@@ -11018,6 +11018,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no benefit in casting a value to a specific type and returning that cast value when the return type is of type object..
+        /// </summary>
+        public static string MiKo_3097_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3097_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not cast to type when returning object.
+        /// </summary>
+        public static string MiKo_3097_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3097_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not cast to type and return object.
+        /// </summary>
+        public static string MiKo_3097_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3097_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>

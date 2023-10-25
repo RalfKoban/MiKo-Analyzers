@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
@@ -201,6 +202,14 @@ namespace MiKoSolutions.Analyzers.Rules
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+
+        protected Diagnostic Issue(CastExpressionSyntax cast)
+        {
+            // underline only the cast itself, not the complete expression
+            var location = CreateLocation(cast, cast.OpenParenToken.SpanStart, cast.CloseParenToken.Span.End);
+
+            return Issue(location);
+        }
 
         protected Diagnostic Issue(ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol));
 
