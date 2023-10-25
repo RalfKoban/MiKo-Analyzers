@@ -34,6 +34,31 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Log_call_directly_behind_if_when_if_is_not_separated_by_blank_line() => No_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = true;
+            if (something) Log.Debug();
+            something = false;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_Log_call_inside_if_statement_followed_by_block_statement() => No_issue_is_reported_for(@"
 namespace log4net
 {
@@ -195,6 +220,54 @@ namespace log4net
                     return;
                 }
             }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Log_call_as_if_condition_when_preceded_by_code() => An_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = true;
+            if (Log.IsDebugEnabled) Log.Debug();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Log_call_as_if_condition_when_followed_by_code() => An_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            if (Log.IsDebugEnabled) Log.Debug();
+            something = true;
         }
     }
 }
@@ -706,6 +779,94 @@ namespace Serilog
             }
 
             Log.Verbose();
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_DebugEnabled_is_on_same_line_as_check_in_multiple_lines()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void DebugFormat(string format, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething1(bool something)
+        {
+            something = false;
+            if (Log.IsDebugEnabled) Log.DebugFormat(""some text {0}"", something);
+            something = true;
+        }
+
+        public void DoSomething2(bool something)
+        {
+            something = false;
+            if (Log.IsDebugEnabled) Log.DebugFormat(""some text {0}"", something);
+            something = true;
+        }
+
+        public void DoSomething3(bool something)
+        {
+            something = false;
+            if (Log.IsDebugEnabled) Log.DebugFormat(""some text {0}"", something);
+            something = true;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void DebugFormat(string format, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething1(bool something)
+        {
+            something = false;
+
+            if (Log.IsDebugEnabled) Log.DebugFormat(""some text {0}"", something);
+
+            something = true;
+        }
+
+        public void DoSomething2(bool something)
+        {
+            something = false;
+
+            if (Log.IsDebugEnabled) Log.DebugFormat(""some text {0}"", something);
+
+            something = true;
+        }
+
+        public void DoSomething3(bool something)
+        {
+            something = false;
+
+            if (Log.IsDebugEnabled) Log.DebugFormat(""some text {0}"", something);
+
+            something = true;
         }
     }
 }
