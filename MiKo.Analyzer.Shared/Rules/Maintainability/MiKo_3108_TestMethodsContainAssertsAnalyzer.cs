@@ -133,22 +133,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // we assume that this is a Moq call
-                    case "VerifyGet" when argumentsCount > 0:
-                    case "VerifySet" when argumentsCount > 0:
-                    case "VerifyAll" when argumentsCount == 0:
-                    case "Verify" when argumentsCount > 0:
+                    case Constants.Moq.VerifyGet when argumentsCount > 0:
+                    case Constants.Moq.VerifySet when argumentsCount > 0:
+                    case Constants.Moq.VerifyAll when argumentsCount == 0:
+                    case Constants.Moq.Verify when argumentsCount > 0:
                     {
                         return true;
                     }
 
-                    case "Verify" when argumentsCount == 0:
+                    case Constants.Moq.Verify when argumentsCount == 0:
                     {
                         if (node.Expression is IdentifierNameSyntax ins)
                         {
                             var mockName = ins.GetName();
 
                             // no arguments, so check for a 'Verifiable' call on the same mock object
-                            return nodes.Where(_ => _.GetName() == "Verifiable" && _.Parent is InvocationExpressionSyntax)
+                            return nodes.Where(_ => _.GetName() == Constants.Moq.Verifiable && _.Parent is InvocationExpressionSyntax)
                                         .SelectMany(_ => _.DescendantNodes<MemberAccessExpressionSyntax>())
                                         .Any(_ => _.Expression is IdentifierNameSyntax e && e.GetName() == mockName);
                         }

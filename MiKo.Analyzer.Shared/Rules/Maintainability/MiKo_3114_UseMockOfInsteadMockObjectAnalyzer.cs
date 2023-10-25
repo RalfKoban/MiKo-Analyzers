@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             types = null;
 
-            if (node.GetName() == "Object" && node.Expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == "Mock" && o.Type is GenericNameSyntax genericName)
+            if (node.GetName() == "Object" && node.Expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
             {
                 types = genericName.TypeArgumentList.Arguments.ToArray();
             }
@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return types != null;
         }
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("Moq.Mock") != null;
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {

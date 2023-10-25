@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("Moq.Mock") != null;
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
@@ -76,31 +76,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentList = node.ArgumentList;
 
-            foreach (var lambda in node.Ancestors<SimpleLambdaExpressionSyntax>())
+            if (node.Ancestors<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
             {
-                if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
-                {
-                    switch (m.GetName())
-                    {
-                        case "Setup":
-                        case "SetupGet":
-                        case "SetupSet":
-                        case "SetupSequence":
-                        case "Verify":
-                        case "VerifyGet":
-                        case "VerifySet":
-                        {
-                            // here we assume that we have a Moq call
-                            return Enumerable.Empty<Diagnostic>();
-                        }
-
-                        case "Of" when m.Expression is IdentifierNameSyntax ins && ins.GetName() == "Mock":
-                        {
-                            // here we assume that we have a Moq call
-                            return Enumerable.Empty<Diagnostic>();
-                        }
-                    }
-                }
+                return Enumerable.Empty<Diagnostic>();
             }
 
             var method = node.GetEnclosingMethod(semanticModel);

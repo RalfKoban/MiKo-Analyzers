@@ -343,6 +343,44 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Moq_setup_or_verification_call() => No_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+}
+
+namespace Moq
+{
+    public class Mock<T>
+    {
+    }
+}
+
+namespace Bla
+{
+    using log4net;
+    using Moq;
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var mock = new Mock<ILog>();
+
+            mock.Setup(_ => _.Debug());
+
+            mock.Verify(_ => _.Debug(), Times.Never);
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace log4net
 {
