@@ -343,6 +343,44 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Moq_setup_or_verification_call() => No_issue_is_reported_for(@"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug();
+    }
+}
+
+namespace Moq
+{
+    public class Mock<T>
+    {
+    }
+}
+
+namespace Bla
+{
+    using log4net;
+    using Moq;
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var mock = new Mock<ILog>();
+
+            mock.Setup(_ => _.Debug());
+
+            mock.Verify(_ => _.Debug(), Times.Never);
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_call_in_method_body_without_IsDebugEnabled_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace log4net
 {
@@ -558,6 +596,61 @@ namespace log4net
             {
                 Log.Debug(""something"");
             }
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_surrounded_by_other_statements()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = true;
+            Log.Debug(""something"");
+            something = false;
+        }
+    }
+}
+";
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(bool something)
+        {
+            something = true;
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""something"");
+            }
+            something = false;
         }
     }
 }
@@ -798,6 +891,62 @@ namespace log4net
     }
 }
 ";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_in_callback()
+        {
+            const string OriginalCode = @"
+using System.Threading;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.Token.Register(() => Log.DebugFormat(""some text""));
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Threading;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.Token.Register(() => { if (Log.IsDebugEnabled) { Log.DebugFormat(""some text""); } });
+        }
+    }
+}
+";
+
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 

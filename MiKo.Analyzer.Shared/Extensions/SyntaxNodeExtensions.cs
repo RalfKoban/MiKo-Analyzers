@@ -1116,6 +1116,30 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsMoqCall(this LambdaExpressionSyntax lambda)
+        {
+            if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
+            {
+                switch (m.GetName())
+                {
+                    case Constants.Moq.Setup:
+                    case Constants.Moq.SetupGet:
+                    case Constants.Moq.SetupSet:
+                    case Constants.Moq.SetupSequence:
+                    case Constants.Moq.Verify:
+                    case Constants.Moq.VerifyGet:
+                    case Constants.Moq.VerifySet:
+                    case Constants.Moq.Of when m.Expression is IdentifierNameSyntax ins && ins.GetName() == Constants.Moq.Mock:
+                    {
+                        // here we assume that we have a Moq call
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
 
         internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();

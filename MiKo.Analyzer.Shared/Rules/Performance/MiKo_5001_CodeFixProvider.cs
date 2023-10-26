@@ -20,8 +20,30 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var statement = (ExpressionStatementSyntax)syntax;
-            var call = (InvocationExpressionSyntax)statement.Expression;
+            var lambda = syntax.FirstDescendant<LambdaExpressionSyntax>();
+
+            if (lambda != null)
+            {
+                // fix inside lambda
+                var ifStatement = CreateIfStatement(lambda.ExpressionBody);
+
+                // nest call in block
+                var block = SyntaxFactory.Block(ifStatement);
+
+                return syntax.ReplaceNode(lambda, lambda.WithBody(block));
+            }
+
+            return CreateIfStatement((ExpressionStatementSyntax)syntax);
+        }
+
+        private static IfStatementSyntax CreateIfStatement(ExpressionStatementSyntax statement)
+        {
+            return CreateIfStatement(statement.Expression).WithTriviaFrom(statement);
+        }
+
+        private static IfStatementSyntax CreateIfStatement(ExpressionSyntax syntax)
+        {
+            var call = (InvocationExpressionSyntax)syntax;
             var expression = (MemberAccessExpressionSyntax)call.Expression;
 
             var condition = CreateCondition(expression);
