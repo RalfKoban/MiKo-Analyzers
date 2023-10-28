@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.GetUpdatedSyntax(document, syntax, issue);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             if (syntax is XmlEmptyElementSyntax element)
             {
@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return root.ReplaceNode(element, nodes);
             }
 
-            return base.GetUpdatedSyntaxRoot(document, root, syntax, issue);
+            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
         }
 
         private static SyntaxNode GetUpdatedSyntax(XmlElementStartTagSyntax syntax)

@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return statement.WithExpression(assertThat).WithTriviaFrom(statement);
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             // only remove assertions if there are no more diagnostics
             // return root.WithUsing("NUnit.Framework").WithoutUsing("FluentAssertions");

@@ -950,6 +950,421 @@ namespace log4net
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_non_consecutive_calls()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log.Debug(""some text"");
+            Log.Error(""some more text"");
+            Log.Debug(""even some more text"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+            }
+            Log.Error(""some more text"");
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""even some more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_consecutive_calls()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log.Debug(""some text"");
+            Log.Debug(""some more text"");
+            Log.Debug(""even some more text"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+                Log.Debug(""some more text"");
+                Log.Debug(""even some more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_consecutive_call_when_first_is_already_part_of_an_IsDebugEnabled_with_block_as_body()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+            }
+
+            Log.Debug(""some more text"");
+            Log.Debug(""even some more text"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+                Log.Debug(""some more text"");
+                Log.Debug(""even some more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_consecutive_call_when_first_is_already_part_of_an_IsDebugEnabled_without_block_as_body()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled) Log.Debug(""some text"");
+
+            Log.Debug(""some more text"");
+            Log.Debug(""even some more text"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+                Log.Debug(""some more text"");
+                Log.Debug(""even some more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_consecutive_call_when_last_is_already_part_of_an_IsDebugEnabled_with_block_as_body()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log.Debug(""some text"");
+
+            // some comment
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some more text"");
+                Log.Debug(""even some more text"");
+            }
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            // some comment
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+                Log.Debug(""some more text"");
+                Log.Debug(""even some more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_consecutive_call_when_last_is_already_part_of_an_IsDebugEnabled_without_block_as_body()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log.Debug(""some text"");
+
+            // some comment
+            if (Log.IsDebugEnabled) Log.Debug(""some more text"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            // some comment
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+                Log.Debug(""some more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_consecutive_calls_when_last_is_already_part_of_an_IsDebugEnabled_without_block_as_body()
+        {
+            const string OriginalCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            Log.Debug(""some text"");
+            Log.Debug(""some more text"");
+
+            if (Log.IsDebugEnabled) Log.Debug(""some even more text"");
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+
+        void Debug(string text);
+    }
+
+    public class TestMe
+    {
+        private ILog Log = null;
+
+        public void DoSomething()
+        {
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug(""some text"");
+                Log.Debug(""some more text"");
+                Log.Debug(""some even more text"");
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5001_DebugLogIsEnabledAnalyzer();

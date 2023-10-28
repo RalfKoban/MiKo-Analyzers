@@ -152,11 +152,21 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var newRoot = root;
 
+            var annotation = new SyntaxAnnotation("document adjustment");
+
             if (ReferenceEquals(updatedSyntax, syntax) is false)
             {
-                newRoot = updatedSyntax is null
-                          ? root.Without(syntax)
-                          : root.ReplaceNode(syntax, updatedSyntax);
+                if (updatedSyntax is null)
+                {
+                    newRoot = root.Without(syntax);
+                }
+                else
+                {
+                    newRoot = root.ReplaceNode(syntax, updatedSyntax.WithAnnotation(annotation));
+
+                    // let's see if the node now gets parents when we annotate it
+                    updatedSyntax = newRoot.GetAnnotatedNodes(annotation).First();
+                }
 
                 if (newRoot is null)
                 {
@@ -169,7 +179,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return Task.FromResult(document);
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, updatedSyntax, diagnostic) ?? newRoot;
+            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, updatedSyntax, annotation, diagnostic) ?? newRoot;
             var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
@@ -206,7 +216,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
 
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => null;
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => null;
 
         protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
 
