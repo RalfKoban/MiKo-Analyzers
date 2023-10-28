@@ -18,6 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
 
+            if (startingNodes.Count == 0)
+            {
+                return syntax;
+            }
+
             return syntax.ReplaceSyntax(
                                         startingNodes.Where(_ => _.IsNode).Select(_ => _.AsNode()),
                                         (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),

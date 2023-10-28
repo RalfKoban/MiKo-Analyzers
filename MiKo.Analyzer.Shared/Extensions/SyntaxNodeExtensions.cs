@@ -1265,6 +1265,27 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsCallTo(this IfStatementSyntax value, string methodName)
+        {
+            var ifExpression = value.FirstChild<MemberAccessExpressionSyntax>();
+
+            if (ifExpression.IsCallTo(methodName))
+            {
+                return true;
+            }
+
+            var binaryExpression = value.FirstChild<BinaryExpressionSyntax>();
+
+            if (binaryExpression.IsBinaryCallTo(methodName))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        internal static bool IsCallTo(this ExpressionSyntax value, string methodName) => value is MemberAccessExpressionSyntax m && m.Name.ToString() == methodName;
+
         internal static bool IsInvocationOnObjectUnderTest(this ExpressionStatementSyntax value)
         {
             switch (value.Expression)
@@ -2038,33 +2059,38 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode
         {
-            var space = SyntaxFactory.Space; // use non-elastic one to prevent formatting to be done automatically
+            if (count <= 0)
+            {
+                return value;
+            }
+
+            var spaces = string.Intern(new string(' ', count)); // use chars to simulate non-elastic one to prevent formatting to be done automatically
 
             var trivia = value.GetLeadingTrivia();
 
             if (trivia.Count == 0)
             {
-                return value.WithLeadingTrivia(Enumerable.Repeat(space, count));
+                return value.WithLeadingTrivia(SyntaxFactory.Whitespace(spaces));
             }
 
             if (trivia[0].IsEndOfLine())
             {
                 // keep empty line at beginning
-                return value.WithLeadingTrivia(Enumerable.Repeat(space, count)).WithLeadingEmptyLine();
+                return value.WithLeadingTrivia(SyntaxFactory.Whitespace(spaces)).WithLeadingEmptyLine();
             }
 
-            // re-construct leading comment with correct amount of spaces
-            var finalTrivia = new List<SyntaxTrivia>();
+            // re-construct leading comment with correct amount of spaces but keep comments
+            // (so we have to find out each white-space trivia and have to replace it with the correct amount of spaces)
+            var finalTrivia = trivia.ToArray();
 
-            foreach (var t in trivia)
+            for (var index = 0; index < finalTrivia.Length; index++)
             {
+                var t = finalTrivia[index];
+
+                // if trivia is white-space, replace it with correct amount of spaces
                 if (t.IsWhiteSpace())
                 {
-                    finalTrivia.AddRange(Enumerable.Repeat(space, count));
-                }
-                else
-                {
-                    finalTrivia.Add(t);
+                    finalTrivia[index] = SyntaxFactory.Whitespace(spaces);
                 }
             }
 
@@ -2157,6 +2183,18 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
+
+        internal static T WithoutLeadingEndOfLine<T>(this T value) where T : SyntaxNode
+        {
+            var trivia = value.GetLeadingTrivia();
+
+            if (trivia.Count > 0 && trivia[0].IsEndOfLine())
+            {
+                return value.WithLeadingTrivia(trivia.RemoveAt(0));
+            }
+
+            return value;
+        }
 
         internal static XmlTextSyntax WithoutLeadingXmlComment(this XmlTextSyntax value)
         {
@@ -2716,27 +2754,6 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
-
-        private static bool IsCallTo(this IfStatementSyntax value, string methodName)
-        {
-            var ifExpression = value.FirstChild<MemberAccessExpressionSyntax>();
-
-            if (ifExpression.IsCallTo(methodName))
-            {
-                return true;
-            }
-
-            var binaryExpression = value.FirstChild<BinaryExpressionSyntax>();
-
-            if (binaryExpression.IsBinaryCallTo(methodName))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private static bool IsCallTo(this ExpressionSyntax value, string methodName) => value is MemberAccessExpressionSyntax m && m.Name.ToString() == methodName;
 
         private static bool IsEmpty(this SyntaxNode value, string tagName, IEnumerable<string> attributeNames)
         {

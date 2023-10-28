@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override string Title => Resources.MiKo_4004_CodeFixTitle;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             var typeSyntax = syntax.FirstAncestorOrSelf<BaseTypeDeclarationSyntax>();
 

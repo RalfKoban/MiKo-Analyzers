@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax) => syntax.ArgumentList; // there might be multiple nodes to replace, hence return original and do replacement in GetUpdatedSyntaxRoot
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
