@@ -11,16 +11,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3104_CodeFixProvider)), Shared]
     public sealed class MiKo_3104_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_3104_CombinatorialTestsAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3104_CombinatorialTestsAnalyzer.Id;
 
-        protected sealed override string Title => Resources.MiKo_3104_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3104_CodeFixTitle;
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             return syntaxNodes.OfType<MethodDeclarationSyntax>().First();
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var method = (MethodDeclarationSyntax)syntax;
 
