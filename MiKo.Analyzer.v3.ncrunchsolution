@@ -2,6 +2,7 @@
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
     <ClientRdiStorageDirectory>_NCrunch_RDI</ClientRdiStorageDirectory>
+    <CollectValues>True</CollectValues>
     <HotSpotsExclusionList>
       <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </HotSpotsExclusionList>
