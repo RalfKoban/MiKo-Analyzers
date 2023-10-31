@@ -94,6 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
+//// ncrunch: collect values off
         internal static IEnumerable<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
@@ -132,6 +133,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return $"Indicates {condition} ";
             }
         }
+//// ncrunch: collect values default
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
                                                                                                                                                             ? Comment(comment, GenericStartParts, GenericEndParts)

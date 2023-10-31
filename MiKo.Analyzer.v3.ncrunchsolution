@@ -13,6 +13,7 @@
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
     <RdiConfigured>True</RdiConfigured>
+    <RestrictToString>False</RestrictToString>
     <SlidingBuildDelayInMilliseconds>500</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
