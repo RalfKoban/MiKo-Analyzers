@@ -66,6 +66,11 @@ public class TestMe
 
         protected override string GetDiagnosticId() => MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest()
+        {
+            NamingLengthAnalyzer.EnabledPerDefault = true;
+
+            return new MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer();
+        }
     }
 }

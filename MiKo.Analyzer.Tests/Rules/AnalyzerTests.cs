@@ -10,10 +10,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using MiKoSolutions.Analyzers.Rules.Documentation;
-using MiKoSolutions.Analyzers.Rules.Maintainability;
-using MiKoSolutions.Analyzers.Rules.Naming;
-
 using NUnit.Framework;
 
 using TestHelper;
@@ -383,10 +379,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private static int GetDiagnosticIdStartingNumber(Analyzer analyzer) => analyzer.GetType().Namespace switch
                                                                                                                    {
-                                                                                                                       "MiKoSolutions.Analyzers.Rules.Documentation" => 2,
-                                                                                                                       "MiKoSolutions.Analyzers.Rules.Maintainability" => 3,
                                                                                                                        "MiKoSolutions.Analyzers.Rules.Metrics" => 0,
                                                                                                                        "MiKoSolutions.Analyzers.Rules.Naming" => 1,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Documentation" => 2,
+                                                                                                                       "MiKoSolutions.Analyzers.Rules.Maintainability" => 3,
                                                                                                                        "MiKoSolutions.Analyzers.Rules.Ordering" => 4,
                                                                                                                        "MiKoSolutions.Analyzers.Rules.Performance" => 5,
                                                                                                                        "MiKoSolutions.Analyzers.Rules.Spacing" => 6,
@@ -395,14 +391,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
         private static Analyzer[] CreateAllAnalyzers()
         {
-            // !! Awful HACKs!!
-            // these line are required to allow the tests to run successfully
-            NamingLengthAnalyzer.EnabledPerDefault = true;
-            MiKo_2306_CommentEndsWithPeriodAnalyzer.EnabledPerDefault = true;
-            MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.EnabledPerDefault = true;
-
-            //// TODO: RKN Fix Markdown for those that are enabled
-
             var baseType = typeof(Analyzer);
 
             var allAnalyzers = baseType.Assembly.GetExportedTypes()

@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected SymbolKind SymbolKind { get; } = SymbolKind.Alias;
 
-        protected bool IsEnabledByDefault { get; set; } = true;
+        protected virtual bool IsEnabledByDefault => true;
 
         protected virtual bool CanRunConcurrently => true;
 

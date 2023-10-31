@@ -46,6 +46,11 @@ public class Abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz
 
         protected override string GetDiagnosticId() => MiKo_1020_TypeNameLengthAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1020_TypeNameLengthAnalyzer(true);
+        protected override DiagnosticAnalyzer GetObjectUnderTest()
+        {
+            NamingLengthAnalyzer.EnabledPerDefault = true;
+
+            return new MiKo_1020_TypeNameLengthAnalyzer();
+        }
     }
 }

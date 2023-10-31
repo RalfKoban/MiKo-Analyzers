@@ -301,6 +301,11 @@ namespace Bla.Blubb.DiBlubb
 
         protected override string GetDiagnosticId() => MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer(true);
+        protected override DiagnosticAnalyzer GetObjectUnderTest()
+        {
+            MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.EnabledPerDefault = true;
+
+            return new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer();
+        }
     }
 }

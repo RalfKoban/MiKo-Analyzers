@@ -30,6 +30,11 @@ public enum MyEnum
 
         protected override string GetDiagnosticId() => MiKo_1023_FieldNameLengthAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1023_FieldNameLengthAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest()
+        {
+            NamingLengthAnalyzer.EnabledPerDefault = true;
+
+            return new MiKo_1023_FieldNameLengthAnalyzer();
+        }
     }
 }

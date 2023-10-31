@@ -10,11 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1020";
 
-        public MiKo_1020_TypeNameLengthAnalyzer() : this(EnabledPerDefault)
-        {
-        }
-
-        public MiKo_1020_TypeNameLengthAnalyzer(bool enabledPerDefault) : base(Id, SymbolKind.NamedType, Constants.MaxNamingLengths.Types, enabledPerDefault)
+        public MiKo_1020_TypeNameLengthAnalyzer() : base(Id, SymbolKind.NamedType, Constants.MaxNamingLengths.Types)
         {
         }
 
