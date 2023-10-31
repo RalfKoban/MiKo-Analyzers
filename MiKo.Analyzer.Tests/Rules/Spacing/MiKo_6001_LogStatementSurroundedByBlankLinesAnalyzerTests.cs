@@ -226,6 +226,42 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Log_call_in_Moq_call() => No_issue_is_reported_for(@"
+using Moq;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        bool IsDebugEnabled { get; }
+        bool IsInfoEnabled { get; }
+        bool IsWarnEnabled { get; }
+
+        void Debug(string text);
+        void Info(string text);
+        void Warn(string text);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething()
+        {
+            var mock = new Mock<ILog>();
+
+            mock.Verify(_ => _.IsInfoEnabled), Times.Once);
+            mock.Verify(_ => _.IsDebugEnabled), Times.Never);
+            mock.Verify(_ => _.IsWarnEnabled, Times.Never);
+            mock.Verify(_ => _.Info(""some text"")), Times.Once);
+            mock.Verify(_ => _.Debug(""some text"")), Times.Never);
+            mock.Verify(_ => _.Warn(""some text""), Times.Never);
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Log_call_as_if_condition_when_preceded_by_code() => An_issue_is_reported_for(@"
 namespace log4net
 {
