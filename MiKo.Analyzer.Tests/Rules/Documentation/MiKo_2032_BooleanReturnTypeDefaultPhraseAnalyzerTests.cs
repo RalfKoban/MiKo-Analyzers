@@ -3,6 +3,8 @@
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
@@ -10,7 +12,7 @@ using TestHelper;
 //// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture]
+    [TestFixture, RequiresCapability("SSD")]
     public sealed class MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BooleanOnlyReturnValues =
