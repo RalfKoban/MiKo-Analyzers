@@ -5,7 +5,6 @@ using NUnit.Framework;
 using TestHelper;
 
 //// ncrunch: collect values off
-
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]

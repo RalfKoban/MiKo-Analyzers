@@ -3,7 +3,6 @@
 using TestHelper;
 
 //// ncrunch: collect values off
-
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public abstract class NamingLengthAnalyzerTests : CodeFixVerifier
