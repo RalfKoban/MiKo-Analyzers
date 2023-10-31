@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
+// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class Analyzer : DiagnosticAnalyzer
@@ -42,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected SymbolKind SymbolKind { get; } = SymbolKind.Alias;
 
-        protected virtual bool IsEnabledByDefault => true;
+        protected bool IsEnabledByDefault { get; set; } = true;
 
         protected virtual bool CanRunConcurrently => true;
 

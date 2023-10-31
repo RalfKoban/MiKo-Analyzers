@@ -19,13 +19,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                SyntaxKind.ElementAccessExpression,
                                                            };
 
-        public MiKo_3030_MethodsFollowLawOfDemeterAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3030_MethodsFollowLawOfDemeterAnalyzer() : this(EnabledPerDefault)
         {
         }
 
-        public static bool EnabledPerDefault { get; set; } = false;
+        public MiKo_3030_MethodsFollowLawOfDemeterAnalyzer(bool enabledPerDefault) : base(Id, (SymbolKind)(-1)) => IsEnabledByDefault = enabledPerDefault;
 
-        protected override bool IsEnabledByDefault => EnabledPerDefault;
+        public static bool EnabledPerDefault { get; set; } = false;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpression, SyntaxKinds);
 

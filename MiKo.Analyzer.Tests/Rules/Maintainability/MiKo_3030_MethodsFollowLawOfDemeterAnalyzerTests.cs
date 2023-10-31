@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
+
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -299,6 +301,6 @@ namespace Bla.Blubb.DiBlubb
 
         protected override string GetDiagnosticId() => MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer(true);
     }
 }

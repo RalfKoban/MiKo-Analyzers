@@ -10,13 +10,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2306";
 
-        public MiKo_2306_CommentEndsWithPeriodAnalyzer() : base(Id)
+        public MiKo_2306_CommentEndsWithPeriodAnalyzer() : this(EnabledPerDefault)
         {
         }
 
-        public static bool EnabledPerDefault { get; set; } = false;
+        public MiKo_2306_CommentEndsWithPeriodAnalyzer(bool enabledPerDefault) : base(Id) => IsEnabledByDefault = enabledPerDefault;
 
-        protected override bool IsEnabledByDefault { get; } = EnabledPerDefault;
+        public static bool EnabledPerDefault { get; set; } = false;
 
         protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => comment.EndsWith('.') is false;
     }

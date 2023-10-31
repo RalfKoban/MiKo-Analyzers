@@ -9,11 +9,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         private readonly int m_limit;
 
-        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, int limit) : base(diagnosticId, kind) => m_limit = limit;
+        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, int limit) : this(diagnosticId, kind, limit, EnabledPerDefault)
+        {
+        }
+
+        protected NamingLengthAnalyzer(string diagnosticId, SymbolKind kind, int limit, bool enabledPerDefault) : base(diagnosticId, kind)
+        {
+            m_limit = limit;
+            IsEnabledByDefault = enabledPerDefault;
+        }
 
         public static bool EnabledPerDefault { get; set; } = false; // TODO: RKN set to false to limit the default analyzing (but be aware to get the tests running)
-
-        protected override bool IsEnabledByDefault => EnabledPerDefault;
 
         protected IEnumerable<Diagnostic> Analyze(ISymbol symbol)
         {
