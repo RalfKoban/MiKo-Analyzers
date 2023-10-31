@@ -112,6 +112,29 @@ namespace log4net
 ");
 
         [Test]
+        public void No_issue_is_reported_for_formatting_call_in_Moq_call_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+using Moq;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        void " + method + @"Format(string text);
+    }
+
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var mock = new Mock<ILog>();
+
+            mock.Verify(_ => _." + method + @"Format(""Some text""), Times.Once);
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_formatting_call_in_method_body_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 namespace log4net
 {

@@ -1116,6 +1116,16 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax syntax)
+        {
+            if (syntax.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
+            {
+                return IsMoqCall(lambda);
+            }
+
+            return false;
+        }
+
         internal static bool IsMoqCall(this LambdaExpressionSyntax lambda)
         {
             if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
