@@ -263,20 +263,20 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 updatedRoot = updatedRoot.ReplaceNodes(
                                                        calls,
                                                        (original, rewritten) =>
-                                                       {
-                                                           if (nodesToRemove.Contains(original))
-                                                           {
-                                                               // annotate it so that we can find it again as left-over when it comes to deleting it
-                                                               return original.WithAnnotation(new SyntaxAnnotation(DeleteAnnotation));
-                                                           }
+                                                                               {
+                                                                                   if (nodesToRemove.Contains(original))
+                                                                                   {
+                                                                                       // annotate it so that we can find it again as left-over when it comes to deleting it
+                                                                                       return original.WithAnnotation(new SyntaxAnnotation(DeleteAnnotation));
+                                                                                   }
 
-                                                           if (nodesToReplace.TryGetValue(original, out var replacement))
-                                                           {
-                                                               return replacement;
-                                                           }
+                                                                                   if (nodesToReplace.TryGetValue(original, out var replacement))
+                                                                                   {
+                                                                                       return replacement;
+                                                                                   }
 
-                                                           return rewritten;
-                                                       });
+                                                                                   return rewritten;
+                                                                               });
 
                 // remove the left-overs
                 return updatedRoot.RemoveNodes(updatedRoot.GetAnnotatedNodes(DeleteAnnotation), SyntaxRemoveOptions.KeepNoTrivia);
