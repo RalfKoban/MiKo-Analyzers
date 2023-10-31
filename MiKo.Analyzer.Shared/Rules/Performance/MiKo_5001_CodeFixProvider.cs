@@ -135,7 +135,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 var updatedRoot = MoveIntoIfStatement(root, insertedBlock.Statements, annotation, otherChild, position);
 
                 // see if we have 2 consecutive statements
-                return MergeConsecutiveIfStatements(updatedRoot);
+                var mergedIfs = MergeConsecutiveIfStatements(updatedRoot);
+
+                return MergeConsecutiveIfStatements(mergedIfs);
             }
 
             return root;
@@ -205,20 +207,22 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             if (calls.Count > 1)
             {
-                var firstCall = calls[0];
+                var firstIf = calls[0];
+
+                var spaces = firstIf.GetStartPosition().Character + Constants.Indentation;
 
                 var nodesToRemove = new HashSet<IfStatementSyntax>();
                 var nodesToReplace = new Dictionary<IfStatementSyntax, IfStatementSyntax>();
 
                 for (var index = 1; index < calls.Count; index++)
                 {
-                    var secondCall = calls[index];
+                    var secondIf = calls[index];
 
-                    if (ReferenceEquals(firstCall.Parent, secondCall.Parent) && firstCall.NextSibling() == secondCall)
+                    if (ReferenceEquals(firstIf.Parent, secondIf.Parent) && firstIf.NextSibling() == secondIf)
                     {
                         // same parents, so adjust
-                        var firstStatement = firstCall.Statement;
-                        var secondStatement = secondCall.Statement;
+                        var firstStatement = firstIf.Statement;
+                        var secondStatement = secondIf.Statement;
 
                         var finalStatements = new List<StatementSyntax>();
 
@@ -243,14 +247,14 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         }
 
                         // remove second if and replace first if
-                        nodesToRemove.Add(secondCall);
+                        nodesToRemove.Add(secondIf);
 
-                        nodesToReplace[firstCall] = firstCall.WithStatement(SyntaxFactory.Block(finalStatements));
+                        nodesToReplace[firstIf] = firstIf.WithStatement(SyntaxFactory.Block(finalStatements.Select(_ => _.WithLeadingSpaces(spaces))));
                     }
                     else
                     {
                         // other stuff, do not merge
-                        firstCall = secondCall;
+                        firstIf = secondIf;
                     }
                 }
 
