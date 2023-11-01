@@ -17,4 +17,16 @@
     <SlidingBuildDelayInMilliseconds>500</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>MiKoAnalyzers-RDI Run impacted tests automatically, others manually</Name>
+      <Settings>
+        <AllowParallelTestExecution>True</AllowParallelTestExecution>
+        <AutoPinNewTests>True</AutoPinNewTests>
+        <FastLaneThreads>0</FastLaneThreads>
+        <FastLaneThresholdInMilliseconds>50</FastLaneThresholdInMilliseconds>
+        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted)</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
 </SolutionConfiguration>

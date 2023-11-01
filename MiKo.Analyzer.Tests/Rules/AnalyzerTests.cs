@@ -17,7 +17,7 @@ using TestHelper;
 //// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules
 {
-    [TestFixture]
+    [TestFixture, Category("Always impacted")]
     public static class AnalyzerTests
     {
         private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
