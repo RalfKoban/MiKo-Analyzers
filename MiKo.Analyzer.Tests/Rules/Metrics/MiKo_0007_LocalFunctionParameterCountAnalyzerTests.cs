@@ -30,7 +30,22 @@ public class TestMe
         [TestCase("int a, int b, int c, int d, int e, int f")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g")]
         [TestCase("int a, int b, int c, int d, int e, int f, int g, int h")]
+        [TestCase("int a, int b, int c, int d, out int e")]
         public void An_issue_is_reported_for_more_than_max_parameters_(string parameters) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    private bool DoSomething()
+    {
+        return true;
+
+        bool LocalDoSomething(" + parameters + @") => true;
+    }
+}");
+
+        [TestCase("int a, int b, int c, out int d")]
+        [TestCase("int a, int b, int c, out int d, out int e")]
+        [TestCase("int a, int b, int c, out int d, out int e, out int f")]
+        public void No_issue_is_reported_for_more_than_max_parameters_caused_by_out_parameters_(string parameters) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private bool DoSomething()

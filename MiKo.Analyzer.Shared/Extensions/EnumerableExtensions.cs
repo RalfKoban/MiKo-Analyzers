@@ -232,6 +232,40 @@ namespace System.Linq
             return false;
         }
 
+        internal static int Count<T>(this ImmutableArray<T> source, Predicate<T> filter) where T : class, ISymbol
+        {
+            var count = 0;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (var index = 0; index < source.Length; index++)
+            {
+                if (filter(source[index]))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        internal static int Count<T>(this SeparatedSyntaxList<T> source, Predicate<T> filter) where T : SyntaxNode
+        {
+            var count = 0;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (var index = 0; index < source.Count; index++)
+            {
+                if (filter(source[index]))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         internal static IEnumerable<T> Except<T>(this IEnumerable<T> source, T value) where T : class
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
