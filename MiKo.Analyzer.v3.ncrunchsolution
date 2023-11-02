@@ -1,6 +1,8 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <ClientRdiStorageDirectory>_NCrunch_RDI</ClientRdiStorageDirectory>
+    <CollectValues>True</CollectValues>
     <HotSpotsExclusionList>
       <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </HotSpotsExclusionList>
@@ -10,7 +12,22 @@
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
+    <RdiConfigured>True</RdiConfigured>
+    <RestrictToString>False</RestrictToString>
     <SlidingBuildDelayInMilliseconds>500</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>MiKoAnalyzers-RDI Run impacted tests automatically, others manually</Name>
+      <Settings>
+        <AlignOutOfDateStatusWithImpactStatus>True</AlignOutOfDateStatusWithImpactStatus>
+        <AllowParallelTestExecution>True</AllowParallelTestExecution>
+        <AutoPinNewTests>True</AutoPinNewTests>
+        <FastLaneThreads>0</FastLaneThreads>
+        <FastLaneThresholdInMilliseconds>50</FastLaneThresholdInMilliseconds>
+        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted OR IsPinned)</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
 </SolutionConfiguration>

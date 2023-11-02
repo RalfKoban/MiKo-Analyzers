@@ -46,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(result);
         }
 
+//// ncrunch: collect values off
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
         {
             var textMap = CreateReplacementTextMap(terms.Min(_ => _.Length));
@@ -71,8 +72,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // replace token in text
                     var textTokens = text.TextTokens;
 
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < textTokens.Count; index++)
+                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                    var textTokensCount = textTokens.Count;
+
+                    for (var index = 0; index < textTokensCount; index++)
                     {
                         var token = textTokens[index];
 
@@ -124,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return map;
             }
         }
+//// ncrunch: collect values default
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
         {
@@ -761,6 +765,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return t1.ToString() == t2.ToString();
         }
 
+//// ncrunch: collect values off
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
             var modified = false;
@@ -798,5 +803,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment;
         }
+//// ncrunch: collect values default
     }
 }

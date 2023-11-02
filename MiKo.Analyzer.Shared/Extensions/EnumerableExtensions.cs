@@ -21,8 +21,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (filter(value[index]) is false)
@@ -39,8 +37,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (predicate(value[index]) is false)
@@ -57,8 +53,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (predicate(value[index]) is false)
@@ -90,8 +84,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (predicate(value[index]) is false)
@@ -108,8 +100,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (filter(value[index]))
@@ -126,8 +116,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (predicate(value[index]))
@@ -144,8 +132,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (predicate(value[index]))
@@ -177,8 +163,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < valueCount; index++)
             {
                 if (predicate(value[index]))
@@ -219,9 +203,10 @@ namespace System.Linq
         internal static bool Contains<TSource, TTarget>(this ImmutableArray<TSource> source, TTarget value, SymbolEqualityComparer comparer) where TSource : class, ISymbol
                                                                                                                                              where TTarget : class, ISymbol
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Length; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceLength = source.Length;
+
+            for (var index = 0; index < sourceLength; index++)
             {
                 if (comparer.Equals(source[index], value))
                 {
@@ -230,6 +215,40 @@ namespace System.Linq
             }
 
             return false;
+        }
+
+        internal static int Count<T>(this ImmutableArray<T> source, Predicate<T> filter) where T : class, ISymbol
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceLength = source.Length;
+            var count = 0;
+
+            for (var index = 0; index < sourceLength; index++)
+            {
+                if (filter(source[index]))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        internal static int Count<T>(this SeparatedSyntaxList<T> source, Predicate<T> filter) where T : SyntaxNode
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceCount = source.Count;
+            var count = 0;
+
+            for (var index = 0; index < sourceCount; index++)
+            {
+                if (filter(source[index]))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         internal static IEnumerable<T> Except<T>(this IEnumerable<T> source, T value) where T : class
@@ -251,8 +270,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
@@ -271,8 +288,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
@@ -291,8 +306,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var firstCount = first.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < firstCount; index++)
             {
                 var item = first[index];
@@ -311,8 +324,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -331,8 +342,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -351,8 +360,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -371,8 +378,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -405,8 +410,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -425,8 +428,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -583,8 +584,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -599,8 +598,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
@@ -613,8 +610,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
@@ -626,8 +621,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
@@ -639,8 +632,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
@@ -652,8 +643,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 yield return selector(source[index]);
@@ -670,8 +659,6 @@ namespace System.Linq
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var listCount = list.Count;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < listCount; index++)
                 {
                     yield return list[index];
@@ -690,8 +677,6 @@ namespace System.Linq
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var listCount = list.Count;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < listCount; index++)
                 {
                     yield return list[index];
@@ -702,9 +687,10 @@ namespace System.Linq
         internal static IEnumerable<TResult> SelectMany<T, TResult>(this ImmutableArray<T> source, Func<T, IEnumerable<TResult>> selector) where T : ISymbol
                                                                                                                                            where TResult : class
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Length; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var sourceLength = source.Length;
+
+            for (var index = 0; index < sourceLength; index++)
             {
                 var value = source[index];
 
@@ -721,8 +707,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -740,8 +724,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -761,9 +743,10 @@ namespace System.Linq
             {
                 var array = selector(value);
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < array.Length; index++)
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var arrayLength = array.Length;
+
+                for (var index = 0; index < arrayLength; index++)
                 {
                     yield return array[index];
                 }
@@ -896,8 +879,6 @@ namespace System.Linq
 
             var target = new List<SyntaxToken>(sourceCount);
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 target.Add(source[index]);
@@ -913,8 +894,6 @@ namespace System.Linq
 
             var target = new List<T>(sourceCount);
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 target.Add(source[index]);
@@ -930,8 +909,6 @@ namespace System.Linq
 
             var target = new List<T>(sourceCount);
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 target.Add(source[index]);
@@ -945,8 +922,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -985,8 +960,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];
@@ -1003,8 +976,6 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
             for (var index = 0; index < sourceCount; index++)
             {
                 var value = source[index];

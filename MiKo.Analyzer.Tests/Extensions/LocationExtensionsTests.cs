@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.Text;
 
 using NUnit.Framework;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Extensions
 {
     [TestFixture]

@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
+//// ncrunch: collect values off
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
@@ -45,6 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
         }
+//// ncrunch: collect values default
 
         protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
 
@@ -139,6 +141,19 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
 
+        protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
+
+        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
+
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null;
+
+        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
+
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
+
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => null;
+
+//// ncrunch: collect values off
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
@@ -208,18 +223,6 @@ namespace MiKoSolutions.Analyzers.Rules
             return Task.FromResult(newDocument);
         }
 
-        protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
-
-        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
-
-        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null;
-
-        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
-
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
-
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => null;
-
         private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)
         {
             var document = context.Document;
@@ -254,5 +257,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
         }
+//// ncrunch: collect values default
     }
 }

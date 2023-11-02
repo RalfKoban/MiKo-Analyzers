@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public sealed class MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzerTests : CodeFixVerifier

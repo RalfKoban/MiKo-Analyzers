@@ -92,7 +92,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var throws = 0;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sectionsCount; index++)
             {
                 var statements = sections[index].Statements;
@@ -135,7 +134,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var throws = 0;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < armsCount; index++)
             {
                 var expression = arms[index].Expression;

@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
+// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class Analyzer : DiagnosticAnalyzer
@@ -47,6 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected virtual bool CanRunConcurrently => true;
 
         protected virtual bool IsUnitTestAnalyzer => false;
+
+        public static void Reset() => KnownRules.Clear();
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
