@@ -96,6 +96,8 @@ public class TestMe
         {
             MiKo_2306_CommentEndsWithPeriodAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_2306_CommentEndsWithPeriodAnalyzer();
         }
     }

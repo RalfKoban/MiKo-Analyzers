@@ -35,6 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             NamingLengthAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_1022_ParameterNameLengthAnalyzer();
         }
     }

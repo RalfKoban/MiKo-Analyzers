@@ -83,6 +83,8 @@ public class TestMe
         {
             NamingLengthAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_1026_LocalVariableNameLengthAnalyzer();
         }
     }

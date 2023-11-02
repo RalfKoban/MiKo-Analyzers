@@ -70,6 +70,8 @@ public class TestMe
         {
             NamingLengthAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_1027_LocalVariableNameInForLoopsLengthAnalyzer();
         }
     }

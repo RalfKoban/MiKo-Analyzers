@@ -304,6 +304,8 @@ namespace Bla.Blubb.DiBlubb
         {
             MiKo_3030_MethodsFollowLawOfDemeterAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_3030_MethodsFollowLawOfDemeterAnalyzer();
         }
     }

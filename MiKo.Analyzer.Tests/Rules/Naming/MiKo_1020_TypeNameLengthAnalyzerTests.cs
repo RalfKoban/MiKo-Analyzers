@@ -50,6 +50,8 @@ public class Abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz
         {
             NamingLengthAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_1020_TypeNameLengthAnalyzer();
         }
     }

@@ -34,6 +34,8 @@ public enum MyEnum
         {
             NamingLengthAnalyzer.EnabledPerDefault = true;
 
+            Analyzer.Reset();
+
             return new MiKo_1023_FieldNameLengthAnalyzer();
         }
     }
