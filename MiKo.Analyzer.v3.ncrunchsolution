@@ -21,11 +21,12 @@
     <EngineMode>
       <Name>MiKoAnalyzers-RDI Run impacted tests automatically, others manually</Name>
       <Settings>
+        <AlignOutOfDateStatusWithImpactStatus>True</AlignOutOfDateStatusWithImpactStatus>
         <AllowParallelTestExecution>True</AllowParallelTestExecution>
         <AutoPinNewTests>True</AutoPinNewTests>
         <FastLaneThreads>0</FastLaneThreads>
         <FastLaneThresholdInMilliseconds>50</FastLaneThresholdInMilliseconds>
-        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted)</TestsToExecuteAutomatically>
+        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted OR IsPinned)</TestsToExecuteAutomatically>
       </Settings>
     </EngineMode>
   </EngineModes>
