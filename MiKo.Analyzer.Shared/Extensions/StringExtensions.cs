@@ -779,7 +779,7 @@ namespace System
 
             try
             {
-                return Regex.IsMatch(text, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
+                return Regex.IsMatch(text, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
             }
             catch (RegexMatchTimeoutException)
             {
@@ -817,6 +817,18 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNumber(this char value) => char.IsNumber(value);
+
+        public static bool IsPascalCasing(this string value)
+        {
+            try
+            {
+                return Regex.IsMatch(value, "[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSentenceEnding(this char value)
