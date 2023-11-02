@@ -86,8 +86,6 @@ namespace MiKoSolutions.Analyzers
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var tokensCount = textTokens.Count;
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                // ReSharper disable once ForCanBeConvertedToForeach
                 for (var index = 0; index < tokensCount; index++)
                 {
                     var token = textTokens[index];

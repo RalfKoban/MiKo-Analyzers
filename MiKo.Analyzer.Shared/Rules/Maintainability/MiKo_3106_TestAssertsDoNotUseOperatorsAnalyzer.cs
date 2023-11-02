@@ -122,20 +122,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = methodCall.ArgumentList.Arguments;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < arguments.Count; index++)
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var argumentsCount = arguments.Count;
+
+                for (var index = 0; index < argumentsCount; index++)
                 {
-                    var argument = arguments[index];
-                    var expression = argument.Expression;
+                    var expression = arguments[index].Expression;
 
-                    if (HasIssue(expression, out var token))
+                    if (HasIssue(expression, out var token) && IsFrameworkAssertion(context, expression) is false)
                     {
-                        if (IsFrameworkAssertion(context, expression) is false)
-                        {
-                            var methodName = context.GetEnclosingMethod()?.Name;
+                        var methodName = context.GetEnclosingMethod()?.Name;
 
-                            yield return Issue(methodName, token, token.ValueText);
-                        }
+                        yield return Issue(methodName, token, token.ValueText);
                     }
                 }
             }

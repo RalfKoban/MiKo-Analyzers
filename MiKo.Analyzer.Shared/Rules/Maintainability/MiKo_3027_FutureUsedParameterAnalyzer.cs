@@ -23,8 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var parameters = symbol.Parameters;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < parameters.Length; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var parametersLength = parameters.Length;
+
+            for (var index = 0; index < parametersLength; index++)
             {
                 var parameter = parameters[index];
                 var comment = parameter.GetComment(commentXml);

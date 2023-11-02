@@ -72,8 +72,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // replace token in text
                     var textTokens = text.TextTokens;
 
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < textTokens.Count; index++)
+                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                    var textTokensCount = textTokens.Count;
+
+                    for (var index = 0; index < textTokensCount; index++)
                     {
                         var token = textTokens[index];
 

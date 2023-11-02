@@ -92,8 +92,6 @@ namespace MiKoSolutions.Analyzers
 
             var results = new List<SyntaxToken>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];

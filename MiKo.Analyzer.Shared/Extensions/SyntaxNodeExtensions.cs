@@ -367,8 +367,10 @@ namespace MiKoSolutions.Analyzers
 
                 var list = value.GetLeadingTrivia();
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < list.Count; index++)
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var listCount = list.Count;
+
+                for (var index = 0; index < listCount; index++)
                 {
                     var trivia = list[index];
 
@@ -853,8 +855,10 @@ namespace MiKoSolutions.Analyzers
 
             var textTokens = value.TextTokens;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < textTokens.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -903,8 +907,10 @@ namespace MiKoSolutions.Analyzers
 
             var textTokens = value.TextTokens;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < textTokens.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -1343,9 +1349,10 @@ namespace MiKoSolutions.Analyzers
         {
             var modifiers = value.Modifiers;
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < modifiers.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var modifiersCount = modifiers.Count;
+
+            for (var index = 0; index < modifiersCount; index++)
             {
                 if (modifiers[index].IsKind(SyntaxKind.AbstractKeyword))
                 {
@@ -1377,9 +1384,10 @@ namespace MiKoSolutions.Analyzers
         {
             var modifiers = value.Modifiers;
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < modifiers.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var modifiersCount = modifiers.Count;
+
+            for (var index = 0; index < modifiersCount; index++)
             {
                 if (modifiers[index].IsKind(SyntaxKind.AsyncKeyword))
                 {
@@ -1394,9 +1402,10 @@ namespace MiKoSolutions.Analyzers
         {
             var modifiers = value.Modifiers;
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < modifiers.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var modifiersCount = modifiers.Count;
+
+            for (var index = 0; index < modifiersCount; index++)
             {
                 if (modifiers[index].IsKind(SyntaxKind.AsyncKeyword))
                 {
@@ -1687,8 +1696,6 @@ namespace MiKoSolutions.Analyzers
 
             var results = new List<TResult>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
@@ -1714,8 +1721,6 @@ namespace MiKoSolutions.Analyzers
 
             var results = new List<T>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
@@ -1767,8 +1772,6 @@ namespace MiKoSolutions.Analyzers
 
             var results = new List<TResult>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sourceCount; index++)
             {
                 if (source[index] is TResult result)
@@ -1838,8 +1841,9 @@ namespace MiKoSolutions.Analyzers
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
         {
             var result = source.ToList();
+            var resultCount = result.Count;
 
-            for (var index = 0; index < result.Count; index++)
+            for (var index = 0; index < resultCount; index++)
             {
                 var value = result[index];
 
@@ -1858,7 +1862,10 @@ namespace MiKoSolutions.Analyzers
 
             var textTokens = value.TextTokens;
 
-            for (var index = 0; index < textTokens.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -1895,8 +1902,10 @@ namespace MiKoSolutions.Analyzers
 
             var textTokens = value.TextTokens;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var i = 0; i < textTokens.Count; i++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var i = 0; i < textTokensCount; i++)
             {
                 var token = textTokens[i];
 
@@ -2486,8 +2495,9 @@ namespace MiKoSolutions.Analyzers
             }
 
             var textTokens = tokens.ToList();
+            var textTokensCount = textTokens.Count;
 
-            for (var i = 0; i < textTokens.Count; i++)
+            for (var i = 0; i < textTokensCount; i++)
             {
                 var token = textTokens[i];
 
@@ -2631,12 +2641,14 @@ namespace MiKoSolutions.Analyzers
 
             var directive = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(usingNamespace));
 
-            if (usings.Count == 0)
+            var usingsCount = usings.Count;
+
+            if (usingsCount == 0)
             {
                 return value.InsertNodeBefore(value.FirstChild(), directive);
             }
 
-            for (var index = 0; index < usings.Count; index++)
+            for (var index = 0; index < usingsCount; index++)
             {
                 var usingDirective = usings[index];
 
@@ -2677,15 +2689,17 @@ namespace MiKoSolutions.Analyzers
         {
             var attributeLists = value.AttributeLists;
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var i = 0; i < attributeLists.Count; i++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var attributeListsCount = attributeLists.Count;
+
+            for (var i = 0; i < attributeListsCount; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < attributes.Count; index++)
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var attributesCount = attributes.Count;
+
+                for (var index = 0; index < attributesCount; index++)
                 {
                     var attribute = attributes[index];
                     var name = attribute.GetName();
@@ -2704,15 +2718,17 @@ namespace MiKoSolutions.Analyzers
         {
             var attributeLists = value.AttributeLists;
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var i = 0; i < attributeLists.Count; i++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var attributeListsCount = attributeLists.Count;
+
+            for (var i = 0; i < attributeListsCount; i++)
             {
                 var attributes = attributeLists[i].Attributes;
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < attributes.Count; index++)
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var attributesCount = attributes.Count;
+
+                for (var index = 0; index < attributesCount; index++)
                 {
                     var attribute = attributes[index];
                     var name = attribute.GetName();
@@ -2759,12 +2775,12 @@ namespace MiKoSolutions.Analyzers
 
         private static XmlCrefAttributeSyntax GetCref(SyntaxList<XmlAttributeSyntax> syntax)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < syntax.Count; index++)
-            {
-                var s = syntax[index];
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var syntaxCount = syntax.Count;
 
-                if (s is XmlCrefAttributeSyntax a)
+            for (var index = 0; index < syntaxCount; index++)
+            {
+                if (syntax[index] is XmlCrefAttributeSyntax a)
                 {
                     return a;
                 }

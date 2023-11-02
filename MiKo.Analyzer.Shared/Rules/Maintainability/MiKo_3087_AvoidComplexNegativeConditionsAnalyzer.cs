@@ -78,9 +78,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < arguments.Count; index++)
+                // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                var argumentsCount = arguments.Count;
+
+                for (var index = 0; index < argumentsCount; index++)
                 {
                     if (arguments[index].Expression is InvocationExpressionSyntax)
                     {
