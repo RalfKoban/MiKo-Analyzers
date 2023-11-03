@@ -142,6 +142,13 @@ namespace MiKoSolutions.Analyzers
                 if (first is XmlTextSyntax firstText)
                 {
                     var token = firstText.TextTokens.FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
+
+                    if (token.IsDefaultValue())
+                    {
+                        // we did not find it, so it seems like an empty text
+                        return firstText.SpanStart;
+                    }
+
                     var text = token.Text;
 
                     var offset = text.Length - text.TrimStart().Length;
