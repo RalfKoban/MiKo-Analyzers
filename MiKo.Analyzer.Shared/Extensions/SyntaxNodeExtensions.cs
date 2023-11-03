@@ -526,6 +526,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.GetName();
 
+        internal static string GetName(this XmlElementEndTagSyntax value) => value?.Name.GetName();
+
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
 //// ncrunch: collect values default
