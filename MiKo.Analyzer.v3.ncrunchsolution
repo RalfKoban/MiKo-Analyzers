@@ -9,6 +9,7 @@
     <MetricsExclusionList>
       <Value>Resources.Designer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
       <Value>MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj</Value>
+      <Value>..\MiKo.Analyzer.Shared\Resources.Designer.cs:MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj</Value>
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
@@ -26,7 +27,7 @@
         <AutoPinNewTests>True</AutoPinNewTests>
         <FastLaneThreads>0</FastLaneThreads>
         <FastLaneThresholdInMilliseconds>50</FastLaneThresholdInMilliseconds>
-        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted OR IsPinned)</TestsToExecuteAutomatically>
+        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted OR IsPinned OR IsFailing)</TestsToExecuteAutomatically>
       </Settings>
     </EngineMode>
   </EngineModes>
