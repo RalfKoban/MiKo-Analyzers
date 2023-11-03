@@ -11,13 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3112_CodeFixProvider)), Shared]
     public sealed class MiKo_3112_CodeFixProvider : UnitTestCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.Id;
 
-        protected sealed override string Title => Resources.MiKo_3112_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3112_CodeFixTitle;
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().First(MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.HasIssue);
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().First(MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.HasIssue);
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var argumentSyntax = syntax.ToString().Contains(".Not.")
                                  ? Is("Not", "Empty")

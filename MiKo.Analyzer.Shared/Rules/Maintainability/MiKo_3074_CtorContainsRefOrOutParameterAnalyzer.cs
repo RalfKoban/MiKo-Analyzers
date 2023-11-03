@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case RefKind.Ref:
                     {
-                        var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.RefKeyword);
+                        var keyword = parameter.GetSyntax().Modifiers.First(SyntaxKind.RefKeyword);
 
                         yield return Issue(methodName, keyword, keyword.ToString());
 
@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case RefKind.Out:
                     {
-                        var keyword = parameter.GetSyntax().FirstChildToken(SyntaxKind.OutKeyword);
+                        var keyword = parameter.GetSyntax().Modifiers.First(SyntaxKind.OutKeyword);
 
                         yield return Issue(methodName, keyword, keyword.ToString());
 

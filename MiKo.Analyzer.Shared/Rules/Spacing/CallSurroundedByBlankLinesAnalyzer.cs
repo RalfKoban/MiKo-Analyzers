@@ -13,10 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        protected sealed override void InitializeCore(CompilationStartAnalysisContext context)
-        {
-            context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
-        }
+        protected sealed override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         protected abstract bool IsCall(ITypeSymbol type);
 
@@ -57,12 +54,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         case SwitchSectionSyntax section:
                             return AnalyzeSimpleMemberAccessExpression(section.Statements, call, semanticModel);
 
-                        // case IfStatementSyntax _: required by MiKo_6001
+                        case IfStatementSyntax statement when statement == call.Parent:
+                            continue; // let's look into the surrounding block because the call is the condition of the 'if' statement
+
+                        case IfStatementSyntax _:
                         case ElseClauseSyntax _:
                         case CaseSwitchLabelSyntax _:
-                        case ParenthesizedLambdaExpressionSyntax _:
-                        case MethodDeclarationSyntax _:
-                        case ClassDeclarationSyntax _:
+                        case LambdaExpressionSyntax _:
+                        case ArrowExpressionClauseSyntax _:
+                        case BaseMethodDeclarationSyntax _:
+                        case LocalFunctionStatementSyntax _:
+                        case TypeDeclarationSyntax _:
                             return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }

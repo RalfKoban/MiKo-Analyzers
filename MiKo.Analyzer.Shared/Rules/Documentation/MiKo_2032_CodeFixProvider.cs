@@ -94,6 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
+//// ncrunch: collect values off
         internal static IEnumerable<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
@@ -132,14 +133,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return $"Indicates {condition} ";
             }
         }
+//// ncrunch: collect values default
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                                                ? Comment(comment, GenericStartParts, GenericEndParts)
-                                                                                                                                                                : comment;
+                                                                                                                                                            ? Comment(comment, GenericStartParts, GenericEndParts)
+                                                                                                                                                            : comment;
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                                            ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
-                                                                                                                                                            : comment;
+                                                                                                                                                        ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
+                                                                                                                                                        : comment;
 
         // introduced as workaround for issue #399
         private static bool CommentCanBeFixed(SyntaxNode syntax)

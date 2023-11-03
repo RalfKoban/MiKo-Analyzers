@@ -172,6 +172,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Identifier",
                                                             "Identity",
                                                             "Identities",
+                                                            "next",
+                                                            "Next",
+                                                            "text",
+                                                            "Text",
                                                         };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)

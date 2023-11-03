@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 401 rules that are currently provided by the analyzer.
+The following tables list all the 405 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -255,6 +255,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_2225|Code marked with &lt;c&gt; tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Documentation should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
+|MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -353,6 +354,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
 |MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
+|MiKo_3097|Do not cast to type and return object|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -371,6 +373,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3115|Test methods should contain code|&#x2713;|\-|
 |MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
+|MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -400,6 +403,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
 |MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
+|MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|

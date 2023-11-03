@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers
         {
             var tree = value.SourceTree;
 
-            if (tree == null)
+            if (tree is null)
             {
                 return null;
             }

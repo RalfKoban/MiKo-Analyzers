@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,15 +21,24 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation)
         {
-            var parameterCount = symbol.Parameters.Length;
-
-            if (parameterCount > MaxParametersCount)
+            if (symbol.IsExtern is false)
             {
-                if (symbol.IsExtern is false && symbol.IsInterfaceImplementation() is false)
+                var parameters = symbol.Parameters;
+                var parametersCount = parameters.Length;
+
+                if (parametersCount > MaxParametersCount && symbol.IsInterfaceImplementation() is false)
                 {
-                    yield return Issue(symbol, parameterCount, MaxParametersCount);
+                    var outParametersCount = parameters.Count(_ => _.RefKind == RefKind.Out);
+                    var count = parametersCount - outParametersCount;
+
+                    if (count > MaxParametersCount)
+                    {
+                        return new[] { Issue(symbol, count, MaxParametersCount) };
+                    }
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

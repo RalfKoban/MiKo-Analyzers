@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,13 +22,20 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
         {
             if (context.Node is LocalFunctionStatementSyntax localFunction)
             {
-                var parameterCount = localFunction.ParameterList?.Parameters.Count;
+                var parameters = localFunction.ParameterList.Parameters;
+                var parametersCount = parameters.Count;
 
-                if (parameterCount > MaxParametersCount)
+                if (parametersCount > MaxParametersCount)
                 {
-                    var issue = Issue(localFunction.Identifier.GetLocation(), parameterCount, MaxParametersCount);
+                    var outParametersCount = parameters.Count(_ => _.Modifiers.Any(SyntaxKind.OutKeyword));
+                    var count = parametersCount - outParametersCount;
 
-                    ReportDiagnostics(context, issue);
+                    if (count > MaxParametersCount)
+                    {
+                        var issue = Issue(localFunction.Identifier.GetLocation(), count, MaxParametersCount);
+
+                        ReportDiagnostics(context, issue);
+                    }
                 }
             }
         }
