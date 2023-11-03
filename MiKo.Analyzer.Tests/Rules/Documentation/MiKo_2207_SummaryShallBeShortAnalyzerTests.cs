@@ -18,7 +18,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_class_summary_being_not_too_long() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_summary_being_short_enough() => No_issue_is_reported_for(@"
 /// <summary>
 /// Specifies that the test fixture(s) marked with this attribute are considered to be <i>atomic</i> by NCrunch, meaning that their child tests cannot
 /// be run separately from each other.
@@ -29,6 +29,34 @@ public class TestMe
 /// </remarks>
 public class TestMe
 {
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_enum_field_even_if_summary_would_be_too_long() => No_issue_is_reported_for(@"
+public enum TestMe
+{
+    /// <summary>
+    /// Specifies that the test fixture(s) marked with this attribute are considered to be <i>atomic</i> by NCrunch, meaning that their child tests cannot
+    /// be run separately from each other.
+    /// A test being queued for execution under an atomic fixture will result in the entire fixture being queued with its child tests all executed in the
+    /// same task/batch.
+    /// </summary>
+    None = 0,
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_if_summary_is_too_long() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Specifies that the test fixture(s) marked with this attribute are considered to be <i>atomic</i> by NCrunch, meaning that their child tests cannot
+    /// be run separately from each other.
+    /// A test being queued for execution under an atomic fixture will result in the entire fixture being queued with its child tests all executed in the
+    /// same task/batch.
+    /// </summary>
+    private int None = 0;
 }
 ");
 

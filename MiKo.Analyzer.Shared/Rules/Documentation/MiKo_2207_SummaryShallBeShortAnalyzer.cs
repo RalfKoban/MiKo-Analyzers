@@ -21,6 +21,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
+        protected override bool ShallAnalyze(IFieldSymbol symbol)
+        {
+            if (symbol.Type.IsEnum())
+            {
+                // remarks sections for enum fields do not work, see MiKo_2211
+                return false;
+            }
+
+            return base.ShallAnalyze(symbol);
+        }
+
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
