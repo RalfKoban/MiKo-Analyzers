@@ -11054,6 +11054,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression..
+        /// </summary>
+        public static string MiKo_3098_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3098_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explain the reason why the message is suppressed.
+        /// </summary>
+        public static string MiKo_3098_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3098_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Justifications of suppressed messages shall explain.
+        /// </summary>
+        public static string MiKo_3098_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3098_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
