@@ -222,7 +222,7 @@ The following tables list all the 405 rules that are currently provided by the a
 |MiKo_2077|&lt;summary&gt; documentation should not contain &lt;code&gt;|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
-|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|
+|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|&#x2713;|
 |MiKo_2090|Documentation for equality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase|&#x2713;|&#x2713;|

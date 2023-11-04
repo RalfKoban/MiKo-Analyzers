@@ -39,15 +39,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepStartingSpace)
         {
-            var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap);
+            var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
 //// ncrunch: collect values off
-        protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepStartingSpace) where T : SyntaxNode
         {
             var textMap = CreateReplacementTextMap(terms.Min(_ => _.Length));
 
@@ -94,7 +94,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (originalText.ContainsAny(terms))
                         {
-                            var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap);
+                            var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap)
+                                                                              .ToString()
+                                                                              .AdjustFirstWord(firstWordHandling);
 
                             var newToken = token.WithText(replacedText);
 
@@ -271,16 +273,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.None) => CommentStartingWith(comment, phrases[0], firstWordHandling);
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        {
+            return CommentStartingWith(comment, phrases[0], firstWordHandling);
+        }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
             return SyntaxFactory.XmlElement(comment.StartTag, content, comment.EndTag);
         }
 
-        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             // when necessary adjust beginning text
             // Note: when on new line, then the text is not the 1st one but the 2nd one

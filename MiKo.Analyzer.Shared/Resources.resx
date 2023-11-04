@@ -2395,6 +2395,9 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2081_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase</value>
   </data>
+  <data name="MiKo_2082_CodeFixTitle" xml:space="preserve">
+    <value>Fix enum member starting phrase</value>
+  </data>
   <data name="MiKo_2082_Description" xml:space="preserve">
     <value>The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
 Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the Enum member summary should describe the meaning of the member itself.</value>

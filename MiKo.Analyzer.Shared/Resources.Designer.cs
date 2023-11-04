@@ -6719,6 +6719,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix enum member starting phrase.
+        /// </summary>
+        public static string MiKo_2082_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2082_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
         ///Such phrases are for example &apos;Defines&apos;, &apos;Indicates&apos; or &apos;Specifies&apos;. Instead, the Enum member summary should describe the meaning of the member itself..
         /// </summary>

@@ -169,7 +169,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var updatedComment = Comment(comment, ReplacementMap.Keys, ReplacementMap);
+            var updatedComment = Comment(comment, ReplacementMap.Keys, ReplacementMap, FirstWordHandling.MakeLowerCase);
 
             return updatedComment;
         }
