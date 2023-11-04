@@ -250,6 +250,30 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property_with_correct_object_initialization_inside_array_initialization() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe[] ObjectUnderTests { get; } = new[] { new TestMe { Value = 42 } };
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_non_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
 using System;
 

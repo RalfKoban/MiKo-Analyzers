@@ -117,9 +117,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
                 else if (expression.IsKind(SyntaxKind.ObjectCreationExpression))
                 {
-                    foreach (var issue in AnalyzeArguments(symbolName, ((ObjectCreationExpressionSyntax)expression).ArgumentList))
+                    var argumentList = ((ObjectCreationExpressionSyntax)expression).ArgumentList;
+
+                    if (argumentList != null)
                     {
-                        yield return issue;
+                        foreach (var issue in AnalyzeArguments(symbolName, argumentList))
+                        {
+                            yield return issue;
+                        }
                     }
                 }
             }
