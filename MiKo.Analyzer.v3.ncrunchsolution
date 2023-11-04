@@ -15,7 +15,7 @@
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
     <RdiConfigured>True</RdiConfigured>
     <RestrictToString>False</RestrictToString>
-    <SlidingBuildDelayInMilliseconds>500</SlidingBuildDelayInMilliseconds>
+    <SlidingBuildDelayInMilliseconds>750</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
   <EngineModes>
