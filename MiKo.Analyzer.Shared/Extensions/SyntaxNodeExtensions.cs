@@ -513,6 +513,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this NameEqualsSyntax value) => value?.Name.GetName();
+
         internal static string GetName(this OperatorDeclarationSyntax value) => value?.OperatorToken.ValueText;
 
         internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
