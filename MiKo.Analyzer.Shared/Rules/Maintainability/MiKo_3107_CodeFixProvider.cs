@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return ReplacementFor(document, generic.TypeArgumentList.Arguments.First());
             }
 
-            return Literal(SyntaxKind.NullLiteralExpression);
+            return NullLiteral();
         }
 
         private static SyntaxNode ReplacementFor(Document document, TypeSyntax typeSyntax)
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return SyntaxFactory.DefaultExpression(typeSyntax);
             }
 
-            return Literal(SyntaxKind.NullLiteralExpression);
+            return NullLiteral();
         }
     }
 }

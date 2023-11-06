@@ -84,8 +84,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return result;
         }
 
-        protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
-
         protected static LiteralExpressionSyntax Literal(char value) => Literal(SyntaxFactory.Literal(value));
 
         protected static LiteralExpressionSyntax Literal(decimal value) => Literal(SyntaxFactory.Literal(value));
@@ -95,6 +93,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static LiteralExpressionSyntax Literal(SyntaxToken token) => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, token);
 
         protected static LiteralExpressionSyntax Literal(int value, string valueRepresentation) => Literal(SyntaxFactory.Literal(valueRepresentation, value));
+
+        protected static LiteralExpressionSyntax NullLiteral() => Literal(SyntaxKind.NullLiteralExpression);
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {

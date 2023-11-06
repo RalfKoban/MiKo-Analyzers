@@ -11711,6 +11711,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invert if.
+        /// </summary>
+        public static string MiKo_3201_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3201_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read..
+        /// </summary>
+        public static string MiKo_3201_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3201_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if.
+        /// </summary>
+        public static string MiKo_3201_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3201_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If statements can be inverted in short methods.
+        /// </summary>
+        public static string MiKo_3201_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3201_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

@@ -22,8 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var unary = (PrefixUnaryExpressionSyntax)syntax;
 
-            var falsePattern = SyntaxFactory.ConstantPattern(Literal(SyntaxKind.FalseLiteralExpression));
-            var pattern = SyntaxFactory.IsPatternExpression(unary.Operand, falsePattern);
+            var pattern = IsFalsePattern(unary.Operand);
 
             return pattern.WithTriviaFrom(syntax);
         }

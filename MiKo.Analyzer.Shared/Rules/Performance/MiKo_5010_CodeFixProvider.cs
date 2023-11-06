@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     if (kind == SyntaxKind.NotEqualsExpression)
                     {
-                        return IsPattern(operand, SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression));
+                        return IsFalsePattern(operand);
                     }
 
                     return operand;
