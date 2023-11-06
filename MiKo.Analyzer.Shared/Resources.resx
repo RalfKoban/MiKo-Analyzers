@@ -4890,4 +4890,16 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6048_Title" xml:space="preserve">
     <value>Logical conditions should be placed on a single line</value>
   </data>
+  <data name="MiKo_6049_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6049_Description" xml:space="preserve">
+    <value>To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6049_MessageFormat" xml:space="preserve">
+    <value>Surround event (un-)registration with a blank line</value>
+  </data>
+  <data name="MiKo_6049_Title" xml:space="preserve">
+    <value>Event (un-)registrations should be surrounded by blank lines</value>
+  </data>
 </root>

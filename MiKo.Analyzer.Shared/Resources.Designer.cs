@@ -13952,5 +13952,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6048_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6049_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6049_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6049_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6049_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround event (un-)registration with a blank line.
+        /// </summary>
+        public static string MiKo_6049_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6049_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event (un-)registrations should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6049_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6049_Title", resourceCulture);
+            }
+        }
     }
 }
