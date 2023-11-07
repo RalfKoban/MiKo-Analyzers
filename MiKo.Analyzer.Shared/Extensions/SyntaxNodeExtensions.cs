@@ -70,6 +70,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
+        internal static T FirstAncestor<T>(this SyntaxNode value, ISet<SyntaxKind> kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
+
         internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
 
         internal static T FirstChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().FirstOrDefault();
@@ -1113,7 +1115,8 @@ namespace MiKoSolutions.Analyzers
         {
             var valueKind = value.Kind();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery: For performance reasons we use indexing instead of an enumerator
+            // ReSharper disable once LoopCanBeConvertedToQuery  : For performance reasons we use indexing instead of an enumerator
+            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use indexing instead of an enumerator
             for (var index = 0; index < kinds.Length; index++)
             {
                 if (kinds[index] == valueKind)
@@ -1124,6 +1127,8 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
+
+        internal static bool IsAnyKind(this SyntaxNode value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
         internal static bool IsBoolean(this TypeSyntax value)
         {
@@ -1159,6 +1164,34 @@ namespace MiKoSolutions.Analyzers
                 default:
                     return false;
             }
+        }
+
+        internal static bool IsInsideLoop(this SyntaxNode node)
+        {
+            foreach (var ancestor in node.Ancestors())
+            {
+                switch (ancestor.Kind())
+                {
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForEachStatement:
+                        return true;
+
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.IndexerDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.EventDeclaration:
+                    case SyntaxKind.EventFieldDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.StructDeclaration:
+                    case SyntaxKind.RecordDeclaration:
+                        return false;
+                }
+            }
+
+            return false;
         }
 
         internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax syntax)
