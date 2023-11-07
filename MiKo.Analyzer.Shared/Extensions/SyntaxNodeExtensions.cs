@@ -2185,12 +2185,6 @@ namespace MiKoSolutions.Analyzers
                 return value.WithLeadingTrivia(SyntaxFactory.Whitespace(spaces));
             }
 
-            if (trivia[0].IsEndOfLine())
-            {
-                // keep empty line at beginning
-                return value.WithLeadingTrivia(SyntaxFactory.Whitespace(spaces)).WithLeadingEmptyLine();
-            }
-
             // re-construct leading comment with correct amount of spaces but keep comments
             // (so we have to find out each white-space trivia and have to replace it with the correct amount of spaces)
             var finalTrivia = trivia.ToArray();
