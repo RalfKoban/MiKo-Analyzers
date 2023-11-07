@@ -51,16 +51,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                var otherStatementsCount = block.Statements.Count - 1; // subtract 1 for the 'if' statement itself
+                var statements = block.Statements;
+                var otherStatementsCount = statements.Count - 1; // subtract 1 for the 'if' statement itself
 
                 if (otherStatementsCount > 0 && otherStatementsCount <= MaximumAllowedFollowUpStatements)
                 {
                     // report only in case we have something to invert
-                    var method = node.GetEnclosingMethod(context.SemanticModel);
-
-                    if (method != null && method.ReturnsVoid)
+                    if (node.IsInsideLoop() is false)
                     {
-                        ReportDiagnostics(context, Issue(node));
+                        var method = node.GetEnclosingMethod(context.SemanticModel);
+
+                        if (method != null && method.ReturnsVoid)
+                        {
+                            ReportDiagnostics(context, Issue(node));
+                        }
                     }
                 }
             }

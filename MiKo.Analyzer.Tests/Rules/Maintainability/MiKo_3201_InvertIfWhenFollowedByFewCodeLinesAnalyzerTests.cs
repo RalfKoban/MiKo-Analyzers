@@ -248,6 +248,130 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_a_while_loop_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while (true)
+        {
+            if (flag)
+            {
+                return;
+            }
+
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_a_do_while_loop_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        do
+        {
+            if (flag)
+            {
+                return;
+            }
+
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+        while (true);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_a_for_loop_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        for (var i = 0; i < 10; i++)
+        {
+            if (flag)
+            {
+                return;
+            }
+
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_a_foreach_loop_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int[] values)
+    {
+        foreach (var value in values)
+        {
+            if (flag)
+            {
+                return;
+            }
+
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_nested_if_statement_inside_a_foreach_loop_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int[] values)
+    {
+        foreach (var value in values)
+        {
+            if (value == 1)
+            {
+                if (flag)
+                {
+                    return;
+                }
+
+                DoSomethingElse(2);
+                DoSomethingElse(3);
+            }
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_a_single_following_line() => An_issue_is_reported_for(@"
 public class TestMe
 {

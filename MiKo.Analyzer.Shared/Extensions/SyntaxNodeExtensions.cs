@@ -1161,6 +1161,34 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsInsideLoop(this SyntaxNode node)
+        {
+            foreach (var ancestor in node.Ancestors())
+            {
+                switch (ancestor.Kind())
+                {
+                    case SyntaxKind.DoStatement:
+                    case SyntaxKind.WhileStatement:
+                    case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForEachStatement:
+                        return true;
+
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.IndexerDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.EventDeclaration:
+                    case SyntaxKind.EventFieldDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.StructDeclaration:
+                    case SyntaxKind.RecordDeclaration:
+                        return false;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax syntax)
         {
             if (syntax.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
