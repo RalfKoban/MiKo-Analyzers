@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using MiKoSolutions.Analyzers;
+using MiKoSolutions.Analyzers.Linguistics;
 
 // ReSharper disable once CheckNamespace
 namespace System
@@ -13,6 +14,45 @@ namespace System
     public static class StringExtensions
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
+
+        public static string AdjustFirstWord(this string value, FirstWordHandling handling)
+        {
+            bool HasFlag(FirstWordHandling flag) => (handling & flag) == flag;
+
+            if (value.StartsWith('<'))
+            {
+                return value;
+            }
+
+            var word = value.FirstWord();
+
+            if (HasFlag(FirstWordHandling.MakeLowerCase))
+            {
+                word = word.ToLowerCaseAt(0);
+            }
+
+            if (HasFlag(FirstWordHandling.MakeUpperCase))
+            {
+                word = word.ToUpperCaseAt(0);
+            }
+
+            // build continuation here because the word length may change based on the infinite term
+            var continuation = value.AsSpan().TrimStart().Slice(word.Length).ToString();
+
+            if (HasFlag(FirstWordHandling.MakeInfinite))
+            {
+                word = Verbalizer.MakeInfiniteVerb(word);
+            }
+
+            var text = word + continuation;
+
+            if (HasFlag(FirstWordHandling.KeepStartingSpace))
+            {
+                return " " + text;
+            }
+
+            return text;
+        }
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {

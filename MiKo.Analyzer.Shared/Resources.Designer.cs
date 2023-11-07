@@ -6719,6 +6719,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix enum member starting phrase.
+        /// </summary>
+        public static string MiKo_2082_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2082_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
         ///Such phrases are for example &apos;Defines&apos;, &apos;Indicates&apos; or &apos;Specifies&apos;. Instead, the Enum member summary should describe the meaning of the member itself..
         /// </summary>
@@ -11045,6 +11054,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression..
+        /// </summary>
+        public static string MiKo_3098_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3098_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explain the reason why the message is suppressed.
+        /// </summary>
+        public static string MiKo_3098_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3098_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Justifications of suppressed messages shall explain.
+        /// </summary>
+        public static string MiKo_3098_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3098_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
@@ -13914,6 +13950,42 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6048_Title {
             get {
                 return ResourceManager.GetString("MiKo_6048_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6049_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6049_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6049_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6049_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround event (un-)registration with a blank line.
+        /// </summary>
+        public static string MiKo_6049_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6049_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event (un-)registrations should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6049_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6049_Title", resourceCulture);
             }
         }
     }

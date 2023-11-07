@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2300";
 
+        private static readonly string[] ReasoningMarkers = { "because", " as ", "reason" };
+
         private static readonly string[] MeaninglessPhrases =
                                                               {
                                                                   "add ",
@@ -94,7 +96,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel)
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment) && comment.ContainsAny(ReasoningMarkers) is false;
+
+        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
         {
             if (comment.StartsWith("//", StringComparison.OrdinalIgnoreCase))
             {
@@ -106,8 +110,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // ignore all empty comments
             }
 
-            if (comment.StartsWithAny(MeaninglessPhrases)
-             && comment.StartsWithAny(AllowedMarkers) is false)
+            if (comment.StartsWithAny(MeaninglessPhrases) && comment.StartsWithAny(AllowedMarkers) is false)
             {
                 return true;
             }

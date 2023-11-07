@@ -2395,6 +2395,9 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2081_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase</value>
   </data>
+  <data name="MiKo_2082_CodeFixTitle" xml:space="preserve">
+    <value>Fix enum member starting phrase</value>
+  </data>
   <data name="MiKo_2082_Description" xml:space="preserve">
     <value>The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
 Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the Enum member summary should describe the meaning of the member itself.</value>
@@ -3899,6 +3902,15 @@ Those finally blocks are intended for cleaning stuff up.</value>
   <data name="MiKo_3097_Title" xml:space="preserve">
     <value>Do not cast to type and return object</value>
   </data>
+  <data name="MiKo_3098_Description" xml:space="preserve">
+    <value>If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression.</value>
+  </data>
+  <data name="MiKo_3098_MessageFormat" xml:space="preserve">
+    <value>Explain the reason why the message is suppressed</value>
+  </data>
+  <data name="MiKo_3098_Title" xml:space="preserve">
+    <value>Justifications of suppressed messages shall explain</value>
+  </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
@@ -4877,5 +4889,17 @@ Hence, the open brace of the expression should be positioned directly below the 
   </data>
   <data name="MiKo_6048_Title" xml:space="preserve">
     <value>Logical conditions should be placed on a single line</value>
+  </data>
+  <data name="MiKo_6049_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6049_Description" xml:space="preserve">
+    <value>To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6049_MessageFormat" xml:space="preserve">
+    <value>Surround event (un-)registration with a blank line</value>
+  </data>
+  <data name="MiKo_6049_Title" xml:space="preserve">
+    <value>Event (un-)registrations should be surrounded by blank lines</value>
   </data>
 </root>

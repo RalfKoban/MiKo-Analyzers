@@ -142,6 +142,13 @@ namespace MiKoSolutions.Analyzers
                 if (first is XmlTextSyntax firstText)
                 {
                     var token = firstText.TextTokens.FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.Text.IsNullOrWhiteSpace() is false);
+
+                    if (token.IsDefaultValue())
+                    {
+                        // we did not find it, so it seems like an empty text
+                        return firstText.SpanStart;
+                    }
+
                     var text = token.Text;
 
                     var offset = text.Length - text.TrimStart().Length;
@@ -506,6 +513,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this NameEqualsSyntax value) => value?.Name.GetName();
+
         internal static string GetName(this OperatorDeclarationSyntax value) => value?.OperatorToken.ValueText;
 
         internal static string GetName(this ParameterSyntax value) => value?.Identifier.ValueText;
@@ -525,6 +534,8 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this XmlEmptyElementSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this XmlElementStartTagSyntax value) => value?.Name.GetName();
+
+        internal static string GetName(this XmlElementEndTagSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
@@ -2530,9 +2541,9 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None) => value.Content.WithStartText(startText, firstWordHandling);
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this XmlElementSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase) => value.Content.WithStartText(startText, firstWordHandling);
 
-        internal static SyntaxList<XmlNodeSyntax> WithStartText(this SyntaxList<XmlNodeSyntax> values, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        internal static SyntaxList<XmlNodeSyntax> WithStartText(this SyntaxList<XmlNodeSyntax> values, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             if (values.Count > 0)
             {
@@ -2544,7 +2555,7 @@ namespace MiKoSolutions.Analyzers
             return new SyntaxList<XmlNodeSyntax>(XmlText(startText));
         }
 
-        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             var tokens = value.TextTokens;
 
@@ -2578,7 +2589,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var originalText = token.Text.AsSpan();
+                var originalText = token.Text;
 
                 if (originalText.IsNullOrWhiteSpace())
                 {
@@ -2587,18 +2598,8 @@ namespace MiKoSolutions.Analyzers
 
                 var space = i == 0 ? string.Empty : " ";
 
-                var continuation = originalText.TrimStart().ToLowerCaseAt(0);
-
                 // replace 3rd person word by infinite word if configured
-                if (firstWordHandling == FirstWordHandling.MakeInfinite)
-                {
-                    if (continuation[0] != '<')
-                    {
-                        var word = continuation.FirstWord();
-
-                        continuation = Verbalizer.MakeInfiniteVerb(word) + continuation.Substring(word.Length);
-                    }
-                }
+                var continuation = originalText.AdjustFirstWord(firstWordHandling);
 
                 var modifiedText = space + startText + continuation;
 

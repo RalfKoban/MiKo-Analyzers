@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 405 rules that are currently provided by the analyzer.
+The following tables list all the 407 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -222,7 +222,7 @@ The following tables list all the 405 rules that are currently provided by the a
 |MiKo_2077|&lt;summary&gt; documentation should not contain &lt;code&gt;|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
-|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|
+|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|&#x2713;|
 |MiKo_2090|Documentation for equality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase|&#x2713;|&#x2713;|
@@ -355,6 +355,7 @@ The following tables list all the 405 rules that are currently provided by the a
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
 |MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
 |MiKo_3097|Do not cast to type and return object|&#x2713;|\-|
+|MiKo_3098|Justifications of suppressed messages shall explain|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -449,3 +450,4 @@ The following tables list all the 405 rules that are currently provided by the a
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
 |MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|&#x2713;|
+|MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
