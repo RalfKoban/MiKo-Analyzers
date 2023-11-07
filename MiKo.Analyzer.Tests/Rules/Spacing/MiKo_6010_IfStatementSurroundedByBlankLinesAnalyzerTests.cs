@@ -159,6 +159,70 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void An_issue_is_reported_for_if_block_as_statement_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+            {
+            }
+            condition = true;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_as_statement_after_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+            if (condition)
+                condition = false;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_as_statement_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+                condition = true;
+            condition = true;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_single_line_if_as_statement_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition) condition = true;
+            condition = true;
+        }
+    }
+}
+");
+
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_second_if_block_as_statement_after_first_if_block_in_method() => An_issue_is_reported_for(2, @"
@@ -466,6 +530,115 @@ namespace Bla
 
                     break;
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_if_as_statement_after_variable_assignment_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+            if (condition)
+                condition = false;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+
+            if (condition)
+                condition = false;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_if_as_statement_before_variable_assignment_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+                condition = true;
+            condition = true;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+                condition = true;
+
+            condition = true;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_single_line_if_as_statement_before_variable_assignment_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition) condition = true;
+            condition = true;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition) condition = true;
+
+            condition = true;
         }
     }
 }
