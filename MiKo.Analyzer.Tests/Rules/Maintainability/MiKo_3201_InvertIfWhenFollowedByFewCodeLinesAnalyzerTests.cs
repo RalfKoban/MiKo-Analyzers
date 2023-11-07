@@ -372,6 +372,188 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_a_do_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        do
+        {
+            DoSomethingElse(1);
+        } while (true);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_a_while_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        while (true)
+        {
+            DoSomethingElse(1);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_a_for_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        for (var i = 0; i < 10; i++)
+        {
+            DoSomethingElse(i);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_a_foreach_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int[] values)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        foreach (var value in values)
+        {
+            DoSomethingElse(value);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_a_switch() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int value)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        switch (value)
+        {
+            case 0: return;
+            case 1: return;
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_another_if() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int value)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        if (value == 0)
+        {
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_using() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, IDisposable value)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        using (value)
+        {
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_local_function() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, IDisposable value)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        void MyFunction()
+        {
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_a_single_following_line() => An_issue_is_reported_for(@"
 public class TestMe
 {

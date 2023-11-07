@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,6 +13,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         public const string Id = "MiKo_3201";
 
         private const int MaximumAllowedFollowUpStatements = 3;
+
+        private static readonly SyntaxKind[] ForbiddenFollowUps =
+                                                                  {
+                                                                      SyntaxKind.DoStatement,
+                                                                      SyntaxKind.WhileStatement,
+                                                                      SyntaxKind.ForStatement,
+                                                                      SyntaxKind.ForEachStatement,
+                                                                      SyntaxKind.SwitchStatement,
+                                                                      SyntaxKind.IfStatement,
+                                                                      SyntaxKind.UsingStatement,
+                                                                      SyntaxKind.LocalFunctionStatement,
+                                                                  };
 
         public MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -51,20 +65,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                var statements = block.Statements;
-                var otherStatementsCount = statements.Count - 1; // subtract 1 for the 'if' statement itself
+                var otherStatements = block.Statements.ToList();
+                otherStatements.Remove(node); // get rid of the 'if' statement itself
 
-                if (otherStatementsCount > 0 && otherStatementsCount <= MaximumAllowedFollowUpStatements)
+                if (otherStatements.Count > 0 && otherStatements.Count <= MaximumAllowedFollowUpStatements)
                 {
-                    // report only in case we have something to invert
-                    if (node.IsInsideLoop() is false)
+                    if (otherStatements.Any(_ => _.IsAnyKind(ForbiddenFollowUps)))
                     {
-                        var method = node.GetEnclosingMethod(context.SemanticModel);
+                        // we assume that those follow ups also contain code, so inverting would make the code less readable
+                        return;
+                    }
 
-                        if (method != null && method.ReturnsVoid)
-                        {
-                            ReportDiagnostics(context, Issue(node));
-                        }
+                    if (node.IsInsideLoop())
+                    {
+                        // inverting inside a loop would alter behavior
+                        return;
+                    }
+
+                    // report only in case we have something to invert
+                    var method = node.GetEnclosingMethod(context.SemanticModel);
+
+                    if (method != null && method.ReturnsVoid)
+                    {
+                        ReportDiagnostics(context, Issue(node));
                     }
                 }
             }
