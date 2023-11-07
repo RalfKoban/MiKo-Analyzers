@@ -1106,6 +1106,56 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_with_comments()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is null)
+        {
+            return;
+        }
+
+        // some comment
+        DoSomethingElse(1);
+
+        // some other comment
+        DoSomethingElse(2);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o != null)
+        {
+            // some comment
+            DoSomethingElse(1);
+
+            // some other comment
+            DoSomethingElse(2);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer();

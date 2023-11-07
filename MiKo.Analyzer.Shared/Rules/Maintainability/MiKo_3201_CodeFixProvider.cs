@@ -40,7 +40,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (index < statements.Count)
                 {
-                    var others = statements.Skip(index + 1).Select(_ => _.WithAdditionalLeadingSpaces(Constants.Indentation)); // adjust spacing
+                    var others = statements.Skip(index + 1).Select(_ => _.WithAdditionalLeadingSpaces(Constants.Indentation)).ToList(); // adjust spacing
+
+                    if (others.Count > 0)
+                    {
+                        others[0] = others[0].WithoutLeadingEndOfLine();
+                    }
 
                     var condition = ifStatement.Condition;
                     var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition))
