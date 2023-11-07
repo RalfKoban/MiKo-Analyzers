@@ -11,7 +11,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public sealed class MiKo_6020_BreakStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6018_BreakStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
@@ -296,10 +296,10 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6020_BreakStatementSurroundedByBlankLinesAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6018_BreakStatementSurroundedByBlankLinesAnalyzer();
 
-        protected override string GetDiagnosticId() => MiKo_6020_BreakStatementSurroundedByBlankLinesAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_6018_BreakStatementSurroundedByBlankLinesAnalyzer.Id;
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6020_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6018_CodeFixProvider();
     }
 }
