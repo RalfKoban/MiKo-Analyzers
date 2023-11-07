@@ -327,12 +327,29 @@ namespace MiKoSolutions.Analyzers
                     return null;
                 }
 
-                for (var index = 0; index < syntaxKinds.Length; index++)
+                if (node.IsAnyKind(syntaxKinds))
                 {
-                    if (node.IsKind(syntaxKinds[index]))
-                    {
-                        return node;
-                    }
+                    return node;
+                }
+
+                node = node.Parent;
+            }
+        }
+
+        internal static SyntaxNode GetEnclosing(this SyntaxNode value, ISet<SyntaxKind> syntaxKinds)
+        {
+            var node = value;
+
+            while (true)
+            {
+                if (node is null)
+                {
+                    return null;
+                }
+
+                if (node.IsAnyKind(syntaxKinds))
+                {
+                    return node;
                 }
 
                 node = node.Parent;
