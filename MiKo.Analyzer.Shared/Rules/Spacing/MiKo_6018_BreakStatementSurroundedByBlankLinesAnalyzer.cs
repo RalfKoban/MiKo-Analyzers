@@ -6,11 +6,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_6020_BreakStatementSurroundedByBlankLinesAnalyzer : StatementSurroundedByBlankLinesAnalyzer<BreakStatementSyntax>
+    public sealed class MiKo_6018_BreakStatementSurroundedByBlankLinesAnalyzer : StatementSurroundedByBlankLinesAnalyzer<BreakStatementSyntax>
     {
-        public const string Id = "MiKo_6020";
+        public const string Id = "MiKo_6018";
 
-        public MiKo_6020_BreakStatementSurroundedByBlankLinesAnalyzer() : base(SyntaxKind.BreakStatement, Id)
+        public MiKo_6018_BreakStatementSurroundedByBlankLinesAnalyzer() : base(SyntaxKind.BreakStatement, Id)
         {
         }
 

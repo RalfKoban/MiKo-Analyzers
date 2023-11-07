@@ -4612,6 +4612,18 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
   <data name="MiKo_6017_Title" xml:space="preserve">
     <value>switch statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_6018_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6018_Description" xml:space="preserve">
+    <value>To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6018_MessageFormat" xml:space="preserve">
+    <value>Surround 'break' with a blank line</value>
+  </data>
+  <data name="MiKo_6018_Title" xml:space="preserve">
+    <value>break statements should be surrounded by blank lines</value>
+  </data>
   <data name="MiKo_6019_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
@@ -4623,18 +4635,6 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
   </data>
   <data name="MiKo_6019_Title" xml:space="preserve">
     <value>continue statements should be surrounded by blank lines</value>
-  </data>
-  <data name="MiKo_6020_CodeFixTitle" xml:space="preserve">
-    <value>Surround with blank lines</value>
-  </data>
-  <data name="MiKo_6020_Description" xml:space="preserve">
-    <value>To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
-  </data>
-  <data name="MiKo_6020_MessageFormat" xml:space="preserve">
-    <value>Surround 'break' with a blank line</value>
-  </data>
-  <data name="MiKo_6020_Title" xml:space="preserve">
-    <value>break statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6021_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>

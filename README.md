@@ -427,8 +427,8 @@ The following tables list all the 408 rules that are currently provided by the a
 |MiKo_6015|do/while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6016|using statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6017|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6018|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6019|continue statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_6020|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6021|ArgumentNullException.ThrowIfNull statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6022|ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6023|ObjectDisposedException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|
