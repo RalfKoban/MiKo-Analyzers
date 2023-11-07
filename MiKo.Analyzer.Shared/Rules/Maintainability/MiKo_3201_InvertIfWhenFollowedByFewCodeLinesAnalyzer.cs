@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3201";
 
-        private const int MaximumAllowedFollowUpStatements = 3 + 1; // incl. 1 for the 'if' statement itself
+        private const int MaximumAllowedFollowUpStatements = 3;
 
         public MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -20,12 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
 
-        private static bool IfStatementContains<T>(IfStatementSyntax node) where T : StatementSyntax
+        private static bool ReturnsImmediately(IfStatementSyntax node)
         {
             switch (node.Statement)
             {
-                case T _:
-                case BlockSyntax block when block.Statements.Any(_ => _ is T):
+                case ReturnStatementSyntax _:
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
                     return true;
 
                 default:
@@ -33,25 +31,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
+        private static bool IsApplicable(IfStatementSyntax node) => node.Else == null // do not invert in case of an else block
+                                                                 && ReturnsImmediately(node);
+
         private void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (IfStatementSyntax)context.Node;
 
-            if (node.Else != null)
+            if (IsApplicable(node) is false)
             {
-                // do not invert in case of an else block
-                return;
-            }
-
-            if (IfStatementContains<ThrowStatementSyntax>(node))
-            {
-                // do not invert if method throws
-                return;
-            }
-
-            if (IfStatementContains<IfStatementSyntax>(node))
-            {
-                // do not invert if condition contains another if
                 return;
             }
 
@@ -63,8 +51,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                if (block.Statements.Count <= MaximumAllowedFollowUpStatements)
+                var otherStatementsCount = block.Statements.Count - 1; // subtract 1 for the 'if' statement itself
+
+                if (otherStatementsCount > 0 && otherStatementsCount <= MaximumAllowedFollowUpStatements)
                 {
+                    // report only in case we have something to invert
                     var method = node.GetEnclosingMethod(context.SemanticModel);
 
                     if (method != null && method.ReturnsVoid)

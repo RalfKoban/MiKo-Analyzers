@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_for_method_without_if_statement() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_void_method_without_if_statement() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething()
@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_if_statement_and_else_block() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_void_method_with_if_statement_and_else_block() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething(bool flag)
@@ -41,7 +41,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_if_statement_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_void_method_with_if_statement_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething(bool flag)
@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_if_statement_and_no_else_block_and_4_following_lines() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_non_void_method_with_if_statement_and_no_else_block_and_4_following_lines() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public int DoSomething(bool flag)
@@ -77,7 +77,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_if_statement_and_no_else_block_and_4_following_lines_on_void_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_4_following_lines_on_void_method() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -100,7 +100,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_throwing_if_statement_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method_with_throwing_if_statement_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -117,7 +117,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_block_throwing_if_statement_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method_with_block_throwing_if_statement_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -137,7 +137,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_nested_block_returning_if_statement_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method_with_nested_block_returning_if_statement_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag1, bool flag2)
@@ -159,7 +159,96 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_if_statement_and_no_else_block_and_a_single_following_line() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method_with_if_statement_containing_some_lines_that_has_no_follow_up_code() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_containing_some_lines_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+
+        DoSomethingElse(4);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_containing_some_lines_and_no_else_block_and_4_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+
+        DoSomethingElse(4);
+        DoSomethingElse(5);
+        DoSomethingElse(6);
+        DoSomethingElse(7);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_containing_a_method_call_and_a_return_and_no_else_block_and_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            DoSomethingElse(1);
+            return;
+        }
+
+        DoSomethingElse(2);
+        DoSomethingElse(3);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_a_single_following_line() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -179,7 +268,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_if_statement_and_no_else_block_and_2_following_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_2_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -200,7 +289,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_if_statement_and_no_else_block_and_3_following_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_3_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -222,7 +311,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method_with_normal_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_normal_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -268,7 +357,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_inverted_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_inverted_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -314,7 +403,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_is_false_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_is_false_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -360,7 +449,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_nullable_is_null_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_nullable_is_null_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -406,7 +495,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_nullable_is_true_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_nullable_is_true_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -452,7 +541,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_nullable_is_false_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_nullable_is_false_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -498,7 +587,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_null_equality_check_as_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_null_equality_check_as_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -544,7 +633,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_null_inequality_check_as_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_null_inequality_check_as_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -590,7 +679,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_with_null_pattern_check_as_if_statement_and_no_else_block_and_3_following_lines()
+        public void Code_gets_fixed_for_void_method_with_null_pattern_check_as_if_statement_and_no_else_block_and_3_following_lines()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -641,7 +730,7 @@ public class TestMe
         [TestCase("<= 42", "> 42")]
         [TestCase("> 42", "<= 42")]
         [TestCase("< 42", ">= 42")]
-        public void Code_gets_fixed_for_method_with_number_check_as_if_statement_and_no_else_block_and_3_following_lines(string originalCheck, string fixedCheck)
+        public void Code_gets_fixed_for_void_method_with_number_check_as_if_statement_and_no_else_block_and_3_following_lines(string originalCheck, string fixedCheck)
         {
             var originalCode = @"
 public class TestMe
