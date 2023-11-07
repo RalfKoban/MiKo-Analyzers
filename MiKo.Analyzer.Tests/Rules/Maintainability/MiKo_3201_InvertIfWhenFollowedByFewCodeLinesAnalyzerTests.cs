@@ -532,6 +532,31 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_try_finally() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, IDisposable value)
+    {
+        if (flag)
+        {
+            return;
+        }
+
+        try
+        {
+        }
+        finally
+        {
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_local_function() => No_issue_is_reported_for(@"
 public class TestMe
 {
