@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 408 rules that are currently provided by the analyzer.
+The following tables list all the 409 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -429,6 +429,7 @@ The following tables list all the 408 rules that are currently provided by the a
 |MiKo_6017|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6018|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6019|continue statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6020|throw statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6021|ArgumentNullException.ThrowIfNull statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6022|ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6023|ObjectDisposedException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|

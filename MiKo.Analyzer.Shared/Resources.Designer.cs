@@ -13198,6 +13198,42 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
+        public static string MiKo_6020_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6020_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate throw statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6020_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6020_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;throw&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6020_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6020_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to throw statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6020_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6020_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
         public static string MiKo_6021_CodeFixTitle {
             get {
                 return ResourceManager.GetString("MiKo_6021_CodeFixTitle", resourceCulture);
