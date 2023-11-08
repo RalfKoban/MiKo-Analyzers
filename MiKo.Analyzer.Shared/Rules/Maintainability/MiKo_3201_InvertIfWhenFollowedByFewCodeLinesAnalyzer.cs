@@ -34,21 +34,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
 
-        private static bool ReturnsImmediately(IfStatementSyntax node)
-        {
-            switch (node.Statement)
-            {
-                case ReturnStatementSyntax _:
-                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        private static bool IsApplicable(IfStatementSyntax node) => node.Else == null // do not invert in case of an else block
-                                                                 && ReturnsImmediately(node);
+        private static bool IsApplicable(IfStatementSyntax node) => node.Else is null // do not invert in case of an else block
+                                                                 && node.ReturnsImmediately();
 
         private void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {

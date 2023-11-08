@@ -200,7 +200,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
             else
             {
-                var exp = (expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression)) ? b.Right : expression;
+                var exp = expression is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) ? b.Right : expression;
                 var dataFlow = context.SemanticModel.AnalyzeDataFlow(exp);
 
                 var localVariableNames = dataFlow.ReadInside.ToHashSet(_ => _.Name);

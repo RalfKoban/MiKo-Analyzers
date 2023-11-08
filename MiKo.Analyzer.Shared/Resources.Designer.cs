@@ -11747,6 +11747,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invert if to positive.
+        /// </summary>
+        public static string MiKo_3202_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3202_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is much easier to read in case it contains an if statement having a positive condition and the code returns in all paths after that if statement..
+        /// </summary>
+        public static string MiKo_3202_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3202_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if.
+        /// </summary>
+        public static string MiKo_3202_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3202_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If statements have positive conditions when returning in all paths.
+        /// </summary>
+        public static string MiKo_3202_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3202_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
@@ -13710,7 +13746,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if consequtive invocations that span multiple lines are aligned by their dots..
+        ///   Looks up a localized string similar to The code is easier to read if consecutive invocations that span multiple lines are aligned by their dots..
         /// </summary>
         public static string MiKo_6040_Description {
             get {

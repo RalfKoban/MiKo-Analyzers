@@ -5,6 +5,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
+    /// <inheritdoc/>
+    /// <seealso cref="MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3087_AvoidComplexNegativeConditionsAnalyzer : MaintainabilityAnalyzer
     {

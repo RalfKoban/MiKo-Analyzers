@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 409 rules that are currently provided by the analyzer.
+The following tables list all the 410 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -376,6 +376,7 @@ The following tables list all the 409 rules that are currently provided by the a
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
 |MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;||&#x2713;|
+|MiKo_3202|If statements have positive conditions when returning in all paths|&#x2713;||&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

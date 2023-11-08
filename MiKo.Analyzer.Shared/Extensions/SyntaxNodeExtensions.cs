@@ -1990,6 +1990,32 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
+        internal static bool ReturnsImmediately(this IfStatementSyntax node)
+        {
+            switch (node?.Statement)
+            {
+                case ReturnStatementSyntax _:
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool ReturnsImmediately(this ElseClauseSyntax node)
+        {
+            switch (node?.Statement)
+            {
+                case ReturnStatementSyntax _:
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static SyntaxNode PreviousSibling(this SyntaxNode value)
         {
             var parent = value?.Parent;
