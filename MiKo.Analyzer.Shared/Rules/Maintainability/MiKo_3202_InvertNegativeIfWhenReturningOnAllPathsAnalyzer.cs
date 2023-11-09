@@ -72,9 +72,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         expression = parenthesized.Expression;
 
                         continue;
-                }
 
-                return false;
+                    default:
+                        return false;
+                }
             }
         }
 
