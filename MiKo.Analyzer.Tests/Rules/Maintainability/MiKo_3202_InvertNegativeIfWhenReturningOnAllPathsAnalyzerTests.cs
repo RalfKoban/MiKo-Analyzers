@@ -72,6 +72,26 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_negative_if_statement_that_returns_and_an_else_block_with_code() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+        {
+            return 42;
+        }
+        else
+        {
+            DoSomething(flag);
+        }
+
+        return 42;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_with_negative_if_statement_that_does_not_return_and_no_else_block() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -96,6 +116,40 @@ public class TestMe
         {
         }
 
+        return 42;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_is_false_if_statement_that_has_a_call_before_it_returns_and_no_else_block() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag is false)
+        {
+            DoSomething(flag);
+            return -1;
+        }
+
+        return 42;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_is_false_if_statement_that_returns_and_no_else_block_but_follow_up_code() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag is false)
+        {
+            return -1;
+        }
+
+        DoSomething(flag);
         return 42;
     }
 }
@@ -467,11 +521,442 @@ public class TestMe
 }
 ");
 
-        // TODO RKN: Test conditionals, if/else, follow up code
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_if_statement_that_returns_and_follow_up_code_that_returns()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+        {
+            return -1;
+        }
+
+        return 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return 42;
+        }
+
+        return -1;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_if_statement_that_returns_and_else_block_that_returns()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+        {
+            return -1;
+        }
+        else
+        {
+            return 42;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return 42;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_if_statement_that_returns_and_else_block_that_returns_but_no_braces()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+            return -1;
+        else
+            return 42;
+    }
+}
+";
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+            return 42;
+        else
+            return -1;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_parenthesized_if_statement_that_returns_and_else_block_that_returns()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if ((!flag))
+        {
+            return -1;
+        }
+        else
+        {
+            return 42;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return 42;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_is_false_if_statement_that_returns_and_else_block_that_returns()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag is false)
+        {
+            return -1;
+        }
+        else
+        {
+            return 42;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return 42;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parenthesized_is_false_if_statement_that_returns_and_else_block_that_returns()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if ((flag is false))
+        {
+            return -1;
+        }
+        else
+        {
+            return 42;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return 42;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return !flag ? -1 : 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag ? 42 : -1;
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_parenthesized_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return (!flag) ? -1 : 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag ? 42 : -1;
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_negative_conditional_statement_inside_parenthesized_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return (!flag ? -1 : 42);
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag ? 42 : -1;
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_is_false_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag is false ? -1 : 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag ? 42 : -1;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_parenthesized_is_false_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return (flag is false) ? -1 : 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag ? 42 : -1;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_expression_body_with_negative_parenthesized_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => (!flag) ? -1 : 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => flag ? 42 : -1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_expression_body_with_negative_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => !flag ? -1 : 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => flag ? 42 : -1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_expression_body_with_is_false_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => flag is false ? -1 : 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => flag ? 42 : -1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_expression_body_with_parenthesized_is_false_conditional_statement_inside_return()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => (flag is false) ? -1 : 42;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag) => flag ? 42 : -1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer();
 
-        // protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3202_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3202_CodeFixProvider();
     }
 }

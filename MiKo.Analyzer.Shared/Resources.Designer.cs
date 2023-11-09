@@ -11747,7 +11747,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert if to positive.
+        ///   Looks up a localized string similar to Invert condition into positive.
         /// </summary>
         public static string MiKo_3202_CodeFixTitle {
             get {
@@ -11756,7 +11756,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is much easier to read in case it contains an if statement having a positive condition and the code returns in all paths after that if statement..
+        ///   Looks up a localized string similar to The code is much easier to read in case it contains an if statement or conditional that has a positive condition and the code returns in all paths..
         /// </summary>
         public static string MiKo_3202_Description {
             get {
@@ -11765,7 +11765,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert if.
+        ///   Looks up a localized string similar to Invert condition into positive.
         /// </summary>
         public static string MiKo_3202_MessageFormat {
             get {
@@ -11774,7 +11774,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If statements have positive conditions when returning in all paths.
+        ///   Looks up a localized string similar to Use positive conditions when returning in all paths.
         /// </summary>
         public static string MiKo_3202_Title {
             get {
