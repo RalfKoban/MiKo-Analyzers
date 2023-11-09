@@ -983,6 +983,240 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_with_conditional_statement_inside_return_that_spans_multiple_lines_and_contains_comment_in_true_clause()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return !flag
+                ? true // some comment
+                : false;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag
+                ? false
+                : true; // some comment
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_conditional_statement_inside_return_that_spans_multiple_lines_and_contains_comment_in_false_clause()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return !flag
+                ? true
+                : false; // some comment
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag
+                ? false // some comment
+                : true;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_conditional_statement_inside_return_that_spans_multiple_lines_and_contains_comment_in_both_clauses()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return !flag
+                ? true // comment 1
+                : false; // comment 2
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag
+                ? false // comment 2
+                : true; // comment 1
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_conditional_statement_inside_return_that_spans_single_and_contains_comment_at_line_end()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return !flag ? true : false; // some comment
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag ? false : true; // some comment
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_if_statement_and_no_else_block_and_comment_in_follow_up_code()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+            return true;
+
+        // some comment
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            // some comment
+            return false;
+        }
+
+        return true;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_if_statement_and_no_else_block_and_comment_in_condition()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+        {
+            // some comment
+            return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return false;
+        }
+
+        // some comment
+        return true;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_if_statement_and_else_block_and_comments_in_both()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (!flag)
+        {
+            // some comment 1
+            return true;
+        }
+        else
+        {
+            // some comment 2
+            return false;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            // some comment 2
+            return false;
+        }
+        else
+        {
+            // some comment 1
+            return true;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer();

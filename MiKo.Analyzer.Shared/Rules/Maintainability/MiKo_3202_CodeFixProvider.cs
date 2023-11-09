@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3202_CodeFixProvider)), Shared]
     public sealed class MiKo_3202_CodeFixProvider : MaintainabilityCodeFixProvider
     {
+        private static readonly SyntaxKind[] ReturnPoints = new[] { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
+
         public override string FixableDiagnosticId => MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3202_CodeFixTitle;
@@ -77,8 +79,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     // we found a follow up, so we fix the block first and then the document
                     var newBlock = block.ReplaceNodes(new[] { syntax, other }, (original, rewritten) => rewritten.IsKind(SyntaxKind.IfStatement)
-                                                                                                        ? newIf.WithStatement(SyntaxFactory.Block(other))
-                                                                                                        : statement.WithLeadingTriviaFrom(rewritten));
+                                                                                                        ? newIf.WithStatement(SyntaxFactory.Block(other.WithoutLeadingEndOfLine()))
+                                                                                                        : statement.WithAdditionalLeadingSpaces(Constants.Indentation * -1).WithLeadingEmptyLine());
 
                     return root.ReplaceNode(block, newBlock);
                 }
@@ -89,22 +91,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static SyntaxNode GetUpdatedSyntaxRootForConditional(Document document, SyntaxNode root, ConditionalExpressionSyntax syntax)
         {
-            var newWhenTrue = syntax.WhenFalse.WithTrailingSpace();
+            var newCondition = GetUpdatedCondition(document, syntax.Condition);
 
-            if (syntax.WhenTrue.GetTrailingTrivia().Any(_ => _.IsEndOfLine()))
+            var returnPoint = syntax.FirstAncestor<SyntaxNode>(ReturnPoints);
+
+            var oldWhenTrue = syntax.WhenTrue;
+            var oldWhenFalse = syntax.WhenFalse;
+
+            var removeCommentFromStatement = false;
+            var applyCommentFromTrue = false;
+
+            // seems we have different lines, so there might be comments to adjust as well
+            if (oldWhenTrue.GetStartingLine() != oldWhenFalse.GetStartingLine())
             {
-                newWhenTrue = newWhenTrue.WithTrailingNewLine();
+                // different line, so apply comment from complete statement
+                applyCommentFromTrue = oldWhenTrue.HasTrailingComment();
+                removeCommentFromStatement = returnPoint.HasTrailingComment();
             }
 
-            var newConditional = syntax.WithCondition(GetUpdatedCondition(document, syntax.Condition))
+            var newWhenTrue = oldWhenTrue.HasTrailingEndOfLine()
+                              ? oldWhenFalse.WithTrailingNewLine()
+                              : oldWhenFalse.WithTrailingSpace();
+
+            if (removeCommentFromStatement)
+            {
+                newWhenTrue = newWhenTrue.WithTrailingTriviaFrom(returnPoint);
+            }
+
+            var newWhenFalse = oldWhenTrue.WithoutTrailingTrivia();
+
+            var newConditional = syntax.WithCondition(newCondition)
                                        .WithWhenTrue(newWhenTrue)
-                                       .WithWhenFalse(syntax.WhenTrue.WithoutTrailingTrivia());
+                                       .WithWhenFalse(newWhenFalse);
 
             var nodeToReplace = syntax.Parent is ParenthesizedExpressionSyntax parenthesized
                                 ? (SyntaxNode)parenthesized
                                 : syntax;
 
-            return root.ReplaceNode(nodeToReplace, newConditional);
+            var newReturnPoint = returnPoint.ReplaceNode(nodeToReplace, newConditional);
+
+            if (removeCommentFromStatement)
+            {
+                newReturnPoint = newReturnPoint.WithTrailingNewLine();
+            }
+
+            if (applyCommentFromTrue)
+            {
+                newReturnPoint = newReturnPoint.WithTrailingTriviaFrom(oldWhenTrue);
+            }
+
+            return root.ReplaceNode(returnPoint, newReturnPoint);
         }
 
         private static ExpressionSyntax GetUpdatedCondition(Document document, ExpressionSyntax condition)

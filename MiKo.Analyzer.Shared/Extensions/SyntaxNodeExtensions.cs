@@ -1111,6 +1111,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsComment());
 
+        internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsEndOfLine());
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
