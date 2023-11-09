@@ -953,6 +953,36 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_with_conditional_statement_inside_return_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return !flag
+                ? true
+                : false;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag)
+    {
+        return flag
+                ? false
+                : true;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer();

@@ -89,8 +89,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static SyntaxNode GetUpdatedSyntaxRootForConditional(Document document, SyntaxNode root, ConditionalExpressionSyntax syntax)
         {
+            var newWhenTrue = syntax.WhenFalse.WithTrailingSpace();
+
+            if (syntax.WhenTrue.GetTrailingTrivia().Any(_ => _.IsEndOfLine()))
+            {
+                newWhenTrue = newWhenTrue.WithTrailingNewLine();
+            }
+
             var newConditional = syntax.WithCondition(GetUpdatedCondition(document, syntax.Condition))
-                                       .WithWhenTrue(syntax.WhenFalse.WithTrailingSpace())
+                                       .WithWhenTrue(newWhenTrue)
                                        .WithWhenFalse(syntax.WhenTrue.WithoutTrailingTrivia());
 
             var nodeToReplace = syntax.Parent is ParenthesizedExpressionSyntax parenthesized
