@@ -29,39 +29,53 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private static bool ReturnsImmediately(SyntaxNode node)
+        private static bool ReturnsImmediately(SyntaxNode syntaxNode)
         {
-            switch (node.Parent)
+            var node = syntaxNode;
+
+            while (true)
             {
-                case ReturnStatementSyntax _:
-                case ArrowExpressionClauseSyntax _:
-                    return true;
+                switch (node.Parent)
+                {
+                    case ReturnStatementSyntax _:
+                    case ArrowExpressionClauseSyntax _:
+                        return true;
 
-                case ParenthesizedExpressionSyntax parenthesized:
-                    return ReturnsImmediately(parenthesized);
+                    case ParenthesizedExpressionSyntax parenthesized:
+                        node = parenthesized;
 
-                default:
-                    return false;
+                        continue;
+
+                    default:
+                        return false;
+                }
             }
         }
 
         private static bool IsNegative(SyntaxNode condition)
         {
-            if (condition.IsKind(SyntaxKind.LogicalNotExpression))
-            {
-                return true;
-            }
+            var expression = condition;
 
-            switch (condition)
+            while (true)
             {
-                case IsPatternExpressionSyntax pattern when pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression):
+                if (expression.IsKind(SyntaxKind.LogicalNotExpression))
+                {
                     return true;
+                }
 
-                case ParenthesizedExpressionSyntax parenthesized:
-                    return IsNegative(parenthesized.Expression);
+                switch (expression)
+                {
+                    case IsPatternExpressionSyntax pattern when pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression):
+                        return true;
+
+                    case ParenthesizedExpressionSyntax parenthesized:
+                        expression = parenthesized.Expression;
+
+                        continue;
+                }
+
+                return false;
             }
-
-            return false;
         }
 
         private static SyntaxNode GetCondition(SyntaxNodeAnalysisContext context)
