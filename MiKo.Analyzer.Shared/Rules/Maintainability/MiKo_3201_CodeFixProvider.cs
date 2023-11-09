@@ -12,16 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3201_CodeFixProvider)), Shared]
     public sealed class MiKo_3201_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        private static readonly Dictionary<SyntaxKind, SyntaxKind> OperatorMapping = new Dictionary<SyntaxKind, SyntaxKind>
-                                                                                         {
-                                                                                             { SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken },
-                                                                                             { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken },
-                                                                                             { SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken },
-                                                                                             { SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken },
-                                                                                             { SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken },
-                                                                                             { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
-                                                                                         };
-
         public override string FixableDiagnosticId => MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3201_CodeFixTitle;
@@ -57,56 +47,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return root;
         }
-
-        private static ExpressionSyntax InvertCondition(Document document, ExpressionSyntax condition)
-        {
-            switch (condition)
-            {
-                case PrefixUnaryExpressionSyntax prefixed:
-                {
-                    return prefixed.Operand;
-                }
-
-                case BinaryExpressionSyntax binary when binary.Right.IsKind(SyntaxKind.NullLiteralExpression) && binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken):
-                {
-                    return IsNullPattern(binary.Left);
-                }
-
-                case BinaryExpressionSyntax binary when OperatorMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement):
-                {
-                    return binary.WithOperatorToken(SyntaxFactory.Token(replacement));
-                }
-
-                case IsPatternExpressionSyntax pattern:
-                {
-                    if (pattern.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax literal)
-                    {
-                        switch (literal.Kind())
-                        {
-                            case SyntaxKind.NullLiteralExpression:
-                                return SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, pattern.Expression, literal);
-
-                            case SyntaxKind.FalseLiteralExpression:
-                                return IsNullable(document, pattern)
-                                       ? LogicalNot(pattern)
-                                       : pattern.Expression.WithoutTrivia();
-
-                            case SyntaxKind.TrueLiteralExpression:
-                                return IsNullable(document, pattern)
-                                       ? LogicalNot(pattern)
-                                       : pattern.Expression.WithoutTrivia();
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            return IsFalsePattern(condition);
-        }
-
-        private static bool IsNullable(Document document, IsPatternExpressionSyntax pattern) => GetSymbol(document, pattern.Expression) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
-
-        private static ExpressionSyntax LogicalNot(ExpressionSyntax expression) => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.ParenthesizedExpression(expression));
     }
 }

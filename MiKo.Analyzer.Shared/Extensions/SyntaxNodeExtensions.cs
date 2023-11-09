@@ -1111,6 +1111,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsComment());
 
+        internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsEndOfLine());
+
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
@@ -1990,6 +1992,32 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
+        internal static bool ReturnsImmediately(this IfStatementSyntax node)
+        {
+            switch (node?.Statement)
+            {
+                case ReturnStatementSyntax _:
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool ReturnsImmediately(this ElseClauseSyntax node)
+        {
+            switch (node?.Statement)
+            {
+                case ReturnStatementSyntax _:
+                case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         internal static SyntaxNode PreviousSibling(this SyntaxNode value)
         {
             var parent = value?.Parent;
@@ -2161,6 +2189,8 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         internal static T WithLeadingSpace<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithTrailingSpace<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, int additionalSpaces) where T : SyntaxNode
         {
@@ -2664,7 +2694,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTrailingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed, SyntaxFactory.CarriageReturnLineFeed);
 
-        internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+        internal static T WithTrailingNewLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use an elastic one to enforce the line break
 
         // internal static T WithTrailingXmlComment<T>(this T value, int spaces) where T : SyntaxNode => value.WithTrailingTrivia(
         //                                                                                                                    SyntaxFactory.ElasticCarriageReturnLineFeed, // use elastic one to allow formatting to be done automatically

@@ -4147,6 +4147,18 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3201_Title" xml:space="preserve">
     <value>If statements can be inverted in short methods</value>
   </data>
+  <data name="MiKo_3202_CodeFixTitle" xml:space="preserve">
+    <value>Invert condition into positive</value>
+  </data>
+  <data name="MiKo_3202_Description" xml:space="preserve">
+    <value>The code is much easier to read in case it contains an if statement or conditional that has a positive condition and the code returns in all paths.</value>
+  </data>
+  <data name="MiKo_3202_MessageFormat" xml:space="preserve">
+    <value>Invert condition into positive</value>
+  </data>
+  <data name="MiKo_3202_Title" xml:space="preserve">
+    <value>Use positive conditions when returning in all paths</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
@@ -4809,7 +4821,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Indent dots</value>
   </data>
   <data name="MiKo_6040_Description" xml:space="preserve">
-    <value>The code is easier to read if consequtive invocations that span multiple lines are aligned by their dots.</value>
+    <value>The code is easier to read if consecutive invocations that span multiple lines are aligned by their dots.</value>
   </data>
   <data name="MiKo_6040_MessageFormat" xml:space="preserve">
     <value>Indent dots</value>

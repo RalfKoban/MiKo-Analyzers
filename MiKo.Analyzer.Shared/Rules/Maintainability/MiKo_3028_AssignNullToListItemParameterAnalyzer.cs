@@ -7,7 +7,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    // see also MiKo_3025_ReuseParameterAnalyzer
+    /// <inheritdoc/>
+    /// <seealso cref="MiKo_3025_ReuseParameterAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3028_AssignNullToListItemParameterAnalyzer : MaintainabilityAnalyzer
     {
