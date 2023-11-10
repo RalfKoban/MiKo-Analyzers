@@ -131,6 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private IEnumerable<Diagnostic> AnalyzeParameters(string methodName, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, SemanticModel semanticModel)
         {
             var eventAssignments = new Lazy<List<AssignmentExpressionSyntax>>(CollectEventAssignments);
+            var identifiersUsedAsArguments = new Lazy<ISet<string>>(CollectArgumentIdentifiers);
 
             var used = methodBody.GetAllUsedVariables(semanticModel);
 
@@ -143,12 +144,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                // only check for methods with names as ctors cannot be registered for event handlers
+                // only check for methods with names as ctors cannot be registered for event handlers or callbacks
                 if (methodName != null)
                 {
                     if (eventAssignments.Value.Any(_ => _.Right is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == methodName))
                     {
                         // seems to be an assignment so we do not report that parameter
+                        continue;
+                    }
+
+                    if (identifiersUsedAsArguments.Value.Contains(methodName))
+                    {
+                        // seems to be a callback
                         continue;
                     }
                 }
@@ -164,6 +171,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                       .ToList();
 
                 return assignments;
+            }
+
+            ISet<string> CollectArgumentIdentifiers()
+            {
+                var root = methodBody.SyntaxTree.GetCompilationUnitRoot();
+
+                var identifiers = root.DescendantNodes<IdentifierNameSyntax>(_ => _.Parent is ArgumentSyntax
+                                                                              || (_.Parent is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) && b.Parent is ArgumentSyntax));
+
+                return identifiers.ToHashSet(_ => _.Identifier.ValueText);
             }
         }
     }
