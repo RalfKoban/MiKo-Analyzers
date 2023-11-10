@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3026_UnusedParameterAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3026";
+
+        private static readonly SyntaxKind[] PossibleEventRegistrations = { SyntaxKind.AddAssignmentExpression, SyntaxKind.SubtractAssignmentExpression };
 
         public MiKo_3026_UnusedParameterAnalyzer() : base(Id)
         {
@@ -87,20 +91,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameters = method.ParameterList.Parameters;
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
-            Analyze(context, methodBody, parameters);
+            Analyze(context, methodBody, parameters, method.GetName());
         }
 
         private void AnalyzeConstructor(SyntaxNodeAnalysisContext context)
         {
-            var method = (ConstructorDeclarationSyntax)context.Node;
+            var ctor = (ConstructorDeclarationSyntax)context.Node;
 
-            var parameters = method.ParameterList.Parameters;
-            var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
+            var parameters = ctor.ParameterList.Parameters;
+            var methodBody = ctor.Body ?? (SyntaxNode)ctor.ExpressionBody?.Expression;
 
             Analyze(context, methodBody, parameters);
         }
 
-        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
+        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, string methodName = null)
         {
             if (methodBody is null)
             {
@@ -119,23 +123,47 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            var issues = AnalyzeParameters(context, methodBody, parameters);
+            var issues = AnalyzeParameters(methodName, methodBody, parameters, context.SemanticModel);
 
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeParameters(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
+        private IEnumerable<Diagnostic> AnalyzeParameters(string methodName, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, SemanticModel semanticModel)
         {
-            var used = methodBody.GetAllUsedVariables(context.SemanticModel);
+            var eventAssignments = new Lazy<List<AssignmentExpressionSyntax>>(CollectEventAssignments);
+
+            var used = methodBody.GetAllUsedVariables(semanticModel);
 
             foreach (var parameter in parameters)
             {
                 var parameterName = parameter.GetName();
 
-                if (used.Contains(parameterName) is false)
+                if (used.Contains(parameterName))
                 {
-                    yield return Issue(parameterName, parameter.Identifier);
+                    continue;
                 }
+
+                // only check for methods with names as ctors cannot be registered for event handlers
+                if (methodName != null)
+                {
+                    if (eventAssignments.Value.Any(_ => _.Right is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == methodName))
+                    {
+                        // seems to be an assignment so we do not report that parameter
+                        continue;
+                    }
+                }
+
+                yield return Issue(parameterName, parameter.Identifier);
+            }
+
+            List<AssignmentExpressionSyntax> CollectEventAssignments()
+            {
+                var root = methodBody.SyntaxTree.GetCompilationUnitRoot();
+
+                var assignments = root.DescendantNodes<AssignmentExpressionSyntax>(_ => _.IsAnyKind(PossibleEventRegistrations) && _.IsEventRegistration(semanticModel))
+                                      .ToList();
+
+                return assignments;
             }
         }
     }

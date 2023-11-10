@@ -12,44 +12,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6049";
 
-        private static readonly SyntaxKind[] Expressions = { SyntaxKind.AddAssignmentExpression, SyntaxKind.SubtractAssignmentExpression };
+        private static readonly SyntaxKind[] PossibleEventRegistrations = { SyntaxKind.AddAssignmentExpression, SyntaxKind.SubtractAssignmentExpression };
 
         public MiKo_6049_EventRegistrationsSurroundedByBlankLinesAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Expressions);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, PossibleEventRegistrations);
 
-        private static bool IsEventRegistration(StatementSyntax statement, SyntaxNodeAnalysisContext context)
+        private Diagnostic AnalyzeAssignment(AssignmentExpressionSyntax assignment, SemanticModel semanticModel)
         {
-            if (statement is ExpressionStatementSyntax e && e.Expression is AssignmentExpressionSyntax assignment)
-            {
-                return IsEventRegistration(assignment, context);
-            }
-
-            return false;
-        }
-
-        private static bool IsEventRegistration(AssignmentExpressionSyntax assignment, SyntaxNodeAnalysisContext context)
-        {
-            if (assignment.Right is IdentifierNameSyntax)
-            {
-                switch (assignment.Left)
-                {
-                    case MemberAccessExpressionSyntax maes:
-                        return maes.GetSymbol(context.SemanticModel) is IEventSymbol;
-
-                    case IdentifierNameSyntax identifier:
-                        return identifier.GetSymbol(context.SemanticModel) is IEventSymbol;
-                }
-            }
-
-            return false;
-        }
-
-        private Diagnostic AnalyzeAssignment(AssignmentExpressionSyntax assignment, SyntaxNodeAnalysisContext context)
-        {
-            if (IsEventRegistration(assignment, context))
+            if (assignment.IsEventRegistration(semanticModel))
             {
                 if (assignment.Parent?.Parent is BlockSyntax block)
                 {
@@ -58,11 +31,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     var noBlankLinesBefore = block.Statements
                                                   .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                                  .Any(_ => IsEventRegistration(_, context) is false);
+                                                  .Any(_ => _.IsEventRegistration(semanticModel) is false);
 
                     var noBlankLinesAfter = block.Statements
                                                  .Where(_ => HasNoBlankLinesAfter(callLineSpan, _))
-                                                 .Any(_ => IsEventRegistration(_, context) is false);
+                                                 .Any(_ => _.IsEventRegistration(semanticModel) is false);
 
                     if (noBlankLinesBefore || noBlankLinesAfter)
                     {
@@ -78,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var assignment = (AssignmentExpressionSyntax)context.Node;
 
-            ReportDiagnostics(context, AnalyzeAssignment(assignment, context));
+            ReportDiagnostics(context, AnalyzeAssignment(assignment, context.SemanticModel));
         }
     }
 }
