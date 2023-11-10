@@ -450,6 +450,48 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_if_method_is_passed_in_as_argument() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething() => DoSomethingCore(MyCallback);
+
+        private void DoSomethingCore(Action<object> callback) => callback(new object());
+
+        private void MyCallback(object obj)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_method_is_passed_in_as_coalescing_argument() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething() => DoSomethingCore(MyCallback1 ?? MyCallback2);
+
+        private void DoSomethingCore(Action<object> callback) => callback(new object());
+
+        private void MyCallback1(object obj)
+        {
+        }
+
+        private void MyCallback2(object obj)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_expression_bodied_method_that_has_unused_parameter() => An_issue_is_reported_for(@"
 using System;
 
