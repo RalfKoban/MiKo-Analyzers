@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Linq;
-using System.Xml.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
