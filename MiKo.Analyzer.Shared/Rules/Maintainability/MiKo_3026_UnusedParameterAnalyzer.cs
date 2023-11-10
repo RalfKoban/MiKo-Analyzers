@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -67,6 +69,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
+            // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
+            if (method.IsEnhancedByPostSharpAdvice())
+            {
+                return true;
+            }
+
             var ignore = method.IsInterfaceImplementation();
 
             return ignore;
@@ -111,35 +119,23 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (context.CancellationToken.IsCancellationRequested)
-            {
-                return;
-            }
+            var issues = AnalyzeParameters(context, methodBody, parameters);
 
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeParameters(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
+        {
             var used = methodBody.GetAllUsedVariables(context.SemanticModel);
 
             foreach (var parameter in parameters)
             {
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-
                 var parameterName = parameter.GetName();
 
-                if (used.Contains(parameterName))
+                if (used.Contains(parameterName) is false)
                 {
-                    continue;
+                    yield return Issue(parameterName, parameter.Identifier);
                 }
-
-                // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
-                if (methodSymbol.IsEnhancedByPostSharpAdvice())
-                {
-                    continue;
-                }
-
-                var issue = Issue(parameterName, parameter.Identifier);
-                ReportDiagnostics(context, issue);
             }
         }
     }
