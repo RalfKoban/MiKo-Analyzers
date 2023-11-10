@@ -1286,6 +1286,33 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsEventRegistration(this StatementSyntax value, SemanticModel semanticModel)
+        {
+            if (value is ExpressionStatementSyntax e && e.Expression is AssignmentExpressionSyntax assignment)
+            {
+                return IsEventRegistration(assignment, semanticModel);
+            }
+
+            return false;
+        }
+
+        internal static bool IsEventRegistration(this AssignmentExpressionSyntax value, SemanticModel semanticModel)
+        {
+            if (value.Right is IdentifierNameSyntax)
+            {
+                switch (value.Left)
+                {
+                    case MemberAccessExpressionSyntax maes:
+                        return maes.GetSymbol(semanticModel) is IEventSymbol;
+
+                    case IdentifierNameSyntax identifier:
+                        return identifier.GetSymbol(semanticModel) is IEventSymbol;
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsException(this TypeSyntax value) => value.IsException<Exception>();
 
         internal static bool IsException<T>(this TypeSyntax value) where T : Exception => value.IsException(typeof(T));
