@@ -9,11 +9,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SpacingCodeFixProvider : MiKoCodeFixProvider
     {
+        protected static T GetNodeAndDescendantsWithAdditionalSpaces<T>(T node, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
+        {
+            return node.ReplaceSyntax(
+                                  descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
+                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                  descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
+                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                  Enumerable.Empty<SyntaxTrivia>(),
+                                  (original, rewritten) => rewritten);
+        }
+
         protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces)
         {
             var syntax = statement.WithLeadingSpaces(spaces);
 
-            var additionalSpaces = syntax.GetStartPosition().Character - statement.GetStartPosition().Character;
+            var additionalSpaces = syntax.GetPositionWithinStartLine() - statement.GetPositionWithinStartLine();
 
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
@@ -23,13 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return syntax;
             }
 
-            return syntax.ReplaceSyntax(
-                                    startingNodes.Where(_ => _.IsNode).Select(_ => _.AsNode()),
-                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                    startingNodes.Where(_ => _.IsToken).Select(_ => _.AsToken()),
-                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                    Enumerable.Empty<SyntaxTrivia>(),
-                                    (original, rewritten) => rewritten);
+            return GetNodeAndDescendantsWithAdditionalSpaces(syntax, startingNodes, additionalSpaces);
         }
 
         protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)
