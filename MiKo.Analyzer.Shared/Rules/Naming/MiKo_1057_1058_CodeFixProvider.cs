@@ -13,8 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1057_1058_CodeFixProvider : NamingCodeFixProvider
     {
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(
-                                                                                             MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id,
-                                                                                             MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer.Id);
+                                                                                         MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id,
+                                                                                         MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer.Id);
 
         public override string FixableDiagnosticId => MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id;
 

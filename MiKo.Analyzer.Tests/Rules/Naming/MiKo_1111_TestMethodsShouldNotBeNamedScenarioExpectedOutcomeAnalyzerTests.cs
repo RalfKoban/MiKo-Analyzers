@@ -95,8 +95,8 @@ public class TestMe
         [TestCase("SomeCondition_ObjectReturned", "Returns_object_if_some_condition")]
         [TestCase("Method_ThrowsExceptionIfNull", "Method_throws_exception_if_null")]
         public void Code_gets_fixed_for_1_slash_in_(string originalName, string fixedName) => VerifyCSharpFix(
-                                                                                                         "class TestMe { [Test] public void " + originalName + "() { } }",
-                                                                                                         "class TestMe { [Test] public void " + fixedName + "() { } }");
+                                                                                                          "class TestMe { [Test] public void " + originalName + "() { } }",
+                                                                                                          "class TestMe { [Test] public void " + fixedName + "() { } }");
 
         [TestCase("Initialize_NothingCanBeFound_ShouldNotDoAnything", "Initialize_should_not_do_anything_if_nothing_can_be_found")]
         [TestCase("MethodName_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails")]
@@ -125,8 +125,8 @@ public class TestMe
         [TestCase("MethodName_XYZReference_ThrowsException", "Method_name_throws_exception_if_XYZ_reference")]
         [TestCase("MethodName_XYZDoesSomething_ThrowsException", "Method_name_throws_exception_if_XYZ_does_something")]
         public void Code_gets_fixed_for_2_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
-                                                                                                                "class TestMe { [Test] public void " + originalName + "() { } }",
-                                                                                                                "class TestMe { [Test] public void " + fixedName + "() { } }");
+                                                                                                            "class TestMe { [Test] public void " + originalName + "() { } }",
+                                                                                                            "class TestMe { [Test] public void " + fixedName + "() { } }");
 
         [TestCase("MethodName_ShouldDoSomething_And_SomethingMore", "Method_name_should_do_something_and_something_more")]
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails_and_some_condition")]
@@ -140,8 +140,8 @@ public class TestMe
         [TestCase("MethodName_WhenSome_Stuff_NullReturned", "Method_name_returns_null_if_some_stuff")]
         [TestCase("MethodName_WhenSomething_Expect_NullReturned", "Method_name_returns_null_if_something")]
         public void Code_gets_fixed_for_3_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
-                                                                                                         "class TestMe { [Test] public void " + originalName + "() { } }",
-                                                                                                         "class TestMe { [Test] public void " + fixedName + "() { } }");
+                                                                                                            "class TestMe { [Test] public void " + originalName + "() { } }",
+                                                                                                            "class TestMe { [Test] public void " + fixedName + "() { } }");
 
         protected override string GetDiagnosticId() => MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.Id;
 

@@ -100,8 +100,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                                 "using System; public class TestMe { public void DoSomething() { Action action = null; } }",
-                                                 "using System; public class TestMe { public void DoSomething() { Action callback = null; } }");
+                                                     "using System; public class TestMe { public void DoSomething() { Action action = null; } }",
+                                                     "using System; public class TestMe { public void DoSomething() { Action callback = null; } }");
 
         protected override string GetDiagnosticId() => MiKo_1052_DelegateLocalVariableNameSuffixAnalyzer.Id;
 

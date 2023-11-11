@@ -246,16 +246,16 @@ public class TestMe
         [TestCase("Remove()", "Clear()")]
         [TestCase("RemoveAll()", "ClearAll()")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
-                                                                                      "using System; class TestMe { void " + method + " { } }",
-                                                                                      "using System; class TestMe { void " + wanted + " { } }");
+                                                                                             "using System; class TestMe { void " + method + " { } }",
+                                                                                             "using System; class TestMe { void " + wanted + " { } }");
 
         [TestCase("Clear(int i)", "Remove(int i)")]
         [TestCase("ClearAll(int i)", "RemoveAll(int i)")]
         [TestCase("Remove()", "Clear()")]
         [TestCase("RemoveAll()", "ClearAll()")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
-                                                                                      "using System; class TestMe { public void DoSomething() { void " + method + " { } } }",
-                                                                                      "using System; class TestMe { public void DoSomething() { void " + wanted + " { } } }");
+                                                                                                     "using System; class TestMe { public void DoSomething() { void " + method + " { } } }",
+                                                                                                     "using System; class TestMe { public void DoSomething() { void " + wanted + " { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1019_ClearRemoveMethodsAnalyzer.Id;
 

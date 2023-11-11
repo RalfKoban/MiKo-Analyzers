@@ -21,16 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules
             DiagnosticId = diagnosticId;
 
             Rule = KnownRules.GetOrAdd(
-                                       diagnosticId,
-                                       id => new DiagnosticDescriptor(
-                                                                      id,
-                                                                      LocalizableResource(id, "Title"),
-                                                                      LocalizableResource(id, "MessageFormat"),
-                                                                      category,
-                                                                      DiagnosticSeverity.Warning,
-                                                                      IsEnabledByDefault,
-                                                                      LocalizableResource(id, "Description"),
-                                                                      LocalizableResource(id, "HelpLinkUri")?.ToString()));
+                                   diagnosticId,
+                                   id => new DiagnosticDescriptor(
+                                                              id,
+                                                              LocalizableResource(id, "Title"),
+                                                              LocalizableResource(id, "MessageFormat"),
+                                                              category,
+                                                              DiagnosticSeverity.Warning,
+                                                              IsEnabledByDefault,
+                                                              LocalizableResource(id, "Description"),
+                                                              LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
         protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;

@@ -24,12 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return syntax.ReplaceSyntax(
-                                        startingNodes.Where(_ => _.IsNode).Select(_ => _.AsNode()),
-                                        (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                        startingNodes.Where(_ => _.IsToken).Select(_ => _.AsToken()),
-                                        (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                        Enumerable.Empty<SyntaxTrivia>(),
-                                        (original, rewritten) => rewritten);
+                                    startingNodes.Where(_ => _.IsNode).Select(_ => _.AsNode()),
+                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                    startingNodes.Where(_ => _.IsToken).Select(_ => _.AsToken()),
+                                    (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                    Enumerable.Empty<SyntaxTrivia>(),
+                                    (original, rewritten) => rewritten);
         }
 
         protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)

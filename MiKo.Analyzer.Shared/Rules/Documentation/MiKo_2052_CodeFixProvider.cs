@@ -18,8 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var updatedSyntax = syntax.ReplaceNodes(
-                                                    syntax.GetExceptionXmls().Where(_ => _.IsExceptionCommentFor<ArgumentNullException>()),
-                                                    (original, rewritten) => GetFixedExceptionCommentForArgumentNullException(original));
+                                                syntax.GetExceptionXmls().Where(_ => _.IsExceptionCommentFor<ArgumentNullException>()),
+                                                (original, rewritten) => GetFixedExceptionCommentForArgumentNullException(original));
 
             return updatedSyntax;
         }

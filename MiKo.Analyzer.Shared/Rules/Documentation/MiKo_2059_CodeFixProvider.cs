@@ -69,13 +69,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // find and replace the nodes with the new fixed ones
             var finalContent = commentWithoutObsoleteNodes.ReplaceNodes(
-                                                                        commentWithoutObsoleteNodes.GetExceptionXmls(),
-                                                                        (original, rewritten) =>
-                                                                                                {
-                                                                                                    var exceptionName = GetReferencedExceptionName(original);
+                                                                    commentWithoutObsoleteNodes.GetExceptionXmls(),
+                                                                    (original, rewritten) =>
+                                                                                            {
+                                                                                                var exceptionName = GetReferencedExceptionName(original);
 
-                                                                                                    return newNodes.TryGetValue(exceptionName, out var replacement) ? replacement : rewritten;
-                                                                                                });
+                                                                                                return newNodes.TryGetValue(exceptionName, out var replacement) ? replacement : rewritten;
+                                                                                            });
 
             return finalContent;
         }
