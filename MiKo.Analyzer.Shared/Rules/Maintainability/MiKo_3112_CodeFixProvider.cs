@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => Resources.MiKo_3112_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().First(MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.HasIssue);
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().FirstOrDefault(MiKo_3112_TestAssertsUseIsEmptyInsteadOfHasCountZeroAnalyzer.HasIssue);
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {

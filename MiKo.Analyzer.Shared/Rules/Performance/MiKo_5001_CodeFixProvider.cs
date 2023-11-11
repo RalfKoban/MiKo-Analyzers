@@ -22,24 +22,29 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override string Title => Resources.MiKo_5001_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var lambda = syntax.FirstDescendant<LambdaExpressionSyntax>();
-
-            if (lambda != null)
+            if (syntax is ExpressionStatementSyntax statement)
             {
-                // fix inside lambda
-                var ifStatement = CreateIfStatement(lambda.ExpressionBody);
+                var lambda = statement.FirstDescendant<LambdaExpressionSyntax>();
 
-                // nest call in block
-                var block = SyntaxFactory.Block(ifStatement);
+                if (lambda != null)
+                {
+                    // fix inside lambda
+                    var ifStatement = CreateIfStatement(lambda.ExpressionBody);
 
-                return syntax.ReplaceNode(lambda, lambda.WithBody(block));
+                    // nest call in block
+                    var block = SyntaxFactory.Block(ifStatement);
+
+                    return syntax.ReplaceNode(lambda, lambda.WithBody(block));
+                }
+
+                return CreateIfStatement(statement);
             }
 
-            return CreateIfStatement((ExpressionStatementSyntax)syntax);
+            return syntax;
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)

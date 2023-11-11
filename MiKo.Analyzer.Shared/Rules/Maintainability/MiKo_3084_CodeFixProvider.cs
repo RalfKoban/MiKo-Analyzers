@@ -27,17 +27,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => Resources.MiKo_3084_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => Expressions.ContainsKey(_.Kind()));
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(_ => Expressions.ContainsKey(_.Kind()));
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var binary = (BinaryExpressionSyntax)syntax;
+            if (syntax is BinaryExpressionSyntax binary)
+            {
+                var operation = Expressions[binary.Kind()];
+                var left = binary.Right.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
+                var right = binary.Left.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
 
-            var operation = Expressions[binary.Kind()];
-            var left = binary.Right.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
-            var right = binary.Left.WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
+                return SyntaxFactory.BinaryExpression(operation, left, right);
+            }
 
-            return SyntaxFactory.BinaryExpression(operation, left, right);
+            return syntax;
         }
     }
 }
