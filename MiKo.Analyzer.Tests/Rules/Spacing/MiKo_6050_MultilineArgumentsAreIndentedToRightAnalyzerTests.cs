@@ -142,6 +142,37 @@ public class TestMe
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:argumentMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_method_call_with_3_arguments_where_middle_one_is_ternary_operator() => An_issue_is_reported_for(3, @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x, int y, bool flag)
+    {
+        DoSomething(
+                    42,
+                    flag ? 08 : 15,
+                    flag);
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_call_with_3_arguments_where_last_is_incomplete() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x, int y, int z)
+    {
+        DoSomething(42, 08,
+                    );
+    }
+}
+");
+
         [Test]
         public void Code_gets_fixed_for_method_with_3_arguments_where_all_arguments_each_are_on_different_line_and_not_outdented()
         {
@@ -241,6 +272,40 @@ public class TestMe
         DoSomething(42,
                     08,
                     15);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void CodeFixProvider_does_not_crash_when_attempting_to_fix_incomplete_code()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x, int y, int z)
+    {
+        DoSomething(42,
+                08,
+                         );
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int x, int y, int z)
+    {
+        DoSomething(42,
+                    08,
+                         );
     }
 }
 ";
