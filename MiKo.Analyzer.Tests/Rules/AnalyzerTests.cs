@@ -363,11 +363,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 const string NoCheck = "\\-";
 
                 markdownBuilder.AppendFormat(
-                                             tableFormat,
-                                             descriptor.Id,
-                                             descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
-                                             descriptor.IsEnabledByDefault ? Check : NoCheck,
-                                             codeFixProviders.Contains(descriptor.Id) ? Check : NoCheck);
+                                         tableFormat,
+                                         descriptor.Id,
+                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
+                                         descriptor.IsEnabledByDefault ? Check : NoCheck,
+                                         codeFixProviders.Contains(descriptor.Id) ? Check : NoCheck);
             }
 
             var markdown = markdownBuilder.ToString();

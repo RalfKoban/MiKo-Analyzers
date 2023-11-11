@@ -32,21 +32,21 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var targetAnnotation = new SyntaxAnnotation();
 
             var modifiedType = typeSyntax.ReplaceNodes(
-                                                       new[] { targetMethod, disposeMethod },
-                                                       (original, rewritten) =>
+                                                   new[] { targetMethod, disposeMethod },
+                                                   (original, rewritten) =>
+                                                                           {
+                                                                               if (original == targetMethod)
                                                                                {
-                                                                                   if (original == targetMethod)
-                                                                                   {
-                                                                                       return targetMethod.WithAnnotation(targetAnnotation);
-                                                                                   }
+                                                                                   return targetMethod.WithAnnotation(targetAnnotation);
+                                                                               }
 
-                                                                                   if (original == disposeMethod)
-                                                                                   {
-                                                                                       return disposeMethod.WithAnnotation(disposeAnnotation);
-                                                                                   }
+                                                                               if (original == disposeMethod)
+                                                                               {
+                                                                                   return disposeMethod.WithAnnotation(disposeAnnotation);
+                                                                               }
 
-                                                                                   return original;
-                                                                               });
+                                                                               return original;
+                                                                           });
 
             // remove dispose method from modified type to place it at correct location
             var annotatedDisposeMethod = modifiedType.GetAnnotatedNodes(disposeAnnotation).OfType<MethodDeclarationSyntax>().First();

@@ -77,13 +77,13 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(
-                                                         "class TestMe { void DoSomething42() { } }",
-                                                         "class TestMe { void DoSomething() { } }");
+                                                                "class TestMe { void DoSomething42() { } }",
+                                                                "class TestMe { void DoSomething() { } }");
 
         [Test]
         public void Code_gets_fixed_for_local_function() => VerifyCSharpFix(
-                                                         "class TestMe { void DoSomething() { void DoSomethingCore42() { } } }",
-                                                         "class TestMe { void DoSomething() { void DoSomethingCore() { } } }");
+                                                                        "class TestMe { void DoSomething() { void DoSomethingCore42() { } } }",
+                                                                        "class TestMe { void DoSomething() { void DoSomethingCore() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1081_MethodsWithNumberSuffixAnalyzer.Id;
 

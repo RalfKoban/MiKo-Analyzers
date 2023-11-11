@@ -40,12 +40,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (Verbalizer.TryMakeVerb(symbol.Name, out var betterName))
             {
                 yield return Issue(
-                                   symbol,
-                                   betterName,
-                                   new Dictionary<string, string>
-                                       {
-                                           { BetterName, betterName },
-                                       });
+                               symbol,
+                               betterName,
+                               new Dictionary<string, string>
+                                   {
+                                       { BetterName, betterName },
+                                   });
             }
         }
     }

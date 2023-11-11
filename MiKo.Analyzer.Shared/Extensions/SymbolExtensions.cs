@@ -20,16 +20,16 @@ namespace MiKoSolutions.Analyzers
     internal static class SymbolExtensions
     {
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormat = new SymbolDisplayFormat(
-                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+                                                                                                      SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                      SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                      SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                      miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormatWithoutAlias = new SymbolDisplayFormat(
-                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
+                                                                                                                  SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                                  SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                                  SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                                  miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
         private static readonly string[] GeneratedCSharpFileExtensions =
                                                                          {

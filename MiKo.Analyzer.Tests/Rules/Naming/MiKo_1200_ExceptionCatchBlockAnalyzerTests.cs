@@ -179,8 +179,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                         "class TestMe { void DoSomething() { try { } catch (System.Exception e) { System.Diagnostics.Trace.Write(e.Message); } } }",
-                         "class TestMe { void DoSomething() { try { } catch (System.Exception ex) { System.Diagnostics.Trace.Write(ex.Message); } } }");
+                                                     "class TestMe { void DoSomething() { try { } catch (System.Exception e) { System.Diagnostics.Trace.Write(e.Message); } } }",
+                                                     "class TestMe { void DoSomething() { try { } catch (System.Exception ex) { System.Diagnostics.Trace.Write(ex.Message); } } }");
 
         [Test]
         public void Code_gets_fixed_for_incorrectly_named_nested_exception_in_catch_block()

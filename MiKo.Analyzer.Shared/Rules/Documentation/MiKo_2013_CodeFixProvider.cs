@@ -67,16 +67,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 return SyntaxFactory.XmlElement(
-                                                comment.StartTag,
-                                                SyntaxFactory.List(contents),
-                                                comment.EndTag.WithLeadingXmlComment());
+                                            comment.StartTag,
+                                            SyntaxFactory.List(contents),
+                                            comment.EndTag.WithLeadingXmlComment());
             }
 
             // happens if we start e.g. with a <see link
             return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
-                                            comment.EndTag.WithLeadingXmlComment());
+                                        comment.StartTag,
+                                        originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
+                                        comment.EndTag.WithLeadingXmlComment());
         }
 
         private static XmlNodeSyntax NewXmlComment(XmlTextSyntax comment, string text)

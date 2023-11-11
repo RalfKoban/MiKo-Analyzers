@@ -73,8 +73,8 @@ public class TestMe
         [TestCase("_fires_", "_raises_")]
         [TestCase("_firing_", "_raising_")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
-                                                                                 "using System; class TestMe { void " + method + "() { } }",
-                                                                                 "using System; class TestMe { void " + wanted + "() { } }");
+                                                                                             "using System; class TestMe { void " + method + "() { } }",
+                                                                                             "using System; class TestMe { void " + wanted + "() { } }");
 
         [TestCase("FireEvent", "RaiseEvent")]
         [TestCase("OnEventFired", "OnEventRaised")]
@@ -84,8 +84,8 @@ public class TestMe
         [TestCase("_fires_", "_raises_")]
         [TestCase("_firing_", "_raising_")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
-                                                                                 "using System; class TestMe { void Something() { void " + method + "() { } } }",
-                                                                                 "using System; class TestMe { void Something() { void " + wanted + "() { } } }");
+                                                                                                     "using System; class TestMe { void Something() { void " + method + "() { } } }",
+                                                                                                     "using System; class TestMe { void Something() { void " + wanted + "() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1012_FireMethodsAnalyzer.Id;
 

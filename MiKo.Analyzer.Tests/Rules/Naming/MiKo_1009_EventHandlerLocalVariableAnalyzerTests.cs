@@ -147,8 +147,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "using System; class TestMe { void DoSomething() { EventHandler x = null; } }",
-                                                         "using System; class TestMe { void DoSomething() { EventHandler handler = null; } }");
+                                                     "using System; class TestMe { void DoSomething() { EventHandler x = null; } }",
+                                                     "using System; class TestMe { void DoSomething() { EventHandler handler = null; } }");
 
         protected override string GetDiagnosticId() => MiKo_1009_EventHandlerLocalVariableAnalyzer.Id;
 
