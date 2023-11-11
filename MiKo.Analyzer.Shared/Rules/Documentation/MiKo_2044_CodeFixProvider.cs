@@ -15,14 +15,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2044_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var cref = syntax.GetCref();
-            var name = cref.GetCrefType().GetName();
+            if (syntax != null)
+            {
+                var cref = syntax.GetCref();
+                var name = cref.GetCrefType().GetName();
 
-            return SyntaxFactory.XmlParamRefElement(name);
+                return SyntaxFactory.XmlParamRefElement(name);
+            }
+
+            return null;
         }
     }
 }
