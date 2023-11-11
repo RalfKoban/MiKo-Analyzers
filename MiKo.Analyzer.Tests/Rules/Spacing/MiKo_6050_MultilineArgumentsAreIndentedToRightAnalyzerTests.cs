@@ -280,6 +280,158 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_method_with_arguments_that_contains_initializer_without_comments()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(42,
+                new Dictionary<int, int>
+                    {
+                        { 1, 2 },
+                        { 3, 4 },
+                        { 5, 6 },
+                    });
+    }
+
+    private void DoSomethingCore(int i, Dictionary<int, int> dictionary)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(42,
+                        new Dictionary<int, int>
+                            {
+                                { 1, 2 },
+                                { 3, 4 },
+                                { 5, 6 },
+                            });
+    }
+
+    private void DoSomethingCore(int i, Dictionary<int, int> dictionary)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_arguments_that_contains_initializer_with_leading_comment()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(42,
+                new Dictionary<int, int>
+                    {
+                        { 1, 2 },
+                        /* some comment */ { 3, 4 },
+                    });
+    }
+
+    private void DoSomethingCore(int i, Dictionary<int, int> dictionary)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(42,
+                        new Dictionary<int, int>
+                            {
+                                { 1, 2 },
+                                /* some comment */ { 3, 4 },
+                            });
+    }
+
+    private void DoSomethingCore(int i, Dictionary<int, int> dictionary)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_arguments_that_contains_initializer_with_trailing_comment()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(42,
+                new Dictionary<int, int>
+                    {
+                        { 1, 2 },
+                        { 3, 4 }, // some comment
+                    });
+    }
+
+    private void DoSomethingCore(int i, Dictionary<int, int> dictionary)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomethingCore(42,
+                        new Dictionary<int, int>
+                            {
+                                { 1, 2 },
+                                { 3, 4 }, // some comment
+                            });
+    }
+
+    private void DoSomethingCore(int i, Dictionary<int, int> dictionary)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void CodeFixProvider_does_not_crash_when_attempting_to_fix_incomplete_code()
         {
             const string OriginalCode = @"

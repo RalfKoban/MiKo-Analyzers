@@ -2233,28 +2233,40 @@ namespace MiKoSolutions.Analyzers
                 return value;
             }
 
-            var spaces = string.Intern(new string(' ', count)); // use chars to simulate non-elastic one to prevent formatting to be done automatically
+            var leadingTrivia = value.GetLeadingTrivia();
 
-            var trivia = value.GetLeadingTrivia();
-
-            if (trivia.Count == 0)
+            if (leadingTrivia.Count == 0)
             {
-                return value.WithLeadingTrivia(SyntaxFactory.Whitespace(spaces));
+                return value.WithLeadingTrivia(SyntaxFactory.Whitespace(new string(' ', count)));
             }
 
             // re-construct leading comment with correct amount of spaces but keep comments
             // (so we have to find out each white-space trivia and have to replace it with the correct amount of spaces)
-            var finalTrivia = trivia.ToArray();
+            var finalTrivia = leadingTrivia.ToArray();
+
+            var resetFinalTrivia = false;
 
             for (var index = 0; index < finalTrivia.Length; index++)
             {
-                var t = finalTrivia[index];
+                var trivia = finalTrivia[index];
 
-                // if trivia is white-space, replace it with correct amount of spaces
-                if (t.IsWhiteSpace())
+                if (trivia.IsWhiteSpace())
                 {
-                    finalTrivia[index] = SyntaxFactory.Whitespace(spaces);
+                    finalTrivia[index] = SyntaxFactory.Whitespace(new string(' ', count));
                 }
+
+                if (trivia.IsComment())
+                {
+                    resetFinalTrivia = true;
+
+                    // we do not need to adjust further as we found a comment and have to fix them based on their specific lines
+                    break;
+                }
+            }
+
+            if (resetFinalTrivia)
+            {
+                finalTrivia = CalculateWhitespaceTriviaWithComment(count, leadingTrivia.ToArray());
             }
 
             return value.WithLeadingTrivia(finalTrivia);
@@ -2981,6 +2993,45 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
+        }
+
+        private static SyntaxTrivia[] CalculateWhitespaceTriviaWithComment(int count, SyntaxTrivia[] finalTrivia)
+        {
+            var triviaGroupedByLines = finalTrivia.GroupBy(_ => _.GetStartingLine());
+
+            foreach (var triviaGroup in triviaGroupedByLines)
+            {
+                var trivia1 = triviaGroup.ElementAt(0);
+                var index1 = finalTrivia.IndexOf(trivia1);
+
+                if (trivia1.IsWhiteSpace())
+                {
+                    var spaces = count;
+
+                    if (triviaGroup.MoreThan(1))
+                    {
+                        var trivia2 = triviaGroup.ElementAt(1);
+
+                        if (trivia2.IsMultiLineComment())
+                        {
+                            var commentLength = trivia2.FullSpan.Length;
+                            var remainingSpaces = triviaGroup.Skip(2).Sum(_ => _.FullSpan.Length);
+
+                            spaces = count - commentLength - remainingSpaces;
+
+                            if (spaces < 0)
+                            {
+                                // it seems we want to remove some spaces, so 'count' is already correct
+                                spaces = count;
+                            }
+                        }
+                    }
+
+                    finalTrivia[index1] = SyntaxFactory.Whitespace(new string(' ', spaces));
+                }
+            }
+
+            return finalTrivia;
         }
 
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);

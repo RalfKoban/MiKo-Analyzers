@@ -441,6 +441,8 @@ namespace System.Linq
             return default;
         }
 
+        internal static int IndexOf<T>(this T[] source, T value) => Array.IndexOf(source, value);
+
         internal static bool None(this SyntaxTriviaList source) => source.Any() is false;
 
         internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Any() is false;

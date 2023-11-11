@@ -22,9 +22,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (syntax is ArgumentSyntax argument)
             {
                 var position = MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer.GetOutdentedStartPosition(argument.FirstAncestor<ArgumentListSyntax>());
-                var spaces = position.Character;
+                var additionalSpaces = position.Character - argument.GetStartPosition().Character;
 
-                return argument.WithLeadingSpaces(spaces);
+                var lines = new HashSet<int>();
+                var descendants = argument.DescendantNodesAndTokensAndSelf().Where(_ => lines.Add(_.GetStartingLine())).ToList();
+
+                return GetNodeAndDescendantsWithAdditionalSpaces(argument, descendants, additionalSpaces);
             }
 
             return syntax;
