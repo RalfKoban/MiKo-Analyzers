@@ -633,6 +633,8 @@ namespace MiKoSolutions.Analyzers
             return Array.Empty<string>();
         }
 
+        internal static int GetPositionWithinStartLine(this SyntaxNode value) => value.GetLocation().GetPositionWithinStartLine();
+
         internal static int GetStartingLine(this SyntaxNode value) => value.GetLocation().GetStartingLine();
 
         internal static int GetEndingLine(this SyntaxNode value) => value.GetLocation().GetEndingLine();
@@ -741,6 +743,8 @@ namespace MiKoSolutions.Analyzers
 
             return typeInfo.Type;
         }
+
+        internal static int GetCharacterPositionInStartLine(this SyntaxNode value) => value.GetPositionWithinStartLine();
 
         internal static LinePosition GetStartPosition(this SyntaxNode value) => value.GetLocation().GetStartPosition();
 
@@ -2221,7 +2225,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, int additionalSpaces) where T : SyntaxNode
         {
-            var currentSpaces = value.GetStartPosition().Character;
+            var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }

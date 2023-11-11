@@ -21,6 +21,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
+        internal static int GetPositionWithinStartLine(this SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
+
         internal static LinePosition GetStartPosition(this SyntaxToken value) => value.GetLocation().GetStartPosition();
 
         internal static LinePosition GetEndPosition(this SyntaxToken value) => value.GetLocation().GetEndPosition();
@@ -139,7 +141,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
         {
-            var currentSpaces = value.GetStartPosition().Character;
+            var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }

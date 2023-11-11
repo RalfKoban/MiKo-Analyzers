@@ -6,6 +6,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeOrTokenExtensions
     {
+        internal static int GetPositionWithinStartLine(this SyntaxNodeOrToken value) => value.GetLocation().GetPositionWithinStartLine();
+
         internal static int GetStartingLine(this SyntaxNodeOrToken value) => value.GetLocation().GetStartingLine();
 
         internal static int GetEndingLine(this SyntaxNodeOrToken value) => value.GetLocation().GetEndingLine();

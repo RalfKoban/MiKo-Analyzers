@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
+        internal static int GetPositionWithinStartLine(this SyntaxTrivia value) => value.GetLocation().GetPositionWithinStartLine();
+
         internal static int GetStartingLine(this SyntaxTrivia value) => value.GetLocation().GetStartingLine();
 
         internal static int GetEndingLine(this SyntaxTrivia value) => value.GetLocation().GetEndingLine();

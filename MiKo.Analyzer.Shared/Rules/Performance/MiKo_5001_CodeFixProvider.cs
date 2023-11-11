@@ -152,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (otherChild is IfStatementSyntax ifStatement && IsDebugEnabledCall(ifStatement))
             {
-                var spaces = ifStatement.GetStartPosition().Character;
+                var spaces = ifStatement.GetPositionWithinStartLine();
 
                 var statementsOfInsertedBlock = insertedStatements.Select(_ => _.WithoutLeadingEndOfLine() // Delete left-over empty line at beginning
                                                                                 .WithLeadingSpaces(spaces + Constants.Indentation)
@@ -214,7 +214,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 var firstIf = calls[0];
 
-                var spaces = firstIf.GetStartPosition().Character + Constants.Indentation;
+                var spaces = firstIf.GetPositionWithinStartLine() + Constants.Indentation;
 
                 var nodesToRemove = new HashSet<IfStatementSyntax>();
                 var nodesToReplace = new Dictionary<IfStatementSyntax, IfStatementSyntax>();

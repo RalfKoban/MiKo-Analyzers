@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var syntax = statement.WithLeadingSpaces(spaces);
 
-            var additionalSpaces = syntax.GetStartPosition().Character - statement.GetStartPosition().Character;
+            var additionalSpaces = syntax.GetPositionWithinStartLine() - statement.GetPositionWithinStartLine();
 
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
