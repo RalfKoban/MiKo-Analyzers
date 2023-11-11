@@ -14096,5 +14096,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6049_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument outdented below method call.
+        /// </summary>
+        public static string MiKo_6050_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6050_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call..
+        /// </summary>
+        public static string MiKo_6050_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6050_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument &apos;{0}&apos; outdented below method call.
+        /// </summary>
+        public static string MiKo_6050_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6050_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi-line arguments are positioned outdented at end of method call.
+        /// </summary>
+        public static string MiKo_6050_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6050_Title", resourceCulture);
+            }
+        }
     }
 }

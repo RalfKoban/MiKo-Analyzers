@@ -4938,4 +4938,16 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6049_Title" xml:space="preserve">
     <value>Event (un-)registrations should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_6050_CodeFixTitle" xml:space="preserve">
+    <value>Place argument outdented below method call</value>
+  </data>
+  <data name="MiKo_6050_Description" xml:space="preserve">
+    <value>To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call.</value>
+  </data>
+  <data name="MiKo_6050_MessageFormat" xml:space="preserve">
+    <value>Place argument '{0}' outdented below method call</value>
+  </data>
+  <data name="MiKo_6050_Title" xml:space="preserve">
+    <value>Multi-line arguments are positioned outdented at end of method call</value>
+  </data>
 </root>
