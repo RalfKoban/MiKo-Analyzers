@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 var descendants = SelfAndDescendantsOnSeparateLines(argument);
 
-                return GetNodeAndDescendantsWithAdditionalSpaces(argument, descendants, additionalSpaces);
+                return argument.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
             }
 
             return syntax;

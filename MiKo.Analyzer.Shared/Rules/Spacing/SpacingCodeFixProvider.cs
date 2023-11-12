@@ -9,23 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SpacingCodeFixProvider : MiKoCodeFixProvider
     {
-        protected static T GetNodeAndDescendantsWithAdditionalSpaces<T>(T node, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
-        {
-            if (additionalSpaces == 0)
-            {
-                return node;
-            }
-
-            return node.ReplaceSyntax(
-                                  descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
-                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                  descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
-                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                  Enumerable.Empty<SyntaxTrivia>(),
-                                  (original, rewritten) => rewritten);
-        }
-
-        protected static IReadOnlyCollection<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode node)
+        protected static List<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode node)
         {
             var lines = new HashSet<int>();
             var descendants = node.DescendantNodesAndTokensAndSelf().Where(_ => lines.Add(_.GetStartingLine())).ToList();
@@ -47,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return syntax;
             }
 
-            return GetNodeAndDescendantsWithAdditionalSpaces(syntax, startingNodes, additionalSpaces);
+            return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
         }
 
         protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)

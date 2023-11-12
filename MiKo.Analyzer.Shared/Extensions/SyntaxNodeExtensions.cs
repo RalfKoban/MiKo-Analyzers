@@ -2235,6 +2235,27 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }
 
+        internal static T WithAdditionalLeadingSpacesOnDescendants<T>(this T node, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
+        {
+            if (additionalSpaces == 0)
+            {
+                return node;
+            }
+
+            if (descendants.Count == 0)
+            {
+                return node;
+            }
+
+            return node.ReplaceSyntax(
+                                      descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
+                                      (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                      descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
+                                      (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                      Enumerable.Empty<SyntaxTrivia>(),
+                                      (original, rewritten) => rewritten);
+        }
+
         internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode
         {
             if (count <= 0)

@@ -106,10 +106,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     if (difference != 0)
                     {
                         ReportDiagnostics(context, Issue(dot, new Dictionary<string, string>
-                                                              {
-                                                                  { Spaces, startCharacterPosition.ToString("D") },
-                                                                  { Difference, difference.ToString("D") },
-                                                              }));
+                                                                  {
+                                                                      { Spaces, startCharacterPosition.ToString("D") },
+                                                                      { Difference, difference.ToString("D") },
+                                                                  }));
                     }
                 }
             }

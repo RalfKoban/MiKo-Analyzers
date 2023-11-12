@@ -38,11 +38,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (argumentList.Arguments.Count > 0)
                 {
-                    var additionalSpaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetDifference(issue);
                     var descendants = SelfAndDescendantsOnSeparateLines(argumentList);
-                    var updatedInvocation = GetNodeAndDescendantsWithAdditionalSpaces(invocation, descendants, additionalSpaces);
+                    descendants.Remove(argumentList); // remove list to see if multiple other arguments are on different lines
 
-                    return root.ReplaceNode(invocation, updatedInvocation);
+                    if (descendants.Count > 0)
+                    {
+                        var additionalSpaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetDifference(issue);
+                        var updatedInvocation = invocation.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
+
+                        return root.ReplaceNode(invocation, updatedInvocation);
+                    }
                 }
             }
 
