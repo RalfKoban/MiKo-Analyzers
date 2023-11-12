@@ -28,5 +28,25 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return syntax;
         }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            // adjust  of invocations
+            if (syntax is MemberAccessExpressionSyntax m && m.Parent is InvocationExpressionSyntax invocation)
+            {
+                var argumentList = invocation.ArgumentList;
+
+                if (argumentList.Arguments.Count > 0)
+                {
+                    var additionalSpaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetDifference(issue);
+                    var descendants = SelfAndDescendantsOnSeparateLines(argumentList);
+                    var updatedInvocation = GetNodeAndDescendantsWithAdditionalSpaces(invocation, descendants, additionalSpaces);
+
+                    return root.ReplaceNode(invocation, updatedInvocation);
+                }
+            }
+
+            return root;
+        }
     }
 }

@@ -2225,6 +2225,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAdditionalLeadingSpaces<T>(this T value, int additionalSpaces) where T : SyntaxNode
         {
+            if (additionalSpaces == 0)
+            {
+                return value;
+            }
+
             var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);

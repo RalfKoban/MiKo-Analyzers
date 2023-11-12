@@ -11,6 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         protected static T GetNodeAndDescendantsWithAdditionalSpaces<T>(T node, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
         {
+            if (additionalSpaces == 0)
+            {
+                return node;
+            }
+
             return node.ReplaceSyntax(
                                   descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
                                   (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
@@ -18,6 +23,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                   (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
                                   Enumerable.Empty<SyntaxTrivia>(),
                                   (original, rewritten) => rewritten);
+        }
+
+        protected static IReadOnlyCollection<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode node)
+        {
+            var lines = new HashSet<int>();
+            var descendants = node.DescendantNodesAndTokensAndSelf().Where(_ => lines.Add(_.GetStartingLine())).ToList();
+
+            return descendants;
         }
 
         protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces)
