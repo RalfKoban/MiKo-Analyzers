@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6038_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CastExpressionSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CastExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {

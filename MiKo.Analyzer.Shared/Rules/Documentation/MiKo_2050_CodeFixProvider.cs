@@ -77,10 +77,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var param2 = ParameterComment(parameters[1], "The second value to compare.").WithTrailingXmlComment();
 
             var returns = SyntaxFactory.XmlReturnsElement(
-                                                          SeeLangword_True().WithLeadingXmlComment(),
-                                                          XmlText(" if both instances are considered not equal; otherwise, "),
-                                                          SeeLangword_False(),
-                                                          XmlText(".").WithTrailingXmlComment())
+                                                      SeeLangword_True().WithLeadingXmlComment(),
+                                                      XmlText(" if both instances are considered not equal; otherwise, "),
+                                                      SeeLangword_False(),
+                                                      XmlText(".").WithTrailingXmlComment())
                                        .WithEndOfLine();
 
             return SyntaxFactory.DocumentationComment(summary, param1, param2, returns);
@@ -123,9 +123,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var param2 = ExceptionParameterComment(exceptionParameter);
 
             return SyntaxFactory.DocumentationComment(
-                                                      summary.WithTrailingXmlComment(),
-                                                      param1.WithTrailingXmlComment(),
-                                                      param2.WithEndOfLine());
+                                                  summary.WithTrailingXmlComment(),
+                                                  param1.WithTrailingXmlComment(),
+                                                  param2.WithEndOfLine());
         }
 
         private static DocumentationCommentTriviaSyntax FixSerializationParamCtor(TypeSyntax type, ParameterSyntax serializationInfoParameter, ParameterSyntax streamingContextParameter)
@@ -144,10 +144,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var remarks = Comment(SyntaxFactory.XmlRemarksElement(), Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase);
 
             return SyntaxFactory.DocumentationComment(
-                                                      summary.WithTrailingXmlComment(),
-                                                      param1.WithTrailingXmlComment(),
-                                                      param2.WithTrailingXmlComment(),
-                                                      remarks.WithEndOfLine());
+                                                  summary.WithTrailingXmlComment(),
+                                                  param1.WithTrailingXmlComment(),
+                                                  param2.WithTrailingXmlComment(),
+                                                  remarks.WithEndOfLine());
         }
 
         private static XmlElementSyntax ExceptionParameterComment(ParameterSyntax exceptionParameter)
@@ -160,16 +160,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var paramRef = SyntaxFactory.XmlParamRefElement(parameterName);
 
             return Comment(
-                           SyntaxFactory.XmlParamElement(parameterName),
-                           XmlText(parts[0]),
-                           Para().WithLeadingXmlComment().WithTrailingXmlComment(),
-                           XmlText(parts[1]),
-                           paramRef,
-                           XmlText(parts[2]),
-                           SeeLangword_Null(),
-                           XmlText(parts[3]),
-                           catchBlock,
-                           XmlText(parts[4]));
+                       SyntaxFactory.XmlParamElement(parameterName),
+                       XmlText(parts[0]),
+                       Para().WithLeadingXmlComment().WithTrailingXmlComment(),
+                       XmlText(parts[1]),
+                       paramRef,
+                       XmlText(parts[2]),
+                       SeeLangword_Null(),
+                       XmlText(parts[3]),
+                       catchBlock,
+                       XmlText(parts[4]));
         }
 
         private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter)

@@ -17,31 +17,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var updatedSyntax = syntax.ReplaceNodes(
-                                                    syntax.GetExceptionXmls(),
-                                                    (original, rewritten) =>
+                                                syntax.GetExceptionXmls(),
+                                                (original, rewritten) =>
+                                                                        {
+                                                                            if (original.IsExceptionCommentFor<ArgumentNullException>())
                                                                             {
-                                                                                if (original.IsExceptionCommentFor<ArgumentNullException>())
-                                                                                {
-                                                                                    return GetFixedExceptionCommentForArgumentNullException(original);
-                                                                                }
+                                                                                return GetFixedExceptionCommentForArgumentNullException(original);
+                                                                            }
 
-                                                                                if (original.IsExceptionCommentFor<ObjectDisposedException>())
-                                                                                {
-                                                                                    return original.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
-                                                                                }
+                                                                            if (original.IsExceptionCommentFor<ObjectDisposedException>())
+                                                                            {
+                                                                                return original.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
+                                                                            }
 
-                                                                                if (original.IsExceptionCommentFor<ArgumentOutOfRangeException>())
-                                                                                {
-                                                                                    return GetFixedExceptionCommentForArgumentOutOfRangeException(original);
-                                                                                }
+                                                                            if (original.IsExceptionCommentFor<ArgumentOutOfRangeException>())
+                                                                            {
+                                                                                return GetFixedExceptionCommentForArgumentOutOfRangeException(original);
+                                                                            }
 
-                                                                                if (original.IsExceptionCommentFor<ArgumentException>())
-                                                                                {
-                                                                                    return GetFixedExceptionCommentForArgumentException(original);
-                                                                                }
+                                                                            if (original.IsExceptionCommentFor<ArgumentException>())
+                                                                            {
+                                                                                return GetFixedExceptionCommentForArgumentException(original);
+                                                                            }
 
-                                                                                return GetFixedStartingPhrase(original);
-                                                                            });
+                                                                            return GetFixedStartingPhrase(original);
+                                                                        });
 
             return updatedSyntax;
         }

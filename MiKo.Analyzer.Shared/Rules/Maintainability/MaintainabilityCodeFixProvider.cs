@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -9,6 +10,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MaintainabilityCodeFixProvider : MiKoCodeFixProvider
     {
+        private static readonly Dictionary<SyntaxKind, SyntaxKind> OperatorInverseMapping = new Dictionary<SyntaxKind, SyntaxKind>
+                                                                                                {
+                                                                                                    { SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken },
+                                                                                                    { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken },
+                                                                                                    { SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken },
+                                                                                                    { SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken },
+                                                                                                    { SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken },
+                                                                                                    { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
+                                                                                                };
+
         protected static ArgumentSyntax Argument(string identifier) => Argument(SyntaxFactory.IdentifierName(identifier));
 
         protected static ArgumentSyntax Argument(ParameterSyntax parameter) => Argument(SyntaxFactory.IdentifierName(parameter.GetName()));
@@ -84,7 +95,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return result;
         }
 
-        protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
+        protected static ExpressionSyntax InvertCondition(Document document, ExpressionSyntax condition)
+        {
+            switch (condition)
+            {
+                case PrefixUnaryExpressionSyntax prefixed:
+                {
+                    return prefixed.Operand;
+                }
+
+                case BinaryExpressionSyntax binary when binary.Right.IsKind(SyntaxKind.NullLiteralExpression) && binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken):
+                {
+                    return IsNullPattern(binary.Left);
+                }
+
+                case BinaryExpressionSyntax binary when OperatorInverseMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement):
+                {
+                    return binary.WithOperatorToken(SyntaxFactory.Token(replacement));
+                }
+
+                case IsPatternExpressionSyntax pattern:
+                {
+                    if (pattern.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax literal)
+                    {
+                        switch (literal.Kind())
+                        {
+                            case SyntaxKind.NullLiteralExpression:
+                                return SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, pattern.Expression, literal);
+
+                            case SyntaxKind.FalseLiteralExpression:
+                                return IsNullable(document, pattern)
+                                       ? LogicalNot(pattern)
+                                       : pattern.Expression.WithoutTrivia();
+
+                            case SyntaxKind.TrueLiteralExpression:
+                                return IsNullable(document, pattern)
+                                       ? LogicalNot(pattern)
+                                       : pattern.Expression.WithoutTrivia();
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            return IsFalsePattern(condition);
+        }
+
+        protected static bool IsNullable(Document document, IsPatternExpressionSyntax pattern) => GetSymbol(document, pattern.Expression) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
+
+        protected static ExpressionSyntax LogicalNot(ExpressionSyntax expression) => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.ParenthesizedExpression(expression));
 
         protected static LiteralExpressionSyntax Literal(char value) => Literal(SyntaxFactory.Literal(value));
 
@@ -95,6 +155,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected static LiteralExpressionSyntax Literal(SyntaxToken token) => SyntaxFactory.LiteralExpression(SyntaxKind.NumericLiteralExpression, token);
 
         protected static LiteralExpressionSyntax Literal(int value, string valueRepresentation) => Literal(SyntaxFactory.Literal(valueRepresentation, value));
+
+        protected static LiteralExpressionSyntax NullLiteral() => Literal(SyntaxKind.NullLiteralExpression);
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {

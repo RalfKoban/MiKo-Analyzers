@@ -6719,6 +6719,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix enum member starting phrase.
+        /// </summary>
+        public static string MiKo_2082_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2082_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
         ///Such phrases are for example &apos;Defines&apos;, &apos;Indicates&apos; or &apos;Specifies&apos;. Instead, the Enum member summary should describe the meaning of the member itself..
         /// </summary>
@@ -11045,6 +11054,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression..
+        /// </summary>
+        public static string MiKo_3098_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3098_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explain the reason why the message is suppressed.
+        /// </summary>
+        public static string MiKo_3098_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3098_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Justifications of suppressed messages shall explain.
+        /// </summary>
+        public static string MiKo_3098_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3098_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
@@ -11671,6 +11707,78 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3118_Title {
             get {
                 return ResourceManager.GetString("MiKo_3118_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if.
+        /// </summary>
+        public static string MiKo_3201_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3201_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read..
+        /// </summary>
+        public static string MiKo_3201_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3201_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if.
+        /// </summary>
+        public static string MiKo_3201_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3201_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If statements can be inverted in short methods.
+        /// </summary>
+        public static string MiKo_3201_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3201_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert condition into positive.
+        /// </summary>
+        public static string MiKo_3202_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3202_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is much easier to read in case it contains an if statement or conditional that has a positive condition and the code returns in all paths..
+        /// </summary>
+        public static string MiKo_3202_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3202_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert condition into positive.
+        /// </summary>
+        public static string MiKo_3202_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3202_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use positive conditions when returning in all paths.
+        /// </summary>
+        public static string MiKo_3202_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3202_Title", resourceCulture);
             }
         }
         
@@ -13054,6 +13162,42 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
+        public static string MiKo_6018_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6018_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6018_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6018_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;break&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6018_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6018_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to break statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6018_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6018_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
         public static string MiKo_6019_CodeFixTitle {
             get {
                 return ResourceManager.GetString("MiKo_6019_CodeFixTitle", resourceCulture);
@@ -13097,7 +13241,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to To separate throw statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
         /// </summary>
         public static string MiKo_6020_Description {
             get {
@@ -13106,7 +13250,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Surround &apos;break&apos; with a blank line.
+        ///   Looks up a localized string similar to Surround &apos;throw&apos; with a blank line.
         /// </summary>
         public static string MiKo_6020_MessageFormat {
             get {
@@ -13115,7 +13259,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to break statements should be surrounded by blank lines.
+        ///   Looks up a localized string similar to throw statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_6020_Title {
             get {
@@ -13602,7 +13746,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if consequtive invocations that span multiple lines are aligned by their dots..
+        ///   Looks up a localized string similar to The code is easier to read if consecutive invocations that span multiple lines are aligned by their dots..
         /// </summary>
         public static string MiKo_6040_Description {
             get {
@@ -13914,6 +14058,78 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6048_Title {
             get {
                 return ResourceManager.GetString("MiKo_6048_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6049_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6049_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6049_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6049_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround event (un-)registration with a blank line.
+        /// </summary>
+        public static string MiKo_6049_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6049_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event (un-)registrations should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6049_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6049_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument outdented below method call.
+        /// </summary>
+        public static string MiKo_6050_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6050_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call..
+        /// </summary>
+        public static string MiKo_6050_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6050_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument &apos;{0}&apos; outdented below method call.
+        /// </summary>
+        public static string MiKo_6050_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6050_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi-line arguments are positioned outdented at end of method call.
+        /// </summary>
+        public static string MiKo_6050_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6050_Title", resourceCulture);
             }
         }
     }

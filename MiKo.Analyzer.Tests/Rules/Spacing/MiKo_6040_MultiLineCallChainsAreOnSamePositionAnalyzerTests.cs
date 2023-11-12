@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -122,6 +124,39 @@ public class TestMe
         var x = type.Assembly
                         .EntryPoint
                     .ReturnParameter;
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:argumentMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_each_wrong_indented_call() => An_issue_is_reported_for(2, @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomething(new Dictionary<int, int>
+                                            {
+                                                { 1, 2 },
+                                            })
+                                            .DoSomethingMore()
+                                    .DoSomething(new Dictionary<int, int>
+                                                     {
+                                                         { 3, 4 },
+                                                     });
+    }
+
+    public TestMe DoSomething(Dictionary<int, int> source)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
     }
 }
 ");
@@ -261,6 +296,132 @@ public class TestMe
                     .EntryPoint
                     .ReturnParameter
                     .Attributes;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_adjusts_multi_line_arguments_as_well()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomething(new Dictionary<int, int>
+                                            {
+                                                { 1, 2 },
+                                            })
+                                            .DoSomethingMore()
+                                    .DoSomething(new Dictionary<int, int>
+                                                     {
+                                                         { 3, 4 },
+                                                     });
+    }
+
+    public TestMe DoSomething(Dictionary<int, int> source)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomething(new Dictionary<int, int>
+                                            {
+                                                { 1, 2 },
+                                            })
+                           .DoSomethingMore()
+                           .DoSomething(new Dictionary<int, int>
+                                            {
+                                                { 3, 4 },
+                                            });
+    }
+
+    public TestMe DoSomething(Dictionary<int, int> source)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_and_adjusts_single_line_arguments_as_well()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomethingMore()
+           .DoSomething(1, 2, 3)
+           .DoSomething(4, 5, 6)
+           .DoSomething(7, 8, 9);
+    }
+
+    public TestMe DoSomething(int x, int y, int z)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public TestMe Start()
+    {
+        return new TestMe().DoSomethingMore()
+                           .DoSomething(1, 2, 3)
+                           .DoSomething(4, 5, 6)
+                           .DoSomething(7, 8, 9);
+    }
+
+    public TestMe DoSomething(int x, int y, int z)
+    {
+        return this;
+    }
+
+    public TestMe DoSomethingMore()
+    {
+        return this;
     }
 }
 ";

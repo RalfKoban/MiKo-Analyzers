@@ -189,13 +189,13 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "using System; class TestMe { void DoSomething() { var eventArgs = new EventArgs(); } }",
-                                                         "using System; class TestMe { void DoSomething() { var e = new EventArgs(); } }");
+                                                     "using System; class TestMe { void DoSomething() { var eventArgs = new EventArgs(); } }",
+                                                     "using System; class TestMe { void DoSomething() { var e = new EventArgs(); } }");
 
         [Test]
         public void Code_gets_fixed_with_parameter() => VerifyCSharpFix(
-                                                         "using System; class TestMe { void DoSomething(EventArgs e) { var eventArgs = new EventArgs(); } }",
-                                                         "using System; class TestMe { void DoSomething(EventArgs e) { var args = new EventArgs(); } }");
+                                                                    "using System; class TestMe { void DoSomething(EventArgs e) { var eventArgs = new EventArgs(); } }",
+                                                                    "using System; class TestMe { void DoSomething(EventArgs e) { var args = new EventArgs(); } }");
 
         protected override string GetDiagnosticId() => MiKo_1005_EventArgsLocalVariableAnalyzer.Id;
 

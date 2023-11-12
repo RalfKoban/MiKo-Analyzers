@@ -167,8 +167,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-            "using System; class TestMe { void OnWhatever(object s, EventArgs args)  { System.Diagnostics.Trace.Write(args.GetType().ToString() + s.ToString(); } }",
-            "using System; class TestMe { void OnWhatever(object sender, EventArgs e)  { System.Diagnostics.Trace.Write(e.GetType().ToString() + sender.ToString(); } }");
+                                                     "using System; class TestMe { void OnWhatever(object s, EventArgs args)  { System.Diagnostics.Trace.Write(args.GetType().ToString() + s.ToString(); } }",
+                                                     "using System; class TestMe { void OnWhatever(object sender, EventArgs e)  { System.Diagnostics.Trace.Write(e.GetType().ToString() + sender.ToString(); } }");
 
         protected override string GetDiagnosticId() => MiKo_1002_EventHandlingMethodParametersAnalyzer.Id;
 

@@ -16,13 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override string Title => Resources.MiKo_5013_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ArrayCreationExpressionSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ArrayCreationExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var node = (ArrayCreationExpressionSyntax)syntax;
+            if (syntax is ArrayCreationExpressionSyntax node)
+            {
+                return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType);
+            }
 
-            return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType);
+            return syntax;
         }
     }
 }

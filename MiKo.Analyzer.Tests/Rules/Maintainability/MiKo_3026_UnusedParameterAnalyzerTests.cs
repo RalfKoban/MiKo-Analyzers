@@ -108,6 +108,58 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_event_handling_method_with_custom_event_args() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class MyEventArgs : EventArgs
+    {
+    }
+
+    public class TestMe
+    {
+        public event EventHandler<MyEventArgs> MyEvent;
+
+        public void Initialize()
+        {
+            MyEvent += OnMyEvent;
+        }
+
+        private void OnMyEvent(object sender, MyEventArgs e)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_event_handling_method_with_fake_event_args() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class FakeEventArgs
+    {
+    }
+
+    public class TestMe
+    {
+        public event EventHandler<FakeEventArgs> FakeEvent;
+
+        public void Initialize()
+        {
+            FakeEvent += OnFakeEvent;
+        }
+
+        private void OnFakeEvent(object sender, FakeEventArgs e)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_dependency_property_changed_event_handling_method() => No_issue_is_reported_for(@"
 namespace System.Windows
 {
@@ -353,6 +405,93 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_aspect_enhanced_method_with_unused_parameter() => No_issue_is_reported_for(@"
+using System;
+
+namespace PostSharp.Aspects.Advices
+{
+    public class Advice : Attribute
+    {
+    }
+
+    public class OnMethodInvokeAdviceAttribute : Advice
+    {
+    }
+}
+
+namespace Bla
+{
+    using PostSharp.Aspects.Advices;
+
+    public class TestMe
+    {
+        [OnMethodInvokeAdvice]
+        public void DoSomething(int i)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_serialization_ctor_with_unused_parameter() => No_issue_is_reported_for(@"
+using System;
+using System.Runtime.Serialization;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private TestMe(SerializationInfo info, StreamingContext context)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_method_is_passed_in_as_argument() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething() => DoSomethingCore(MyCallback);
+
+        private void DoSomethingCore(Action<object> callback) => callback(new object());
+
+        private void MyCallback(object obj)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_method_is_passed_in_as_coalescing_argument() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething() => DoSomethingCore(MyCallback1 ?? MyCallback2);
+
+        private void DoSomethingCore(Action<object> callback) => callback(new object());
+
+        private void MyCallback1(object obj)
+        {
+        }
+
+        private void MyCallback2(object obj)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_expression_bodied_method_that_has_unused_parameter() => An_issue_is_reported_for(@"
 using System;
 
@@ -406,51 +545,6 @@ namespace Bla
         public TestMe(int field) => m_field = 42;
 
         private int m_field;
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_aspect_enhanced_method_with_unused_parameter() => No_issue_is_reported_for(@"
-using System;
-
-namespace PostSharp.Aspects.Advices
-{
-    public class Advice : Attribute
-    {
-    }
-
-    public class OnMethodInvokeAdviceAttribute : Advice
-    {
-    }
-}
-
-namespace Bla
-{
-    using PostSharp.Aspects.Advices;
-
-    public class TestMe
-    {
-        [OnMethodInvokeAdvice]
-        public void DoSomething(int i)
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_serialization_ctor_with_unused_parameter() => No_issue_is_reported_for(@"
-using System;
-using System.Runtime.Serialization;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        private TestMe(SerializationInfo info, StreamingContext context)
-        {
-        }
     }
 }
 ");

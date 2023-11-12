@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => Resources.MiKo_3034_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ParameterSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var attributeList = SyntaxFactory.AttributeList().WithAttributes(SyntaxFactory.SeparatedList(new[] { attribute }));
 
             return parameter.WithAttributeLists(new SyntaxList<AttributeListSyntax>(attributeList))
-                            .WithDefault(SyntaxFactory.EqualsValueClause(Literal(SyntaxKind.NullLiteralExpression)));
+                            .WithDefault(SyntaxFactory.EqualsValueClause(NullLiteral()));
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithUsing("System.Runtime.CompilerServices");

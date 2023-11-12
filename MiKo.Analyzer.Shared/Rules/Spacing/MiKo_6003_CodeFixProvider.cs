@@ -15,6 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6003_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<LocalDeclarationStatementSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<LocalDeclarationStatementSyntax>().FirstOrDefault();
     }
 }

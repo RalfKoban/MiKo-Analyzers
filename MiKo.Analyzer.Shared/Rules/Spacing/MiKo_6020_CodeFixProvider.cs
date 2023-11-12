@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6020_CodeFixProvider)), Shared]
     public sealed class MiKo_6020_CodeFixProvider : SurroundedByBlankLinesCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6020_BreakStatementSurroundedByBlankLinesAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_6020_ThrowStatementSurroundedByBlankLinesAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_6020_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BreakStatementSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ThrowStatementSyntax>().FirstOrDefault();
     }
 }

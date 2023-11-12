@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
-            var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap);
+            var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap, FirstWordHandling.MakeLowerCase);
 
-            return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeInfinite);
+            return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeInfinite);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);

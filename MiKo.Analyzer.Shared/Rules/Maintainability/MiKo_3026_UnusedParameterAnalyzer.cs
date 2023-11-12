@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -9,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3026_UnusedParameterAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3026";
+
+        private static readonly SyntaxKind[] PossibleEventRegistrations = { SyntaxKind.AddAssignmentExpression, SyntaxKind.SubtractAssignmentExpression };
 
         public MiKo_3026_UnusedParameterAnalyzer() : base(Id)
         {
@@ -67,6 +73,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
+            // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
+            if (method.IsEnhancedByPostSharpAdvice())
+            {
+                return true;
+            }
+
             var ignore = method.IsInterfaceImplementation();
 
             return ignore;
@@ -79,20 +91,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var parameters = method.ParameterList.Parameters;
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
-            Analyze(context, methodBody, parameters);
+            Analyze(context, methodBody, parameters, method.GetName());
         }
 
         private void AnalyzeConstructor(SyntaxNodeAnalysisContext context)
         {
-            var method = (ConstructorDeclarationSyntax)context.Node;
+            var ctor = (ConstructorDeclarationSyntax)context.Node;
 
-            var parameters = method.ParameterList.Parameters;
-            var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
+            var parameters = ctor.ParameterList.Parameters;
+            var methodBody = ctor.Body ?? (SyntaxNode)ctor.ExpressionBody?.Expression;
 
             Analyze(context, methodBody, parameters);
         }
 
-        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters)
+        private void Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, string methodName = null)
         {
             if (methodBody is null)
             {
@@ -111,20 +123,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return;
             }
 
-            if (context.CancellationToken.IsCancellationRequested)
-            {
-                return;
-            }
+            var issues = AnalyzeParameters(methodName, methodBody, parameters, context.SemanticModel);
 
-            var used = methodBody.GetAllUsedVariables(context.SemanticModel);
+            ReportDiagnostics(context, issues);
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeParameters(string methodName, SyntaxNode methodBody, SeparatedSyntaxList<ParameterSyntax> parameters, SemanticModel semanticModel)
+        {
+            var eventAssignments = new Lazy<List<AssignmentExpressionSyntax>>(CollectEventAssignments);
+            var identifiersUsedAsArguments = new Lazy<ISet<string>>(CollectArgumentIdentifiers);
+
+            var used = methodBody.GetAllUsedVariables(semanticModel);
 
             foreach (var parameter in parameters)
             {
-                if (context.CancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-
                 var parameterName = parameter.GetName();
 
                 if (used.Contains(parameterName))
@@ -132,14 +144,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     continue;
                 }
 
-                // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
-                if (methodSymbol.IsEnhancedByPostSharpAdvice())
+                // only check for methods with names as ctors cannot be registered for event handlers or callbacks
+                if (methodName != null)
                 {
-                    continue;
+                    if (eventAssignments.Value.Any(_ => _.Right is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == methodName))
+                    {
+                        // seems to be an assignment so we do not report that parameter
+                        continue;
+                    }
+
+                    if (identifiersUsedAsArguments.Value.Contains(methodName))
+                    {
+                        // seems to be a callback
+                        continue;
+                    }
                 }
 
-                var issue = Issue(parameterName, parameter.Identifier);
-                ReportDiagnostics(context, issue);
+                yield return Issue(parameterName, parameter.Identifier);
+            }
+
+            List<AssignmentExpressionSyntax> CollectEventAssignments()
+            {
+                var root = methodBody.SyntaxTree.GetCompilationUnitRoot();
+
+                var assignments = root.DescendantNodes<AssignmentExpressionSyntax>(_ => _.IsAnyKind(PossibleEventRegistrations) && _.IsEventRegistration(semanticModel))
+                                      .ToList();
+
+                return assignments;
+            }
+
+            ISet<string> CollectArgumentIdentifiers()
+            {
+                var root = methodBody.SyntaxTree.GetCompilationUnitRoot();
+
+                var identifiers = root.DescendantNodes<IdentifierNameSyntax>(_ => _.Parent is ArgumentSyntax
+                                                                              || (_.Parent is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) && b.Parent is ArgumentSyntax));
+
+                return identifiers.ToHashSet(_ => _.Identifier.ValueText);
             }
         }
     }

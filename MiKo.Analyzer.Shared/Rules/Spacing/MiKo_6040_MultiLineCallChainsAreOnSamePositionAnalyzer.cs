@@ -14,12 +14,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         public const string Id = "MiKo_6040";
 
         private const string Spaces = "SPACES";
+        private const string Difference = "DIFFERENCE";
 
         public MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer() : base(Id)
         {
         }
 
         internal static int GetSpaces(Diagnostic diagnostic) => int.Parse(diagnostic.Properties[Spaces]);
+
+        internal static int GetDifference(Diagnostic diagnostic) => int.Parse(diagnostic.Properties[Difference]);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.SimpleMemberAccessExpression);
 
@@ -96,9 +99,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 var position = dot.GetStartPosition();
 
-                if (position.Line != startLine && position.Character != startCharacterPosition)
+                if (position.Line != startLine)
                 {
-                    ReportDiagnostics(context, Issue(dot, new Dictionary<string, string> { { Spaces, startCharacterPosition.ToString("D") } }));
+                    var difference = startCharacterPosition - position.Character;
+
+                    if (difference != 0)
+                    {
+                        ReportDiagnostics(context, Issue(dot, new Dictionary<string, string>
+                                                                  {
+                                                                      { Spaces, startCharacterPosition.ToString("D") },
+                                                                      { Difference, difference.ToString("D") },
+                                                                  }));
+                    }
                 }
             }
         }

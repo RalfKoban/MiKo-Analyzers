@@ -21,16 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules
             DiagnosticId = diagnosticId;
 
             Rule = KnownRules.GetOrAdd(
-                                       diagnosticId,
-                                       id => new DiagnosticDescriptor(
-                                                                      id,
-                                                                      LocalizableResource(id, "Title"),
-                                                                      LocalizableResource(id, "MessageFormat"),
-                                                                      category,
-                                                                      DiagnosticSeverity.Warning,
-                                                                      IsEnabledByDefault,
-                                                                      LocalizableResource(id, "Description"),
-                                                                      LocalizableResource(id, "HelpLinkUri")?.ToString()));
+                                   diagnosticId,
+                                   id => new DiagnosticDescriptor(
+                                                              id,
+                                                              LocalizableResource(id, "Title"),
+                                                              LocalizableResource(id, "MessageFormat"),
+                                                              category,
+                                                              DiagnosticSeverity.Warning,
+                                                              IsEnabledByDefault,
+                                                              LocalizableResource(id, "Description"),
+                                                              LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
         protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;
@@ -86,7 +86,13 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(SyntaxTree syntaxTree, int start, int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
 
-        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                ReportDiagnostics(context, new[] { issue });
+            }
+        }
 
         protected static void ReportDiagnostics(CodeBlockAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -111,7 +117,13 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+        protected static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                ReportDiagnostics(context, new[] { issue });
+            }
+        }
 
         protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -136,7 +148,13 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                ReportDiagnostics(context, new[] { issue });
+            }
+        }
 
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {

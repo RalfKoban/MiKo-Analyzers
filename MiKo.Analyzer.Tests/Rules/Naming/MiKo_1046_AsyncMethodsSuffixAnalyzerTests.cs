@@ -216,13 +216,13 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(
-                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomething() { } }",
-                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { } }");
+                                                                "using System.Threading.Tasks; class TestMe { Task DoSomething() { } }",
+                                                                "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { } }");
 
         [Test]
         public void Code_gets_fixed_for_local_function() => VerifyCSharpFix(
-                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { Task Core() { } } }",
-                                                                    "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { Task CoreAsync() { } } }");
+                                                                        "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { Task Core() { } } }",
+                                                                        "using System.Threading.Tasks; class TestMe { Task DoSomethingAsync() { Task CoreAsync() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1046_AsyncMethodsSuffixAnalyzer.Id;
 

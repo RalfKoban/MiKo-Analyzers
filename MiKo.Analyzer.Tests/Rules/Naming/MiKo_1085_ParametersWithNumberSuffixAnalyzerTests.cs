@@ -66,8 +66,8 @@ public static class TestMeExtensions
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "class TestMe { void Method(object o1) { } }",
-                                                         "class TestMe { void Method(object o) { } }");
+                                                     "class TestMe { void Method(object o1) { } }",
+                                                     "class TestMe { void Method(object o) { } }");
 
         protected override string GetDiagnosticId() => MiKo_1085_ParametersWithNumberSuffixAnalyzer.Id;
 

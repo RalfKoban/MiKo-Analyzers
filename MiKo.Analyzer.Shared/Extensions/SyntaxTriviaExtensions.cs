@@ -5,13 +5,43 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions
     {
-        public static bool IsSpanningMultipleLines(this SyntaxTrivia value)
+        internal static int GetPositionWithinStartLine(this SyntaxTrivia value) => value.GetLocation().GetPositionWithinStartLine();
+
+        internal static int GetStartingLine(this SyntaxTrivia value) => value.GetLocation().GetStartingLine();
+
+        internal static int GetEndingLine(this SyntaxTrivia value) => value.GetLocation().GetEndingLine();
+
+        internal static LinePosition GetStartPosition(this SyntaxTrivia value) => value.GetLocation().GetStartPosition();
+
+        internal static LinePosition GetEndPosition(this SyntaxTrivia value) => value.GetLocation().GetEndPosition();
+
+        internal static bool IsEndOfLine(this SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
+
+        internal static bool IsComment(this SyntaxTrivia value)
+        {
+            switch (value.Kind())
+            {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        internal static bool IsMultiLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
+
+        internal static bool IsSingleLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
+
+        internal static bool IsSpanningMultipleLines(this SyntaxTrivia value)
         {
             var foundLine = false;
 
@@ -36,28 +66,9 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        public static bool IsEndOfLine(this SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
+        internal static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
-        public static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
-
-        public static bool IsSingleLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
-
-        public static bool IsMultiLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
-
-        public static bool IsComment(this SyntaxTrivia value)
-        {
-            switch (value.Kind())
-            {
-                case SyntaxKind.SingleLineCommentTrivia:
-                case SyntaxKind.MultiLineCommentTrivia:
-                    return true;
-
-                default:
-                    return false;
-            }
-        }
-
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
+        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
         {
             if (value is null)
             {
@@ -67,7 +78,7 @@ namespace MiKoSolutions.Analyzers
             return value.ChildNodes<XmlTextSyntax>().GetXmlTextTokens();
         }
 
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlElementSyntax> value)
+        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlElementSyntax> value)
         {
             if (value is null)
             {
@@ -77,7 +88,7 @@ namespace MiKoSolutions.Analyzers
             return value.SelectMany(_ => _.GetXmlTextTokens());
         }
 
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
+        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlTextSyntax value)
         {
             if (value != null)
             {
@@ -98,7 +109,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
+        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this IEnumerable<XmlTextSyntax> value)
         {
             if (value is null)
             {
@@ -108,12 +119,12 @@ namespace MiKoSolutions.Analyzers
             return value.SelectMany(_ => _.GetXmlTextTokens());
         }
 
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
+        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value)
         {
             return GetXmlTextTokens(value, node => node.IsCode() is false); // skip code
         }
 
-        public static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
+        internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this DocumentationCommentTriviaSyntax value, Func<XmlElementSyntax, bool> descendantNodesFilter)
         {
             return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
         }

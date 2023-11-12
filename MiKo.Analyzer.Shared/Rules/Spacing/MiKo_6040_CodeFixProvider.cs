@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6040_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -27,6 +27,31 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return syntax;
+        }
+
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            // adjust  of invocations
+            if (syntax is MemberAccessExpressionSyntax m && m.Parent is InvocationExpressionSyntax invocation)
+            {
+                var argumentList = invocation.ArgumentList;
+
+                if (argumentList.Arguments.Count > 0)
+                {
+                    var descendants = SelfAndDescendantsOnSeparateLines(argumentList);
+                    descendants.Remove(argumentList); // remove list to see if multiple other arguments are on different lines
+
+                    if (descendants.Count > 0)
+                    {
+                        var additionalSpaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetDifference(issue);
+                        var updatedInvocation = invocation.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
+
+                        return root.ReplaceNode(invocation, updatedInvocation);
+                    }
+                }
+            }
+
+            return root;
         }
     }
 }

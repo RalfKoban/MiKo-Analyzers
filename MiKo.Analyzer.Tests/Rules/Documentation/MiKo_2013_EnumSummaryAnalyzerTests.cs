@@ -58,6 +58,16 @@ public enum TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_enum_with_empty_phrase() => An_issue_is_reported_for(@"
+/// <summary>
+///
+/// </summary>
+public enum TestMe
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_enum_with_wrong_phrase() => An_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation.
@@ -196,8 +206,29 @@ public enum TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_almost_correct_documentation_([Values("Specifies", "Defines", "Indicates")] string firstWord)
+        [TestCase("Contains")]
+        [TestCase("Define")]
+        [TestCase("Defined")]
+        [TestCase("Defines")]
+        [TestCase("Describe")]
+        [TestCase("Described")]
+        [TestCase("Describes")]
+        [TestCase("Identify")]
+        [TestCase("Identified")]
+        [TestCase("Identifies")]
+        [TestCase("Indicate")]
+        [TestCase("Indicated")]
+        [TestCase("Indicates")]
+        [TestCase("Present")]
+        [TestCase("Presents")]
+        [TestCase("Provide")]
+        [TestCase("Provides")]
+        [TestCase("Represent")]
+        [TestCase("Represents")]
+        [TestCase("Specify")]
+        [TestCase("Specified")]
+        [TestCase("Specifies")]
+        public void Code_gets_fixed_for_almost_correct_documentation_(string firstWord)
         {
             var originalCode = @"
 /// <summary>
@@ -217,6 +248,80 @@ public enum TestMe
 }
 ";
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase("Declaration of", "")]
+        [TestCase("Enum containing the", "the ")]
+        [TestCase("Enum contains the", "the ")]
+        [TestCase("Enum describes the", "the ")]
+        [TestCase("Enum describing the", "the ")]
+        [TestCase("Enum for", "")]
+        [TestCase("Enum of", "")]
+        [TestCase("Enum representing the", "the ")]
+        [TestCase("Enum represents the", "the ")]
+        [TestCase("Enum that contains", "")]
+        [TestCase("Enum that describes", "")]
+        [TestCase("Enum that represents", "")]
+        [TestCase("Enum what", "what ")]
+        [TestCase("Enum which contains", "")]
+        [TestCase("Enum which describes", "")]
+        [TestCase("Enum which represents", "")]
+        [TestCase("Enumeration containing the", "the ")]
+        [TestCase("Enumeration contains the", "the ")]
+        [TestCase("Enumeration describes the", "the ")]
+        [TestCase("Enumeration describing the", "the ")]
+        [TestCase("Enumeration for", "")]
+        [TestCase("Enumeration of", "")]
+        [TestCase("Enumeration representing the", "the ")]
+        [TestCase("Enumeration represents the", "the ")]
+        [TestCase("Enumeration that contains", "")]
+        [TestCase("Enumeration that describes", "")]
+        [TestCase("Enumeration that represents", "")]
+        [TestCase("Enumeration what", "what ")]
+        [TestCase("Enumeration which contains", "")]
+        [TestCase("Enumeration which describes", "")]
+        [TestCase("Enumeration which represents", "")]
+        [TestCase("Flagged enum for", "")]
+        [TestCase("Flagged enumeration for", "")]
+        [TestCase("Flags enum representing the", "the ")]
+        [TestCase("Flags enum represents the", "the ")]
+        [TestCase("Flags enumeration representing the", "the ")]
+        [TestCase("Flags enumeration represents the", "the ")]
+        [TestCase("State containing the", "the ")]
+        [TestCase("State contains the", "the ")]
+        [TestCase("State describes the", "the ")]
+        [TestCase("State describing the", "the ")]
+        [TestCase("State for", "")]
+        [TestCase("State of", "")]
+        [TestCase("State representing the", "the ")]
+        [TestCase("State represents the", "the ")]
+        [TestCase("State that contains", "")]
+        [TestCase("State that describes", "")]
+        [TestCase("State that represents", "")]
+        [TestCase("State what", "what ")]
+        [TestCase("State which contains", "")]
+        [TestCase("State which describes", "")]
+        [TestCase("State which represents", "")]
+        public void Code_gets_fixed_for_documentation_(string start, string expectedStart)
+        {
+            var originalCode = @"
+/// <summary>
+/// " + start + @" something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+
+            var fixedCode = @"
+/// <summary>
+/// Defines values that specify " + expectedStart + @"something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;

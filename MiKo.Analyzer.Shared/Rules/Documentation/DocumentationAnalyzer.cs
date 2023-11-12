@@ -266,6 +266,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return StartIssue(symbol, node); // it's no text, so it must be something different
                     }
 
+                    case XmlElementEndTagSyntax endTag:
+                    {
+                        var tagName = endTag.GetName();
+
+                        if (tagName == Constants.XmlTag.Para)
+                        {
+                            continue; // skip over the start tag and name syntax
+                        }
+
+                        if (endTag.Parent is XmlElementSyntax element)
+                        {
+                            return StartIssue(symbol, element.GetContentsLocation()); // it's an empty text
+                        }
+
+                        return StartIssue(symbol, node); // it's no text, so it must be something different
+                    }
+
                     case XmlNameSyntax _:
                     case XmlElementSyntax e when e.GetName() == Constants.XmlTag.Para:
                     case XmlEmptyElementSyntax ee when ee.GetName() == Constants.XmlTag.Para:

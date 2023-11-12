@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             return syntax.ReplaceTokens(
-                                        syntax.DescendantTokens(SyntaxKind.XmlTextLiteralToken).Where(_ => _.GetLocation().Contains(diagnostic.Location)),
-                                        (original, rewritten) => original.WithText(ReplaceText(original.Text)));
+                                    syntax.DescendantTokens(SyntaxKind.XmlTextLiteralToken).Where(_ => _.GetLocation().Contains(diagnostic.Location)),
+                                    (original, rewritten) => original.WithText(ReplaceText(original.Text)));
         }
 
         private static StringBuilder ReplaceText(string originalText)

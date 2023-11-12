@@ -12,12 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2082";
 
-        private static readonly string[] StartingPhrases =
-                                                           {
-                                                               "Defines",
-                                                               "Indicates",
-                                                               "Specifies",
-                                                           };
+        internal static readonly string[] StartingPhrases =
+                                                            {
+                                                                "Defines",
+                                                                "Indicates",
+                                                                "Represents",
+                                                                "Specifies",
+                                                            };
 
         public MiKo_2082_EnumMemberAnalyzer() : base(Id, SymbolKind.NamedType)
         {

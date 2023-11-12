@@ -22,24 +22,29 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override string Title => Resources.MiKo_5001_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var lambda = syntax.FirstDescendant<LambdaExpressionSyntax>();
-
-            if (lambda != null)
+            if (syntax is ExpressionStatementSyntax statement)
             {
-                // fix inside lambda
-                var ifStatement = CreateIfStatement(lambda.ExpressionBody);
+                var lambda = statement.FirstDescendant<LambdaExpressionSyntax>();
 
-                // nest call in block
-                var block = SyntaxFactory.Block(ifStatement);
+                if (lambda != null)
+                {
+                    // fix inside lambda
+                    var ifStatement = CreateIfStatement(lambda.ExpressionBody);
 
-                return syntax.ReplaceNode(lambda, lambda.WithBody(block));
+                    // nest call in block
+                    var block = SyntaxFactory.Block(ifStatement);
+
+                    return syntax.ReplaceNode(lambda, lambda.WithBody(block));
+                }
+
+                return CreateIfStatement(statement);
             }
 
-            return CreateIfStatement((ExpressionStatementSyntax)syntax);
+            return syntax;
         }
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
@@ -147,7 +152,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (otherChild is IfStatementSyntax ifStatement && IsDebugEnabledCall(ifStatement))
             {
-                var spaces = ifStatement.GetStartPosition().Character;
+                var spaces = ifStatement.GetPositionWithinStartLine();
 
                 var statementsOfInsertedBlock = insertedStatements.Select(_ => _.WithoutLeadingEndOfLine() // Delete left-over empty line at beginning
                                                                                 .WithLeadingSpaces(spaces + Constants.Indentation)
@@ -209,7 +214,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 var firstIf = calls[0];
 
-                var spaces = firstIf.GetStartPosition().Character + Constants.Indentation;
+                var spaces = firstIf.GetPositionWithinStartLine() + Constants.Indentation;
 
                 var nodesToRemove = new HashSet<IfStatementSyntax>();
                 var nodesToReplace = new Dictionary<IfStatementSyntax, IfStatementSyntax>();
@@ -261,22 +266,22 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 const string DeleteAnnotation = "delete me";
 
                 updatedRoot = updatedRoot.ReplaceNodes(
-                                                       calls,
-                                                       (original, rewritten) =>
+                                                   calls,
+                                                   (original, rewritten) =>
+                                                                           {
+                                                                               if (nodesToRemove.Contains(original))
                                                                                {
-                                                                                   if (nodesToRemove.Contains(original))
-                                                                                   {
-                                                                                       // annotate it so that we can find it again as left-over when it comes to deleting it
-                                                                                       return original.WithAnnotation(new SyntaxAnnotation(DeleteAnnotation));
-                                                                                   }
+                                                                                   // annotate it so that we can find it again as left-over when it comes to deleting it
+                                                                                   return original.WithAnnotation(new SyntaxAnnotation(DeleteAnnotation));
+                                                                               }
 
-                                                                                   if (nodesToReplace.TryGetValue(original, out var replacement))
-                                                                                   {
-                                                                                       return replacement;
-                                                                                   }
+                                                                               if (nodesToReplace.TryGetValue(original, out var replacement))
+                                                                               {
+                                                                                   return replacement;
+                                                                               }
 
-                                                                                   return rewritten;
-                                                                               });
+                                                                               return rewritten;
+                                                                           });
 
                 // remove the left-overs
                 return updatedRoot.RemoveNodes(updatedRoot.GetAnnotatedNodes(DeleteAnnotation), SyntaxRemoveOptions.KeepNoTrivia);
