@@ -24,10 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var position = MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer.GetOutdentedStartPosition(argument.FirstAncestor<ArgumentListSyntax>());
                 var additionalSpaces = position.Character - argument.GetPositionWithinStartLine();
 
-                var lines = new HashSet<int>();
-                var descendants = argument.DescendantNodesAndTokensAndSelf().Where(_ => lines.Add(_.GetStartingLine())).ToList();
+                var descendants = SelfAndDescendantsOnSeparateLines(argument);
 
-                return GetNodeAndDescendantsWithAdditionalSpaces(argument, descendants, additionalSpaces);
+                return argument.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
             }
 
             return syntax;
