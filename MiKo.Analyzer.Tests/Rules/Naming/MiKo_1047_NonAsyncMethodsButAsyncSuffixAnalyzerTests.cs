@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -104,13 +105,13 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(
-                                                         "class TestMe { void DoSomethingAsync() { } }",
-                                                         "class TestMe { void DoSomething() { } }");
+                                                                "class TestMe { void DoSomethingAsync() { } }",
+                                                                "class TestMe { void DoSomething() { } }");
 
         [Test]
         public void Code_gets_fixed_for_local_function() => VerifyCSharpFix(
-                                                         "class TestMe { void DoSomething() { void SomethingAsync() { } } }",
-                                                         "class TestMe { void DoSomething() { void Something() { } } }");
+                                                                        "class TestMe { void DoSomething() { void SomethingAsync() { } } }",
+                                                                        "class TestMe { void DoSomething() { void Something() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1047_NonAsyncMethodsButAsyncSuffixAnalyzer.Id;
 

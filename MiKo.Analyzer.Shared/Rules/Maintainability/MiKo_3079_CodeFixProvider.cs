@@ -16,18 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => Resources.MiKo_3079_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.UnaryMinusExpression));
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(_ => _.IsKind(SyntaxKind.UnaryMinusExpression));
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var unary = (PrefixUnaryExpressionSyntax)syntax;
-
-            if (unary.Operand is LiteralExpressionSyntax literal && literal.Token.Value is int i)
+            if (syntax is PrefixUnaryExpressionSyntax unary)
             {
-                var hresult = "0x" + ((-1) * i).ToString("X8");
-                var cast = SyntaxFactory.CastExpression(PredefinedType(SyntaxKind.IntKeyword), Literal(i, hresult));
+                if (unary.Operand is LiteralExpressionSyntax literal && literal.Token.Value is int i)
+                {
+                    var hresult = "0x" + ((-1) * i).ToString("X8");
+                    var cast = SyntaxFactory.CastExpression(PredefinedType(SyntaxKind.IntKeyword), Literal(i, hresult));
 
-                return SyntaxFactory.CheckedExpression(SyntaxKind.UncheckedExpression, cast);
+                    return SyntaxFactory.CheckedExpression(SyntaxKind.UncheckedExpression, cast);
+                }
             }
 
             return syntax;

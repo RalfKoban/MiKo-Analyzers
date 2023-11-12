@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -65,8 +66,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                      "using System.Threading; class TestMe { void DoSomething(CancellationToken token) { } }",
-                                      "using System.Threading; class TestMe { void DoSomething(CancellationToken cancellationToken) { } }");
+                                                     "using System.Threading; class TestMe { void DoSomething(CancellationToken token) { } }",
+                                                     "using System.Threading; class TestMe { void DoSomething(CancellationToken cancellationToken) { } }");
 
         protected override string GetDiagnosticId() => MiKo_1042_CancellationTokenParameterNameAnalyzer.Id;
 

@@ -17,33 +17,36 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override string Title => Resources.MiKo_3113_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ExpressionStatementSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var statement = (ExpressionStatementSyntax)syntax;
-
-            var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
-            var assertThat = ConvertToAssertThat(document, shouldNode);
-
-            if (assertThat is null)
+            if (syntax is ExpressionStatementSyntax statement)
             {
-                return statement;
+                var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
+                var assertThat = ConvertToAssertThat(document, shouldNode);
+
+                if (assertThat is null)
+                {
+                    return statement;
+                }
+
+                // find lambda
+                var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
+
+                if (lambda != null && lambda.Ancestors().Any(_ => _ == statement))
+                {
+                    // we have a lambda expression, so replace that one
+                    return statement.ReplaceNode(lambda, lambda.WithExpressionBody(assertThat));
+                }
+
+                return statement.WithExpression(assertThat).WithTriviaFrom(statement);
             }
 
-            // find lambda
-            var lambda = shouldNode.FirstAncestor<LambdaExpressionSyntax>();
-
-            if (lambda != null && lambda.Ancestors().Any(_ => _ == statement))
-            {
-                // we have a lambda expression, so replace that one
-                return statement.ReplaceNode(lambda, lambda.WithExpressionBody(assertThat));
-            }
-
-            return statement.WithExpression(assertThat).WithTriviaFrom(statement);
+            return syntax;
         }
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             // only remove assertions if there are no more diagnostics
             // return root.WithUsing("NUnit.Framework").WithoutUsing("FluentAssertions");

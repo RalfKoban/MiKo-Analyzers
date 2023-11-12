@@ -9,22 +9,29 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SpacingCodeFixProvider : MiKoCodeFixProvider
     {
+        protected static List<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode node)
+        {
+            var lines = new HashSet<int>();
+            var descendants = node.DescendantNodesAndTokensAndSelf().Where(_ => lines.Add(_.GetStartingLine())).ToList();
+
+            return descendants;
+        }
+
         protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces)
         {
             var syntax = statement.WithLeadingSpaces(spaces);
 
-            var additionalSpaces = syntax.GetStartPosition().Character - statement.GetStartPosition().Character;
+            var additionalSpaces = syntax.GetPositionWithinStartLine() - statement.GetPositionWithinStartLine();
 
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
 
-            return syntax.ReplaceSyntax(
-                                        startingNodes.Where(_ => _.IsNode).Select(_ => _.AsNode()),
-                                        (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                        startingNodes.Where(_ => _.IsToken).Select(_ => _.AsToken()),
-                                        (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                        Enumerable.Empty<SyntaxTrivia>(),
-                                        (original, rewritten) => rewritten);
+            if (startingNodes.Count == 0)
+            {
+                return syntax;
+            }
+
+            return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
         }
 
         protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)

@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -188,8 +189,8 @@ namespace Bla
         [Test]
         public void Exactly_2_issues_are_reported_for_a_test_method_that_uses_AssertMultiple_and_2_assertions_with_no_messages_([ValueSource(nameof(AssertionsWithoutMessages))] string assertion)
             => An_issue_is_reported_for(
-                                        2, // 1 issue for each assertion
-                                        @"
+                                    2, // 1 issue for each assertion
+                                    @"
 using NUnit.Framework;
 
 namespace Bla

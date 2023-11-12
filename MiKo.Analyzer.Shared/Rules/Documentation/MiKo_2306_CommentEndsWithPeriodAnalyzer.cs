@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static bool EnabledPerDefault { get; set; } = false;
 
-        protected override bool IsEnabledByDefault { get; } = EnabledPerDefault;
+        protected override bool IsEnabledByDefault => EnabledPerDefault;
 
         protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => comment.EndsWith('.') is false;
     }

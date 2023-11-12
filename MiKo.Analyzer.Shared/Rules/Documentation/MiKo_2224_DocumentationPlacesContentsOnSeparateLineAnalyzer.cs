@@ -50,9 +50,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var textTokens = text.TextTokens;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < textTokens.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -74,13 +75,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines) => IsOnSameLine(text, (ICollection<int>)lines);
-
         private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, ICollection<int> lines)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < contents.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var contentsCount = contents.Count;
+
+            for (var index = 0; index < contentsCount; index++)
             {
                 var content = contents[index];
 
@@ -104,6 +104,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return false;
         }
+
+        private static bool IsOnSameLine(XmlTextSyntax text, params int[] lines) => IsOnSameLine(text, (ICollection<int>)lines);
 
         private static bool IsOnSameLine(SyntaxList<XmlNodeSyntax> contents, params int[] lines) => IsOnSameLine(contents, (ICollection<int>)lines);
 
@@ -137,10 +139,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case XmlEmptyElementSyntax emptyElement:
                         emptyElements.Add(emptyElement);
+
                         break;
 
                     case XmlElementSyntax element:
                         elements.Add(element);
+
                         break;
                 }
             }

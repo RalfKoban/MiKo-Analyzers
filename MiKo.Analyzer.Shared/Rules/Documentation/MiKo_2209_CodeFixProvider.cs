@@ -17,8 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             return syntax.ReplaceTokens(
-                                        syntax.DescendantTokens(SyntaxKind.XmlTextLiteralToken),
-                                        (original, rewritten) => original.WithText(original.Text.Replace("..", ".")));
+                                    syntax.DescendantTokens(SyntaxKind.XmlTextLiteralToken),
+                                    (original, rewritten) => original.WithText(original.Text.Replace("..", ".")));
         }
     }
 }

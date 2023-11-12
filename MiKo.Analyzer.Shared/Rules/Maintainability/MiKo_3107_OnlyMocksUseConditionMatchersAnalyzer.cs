@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("Moq.Mock") != null;
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
@@ -76,31 +76,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentList = node.ArgumentList;
 
-            foreach (var lambda in node.Ancestors<SimpleLambdaExpressionSyntax>())
+            if (node.Ancestors<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
             {
-                if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
-                {
-                    switch (m.GetName())
-                    {
-                        case "Setup":
-                        case "SetupGet":
-                        case "SetupSet":
-                        case "SetupSequence":
-                        case "Verify":
-                        case "VerifyGet":
-                        case "VerifySet":
-                        {
-                            // here we assume that we have a Moq call
-                            return Enumerable.Empty<Diagnostic>();
-                        }
-
-                        case "Of" when m.Expression is IdentifierNameSyntax ins && ins.GetName() == "Mock":
-                        {
-                            // here we assume that we have a Moq call
-                            return Enumerable.Empty<Diagnostic>();
-                        }
-                    }
-                }
+                return Enumerable.Empty<Diagnostic>();
             }
 
             var method = node.GetEnclosingMethod(semanticModel);
@@ -121,21 +99,42 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var symbol = node.GetEnclosingSymbol(semanticModel);
             var symbolName = symbol?.Name;
 
-            return node.Expressions.OfKind<AssignmentExpressionSyntax, ExpressionSyntax>(SyntaxKind.SimpleAssignmentExpression)
-                       .SelectMany(_ => AnalyzeExpression(_.Right, symbolName, _.GetLocation()));
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeArguments(IMethodSymbol method, ArgumentListSyntax argumentList)
-        {
-            if (method is null)
+            foreach (var expression in node.Expressions)
             {
-                return Enumerable.Empty<Diagnostic>();
+                if (expression.IsKind(SyntaxKind.SimpleAssignmentExpression))
+                {
+                    foreach (var issue in AnalyzeExpression(((AssignmentExpressionSyntax)expression).Right, symbolName, expression.GetLocation()))
+                    {
+                        yield return issue;
+                    }
+                }
+                else if (expression.IsKind(SyntaxKind.InvocationExpression))
+                {
+                    foreach (var issue in AnalyzeExpression(expression, symbolName, expression.GetLocation()))
+                    {
+                        yield return issue;
+                    }
+                }
+                else if (expression.IsKind(SyntaxKind.ObjectCreationExpression))
+                {
+                    var argumentList = ((ObjectCreationExpressionSyntax)expression).ArgumentList;
+
+                    if (argumentList != null)
+                    {
+                        foreach (var issue in AnalyzeArguments(symbolName, argumentList))
+                        {
+                            yield return issue;
+                        }
+                    }
+                }
             }
-
-            var methodName = method.Name;
-
-            return argumentList.Arguments.SelectMany(_ => AnalyzeExpression(_.Expression, methodName, _.GetLocation()));
         }
+
+        private IEnumerable<Diagnostic> AnalyzeArguments(IMethodSymbol method, ArgumentListSyntax argumentList) => method is null
+                                                                                                                   ? Enumerable.Empty<Diagnostic>()
+                                                                                                                   : AnalyzeArguments(method.Name, argumentList);
+
+        private IEnumerable<Diagnostic> AnalyzeArguments(string name, ArgumentListSyntax argumentList) => argumentList.Arguments.SelectMany(_ => AnalyzeExpression(_.Expression, name, _.GetLocation()));
 
         private IEnumerable<Diagnostic> AnalyzeExpression(ExpressionSyntax expression, string methodName, Location location)
         {

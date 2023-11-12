@@ -2395,6 +2395,9 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2081_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase</value>
   </data>
+  <data name="MiKo_2082_CodeFixTitle" xml:space="preserve">
+    <value>Fix enum member starting phrase</value>
+  </data>
   <data name="MiKo_2082_Description" xml:space="preserve">
     <value>The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
 Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the Enum member summary should describe the meaning of the member itself.</value>
@@ -2809,6 +2812,16 @@ When defined, ReSharper disables the specific rule once or until the document en
   </data>
   <data name="MiKo_2227_Title" xml:space="preserve">
     <value>Documentation should not contain ReSharper suppressions</value>
+  </data>
+  <data name="MiKo_2228_Description" xml:space="preserve">
+    <value>Negative wording is difficult to understand, especially when being combined (eg. "You cannot do this if it is not empty").
+Positive wording is much easier to understand as it is straight forward and comes to the point.</value>
+  </data>
+  <data name="MiKo_2228_MessageFormat" xml:space="preserve">
+    <value>Use positive wording instead of negative</value>
+  </data>
+  <data name="MiKo_2228_Title" xml:space="preserve">
+    <value>Documentation should use positive wording instead of negative</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
@@ -3880,6 +3893,24 @@ Those finally blocks are intended for cleaning stuff up.</value>
   <data name="MiKo_3096_Title" xml:space="preserve">
     <value>Use dictionaries instead of large switch statements</value>
   </data>
+  <data name="MiKo_3097_Description" xml:space="preserve">
+    <value>There is no benefit in casting a value to a specific type and returning that cast value when the return type is of type object.</value>
+  </data>
+  <data name="MiKo_3097_MessageFormat" xml:space="preserve">
+    <value>Do not cast to type when returning object</value>
+  </data>
+  <data name="MiKo_3097_Title" xml:space="preserve">
+    <value>Do not cast to type and return object</value>
+  </data>
+  <data name="MiKo_3098_Description" xml:space="preserve">
+    <value>If messages get suppressed via the [SuppressMessage] attribute, a justification has to be given. That justification has to explain why the message got suppressed so that later on developers have a chance to understand the reasoning behind the suppression.</value>
+  </data>
+  <data name="MiKo_3098_MessageFormat" xml:space="preserve">
+    <value>Explain the reason why the message is suppressed</value>
+  </data>
+  <data name="MiKo_3098_Title" xml:space="preserve">
+    <value>Justifications of suppressed messages shall explain</value>
+  </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
@@ -4092,6 +4123,41 @@ It may even be that the contained code is commented out, leading to the question
   </data>
   <data name="MiKo_3117_Title" xml:space="preserve">
     <value>Test cleanup methods should contain code</value>
+  </data>
+  <data name="MiKo_3118_Description" xml:space="preserve">
+    <value>Tests should be as explicit as possible.
+Different Linq calls such as 'Skip' or 'Take' or 'FirstOrDefault' help in production code but are not clear enough when used inside a tests.
+For example, if the test uses 'Skip', it is unclear for the reader why the code should skip some values. Hence the reader needs to find out, which costs some time and could be easily avoided when the test would be more explicit here about the outcome.</value>
+  </data>
+  <data name="MiKo_3118_MessageFormat" xml:space="preserve">
+    <value>Do not use ambiguous Linq call '{0}'</value>
+  </data>
+  <data name="MiKo_3118_Title" xml:space="preserve">
+    <value>Test methods should not use ambiguous Linq calls</value>
+  </data>
+  <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
+    <value>Invert if</value>
+  </data>
+  <data name="MiKo_3201_Description" xml:space="preserve">
+    <value>In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read.</value>
+  </data>
+  <data name="MiKo_3201_MessageFormat" xml:space="preserve">
+    <value>Invert if</value>
+  </data>
+  <data name="MiKo_3201_Title" xml:space="preserve">
+    <value>If statements can be inverted in short methods</value>
+  </data>
+  <data name="MiKo_3202_CodeFixTitle" xml:space="preserve">
+    <value>Invert condition into positive</value>
+  </data>
+  <data name="MiKo_3202_Description" xml:space="preserve">
+    <value>The code is much easier to read in case it contains an if statement or conditional that has a positive condition and the code returns in all paths.</value>
+  </data>
+  <data name="MiKo_3202_MessageFormat" xml:space="preserve">
+    <value>Invert condition into positive</value>
+  </data>
+  <data name="MiKo_3202_Title" xml:space="preserve">
+    <value>Use positive conditions when returning in all paths</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
@@ -4344,6 +4410,16 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_5015_Title" xml:space="preserve">
     <value>Do not intern string literals</value>
   </data>
+  <data name="MiKo_5016_Description" xml:space="preserve">
+    <value>For performance reasons, when using a '.Contains()' call inside an call of 'List.RemoveAll(...)', that 'Contains' call should be done on a HashSet. This is because that call has a complexity of O(1) for the lookup.
+When used e.g. on a list, that 'Contains' call has to loop over that list again and again for each single element to look up, leading to a much worse runtime experience.</value>
+  </data>
+  <data name="MiKo_5016_MessageFormat" xml:space="preserve">
+    <value>Use a HashSet for the lookup</value>
+  </data>
+  <data name="MiKo_5016_Title" xml:space="preserve">
+    <value>Use a HashSet for lookups in 'List.RemoveAll'</value>
+  </data>
   <data name="MiKo_6001_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
@@ -4548,6 +4624,18 @@ Instead the equality operator should be used to compare value types.</value>
   <data name="MiKo_6017_Title" xml:space="preserve">
     <value>switch statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_6018_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6018_Description" xml:space="preserve">
+    <value>To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6018_MessageFormat" xml:space="preserve">
+    <value>Surround 'break' with a blank line</value>
+  </data>
+  <data name="MiKo_6018_Title" xml:space="preserve">
+    <value>break statements should be surrounded by blank lines</value>
+  </data>
   <data name="MiKo_6019_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>
@@ -4564,13 +4652,13 @@ Instead the equality operator should be used to compare value types.</value>
     <value>Surround with blank lines</value>
   </data>
   <data name="MiKo_6020_Description" xml:space="preserve">
-    <value>To separate break statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+    <value>To separate throw statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
   </data>
   <data name="MiKo_6020_MessageFormat" xml:space="preserve">
-    <value>Surround 'break' with a blank line</value>
+    <value>Surround 'throw' with a blank line</value>
   </data>
   <data name="MiKo_6020_Title" xml:space="preserve">
-    <value>break statements should be surrounded by blank lines</value>
+    <value>throw statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6021_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
@@ -4733,7 +4821,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Indent dots</value>
   </data>
   <data name="MiKo_6040_Description" xml:space="preserve">
-    <value>The code is easier to read if consequtive invocations that span multiple lines are aligned by their dots.</value>
+    <value>The code is easier to read if consecutive invocations that span multiple lines are aligned by their dots.</value>
   </data>
   <data name="MiKo_6040_MessageFormat" xml:space="preserve">
     <value>Indent dots</value>
@@ -4837,5 +4925,29 @@ Hence, the open brace of the expression should be positioned directly below the 
   </data>
   <data name="MiKo_6048_Title" xml:space="preserve">
     <value>Logical conditions should be placed on a single line</value>
+  </data>
+  <data name="MiKo_6049_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6049_Description" xml:space="preserve">
+    <value>To separate event (un-)registrations visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6049_MessageFormat" xml:space="preserve">
+    <value>Surround event (un-)registration with a blank line</value>
+  </data>
+  <data name="MiKo_6049_Title" xml:space="preserve">
+    <value>Event (un-)registrations should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6050_CodeFixTitle" xml:space="preserve">
+    <value>Place argument outdented below method call</value>
+  </data>
+  <data name="MiKo_6050_Description" xml:space="preserve">
+    <value>To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call.</value>
+  </data>
+  <data name="MiKo_6050_MessageFormat" xml:space="preserve">
+    <value>Place argument '{0}' outdented below method call</value>
+  </data>
+  <data name="MiKo_6050_Title" xml:space="preserve">
+    <value>Multi-line arguments are positioned outdented at end of method call</value>
   </data>
 </root>

@@ -37,8 +37,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var names = new List<string>();
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < directlyImplementedInterfaces.Length; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var length = directlyImplementedInterfaces.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var implementedInterface = directlyImplementedInterfaces[index];
                 var name = implementedInterface.Name

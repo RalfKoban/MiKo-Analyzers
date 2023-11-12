@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -91,6 +92,13 @@ public class TestMe
 
         protected override string GetDiagnosticId() => MiKo_2306_CommentEndsWithPeriodAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2306_CommentEndsWithPeriodAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest()
+        {
+            MiKo_2306_CommentEndsWithPeriodAnalyzer.EnabledPerDefault = true;
+
+            Analyzer.Reset();
+
+            return new MiKo_2306_CommentEndsWithPeriodAnalyzer();
+        }
     }
 }

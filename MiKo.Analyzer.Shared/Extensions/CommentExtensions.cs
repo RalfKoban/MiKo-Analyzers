@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 
+// ncrunch: collect values off
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {

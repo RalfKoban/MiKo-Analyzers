@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -151,8 +152,8 @@ public class TestMe
         [TestCase("Something_should_returns_Anything", "Something_returns_Anything")]
         [TestCase("Something_should_throw_Anything", "Something_throws_Anything")]
         public void Code_gets_fixed_for_method_(string method, string wanted) => VerifyCSharpFix(
-                                                                                                 "using System; class TestMe { void " + method + "() { } }",
-                                                                                                 "using System; class TestMe { void " + wanted + "() { } }");
+                                                                                             "using System; class TestMe { void " + method + "() { } }",
+                                                                                             "using System; class TestMe { void " + wanted + "() { } }");
 
         [TestCase("SomethingShouldFail", "SomethingFails")]
         [TestCase("SomethingShouldHaveAnything", "SomethingHaveAnything")]
@@ -182,8 +183,8 @@ public class TestMe
         [TestCase("Something_should_return_Anything", "Something_returns_Anything")]
         [TestCase("Something_should_throw_Anything", "Something_throws_Anything")]
         public void Code_gets_fixed_for_local_function_(string method, string wanted) => VerifyCSharpFix(
-                                                                                                         "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
-                                                                                                         "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
+                                                                                                     "using System; class TestMe { void DoSomething() { void " + method + "() { } } }",
+                                                                                                     "using System; class TestMe { void DoSomething() { void " + wanted + "() { } } }");
 
         protected override string GetDiagnosticId() => MiKo_1049_RequirementTermAnalyzer.Id;
 

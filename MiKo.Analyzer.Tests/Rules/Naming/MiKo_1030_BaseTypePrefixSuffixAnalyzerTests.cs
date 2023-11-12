@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -50,8 +51,8 @@ public " + type + " " + name + @"
         [TestCase("interface", "IAbstractSomethingBase", "ISomething")]
         [TestCase("class", "AbstractSomethingBase", "Something")]
         public void Code_gets_fixed_(string type, string name, string expectedName) => VerifyCSharpFix(
-                                                                                                       "public " + type + " " + name + " {  }",
-                                                                                                       "public " + type + " " + expectedName + " {  }");
+                                                                                                   "public " + type + " " + name + " {  }",
+                                                                                                   "public " + type + " " + expectedName + " {  }");
 
         protected override string GetDiagnosticId() => MiKo_1030_BaseTypePrefixSuffixAnalyzer.Id;
 

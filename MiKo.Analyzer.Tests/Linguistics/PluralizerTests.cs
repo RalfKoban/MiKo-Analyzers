@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     [TestFixture]

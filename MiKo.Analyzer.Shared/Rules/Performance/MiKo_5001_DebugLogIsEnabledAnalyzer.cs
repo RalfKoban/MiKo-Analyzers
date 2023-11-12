@@ -61,6 +61,12 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return null;
                     }
 
+                    if (methodCall.Ancestors<LambdaExpressionSyntax>().Any(_ => _.IsMoqCall()))
+                    {
+                        // skip Moq calls
+                        return null;
+                    }
+
                     // only ILog methods shall be reported
                     var type = methodCall.GetTypeSymbol(semanticModel);
 

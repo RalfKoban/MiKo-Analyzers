@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -67,6 +68,13 @@ public class TestMe
 
         protected override string GetDiagnosticId() => MiKo_1021_MethodNameLengthAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1021_MethodNameLengthAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest()
+        {
+            NamingLengthAnalyzer.EnabledPerDefault = true;
+
+            Analyzer.Reset();
+
+            return new MiKo_1021_MethodNameLengthAnalyzer();
+        }
     }
 }

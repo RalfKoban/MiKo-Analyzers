@@ -74,6 +74,22 @@ namespace MiKoSolutions.Analyzers
             internal const string Fatal = nameof(Fatal);
         }
 
+        internal static class Moq
+        {
+            internal const string Mock = nameof(Mock);
+            internal const string Of = nameof(Of);
+            internal const string Setup = nameof(Setup);
+            internal const string SetupGet = nameof(SetupGet);
+            internal const string SetupSet = nameof(SetupSet);
+            internal const string SetupSequence = nameof(SetupSequence);
+            internal const string VerifyGet = nameof(VerifyGet);
+            internal const string VerifySet = nameof(VerifySet);
+            internal const string VerifyAll = nameof(VerifyAll);
+            internal const string Verify = nameof(Verify);
+            internal const string Verifiable = nameof(Verifiable);
+            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+        }
+
         internal static class MaxNamingLengths
         {
             public const int Types = 40;

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using MiKoSolutions.Analyzers;
+using MiKoSolutions.Analyzers.Linguistics;
 
 // ReSharper disable once CheckNamespace
 namespace System
@@ -14,6 +15,45 @@ namespace System
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
+        public static string AdjustFirstWord(this string value, FirstWordHandling handling)
+        {
+            bool HasFlag(FirstWordHandling flag) => (handling & flag) == flag;
+
+            if (value.StartsWith('<'))
+            {
+                return value;
+            }
+
+            var word = value.FirstWord();
+
+            if (HasFlag(FirstWordHandling.MakeLowerCase))
+            {
+                word = word.ToLowerCaseAt(0);
+            }
+
+            if (HasFlag(FirstWordHandling.MakeUpperCase))
+            {
+                word = word.ToUpperCaseAt(0);
+            }
+
+            // build continuation here because the word length may change based on the infinite term
+            var continuation = value.AsSpan().TrimStart().Slice(word.Length).ToString();
+
+            if (HasFlag(FirstWordHandling.MakeInfinite))
+            {
+                word = Verbalizer.MakeInfiniteVerb(word);
+            }
+
+            var text = word + continuation;
+
+            if (HasFlag(FirstWordHandling.KeepStartingSpace))
+            {
+                return " " + text;
+            }
+
+            return text;
+        }
+
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
@@ -21,14 +61,17 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            if (finding.Length > value.Length)
+            var valueLength = value.Length;
+            var findingLength = finding.Length;
+
+            if (findingLength > valueLength)
             {
                 return Array.Empty<int>();
             }
 
             var indices = new List<int>();
 
-            for (var index = 0; ; index += finding.Length)
+            for (var index = 0; ; index += findingLength)
             {
                 index = value.IndexOf(finding, index, comparison);
 
@@ -90,6 +133,8 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
 
+//// ncrunch: collect values off
+
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
             var builder = new StringBuilder();
@@ -124,7 +169,10 @@ namespace System
 
         public static bool Contains(this string value, string finding, StringComparison comparison)
         {
-            if (finding.Length > value.Length)
+            var valueLength = value.Length;
+            var findingLength = finding.Length;
+
+            if (findingLength > valueLength)
             {
                 switch (comparison)
                 {
@@ -276,6 +324,8 @@ namespace System
 
             return false;
         }
+
+//// ncrunch: collect values default
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
@@ -811,7 +861,7 @@ namespace System
 
             try
             {
-                return Regex.IsMatch(text, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
+                return Regex.IsMatch(text, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
             }
             catch (RegexMatchTimeoutException)
             {
@@ -849,6 +899,18 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNumber(this char value) => char.IsNumber(value);
+
+        public static bool IsPascalCasing(this string value)
+        {
+            try
+            {
+                return Regex.IsMatch(value, "[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSentenceEnding(this char value)

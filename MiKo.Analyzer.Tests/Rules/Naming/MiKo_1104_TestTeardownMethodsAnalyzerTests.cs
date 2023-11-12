@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -86,8 +87,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed_([ValueSource(nameof(TestTearDowns))] string test) => VerifyCSharpFix(
-                                                                 "using System; class TestMe { [" + test + "] public void Teardown()  { } }",
-                                                                 "using System; class TestMe { [" + test + "] public void CleanupTest()  { } }");
+                                                                                                      "using System; class TestMe { [" + test + "] public void Teardown()  { } }",
+                                                                                                      "using System; class TestMe { [" + test + "] public void CleanupTest()  { } }");
 
         protected override string GetDiagnosticId() => MiKo_1104_TestTeardownMethodsAnalyzer.Id;
 

@@ -3,13 +3,16 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [TestFixture]
+    [TestFixture, RequiresCapability("SSD")]
     public sealed partial class MiKo_1063_AbbreviationsInNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BadPrefixes =
@@ -161,7 +164,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "adoptsWhatever",
                                                             "adoptWhatever",
                                                             "allowedFeatures",
-                                                            "AsyncGoOnline",
+                                                            "asyncGoOnline",
                                                             "attempt",
                                                             "attempts",
                                                             "corrupt",
@@ -183,17 +186,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "httpResponse",
                                                             "identifiable",
                                                             "identification",
-                                                            "Identification",
                                                             "identifier",
-                                                            "Identifier",
                                                             "identities",
-                                                            "Identities",
                                                             "identity",
-                                                            "Identity",
                                                             "isKept",
                                                             "kept",
                                                             "measures",
                                                             "mixtures",
+                                                            "next",
                                                             "number",
                                                             "prompt",
                                                             "requestTime",
@@ -201,6 +201,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "script",
                                                             "scripts",
                                                             "signCertificate",
+                                                            "text",
                                                             "tires",
                                                         };
 

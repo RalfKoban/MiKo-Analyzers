@@ -17,7 +17,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
+        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).First();
+
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
+
+        internal static int GetPositionWithinStartLine(this SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
 
         internal static LinePosition GetStartPosition(this SyntaxToken value) => value.GetLocation().GetStartPosition();
 
@@ -90,8 +94,6 @@ namespace MiKoSolutions.Analyzers
 
             var results = new List<SyntaxToken>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
@@ -139,7 +141,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
         {
-            var currentSpaces = value.GetStartPosition().Character;
+            var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }

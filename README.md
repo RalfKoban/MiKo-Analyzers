@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 401 rules that are currently provided by the analyzer.
+The following tables list all the 411 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -222,7 +222,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_2077|&lt;summary&gt; documentation should not contain &lt;code&gt;|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
-|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|
+|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|&#x2713;|
 |MiKo_2090|Documentation for equality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase|&#x2713;|&#x2713;|
@@ -255,6 +255,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_2225|Code marked with &lt;c&gt; tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Documentation should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
+|MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -353,6 +354,8 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
 |MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
+|MiKo_3097|Do not cast to type and return object|&#x2713;|\-|
+|MiKo_3098|Justifications of suppressed messages shall explain|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -371,6 +374,9 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3115|Test methods should contain code|&#x2713;|\-|
 |MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
+|MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
+|MiKo_3201|If statements can be inverted in short methods|&#x2713;||&#x2713;|
+|MiKo_3202|Use positive conditions when returning in all paths|&#x2713;||&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -400,6 +406,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
 |MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
+|MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|
@@ -421,8 +428,9 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_6015|do/while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6016|using statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6017|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6018|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6019|continue statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_6020|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6020|throw statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6021|ArgumentNullException.ThrowIfNull statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6022|ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6023|ObjectDisposedException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|
@@ -445,3 +453,5 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
 |MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|&#x2713;|
+|MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|

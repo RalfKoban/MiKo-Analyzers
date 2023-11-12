@@ -22,6 +22,7 @@ using NUnit.Framework;
 
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
+//// ncrunch: collect values off
 namespace TestHelper
 {
     /// <summary>

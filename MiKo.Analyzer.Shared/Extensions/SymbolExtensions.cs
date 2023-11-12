@@ -20,16 +20,16 @@ namespace MiKoSolutions.Analyzers
     internal static class SymbolExtensions
     {
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormat = new SymbolDisplayFormat(
-                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+                                                                                                      SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                      SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                      SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                      miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormatWithoutAlias = new SymbolDisplayFormat(
-                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
+                                                                                                                  SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                                  SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                                  SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                                  miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
         private static readonly string[] GeneratedCSharpFileExtensions =
                                                                          {
@@ -38,13 +38,13 @@ namespace MiKoSolutions.Analyzers
                                                                              ".Designer.cs",
                                                                          };
 
-        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
-                                                                                 {
-                                                                                     SyntaxKind.MethodDeclaration,
-                                                                                     SyntaxKind.Block,
-                                                                                     SyntaxKind.ConstructorDeclaration,
-                                                                                     SyntaxKind.LocalFunctionStatement,
-                                                                                 };
+        private static readonly HashSet<SyntaxKind> LocalFunctionContainerSyntaxKinds = new HashSet<SyntaxKind>
+                                                                                            {
+                                                                                                SyntaxKind.MethodDeclaration,
+                                                                                                SyntaxKind.Block,
+                                                                                                SyntaxKind.ConstructorDeclaration,
+                                                                                                SyntaxKind.LocalFunctionStatement,
+                                                                                            };
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 

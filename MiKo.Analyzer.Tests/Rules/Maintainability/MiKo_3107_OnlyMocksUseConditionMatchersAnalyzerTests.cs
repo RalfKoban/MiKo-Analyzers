@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -166,62 +167,6 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_non_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
-using System;
-
-using Moq;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public TestMe(string text) { }
-
-        public void DoSomething(string text) { }
-    }
-
-    public class TestMeTests
-    {
-        private TestMe ObjectUnderTest { get; set; }
-
-        public void PrepareTest()
-        {
-            ObjectUnderTest = new TestMe(string.Empty);
-
-            ObjectUnderTest.DoSomething(It." + method + @"<string>());
-        }
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_problem_on_object_creation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
-using System;
-
-using Moq;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public TestMe(string text) { }
-
-        public void DoSomething(string text) { }
-    }
-
-    public class TestMeTests
-    {
-        private TestMe ObjectUnderTest { get; set; }
-
-        public void PrepareTest()
-        {
-            ObjectUnderTest = new TestMe(It." + method + @"<string>());
-        }
-    }
-}
-");
-
-        [Test]
         public void No_issue_is_reported_for_method_body_with_correct_object_creation() => No_issue_is_reported_for(@"
 using System;
 
@@ -245,35 +190,6 @@ namespace Bla
         public void PrepareTest() => ObjectUnderTest = new TestMe
                                                            {
                                                                Value = 42,
-                                                           };
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_method_body_with_wrong_object_creation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
-using System;
-
-using Moq;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public TestMe() { }
-
-        public void DoSomething(string text) { }
-
-        public int Value { get; set; }
-    }
-
-    public class TestMeTests
-    {
-        private TestMe ObjectUnderTest { get; set; }
-
-        public void PrepareTest() => ObjectUnderTest = new TestMe
-                                                           {
-                                                               Value = It." + method + @"<int>(),
                                                            };
     }
 }
@@ -333,6 +249,153 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_property_with_correct_object_initialization_inside_array_initialization() => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe[] ObjectUnderTests { get; } = new[] { new TestMe { Value = 42 } };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_non_mock_method_invocation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe(string text) { }
+
+        public void DoSomething(string text) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe(string.Empty);
+
+            ObjectUnderTest.DoSomething(It." + method + @"<string>());
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_problem_on_object_creation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe(string text) { }
+
+        public void DoSomething(string text) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new TestMe(It." + method + @"<string>());
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_body_with_wrong_object_creation_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public TestMe() { }
+
+        public void DoSomething(string text) { }
+
+        public int Value { get; set; }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest { get; set; }
+
+        public void PrepareTest() => ObjectUnderTest = new TestMe
+                                                           {
+                                                               Value = It." + method + @"<int>(),
+                                                           };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_case_source_data_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMeTests
+    {
+        [TestCaseSource(nameof(data)]
+        public void TestSomething(object data) => Assert.That(data, Is.Null);
+
+        private static readonly object[] Data = new[] { It." + method + @"<int>() };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_test_case_data_([ValueSource(nameof(MethodNames))] string method) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMeTests
+    {
+        [TestCaseSource(nameof(data)]
+        public void TestSomething(object data) => Assert.That(data, Is.Null);
+
+        private static readonly TestCaseData[] Data = { new TestCaseData(It." + method + @"<int>()) };
+    }
+}
+");
+
         [TestCase("It.IsAny<bool>()", "false")]
         [TestCase("It.IsAny<byte>()", "0")]
         [TestCase("It.IsAny<char>()", @"'\0'")]
@@ -369,6 +432,58 @@ namespace Bla
 
             ObjectUnderTest.DoSomething(###);
         }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("It.IsAny<bool>()", "false")]
+        [TestCase("It.IsAny<int>()", "0")]
+        [TestCase("It.IsAny<string>()", "null")]
+        public void Code_gets_fixed_for_test_case_source_data_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMeTests
+    {
+        [TestCaseSource(nameof(data)]
+        public void TestSomething(object data) => Assert.That(data, Is.Null);
+
+        private static readonly object[] Data = new object[] { ### };
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCode), Template.Replace("###", fixedCode));
+        }
+
+        [TestCase("It.IsAny<bool>()", "false")]
+        [TestCase("It.IsAny<int>()", "0")]
+        [TestCase("It.IsAny<string>()", "null")]
+        public void Code_gets_fixed_for_test_case_data_(string originalCode, string fixedCode)
+        {
+            const string Template = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    [TestFixture]
+    public class TestMeTests
+    {
+        [TestCaseSource(nameof(data)]
+        public void TestSomething(object data) => Assert.That(data, Is.Null);
+
+        private static readonly TestCaseData[] Data = { new TestCaseData(###) };
     }
 }
 ";
