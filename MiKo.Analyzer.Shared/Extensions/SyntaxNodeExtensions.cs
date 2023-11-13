@@ -2252,12 +2252,12 @@ namespace MiKoSolutions.Analyzers
             }
 
             return node.ReplaceSyntax(
-                                      descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
-                                      (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                      descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
-                                      (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                      Enumerable.Empty<SyntaxTrivia>(),
-                                      (original, rewritten) => rewritten);
+                                  descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
+                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                  descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
+                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                  Enumerable.Empty<SyntaxTrivia>(),
+                                  (original, rewritten) => rewritten);
         }
 
         internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode

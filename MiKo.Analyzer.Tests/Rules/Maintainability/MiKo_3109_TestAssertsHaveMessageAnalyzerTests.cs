@@ -132,7 +132,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_a_test_method_that_uses_a_parameter_as_assertion_message_() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_uses_a_parameter_as_assertion_message() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla
