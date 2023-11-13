@@ -77,6 +77,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
 
+        protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(Token(kind));
+
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
         {
             var identifierName = SyntaxFactory.IdentifierName(name);
@@ -91,6 +93,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
+
+        protected static SyntaxToken Token(SyntaxKind kind) => SyntaxFactory.Token(kind);
+
+        protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => TokenList((IEnumerable<SyntaxKind>)syntaxKinds);
+
+        protected static SyntaxTokenList TokenList(IEnumerable<SyntaxKind> syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(Token));
 
         protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).Result;
 

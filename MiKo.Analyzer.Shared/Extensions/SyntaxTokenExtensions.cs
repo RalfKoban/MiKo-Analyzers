@@ -86,6 +86,25 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDefaultValue(this SyntaxToken value) => value.IsKind(SyntaxKind.None);
 
+        internal static bool IsAnyKind(this SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
+
+        internal static bool IsAnyKind(this SyntaxToken value, params SyntaxKind[] kinds)
+        {
+            var valueKind = value.Kind();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery  : For performance reasons we use indexing instead of an enumerator
+            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use indexing instead of an enumerator
+            for (var index = 0; index < kinds.Length; index++)
+            {
+                if (kinds[index] == valueKind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static IReadOnlyList<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                               LocalizableResource(id, "Title"),
                                                               LocalizableResource(id, "MessageFormat"),
                                                               category,
-                                                              DiagnosticSeverity.Warning,
+                                                              Severity,
                                                               IsEnabledByDefault,
                                                               LocalizableResource(id, "Description"),
                                                               LocalizableResource(id, "HelpLinkUri")?.ToString()));
@@ -42,6 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules
         protected DiagnosticDescriptor Rule { get; }
 
         protected SymbolKind SymbolKind { get; } = SymbolKind.Alias;
+
+        protected virtual DiagnosticSeverity Severity => DiagnosticSeverity.Warning;
 
         protected virtual bool IsEnabledByDefault => true;
 
