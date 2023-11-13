@@ -604,11 +604,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1110_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1110_TestMethodsSuffixedWithUnderscoreAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1111_CodeFixProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1111_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1111_TestMethodsWithoutParametersNotSuffixedWithUnderscoreAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1112_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1112_TestsShouldNotUseArbitraryIdentifiersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1113_TestMethodsShouldNotBeNamedGivenWhenThenAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1114_TestMethodsShouldNotBeNamedBadOrHappyPathAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1115_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1200_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1200_ExceptionCatchBlockAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1201_CodeFixProvider.cs" />

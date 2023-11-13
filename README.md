@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 411 rules that are currently provided by the analyzer.
+The following tables list all the 412 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -134,10 +134,11 @@ The following tables list all the 411 rules that are currently provided by the a
 |MiKo_1108|Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore|&#x2713;|&#x2713;|
-|MiKo_1111|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
+|MiKo_1111|Test methods without parameters should not be suffixed with underscore|&#x2713;|&#x2713;|
 |MiKo_1112|Do not name test data 'arbitrary'|&#x2713;|&#x2713;|
 |MiKo_1113|Test methods should not be named according BDD style|&#x2713;|\-|
 |MiKo_1114|Test methods should not be named 'HappyPath' or 'BadPath'|&#x2713;|\-|
+|MiKo_1115|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|

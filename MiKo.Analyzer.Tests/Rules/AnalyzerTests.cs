@@ -285,12 +285,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
                                          if (parts.Length <= 1)
                                          {
-                                             Assert.That(codeFixTitle, Is.EqualTo(expectedTitle), "No codefix title found at all");
+                                             Assert.That(codeFixTitle, Is.EqualTo(expectedTitle), $"No codefix title found at all for {resourceKey}");
                                          }
                                          else
                                          {
-                                             Assert.That(codeFixTitle, Is.Not.EqualTo(expectedTitle), "Missing phrase");
-                                             Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]), "Codefix title missing");
+                                             Assert.That(codeFixTitle, Is.Not.EqualTo(expectedTitle), $"Missing phrase for {resourceKey}");
+                                             Assert.That(codeFixTitle, Does.StartWith(parts[0]).And.EndWith(parts[1]), $"Codefix title missing for {resourceKey}");
                                          }
                                      }
                                  });

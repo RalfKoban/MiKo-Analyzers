@@ -1417,20 +1417,19 @@ Example:
     <value>Test methods with parameters should be suffixed with underscore</value>
   </data>
   <data name="MiKo_1111_CodeFixTitle" xml:space="preserve">
-    <value>Fix "Yoda-speak" method name</value>
+    <value>Remove underscore</value>
   </data>
   <data name="MiKo_1111_Description" xml:space="preserve">
-    <value>For maintenance reasons, the names of test methods should be easy to read.
-They should describe the scenario that is tested in a fluent way and not in a 'Yoda' like way.
+    <value>For maintenance reasons, parameterless test methods should be easy to read. Therefore they should not be suffixed with underscores, in contrast to parameterized methods.
 
 Example:
-"Send_EMailAddressValid_SendsMail" is hard to read. Much easier to read udn understand would be "Send_sends_email_to_valid_address".</value>
+   "Do_something_for_value()" is easier to read than "Do_something_for_value_()".</value>
   </data>
   <data name="MiKo_1111_MessageFormat" xml:space="preserve">
-    <value>Do not use "Yoda-speak" for method names</value>
+    <value>Do not suffix name with underscore</value>
   </data>
   <data name="MiKo_1111_Title" xml:space="preserve">
-    <value>Test methods should be named in a fluent way</value>
+    <value>Test methods without parameters should not be suffixed with underscore</value>
   </data>
   <data name="MiKo_1112_CodeFixTitle" xml:space="preserve">
     <value>Remove 'arbitrary' from name</value>
@@ -1463,6 +1462,22 @@ The audience of unit tests, however, are developers. Hence, such tests should no
   </data>
   <data name="MiKo_1114_Title" xml:space="preserve">
     <value>Test methods should not be named 'HappyPath' or 'BadPath'</value>
+  </data>
+  <data name="MiKo_1115_CodeFixTitle" xml:space="preserve">
+    <value>Fix "Yoda-speak" method name</value>
+  </data>
+  <data name="MiKo_1115_Description" xml:space="preserve">
+    <value>For maintenance reasons, the names of test methods should be easy to read.
+They should describe the scenario that is tested in a fluent way and not in a 'Yoda' like way.
+
+Example:
+"Send_EMailAddressValid_SendsMail" is hard to read. Much easier to read udn understand would be "Send_sends_email_to_valid_address".</value>
+  </data>
+  <data name="MiKo_1115_MessageFormat" xml:space="preserve">
+    <value>Do not use "Yoda-speak" for method names</value>
+  </data>
+  <data name="MiKo_1115_Title" xml:space="preserve">
+    <value>Test methods should be named in a fluent way</value>
   </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>

@@ -3820,7 +3820,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fix &quot;Yoda-speak&quot; method name.
+        ///   Looks up a localized string similar to Remove underscore.
         /// </summary>
         public static string MiKo_1111_CodeFixTitle {
             get {
@@ -3829,11 +3829,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to For maintenance reasons, the names of test methods should be easy to read.
-        ///They should describe the scenario that is tested in a fluent way and not in a &apos;Yoda&apos; like way.
+        ///   Looks up a localized string similar to For maintenance reasons, parameterless test methods should be easy to read. Therefore they should not be suffixed with underscores, in contrast to parameterized methods.
         ///
         ///Example:
-        ///&quot;Send_EMailAddressValid_SendsMail&quot; is hard to read. Much easier to read udn understand would be &quot;Send_sends_email_to_valid_address&quot;..
+        ///   &quot;Do_something_for_value()&quot; is easier to read than &quot;Do_something_for_value_()&quot;..
         /// </summary>
         public static string MiKo_1111_Description {
             get {
@@ -3842,7 +3841,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &quot;Yoda-speak&quot; for method names.
+        ///   Looks up a localized string similar to Do not suffix name with underscore.
         /// </summary>
         public static string MiKo_1111_MessageFormat {
             get {
@@ -3851,7 +3850,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test methods should be named in a fluent way.
+        ///   Looks up a localized string similar to Test methods without parameters should not be suffixed with underscore.
         /// </summary>
         public static string MiKo_1111_Title {
             get {
@@ -3948,6 +3947,46 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_1114_Title {
             get {
                 return ResourceManager.GetString("MiKo_1114_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix &quot;Yoda-speak&quot; method name.
+        /// </summary>
+        public static string MiKo_1115_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1115_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For maintenance reasons, the names of test methods should be easy to read.
+        ///They should describe the scenario that is tested in a fluent way and not in a &apos;Yoda&apos; like way.
+        ///
+        ///Example:
+        ///&quot;Send_EMailAddressValid_SendsMail&quot; is hard to read. Much easier to read udn understand would be &quot;Send_sends_email_to_valid_address&quot;..
+        /// </summary>
+        public static string MiKo_1115_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1115_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use &quot;Yoda-speak&quot; for method names.
+        /// </summary>
+        public static string MiKo_1115_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1115_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named in a fluent way.
+        /// </summary>
+        public static string MiKo_1115_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1115_Title", resourceCulture);
             }
         }
         
