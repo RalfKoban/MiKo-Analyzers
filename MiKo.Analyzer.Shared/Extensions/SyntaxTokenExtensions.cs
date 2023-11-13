@@ -78,6 +78,10 @@ namespace MiKoSolutions.Analyzers
             return symbol;
         }
 
+        internal static bool HasComment(this SyntaxToken value) => value.HasLeadingComment() || value.HasTrailingComment();
+
+        internal static bool HasLeadingComment(this SyntaxToken value) => value.LeadingTrivia.Any(_ => _.IsComment());
+
         internal static bool HasTrailingComment(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsComment());
 
         internal static bool IsDefaultValue(this SyntaxToken value) => value.IsKind(SyntaxKind.None);

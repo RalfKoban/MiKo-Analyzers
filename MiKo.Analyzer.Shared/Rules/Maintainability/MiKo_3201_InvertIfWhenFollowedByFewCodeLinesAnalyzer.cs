@@ -71,6 +71,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return;
                     }
 
+                    if (node.FirstDescendant<ReturnStatementSyntax>().HasComment())
+                    {
+                        // the developer documented a reason, in that case we keep the if statement
+                        return;
+                    }
+
                     // report only in case we have something to invert
                     var method = node.GetEnclosingMethod(context.SemanticModel);
 

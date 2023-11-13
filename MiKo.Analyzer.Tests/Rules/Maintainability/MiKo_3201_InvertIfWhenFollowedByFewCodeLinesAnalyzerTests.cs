@@ -580,6 +580,47 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_and_comment_above_return_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            // for some reason
+            return;
+        }
+
+        DoSomethingElse(1);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_and_comment_behind_return_and_no_else_block_and_a_single_following_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        if (flag)
+        {
+            return; // for some reason
+        }
+
+        DoSomethingElse(1);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_if_statement_and_no_else_block_and_a_single_following_line() => An_issue_is_reported_for(@"
 public class TestMe
 {
