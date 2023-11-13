@@ -96,9 +96,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static SyntaxToken Token(SyntaxKind kind) => SyntaxFactory.Token(kind);
 
-        protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => TokenList((IEnumerable<SyntaxKind>)syntaxKinds);
+        protected static SyntaxTokenList TokenList(IEnumerable<SyntaxToken> tokens) => SyntaxFactory.TokenList(tokens);
 
-        protected static SyntaxTokenList TokenList(IEnumerable<SyntaxKind> syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(Token));
+        protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => TokenList(syntaxKinds.Select(Token));
 
         protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).Result;
 

@@ -224,6 +224,58 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_string_literal_as_field_with_inline_comment()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    // some comment
+    private string Value = ""test me"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    // some comment
+    private const string Value = ""test me"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_string_literal_as_field_with_XML_comment()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Some comment.</summary>
+    private string Value = ""test me"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Some comment.</summary>
+    private const string Value = ""test me"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_string_literal_as_field_without_accessibility()
         {
             const string OriginalCode = @"
@@ -299,6 +351,38 @@ public class TestMe
 {
     public void DoSomething()
     {
+        const string value = ""test me"";
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_string_literal_as_local_variable_with_var_and_comment()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment
+        var value = ""test me"";
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment
         const string value = ""test me"";
     }
 }
