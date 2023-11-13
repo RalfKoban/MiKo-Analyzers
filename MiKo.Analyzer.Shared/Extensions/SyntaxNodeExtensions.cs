@@ -68,9 +68,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
 
-        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
-
         internal static T FirstAncestor<T>(this SyntaxNode value, ISet<SyntaxKind> kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
+
+        internal static T FirstAncestor<T>(this SyntaxNode value, params SyntaxKind[] kinds) where T : SyntaxNode => value.FirstAncestor<T>(_ => _.IsAnyKind(kinds));
 
         internal static SyntaxNode FirstChild(this SyntaxNode value) => value.ChildNodes().FirstOrDefault();
 
@@ -316,7 +316,7 @@ namespace MiKoSolutions.Analyzers
 
 //// ncrunch: collect values default
 
-        internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
+        internal static SyntaxNode GetEnclosing(this SyntaxNode value, ISet<SyntaxKind> syntaxKinds)
         {
             var node = value;
 
@@ -336,7 +336,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static SyntaxNode GetEnclosing(this SyntaxNode value, ISet<SyntaxKind> syntaxKinds)
+        internal static SyntaxNode GetEnclosing(this SyntaxNode value, params SyntaxKind[] syntaxKinds)
         {
             var node = value;
 
@@ -1113,6 +1113,10 @@ namespace MiKoSolutions.Analyzers
             return null;
         }
 
+        internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
+
+        internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().Any(_ => _.IsComment());
+
         internal static bool HasTrailingComment(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsComment());
 
         internal static bool HasTrailingEndOfLine(this SyntaxNode value) => value != null && value.GetTrailingTrivia().Any(_ => _.IsEndOfLine());
@@ -1134,6 +1138,8 @@ namespace MiKoSolutions.Analyzers
             return value.InsertNodesBefore(nodeInList, new[] { modifiedNode });
         }
 
+        internal static bool IsAnyKind(this SyntaxNode value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
+
         internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds)
         {
             var valueKind = value.Kind();
@@ -1150,8 +1156,6 @@ namespace MiKoSolutions.Analyzers
 
             return false;
         }
-
-        internal static bool IsAnyKind(this SyntaxNode value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
 
         internal static bool IsBoolean(this TypeSyntax value)
         {

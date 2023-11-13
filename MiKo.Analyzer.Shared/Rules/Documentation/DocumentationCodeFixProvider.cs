@@ -39,6 +39,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
+//// ncrunch: collect values off
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
+        {
+            var end = CommentEnd(text, additionalComment.ToArray());
+
+            return Comment(comment, end);
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
+        {
+            return Comment(comment, XmlText(text + additionalComment));
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepStartingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
@@ -46,7 +60,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(result);
         }
 
-//// ncrunch: collect values off
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepStartingSpace) where T : SyntaxNode
         {
             var textMap = CreateReplacementTextMap(terms.Min(_ => _.Length));
@@ -129,19 +142,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return map;
             }
         }
+
 //// ncrunch: collect values default
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
-        {
-            var end = CommentEnd(text, additionalComment.ToArray());
-
-            return Comment(comment, end);
-        }
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
-        {
-            return Comment(comment, XmlText(text + additionalComment));
-        }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
