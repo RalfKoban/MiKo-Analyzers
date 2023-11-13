@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var syntax = parameter.GetSyntax();
 
-                var refKeyword = syntax.Modifiers.First(_ => _.IsKind(SyntaxKind.RefKeyword));
+                var refKeyword = syntax.Modifiers.First(SyntaxKind.RefKeyword);
 
                 yield return Issue(parameter.Name, refKeyword);
             }

@@ -1294,6 +1294,8 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsConst(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ConstKeyword);
+
         internal static bool IsEventRegistration(this StatementSyntax value, SemanticModel semanticModel)
         {
             if (value is ExpressionStatementSyntax e && e.Expression is AssignmentExpressionSyntax assignment)
@@ -1443,23 +1445,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsInvocationOnObjectUnderTest(this InvocationExpressionSyntax value) => value.Expression.IsAccessOnObjectUnderTest();
 
-        internal static bool IsAbstract(this MethodDeclarationSyntax value)
-        {
-            var modifiers = value.Modifiers;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var modifiersCount = modifiers.Count;
-
-            for (var index = 0; index < modifiersCount; index++)
-            {
-                if (modifiers[index].IsKind(SyntaxKind.AbstractKeyword))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        internal static bool IsAbstract(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AbstractKeyword);
 
         internal static bool IsAccessOnObjectUnderTest(this ExpressionSyntax value)
         {
@@ -1478,41 +1464,9 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsAsync(this BasePropertyDeclarationSyntax value)
-        {
-            var modifiers = value.Modifiers;
+        internal static bool IsAsync(this BasePropertyDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
 
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var modifiersCount = modifiers.Count;
-
-            for (var index = 0; index < modifiersCount; index++)
-            {
-                if (modifiers[index].IsKind(SyntaxKind.AsyncKeyword))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        internal static bool IsAsync(this MethodDeclarationSyntax value)
-        {
-            var modifiers = value.Modifiers;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var modifiersCount = modifiers.Count;
-
-            for (var index = 0; index < modifiersCount; index++)
-            {
-                if (modifiers[index].IsKind(SyntaxKind.AsyncKeyword))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        internal static bool IsAsync(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
 
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName) => value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
 
@@ -1534,6 +1488,8 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsParameter(this IdentifierNameSyntax value, SemanticModel semanticModel) => value.EnclosingMethodHasParameter(value.GetName(), semanticModel);
 
         internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
+
+        internal static bool IsReadOnly(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
 
         internal static bool IsXmlTag(this SyntaxNode value, string tagName)
         {
