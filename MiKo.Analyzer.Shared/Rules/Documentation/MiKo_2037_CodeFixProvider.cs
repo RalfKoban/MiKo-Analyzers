@@ -42,14 +42,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // try to find a getter
             var getter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
 
-            if (getter is null || getter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
+            if (getter is null || getter.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
                 return SetOnly;
             }
 
             var setter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
 
-            if (setter is null || setter.Modifiers.Any(_ => _.IsKind(SyntaxKind.PrivateKeyword)))
+            if (setter is null || setter.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
                 return GetOnly;
             }

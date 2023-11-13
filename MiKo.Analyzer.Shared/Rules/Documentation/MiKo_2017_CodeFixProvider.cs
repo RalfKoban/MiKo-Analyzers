@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -35,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var readOnlyMarker = string.Empty;
 
-            if (fieldDeclaration.Modifiers.Any(_ => _.IsKind(SyntaxKind.ReadOnlyKeyword)))
+            if (fieldDeclaration.IsReadOnly())
             {
                 readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
             }
