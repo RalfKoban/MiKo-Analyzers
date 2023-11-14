@@ -1193,18 +1193,19 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsInsideLoop(this SyntaxNode node)
+        internal static bool IsInside(this SyntaxNode node, ISet<SyntaxKind> kinds)
         {
             foreach (var ancestor in node.Ancestors())
             {
-                switch (ancestor.Kind())
-                {
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForEachStatement:
-                        return true;
+                var kind = ancestor.Kind();
 
+                if (kinds.Contains(kind))
+                {
+                    return true;
+                }
+
+                switch (kind)
+                {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.IndexerDeclaration:
                     case SyntaxKind.ConstructorDeclaration:
