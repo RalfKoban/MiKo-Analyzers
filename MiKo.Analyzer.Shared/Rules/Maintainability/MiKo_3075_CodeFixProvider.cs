@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var modifiers = declaration.Modifiers;
             var position = modifiers.IndexOf(SyntaxKind.PartialKeyword);
 
-            var syntaxToken = SyntaxFactory.Token(keyword);
+            var syntaxToken = Token(keyword);
 
             return position > -1
                    ? modifiers.Insert(position, syntaxToken)

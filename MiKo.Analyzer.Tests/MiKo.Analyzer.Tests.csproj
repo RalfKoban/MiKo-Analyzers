@@ -35,13 +35,13 @@
 
   <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
   <ItemGroup Condition="'$(NCrunch)' != '1'">
-    <PackageReference Include="Codecov" Version="1.10.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Codecov" Version="1.10.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="OpenCover" Version="4.7.1221" />
+    <PackageReference Include="OpenCover" Version="4.7.1221" PrivateAssets="all" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
