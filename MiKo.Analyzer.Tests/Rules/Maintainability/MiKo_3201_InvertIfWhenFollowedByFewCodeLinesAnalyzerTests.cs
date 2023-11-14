@@ -373,6 +373,66 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_a_lock_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int[] values)
+    {
+        lock (this)
+        {
+            if (flag)
+            {
+                return;
+            }
+
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+
+        DoSomethingElse(4);
+        DoSomethingElse(5);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_a_switch_returns_and_has_2_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag, int value)
+    {
+        switch (value)
+        {
+            case 1:
+            {
+                if (flag)
+                {
+                    return;
+                }
+
+                DoSomethingElse(2);
+                DoSomethingElse(3);
+            }
+
+            default:
+                break;
+        }
+
+        DoSomethingElse(4);
+        DoSomethingElse(5);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_void_method_with_if_statement_is_followed_by_a_do_loop() => No_issue_is_reported_for(@"
 public class TestMe
 {
