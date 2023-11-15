@@ -223,7 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (lastToken.IsDefaultValue())
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
-                    var token = ending.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken);
+                    var token = ending.AsToken(SyntaxKind.XmlTextLiteralToken);
 
                     return comment.InsertTokensBefore(textTokens.First(), new[] { token });
                 }
@@ -638,7 +638,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
-            var token = text.ToSyntaxToken();
+            var token = text.AsToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
@@ -652,7 +652,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
         {
-            var token = name.ToSyntaxToken();
+            var token = name.AsToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Name, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
@@ -688,7 +688,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 textTokens.RemoveRange(0, removals + 1);
 
                 var replacementText = commentEnd + textToken.ValueText.AsSpan().TrimStart().ToLowerCaseAt(0);
-                var replacement = replacementText.ToSyntaxToken();
+                var replacement = replacementText.AsToken();
                 textTokens.Insert(0, replacement);
 
                 textCommentEnd = XmlText(new SyntaxTokenList(textTokens).WithoutLastXmlNewLine());

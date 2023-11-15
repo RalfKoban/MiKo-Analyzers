@@ -109,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case BinaryExpressionSyntax binary when OperatorInverseMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement):
                 {
-                    return binary.WithOperatorToken(Token(replacement));
+                    return binary.WithOperatorToken(replacement.AsToken());
                 }
 
                 case IsPatternExpressionSyntax pattern:
@@ -158,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {
-            var token = text.SurroundedWithDoubleQuote().ToSyntaxToken();
+            var token = text.SurroundedWithDoubleQuote().AsToken();
 
             return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
         }

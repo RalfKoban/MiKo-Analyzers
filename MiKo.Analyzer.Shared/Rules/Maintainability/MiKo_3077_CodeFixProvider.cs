@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // append a semicolon to the end
                 var initializer = CreateInitializer(document, propertySyntax.Type);
-                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".ToSyntaxToken(SyntaxKind.SemicolonToken));
+                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".AsToken(SyntaxKind.SemicolonToken));
 
                 return root.ReplaceNode(propertySyntax, updatedNode);
             }

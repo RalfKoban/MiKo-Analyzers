@@ -15,6 +15,20 @@ namespace MiKoSolutions.Analyzers
     {
         internal static IEnumerable<T> Ancestors<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
 
+        internal static SyntaxToken AsToken(this SyntaxKind kind) => SyntaxFactory.Token(kind);
+
+        internal static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.IdentifierToken:
+                    return SyntaxFactory.Identifier(source);
+
+                default:
+                    return SyntaxFactory.Token(default, kind, source, source, default);
+            }
+        }
+
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
         internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).First();
@@ -139,18 +153,6 @@ namespace MiKoSolutions.Analyzers
                 {
                     yield return item;
                 }
-            }
-        }
-
-        internal static SyntaxToken ToSyntaxToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
-        {
-            switch (kind)
-            {
-                case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(source);
-
-                default:
-                    return SyntaxFactory.Token(default, kind, source, source, default);
             }
         }
 
