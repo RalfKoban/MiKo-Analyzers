@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return literal.WithToken(literal.Token.WithText(GetFixedText(literal.Token, ending).SurroundedWithDoubleQuote()));
 
                 case InterpolatedStringExpressionSyntax interpolated: // it's no text at the end, so add some
-                    return interpolated.AddContents(SyntaxFactory.InterpolatedStringText(ending.ToSyntaxToken(SyntaxKind.InterpolatedStringTextToken)));
+                    return interpolated.AddContents(SyntaxFactory.InterpolatedStringText(ending.AsToken(SyntaxKind.InterpolatedStringTextToken)));
 
                 case InterpolatedStringTextSyntax text:
                     return text.WithTextToken(text.TextToken.WithText(GetFixedText(text.TextToken, ending)));

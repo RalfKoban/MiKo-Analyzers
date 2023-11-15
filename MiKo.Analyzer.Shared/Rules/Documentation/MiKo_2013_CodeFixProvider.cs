@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment.WithTextTokens(SyntaxFactory.TokenList(textTokens));
         }
 
-        private static SyntaxToken XmlTextToken(string text) => text.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
+        private static SyntaxToken XmlTextToken(string text) => text.AsToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
 
 //// ncrunch: collect values off
         private static IEnumerable<string> CreateEnumStartingPhrases()

@@ -37,18 +37,19 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 case FieldDeclarationSyntax field:
                 {
-                    var modifiers = field.Modifiers
-                                         .Where(_ => _.IsKind(SyntaxKind.StaticKeyword) is false && _.IsKind(SyntaxKind.ReadOnlyKeyword) is false)
-                                         .Append(Token(SyntaxKind.ConstKeyword));
+                    var modifiers = field.Modifiers.Select(_ => _.Kind()).ToList();
+                    modifiers.Remove(SyntaxKind.StaticKeyword);
+                    modifiers.Remove(SyntaxKind.ReadOnlyKeyword);
+                    modifiers.Add(SyntaxKind.ConstKeyword);
 
-                    return field.WithModifiers(TokenList(modifiers));
+                    return field.WithModifiers(modifiers);
                 }
 
                 case LocalDeclarationStatementSyntax declaration:
                 {
                     var variable = declaration.Declaration;
 
-                    return declaration.AddModifiers(Token(SyntaxKind.ConstKeyword).WithLeadingTriviaFrom(variable.Type))
+                    return declaration.AddModifiers(SyntaxKind.ConstKeyword.AsToken()).WithLeadingTriviaFrom(variable.Type)
                                       .WithDeclaration(variable.WithType(PredefinedType(SyntaxKind.StringKeyword)));
                 }
 

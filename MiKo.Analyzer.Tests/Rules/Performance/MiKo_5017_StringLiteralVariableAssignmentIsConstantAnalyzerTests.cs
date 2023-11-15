@@ -300,6 +300,32 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_string_literal_as_field_without_accessibility_with_XML_comment()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Some comment.</summary>
+    string Value = ""test me"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>Some comment.</summary>
+    const string Value = ""test me"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_string_literal_as_local_variable()
         {
             const string OriginalCode = @"
