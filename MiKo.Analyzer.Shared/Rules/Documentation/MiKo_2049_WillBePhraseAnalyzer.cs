@@ -21,6 +21,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string AcceptedPhrase = "willing";
 
+        private const string IsPhrase = "is";
+        private const string ArePhrase = "are";
+        private const string DoPhrase = "do";
+        private const string DoesPhrase = "does";
+
         private const string WillPhrase = "will";
         private const string NeverPhrase = "never";
         private const string WillNeverPhrase = WillPhrase + " " + NeverPhrase;
@@ -45,7 +50,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                  { "will both be", "are both" },
                                                                              };
 
-        private static readonly string[] Phrases = GetWithDelimiters(PhrasesMap.Keys.ToArray());
+        private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.ToArray();
+
+        private static readonly string[] Phrases = GetWithDelimiters(PhrasesMapKeys);
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
@@ -76,6 +83,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         // do not bother with only empty text
                         continue;
+                    }
+
+                    var startingPart = text.AsSpan(0, text.IndexOf(textToReplace, StringComparison.Ordinal));
+                    var lastWord = startingPart.LastWord().ToString();
+
+                    // let's see if we have to deal with 'does' or 'is' but need to have plural
+                    if (Verbalizer.IsPlural(lastWord.AsSpan()))
+                    {
+                        if (textToReplaceWith.StartsWith(IsPhrase, StringComparison.Ordinal))
+                        {
+                            textToReplaceWith = ArePhrase + textToReplaceWith.Substring(2);
+                        }
+                        else if (textToReplaceWith.StartsWith(DoesPhrase, StringComparison.Ordinal))
+                        {
+                            textToReplaceWith = DoPhrase + textToReplaceWith.Substring(4);
+                        }
                     }
 
                     tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
@@ -161,7 +184,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var text = issue.Location.GetText().ToLowerInvariant();
 
-                    if (text.Contains(AcceptedPhrase) is false)
+                    if (text.Contains(AcceptedPhrase) is false && text.ContainsAny(PhrasesMapKeys) is false)
                     {
                         yield return issue;
                     }

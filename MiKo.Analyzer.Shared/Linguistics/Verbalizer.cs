@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
+        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors" };
+
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
@@ -148,10 +150,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AdjectivesOrAdverbs =
                                                                {
+                                                                   "about",
                                                                    "afterwards",
                                                                    "also",
                                                                    "already",
                                                                    "always",
+                                                                   "at",
                                                                    "before",
                                                                    "either",
                                                                    "first",
@@ -160,12 +164,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "just",
                                                                    "later",
                                                                    "longer",
+                                                                   "on",
+                                                                   "off",
+                                                                   "out",
                                                                    "no",
                                                                    "not",
                                                                    "now",
                                                                    "than",
                                                                    "then",
                                                                    "therefore",
+                                                                   "to",
                                                                    "turn",
                                                                };
 
@@ -184,22 +192,38 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value.EqualsAny(AdjectivesOrAdverbs, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsThirdPersonSingularVerb(string value)
+        public static bool IsPlural(ReadOnlySpan<char> value) => value.EndsWith('s') && IsThirdPersonSingularVerb(value) is false;
+
+        public static bool IsThirdPersonSingularVerb(ReadOnlySpan<char> value)
         {
-            var length = value?.Length;
+            var length = value.Length;
+
+            if (length < 2)
+            {
+                return false;
+            }
 
             if (length == 4 && value.Equals("will", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            if (length >= 2)
+            if (value[length - 1] != 's')
             {
-                return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]) is false;
+                return false;
             }
 
-            return false;
+            var previous = value[length - 2];
+
+            if (previous == 'r')
+            {
+                return value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase) is false;
+            }
+
+            return CharsForTwoCharacterEndingsWithS.Contains(previous) is false;
         }
+
+        public static bool IsThirdPersonSingularVerb(string value) => value != null && IsThirdPersonSingularVerb(value.AsSpan());
 
         public static bool IsTwoCharacterEndingsWithS(string value)
         {
