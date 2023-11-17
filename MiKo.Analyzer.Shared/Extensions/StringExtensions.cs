@@ -558,6 +558,10 @@ namespace System
 
         public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
 
+        public static string ThirdWord(this string text) => ThirdWord(text.AsSpan()).ToString();
+
+        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
+
         public static string LastWord(this string value)
         {
             if (value is null)
@@ -1014,10 +1018,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
-
-        public static string ThirdWord(this string text) => ThirdWord(text.AsSpan()).ToString();
-
-        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToLowerCase(this string value) => value?.ToLower(CultureInfo.InvariantCulture);

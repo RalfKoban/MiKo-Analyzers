@@ -38,9 +38,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
-            var entries = CreateCommandReplacementMapEntries().OrderBy(_ => _.Key[0]).ToList(); // sort by first character
+            var entries = CreateCommandReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
 
-            var result = new Dictionary<string, string>(entries.Count);
+            var result = new Dictionary<string, string>(entries.Length);
 
             foreach (var entry in entries)
             {
