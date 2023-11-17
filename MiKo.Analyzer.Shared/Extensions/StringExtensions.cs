@@ -573,8 +573,8 @@ namespace System
             var word = LastWord(span);
 
             return word != span
-                       ? word.ToString()
-                       : value;
+                   ? word.ToString()
+                   : value;
         }
 
         public static ReadOnlySpan<char> LastWord(this ReadOnlySpan<char> value)
