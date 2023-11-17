@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             // same sub string, so investigate into length
             var lengthDifference = lengthX - lengthY;
+
             if (lengthDifference < 0)
             {
                 // y longer, so prefer y
