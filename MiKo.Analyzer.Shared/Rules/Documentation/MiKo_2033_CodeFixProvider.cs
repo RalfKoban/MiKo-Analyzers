@@ -7,6 +7,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2033_CodeFixProvider)), Shared]
@@ -31,10 +33,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                                     .ThenBy(_ => _)
-                                                                                                                     .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                                     .ToArray();
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                     .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 

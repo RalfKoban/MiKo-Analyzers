@@ -132,9 +132,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Wrap",
                                                                    "Write",
                                                                    "Zoom",
-                                                               }.OrderBy(_ => _.Length)
-                                                                .ThenBy(_ => _)
-                                                                .ToArray();
+                                                               }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly string[] MiddlePhrases = new[]
                                                              {
@@ -142,9 +140,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "InformsAbout",
                                                                  "InformedAbout",
                                                                  "BelongsTo",
-                                                             }.OrderBy(_ => _.Length)
-                                                              .ThenBy(_ => _)
-                                                              .ToArray();
+                                                             }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
@@ -177,19 +173,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "turn",
                                                                };
 
-        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value)
+        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (value.EndsWith("ly", StringComparison.OrdinalIgnoreCase))
+            if (value.EndsWith("ly", comparison))
             {
-                if (value.EndsWith("ply", StringComparison.OrdinalIgnoreCase))
+                if (value.EndsWith("ply", comparison))
                 {
-                    return value.Equals("simply", StringComparison.OrdinalIgnoreCase);
+                    return value.Equals("simply", comparison);
                 }
 
                 return true;
             }
 
-            return value.EqualsAny(AdjectivesOrAdverbs, StringComparison.OrdinalIgnoreCase);
+            return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
         public static bool IsPlural(ReadOnlySpan<char> value) => value.EndsWith('s') && IsThirdPersonSingularVerb(value) is false;
@@ -342,12 +338,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     const char Apostrophe = '\'';
                     const char DoubleQuote = '\"';
 
-                    if (word.First() == Apostrophe && word.Last() == Apostrophe)
+                    var firstChar = word.First();
+                    var lastChar = word.Last();
+
+                    if (firstChar == Apostrophe && lastChar == Apostrophe)
                     {
                         return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
                     }
 
-                    if (word.First() == DoubleQuote && word.Last() == DoubleQuote)
+                    if (firstChar == DoubleQuote && lastChar == DoubleQuote)
                     {
                         return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
                     }
@@ -520,10 +519,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     var remaining = value.Slice(phrase.Length);
 
-                    if (remaining.Length == 0 || remaining[0].IsUpperCase())
-                    {
-                        return true;
-                    }
+                    return remaining.Length == 0 || remaining[0].IsUpperCase();
                 }
             }
 
