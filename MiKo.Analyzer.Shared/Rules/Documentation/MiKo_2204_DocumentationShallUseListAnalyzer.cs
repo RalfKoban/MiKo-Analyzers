@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -19,9 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               .Concat(new[] { " -", "--", "---", "*" }.SelectMany(_ => Constants.Comments.Delimiters, (_, delimiter) => string.Concat(delimiter, _, " ")))
                                                               .Concat(new[] { "1", "a", "2", "b", "3", "c" }.SelectMany(_ => Delimiters, (_, delimiter) => string.Concat(" ", _, delimiter, " ")))
                                                               .Concat(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
-                                                              .OrderByDescending(_ => _.Length).ThenBy(_ => _)
-                                                              .Distinct()
-                                                              .ToArray();
+                                                              .ToHashSet()
+                                                              .ToArray(AscendingStringComparer.Default);
 
         public MiKo_2204_DocumentationShallUseListAnalyzer() : base(Id)
         {

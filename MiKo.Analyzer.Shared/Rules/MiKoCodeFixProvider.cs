@@ -77,6 +77,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
 
+        protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(kind.AsToken());
+
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
         {
             var identifierName = SyntaxFactory.IdentifierName(name);

@@ -12587,6 +12587,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert to constant.
+        /// </summary>
+        public static string MiKo_5017_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5017_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To avoid unnecessary memory consumptions, string literals that are used as field or variable values should be constant..
+        /// </summary>
+        public static string MiKo_5017_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5017_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert to constant.
+        /// </summary>
+        public static string MiKo_5017_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5017_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fields or variables assigned with string literals should be constant.
+        /// </summary>
+        public static string MiKo_5017_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5017_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         public static string MiKo_6001_CodeFixTitle {

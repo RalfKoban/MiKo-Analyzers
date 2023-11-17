@@ -1193,18 +1193,19 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsInsideLoop(this SyntaxNode node)
+        internal static bool IsInside(this SyntaxNode node, ISet<SyntaxKind> kinds)
         {
             foreach (var ancestor in node.Ancestors())
             {
-                switch (ancestor.Kind())
-                {
-                    case SyntaxKind.DoStatement:
-                    case SyntaxKind.WhileStatement:
-                    case SyntaxKind.ForStatement:
-                    case SyntaxKind.ForEachStatement:
-                        return true;
+                var kind = ancestor.Kind();
 
+                if (kinds.Contains(kind))
+                {
+                    return true;
+                }
+
+                switch (kind)
+                {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.IndexerDeclaration:
                     case SyntaxKind.ConstructorDeclaration:
@@ -2265,6 +2266,57 @@ namespace MiKoSolutions.Analyzers
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
         internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia().WithLeadingXmlComment());
+
+        internal static SyntaxNode WithModifiers(this FieldDeclarationSyntax value, IEnumerable<SyntaxKind> modifiers)
+        {
+            var oldModifiers = value.Modifiers;
+
+            var newModifiers = SyntaxFactory.TokenList(modifiers.Select(_ => _.AsToken()));
+
+            if (oldModifiers.Count > 0)
+            {
+                // keep comments
+                newModifiers = newModifiers.Replace(newModifiers[0], newModifiers[0].WithTriviaFrom(oldModifiers[0]));
+
+                return value.WithModifiers(newModifiers);
+            }
+
+            var declaration = value.Declaration;
+            var type = declaration.Type;
+
+            // keep comments
+            newModifiers = newModifiers.Replace(newModifiers[0], newModifiers[0].WithLeadingTriviaFrom(type));
+
+            return value.WithModifiers(newModifiers)
+                        .WithDeclaration(declaration.WithType(type.WithLeadingSpace()));
+        }
+
+        internal static SyntaxNode WithModifiers(this FieldDeclarationSyntax value, params SyntaxKind[] modifiers) => value.WithModifiers((IEnumerable<SyntaxKind>)modifiers);
+
+        internal static T WithAdditionalModifier<T>(this T value, SyntaxKind keyword) where T : MemberDeclarationSyntax
+        {
+            var modifiers = value.Modifiers;
+            var position = modifiers.IndexOf(SyntaxKind.PartialKeyword);
+
+            var syntaxToken = keyword.AsToken();
+
+            if (modifiers.Count == 0)
+            {
+                var commentedChild = value.FirstChildToken();
+
+                // remove comment from previous first child
+                value = value.ReplaceToken(commentedChild, commentedChild.WithLeadingSpace());
+
+                // add comment to new first child
+                syntaxToken = syntaxToken.WithLeadingTriviaFrom(commentedChild);
+            }
+
+            var newModifiers = position > -1
+                               ? value.Modifiers.Insert(position, syntaxToken)
+                               : value.Modifiers.Add(syntaxToken);
+
+            return (T)value.WithModifiers(newModifiers);
+        }
 
         internal static T WithLeadingXmlCommentExterior<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentExterior);
 

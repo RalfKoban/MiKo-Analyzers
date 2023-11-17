@@ -122,6 +122,102 @@ namespace Bla
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_field_with_inline_comment()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        // some comment
+        static internal readonly DependencyProperty m_fieldProperty;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        // some comment
+        public static readonly DependencyProperty m_fieldProperty;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_with_XML_comment()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Some comment.</summary>
+        protected readonly static DependencyProperty m_fieldProperty;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Some comment.</summary>
+        public static readonly DependencyProperty m_fieldProperty;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_without_modifiers_with_XML_comment()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Some comment.</summary>
+        DependencyProperty m_fieldProperty;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        /// <summary>Some comment.</summary>
+        public static readonly DependencyProperty m_fieldProperty;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3050_DependencyPropertyPublicStaticReadOnlyFieldAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3050_DependencyPropertyPublicStaticReadOnlyFieldAnalyzer();

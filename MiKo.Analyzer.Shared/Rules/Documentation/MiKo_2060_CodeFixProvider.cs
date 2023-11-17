@@ -8,30 +8,24 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet()
-                                                                                                                   .OrderBy(_ => _.Length)
-                                                                                                                   .ThenBy(_ => _)
-                                                                                                                   .ToArray();
+        private static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet() // avoid duplicates
+                                                                                                                   .ToArray(AscendingStringComparer.Default);
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                                             .ThenBy(_ => _)
-                                                                                                                             .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                                             .ToArray();
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                             .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
-        private static readonly IReadOnlyCollection<string> MethodReplacementMapKeys = CreateMethodReplacementMapKeys().ToHashSet()
-                                                                                                                       .OrderBy(_ => _.Length)
-                                                                                                                       .ThenBy(_ => _)
-                                                                                                                       .ToArray();
+        private static readonly IReadOnlyCollection<string> MethodReplacementMapKeys = CreateMethodReplacementMapKeys().ToHashSet() // avoid duplicates
+                                                                                                                       .ToArray(AscendingStringComparer.Default);
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap = MethodReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                                                 .ThenBy(_ => _)
-                                                                                                                                 .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                                                 .ToArray();
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap = MethodReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                                 .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
         private static readonly Dictionary<string, string> CleanupReplacementMap = new Dictionary<string, string>
                                                                                        {
