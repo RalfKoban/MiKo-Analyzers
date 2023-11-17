@@ -554,6 +554,39 @@ namespace System
             return text;
         }
 
+        public static string SecondWord(this string text) => SecondWord(text.AsSpan()).ToString();
+
+        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
+
+        public static string LastWord(this string value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var span = value.AsSpan();
+            var word = LastWord(span);
+
+            return word != span
+                       ? word.ToString()
+                       : value;
+        }
+
+        public static ReadOnlySpan<char> LastWord(this ReadOnlySpan<char> value)
+        {
+            var text = value.TrimEnd();
+
+            var lastSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters) + 1;
+
+            if (lastSpace <= 0)
+            {
+                return text;
+            }
+
+            return text.Slice(lastSpace);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
 
@@ -893,10 +926,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
-
-        public static string SecondWord(this string text) => SecondWord(text.AsSpan()).ToString();
-
-        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
 
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
