@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
-        internal static bool HasAttribute(this ISymbol value, IEnumerable<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
+        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
 
@@ -1182,7 +1182,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
-        internal static bool IsPartial(this IMethodSymbol value) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(_ => _.IsKind(SyntaxKind.PartialKeyword));
+        internal static bool IsPartial(this IMethodSymbol value) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(SyntaxKind.PartialKeyword);
 
         internal static bool IsPubliclyVisible(this ISymbol symbol)
         {
@@ -1383,6 +1383,6 @@ namespace MiKoSolutions.Analyzers
             return typeName;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
     }
 }

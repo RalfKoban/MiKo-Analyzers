@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var field = SyntaxFactory.FieldDeclaration(
                                                    default,
-                                                   TokenList(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword),
+                                                   SyntaxFactory.TokenList(SyntaxKind.PublicKeyword.AsToken(), SyntaxKind.StaticKeyword.AsToken(), SyntaxKind.ReadOnlyKeyword.AsToken()),
                                                    variableDeclaration);
 
             var originalField = syntax.FirstAncestorOrSelf<FieldDeclarationSyntax>();

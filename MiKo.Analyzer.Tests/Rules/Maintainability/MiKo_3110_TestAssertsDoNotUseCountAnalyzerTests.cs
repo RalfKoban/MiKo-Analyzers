@@ -120,7 +120,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Count_property_in_an_Assert_That_test_method_() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Count_property_in_an_Assert_That_test_method() => An_issue_is_reported_for(@"
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -139,7 +139,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Length_property_in_an_Assert_That_test_method_() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Length_property_in_an_Assert_That_test_method() => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla

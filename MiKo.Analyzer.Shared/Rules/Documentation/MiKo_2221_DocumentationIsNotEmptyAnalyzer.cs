@@ -12,18 +12,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2221";
 
-        private static readonly IEnumerable<string> Tags = new HashSet<string>
-                                                               {
-                                                                   Constants.XmlTag.Overloads,
-                                                                   Constants.XmlTag.Summary,
-                                                                   Constants.XmlTag.Remarks,
-                                                                   Constants.XmlTag.Returns,
-                                                                   Constants.XmlTag.Example,
-                                                                   Constants.XmlTag.Exception,
-                                                                   Constants.XmlTag.Code,
-                                                                   Constants.XmlTag.Note,
-                                                                   Constants.XmlTag.Value,
-                                                               };
+        private static readonly HashSet<string> Tags = new HashSet<string>
+                                                           {
+                                                               Constants.XmlTag.Overloads,
+                                                               Constants.XmlTag.Summary,
+                                                               Constants.XmlTag.Remarks,
+                                                               Constants.XmlTag.Returns,
+                                                               Constants.XmlTag.Example,
+                                                               Constants.XmlTag.Exception,
+                                                               Constants.XmlTag.Code,
+                                                               Constants.XmlTag.Note,
+                                                               Constants.XmlTag.Value,
+                                                           };
 
         public MiKo_2221_DocumentationIsNotEmptyAnalyzer() : base(Id)
         {

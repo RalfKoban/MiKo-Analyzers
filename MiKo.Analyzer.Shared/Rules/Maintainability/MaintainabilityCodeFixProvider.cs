@@ -59,8 +59,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Invocation(member);
         }
 
-        protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(SyntaxFactory.Token(kind));
-
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(PredefinedTypeSyntax type, string methodName)
         {
             var method = SyntaxFactory.IdentifierName(methodName);
@@ -111,7 +109,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case BinaryExpressionSyntax binary when OperatorInverseMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement):
                 {
-                    return binary.WithOperatorToken(SyntaxFactory.Token(replacement));
+                    return binary.WithOperatorToken(replacement.AsToken());
                 }
 
                 case IsPatternExpressionSyntax pattern:
@@ -160,12 +158,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {
-            var token = text.SurroundedWithDoubleQuote().ToSyntaxToken();
+            var token = text.SurroundedWithDoubleQuote().AsToken();
 
             return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression, token);
         }
-
-        protected static SyntaxTokenList TokenList(params SyntaxKind[] syntaxKinds) => SyntaxFactory.TokenList(syntaxKinds.Select(SyntaxFactory.Token));
 
         protected static TypeOfExpressionSyntax TypeOf(ParameterSyntax parameter)
         {

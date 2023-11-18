@@ -125,7 +125,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var list = XmlElement(Constants.XmlTag.List, items);
-            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.ToSyntaxToken());
+            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.AsToken());
 
             return list.AddStartTagAttributes(listType).WithLeadingXmlComment();
         }

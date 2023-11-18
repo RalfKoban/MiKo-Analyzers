@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
+        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors" };
+
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
@@ -130,9 +132,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Wrap",
                                                                    "Write",
                                                                    "Zoom",
-                                                               }.OrderBy(_ => _.Length)
-                                                                .ThenBy(_ => _)
-                                                                .ToArray();
+                                                               }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly string[] MiddlePhrases = new[]
                                                              {
@@ -140,18 +140,18 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "InformsAbout",
                                                                  "InformedAbout",
                                                                  "BelongsTo",
-                                                             }.OrderBy(_ => _.Length)
-                                                              .ThenBy(_ => _)
-                                                              .ToArray();
+                                                             }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
 
         private static readonly string[] AdjectivesOrAdverbs =
                                                                {
+                                                                   "about",
                                                                    "afterwards",
                                                                    "also",
                                                                    "already",
                                                                    "always",
+                                                                   "at",
                                                                    "before",
                                                                    "either",
                                                                    "first",
@@ -160,46 +160,66 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "just",
                                                                    "later",
                                                                    "longer",
+                                                                   "on",
+                                                                   "off",
+                                                                   "out",
                                                                    "no",
                                                                    "not",
                                                                    "now",
                                                                    "than",
                                                                    "then",
                                                                    "therefore",
+                                                                   "to",
                                                                    "turn",
                                                                };
 
-        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value)
+        public static bool IsAdjectiveOrAdverb(ReadOnlySpan<char> value, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (value.EndsWith("ly", StringComparison.OrdinalIgnoreCase))
+            if (value.EndsWith("ly", comparison))
             {
-                if (value.EndsWith("ply", StringComparison.OrdinalIgnoreCase))
+                if (value.EndsWith("ply", comparison))
                 {
-                    return value.Equals("simply", StringComparison.OrdinalIgnoreCase);
+                    return value.Equals("simply", comparison);
                 }
 
                 return true;
             }
 
-            return value.EqualsAny(AdjectivesOrAdverbs, StringComparison.OrdinalIgnoreCase);
+            return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
-        public static bool IsThirdPersonSingularVerb(string value)
+        public static bool IsPlural(ReadOnlySpan<char> value) => value.EndsWith('s') && IsThirdPersonSingularVerb(value) is false;
+
+        public static bool IsThirdPersonSingularVerb(ReadOnlySpan<char> value)
         {
-            var length = value?.Length;
+            var length = value.Length;
+
+            if (length < 2)
+            {
+                return false;
+            }
 
             if (length == 4 && value.Equals("will", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            if (length >= 2)
+            if (value[length - 1] != 's')
             {
-                return value[length.Value - 1] == 's' && CharsForTwoCharacterEndingsWithS.Contains(value[length.Value - 2]) is false;
+                return false;
             }
 
-            return false;
+            var previous = value[length - 2];
+
+            if (previous == 'r')
+            {
+                return value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase) is false;
+            }
+
+            return CharsForTwoCharacterEndingsWithS.Contains(previous) is false;
         }
+
+        public static bool IsThirdPersonSingularVerb(string value) => value != null && IsThirdPersonSingularVerb(value.AsSpan());
 
         public static bool IsTwoCharacterEndingsWithS(string value)
         {
@@ -318,12 +338,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     const char Apostrophe = '\'';
                     const char DoubleQuote = '\"';
 
-                    if (word.First() == Apostrophe && word.Last() == Apostrophe)
+                    var firstChar = word.First();
+                    var lastChar = word.Last();
+
+                    if (firstChar == Apostrophe && lastChar == Apostrophe)
                     {
                         return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
                     }
 
-                    if (word.First() == DoubleQuote && word.Last() == DoubleQuote)
+                    if (firstChar == DoubleQuote && lastChar == DoubleQuote)
                     {
                         return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
                     }
@@ -496,10 +519,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     var remaining = value.Slice(phrase.Length);
 
-                    if (remaining.Length == 0 || remaining[0].IsUpperCase())
-                    {
-                        return true;
-                    }
+                    return remaining.Length == 0 || remaining[0].IsUpperCase();
                 }
             }
 

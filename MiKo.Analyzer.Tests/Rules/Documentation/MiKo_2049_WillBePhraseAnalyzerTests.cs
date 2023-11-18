@@ -177,7 +177,7 @@ public interface ITestMe
         [TestCase("It is something (will leave something)", "It is something (leaves something)")]
         [TestCase("It is something (will exist).", "It is something (exists).")]
         [TestCase("It will not be something.", "It is not something.")]
-        [TestCase("It will not contain something.", "It not contains something.")]
+        [TestCase("It will not contain something.", "It does not contain something.")]
         [TestCase("It will never be something.", "It is never something.")]
         [TestCase("It will never return.", "It never returns.")]
         [TestCase("Will return.", "Returns.")]
@@ -208,13 +208,16 @@ public interface ITestMe
         [TestCase("The objects will both be notified.", "The objects are both notified.")]
         [TestCase("The object will first get notified.", "The object first gets notified.")]
         [TestCase("The object will later get notified.", "The object later gets notified.")]
-        [TestCase("The object will before get notified.", "The object before gets notified.")]
+        [TestCase("The object will later on get notified.", "The object later on gets notified.")]
         [TestCase("The object will likely either get notified.", "The object likely either gets notified.")]
         [TestCase("The object will now get notified.", "The object now gets notified.")]
         [TestCase("The object will afterwards get notified.", "The object afterwards gets notified.")]
         [TestCase("The object will however only be the first.", "The object however only is the first.")]
         [TestCase("The object will either be the first or the second.", "The object either is the first or the second.")]
         [TestCase("The object will simply cause an issue.", "The object simply causes an issue.")]
+        [TestCase("The manager will not create any issues.", "The manager does not create any issues.")]
+        [TestCase("The managers will not create any issues.", "The managers do not create any issues.")]
+        [TestCase("The managers will be successful.", "The managers are successful.")]
         public void Code_gets_fixed_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
