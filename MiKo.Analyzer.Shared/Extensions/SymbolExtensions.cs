@@ -38,13 +38,13 @@ namespace MiKoSolutions.Analyzers
                                                                              ".Designer.cs",
                                                                          };
 
-        private static readonly HashSet<SyntaxKind> LocalFunctionContainerSyntaxKinds = new HashSet<SyntaxKind>
-                                                                                            {
-                                                                                                SyntaxKind.MethodDeclaration,
-                                                                                                SyntaxKind.Block,
-                                                                                                SyntaxKind.ConstructorDeclaration,
-                                                                                                SyntaxKind.LocalFunctionStatement,
-                                                                                            };
+        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
+                                                                                 {
+                                                                                     SyntaxKind.MethodDeclaration,
+                                                                                     SyntaxKind.Block,
+                                                                                     SyntaxKind.ConstructorDeclaration,
+                                                                                     SyntaxKind.LocalFunctionStatement,
+                                                                                 };
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
