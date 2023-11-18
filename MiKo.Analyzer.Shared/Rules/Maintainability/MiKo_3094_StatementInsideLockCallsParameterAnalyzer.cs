@@ -14,7 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3094";
 
-        private static readonly SyntaxKind[] AccessOrInvocations = {
+        private static readonly SyntaxKind[] AccessOrInvocations =
+                                                                   {
                                                                        SyntaxKind.ConditionalAccessExpression,
                                                                        SyntaxKind.InvocationExpression,
                                                                        SyntaxKind.MemberBindingExpression,

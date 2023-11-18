@@ -38,7 +38,8 @@ namespace MiKoSolutions.Analyzers
                                                                              ".Designer.cs",
                                                                          };
 
-        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds = {
+        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
+                                                                                 {
                                                                                      SyntaxKind.MethodDeclaration,
                                                                                      SyntaxKind.Block,
                                                                                      SyntaxKind.ConstructorDeclaration,

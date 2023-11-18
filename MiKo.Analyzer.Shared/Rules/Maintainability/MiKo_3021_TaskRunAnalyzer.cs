@@ -13,7 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3021";
 
-        private static readonly SyntaxKind[] EnclosingInvocationSyntaxKinds = {
+        private static readonly SyntaxKind[] EnclosingInvocationSyntaxKinds =
+                                                                              {
                                                                                   SyntaxKind.AwaitExpression,
                                                                                   SyntaxKind.ReturnStatement,
                                                                                   SyntaxKind.VariableDeclarator,

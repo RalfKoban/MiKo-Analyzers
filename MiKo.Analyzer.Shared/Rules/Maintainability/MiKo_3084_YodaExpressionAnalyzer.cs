@@ -13,7 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3084";
 
-        private static readonly SyntaxKind[] ExpressionValues = {
+        private static readonly SyntaxKind[] ExpressionValues =
+                                                                {
                                                                     SyntaxKind.TrueLiteralExpression,
                                                                     SyntaxKind.FalseLiteralExpression,
                                                                     SyntaxKind.NullLiteralExpression,
@@ -21,7 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                     SyntaxKind.StringLiteralExpression,
                                                                 };
 
-        private static readonly SyntaxKind[] Expressions = {
+        private static readonly SyntaxKind[] Expressions =
+                                                           {
                                                                SyntaxKind.EqualsExpression,
                                                                SyntaxKind.NotEqualsExpression,
                                                                SyntaxKind.LessThanExpression,
