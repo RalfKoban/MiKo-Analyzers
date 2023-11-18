@@ -33,7 +33,7 @@ namespace Bla
     public class TestMe
     {
         public int MyField { get; set; }
-        
+
         private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
 
         public static readonly DependencyProperty m_fieldProperty = m_fieldKey.DependencyProperty;
@@ -52,7 +52,7 @@ namespace Bla
         public int MyField { get; set; }
 
         public int OtherField { get; set; }
-        
+
         private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
 
         public static readonly DependencyProperty m_otherProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
@@ -73,7 +73,7 @@ namespace Bla
         public int MyField { get; set; }
 
         public int OtherField { get; set; }
-        
+
         private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
 
         public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
@@ -91,7 +91,7 @@ namespace Bla
         public int MyField { get; set; }
 
         public int OtherField { get; set; }
-        
+
         private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
         public static readonly DependencyProperty MyFieldProperty = m_fieldKey.DependencyProperty;
         public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
@@ -114,7 +114,7 @@ namespace Bla
         public int MyField { get; set; }
 
         public int OtherField { get; set; }
-        
+
         private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(""MyField"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
 
         public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
@@ -132,9 +132,55 @@ namespace Bla
         public int MyField { get; set; }
 
         public int OtherField { get; set; }
-        
+
         private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(""MyField"", typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
         public static readonly DependencyProperty MyFieldProperty = m_fieldKey.DependencyProperty;
+        public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_DependencyPropertyKey_field_that_has_no_corresponding_DependencyProperty_but_comments()
+        {
+            const string OriginalCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        public int OtherField { get; set; }
+
+        // some comment
+        private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+
+        // some other comment
+        public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int MyField { get; set; }
+
+        public int OtherField { get; set; }
+
+        // some comment
+        private static readonly DependencyPropertyKey m_fieldKey = DependencyProperty.RegisterReadOnly(nameof(MyField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
+        public static readonly DependencyProperty MyFieldProperty = m_fieldKey.DependencyProperty;
+
+        // some other comment
         public static readonly DependencyProperty OtherFieldProperty = DependencyProperty.Register(nameof(OtherField), typeof(int), typeof(TestMe), new PropertyMetadata(default(int)));
     }
 }

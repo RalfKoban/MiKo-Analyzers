@@ -39,6 +39,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
+//// ncrunch: collect values off
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
+        {
+            var end = CommentEnd(text, additionalComment.ToArray());
+
+            return Comment(comment, end);
+        }
+
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
+        {
+            return Comment(comment, XmlText(text + additionalComment));
+        }
+
         protected static XmlElementSyntax Comment(XmlElementSyntax syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepStartingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
@@ -46,7 +60,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(result);
         }
 
-//// ncrunch: collect values off
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepStartingSpace) where T : SyntaxNode
         {
             var textMap = CreateReplacementTextMap(terms.Min(_ => _.Length));
@@ -129,19 +142,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return map;
             }
         }
+
 //// ncrunch: collect values default
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
-        {
-            var end = CommentEnd(text, additionalComment.ToArray());
-
-            return Comment(comment, end);
-        }
-
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, string additionalComment = null)
-        {
-            return Comment(comment, XmlText(text + additionalComment));
-        }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
@@ -221,7 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 if (lastToken.IsDefaultValue())
                 {
                     // seems like we have a <see cref/> or something with a CRLF at the end
-                    var token = ending.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken);
+                    var token = ending.AsToken(SyntaxKind.XmlTextLiteralToken);
 
                     return comment.InsertTokensBefore(textTokens.First(), new[] { token });
                 }
@@ -636,7 +638,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
-            var token = text.ToSyntaxToken();
+            var token = text.AsToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
@@ -650,7 +652,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
         {
-            var token = name.ToSyntaxToken();
+            var token = name.AsToken();
             var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Name, token);
 
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
@@ -686,7 +688,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 textTokens.RemoveRange(0, removals + 1);
 
                 var replacementText = commentEnd + textToken.ValueText.AsSpan().TrimStart().ToLowerCaseAt(0);
-                var replacement = replacementText.ToSyntaxToken();
+                var replacement = replacementText.AsToken();
                 textTokens.Insert(0, replacement);
 
                 textCommentEnd = XmlText(new SyntaxTokenList(textTokens).WithoutLastXmlNewLine());

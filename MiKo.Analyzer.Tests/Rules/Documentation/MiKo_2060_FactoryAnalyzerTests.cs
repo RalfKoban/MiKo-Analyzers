@@ -348,7 +348,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_based_on_()
+        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_based_on()
         {
             const string OriginalCode = @"
 public class TestMeFactory

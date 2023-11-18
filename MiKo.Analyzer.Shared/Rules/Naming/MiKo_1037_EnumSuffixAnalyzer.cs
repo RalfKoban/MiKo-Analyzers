@@ -17,7 +17,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WrongNames = { "Enums", "Enum" }; // order is important because of remove order
 
-        private static readonly string[] FlagsAttributes = { nameof(FlagsAttribute) };
+        private static readonly ISet<string> FlagsAttributes = new HashSet<string>
+                                                                   {
+                                                                       "Flags",
+                                                                       nameof(FlagsAttribute),
+                                                                   };
 
         public MiKo_1037_EnumSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {

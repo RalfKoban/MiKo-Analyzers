@@ -20,9 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var field = (FieldDeclarationSyntax)syntax;
+            if (syntax is FieldDeclarationSyntax field)
+            {
+                return field.WithModifiers(SyntaxKind.PrivateKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword);
+            }
 
-            return field.WithModifiers(TokenList(SyntaxKind.PrivateKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword));
+            return syntax;
         }
     }
 }

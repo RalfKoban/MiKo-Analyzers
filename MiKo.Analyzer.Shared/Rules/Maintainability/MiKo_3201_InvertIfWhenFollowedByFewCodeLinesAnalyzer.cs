@@ -28,6 +28,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                  SyntaxKind.LocalFunctionStatement,
                                                                              };
 
+        private static readonly ISet<SyntaxKind> ForbiddenInsides = new HashSet<SyntaxKind>
+                                                                        {
+                                                                            SyntaxKind.DoStatement,
+                                                                            SyntaxKind.WhileStatement,
+                                                                            SyntaxKind.ForStatement,
+                                                                            SyntaxKind.ForEachStatement,
+                                                                            SyntaxKind.SwitchStatement,
+                                                                            SyntaxKind.LockStatement,
+                                                                        };
+
         public MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -65,9 +75,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         return;
                     }
 
-                    if (node.IsInsideLoop())
+                    if (node.IsInside(ForbiddenInsides))
                     {
-                        // inverting inside a loop would alter behavior
+                        // inverting would alter behavior
+                        return;
+                    }
+
+                    if (node.FirstDescendant<ReturnStatementSyntax>().HasComment())
+                    {
+                        // the developer documented a reason, in that case we keep the if statement
                         return;
                     }
 

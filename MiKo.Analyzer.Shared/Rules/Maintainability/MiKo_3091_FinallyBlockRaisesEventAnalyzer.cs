@@ -23,14 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var finallyBlock = ((FinallyClauseSyntax)context.Node).Block;
 
-            if (finallyBlock is null)
+            if (finallyBlock != null)
             {
-                return;
+                var issues = AnalyzeFinallyClause(context, finallyBlock);
+
+                ReportDiagnostics(context, issues);
             }
-
-            var issues = AnalyzeFinallyClause(context, finallyBlock);
-
-            ReportDiagnostics(context, issues);
         }
 
         private IEnumerable<Diagnostic> AnalyzeFinallyClause(SyntaxNodeAnalysisContext context, BlockSyntax finallyBlock)
