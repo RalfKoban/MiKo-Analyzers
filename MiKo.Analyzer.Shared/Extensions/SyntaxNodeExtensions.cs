@@ -759,111 +759,26 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            switch (value)
+            var token = value.DescendantTokens().First();
+
+            if (token.HasStructuredTrivia)
             {
-                case BaseTypeDeclarationSyntax type:
+                // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero so we can save some time and memory by doing it by ourselves
+                var leadingTrivia = token.LeadingTrivia;
+                var count = leadingTrivia.Count;
+
+                for (var index = 0; index < count; index++)
                 {
-                    // inspect for attributes
-                    var attributeListSyntax = type.AttributeLists.FirstOrDefault();
+                    var trivia = leadingTrivia[index];
 
-                    if (attributeListSyntax != null)
+                    if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
                     {
-                        return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
+                        return syntax;
                     }
-
-                    return FindDocumentationCommentTriviaSyntaxForNode(value);
-                }
-
-                case BaseMethodDeclarationSyntax method:
-                {
-                    var attributeListSyntax = method.AttributeLists.FirstOrDefault();
-
-                    if (attributeListSyntax != null)
-                    {
-                        return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                    }
-
-                    var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(value);
-
-                    if (commentOnCode != null)
-                    {
-                        return commentOnCode;
-                    }
-
-                    if (method.FirstChild() is SyntaxNode child)
-                    {
-                        return FindDocumentationCommentTriviaSyntaxForNode(child);
-                    }
-
-                    return null;
-                }
-
-                case BasePropertyDeclarationSyntax property:
-                {
-                    var attributeListSyntax = property.AttributeLists.FirstOrDefault();
-
-                    if (attributeListSyntax != null)
-                    {
-                        return FindDocumentationCommentTriviaSyntaxForNode(attributeListSyntax);
-                    }
-
-                    var commentOnCode = FindDocumentationCommentTriviaSyntaxForNode(value);
-
-                    if (commentOnCode != null)
-                    {
-                        return commentOnCode;
-                    }
-
-                    if (property.FirstChild() is SyntaxNode child)
-                    {
-                        return FindDocumentationCommentTriviaSyntaxForNode(child);
-                    }
-
-                    return null;
-                }
-
-                default:
-                {
-                    return FindDocumentationCommentTriviaSyntaxForNode(value);
                 }
             }
 
-            DocumentationCommentTriviaSyntax FindDocumentationCommentTriviaSyntaxForNode(SyntaxNode node)
-            {
-                while (true)
-                {
-                    if (node is ArrayTypeSyntax array)
-                    {
-                        node = array.ElementType;
-
-                        continue;
-                    }
-
-                    if (node.HasStructuredTrivia)
-                    {
-                        var childToken = node.FirstChildToken();
-
-                        if (childToken.HasStructuredTrivia)
-                        {
-                            // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero so we can save some time and memory by doing it by ourselves
-                            var leadingTrivia = childToken.LeadingTrivia;
-                            var count = leadingTrivia.Count;
-
-                            for (var index = 0; index < count; index++)
-                            {
-                                var trivia = leadingTrivia[index];
-
-                                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) && trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
-                                {
-                                    return syntax;
-                                }
-                            }
-                        }
-                    }
-
-                    return null;
-                }
-            }
+            return null;
         }
 
 //// ncrunch: collect values default
