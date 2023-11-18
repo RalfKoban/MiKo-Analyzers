@@ -4,8 +4,11 @@ using System.Linq;
 
 using BenchmarkDotNet.Attributes;
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Extensions.Primitives;
 
+using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Rules.Documentation;
 
 namespace BenchmarkConsole
@@ -17,7 +20,10 @@ namespace BenchmarkConsole
     {
         private const string Text = "This is a very long text to test SubString() on types such as string or StringSegment.";
 
-        [Params(/* 0, 1, 2, 3, 4, */ 10, 100, 1000)] //, 10000, 100000)]
+        private static SyntaxNode TypeName = SyntaxFactory.ParseTypeName("System.String");
+
+
+        [Params(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30)] // , */ 10, 100, 1000)] //, 10000, 100000)]
         public int Times;
 
         // [Benchmark]
@@ -50,7 +56,7 @@ namespace BenchmarkConsole
             Text.AsSpan().AllIndicesOf("s");
         }
 
-        [Benchmark]
+        // [Benchmark]
         public string HumanizedConcatenated()
         {
             return data.HumanizedConcatenated();
@@ -65,11 +71,23 @@ namespace BenchmarkConsole
             }
         }
 
+        [Benchmark]
+        public bool IsAnyKind_Array() => TypeName.IsAnyKind(StrangeMarkersArray);
+
+        [Benchmark]
+        public bool IsAnyKind_Set() => TypeName.IsAnyKind(StrangeMarkersSet);
+
         private IEnumerable<string> data;
+
+        private SyntaxKind[] StrangeMarkersArray;
+        private HashSet<SyntaxKind> StrangeMarkersSet;
 
         [GlobalSetup]
         public void Setup()
         {
+            StrangeMarkersArray = Enum.GetValues(typeof(SyntaxKind)).Cast<SyntaxKind>().Skip(50).Take(Times).Concat(new[]{ TypeName.Kind() }).ToArray();
+            StrangeMarkersSet = new HashSet<SyntaxKind>(StrangeMarkersArray);
+
             data = Enumerable.Repeat("a", Times).ToArray();
         }
     }
