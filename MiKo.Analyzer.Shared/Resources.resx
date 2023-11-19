@@ -4207,6 +4207,16 @@ All other methods would vary from the Dispose pattern and lead to confusion.</va
   <data name="MiKo_3212_Title" xml:space="preserve">
     <value>Do not confuse developers by providing other Dispose methods</value>
   </data>
+  <data name="MiKo_3213_Description" xml:space="preserve">
+    <value>The public 'Dispose()' method should invoke the 'Dispose(bool disposing)' method with 'disposing' set to 'true' as the only call.
+All the other calls should be invoked from the 'Dispose(bool disposing)' method.</value>
+  </data>
+  <data name="MiKo_3213_MessageFormat" xml:space="preserve">
+    <value>Only invoke 'Dispose(false)' but nothing more</value>
+  </data>
+  <data name="MiKo_3213_Title" xml:space="preserve">
+    <value>Parameterless Dispose method follows Basic Dispose pattern</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
