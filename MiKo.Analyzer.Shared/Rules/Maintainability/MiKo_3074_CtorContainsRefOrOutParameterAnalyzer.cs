@@ -19,29 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
         {
-            var methodName = symbol.Name;
-
             foreach (var parameter in symbol.Parameters)
             {
-                switch (parameter.RefKind)
+                if (parameter.RefKind == RefKind.Ref)
                 {
-                    case RefKind.Ref:
-                    {
-                        var keyword = parameter.GetSyntax().Modifiers.First(SyntaxKind.RefKeyword);
+                    var keyword = parameter.GetModifier(SyntaxKind.RefKeyword);
 
-                        yield return Issue(methodName, keyword, keyword.ToString());
+                    yield return Issue(keyword);
+                }
+                else if (parameter.RefKind == RefKind.Out)
+                {
+                    var keyword = parameter.GetModifier(SyntaxKind.OutKeyword);
 
-                        break;
-                    }
-
-                    case RefKind.Out:
-                    {
-                        var keyword = parameter.GetSyntax().Modifiers.First(SyntaxKind.OutKeyword);
-
-                        yield return Issue(methodName, keyword, keyword.ToString());
-
-                        break;
-                    }
+                    yield return Issue(keyword);
                 }
             }
         }

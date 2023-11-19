@@ -10463,7 +10463,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_3074_MessageFormat {
             get {
@@ -11818,6 +11818,35 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3202_Title {
             get {
                 return ResourceManager.GetString("MiKo_3202_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that&apos;s why they have fewer parameters.
+        ///So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
+        ///Same applies to abstract methods..
+        /// </summary>
+        public static string MiKo_3210_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3210_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not make it &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3210_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3210_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the longest overloads should be virtual or abstract.
+        /// </summary>
+        public static string MiKo_3210_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3210_Title", resourceCulture);
             }
         }
         
