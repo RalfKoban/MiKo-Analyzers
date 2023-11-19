@@ -20,11 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var parameter in symbol.Parameters.Where(_ => _.RefKind == RefKind.Ref && _.Type.TypeKind != TypeKind.Struct))
             {
-                var syntax = parameter.GetSyntax();
+                var keyword = parameter.GetModifier(SyntaxKind.RefKeyword);
 
-                var refKeyword = syntax.Modifiers.First(SyntaxKind.RefKeyword);
-
-                yield return Issue(parameter.Name, refKeyword);
+                yield return Issue(parameter.Name, keyword);
             }
         }
     }
