@@ -11909,6 +11909,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The public &apos;Dispose()&apos; method should invoke the &apos;Dispose(bool disposing)&apos; method with &apos;disposing&apos; set to &apos;true&apos; as the only call.
+        ///All the other calls should be invoked from the &apos;Dispose(bool disposing)&apos; method..
+        /// </summary>
+        public static string MiKo_3213_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3213_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only invoke &apos;Dispose(false)&apos; but nothing more.
+        /// </summary>
+        public static string MiKo_3213_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3213_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameterless Dispose method follows Basic Dispose pattern.
+        /// </summary>
+        public static string MiKo_3213_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3213_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
