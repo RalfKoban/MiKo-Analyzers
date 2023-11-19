@@ -334,7 +334,7 @@ namespace MiKoSolutions.Analyzers.Rules
             Assert.That(gaps, Is.Empty, string.Join(Environment.NewLine, gaps));
         }
 
-        [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file"), Ignore("Disabled")]
+        [Test, Explicit("Test shall be run explicitly as it generates some markdown for the README.md file")] // , Ignore("Disabled")]
         public static void Analyzer_documentation_for_Markdown()
         {
             var markdownBuilder = new StringBuilder().AppendLine()

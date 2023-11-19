@@ -2670,10 +2670,10 @@ In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&g
 So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;remarks&gt; section, you should use the &lt;paramref&gt; tag.</value>
   </data>
   <data name="MiKo_2216_MessageFormat" xml:space="preserve">
-    <value>Do use &lt;paramref&gt; instead of &lt;param&gt;</value>
+    <value>Use &lt;paramref&gt; instead of &lt;param&gt;</value>
   </data>
   <data name="MiKo_2216_Title" xml:space="preserve">
-    <value>Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters</value>
+    <value>Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters</value>
   </data>
   <data name="MiKo_2217_CodeFixTitle" xml:space="preserve">
     <value>Fix '&lt;list&gt;'</value>
@@ -2912,10 +2912,10 @@ If it question things, then the reasons behind are still unclear. This makes it 
 This rule contradicts rule MiKo_2303.</value>
   </data>
   <data name="MiKo_2306_MessageFormat" xml:space="preserve">
-    <value>Do end comment with period</value>
+    <value>End comment with period</value>
   </data>
   <data name="MiKo_2306_Title" xml:space="preserve">
-    <value>Do end comments with a period</value>
+    <value>End comments with a period</value>
   </data>
   <data name="MiKo_2307_CodeFixTitle" xml:space="preserve">
     <value>Replace with 'failed'</value>
@@ -3644,7 +3644,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with colon</value>
   </data>
   <data name="MiKo_3062_Title" xml:space="preserve">
-    <value>Do end log messages for exceptions with a colon</value>
+    <value>End log messages for exceptions with a colon</value>
   </data>
   <data name="MiKo_3063_CodeFixTitle" xml:space="preserve">
     <value>End log message with dot</value>
@@ -3656,7 +3656,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with dot</value>
   </data>
   <data name="MiKo_3063_Title" xml:space="preserve">
-    <value>Do end non-exceptional log messages with a dot</value>
+    <value>End non-exceptional log messages with a dot</value>
   </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
