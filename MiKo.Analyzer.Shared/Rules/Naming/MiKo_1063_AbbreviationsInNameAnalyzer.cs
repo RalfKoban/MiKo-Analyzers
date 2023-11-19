@@ -147,6 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "crypt", // decrypt/encrypt
                                                                    "dopt", // adopt
                                                                    "dopts", // adopts
+                                                                   "enum",
                                                                    "ires",
                                                                    "ixtures",
                                                                    "kept",
