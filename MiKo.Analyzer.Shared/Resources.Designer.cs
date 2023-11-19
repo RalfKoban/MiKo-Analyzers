@@ -11880,6 +11880,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep the basic Dispose pattern consistent and do not confuse developers by providing other &quot;Dispose&quot; methods. The only methods called &quot;Dispose&quot; should be the &quot;void IDisposable.Dispose()&quot; and the &quot;void Dispose(bool disposing)&quot; methods.
+        ///
+        ///All other methods would vary from the Dispose pattern and lead to confusion..
+        /// </summary>
+        public static string MiKo_3212_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3212_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not provide such Dispose method.
+        /// </summary>
+        public static string MiKo_3212_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3212_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not confuse developers by providing other Dispose methods.
+        /// </summary>
+        public static string MiKo_3212_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3212_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

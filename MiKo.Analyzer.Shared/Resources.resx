@@ -4196,6 +4196,17 @@ The reason is that finalizers are notoriously difficult to implement correctly b
   <data name="MiKo_3211_Title" xml:space="preserve">
     <value>Public types should not have finalizers</value>
   </data>
+  <data name="MiKo_3212_Description" xml:space="preserve">
+    <value>Keep the basic Dispose pattern consistent and do not confuse developers by providing other "Dispose" methods. The only methods called "Dispose" should be the "void IDisposable.Dispose()" and the "void Dispose(bool disposing)" methods.
+
+All other methods would vary from the Dispose pattern and lead to confusion.</value>
+  </data>
+  <data name="MiKo_3212_MessageFormat" xml:space="preserve">
+    <value>Do not provide such Dispose method</value>
+  </data>
+  <data name="MiKo_3212_Title" xml:space="preserve">
+    <value>Do not confuse developers by providing other Dispose methods</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
