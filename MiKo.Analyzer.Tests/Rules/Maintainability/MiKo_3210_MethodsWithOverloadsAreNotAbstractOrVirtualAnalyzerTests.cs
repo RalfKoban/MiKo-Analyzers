@@ -29,6 +29,18 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_interface_with_same_named_methods() => No_issue_is_reported_for(@"
+public interface TestMe
+{
+    object DoSomething();
+
+    int DoSomething(int i);
+
+    float DoSomething(float f);
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_type_with_same_named_methods_and_only_the_method_with_most_parameters_is_virtual() => No_issue_is_reported_for(@"
 public class TestMe
 {

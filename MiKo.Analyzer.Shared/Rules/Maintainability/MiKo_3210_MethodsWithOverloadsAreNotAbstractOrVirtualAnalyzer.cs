@@ -16,6 +16,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol)
+        {
+            switch (symbol.TypeKind)
+            {
+                case TypeKind.Class:
+                case TypeKind.Struct:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
             foreach (var group in symbol.GetMethods().GroupBy(_ => _.Name))
