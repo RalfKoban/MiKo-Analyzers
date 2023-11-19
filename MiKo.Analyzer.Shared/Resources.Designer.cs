@@ -7509,7 +7509,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt;.
+        ///   Looks up a localized string similar to Use &lt;paramref&gt; instead of &lt;param&gt;.
         /// </summary>
         public static string MiKo_2216_MessageFormat {
             get {
@@ -7518,7 +7518,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.
+        ///   Looks up a localized string similar to Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.
         /// </summary>
         public static string MiKo_2216_Title {
             get {
@@ -8193,7 +8193,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end comment with period.
+        ///   Looks up a localized string similar to End comment with period.
         /// </summary>
         public static string MiKo_2306_MessageFormat {
             get {
@@ -8202,7 +8202,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end comments with a period.
+        ///   Looks up a localized string similar to End comments with a period.
         /// </summary>
         public static string MiKo_2306_Title {
             get {
@@ -10297,7 +10297,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end log messages for exceptions with a colon.
+        ///   Looks up a localized string similar to End log messages for exceptions with a colon.
         /// </summary>
         public static string MiKo_3062_Title {
             get {
@@ -10333,7 +10333,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end non-exceptional log messages with a dot.
+        ///   Looks up a localized string similar to End non-exceptional log messages with a dot.
         /// </summary>
         public static string MiKo_3063_Title {
             get {

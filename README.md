@@ -244,14 +244,14 @@ The following tables list all the 414 rules that are currently provided by the a
 |MiKo_2213|Documentation should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
-|MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
+|MiKo_2216|Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
 |MiKo_2217|&lt;list&gt; documentation is done properly|&#x2713;|&#x2713;|
 |MiKo_2218|Documentation should use shorter terms instead of longer term 'used to/in/by'|&#x2713;|&#x2713;|
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
 |MiKo_2222|Documentation should use the term 'identification' instead of 'ident'|&#x2713;|&#x2713;|
-|MiKo_2223|Documentation links references via &lt;see cref=&quot;...&quot;/&gt;|&#x2713;|\-|
+|MiKo_2223|Documentation links references via &lt;see cref="..."/&gt;|&#x2713;|\-|
 |MiKo_2224|Documentation should have XML tags and texts placed on separate lines|&#x2713;|&#x2713;|
 |MiKo_2225|Code marked with &lt;c&gt; tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Documentation should explain the 'Why' and not the 'That'|&#x2713;|\-|
@@ -263,7 +263,7 @@ The following tables list all the 414 rules that are currently provided by the a
 |MiKo_2303|Do not end comments with a period|&#x2713;|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments|&#x2713;|&#x2713;|
-|MiKo_2306|Do end comments with a period|\-|\-|
+|MiKo_2306|End comments with a period|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
@@ -329,8 +329,8 @@ The following tables list all the 414 rules that are currently provided by the a
 |MiKo_3055|ViewModels should implement INotifyPropertyChanged|&#x2713;|\-|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
-|MiKo_3062|Do end log messages for exceptions with a colon|&#x2713;|&#x2713;|
-|MiKo_3063|Do end non-exceptional log messages with a dot|&#x2713;|&#x2713;|
+|MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
+|MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|\-|
@@ -371,13 +371,13 @@ The following tables list all the 414 rules that are currently provided by the a
 |MiKo_3111|Assertions should use 'Is.Zero' instead of 'Is.EqualTo(0)'|&#x2713;|&#x2713;|
 |MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
 |MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
-|MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
+|MiKo_3114|Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'|&#x2713;|&#x2713;|
 |MiKo_3115|Test methods should contain code|&#x2713;|\-|
 |MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
 |MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
-|MiKo_3201|If statements can be inverted in short methods|&#x2713;||&#x2713;|
-|MiKo_3202|Use positive conditions when returning in all paths|&#x2713;||&#x2713;|
+|MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
+|MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3210|Only the longest overloads should be virtual or abstract|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
@@ -410,7 +410,6 @@ The following tables list all the 414 rules that are currently provided by the a
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
 |MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 |MiKo_5017|Fields or variables assigned with string literals should be constant|&#x2713;|&#x2713;|
-
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|
@@ -452,10 +451,10 @@ The following tables list all the 414 rules that are currently provided by the a
 |MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
 |MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
-|MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
+|MiKo_6044|Binary operators such as '&amp;&amp;' or '||' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
-|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|&#x2713;|
+|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|\-|
 |MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
