@@ -11851,6 +11851,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+        ///
+        ///The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution..
+        /// </summary>
+        public static string MiKo_3211_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a finalizer.
+        /// </summary>
+        public static string MiKo_3211_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3211_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public types should not have finalizers.
+        /// </summary>
+        public static string MiKo_3211_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

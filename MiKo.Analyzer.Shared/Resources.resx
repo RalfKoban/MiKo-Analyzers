@@ -4185,6 +4185,17 @@ Same applies to abstract methods.</value>
   <data name="MiKo_3210_Title" xml:space="preserve">
     <value>Only the longest overloads should be virtual or abstract</value>
   </data>
+  <data name="MiKo_3211_Description" xml:space="preserve">
+    <value>In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+
+The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution.</value>
+  </data>
+  <data name="MiKo_3211_MessageFormat" xml:space="preserve">
+    <value>Do not use a finalizer</value>
+  </data>
+  <data name="MiKo_3211_Title" xml:space="preserve">
+    <value>Public types should not have finalizers</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
