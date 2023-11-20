@@ -58,6 +58,28 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_type_with_Dispose_disposing_method_where_Dispose_method_invokes_Dispose_disposing_and_GC_SuppressFinalize() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    ~TestMe()
+    {
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected void Dispose(bool disposing)
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_type_with_Dispose_disposing_method_where_Dispose_method_invokes_Dispose_disposing_as_expression_body() => No_issue_is_reported_for(@"
 public class TestMe
 {
