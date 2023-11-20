@@ -11750,7 +11750,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert if.
+        ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {
             get {
@@ -11768,7 +11768,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert if.
+        ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         public static string MiKo_3201_MessageFormat {
             get {
@@ -11833,7 +11833,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not make it &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Do not make method &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_3210_MessageFormat {
             get {
