@@ -4151,13 +4151,13 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
     <value>Test methods should not use ambiguous Linq calls</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
-    <value>Invert if</value>
+    <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Description" xml:space="preserve">
     <value>In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read.</value>
   </data>
   <data name="MiKo_3201_MessageFormat" xml:space="preserve">
-    <value>Invert if</value>
+    <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Title" xml:space="preserve">
     <value>If statements can be inverted in short methods</value>
@@ -4180,7 +4180,7 @@ So, when inheriting is needed and such overload method needs to be overridden by
 Same applies to abstract methods.</value>
   </data>
   <data name="MiKo_3210_MessageFormat" xml:space="preserve">
-    <value>Do not make it '{0}'</value>
+    <value>Do not make method '{0}'</value>
   </data>
   <data name="MiKo_3210_Title" xml:space="preserve">
     <value>Only the longest overloads should be virtual or abstract</value>
