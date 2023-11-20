@@ -31,14 +31,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var statements = block.Statements;
 
-                if (statements.Count == 1 && statements[0] is ExpressionStatementSyntax statement && IsCorrectCall(statement.Expression))
+                switch (statements.Count)
                 {
-                    return Enumerable.Empty<Diagnostic>();
+                    case 1 when IsCallDisposeTrue(statements[0]):
+                        return Enumerable.Empty<Diagnostic>();
+
+                    case 2 when IsCallDisposeTrue(statements[0]) && IsCallGcFinalizeThis(statements[1]):
+                        return Enumerable.Empty<Diagnostic>();
                 }
             }
             else
             {
-                if (IsCorrectCall(method.ExpressionBody?.Expression))
+                if (IsCallDisposeTrue(method.ExpressionBody?.Expression))
                 {
                     return Enumerable.Empty<Diagnostic>();
                 }
@@ -47,7 +51,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return new[] { Issue(symbol) };
         }
 
-        private static bool IsCorrectCall(ExpressionSyntax expression)
+        private static bool IsCallGcFinalizeThis(StatementSyntax statement) => statement is ExpressionStatementSyntax e && IsCallGcFinalizeThis(e.Expression);
+
+        private static bool IsCallGcFinalizeThis(ExpressionSyntax expression)
+        {
+            if (expression is InvocationExpressionSyntax invocation)
+            {
+                var arguments = invocation.ArgumentList.Arguments;
+
+                if (arguments.Count == 1 && arguments[0].Expression?.IsKind(SyntaxKind.ThisExpression) is true && invocation.GetName() == nameof(GC) && invocation.Expression.GetName() == nameof(GC.SuppressFinalize))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsCallDisposeTrue(StatementSyntax statement) => statement is ExpressionStatementSyntax e && IsCallDisposeTrue(e.Expression);
+
+        private static bool IsCallDisposeTrue(ExpressionSyntax expression)
         {
             if (expression is InvocationExpressionSyntax invocation)
             {
