@@ -454,7 +454,7 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
 |MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
-|MiKo_6044|Binary operators such as '&amp;&amp;' or '||' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
+|MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
