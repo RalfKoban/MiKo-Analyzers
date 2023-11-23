@@ -185,6 +185,30 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_wrong_assignment_to_parameters_spanning_multiple_lines_([ValueSource(nameof(WrongArrayCreations))] string creation)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomething(
+                 ###,
+                 ###);
+    }
+
+    public void DoSomething(int[] array1, int[] array2)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", creation), Template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
         public void Code_gets_fixed_for_wrong_assignment_to_return_value_([ValueSource(nameof(WrongArrayCreations))] string creation)
         {
             const string Template = @"
