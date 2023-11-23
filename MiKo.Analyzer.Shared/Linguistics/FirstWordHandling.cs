@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
         None = 0,
 
         /// <summary>
-        /// Keep the space at the beginning of the word if there is any.
+        /// Keep the leading space of the word if there is any.
         /// </summary>
-        KeepStartingSpace = 1 << 0,
+        KeepLeadingSpace = 1 << 0,
 
         /// <summary>
         /// Attempt to make it an infinite verb.
