@@ -17,11 +17,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         internal static readonly string[] CommandStartingPhrases =
                                                                    {
                                                                        "A command ",
+                                                                       "A standard command ",
+                                                                       "A toggle command ",
+                                                                       "The command ",
+                                                                       "The standard command ",
+                                                                       "The toggle command ",
                                                                        "Command ",
                                                                        "command ",
                                                                    };
 
-        private static readonly Dictionary<string, string> CommandReplacementMap = CreateReplacementMap();
+        private static readonly Dictionary<string, string> CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
+                                                                                                                       .ThenBy(_ => _.Key)
+                                                                                                                       .ToDictionary(_ => _.Key, _ => _.Value);
 
         public override string FixableDiagnosticId => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
 
@@ -35,20 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
-
-        private static Dictionary<string, string> CreateReplacementMap()
-        {
-            var entries = CreateCommandReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
-
-            var result = new Dictionary<string, string>(entries.Length);
-
-            foreach (var entry in entries)
-            {
-                result[entry.Key] = entry.Value;
-            }
-
-            return result;
-        }
 
         private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
         {
