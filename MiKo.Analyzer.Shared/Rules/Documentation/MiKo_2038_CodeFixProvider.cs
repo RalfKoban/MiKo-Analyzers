@@ -44,10 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var entry in entries)
             {
-                if (result.ContainsKey(entry.Key) is false)
-                {
-                    result[entry.Key] = entry.Value;
-                }
+                result[entry.Key] = entry.Value;
             }
 
             return result;
@@ -72,12 +69,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var phrase in CommandStartingPhrases)
             {
-                var start = phrase.AsSpan().Trim();
+                var start = phrase.AsSpan().Trim().ToString();
 
                 foreach (var middle in middleParts)
                 {
-                    results.Add(new KeyValuePair<string, string>(string.Concat(start.ToString(), " ", middle, " "), string.Empty));
+                    results.Add(new KeyValuePair<string, string>(string.Concat(start, " ", middle, " "), string.Empty));
                 }
+
+                results.Add(new KeyValuePair<string, string>(string.Concat(start, " "), string.Empty));
             }
 
             return results;
