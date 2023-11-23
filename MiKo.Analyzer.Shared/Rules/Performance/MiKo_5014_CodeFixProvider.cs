@@ -20,11 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var node = (ObjectCreationExpressionSyntax)syntax;
-
-            if (node.Type is GenericNameSyntax generic)
+            if (syntax is ObjectCreationExpressionSyntax node && node.Type is GenericNameSyntax generic)
             {
-                return Invocation(nameof(Array), nameof(Array.Empty), generic.TypeArgumentList.Arguments.ToArray());
+                return Invocation(nameof(Array), nameof(Array.Empty), generic.TypeArgumentList.Arguments.ToArray()).WithTriviaFrom(node);
             }
 
             return syntax;

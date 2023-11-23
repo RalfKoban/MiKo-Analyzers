@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (syntax is ArrayCreationExpressionSyntax node)
             {
-                return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType);
+                return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType).WithTriviaFrom(node);
             }
 
             return syntax;
