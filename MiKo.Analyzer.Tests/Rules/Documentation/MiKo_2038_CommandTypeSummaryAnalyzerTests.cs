@@ -102,9 +102,14 @@ public interface ITestMe : ICommand
 ");
 
         [TestCase("A command that can do something.", "Represents a command that can do something.")]
+        [TestCase("The command that can do something.", "Represents a command that can do something.")]
         [TestCase("Command that can do something.", "Represents a command that can do something.")]
         [TestCase("Do something.", "Represents a command that can do something.")]
         [TestCase("A command executes something.", "Represents a command that can execute something.")]
+        [TestCase("A toggle command to execute something.", "Represents a command that can execute something.")]
+        [TestCase("The toggle command to execute something.", "Represents a command that can execute something.")]
+        [TestCase("A standard command to execute something.", "Represents a command that can execute something.")]
+        [TestCase("The standard command to execute something.", "Represents a command that can execute something.")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"
