@@ -73,15 +73,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // symbol parameters
             if (baseCall.GetSymbol(compilation) is IMethodSymbol baseCtor)
             {
+                var parameters = symbol.Parameters;
                 var baseCtorParameters = baseCtor.Parameters;
 
-                foreach (var parameter in symbol.Parameters)
+                // check for each parameter whether the base parameter has the same name as any of the own parameters or whether it has a different one
+                foreach (var parameter in parameters)
                 {
                     var parameterName = parameter.Name;
 
                     if (mapping.TryGetValue(parameterName, out var argumentPosition))
                     {
                         // we found a parameter, hence we check the name on the base ctor
+                        if (argumentPosition >= baseCtorParameters.Length)
+                        {
+                            // seems to not match because we have some uncompilable code
+                            continue;
+                        }
+
                         var baseParameter = baseCtorParameters[argumentPosition];
                         var baseParameterName = baseParameter.Name;
 
@@ -91,8 +99,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         }
                     }
                 }
-
-                // check for each parameter whether the base parameter has the same name as any of the own parameters or whether it has a different one
             }
         }
     }
