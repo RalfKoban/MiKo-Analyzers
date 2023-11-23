@@ -22,6 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "The command ",
                                                                        "The standard command ",
                                                                        "The toggle command ",
+                                                                       "This command ",
+                                                                       "This standard command ",
+                                                                       "This toggle command ",
                                                                        "Command ",
                                                                        "command ",
                                                                    };
@@ -56,6 +59,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "will",
                                       "to",
                                       "for",
+                                      "can be used to",
+                                      "is used to",
                                   };
 
             var results = new List<KeyValuePair<string, string>>();
