@@ -110,6 +110,8 @@ public interface ITestMe : ICommand
         [TestCase("The toggle command to execute something.", "Represents a command that can execute something.")]
         [TestCase("A standard command to execute something.", "Represents a command that can execute something.")]
         [TestCase("The standard command to execute something.", "Represents a command that can execute something.")]
+        [TestCase("This command can be used to execute something.", "Represents a command that can execute something.")]
+        [TestCase("This command is used to execute something.", "Represents a command that can execute something.")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"
