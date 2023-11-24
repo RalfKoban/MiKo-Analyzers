@@ -938,11 +938,11 @@ namespace MiKoSolutions.Analyzers
                                                                                    };
 
             internal static readonly ISet<string> ObjectUnderTestNames = Enumerable.Empty<string>()
-                                                                                          .Concat(TypeUnderTestFieldNames)
-                                                                                          .Concat(TypeUnderTestVariableNames)
-                                                                                          .Concat(TypeUnderTestPropertyNames)
-                                                                                          .OrderBy(_ => _)
-                                                                                          .ToHashSet();
+                                                                                   .Concat(TypeUnderTestFieldNames)
+                                                                                   .Concat(TypeUnderTestVariableNames)
+                                                                                   .Concat(TypeUnderTestPropertyNames)
+                                                                                   .OrderBy(_ => _)
+                                                                                   .ToHashSet();
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>
                                                                        {

@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
-        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).First();
+        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
