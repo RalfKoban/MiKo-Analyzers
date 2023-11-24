@@ -181,6 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { @"element1.Should().BeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Ordered.Descending, ""some message"")" },
                                                                                new object[] { "element1.Should().NotBeInDescendingOrder()", "Assert.That(element1, Is.Not.Ordered.Descending)" },
                                                                                new object[] { @"element1.Should().NotBeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Not.Ordered.Descending, ""some message"")" },
+                                                                               new object[] { @"element1.ShouldBeEquivalentTo(""some message"")", @"Assert.That(element1, Is.EquivalentTo(""some message""))" },
                                                                            };
 
         // for yet unknown reasons those elements cannot be fixed when available multiple times
