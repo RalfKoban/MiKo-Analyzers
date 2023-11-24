@@ -24,7 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (syntax is ExpressionStatementSyntax statement)
             {
                 var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
-                var assertThat = ConvertToAssertThat(document, shouldNode);
+                var shouldName = shouldNode.GetName();
+
+                var assertThat = shouldName == "ShouldBeEquivalentTo"
+                                 ? ConvertShouldBeEquivalentToToAssertThat(document, shouldNode)
+                                 : ConvertShouldToAssertThat(document, shouldNode);
 
                 if (assertThat is null)
                 {
@@ -53,7 +57,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root.WithUsing("NUnit.Framework");
         }
 
-        private static InvocationExpressionSyntax ConvertToAssertThat(Document document, MemberAccessExpressionSyntax shouldNode)
+        private static InvocationExpressionSyntax ConvertShouldBeEquivalentToToAssertThat(Document document, MemberAccessExpressionSyntax shouldNode)
+        {
+            var originalExpression = shouldNode.Expression;
+
+            var expression = originalExpression.WithoutLeadingTrivia();
+
+            var invocation = shouldNode.FirstAncestor<InvocationExpressionSyntax>();
+            var arguments = invocation.ArgumentList.Arguments;
+
+            return AssertThat(expression, Is("EquivalentTo", arguments[0]), arguments, 1, removeNameColon: true);
+        }
+
+        private static InvocationExpressionSyntax ConvertShouldToAssertThat(Document document, MemberAccessExpressionSyntax shouldNode)
         {
             var originalExpression = shouldNode.Expression;
 

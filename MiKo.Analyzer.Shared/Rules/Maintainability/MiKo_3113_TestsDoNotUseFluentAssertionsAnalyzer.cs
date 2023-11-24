@@ -33,6 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     // we might have an lambda expression, so the given statement might not be the correct ancestor statement of the 'Should()' node, hence we have to determine whether it's the specific statement that has an issue
                     case "Should" when node.FirstAncestor<ExpressionStatementSyntax>() == statement:
                         return node;
+
+                    case "ShouldBeEquivalentTo" when node.FirstAncestor<ExpressionStatementSyntax>() == statement:
+                        return node;
                 }
             }
 
