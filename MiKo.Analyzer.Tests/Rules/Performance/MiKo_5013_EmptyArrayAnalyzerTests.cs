@@ -105,6 +105,19 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_wrong_assignment_to_strong_typed_variable_() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        byte[] empty = { };
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_wrong_assignment_to_parameter_([ValueSource(nameof(WrongArrayCreations))] string creation) => An_issue_is_reported_for(@"
 using System;
 
@@ -160,6 +173,24 @@ public class TestMe
 ";
 
             VerifyCSharpFix(Template.Replace("###", creation), Template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_wrong_assignment_to_strong_typed_variable()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        byte[] empty = ###;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "{ }"), Template.Replace("###", "Array.Empty<byte>()"));
         }
 
         [Test]

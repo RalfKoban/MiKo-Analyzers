@@ -24,6 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             }
         }
 
+        protected override IEnumerable<Diagnostic> AnalyzeArrayInitializer(InitializerExpressionSyntax node, SemanticModel semanticModel)
+        {
+            if (HasIssue(node))
+            {
+                yield return Issue(node);
+            }
+        }
+
         private static bool HasIssue(ArrayCreationExpressionSyntax node)
         {
             var rankSpecifiers = node.Type.RankSpecifiers;
@@ -59,5 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 }
             }
         }
+
+        private static bool HasIssue(InitializerExpressionSyntax node) => node.Expressions.Count == 0; // seems we do not have any contents
     }
 }
