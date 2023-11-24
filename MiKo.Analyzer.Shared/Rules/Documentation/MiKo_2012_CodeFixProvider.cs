@@ -104,6 +104,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ReplacementMapKeys = ReplacementMap.Keys.Select(_ => _.Trim()).ToArray();
 
+        private static readonly ISet<SyntaxKind> Declarations = new HashSet<SyntaxKind>
+                                                                    {
+                                                                        SyntaxKind.ClassDeclaration,
+                                                                        SyntaxKind.StructDeclaration,
+                                                                        SyntaxKind.RecordDeclaration,
+                                                                        SyntaxKind.InterfaceDeclaration,
+                                                                        SyntaxKind.MethodDeclaration,
+                                                                        SyntaxKind.PropertyDeclaration,
+                                                                        SyntaxKind.EventDeclaration,
+                                                                        SyntaxKind.EventFieldDeclaration,
+                                                                        SyntaxKind.FieldDeclaration,
+                                                                    };
+
         public override string FixableDiagnosticId => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2012_CodeFixTitle;
@@ -132,7 +145,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWithAny(MiKo_2038_CodeFixProvider.CommandStartingPhrases, StringComparison.Ordinal))
                 {
-                    return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
+                    if (syntax.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
+                    {
+                        var name = member.GetName();
+
+                        if (name != null && name.Contains("Command", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
+                        }
+                    }
                 }
 
                 if (text.StartsWithAny(Constants.Comments.FieldStartingPhrase, StringComparison.Ordinal))

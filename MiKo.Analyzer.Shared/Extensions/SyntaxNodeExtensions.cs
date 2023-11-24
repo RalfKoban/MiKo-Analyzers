@@ -332,7 +332,9 @@ namespace MiKoSolutions.Analyzers
                     return node;
                 }
 
-                node = node.Parent;
+                node = node is DocumentationCommentTriviaSyntax d
+                       ? d.ParentTrivia.Token.Parent
+                       : node.Parent;
             }
         }
 
@@ -352,7 +354,9 @@ namespace MiKoSolutions.Analyzers
                     return node;
                 }
 
-                node = node.Parent;
+                node = node is DocumentationCommentTriviaSyntax d
+                       ? d.ParentTrivia.Token.Parent
+                       : node.Parent;
             }
         }
 
@@ -529,6 +533,33 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this MemberAccessExpressionSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this MemberBindingExpressionSyntax value) => value?.Name.GetName();
+
+        internal static string GetName(this MemberDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case ClassDeclarationSyntax s: return s.GetName();
+                case StructDeclarationSyntax s: return s.GetName();
+                case RecordDeclarationSyntax s: return s.GetName();
+                case InterfaceDeclarationSyntax s: return s.GetName();
+                case ConstructorDeclarationSyntax s: return s.GetName();
+                case EventDeclarationSyntax s: return s.GetName();
+                case PropertyDeclarationSyntax s: return s.GetName();
+                case MethodDeclarationSyntax s: return s.GetName();
+                case FieldDeclarationSyntax s: return s.Declaration.Variables.FirstOrDefault().GetName();
+
+                default:
+                    return null;
+            }
+        }
+
+        internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this StructDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this RecordDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this InterfaceDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
@@ -1391,7 +1422,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAsync(this MethodDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.AsyncKeyword);
 
+        internal static bool IsLocalVariableDeclaration(this SyntaxNode value, ISet<string> identifierNames) => value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => identifierNames.Contains(__.Identifier.ValueText));
+
         internal static bool IsLocalVariableDeclaration(this SyntaxNode value, string identifierName) => value is LocalDeclarationStatementSyntax l && l.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
+
+        internal static bool IsFieldVariableDeclaration(this SyntaxNode value, ISet<string> identifierNames) => value is FieldDeclarationSyntax f && f.Declaration.Variables.Any(__ => identifierNames.Contains(__.Identifier.ValueText));
+
+        internal static bool IsFieldVariableDeclaration(this SyntaxNode value, string identifierName) => value is FieldDeclarationSyntax f && f.Declaration.Variables.Any(__ => __.Identifier.ValueText == identifierName);
 
         internal static bool IsWhiteSpaceOnlyText(this SyntaxNode value) => value is XmlTextSyntax text && text.IsWhiteSpaceOnlyText();
 
