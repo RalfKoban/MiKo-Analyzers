@@ -149,7 +149,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var name = member.GetName();
 
-                        if (name != null && name.Contains("Command", StringComparison.OrdinalIgnoreCase))
+                        if (name.Contains("Command", StringComparison.OrdinalIgnoreCase))
                         {
                             return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
                         }

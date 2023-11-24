@@ -203,6 +203,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+//// ncrunch: collect values off
+
         internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode value)
         {
             switch (value)
@@ -212,8 +214,6 @@ namespace MiKoSolutions.Analyzers
                 default: return null;
             }
         }
-
-//// ncrunch: collect values off
 
         internal static string GetParameterName(this XmlElementSyntax value) => value.GetAttributes<XmlNameAttributeSyntax>().FirstOrDefault()?.Identifier.GetName();
 
@@ -414,6 +414,8 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+//// ncrunch: collect values off
+
         internal static string GetMethodName(this ParameterSyntax value)
         {
             var enclosingNode = value.GetEnclosing(MethodNameSyntaxKinds);
@@ -456,6 +458,39 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static string GetName(this BaseTypeDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case EnumDeclarationSyntax s: return s.GetName();
+                case TypeDeclarationSyntax s: return s.GetName();
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static string GetName(this BaseFieldDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case FieldDeclarationSyntax s: return s.Declaration.Variables.FirstOrDefault().GetName();
+                case EventFieldDeclarationSyntax s: return s.Declaration.Variables.FirstOrDefault().GetName();
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
+                case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
+                default:
+                    return Enumerable.Empty<string>();
+            }
+        }
+
         internal static string GetName(this BasePropertyDeclarationSyntax value)
         {
             switch (value)
@@ -468,11 +503,15 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
+
         internal static string GetName(this ConstructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this ConversionOperatorDeclarationSyntax value) => value?.OperatorKeyword.ValueText;
 
         internal static string GetName(this DestructorDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this EnumDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this EventDeclarationSyntax value) => value?.Identifier.ValueText;
 
@@ -488,6 +527,8 @@ namespace MiKoSolutions.Analyzers
                 default: return string.Empty;
             }
         }
+
+//// ncrunch: collect values default
 
         internal static string GetName(this InvocationExpressionSyntax value)
         {
@@ -526,6 +567,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this IndexerDeclarationSyntax value) => value?.ThisKeyword.ValueText;
 
+        internal static string GetName(this InterfaceDeclarationSyntax value) => value?.Identifier.ValueText;
+
         internal static string GetName(this LiteralExpressionSyntax value) => value?.Token.ValueText;
 
         internal static string GetName(this LocalFunctionStatementSyntax value) => value?.Identifier.ValueText;
@@ -538,28 +581,14 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case ClassDeclarationSyntax s: return s.GetName();
-                case StructDeclarationSyntax s: return s.GetName();
-                case RecordDeclarationSyntax s: return s.GetName();
-                case InterfaceDeclarationSyntax s: return s.GetName();
-                case ConstructorDeclarationSyntax s: return s.GetName();
-                case EventDeclarationSyntax s: return s.GetName();
-                case PropertyDeclarationSyntax s: return s.GetName();
-                case MethodDeclarationSyntax s: return s.GetName();
-                case FieldDeclarationSyntax s: return s.Declaration.Variables.FirstOrDefault().GetName();
-
+                case BaseMethodDeclarationSyntax s: return s.GetName();
+                case BasePropertyDeclarationSyntax s: return s.GetName();
+                case BaseTypeDeclarationSyntax s: return s.GetName();
+                case BaseFieldDeclarationSyntax s: return s.GetName();
                 default:
-                    return null;
+                    return string.Empty;
             }
         }
-
-        internal static string GetName(this ClassDeclarationSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this StructDeclarationSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this RecordDeclarationSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this InterfaceDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
 
@@ -571,7 +600,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this PropertyDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this RecordDeclarationSyntax value) => value?.Identifier.ValueText;
+
         internal static string GetName(this SimpleNameSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this StructDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this TypeDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case ClassDeclarationSyntax s: return s.GetName();
+                case InterfaceDeclarationSyntax s: return s.GetName();
+                case RecordDeclarationSyntax s: return s.GetName();
+                case StructDeclarationSyntax s: return s.GetName();
+                default:
+                    return string.Empty;
+            }
+        }
+
+        internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
 
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
 
