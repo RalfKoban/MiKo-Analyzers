@@ -112,6 +112,14 @@ public interface ITestMe : ICommand
         [TestCase("The standard command to execute something.", "Represents a command that can execute something.")]
         [TestCase("This command can be used to execute something.", "Represents a command that can execute something.")]
         [TestCase("This command is used to execute something.", "Represents a command that can execute something.")]
+        [TestCase("A class that offers to execute something.", "Represents a command that can execute something.")]
+        [TestCase("The class which offers to execute something.", "Represents a command that can execute something.")]
+        [TestCase("This class offers to execute something.", "Represents a command that can execute something.")]
+        [TestCase("Offers to execute something.", "Represents a command that can execute something.")]
+        [TestCase("A class that tries to execute something.", "Represents a command that can execute something.")]
+        [TestCase("The class which tries to execute something.", "Represents a command that can execute something.")]
+        [TestCase("This class tries to execute something.", "Represents a command that can execute something.")]
+        [TestCase("Tries to execute something.", "Represents a command that can execute something.")]
         public void Code_gets_fixed_(string originalComment, string fixedComment)
         {
             const string Template = @"
