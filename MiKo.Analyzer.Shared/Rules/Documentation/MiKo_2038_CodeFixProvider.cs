@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "This toggle command ",
                                                                        "Command ",
                                                                        "command ",
+                                                                       "A class ",
+                                                                       "The class ",
+                                                                       "This class ",
                                                                    };
 
         private static readonly Dictionary<string, string> CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
@@ -52,15 +56,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   {
                                       "that can",
                                       "that will",
+                                      "that offers to",
+                                      "that tries to",
                                       "that",
                                       "which can",
                                       "which will",
+                                      "which offers to",
+                                      "which tries to",
                                       "which",
                                       "will",
                                       "to",
                                       "for",
                                       "can be used to",
                                       "is used to",
+                                      "offers to",
+                                      "tries to",
                                   };
 
             var results = new List<KeyValuePair<string, string>>();
@@ -76,6 +86,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 results.Add(new KeyValuePair<string, string>(string.Concat(start, " "), string.Empty));
             }
+
+            results.Add(new KeyValuePair<string, string>(string.Concat("Offers to", " "), string.Empty));
+            results.Add(new KeyValuePair<string, string>(string.Concat("Tries to", " "), string.Empty));
 
             return results;
         }
