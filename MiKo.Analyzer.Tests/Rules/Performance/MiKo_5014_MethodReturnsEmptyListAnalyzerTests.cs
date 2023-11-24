@@ -207,6 +207,25 @@ public class TestMe
             VerifyCSharpFix(template.Replace("###", creation), template.Replace("###", "Array.Empty<int>()"));
         }
 
+        [Test]
+        public void Code_gets_fixed_for_a_method_that_returns_a_list_with_an_empty_initializer_spanning_multiple_lines_(
+                                                                                                                    [ValueSource(nameof(ProblematicReturnTypes))] string returnType,
+                                                                                                                    [Values("new List<int> { }", "new List<int>()")] string creation)
+        {
+            var template = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public " + returnType + @"<int> DoSomething() { return
+                                                        ###; }
+}
+";
+
+            VerifyCSharpFix(template.Replace("###", creation), template.Replace("###", "Array.Empty<int>()"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_5014_MethodReturnsEmptyListAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_5014_MethodReturnsEmptyListAnalyzer();

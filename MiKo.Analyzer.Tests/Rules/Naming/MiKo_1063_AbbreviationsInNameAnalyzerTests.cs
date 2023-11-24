@@ -286,6 +286,38 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_properly_named_method_with_upper_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething" + methodName.ToUpperCaseAt(0) + @"()
+        {
+            return 42;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_properly_named_method_with_lower_case_suffix_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething_" + methodName.ToLowerCaseAt(0) + @"()
+        {
+            return 42;
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedTerms))] string propertyName) => No_issue_is_reported_for(@"
 using System;
 

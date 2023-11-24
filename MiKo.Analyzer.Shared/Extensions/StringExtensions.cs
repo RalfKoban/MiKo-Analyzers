@@ -46,9 +46,13 @@ namespace System
 
             var text = word + continuation;
 
-            if (HasFlag(FirstWordHandling.KeepStartingSpace))
+            if (HasFlag(FirstWordHandling.KeepLeadingSpace))
             {
-                return " " + text;
+                // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space and we would fix it in a wrong way)
+                if (value.StartsWith(' '))
+                {
+                    return " " + text;
+                }
             }
 
             return text;

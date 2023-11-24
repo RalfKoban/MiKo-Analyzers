@@ -15,18 +15,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private const int MaximumAllowedFollowUpStatements = 3;
 
-        private static readonly HashSet<SyntaxKind> ForbiddenFollowUps = new HashSet<SyntaxKind>
-                                                                             {
-                                                                                 SyntaxKind.DoStatement,
-                                                                                 SyntaxKind.WhileStatement,
-                                                                                 SyntaxKind.ForStatement,
-                                                                                 SyntaxKind.ForEachStatement,
-                                                                                 SyntaxKind.SwitchStatement,
-                                                                                 SyntaxKind.IfStatement,
-                                                                                 SyntaxKind.UsingStatement,
-                                                                                 SyntaxKind.TryStatement,
-                                                                                 SyntaxKind.LocalFunctionStatement,
-                                                                             };
+        private static readonly ISet<SyntaxKind> ForbiddenFollowUps = new HashSet<SyntaxKind>
+                                                                          {
+                                                                              SyntaxKind.DoStatement,
+                                                                              SyntaxKind.WhileStatement,
+                                                                              SyntaxKind.ForStatement,
+                                                                              SyntaxKind.ForEachStatement,
+                                                                              SyntaxKind.SwitchStatement,
+                                                                              SyntaxKind.IfStatement,
+                                                                              SyntaxKind.UsingStatement,
+                                                                              SyntaxKind.TryStatement,
+                                                                              SyntaxKind.LocalFunctionStatement,
+                                                                          };
 
         private static readonly ISet<SyntaxKind> ForbiddenInsides = new HashSet<SyntaxKind>
                                                                         {
