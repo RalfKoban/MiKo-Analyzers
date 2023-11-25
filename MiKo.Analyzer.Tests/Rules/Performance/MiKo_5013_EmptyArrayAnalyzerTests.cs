@@ -52,6 +52,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_valid_assignment_to_strong_typed_variable() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] values = { 42 };
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_valid_assignment_to_parameter_([ValueSource(nameof(ValidArrayCreations))] string creation) => No_issue_is_reported_for(@"
 using System;
 
@@ -105,7 +118,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_assignment_to_strong_typed_variable_() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_assignment_to_strong_typed_variable() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
