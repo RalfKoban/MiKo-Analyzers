@@ -22,6 +22,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var token in comment.DescendantTokens(SyntaxKind.XmlTextLiteralToken))
             {
+                if (token.Parent.IsKind(SyntaxKind.XmlCDataSection))
+                {
+                    // ignore the code sections
+                    continue;
+                }
+
                 foreach (var location in GetAllLocations(token, Phrases))
                 {
                     yield return Issue(location);

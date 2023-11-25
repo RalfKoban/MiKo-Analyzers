@@ -22,6 +22,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correct_XML_with_CDataSection() => No_issue_is_reported_for(@"
+/// <summary>
+/// Some text
+/// </summary>
+/// <example>
+/// <code>
+/// <![CDATA[
+///    <Button>
+///    </Button>
+/// ]]>
+/// </code>
+/// </example>
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrect_XML_([Values("</", "/>", "/ >")] string fragment) => An_issue_is_reported_for(@"
 /// <summary>
 /// Some text
