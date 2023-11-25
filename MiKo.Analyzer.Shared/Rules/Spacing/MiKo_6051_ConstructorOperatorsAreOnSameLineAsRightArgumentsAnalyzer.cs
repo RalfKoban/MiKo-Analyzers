@@ -29,9 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             var colonToken = node.ColonToken;
             var startLine = colonToken.GetStartingLine();
-            var rightPosition = keyword.GetStartPosition();
+            var keywordLine = keyword.GetStartingLine();
 
-            if (startLine != rightPosition.Line)
+            if (startLine != keywordLine)
             {
                 ReportDiagnostics(context, Issue(colonToken));
             }
