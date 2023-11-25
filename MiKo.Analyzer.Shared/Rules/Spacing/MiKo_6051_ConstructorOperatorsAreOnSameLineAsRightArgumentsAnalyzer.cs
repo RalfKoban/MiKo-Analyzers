@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,13 +10,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6051";
 
-        private const string Spaces = "SPACES";
-
         public MiKo_6051_ConstructorOperatorsAreOnSameLineAsRightArgumentsAnalyzer() : base(Id)
         {
         }
-
-        internal static int GetSpaces(Diagnostic diagnostic) => int.Parse(diagnostic.Properties[Spaces]);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.BaseConstructorInitializer, SyntaxKind.ThisConstructorInitializer);
 
@@ -31,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (startLine != rightPosition.Line)
             {
-                ReportDiagnostics(context, Issue(node.ColonToken, new Dictionary<string, string> { { Spaces, rightPosition.Character.ToString("D") } }));
+                ReportDiagnostics(context, Issue(node.ColonToken));
             }
         }
     }

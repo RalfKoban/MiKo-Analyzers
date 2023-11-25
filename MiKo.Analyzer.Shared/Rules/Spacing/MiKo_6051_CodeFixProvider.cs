@@ -21,9 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ConstructorInitializerSyntax initializer)
             {
-                var spaces = MiKo_6051_ConstructorOperatorsAreOnSameLineAsRightArgumentsAnalyzer.GetSpaces(issue);
-
-                var updatedToken = initializer.ColonToken.WithLeadingSpaces(spaces).WithTrailingSpace();
+                var updatedToken = initializer.ColonToken.WithoutLeadingTrivia().WithTrailingSpace();
                 var updatedKeyword = initializer.ThisOrBaseKeyword.WithoutLeadingTrivia();
 
                 return initializer.WithColonToken(updatedToken)
