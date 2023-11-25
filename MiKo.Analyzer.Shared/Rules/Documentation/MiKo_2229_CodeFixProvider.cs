@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var token = syntax.FindToken(diagnostic);
             var fragment = diagnostic.Location.GetText();
 
-            return syntax.ReplaceToken(token, token.WithText(token.Text.Without(fragment)));
+            return syntax.ReplaceToken(token, token.WithText(token.ValueText.Without(fragment)));
         }
     }
 }
