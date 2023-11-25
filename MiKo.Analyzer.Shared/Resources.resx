@@ -2838,6 +2838,18 @@ Positive wording is much easier to understand as it is straight forward and come
   <data name="MiKo_2228_Title" xml:space="preserve">
     <value>Documentation should use positive wording instead of negative</value>
   </data>
+  <data name="MiKo_2229_CodeFixTitle" xml:space="preserve">
+    <value>Delete XML fragment</value>
+  </data>
+  <data name="MiKo_2229_Description" xml:space="preserve">
+    <value>XML fragments in XML documentation are a left over and were not recognized by the developer. However, they may end up in documentation that is available to everybody and therefore should be avoided.</value>
+  </data>
+  <data name="MiKo_2229_MessageFormat" xml:space="preserve">
+    <value>Delete XML fragment '{0}'</value>
+  </data>
+  <data name="MiKo_2229_Title" xml:space="preserve">
+    <value>Documentation should not contain left-over XML fragments</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
