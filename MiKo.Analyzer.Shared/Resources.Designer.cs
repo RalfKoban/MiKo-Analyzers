@@ -7988,6 +7988,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete XML fragment.
+        /// </summary>
+        public static string MiKo_2229_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2229_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML fragments in XML documentation are a left over and were not recognized by the developer. However, they may end up in documentation that is available to everybody and therefore should be avoided..
+        /// </summary>
+        public static string MiKo_2229_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2229_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete XML fragment &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_2229_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2229_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not contain left-over XML fragments.
+        /// </summary>
+        public static string MiKo_2229_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2229_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

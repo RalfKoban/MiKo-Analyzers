@@ -64,6 +64,14 @@ namespace MiKoSolutions.Analyzers
 
 //// ncrunch: collect values off
 
+        internal static SyntaxToken FindToken<T>(this T value, Diagnostic diagnostic) where T : SyntaxNode
+        {
+            var position = diagnostic.Location.SourceSpan.Start;
+            var token = value.FindToken(position, true);
+
+            return token;
+        }
+
         internal static T FirstAncestor<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault();
 
         internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
