@@ -12,6 +12,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public class MiKo_6051_ConstructorOperatorsAreOnSameLineAsRightArgumentsAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_incomplete_ctor__when_colon_is_on_same_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public TestMe() :
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_incomplete_ctor__when_colon_is_on_other_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public TestMe()
+                :
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_ctor_calling_other_this_ctor_when_colon_is_on_same_line() => No_issue_is_reported_for(@"
 public class TestMe
 {

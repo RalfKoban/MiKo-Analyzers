@@ -19,9 +19,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             var node = (ConstructorInitializerSyntax)context.Node;
+            var keyword = node.ThisOrBaseKeyword;
+
+            if (keyword.IsMissing)
+            {
+                // incomplete code
+                return;
+            }
 
             var startLine = node.ColonToken.GetStartingLine();
-            var rightPosition = node.ThisOrBaseKeyword.GetStartPosition();
+            var rightPosition = keyword.GetStartPosition();
 
             if (startLine != rightPosition.Line)
             {
