@@ -27,12 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return;
             }
 
-            var startLine = node.ColonToken.GetStartingLine();
+            var colonToken = node.ColonToken;
+            var startLine = colonToken.GetStartingLine();
             var rightPosition = keyword.GetStartPosition();
 
             if (startLine != rightPosition.Line)
             {
-                ReportDiagnostics(context, Issue(node.ColonToken));
+                ReportDiagnostics(context, Issue(colonToken));
             }
         }
     }
