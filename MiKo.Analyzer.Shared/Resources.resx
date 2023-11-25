@@ -4767,50 +4767,50 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
     <value>ObjectDisposedException.ThrowIf statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6030_CodeFixTitle" xml:space="preserve">
-    <value>Place open brace directly below type</value>
+    <value>Align open brace directly below type</value>
   </data>
   <data name="MiKo_6030_Description" xml:space="preserve">
     <value>To indicate the initializations and to distinguish them from blocks (such as if blocks), the open brace of the initializer should be positioned directly below the corresponding type definition.</value>
   </data>
   <data name="MiKo_6030_MessageFormat" xml:space="preserve">
-    <value>Place open brace directly below type</value>
+    <value>Align open brace directly below type</value>
   </data>
   <data name="MiKo_6030_Title" xml:space="preserve">
     <value>Open braces of initializers should be placed directly below the corresponding type definition</value>
   </data>
   <data name="MiKo_6031_CodeFixTitle" xml:space="preserve">
-    <value>Place ternary operator directly below condition</value>
+    <value>Align ternary operator directly below condition</value>
   </data>
   <data name="MiKo_6031_Description" xml:space="preserve">
     <value>To easily spot the 2 possibilities of ternary operators based on their conditions, the question and colon tokens should be positioned directly below the corresponding condition.</value>
   </data>
   <data name="MiKo_6031_MessageFormat" xml:space="preserve">
-    <value>Place ternary operator directly below condition</value>
+    <value>Align ternary operator directly below condition</value>
   </data>
   <data name="MiKo_6031_Title" xml:space="preserve">
     <value>Question and colon tokens of ternary operators should be placed directly below the corresponding condition</value>
   </data>
   <data name="MiKo_6032_CodeFixTitle" xml:space="preserve">
-    <value>Place parameter outdented below method</value>
+    <value>Align parameter outdented below method</value>
   </data>
   <data name="MiKo_6032_Description" xml:space="preserve">
     <value>To easily spot the multi-line parameters of a method, those parameters should be positioned outdented below the corresponding method declaration.</value>
   </data>
   <data name="MiKo_6032_MessageFormat" xml:space="preserve">
-    <value>Place parameter '{0}' outdented below method</value>
+    <value>Align parameter '{0}' outdented below method</value>
   </data>
   <data name="MiKo_6032_Title" xml:space="preserve">
     <value>Multi-line parameters are positioned outdented at end of method</value>
   </data>
   <data name="MiKo_6033_CodeFixTitle" xml:space="preserve">
-    <value>Place open brace directly below case</value>
+    <value>Align open brace directly below case</value>
   </data>
   <data name="MiKo_6033_Description" xml:space="preserve">
     <value>Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
 Hence, as it is a block similar to the if block(s), the open brace of the block should be positioned directly below the corresponding case keyword.</value>
   </data>
   <data name="MiKo_6033_MessageFormat" xml:space="preserve">
-    <value>Place open brace directly below case</value>
+    <value>Align open brace directly below case</value>
   </data>
   <data name="MiKo_6033_Title" xml:space="preserve">
     <value>Braces of blocks below case sections should be placed directly below the corresponding case keyword</value>
@@ -4840,13 +4840,13 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Open parenthesis should be placed on same line(s) as invoked methods</value>
   </data>
   <data name="MiKo_6036_CodeFixTitle" xml:space="preserve">
-    <value>Place block directly below arrow</value>
+    <value>Align block directly below arrow</value>
   </data>
   <data name="MiKo_6036_Description" xml:space="preserve">
     <value>To easily distinguish lambda blocks from other code blocks, these blocks should be positioned either in line with or directly below the corresponding arrow.</value>
   </data>
   <data name="MiKo_6036_MessageFormat" xml:space="preserve">
-    <value>Place lambda block directly below arrow</value>
+    <value>Align lambda block directly below arrow</value>
   </data>
   <data name="MiKo_6036_Title" xml:space="preserve">
     <value>Lambda blocks should be placed directly below the corresponding arrow(s)</value>
@@ -4972,14 +4972,14 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Calculations using operators such as '+' or '%' should be placed on same line(s)</value>
   </data>
   <data name="MiKo_6047_CodeFixTitle" xml:space="preserve">
-    <value>Place open brace directly below switch</value>
+    <value>Align open brace directly below switch</value>
   </data>
   <data name="MiKo_6047_Description" xml:space="preserve">
     <value>Switch expressions are very similar to switch statements.
 Hence, the open brace of the expression should be positioned directly below the corresponding switch keyword.</value>
   </data>
   <data name="MiKo_6047_MessageFormat" xml:space="preserve">
-    <value>Place open brace directly below switch</value>
+    <value>Align open brace directly below switch</value>
   </data>
   <data name="MiKo_6047_Title" xml:space="preserve">
     <value>Braces of switch expressions should be placed directly below the corresponding switch keyword</value>
@@ -5009,13 +5009,13 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Event (un-)registrations should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6050_CodeFixTitle" xml:space="preserve">
-    <value>Place argument outdented below method call</value>
+    <value>Align argument outdented below method call</value>
   </data>
   <data name="MiKo_6050_Description" xml:space="preserve">
     <value>To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call.</value>
   </data>
   <data name="MiKo_6050_MessageFormat" xml:space="preserve">
-    <value>Place argument '{0}' outdented below method call</value>
+    <value>Align argument '{0}' outdented below method call</value>
   </data>
   <data name="MiKo_6050_Title" xml:space="preserve">
     <value>Multi-line arguments are positioned outdented at end of method call</value>
