@@ -14322,5 +14322,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6050_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6051_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves..
+        /// </summary>
+        public static string MiKo_6051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colon of constructor call shall be placed on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6051_Title", resourceCulture);
+            }
+        }
     }
 }

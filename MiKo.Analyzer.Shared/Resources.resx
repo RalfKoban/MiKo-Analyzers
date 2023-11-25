@@ -5020,4 +5020,16 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6050_Title" xml:space="preserve">
     <value>Multi-line arguments are positioned outdented at end of method call</value>
   </data>
+  <data name="MiKo_6051_CodeFixTitle" xml:space="preserve">
+    <value>Place colon on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6051_Description" xml:space="preserve">
+    <value>The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves.</value>
+  </data>
+  <data name="MiKo_6051_MessageFormat" xml:space="preserve">
+    <value>Place colon on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6051_Title" xml:space="preserve">
+    <value>Colon of constructor call shall be placed on same line as constructor call</value>
+  </data>
 </root>

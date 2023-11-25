@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 417 rules that are currently provided by the analyzer.
+The following tables list all the 418 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -461,3 +461,4 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|\-|
 |MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
+|MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
