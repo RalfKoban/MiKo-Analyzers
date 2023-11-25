@@ -13566,7 +13566,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below type.
+        ///   Looks up a localized string similar to Align open brace directly below type.
         /// </summary>
         public static string MiKo_6030_CodeFixTitle {
             get {
@@ -13584,7 +13584,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below type.
+        ///   Looks up a localized string similar to Align open brace directly below type.
         /// </summary>
         public static string MiKo_6030_MessageFormat {
             get {
@@ -13602,7 +13602,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place ternary operator directly below condition.
+        ///   Looks up a localized string similar to Align ternary operator directly below condition.
         /// </summary>
         public static string MiKo_6031_CodeFixTitle {
             get {
@@ -13620,7 +13620,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place ternary operator directly below condition.
+        ///   Looks up a localized string similar to Align ternary operator directly below condition.
         /// </summary>
         public static string MiKo_6031_MessageFormat {
             get {
@@ -13638,7 +13638,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place parameter outdented below method.
+        ///   Looks up a localized string similar to Align parameter outdented below method.
         /// </summary>
         public static string MiKo_6032_CodeFixTitle {
             get {
@@ -13656,7 +13656,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place parameter &apos;{0}&apos; outdented below method.
+        ///   Looks up a localized string similar to Align parameter &apos;{0}&apos; outdented below method.
         /// </summary>
         public static string MiKo_6032_MessageFormat {
             get {
@@ -13674,7 +13674,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below case.
+        ///   Looks up a localized string similar to Align open brace directly below case.
         /// </summary>
         public static string MiKo_6033_CodeFixTitle {
             get {
@@ -13693,7 +13693,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below case.
+        ///   Looks up a localized string similar to Align open brace directly below case.
         /// </summary>
         public static string MiKo_6033_MessageFormat {
             get {
@@ -13783,7 +13783,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place block directly below arrow.
+        ///   Looks up a localized string similar to Align block directly below arrow.
         /// </summary>
         public static string MiKo_6036_CodeFixTitle {
             get {
@@ -13801,7 +13801,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place lambda block directly below arrow.
+        ///   Looks up a localized string similar to Align lambda block directly below arrow.
         /// </summary>
         public static string MiKo_6036_MessageFormat {
             get {
@@ -14179,7 +14179,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below switch.
+        ///   Looks up a localized string similar to Align open brace directly below switch.
         /// </summary>
         public static string MiKo_6047_CodeFixTitle {
             get {
@@ -14198,7 +14198,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below switch.
+        ///   Looks up a localized string similar to Align open brace directly below switch.
         /// </summary>
         public static string MiKo_6047_MessageFormat {
             get {
@@ -14288,7 +14288,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place argument outdented below method call.
+        ///   Looks up a localized string similar to Align argument outdented below method call.
         /// </summary>
         public static string MiKo_6050_CodeFixTitle {
             get {
@@ -14306,7 +14306,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place argument &apos;{0}&apos; outdented below method call.
+        ///   Looks up a localized string similar to Align argument &apos;{0}&apos; outdented below method call.
         /// </summary>
         public static string MiKo_6050_MessageFormat {
             get {

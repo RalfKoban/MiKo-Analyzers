@@ -186,8 +186,8 @@ namespace MiKoSolutions.Analyzers
             var trivia = node.GetLeadingTrivia();
 
             return trivia.Count > 0
-                       ? value.WithAdditionalLeadingTrivia(trivia)
-                       : value;
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
         }
 
         internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxToken token)
@@ -195,8 +195,8 @@ namespace MiKoSolutions.Analyzers
             var trivia = token.LeadingTrivia;
 
             return trivia.Count > 0
-                       ? value.WithAdditionalLeadingTrivia(trivia)
-                       : value;
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
         }
 
         internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count) => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically
