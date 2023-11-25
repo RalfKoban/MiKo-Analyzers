@@ -2123,9 +2123,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
 
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivias) where T : SyntaxNode
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
         {
-            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivias));
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
+        }
+
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
+        {
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
         }
 
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
@@ -2369,6 +2374,24 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
                                                                                                           .WithTrailingTriviaFrom(token);
+
+        internal static T WithAdditionalLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            var trivia = node.GetLeadingTrivia();
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
+        }
+
+        internal static T WithAdditionalLeadingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode
+        {
+            var trivia = token.LeadingTrivia;
+
+            return trivia.Count > 0
+                       ? value.WithAdditionalLeadingTrivia(trivia)
+                       : value;
+        }
 
         internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {

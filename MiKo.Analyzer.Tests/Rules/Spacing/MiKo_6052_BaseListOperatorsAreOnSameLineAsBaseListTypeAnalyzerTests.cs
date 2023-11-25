@@ -96,13 +96,13 @@ public class TestMe<T> :
 ");
 
         [Test]
-        public void Code_gets_fixed_for_non_generic_type()
+        public void Code_gets_fixed_for_non_generic_([Values("class", "interface", "struct", "record")] string typeKind)
         {
             const string OriginalCode = @"
 using System;
 
-public class TestMe :
-                    IDisposable
+public ### TestMe :
+                IDisposable
 {
 }
 ";
@@ -110,22 +110,23 @@ public class TestMe :
             const string FixedCode = @"
 using System;
 
-public class TestMe : IDisposable
+public ### TestMe
+                : IDisposable
 {
 }
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
+"
+            ;
+            VerifyCSharpFix(OriginalCode.Replace("###", typeKind), FixedCode.Replace("###", typeKind));
         }
 
         [Test]
-        public void Code_gets_fixed_for_generic_type()
+        public void Code_gets_fixed_for_generic_([Values("class", "interface", "struct", "record")] string typeKind)
         {
             const string OriginalCode = @"
 using System;
 
-public class TestMe<T> :
-                    IDisposable
+public ### TestMe<T> :
+                IDisposable
 {
 }
 ";
@@ -133,12 +134,13 @@ public class TestMe<T> :
             const string FixedCode = @"
 using System;
 
-public class TestMe<T> : IDisposable
+public ### TestMe<T>
+                : IDisposable
 {
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode.Replace("###", typeKind), FixedCode.Replace("###", typeKind));
         }
 
         protected override string GetDiagnosticId() => MiKo_6052_BaseListOperatorsAreOnSameLineAsBaseListTypeAnalyzer.Id;
