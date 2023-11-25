@@ -7509,7 +7509,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt;.
+        ///   Looks up a localized string similar to Use &lt;paramref&gt; instead of &lt;param&gt;.
         /// </summary>
         public static string MiKo_2216_MessageFormat {
             get {
@@ -7518,7 +7518,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.
+        ///   Looks up a localized string similar to Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters.
         /// </summary>
         public static string MiKo_2216_Title {
             get {
@@ -8193,7 +8193,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end comment with period.
+        ///   Looks up a localized string similar to End comment with period.
         /// </summary>
         public static string MiKo_2306_MessageFormat {
             get {
@@ -8202,7 +8202,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end comments with a period.
+        ///   Looks up a localized string similar to End comments with a period.
         /// </summary>
         public static string MiKo_2306_Title {
             get {
@@ -10297,7 +10297,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end log messages for exceptions with a colon.
+        ///   Looks up a localized string similar to End log messages for exceptions with a colon.
         /// </summary>
         public static string MiKo_3062_Title {
             get {
@@ -10333,7 +10333,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do end non-exceptional log messages with a dot.
+        ///   Looks up a localized string similar to End non-exceptional log messages with a dot.
         /// </summary>
         public static string MiKo_3063_Title {
             get {
@@ -10463,7 +10463,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not use &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Do not use &apos;{0}&apos;.
         /// </summary>
         public static string MiKo_3074_MessageFormat {
             get {
@@ -11750,7 +11750,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert if.
+        ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         public static string MiKo_3201_CodeFixTitle {
             get {
@@ -11768,7 +11768,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invert if.
+        ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         public static string MiKo_3201_MessageFormat {
             get {
@@ -11818,6 +11818,121 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3202_Title {
             get {
                 return ResourceManager.GetString("MiKo_3202_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that&apos;s why they have fewer parameters.
+        ///So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
+        ///Same applies to abstract methods..
+        /// </summary>
+        public static string MiKo_3210_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3210_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not make method &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_3210_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3210_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the longest overloads should be virtual or abstract.
+        /// </summary>
+        public static string MiKo_3210_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3210_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+        ///
+        ///The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution..
+        /// </summary>
+        public static string MiKo_3211_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a finalizer.
+        /// </summary>
+        public static string MiKo_3211_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3211_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public types should not have finalizers.
+        /// </summary>
+        public static string MiKo_3211_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3211_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep the basic Dispose pattern consistent and do not confuse developers by providing other &quot;Dispose&quot; methods. The only methods called &quot;Dispose&quot; should be the &quot;void IDisposable.Dispose()&quot; and the &quot;void Dispose(bool disposing)&quot; methods.
+        ///
+        ///All other methods would vary from the Dispose pattern and lead to confusion..
+        /// </summary>
+        public static string MiKo_3212_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3212_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not provide such Dispose method.
+        /// </summary>
+        public static string MiKo_3212_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3212_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not confuse developers by providing other Dispose methods.
+        /// </summary>
+        public static string MiKo_3212_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3212_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The public &apos;Dispose()&apos; method should invoke the &apos;Dispose(bool disposing)&apos; method with &apos;disposing&apos; set to &apos;true&apos; as the only call.
+        ///All the other calls should be invoked from the &apos;Dispose(bool disposing)&apos; method..
+        /// </summary>
+        public static string MiKo_3213_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3213_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only invoke &apos;Dispose(false)&apos; but nothing more.
+        /// </summary>
+        public static string MiKo_3213_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3213_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameterless Dispose method follows Basic Dispose pattern.
+        /// </summary>
+        public static string MiKo_3213_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3213_Title", resourceCulture);
             }
         }
         
@@ -14205,6 +14320,78 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6050_Title {
             get {
                 return ResourceManager.GetString("MiKo_6050_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6051_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves..
+        /// </summary>
+        public static string MiKo_6051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colon of constructor call shall be placed on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6052_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types..
+        /// </summary>
+        public static string MiKo_6052_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6052_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6052_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colon of list of base types shall be placed on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6052_Title", resourceCulture);
             }
         }
     }

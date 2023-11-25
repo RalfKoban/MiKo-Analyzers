@@ -15,8 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            {
                                                                                new object[] { "element1.Equals(element2).Should().BeTrue()", "Assert.That(element1.Equals(element2), Is.True)" },
                                                                                new object[] { @"element1.Equals(element2).Should().BeTrue(""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().Be(true)", "Assert.That(element1.Equals(element2), Is.True)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().Be(true, ""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().NotBe(true)", "Assert.That(element1.Equals(element2), Is.False)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().NotBe(true, ""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
                                                                                new object[] { "element1.Equals(element2).Should().BeFalse()", "Assert.That(element1.Equals(element2), Is.False)" },
                                                                                new object[] { @"element1.Equals(element2).Should().BeFalse(""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().Be(false)", "Assert.That(element1.Equals(element2), Is.False)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().Be(false, ""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().NotBe(false)", "Assert.That(element1.Equals(element2), Is.True)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().NotBe(false, ""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
                                                                                new object[] { "element1.Should().BeNull()", "Assert.That(element1, Is.Null)" },
                                                                                new object[] { @"element1.Should().BeNull(""some message"")", @"Assert.That(element1, Is.Null, ""some message"")" },
                                                                                new object[] { "element1.Should().Be(null)", "Assert.That(element1, Is.Null)" },
@@ -181,6 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { @"element1.Should().BeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Ordered.Descending, ""some message"")" },
                                                                                new object[] { "element1.Should().NotBeInDescendingOrder()", "Assert.That(element1, Is.Not.Ordered.Descending)" },
                                                                                new object[] { @"element1.Should().NotBeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Not.Ordered.Descending, ""some message"")" },
+                                                                               new object[] { @"element1.ShouldBeEquivalentTo(""some message"")", @"Assert.That(element1, Is.EquivalentTo(""some message""))" },
                                                                            };
 
         // for yet unknown reasons those elements cannot be fixed when available multiple times

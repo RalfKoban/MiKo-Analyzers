@@ -13,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3084";
 
-        private static readonly HashSet<SyntaxKind> ExpressionValues = new HashSet<SyntaxKind>
-                                                                           {
-                                                                               SyntaxKind.TrueLiteralExpression,
-                                                                               SyntaxKind.FalseLiteralExpression,
-                                                                               SyntaxKind.NullLiteralExpression,
-                                                                               SyntaxKind.NumericLiteralExpression,
-                                                                               SyntaxKind.StringLiteralExpression,
-                                                                           };
+        private static readonly SyntaxKind[] ExpressionValues =
+                                                                {
+                                                                    SyntaxKind.TrueLiteralExpression,
+                                                                    SyntaxKind.FalseLiteralExpression,
+                                                                    SyntaxKind.NullLiteralExpression,
+                                                                    SyntaxKind.NumericLiteralExpression,
+                                                                    SyntaxKind.StringLiteralExpression,
+                                                                };
 
         private static readonly SyntaxKind[] Expressions =
                                                            {

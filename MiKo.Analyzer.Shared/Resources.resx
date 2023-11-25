@@ -2670,10 +2670,10 @@ In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&g
 So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;remarks&gt; section, you should use the &lt;paramref&gt; tag.</value>
   </data>
   <data name="MiKo_2216_MessageFormat" xml:space="preserve">
-    <value>Do use &lt;paramref&gt; instead of &lt;param&gt;</value>
+    <value>Use &lt;paramref&gt; instead of &lt;param&gt;</value>
   </data>
   <data name="MiKo_2216_Title" xml:space="preserve">
-    <value>Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters</value>
+    <value>Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters</value>
   </data>
   <data name="MiKo_2217_CodeFixTitle" xml:space="preserve">
     <value>Fix '&lt;list&gt;'</value>
@@ -2912,10 +2912,10 @@ If it question things, then the reasons behind are still unclear. This makes it 
 This rule contradicts rule MiKo_2303.</value>
   </data>
   <data name="MiKo_2306_MessageFormat" xml:space="preserve">
-    <value>Do end comment with period</value>
+    <value>End comment with period</value>
   </data>
   <data name="MiKo_2306_Title" xml:space="preserve">
-    <value>Do end comments with a period</value>
+    <value>End comments with a period</value>
   </data>
   <data name="MiKo_2307_CodeFixTitle" xml:space="preserve">
     <value>Replace with 'failed'</value>
@@ -3644,7 +3644,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with colon</value>
   </data>
   <data name="MiKo_3062_Title" xml:space="preserve">
-    <value>Do end log messages for exceptions with a colon</value>
+    <value>End log messages for exceptions with a colon</value>
   </data>
   <data name="MiKo_3063_CodeFixTitle" xml:space="preserve">
     <value>End log message with dot</value>
@@ -3656,7 +3656,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with dot</value>
   </data>
   <data name="MiKo_3063_Title" xml:space="preserve">
-    <value>Do end non-exceptional log messages with a dot</value>
+    <value>End non-exceptional log messages with a dot</value>
   </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
@@ -3702,7 +3702,7 @@ Doing so allows to change the implementation of the return value whenever it's n
 So, having 'ref' or 'out' parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor.</value>
   </data>
   <data name="MiKo_3074_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}'</value>
+    <value>Do not use '{0}'</value>
   </data>
   <data name="MiKo_3074_Title" xml:space="preserve">
     <value>Do not define 'ref' or 'out' parameters on constructors</value>
@@ -4151,13 +4151,13 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
     <value>Test methods should not use ambiguous Linq calls</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
-    <value>Invert if</value>
+    <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Description" xml:space="preserve">
     <value>In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read.</value>
   </data>
   <data name="MiKo_3201_MessageFormat" xml:space="preserve">
-    <value>Invert if</value>
+    <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Title" xml:space="preserve">
     <value>If statements can be inverted in short methods</value>
@@ -4173,6 +4173,49 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   </data>
   <data name="MiKo_3202_Title" xml:space="preserve">
     <value>Use positive conditions when returning in all paths</value>
+  </data>
+  <data name="MiKo_3210_Description" xml:space="preserve">
+    <value>Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that's why they have fewer parameters.
+So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
+Same applies to abstract methods.</value>
+  </data>
+  <data name="MiKo_3210_MessageFormat" xml:space="preserve">
+    <value>Do not make method '{0}'</value>
+  </data>
+  <data name="MiKo_3210_Title" xml:space="preserve">
+    <value>Only the longest overloads should be virtual or abstract</value>
+  </data>
+  <data name="MiKo_3211_Description" xml:space="preserve">
+    <value>In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+
+The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution.</value>
+  </data>
+  <data name="MiKo_3211_MessageFormat" xml:space="preserve">
+    <value>Do not use a finalizer</value>
+  </data>
+  <data name="MiKo_3211_Title" xml:space="preserve">
+    <value>Public types should not have finalizers</value>
+  </data>
+  <data name="MiKo_3212_Description" xml:space="preserve">
+    <value>Keep the basic Dispose pattern consistent and do not confuse developers by providing other "Dispose" methods. The only methods called "Dispose" should be the "void IDisposable.Dispose()" and the "void Dispose(bool disposing)" methods.
+
+All other methods would vary from the Dispose pattern and lead to confusion.</value>
+  </data>
+  <data name="MiKo_3212_MessageFormat" xml:space="preserve">
+    <value>Do not provide such Dispose method</value>
+  </data>
+  <data name="MiKo_3212_Title" xml:space="preserve">
+    <value>Do not confuse developers by providing other Dispose methods</value>
+  </data>
+  <data name="MiKo_3213_Description" xml:space="preserve">
+    <value>The public 'Dispose()' method should invoke the 'Dispose(bool disposing)' method with 'disposing' set to 'true' as the only call.
+All the other calls should be invoked from the 'Dispose(bool disposing)' method.</value>
+  </data>
+  <data name="MiKo_3213_MessageFormat" xml:space="preserve">
+    <value>Only invoke 'Dispose(false)' but nothing more</value>
+  </data>
+  <data name="MiKo_3213_Title" xml:space="preserve">
+    <value>Parameterless Dispose method follows Basic Dispose pattern</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
@@ -4976,5 +5019,29 @@ Hence, the open brace of the expression should be positioned directly below the 
   </data>
   <data name="MiKo_6050_Title" xml:space="preserve">
     <value>Multi-line arguments are positioned outdented at end of method call</value>
+  </data>
+  <data name="MiKo_6051_CodeFixTitle" xml:space="preserve">
+    <value>Place colon on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6051_Description" xml:space="preserve">
+    <value>The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves.</value>
+  </data>
+  <data name="MiKo_6051_MessageFormat" xml:space="preserve">
+    <value>Place colon on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6051_Title" xml:space="preserve">
+    <value>Colon of constructor call shall be placed on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6052_CodeFixTitle" xml:space="preserve">
+    <value>Place colon on same line as first base type</value>
+  </data>
+  <data name="MiKo_6052_Description" xml:space="preserve">
+    <value>The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types.</value>
+  </data>
+  <data name="MiKo_6052_MessageFormat" xml:space="preserve">
+    <value>Place colon on same line as first base type</value>
+  </data>
+  <data name="MiKo_6052_Title" xml:space="preserve">
+    <value>Colon of list of base types shall be placed on same line as first base type</value>
   </data>
 </root>

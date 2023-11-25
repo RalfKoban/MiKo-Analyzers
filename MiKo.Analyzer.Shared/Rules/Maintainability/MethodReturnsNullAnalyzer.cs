@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MethodReturnsNullAnalyzer : MaintainabilityAnalyzer
     {
-        private static readonly HashSet<SyntaxKind> ImportantAncestors = new HashSet<SyntaxKind>
-                                                                             {
-                                                                                 SyntaxKind.VariableDeclaration,
-                                                                                 SyntaxKind.Parameter,
-                                                                                 SyntaxKind.IfStatement,
-                                                                                 SyntaxKind.ConditionalExpression,
-                                                                                 SyntaxKind.SwitchStatement,
-                                                                             };
+        private static readonly SyntaxKind[] ImportantAncestors =
+                                                                  {
+                                                                      SyntaxKind.VariableDeclaration,
+                                                                      SyntaxKind.Parameter,
+                                                                      SyntaxKind.IfStatement,
+                                                                      SyntaxKind.ConditionalExpression,
+                                                                      SyntaxKind.SwitchStatement,
+                                                                  };
 
         protected MethodReturnsNullAnalyzer(string diagnosticId) : base(diagnosticId)
         {

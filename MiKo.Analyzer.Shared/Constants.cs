@@ -780,96 +780,96 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
-            internal static readonly HashSet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
-                                                                                         .Select(_ => _.Name)
-                                                                                         .Except(new[]
-                                                                                                     {
-                                                                                                         nameof(Equals),
-                                                                                                         nameof(ToString),
-                                                                                                         nameof(GetHashCode),
-                                                                                                         nameof(GetType),
-                                                                                                     })
-                                                                                         .ToHashSet();
+            internal static readonly ISet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
+                                                                                      .Select(_ => _.Name)
+                                                                                      .Except(new[]
+                                                                                                  {
+                                                                                                      nameof(Equals),
+                                                                                                      nameof(ToString),
+                                                                                                      nameof(GetHashCode),
+                                                                                                      nameof(GetType),
+                                                                                                  })
+                                                                                      .ToHashSet();
 
-            internal static readonly IEnumerable<string> GeneratedAttributeNames = new HashSet<string>
+            internal static readonly ISet<string> GeneratedAttributeNames = new HashSet<string>
+                                                                                {
+                                                                                    "CompilerGenerated",
+                                                                                    "CompilerGeneratedAttribute",
+                                                                                    "DebuggerNonUserCode",
+                                                                                    "DebuggerNonUserCodeAttribute",
+                                                                                    "GeneratedCode",
+                                                                                    "GeneratedCodeAttribute",
+                                                                                };
+
+            internal static readonly ISet<string> TestMethodAttributeNames = new HashSet<string>
+                                                                                 {
+                                                                                     "Test",
+                                                                                     "TestAttribute",
+                                                                                     "TestCase",
+                                                                                     "TestCaseAttribute",
+                                                                                     "TestCaseSource",
+                                                                                     "TestCaseSourceAttribute",
+                                                                                     "Theory",
+                                                                                     "TheoryAttribute",
+                                                                                     "Fact",
+                                                                                     "FactAttribute",
+                                                                                     "TestMethod",
+                                                                                     "TestMethodAttribute",
+                                                                                 };
+
+            internal static readonly ISet<string> TestClassAttributeNames = new HashSet<string>
+                                                                                {
+                                                                                    "TestFixture",
+                                                                                    "TestFixtureAttribute",
+                                                                                    "TestClass",
+                                                                                    "TestClassAttribute",
+                                                                                };
+
+            internal static readonly ISet<string> TestSetupAttributeNames = new HashSet<string>
+                                                                                {
+                                                                                    "SetUp",
+                                                                                    "SetUpAttribute",
+                                                                                    "TestInitialize",
+                                                                                    "TestInitializeAttribute",
+                                                                                };
+
+            internal static readonly ISet<string> TestTearDownAttributeNames = new HashSet<string>
+                                                                                   {
+                                                                                       "TearDown",
+                                                                                       "TearDownAttribute",
+                                                                                       "TestCleanup",
+                                                                                       "TestCleanupAttribute",
+                                                                                   };
+
+            internal static readonly ISet<string> TestOneTimeSetupAttributeNames = new HashSet<string>
                                                                                        {
-                                                                                           "CompilerGenerated",
-                                                                                           "CompilerGeneratedAttribute",
-                                                                                           "DebuggerNonUserCode",
-                                                                                           "DebuggerNonUserCodeAttribute",
-                                                                                           "GeneratedCode",
-                                                                                           "GeneratedCodeAttribute",
+                                                                                           "OneTimeSetUp",
+                                                                                           "OneTimeSetUpAttribute",
+                                                                                           "TestFixtureSetUp", // deprecated NUnit 2.6
+                                                                                           "TestFixtureSetUpAttribute", // deprecated NUnit 2.6
                                                                                        };
 
-            internal static readonly IEnumerable<string> TestMethodAttributeNames = new HashSet<string>
-                                                                                        {
-                                                                                            "Test",
-                                                                                            "TestAttribute",
-                                                                                            "TestCase",
-                                                                                            "TestCaseAttribute",
-                                                                                            "TestCaseSource",
-                                                                                            "TestCaseSourceAttribute",
-                                                                                            "Theory",
-                                                                                            "TheoryAttribute",
-                                                                                            "Fact",
-                                                                                            "FactAttribute",
-                                                                                            "TestMethod",
-                                                                                            "TestMethodAttribute",
-                                                                                        };
-
-            internal static readonly IEnumerable<string> TestClassAttributeNames = new HashSet<string>
-                                                                                       {
-                                                                                           "TestFixture",
-                                                                                           "TestFixtureAttribute",
-                                                                                           "TestClass",
-                                                                                           "TestClassAttribute",
-                                                                                       };
-
-            internal static readonly IEnumerable<string> TestSetupAttributeNames = new HashSet<string>
-                                                                                       {
-                                                                                           "SetUp",
-                                                                                           "SetUpAttribute",
-                                                                                           "TestInitialize",
-                                                                                           "TestInitializeAttribute",
-                                                                                       };
-
-            internal static readonly IEnumerable<string> TestTearDownAttributeNames = new HashSet<string>
+            internal static readonly ISet<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
                                                                                           {
-                                                                                              "TearDown",
-                                                                                              "TearDownAttribute",
-                                                                                              "TestCleanup",
-                                                                                              "TestCleanupAttribute",
+                                                                                              "OneTimeTearDown",
+                                                                                              "OneTimeTearDownAttribute",
+                                                                                              "TestFixtureTearDown", // deprecated NUnit 2.6
+                                                                                              "TestFixtureTearDownAttribute", // deprecated NUnit 2.6
                                                                                           };
 
-            internal static readonly IEnumerable<string> TestOneTimeSetupAttributeNames = new HashSet<string>
-                                                                                              {
-                                                                                                  "OneTimeSetUp",
-                                                                                                  "OneTimeSetUpAttribute",
-                                                                                                  "TestFixtureSetUp", // deprecated NUnit 2.6
-                                                                                                  "TestFixtureSetUpAttribute", // deprecated NUnit 2.6
-                                                                                              };
+            internal static readonly ISet<string> ImportAttributeNames = new HashSet<string>
+                                                                             {
+                                                                                 "Import",
+                                                                                 nameof(ImportAttribute),
+                                                                                 "ImportMany",
+                                                                                 nameof(ImportManyAttribute),
+                                                                             };
 
-            internal static readonly IEnumerable<string> TestOneTimeTearDownAttributeNames = new HashSet<string>
-                                                                                                 {
-                                                                                                     "OneTimeTearDown",
-                                                                                                     "OneTimeTearDownAttribute",
-                                                                                                     "TestFixtureTearDown", // deprecated NUnit 2.6
-                                                                                                     "TestFixtureTearDownAttribute", // deprecated NUnit 2.6
-                                                                                                 };
-
-            internal static readonly IEnumerable<string> ImportAttributeNames = new HashSet<string>
-                                                                                    {
-                                                                                        "Import",
-                                                                                        nameof(ImportAttribute),
-                                                                                        "ImportMany",
-                                                                                        nameof(ImportManyAttribute),
-                                                                                    };
-
-            internal static readonly IEnumerable<string> ImportingConstructorAttributeNames = new HashSet<string>
-                                                                                                  {
-                                                                                                      "ImportingConstructor",
-                                                                                                      nameof(ImportingConstructorAttribute),
-                                                                                                  };
+            internal static readonly ISet<string> ImportingConstructorAttributeNames = new HashSet<string>
+                                                                                           {
+                                                                                               "ImportingConstructor",
+                                                                                               nameof(ImportingConstructorAttribute),
+                                                                                           };
 
             internal static readonly IEnumerable<string> TypeUnderTestRawFieldNames = new[]
                                                                                           {
@@ -897,240 +897,240 @@ namespace MiKoSolutions.Analyzers
                                                                                               "candidateUnderTest",
                                                                                           };
 
-            internal static readonly IEnumerable<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
+            internal static readonly ISet<string> TypeUnderTestFieldNames = Markers.FieldPrefixes.SelectMany(_ => TypeUnderTestRawFieldNames, (prefix, name) => prefix + name).ToHashSet();
 
-            internal static readonly IEnumerable<string> TypeUnderTestPropertyNames = new HashSet<string>
-                                                                                          {
-                                                                                              "ObjectUnderTest",
-                                                                                              "ObjectToTest",
-                                                                                              "Sut",
-                                                                                              "SuT",
-                                                                                              "SUT",
-                                                                                              "SubjectToTest",
-                                                                                              "SubjectUnderTest",
-                                                                                              "UnitToTest",
-                                                                                              "UnitUnderTest",
-                                                                                              "Uut",
-                                                                                              "UuT",
-                                                                                              "UUT",
-                                                                                              "TestCandidate",
-                                                                                              "TestObject",
-                                                                                              "Testee",
-                                                                                          };
-
-            internal static readonly IEnumerable<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
-
-            internal static readonly IEnumerable<string> TypeUnderTestVariableNames = new HashSet<string>
-                                                                                          {
-                                                                                              "objectUnderTest",
-                                                                                              "objectToTest",
-                                                                                              "sut",
-                                                                                              "subjectToTest",
-                                                                                              "subjectUnderTest",
-                                                                                              "unitToTest",
-                                                                                              "unitUnderTest",
-                                                                                              "uut",
-                                                                                              "testCandidate",
-                                                                                              "testObject",
-                                                                                              "testee",
-                                                                                              "candidateToTest",
-                                                                                              "candidateUnderTest",
-                                                                                          };
-
-            internal static readonly IEnumerable<string> ObjectUnderTestNames = Enumerable.Empty<string>()
-                                                                                          .Concat(TypeUnderTestFieldNames)
-                                                                                          .Concat(TypeUnderTestVariableNames)
-                                                                                          .Concat(TypeUnderTestPropertyNames)
-                                                                                          .OrderBy(_ => _)
-                                                                                          .ToHashSet();
-
-            internal static readonly IEnumerable<string> AssertionTypes = new HashSet<string>
-                                                                              {
-                                                                                  "Assert",
-                                                                                  "CollectionAssert",
-                                                                                  "DirectoryAssert",
-                                                                                  "FileAssert",
-                                                                                  "StringAssert",
-                                                                              };
-
-            internal static readonly IEnumerable<string> AssertionNamespaces = new HashSet<string>
+            internal static readonly ISet<string> TypeUnderTestPropertyNames = new HashSet<string>
                                                                                    {
-                                                                                       "NUnit.Framework",
-                                                                                       "NUnit.Framework.Constraints",
+                                                                                       "ObjectUnderTest",
+                                                                                       "ObjectToTest",
+                                                                                       "Sut",
+                                                                                       "SuT",
+                                                                                       "SUT",
+                                                                                       "SubjectToTest",
+                                                                                       "SubjectUnderTest",
+                                                                                       "UnitToTest",
+                                                                                       "UnitUnderTest",
+                                                                                       "Uut",
+                                                                                       "UuT",
+                                                                                       "UUT",
+                                                                                       "TestCandidate",
+                                                                                       "TestObject",
+                                                                                       "Testee",
                                                                                    };
 
-            internal static readonly IEnumerable<string> KnownWindowsEventHandlers = new HashSet<string>
-                                                                                         {
-                                                                                             "AnnotationAuthorChangedEventHandler",
-                                                                                             "AnnotationResourceChangedEventHandler",
-                                                                                             "BamlLocalizerErrorNotifyEventHandler",
-                                                                                             "BindingCompleteEventHandler",
-                                                                                             "BindingManagerDataErrorEventHandler",
-                                                                                             "CacheVirtualItemsEventHandler",
-                                                                                             "CleanUpVirtualizedItemEventHandler",
-                                                                                             "ColumnClickEventHandler",
-                                                                                             "ColumnReorderedEventHandler",
-                                                                                             "ColumnWidthChangedEventHandler",
-                                                                                             "ColumnWidthChangingEventHandler",
-                                                                                             "ContentsResizedEventHandler",
-                                                                                             "ContextMenuEventHandler",
-                                                                                             "ControlEventHandler",
-                                                                                             "ConvertEventHandler",
-                                                                                             "DataGridSortingEventHandler",
-                                                                                             "DataGridViewAutoSizeColumnModeEventHandler",
-                                                                                             "DataGridViewAutoSizeColumnsModeEventHandler",
-                                                                                             "DataGridViewAutoSizeModeEventHandler",
-                                                                                             "DataGridViewBindingCompleteEventHandler",
-                                                                                             "DataGridViewCellCancelEventHandler",
-                                                                                             "DataGridViewCellContextMenuStripNeededEventHandler",
-                                                                                             "DataGridViewCellErrorTextNeededEventHandler",
-                                                                                             "DataGridViewCellEventHandler",
-                                                                                             "DataGridViewCellFormattingEventHandler",
-                                                                                             "DataGridViewCellMouseEventHandler",
-                                                                                             "DataGridViewCellPaintingEventHandler",
-                                                                                             "DataGridViewCellParsingEventHandler",
-                                                                                             "DataGridViewCellStateChangedEventHandler",
-                                                                                             "DataGridViewCellStyleContentChangedEventHandler",
-                                                                                             "DataGridViewCellToolTipTextNeededEventHandler",
-                                                                                             "DataGridViewCellValidatingEventHandler",
-                                                                                             "DataGridViewCellValueEventHandler",
-                                                                                             "DataGridViewColumnDividerDoubleClickEventHandler",
-                                                                                             "DataGridViewColumnEventHandler",
-                                                                                             "DataGridViewColumnStateChangedEventHandler",
-                                                                                             "DataGridViewDataErrorEventHandler",
-                                                                                             "DataGridViewEditingControlShowingEventHandler",
-                                                                                             "DataGridViewRowCancelEventHandler",
-                                                                                             "DataGridViewRowContextMenuStripNeededEventHandler",
-                                                                                             "DataGridViewRowDividerDoubleClickEventHandler",
-                                                                                             "DataGridViewRowErrorTextNeededEventHandler",
-                                                                                             "DataGridViewRowEventHandler",
-                                                                                             "DataGridViewRowHeightInfoNeededEventHandler",
-                                                                                             "DataGridViewRowHeightInfoPushedEventHandler",
-                                                                                             "DataGridViewRowPostPaintEventHandler",
-                                                                                             "DataGridViewRowPrePaintEventHandler",
-                                                                                             "DataGridViewRowsAddedEventHandler",
-                                                                                             "DataGridViewRowsRemovedEventHandler",
-                                                                                             "DataGridViewRowStateChangedEventHandler",
-                                                                                             "DataGridViewSortCompareEventHandler",
-                                                                                             "DateBoldEventHandler",
-                                                                                             "DateRangeEventHandler",
-                                                                                             "DpiChangedEventHandler",
-                                                                                             "DragCompletedEventHandler",
-                                                                                             "DragDeltaEventHandler",
-                                                                                             "DragEventHandler",
-                                                                                             "DragStartedEventHandler",
-                                                                                             "DrawItemEventHandler",
-                                                                                             "DrawListViewColumnHeaderEventHandler",
-                                                                                             "DrawListViewItemEventHandler",
-                                                                                             "DrawListViewSubItemEventHandler",
-                                                                                             "DrawToolTipEventHandler",
-                                                                                             "DrawTreeNodeEventHandler",
-                                                                                             "ExitEventHandler",
-                                                                                             "FilterEventHandler",
-                                                                                             "FormClosedEventHandler",
-                                                                                             "FormClosingEventHandler",
-                                                                                             "FragmentNavigationEventHandler",
-                                                                                             "GetPageRootCompletedEventHandler",
-                                                                                             "GiveFeedbackEventHandler",
-                                                                                             "HelpEventHandler",
-                                                                                             "HtmlElementErrorEventHandler",
-                                                                                             "HtmlElementEventHandler",
-                                                                                             "InitializingNewItemEventHandler",
-                                                                                             "InkCanvasGestureEventHandler",
-                                                                                             "InkCanvasSelectionChangingEventHandler",
-                                                                                             "InkCanvasSelectionEditingEventHandler",
-                                                                                             "InkCanvasStrokeCollectedEventHandler",
-                                                                                             "InkCanvasStrokeErasingEventHandler",
-                                                                                             "InkCanvasStrokesReplacedEventHandler",
-                                                                                             "InputLanguageChangedEventHandler",
-                                                                                             "InputLanguageChangingEventHandler",
-                                                                                             "InvalidateEventHandler",
-                                                                                             "ItemChangedEventHandler",
-                                                                                             "ItemCheckedEventHandler",
-                                                                                             "ItemCheckEventHandler",
-                                                                                             "ItemDragEventHandler",
-                                                                                             "ItemsChangedEventHandler",
-                                                                                             "KeyEventHandler",
-                                                                                             "KeyPressEventHandler",
-                                                                                             "LabelEditEventHandler",
-                                                                                             "LayoutEventHandler",
-                                                                                             "LinkClickedEventHandler",
-                                                                                             "LinkLabelLinkClickedEventHandler",
-                                                                                             "ListControlConvertEventHandler",
-                                                                                             "ListViewItemMouseHoverEventHandler",
-                                                                                             "ListViewItemSelectionChangedEventHandler",
-                                                                                             "ListViewVirtualItemsSelectionRangeChangedEventHandler",
-                                                                                             "LoadCompletedEventHandler",
-                                                                                             "MaskInputRejectedEventHandler",
-                                                                                             "MeasureItemEventHandler",
-                                                                                             "MouseEventHandler",
-                                                                                             "NavigatedEventHandler",
-                                                                                             "NavigateEventHandler",
-                                                                                             "NavigatingCancelEventHandler",
-                                                                                             "NavigationFailedEventHandler",
-                                                                                             "NavigationProgressEventHandler",
-                                                                                             "NavigationStoppedEventHandler",
-                                                                                             "NodeLabelEditEventHandler",
-                                                                                             "PaintEventHandler",
-                                                                                             "PopupEventHandler",
-                                                                                             "PreviewKeyDownEventHandler",
-                                                                                             "PropertyTabChangedEventHandler",
-                                                                                             "PropertyValueChangedEventHandler",
-                                                                                             "QueryAccessibilityHelpEventHandler",
-                                                                                             "QueryContinueDragEventHandler",
-                                                                                             "QuestionEventHandler",
-                                                                                             "RequestBringIntoViewEventHandler",
-                                                                                             "RequestNavigateEventHandler",
-                                                                                             "RetrieveVirtualItemEventHandler",
-                                                                                             "ScrollChangedEventHandler",
-                                                                                             "ScrollEventHandler",
-                                                                                             "SearchForVirtualItemEventHandler",
-                                                                                             "SelectedCellsChangedEventHandler",
-                                                                                             "SelectedGridItemChangedEventHandler",
-                                                                                             "SelectionChangedEventHandler",
-                                                                                             "SessionEndingCancelEventHandler",
-                                                                                             "SizeChangedEventHandler",
-                                                                                             "SplitterCancelEventHandler",
-                                                                                             "SplitterEventHandler",
-                                                                                             "StartupEventHandler",
-                                                                                             "StatusBarDrawItemEventHandler",
-                                                                                             "StatusBarPanelClickEventHandler",
-                                                                                             "StoreContentChangedEventHandler",
-                                                                                             "TabControlCancelEventHandler",
-                                                                                             "TabControlEventHandler",
-                                                                                             "TableLayoutCellPaintEventHandler",
-                                                                                             "TextChangedEventHandler",
-                                                                                             "ToolBarButtonClickEventHandler",
-                                                                                             "ToolStripArrowRenderEventHandler",
-                                                                                             "ToolStripContentPanelRenderEventHandler",
-                                                                                             "ToolStripDropDownClosedEventHandler",
-                                                                                             "ToolStripDropDownClosingEventHandler",
-                                                                                             "ToolStripGripRenderEventHandler",
-                                                                                             "ToolStripItemClickedEventHandler",
-                                                                                             "ToolStripItemEventHandler",
-                                                                                             "ToolStripItemImageRenderEventHandler",
-                                                                                             "ToolStripItemRenderEventHandler",
-                                                                                             "ToolStripItemTextRenderEventHandler",
-                                                                                             "ToolStripPanelRenderEventHandler",
-                                                                                             "ToolStripRenderEventHandler",
-                                                                                             "ToolStripSeparatorRenderEventHandler",
-                                                                                             "ToolTipEventHandler",
-                                                                                             "TreeNodeMouseClickEventHandler",
-                                                                                             "TreeNodeMouseHoverEventHandler",
-                                                                                             "TreeViewCancelEventHandler",
-                                                                                             "TreeViewEventHandler",
-                                                                                             "TypeValidationEventHandler",
-                                                                                             "UICuesEventHandler",
-                                                                                             "UpDownEventHandler",
-                                                                                             "WebBrowserDocumentCompletedEventHandler",
-                                                                                             "WebBrowserNavigatedEventHandler",
-                                                                                             "WebBrowserNavigatingEventHandler",
-                                                                                             "WebBrowserProgressChangedEventHandler",
-                                                                                             "WritingCancelledEventHandler",
-                                                                                             "WritingCompletedEventHandler",
-                                                                                             "WritingPrintTicketRequiredEventHandler",
-                                                                                             "WritingProgressChangedEventHandler",
-                                                                                         };
+            internal static readonly ISet<string> TypeUnderTestMethodNames = new[] { "Create", "Get" }.SelectMany(_ => TypeUnderTestPropertyNames, (prefix, name) => prefix + name).ToHashSet();
+
+            internal static readonly ISet<string> TypeUnderTestVariableNames = new HashSet<string>
+                                                                                   {
+                                                                                       "objectUnderTest",
+                                                                                       "objectToTest",
+                                                                                       "sut",
+                                                                                       "subjectToTest",
+                                                                                       "subjectUnderTest",
+                                                                                       "unitToTest",
+                                                                                       "unitUnderTest",
+                                                                                       "uut",
+                                                                                       "testCandidate",
+                                                                                       "testObject",
+                                                                                       "testee",
+                                                                                       "candidateToTest",
+                                                                                       "candidateUnderTest",
+                                                                                   };
+
+            internal static readonly ISet<string> ObjectUnderTestNames = Enumerable.Empty<string>()
+                                                                                   .Concat(TypeUnderTestFieldNames)
+                                                                                   .Concat(TypeUnderTestVariableNames)
+                                                                                   .Concat(TypeUnderTestPropertyNames)
+                                                                                   .OrderBy(_ => _)
+                                                                                   .ToHashSet();
+
+            internal static readonly ISet<string> AssertionTypes = new HashSet<string>
+                                                                       {
+                                                                           "Assert",
+                                                                           "CollectionAssert",
+                                                                           "DirectoryAssert",
+                                                                           "FileAssert",
+                                                                           "StringAssert",
+                                                                       };
+
+            internal static readonly ISet<string> AssertionNamespaces = new HashSet<string>
+                                                                            {
+                                                                                "NUnit.Framework",
+                                                                                "NUnit.Framework.Constraints",
+                                                                            };
+
+            internal static readonly ISet<string> KnownWindowsEventHandlers = new HashSet<string>
+                                                                                  {
+                                                                                      "AnnotationAuthorChangedEventHandler",
+                                                                                      "AnnotationResourceChangedEventHandler",
+                                                                                      "BamlLocalizerErrorNotifyEventHandler",
+                                                                                      "BindingCompleteEventHandler",
+                                                                                      "BindingManagerDataErrorEventHandler",
+                                                                                      "CacheVirtualItemsEventHandler",
+                                                                                      "CleanUpVirtualizedItemEventHandler",
+                                                                                      "ColumnClickEventHandler",
+                                                                                      "ColumnReorderedEventHandler",
+                                                                                      "ColumnWidthChangedEventHandler",
+                                                                                      "ColumnWidthChangingEventHandler",
+                                                                                      "ContentsResizedEventHandler",
+                                                                                      "ContextMenuEventHandler",
+                                                                                      "ControlEventHandler",
+                                                                                      "ConvertEventHandler",
+                                                                                      "DataGridSortingEventHandler",
+                                                                                      "DataGridViewAutoSizeColumnModeEventHandler",
+                                                                                      "DataGridViewAutoSizeColumnsModeEventHandler",
+                                                                                      "DataGridViewAutoSizeModeEventHandler",
+                                                                                      "DataGridViewBindingCompleteEventHandler",
+                                                                                      "DataGridViewCellCancelEventHandler",
+                                                                                      "DataGridViewCellContextMenuStripNeededEventHandler",
+                                                                                      "DataGridViewCellErrorTextNeededEventHandler",
+                                                                                      "DataGridViewCellEventHandler",
+                                                                                      "DataGridViewCellFormattingEventHandler",
+                                                                                      "DataGridViewCellMouseEventHandler",
+                                                                                      "DataGridViewCellPaintingEventHandler",
+                                                                                      "DataGridViewCellParsingEventHandler",
+                                                                                      "DataGridViewCellStateChangedEventHandler",
+                                                                                      "DataGridViewCellStyleContentChangedEventHandler",
+                                                                                      "DataGridViewCellToolTipTextNeededEventHandler",
+                                                                                      "DataGridViewCellValidatingEventHandler",
+                                                                                      "DataGridViewCellValueEventHandler",
+                                                                                      "DataGridViewColumnDividerDoubleClickEventHandler",
+                                                                                      "DataGridViewColumnEventHandler",
+                                                                                      "DataGridViewColumnStateChangedEventHandler",
+                                                                                      "DataGridViewDataErrorEventHandler",
+                                                                                      "DataGridViewEditingControlShowingEventHandler",
+                                                                                      "DataGridViewRowCancelEventHandler",
+                                                                                      "DataGridViewRowContextMenuStripNeededEventHandler",
+                                                                                      "DataGridViewRowDividerDoubleClickEventHandler",
+                                                                                      "DataGridViewRowErrorTextNeededEventHandler",
+                                                                                      "DataGridViewRowEventHandler",
+                                                                                      "DataGridViewRowHeightInfoNeededEventHandler",
+                                                                                      "DataGridViewRowHeightInfoPushedEventHandler",
+                                                                                      "DataGridViewRowPostPaintEventHandler",
+                                                                                      "DataGridViewRowPrePaintEventHandler",
+                                                                                      "DataGridViewRowsAddedEventHandler",
+                                                                                      "DataGridViewRowsRemovedEventHandler",
+                                                                                      "DataGridViewRowStateChangedEventHandler",
+                                                                                      "DataGridViewSortCompareEventHandler",
+                                                                                      "DateBoldEventHandler",
+                                                                                      "DateRangeEventHandler",
+                                                                                      "DpiChangedEventHandler",
+                                                                                      "DragCompletedEventHandler",
+                                                                                      "DragDeltaEventHandler",
+                                                                                      "DragEventHandler",
+                                                                                      "DragStartedEventHandler",
+                                                                                      "DrawItemEventHandler",
+                                                                                      "DrawListViewColumnHeaderEventHandler",
+                                                                                      "DrawListViewItemEventHandler",
+                                                                                      "DrawListViewSubItemEventHandler",
+                                                                                      "DrawToolTipEventHandler",
+                                                                                      "DrawTreeNodeEventHandler",
+                                                                                      "ExitEventHandler",
+                                                                                      "FilterEventHandler",
+                                                                                      "FormClosedEventHandler",
+                                                                                      "FormClosingEventHandler",
+                                                                                      "FragmentNavigationEventHandler",
+                                                                                      "GetPageRootCompletedEventHandler",
+                                                                                      "GiveFeedbackEventHandler",
+                                                                                      "HelpEventHandler",
+                                                                                      "HtmlElementErrorEventHandler",
+                                                                                      "HtmlElementEventHandler",
+                                                                                      "InitializingNewItemEventHandler",
+                                                                                      "InkCanvasGestureEventHandler",
+                                                                                      "InkCanvasSelectionChangingEventHandler",
+                                                                                      "InkCanvasSelectionEditingEventHandler",
+                                                                                      "InkCanvasStrokeCollectedEventHandler",
+                                                                                      "InkCanvasStrokeErasingEventHandler",
+                                                                                      "InkCanvasStrokesReplacedEventHandler",
+                                                                                      "InputLanguageChangedEventHandler",
+                                                                                      "InputLanguageChangingEventHandler",
+                                                                                      "InvalidateEventHandler",
+                                                                                      "ItemChangedEventHandler",
+                                                                                      "ItemCheckedEventHandler",
+                                                                                      "ItemCheckEventHandler",
+                                                                                      "ItemDragEventHandler",
+                                                                                      "ItemsChangedEventHandler",
+                                                                                      "KeyEventHandler",
+                                                                                      "KeyPressEventHandler",
+                                                                                      "LabelEditEventHandler",
+                                                                                      "LayoutEventHandler",
+                                                                                      "LinkClickedEventHandler",
+                                                                                      "LinkLabelLinkClickedEventHandler",
+                                                                                      "ListControlConvertEventHandler",
+                                                                                      "ListViewItemMouseHoverEventHandler",
+                                                                                      "ListViewItemSelectionChangedEventHandler",
+                                                                                      "ListViewVirtualItemsSelectionRangeChangedEventHandler",
+                                                                                      "LoadCompletedEventHandler",
+                                                                                      "MaskInputRejectedEventHandler",
+                                                                                      "MeasureItemEventHandler",
+                                                                                      "MouseEventHandler",
+                                                                                      "NavigatedEventHandler",
+                                                                                      "NavigateEventHandler",
+                                                                                      "NavigatingCancelEventHandler",
+                                                                                      "NavigationFailedEventHandler",
+                                                                                      "NavigationProgressEventHandler",
+                                                                                      "NavigationStoppedEventHandler",
+                                                                                      "NodeLabelEditEventHandler",
+                                                                                      "PaintEventHandler",
+                                                                                      "PopupEventHandler",
+                                                                                      "PreviewKeyDownEventHandler",
+                                                                                      "PropertyTabChangedEventHandler",
+                                                                                      "PropertyValueChangedEventHandler",
+                                                                                      "QueryAccessibilityHelpEventHandler",
+                                                                                      "QueryContinueDragEventHandler",
+                                                                                      "QuestionEventHandler",
+                                                                                      "RequestBringIntoViewEventHandler",
+                                                                                      "RequestNavigateEventHandler",
+                                                                                      "RetrieveVirtualItemEventHandler",
+                                                                                      "ScrollChangedEventHandler",
+                                                                                      "ScrollEventHandler",
+                                                                                      "SearchForVirtualItemEventHandler",
+                                                                                      "SelectedCellsChangedEventHandler",
+                                                                                      "SelectedGridItemChangedEventHandler",
+                                                                                      "SelectionChangedEventHandler",
+                                                                                      "SessionEndingCancelEventHandler",
+                                                                                      "SizeChangedEventHandler",
+                                                                                      "SplitterCancelEventHandler",
+                                                                                      "SplitterEventHandler",
+                                                                                      "StartupEventHandler",
+                                                                                      "StatusBarDrawItemEventHandler",
+                                                                                      "StatusBarPanelClickEventHandler",
+                                                                                      "StoreContentChangedEventHandler",
+                                                                                      "TabControlCancelEventHandler",
+                                                                                      "TabControlEventHandler",
+                                                                                      "TableLayoutCellPaintEventHandler",
+                                                                                      "TextChangedEventHandler",
+                                                                                      "ToolBarButtonClickEventHandler",
+                                                                                      "ToolStripArrowRenderEventHandler",
+                                                                                      "ToolStripContentPanelRenderEventHandler",
+                                                                                      "ToolStripDropDownClosedEventHandler",
+                                                                                      "ToolStripDropDownClosingEventHandler",
+                                                                                      "ToolStripGripRenderEventHandler",
+                                                                                      "ToolStripItemClickedEventHandler",
+                                                                                      "ToolStripItemEventHandler",
+                                                                                      "ToolStripItemImageRenderEventHandler",
+                                                                                      "ToolStripItemRenderEventHandler",
+                                                                                      "ToolStripItemTextRenderEventHandler",
+                                                                                      "ToolStripPanelRenderEventHandler",
+                                                                                      "ToolStripRenderEventHandler",
+                                                                                      "ToolStripSeparatorRenderEventHandler",
+                                                                                      "ToolTipEventHandler",
+                                                                                      "TreeNodeMouseClickEventHandler",
+                                                                                      "TreeNodeMouseHoverEventHandler",
+                                                                                      "TreeViewCancelEventHandler",
+                                                                                      "TreeViewEventHandler",
+                                                                                      "TypeValidationEventHandler",
+                                                                                      "UICuesEventHandler",
+                                                                                      "UpDownEventHandler",
+                                                                                      "WebBrowserDocumentCompletedEventHandler",
+                                                                                      "WebBrowserNavigatedEventHandler",
+                                                                                      "WebBrowserNavigatingEventHandler",
+                                                                                      "WebBrowserProgressChangedEventHandler",
+                                                                                      "WritingCancelledEventHandler",
+                                                                                      "WritingCompletedEventHandler",
+                                                                                      "WritingPrintTicketRequiredEventHandler",
+                                                                                      "WritingProgressChangedEventHandler",
+                                                                                  };
         }
     }
 }
