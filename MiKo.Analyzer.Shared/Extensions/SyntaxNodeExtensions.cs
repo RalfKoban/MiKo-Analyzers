@@ -2389,8 +2389,8 @@ namespace MiKoSolutions.Analyzers
             var trivia = token.LeadingTrivia;
 
             return trivia.Count > 0
-                       ? value.WithAdditionalLeadingTrivia(trivia)
-                       : value;
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
         }
 
         internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
