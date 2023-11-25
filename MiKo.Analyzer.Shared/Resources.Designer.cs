@@ -14358,5 +14358,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6051_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6052_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types..
+        /// </summary>
+        public static string MiKo_6052_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6052_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6052_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colon of list of base types shall be placed on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6052_Title", resourceCulture);
+            }
+        }
     }
 }
