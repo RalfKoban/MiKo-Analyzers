@@ -15,17 +15,26 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6051_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ConstructorInitializerSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is ConstructorInitializerSyntax initializer)
+            if (syntax is ConstructorDeclarationSyntax ctor)
             {
-                var updatedToken = initializer.ColonToken.WithoutLeadingTrivia().WithTrailingSpace();
-                var updatedKeyword = initializer.ThisOrBaseKeyword.WithoutLeadingTrivia();
+                var initializer = ctor.Initializer;
 
-                return initializer.WithColonToken(updatedToken)
-                                  .WithThisOrBaseKeyword(updatedKeyword);
+                if (initializer != null)
+                {
+                    var keyword = initializer.ThisOrBaseKeyword;
+
+                    var updatedToken = initializer.ColonToken.WithLeadingEndOfLine().WithAdditionalLeadingTriviaFrom(keyword).WithTrailingSpace();
+                    var updatedKeyword = keyword.WithoutLeadingTrivia();
+
+                    var updatedInitializer = initializer.WithColonToken(updatedToken).WithThisOrBaseKeyword(updatedKeyword);
+
+                    return ctor.WithParameterList(ctor.ParameterList.WithoutTrailingTrivia())
+                               .WithInitializer(updatedInitializer);
+                }
             }
 
             return syntax;

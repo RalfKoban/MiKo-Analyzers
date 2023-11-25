@@ -114,7 +114,8 @@ public class TestMe
             const string FixedCode = @"
 public class TestMe
 {
-    public TestMe() : this(42) {}
+    public TestMe()
+                : this(42) {}
 
     public TestMe(int i) {}
 }
@@ -131,6 +132,7 @@ public class TestMeBase
 {
     public TestMeBase(int i) {}
 }
+
 public class TestMe : TestMeBase
 {
     public TestMe() :
@@ -143,9 +145,11 @@ public class TestMeBase
 {
     public TestMeBase(int i) {}
 }
+
 public class TestMe : TestMeBase
 {
-    public TestMe() : base(42) {}
+    public TestMe()
+                : base(42) {}
 }
 ";
 
