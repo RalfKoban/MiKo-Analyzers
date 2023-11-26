@@ -780,6 +780,12 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
 
+            internal static readonly ISet<string> FlagsAttributeNames = new HashSet<string>
+                                                                            {
+                                                                                "Flags",
+                                                                                nameof(FlagsAttribute),
+                                                                            };
+
             internal static readonly ISet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
                                                                                       .Select(_ => _.Name)
                                                                                       .Except(new[]

@@ -521,6 +521,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this EnumDeclarationSyntax value) => value?.Identifier.ValueText;
 
+        internal static string GetName(this EnumMemberDeclarationSyntax value) => value?.Identifier.ValueText;
+
         internal static string GetName(this EventDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this ExpressionSyntax value)
@@ -593,6 +595,7 @@ namespace MiKoSolutions.Analyzers
                 case BasePropertyDeclarationSyntax s: return s.GetName();
                 case BaseTypeDeclarationSyntax s: return s.GetName();
                 case BaseFieldDeclarationSyntax s: return s.GetName();
+                case EnumMemberDeclarationSyntax s: return s.GetName();
                 default:
                     return string.Empty;
             }
