@@ -10621,6 +10621,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply a default value.
+        /// </summary>
+        public static string MiKo_3078_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3078_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explicitly setting values for &apos;Enum&apos; members prevents change of meanings when the Enum gets modified, may it be by adding, removing, renaming or resorting different values..
+        /// </summary>
+        public static string MiKo_3078_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3078_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set a default value.
+        /// </summary>
+        public static string MiKo_3078_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3078_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum members should have a default value.
+        /// </summary>
+        public static string MiKo_3078_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3078_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Replace with hex value.
         /// </summary>
         public static string MiKo_3079_CodeFixTitle {
