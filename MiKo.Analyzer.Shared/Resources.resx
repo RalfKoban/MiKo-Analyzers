@@ -1072,6 +1072,31 @@ Example:
   <data name="MiKo_1074_Title" xml:space="preserve">
     <value>Objects used to lock on should be suffixed with 'Lock'</value>
   </data>
+  <data name="MiKo_1075_CodeFixTitle" xml:space="preserve">
+    <value>Remove suffix 'EventArgs'</value>
+  </data>
+  <data name="MiKo_1075_Description" xml:space="preserve">
+    <value>Event argument types should follow the pattern that they inherit from 'System.EventArgs' and their names end with 'EventArgs'.
+Types that end their names with 'EventArgs' but do not follow that pattern lie about being event arguments types. Such types should not end their names with 'EventArgs' at all.</value>
+  </data>
+  <data name="MiKo_1075_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1075_Title" xml:space="preserve">
+    <value>Non-'System.EventArgs' types should not be suffixed with 'EventArgs'</value>
+  </data>
+  <data name="MiKo_1076_CodeFixTitle" xml:space="preserve">
+    <value>Change suffix to 'Event'</value>
+  </data>
+  <data name="MiKo_1076_Description" xml:space="preserve">
+    <value>Prism event types follow the pattern defined by Prism and end their names with 'Event'.</value>
+  </data>
+  <data name="MiKo_1076_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' instead</value>
+  </data>
+  <data name="MiKo_1076_Title" xml:space="preserve">
+    <value>Prism event types should be suffixed with 'Event'</value>
+  </data>
   <data name="MiKo_1080_Description" xml:space="preserve">
     <value>It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. 'issue42' in contrast to 'issueFortyTwo').</value>
   </data>
@@ -2670,10 +2695,10 @@ In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&g
 So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;remarks&gt; section, you should use the &lt;paramref&gt; tag.</value>
   </data>
   <data name="MiKo_2216_MessageFormat" xml:space="preserve">
-    <value>Do use &lt;paramref&gt; instead of &lt;param&gt;</value>
+    <value>Use &lt;paramref&gt; instead of &lt;param&gt;</value>
   </data>
   <data name="MiKo_2216_Title" xml:space="preserve">
-    <value>Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters</value>
+    <value>Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters</value>
   </data>
   <data name="MiKo_2217_CodeFixTitle" xml:space="preserve">
     <value>Fix '&lt;list&gt;'</value>
@@ -2838,6 +2863,18 @@ Positive wording is much easier to understand as it is straight forward and come
   <data name="MiKo_2228_Title" xml:space="preserve">
     <value>Documentation should use positive wording instead of negative</value>
   </data>
+  <data name="MiKo_2229_CodeFixTitle" xml:space="preserve">
+    <value>Delete XML fragment</value>
+  </data>
+  <data name="MiKo_2229_Description" xml:space="preserve">
+    <value>XML fragments in XML documentation are a left over and were not recognized by the developer. However, they may end up in documentation that is available to everybody and therefore should be avoided.</value>
+  </data>
+  <data name="MiKo_2229_MessageFormat" xml:space="preserve">
+    <value>Delete XML fragment '{0}'</value>
+  </data>
+  <data name="MiKo_2229_Title" xml:space="preserve">
+    <value>Documentation should not contain left-over XML fragments</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
@@ -2912,10 +2949,10 @@ If it question things, then the reasons behind are still unclear. This makes it 
 This rule contradicts rule MiKo_2303.</value>
   </data>
   <data name="MiKo_2306_MessageFormat" xml:space="preserve">
-    <value>Do end comment with period</value>
+    <value>End comment with period</value>
   </data>
   <data name="MiKo_2306_Title" xml:space="preserve">
-    <value>Do end comments with a period</value>
+    <value>End comments with a period</value>
   </data>
   <data name="MiKo_2307_CodeFixTitle" xml:space="preserve">
     <value>Replace with 'failed'</value>
@@ -3644,7 +3681,7 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with colon</value>
   </data>
   <data name="MiKo_3062_Title" xml:space="preserve">
-    <value>Do end log messages for exceptions with a colon</value>
+    <value>End log messages for exceptions with a colon</value>
   </data>
   <data name="MiKo_3063_CodeFixTitle" xml:space="preserve">
     <value>End log message with dot</value>
@@ -3656,7 +3693,20 @@ Therefore, the logger should be requested via a string that acts as category.</v
     <value>End log message with dot</value>
   </data>
   <data name="MiKo_3063_Title" xml:space="preserve">
-    <value>Do end non-exceptional log messages with a dot</value>
+    <value>End non-exceptional log messages with a dot</value>
+  </data>
+  <data name="MiKo_3064_CodeFixTitle" xml:space="preserve">
+    <value>Change "n't" to " not"</value>
+  </data>
+  <data name="MiKo_3064_Description" xml:space="preserve">
+    <value>It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.
+It would therefore be better to clearly highlight the contradiction.</value>
+  </data>
+  <data name="MiKo_3064_MessageFormat" xml:space="preserve">
+    <value>Do not use contradiction "n't"</value>
+  </data>
+  <data name="MiKo_3064_Title" xml:space="preserve">
+    <value>Log messages should not use the contradiction "n't"</value>
   </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
@@ -3702,7 +3752,7 @@ Doing so allows to change the implementation of the return value whenever it's n
 So, having 'ref' or 'out' parameters on a constructor contradicts the complete concept of the constructor as these parameters solely exist to provide instances of (other types) out of that constructor in addition to the instance that is created and initialized by the constructor.</value>
   </data>
   <data name="MiKo_3074_MessageFormat" xml:space="preserve">
-    <value>Do not use '{1}'</value>
+    <value>Do not use '{0}'</value>
   </data>
   <data name="MiKo_3074_Title" xml:space="preserve">
     <value>Do not define 'ref' or 'out' parameters on constructors</value>
@@ -3745,15 +3795,17 @@ So it assists in thinking about whether the value is the intended one.</value>
   <data name="MiKo_3077_Title" xml:space="preserve">
     <value>Properties that return an Enum should have a default value</value>
   </data>
+  <data name="MiKo_3078_CodeFixTitle" xml:space="preserve">
+    <value>Apply a default value</value>
+  </data>
   <data name="MiKo_3078_Description" xml:space="preserve">
-    <value>Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
-Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a 'shared' variable and do a break afterwards.</value>
+    <value>Explicitly setting values for 'Enum' members prevents change of meanings when the Enum gets modified, may it be by adding, removing, renaming or resorting different values.</value>
   </data>
   <data name="MiKo_3078_MessageFormat" xml:space="preserve">
-    <value>Place switch statement in separate method and return value within case blocks</value>
+    <value>Set a default value</value>
   </data>
   <data name="MiKo_3078_Title" xml:space="preserve">
-    <value>Use 'switch ... return' instead of 'switch ... break' when assigning variables</value>
+    <value>Enum members should have a default value</value>
   </data>
   <data name="MiKo_3079_CodeFixTitle" xml:space="preserve">
     <value>Replace with hex value</value>
@@ -3766,6 +3818,16 @@ Most times, such code can be simplified by refactoring the complete switch state
   </data>
   <data name="MiKo_3079_Title" xml:space="preserve">
     <value>HResults should be written in hexadecimal</value>
+  </data>
+  <data name="MiKo_3080_Description" xml:space="preserve">
+    <value>Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
+Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a 'shared' variable and do a break afterwards.</value>
+  </data>
+  <data name="MiKo_3080_MessageFormat" xml:space="preserve">
+    <value>Place switch statement in separate method and return value within case blocks</value>
+  </data>
+  <data name="MiKo_3080_Title" xml:space="preserve">
+    <value>Use 'switch ... return' instead of 'switch ... break' when assigning variables</value>
   </data>
   <data name="MiKo_3081_CodeFixTitle" xml:space="preserve">
     <value>Apply 'is false' pattern</value>
@@ -4151,13 +4213,13 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
     <value>Test methods should not use ambiguous Linq calls</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
-    <value>Invert if</value>
+    <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Description" xml:space="preserve">
     <value>In case a method contains only a few statements and an if statement simply returns, that if statement can be inverted. Doing so makes the method easier to read.</value>
   </data>
   <data name="MiKo_3201_MessageFormat" xml:space="preserve">
-    <value>Invert if</value>
+    <value>Invert if to simplify</value>
   </data>
   <data name="MiKo_3201_Title" xml:space="preserve">
     <value>If statements can be inverted in short methods</value>
@@ -4173,6 +4235,61 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   </data>
   <data name="MiKo_3202_Title" xml:space="preserve">
     <value>Use positive conditions when returning in all paths</value>
+  </data>
+  <data name="MiKo_3210_Description" xml:space="preserve">
+    <value>Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that's why they have fewer parameters.
+So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
+Same applies to abstract methods.</value>
+  </data>
+  <data name="MiKo_3210_MessageFormat" xml:space="preserve">
+    <value>Do not make method '{0}'</value>
+  </data>
+  <data name="MiKo_3210_Title" xml:space="preserve">
+    <value>Only the longest overloads should be virtual or abstract</value>
+  </data>
+  <data name="MiKo_3211_Description" xml:space="preserve">
+    <value>In case a public type contains a finalizable resource, that type should instead have a private nested type (or an internal type when used in multiple classes) that acts as finalizable resource holder.
+
+The reason is that finalizers are notoriously difficult to implement correctly because they cannot make assumptions about the state of the system during their execution.</value>
+  </data>
+  <data name="MiKo_3211_MessageFormat" xml:space="preserve">
+    <value>Do not use a finalizer</value>
+  </data>
+  <data name="MiKo_3211_Title" xml:space="preserve">
+    <value>Public types should not have finalizers</value>
+  </data>
+  <data name="MiKo_3212_Description" xml:space="preserve">
+    <value>Keep the basic Dispose pattern consistent and do not confuse developers by providing other "Dispose" methods. The only methods called "Dispose" should be the "void IDisposable.Dispose()" and the "void Dispose(bool disposing)" methods.
+
+All other methods would vary from the Dispose pattern and lead to confusion.</value>
+  </data>
+  <data name="MiKo_3212_MessageFormat" xml:space="preserve">
+    <value>Do not provide such Dispose method</value>
+  </data>
+  <data name="MiKo_3212_Title" xml:space="preserve">
+    <value>Do not confuse developers by providing other Dispose methods</value>
+  </data>
+  <data name="MiKo_3213_Description" xml:space="preserve">
+    <value>The public 'Dispose()' method should invoke the 'Dispose(bool disposing)' method with 'disposing' set to 'true' as the only call.
+All the other calls should be invoked from the 'Dispose(bool disposing)' method.</value>
+  </data>
+  <data name="MiKo_3213_MessageFormat" xml:space="preserve">
+    <value>Only invoke 'Dispose(false)' but nothing more</value>
+  </data>
+  <data name="MiKo_3213_Title" xml:space="preserve">
+    <value>Parameterless Dispose method follows Basic Dispose pattern</value>
+  </data>
+  <data name="MiKo_3214_Description" xml:space="preserve">
+    <value>If methods start with 'Begin' or 'Enter' they probably have counterparts that start with 'End' or 'Exit'. Such methods are considered to define some kind of scope (for example, 'BeginUpdate' and 'EndUpdate' defines a scope for an update operation).
+As it is prone to errors to forget or not correctly invoke the 'End' methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
+Instead, a method should be made available that returns an 'IDisposable' to define that scope.
+By doing so developers can simply place the call inside a 'using' to guarantee that the 'End' method is invoked in all cases.</value>
+  </data>
+  <data name="MiKo_3214_MessageFormat" xml:space="preserve">
+    <value>Rename scope-defining method to not start with '{1}'</value>
+  </data>
+  <data name="MiKo_3214_Title" xml:space="preserve">
+    <value>Interfaces do not contain 'Begin/End' or 'Enter/Exit' scope-defining methods</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
@@ -4724,50 +4841,50 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
     <value>ObjectDisposedException.ThrowIf statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6030_CodeFixTitle" xml:space="preserve">
-    <value>Place open brace directly below type</value>
+    <value>Align open brace directly below type</value>
   </data>
   <data name="MiKo_6030_Description" xml:space="preserve">
     <value>To indicate the initializations and to distinguish them from blocks (such as if blocks), the open brace of the initializer should be positioned directly below the corresponding type definition.</value>
   </data>
   <data name="MiKo_6030_MessageFormat" xml:space="preserve">
-    <value>Place open brace directly below type</value>
+    <value>Align open brace directly below type</value>
   </data>
   <data name="MiKo_6030_Title" xml:space="preserve">
     <value>Open braces of initializers should be placed directly below the corresponding type definition</value>
   </data>
   <data name="MiKo_6031_CodeFixTitle" xml:space="preserve">
-    <value>Place ternary operator directly below condition</value>
+    <value>Align ternary operator directly below condition</value>
   </data>
   <data name="MiKo_6031_Description" xml:space="preserve">
     <value>To easily spot the 2 possibilities of ternary operators based on their conditions, the question and colon tokens should be positioned directly below the corresponding condition.</value>
   </data>
   <data name="MiKo_6031_MessageFormat" xml:space="preserve">
-    <value>Place ternary operator directly below condition</value>
+    <value>Align ternary operator directly below condition</value>
   </data>
   <data name="MiKo_6031_Title" xml:space="preserve">
     <value>Question and colon tokens of ternary operators should be placed directly below the corresponding condition</value>
   </data>
   <data name="MiKo_6032_CodeFixTitle" xml:space="preserve">
-    <value>Place parameter outdented below method</value>
+    <value>Align parameter outdented below method</value>
   </data>
   <data name="MiKo_6032_Description" xml:space="preserve">
     <value>To easily spot the multi-line parameters of a method, those parameters should be positioned outdented below the corresponding method declaration.</value>
   </data>
   <data name="MiKo_6032_MessageFormat" xml:space="preserve">
-    <value>Place parameter '{0}' outdented below method</value>
+    <value>Align parameter '{0}' outdented below method</value>
   </data>
   <data name="MiKo_6032_Title" xml:space="preserve">
     <value>Multi-line parameters are positioned outdented at end of method</value>
   </data>
   <data name="MiKo_6033_CodeFixTitle" xml:space="preserve">
-    <value>Place open brace directly below case</value>
+    <value>Align open brace directly below case</value>
   </data>
   <data name="MiKo_6033_Description" xml:space="preserve">
     <value>Similar to if statements case sections within a switch statement represent conditions to check. In case such a condition matches, the corresponding block gets executed.
 Hence, as it is a block similar to the if block(s), the open brace of the block should be positioned directly below the corresponding case keyword.</value>
   </data>
   <data name="MiKo_6033_MessageFormat" xml:space="preserve">
-    <value>Place open brace directly below case</value>
+    <value>Align open brace directly below case</value>
   </data>
   <data name="MiKo_6033_Title" xml:space="preserve">
     <value>Braces of blocks below case sections should be placed directly below the corresponding case keyword</value>
@@ -4797,13 +4914,13 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Open parenthesis should be placed on same line(s) as invoked methods</value>
   </data>
   <data name="MiKo_6036_CodeFixTitle" xml:space="preserve">
-    <value>Place block directly below arrow</value>
+    <value>Align block directly below arrow</value>
   </data>
   <data name="MiKo_6036_Description" xml:space="preserve">
     <value>To easily distinguish lambda blocks from other code blocks, these blocks should be positioned either in line with or directly below the corresponding arrow.</value>
   </data>
   <data name="MiKo_6036_MessageFormat" xml:space="preserve">
-    <value>Place lambda block directly below arrow</value>
+    <value>Align lambda block directly below arrow</value>
   </data>
   <data name="MiKo_6036_Title" xml:space="preserve">
     <value>Lambda blocks should be placed directly below the corresponding arrow(s)</value>
@@ -4929,14 +5046,14 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Calculations using operators such as '+' or '%' should be placed on same line(s)</value>
   </data>
   <data name="MiKo_6047_CodeFixTitle" xml:space="preserve">
-    <value>Place open brace directly below switch</value>
+    <value>Align open brace directly below switch</value>
   </data>
   <data name="MiKo_6047_Description" xml:space="preserve">
     <value>Switch expressions are very similar to switch statements.
 Hence, the open brace of the expression should be positioned directly below the corresponding switch keyword.</value>
   </data>
   <data name="MiKo_6047_MessageFormat" xml:space="preserve">
-    <value>Place open brace directly below switch</value>
+    <value>Align open brace directly below switch</value>
   </data>
   <data name="MiKo_6047_Title" xml:space="preserve">
     <value>Braces of switch expressions should be placed directly below the corresponding switch keyword</value>
@@ -4966,15 +5083,39 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Event (un-)registrations should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6050_CodeFixTitle" xml:space="preserve">
-    <value>Place argument outdented below method call</value>
+    <value>Align argument outdented below method call</value>
   </data>
   <data name="MiKo_6050_Description" xml:space="preserve">
     <value>To easily spot the multi-line arguments of a method call, those arguments should be positioned outdented below the corresponding method call.</value>
   </data>
   <data name="MiKo_6050_MessageFormat" xml:space="preserve">
-    <value>Place argument '{0}' outdented below method call</value>
+    <value>Align argument '{0}' outdented below method call</value>
   </data>
   <data name="MiKo_6050_Title" xml:space="preserve">
     <value>Multi-line arguments are positioned outdented at end of method call</value>
+  </data>
+  <data name="MiKo_6051_CodeFixTitle" xml:space="preserve">
+    <value>Place colon on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6051_Description" xml:space="preserve">
+    <value>The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves.</value>
+  </data>
+  <data name="MiKo_6051_MessageFormat" xml:space="preserve">
+    <value>Place colon on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6051_Title" xml:space="preserve">
+    <value>Colon of constructor call shall be placed on same line as constructor call</value>
+  </data>
+  <data name="MiKo_6052_CodeFixTitle" xml:space="preserve">
+    <value>Place colon on same line as first base type</value>
+  </data>
+  <data name="MiKo_6052_Description" xml:space="preserve">
+    <value>The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types.</value>
+  </data>
+  <data name="MiKo_6052_MessageFormat" xml:space="preserve">
+    <value>Place colon on same line as first base type</value>
+  </data>
+  <data name="MiKo_6052_Title" xml:space="preserve">
+    <value>Colon of list of base types shall be placed on same line as first base type</value>
   </data>
 </root>

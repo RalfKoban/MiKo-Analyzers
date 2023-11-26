@@ -339,7 +339,6 @@ public class TestMe
         [TestCase("true: if something, else it returns false.")]
         [TestCase("true, if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
-        [TestCase("true if something else will return with false.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
         {
             var originalCode = @"
@@ -350,6 +349,63 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>" + comment + @"</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase(@"<see langword=""false""/> in any other case.")]
+        [TestCase(@"<see langword=""false""/> in any other cases.")]
+        [TestCase(@"<see langword=""false""/> in any of the other cases.")]
+        [TestCase(@"<see langword=""false""/> in all other case.")]
+        [TestCase(@"<see langword=""false""/> in all other cases.")]
+        [TestCase(@"<see langword=""false""/> in all of the other cases.")]
+        [TestCase(@"<see langword=""false""/> in each other case.")]
+        [TestCase(@"<see langword=""false""/> in each other cases.")]
+        [TestCase(@"<see langword=""false""/> in each of the other cases.")]
+        [TestCase(@"<see langword=""false""/> in the other cases.")]
+        [TestCase(@"<see langword=""false""/> in the other case.")]
+        [TestCase(@"<see langword=""false""/> in other cases.")]
+        [TestCase(@"<see langword=""false""/> in other case.")]
+        [TestCase("false in any other case.")]
+        [TestCase("false in any other cases.")]
+        [TestCase("false in any of the other cases.")]
+        [TestCase("false in all other case.")]
+        [TestCase("false in all other cases.")]
+        [TestCase("false in all of the other cases.")]
+        [TestCase("false in each other case.")]
+        [TestCase("false in each other cases.")]
+        [TestCase("false in each of the other cases.")]
+        [TestCase("false in the other cases.")]
+        [TestCase("false in the other case.")]
+        [TestCase("false in other cases.")]
+        [TestCase("false in other case.")]
+        public void Code_gets_fixed_for_almost_correct_comment_with_trailing_other_cases_(string comment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns><see langword=""true""/> if something, " + comment + @"</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";

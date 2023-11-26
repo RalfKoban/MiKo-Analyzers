@@ -64,6 +64,32 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrect_usage_with_parenthesis() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(IEnumerable<string> text) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest = new TestMe();
+
+        public void Test()
+        {
+            ObjectUnderTest.DoSomething((new Mock<IEnumerable<string>>()).Object);
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed()
         {
             const string OriginalCode = @"
@@ -86,6 +112,122 @@ namespace Bla
         public void Test()
         {
             ObjectUnderTest.DoSomething(new Mock<IEnumerable<string>>().Object);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(IEnumerable<string> text) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest = new TestMe();
+
+        public void Test()
+        {
+            ObjectUnderTest.DoSomething(Mock.Of<IEnumerable<string>>());
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_when_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(IEnumerable<string> texts, IEnumerable<string> words) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest = new TestMe();
+
+        public void Test()
+        {
+            ObjectUnderTest.DoSomething(
+                                    new Mock<IEnumerable<string>>().Object,
+                                    new Mock<IEnumerable<string>>().Object);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(IEnumerable<string> texts, IEnumerable<string> words) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest = new TestMe();
+
+        public void Test()
+        {
+            ObjectUnderTest.DoSomething(
+                                    Mock.Of<IEnumerable<string>>(),
+                                    Mock.Of<IEnumerable<string>>());
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesis()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+using Moq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(IEnumerable<string> text) { }
+    }
+
+    public class TestMeTests
+    {
+        private TestMe ObjectUnderTest = new TestMe();
+
+        public void Test()
+        {
+            ObjectUnderTest.DoSomething((new Mock<IEnumerable<string>>()).Object);
         }
     }
 }

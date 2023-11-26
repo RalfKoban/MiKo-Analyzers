@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,16 +15,37 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         protected override string Title => Resources.MiKo_5013_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<ArrayCreationExpressionSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var node in syntaxNodes)
+            {
+                switch (node)
+                {
+                    case ArrayCreationExpressionSyntax _:
+                    case InitializerExpressionSyntax _:
+                        return node;
+
+                    default:
+                        return null;
+                }
+            }
+
+            return null;
+        }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is ArrayCreationExpressionSyntax node)
+            switch (syntax)
             {
-                return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType);
-            }
+                case ArrayCreationExpressionSyntax node:
+                    return Invocation(nameof(Array), nameof(Array.Empty), node.Type.ElementType).WithTriviaFrom(node);
 
-            return syntax;
+                case InitializerExpressionSyntax node when node.Parent is EqualsValueClauseSyntax c && c.Parent is VariableDeclaratorSyntax v && v.Parent is VariableDeclarationSyntax d && d.Type is ArrayTypeSyntax a:
+                    return Invocation(nameof(Array), nameof(Array.Empty), a.ElementType).WithTriviaFrom(node);
+
+                default:
+                    return syntax;
+            }
         }
     }
 }

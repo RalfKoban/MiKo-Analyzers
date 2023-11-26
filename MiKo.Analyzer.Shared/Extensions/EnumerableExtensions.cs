@@ -866,6 +866,10 @@ namespace System.Linq
             return target;
         }
 
+        internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
+
+        internal static TSource[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) => source.OrderBy(keySelector, comparer).ToArray();
+
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
 
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer) => new HashSet<T>(source, comparer);

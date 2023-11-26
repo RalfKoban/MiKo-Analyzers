@@ -191,7 +191,7 @@ public class TestMe
 }
 ";
 
-            var fixedCode = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -206,13 +206,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_ObjectDisposedException_with_para_tag()
         {
-            var originalCode = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe
@@ -229,7 +229,7 @@ public class TestMe
 }
 ";
 
-            var fixedCode = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -244,7 +244,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [TestCase(nameof(ArgumentNullException), "If null")]

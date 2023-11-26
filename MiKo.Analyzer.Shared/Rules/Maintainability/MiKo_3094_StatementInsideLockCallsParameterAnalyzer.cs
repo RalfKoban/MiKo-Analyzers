@@ -14,13 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3094";
 
-        private static readonly HashSet<SyntaxKind> AccessOrInvocations = new HashSet<SyntaxKind>
-                                                                              {
-                                                                                  SyntaxKind.ConditionalAccessExpression,
-                                                                                  SyntaxKind.InvocationExpression,
-                                                                                  SyntaxKind.MemberBindingExpression,
-                                                                                  SyntaxKind.SimpleMemberAccessExpression,
-                                                                              };
+        private static readonly SyntaxKind[] AccessOrInvocations =
+                                                                   {
+                                                                       SyntaxKind.ConditionalAccessExpression,
+                                                                       SyntaxKind.InvocationExpression,
+                                                                       SyntaxKind.MemberBindingExpression,
+                                                                       SyntaxKind.SimpleMemberAccessExpression,
+                                                                   };
 
         public MiKo_3094_StatementInsideLockCallsParameterAnalyzer() : base(Id, (SymbolKind)(-1))
         {

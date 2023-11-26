@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 413 rules that are currently provided by the analyzer.
+The following tables list all the 425 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -105,6 +105,8 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1073|Boolean fields should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1074|Objects used to lock on should be suffixed with 'Lock'|&#x2713;|\-|
+|MiKo_1075|Non-'System.EventArgs' types should not be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
+|MiKo_1076|Prism event types should be suffixed with 'Event'|&#x2713;|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
@@ -244,26 +246,27 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_2213|Documentation should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
-|MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
+|MiKo_2216|Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
 |MiKo_2217|&lt;list&gt; documentation is done properly|&#x2713;|&#x2713;|
 |MiKo_2218|Documentation should use shorter terms instead of longer term 'used to/in/by'|&#x2713;|&#x2713;|
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
 |MiKo_2222|Documentation should use the term 'identification' instead of 'ident'|&#x2713;|&#x2713;|
-|MiKo_2223|Documentation links references via &lt;see cref=&quot;...&quot;/&gt;|&#x2713;|\-|
+|MiKo_2223|Documentation links references via &lt;see cref="..."/&gt;|&#x2713;|\-|
 |MiKo_2224|Documentation should have XML tags and texts placed on separate lines|&#x2713;|&#x2713;|
 |MiKo_2225|Code marked with &lt;c&gt; tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Documentation should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
 |MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
+|MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
 |MiKo_2303|Do not end comments with a period|&#x2713;|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments|&#x2713;|&#x2713;|
-|MiKo_2306|Do end comments with a period|\-|\-|
+|MiKo_2306|End comments with a period|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
@@ -329,8 +332,9 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_3055|ViewModels should implement INotifyPropertyChanged|&#x2713;|\-|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
-|MiKo_3062|Do end log messages for exceptions with a colon|&#x2713;|&#x2713;|
-|MiKo_3063|Do end non-exceptional log messages with a dot|&#x2713;|&#x2713;|
+|MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
+|MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
+|MiKo_3064|Log messages should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|\-|
@@ -339,8 +343,9 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required|&#x2713;|&#x2713;|
 |MiKo_3076|Do not initialize static member with static member below or in other type part|&#x2713;|\-|
 |MiKo_3077|Properties that return an Enum should have a default value|&#x2713;|&#x2713;|
-|MiKo_3078|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
+|MiKo_3078|Enum members should have a default value|&#x2713;|&#x2713;|
 |MiKo_3079|HResults should be written in hexadecimal|&#x2713;|&#x2713;|
+|MiKo_3080|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
 |MiKo_3081|Prefer pattern matching over a logical NOT condition|&#x2713;|&#x2713;|
 |MiKo_3082|Prefer pattern matching over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
 |MiKo_3083|Prefer pattern matching for null checks|&#x2713;|&#x2713;|
@@ -371,13 +376,18 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_3111|Assertions should use 'Is.Zero' instead of 'Is.EqualTo(0)'|&#x2713;|&#x2713;|
 |MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
 |MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
-|MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
+|MiKo_3114|Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'|&#x2713;|&#x2713;|
 |MiKo_3115|Test methods should contain code|&#x2713;|\-|
 |MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
 |MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
-|MiKo_3201|If statements can be inverted in short methods|&#x2713;||&#x2713;|
-|MiKo_3202|Use positive conditions when returning in all paths|&#x2713;||&#x2713;|
+|MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
+|MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
+|MiKo_3210|Only the longest overloads should be virtual or abstract|&#x2713;|\-|
+|MiKo_3211|Public types should not have finalizers|&#x2713;|\-|
+|MiKo_3212|Do not confuse developers by providing other Dispose methods|&#x2713;|\-|
+|MiKo_3213|Parameterless Dispose method follows Basic Dispose pattern|&#x2713;|\-|
+|MiKo_3214|Interfaces do not contain 'Begin/End' or 'Enter/Exit' scope-defining methods|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -409,7 +419,6 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
 |MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
 |MiKo_5017|Fields or variables assigned with string literals should be constant|&#x2713;|&#x2713;|
-
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|
@@ -455,6 +464,8 @@ The following tables list all the 413 rules that are currently provided by the a
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
-|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|&#x2713;|
+|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|\-|
 |MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
+|MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
+|MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|

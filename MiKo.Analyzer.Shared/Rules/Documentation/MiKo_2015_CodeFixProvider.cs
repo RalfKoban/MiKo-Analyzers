@@ -5,8 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using MiKoSolutions.Analyzers.Linguistics;
-
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2015_CodeFixProvider)), Shared]
@@ -44,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var map = GetMap(syntax);
 
-            return Comment(syntax, map.Keys, map, FirstWordHandling.None);
+            return Comment(syntax, map.Keys, map);
         }
 
         private static Dictionary<string, string> GetMap(SyntaxNode syntax)

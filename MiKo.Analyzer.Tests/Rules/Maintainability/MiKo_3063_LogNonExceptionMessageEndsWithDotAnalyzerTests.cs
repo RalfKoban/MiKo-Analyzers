@@ -14,128 +14,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] Methods = { "Debug", "Info", "Error", "Warn", "Fatal", "DebugFormat", "InfoFormat", "ErrorFormat", "WarnFormat", "FatalFormat" };
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_body_with_no_dot_message_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-using System;
-
+        public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
 namespace log4net
 {
-    public interface ILog
-    {
-        void " + method + @"();
-    }
-
     public class TestMe
-    {
-        private static ILog Log = null;
-
-        public TestMe()
-        {
-            Log." + method + @"(""some text"");
-        }
-    }
+    { }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_expression_body_with_no_dot_message_([ValueSource(nameof(Methods))] string method)
-            => An_issue_is_reported_for(@"
-using System;
-
+        public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
 namespace log4net
 {
-    public interface ILog
-    {
-        void " + method + @"();
-    }
-
     public class TestMe
     {
-        private static ILog Log = null;
-
-        public TestMe() => Log." + method + @"(""some text"");
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_call_in_method_expression_body_with_interpolated_message_and_no_dot_at_end() => An_issue_is_reported_for(@"
-using System;
-
-namespace log4net
-{
-    public interface ILog
-    {
-        void Error();
-    }
-
-    public class TestMe
-    {
-        private static ILog Log = null;
-
-        public void DoSomething(int i) => Log.Error($""some text for {i}   "");
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_call_in_method_expression_body_with_interpolated_message_with_interpolation_at_end() => An_issue_is_reported_for(@"
-using System;
-
-namespace log4net
-{
-    public interface ILog
-    {
-        void Error();
-    }
-
-    public class TestMe
-    {
-        private static ILog Log = null;
-
-        public void DoSomething(int i) => Log.Error($""some text for {i}"");
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_call_in_method_expression_body_with_no_dot_message_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
-using System;
-
-namespace log4net
-{
-    public interface ILog
-    {
-        void " + method + @"();
-    }
-
-    public class TestMe
-    {
-        private static ILog Log = null;
-
-        public void DoSomething() => Log." + method + @"(""some text"");
-    }
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_DebugFormat_call_in_method_body_with_IFormatProvider_and_no_dot_message() => An_issue_is_reported_for(@"
-using System;
-
-namespace log4net
-{
-    public interface ILog
-    {
-        void DebugFormat(string format, object arg);
-    }
-
-    public class TestMe
-    {
-        private static ILog Log = null;
-
-        public void DoSomething(int i)
-        {
-            Log.DebugFormat((IFormatProvider)null, ""something went wrong"", i);
-        }
+        public void DoSomething()
+        { }
     }
 }
 ");
@@ -489,22 +383,128 @@ namespace log4net
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_body_with_no_dot_message_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+
 namespace log4net
 {
+    public interface ILog
+    {
+        void " + method + @"();
+    }
+
     public class TestMe
-    { }
+    {
+        private static ILog Log = null;
+
+        public TestMe()
+        {
+            Log." + method + @"(""some text"");
+        }
+    }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_expression_body_with_no_dot_message_([ValueSource(nameof(Methods))] string method)
+            => An_issue_is_reported_for(@"
+using System;
+
 namespace log4net
 {
+    public interface ILog
+    {
+        void " + method + @"();
+    }
+
     public class TestMe
     {
-        public void DoSomething()
-        { }
+        private static ILog Log = null;
+
+        public TestMe() => Log." + method + @"(""some text"");
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_call_in_method_expression_body_with_interpolated_message_and_no_dot_at_end() => An_issue_is_reported_for(@"
+using System;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        void Error();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int i) => Log.Error($""some text for {i}   "");
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_call_in_method_expression_body_with_interpolated_message_with_interpolation_at_end() => An_issue_is_reported_for(@"
+using System;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        void Error();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int i) => Log.Error($""some text for {i}"");
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_call_in_method_expression_body_with_no_dot_message_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        void " + method + @"();
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething() => Log." + method + @"(""some text"");
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_DebugFormat_call_in_method_body_with_IFormatProvider_and_no_dot_message() => An_issue_is_reported_for(@"
+using System;
+
+namespace log4net
+{
+    public interface ILog
+    {
+        void DebugFormat(string format, object arg);
+    }
+
+    public class TestMe
+    {
+        private static ILog Log = null;
+
+        public void DoSomething(int i)
+        {
+            Log.DebugFormat((IFormatProvider)null, ""something went wrong"", i);
+        }
     }
 }
 ");

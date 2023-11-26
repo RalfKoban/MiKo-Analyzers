@@ -38,13 +38,13 @@ namespace MiKoSolutions.Analyzers
                                                                              ".Designer.cs",
                                                                          };
 
-        private static readonly HashSet<SyntaxKind> LocalFunctionContainerSyntaxKinds = new HashSet<SyntaxKind>
-                                                                                            {
-                                                                                                SyntaxKind.MethodDeclaration,
-                                                                                                SyntaxKind.Block,
-                                                                                                SyntaxKind.ConstructorDeclaration,
-                                                                                                SyntaxKind.LocalFunctionStatement,
-                                                                                            };
+        private static readonly SyntaxKind[] LocalFunctionContainerSyntaxKinds =
+                                                                                 {
+                                                                                     SyntaxKind.MethodDeclaration,
+                                                                                     SyntaxKind.Block,
+                                                                                     SyntaxKind.ConstructorDeclaration,
+                                                                                     SyntaxKind.LocalFunctionStatement,
+                                                                                 };
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
@@ -127,8 +127,6 @@ namespace MiKoSolutions.Analyzers
 
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
-
-        internal static bool HasAttribute(this ISymbol value, IEnumerable<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
 
@@ -335,6 +333,20 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static SyntaxToken GetModifier(this IMethodSymbol value, SyntaxKind kind)
+        {
+            var syntax = (BaseMethodDeclarationSyntax)value.GetSyntax();
+
+            return syntax.Modifiers.First(kind);
+        }
+
+        internal static SyntaxToken GetModifier(this IParameterSymbol value, SyntaxKind kind)
+        {
+            var syntax = value.GetSyntax();
+
+            return syntax.Modifiers.First(kind);
+        }
+
         internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetStartingLine();
@@ -426,9 +438,13 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
+        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
+
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
+
+        internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
 
         internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
 
@@ -903,6 +919,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
+                                                                  && value.SpecialType == SpecialType.None
+                                                                  && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
+                                                                  && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
+
         internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
                                                                  && value.SpecialType == SpecialType.None
                                                                  && value.InheritsFrom<EventArgs>();
@@ -1182,7 +1203,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
-        internal static bool IsPartial(this IMethodSymbol value) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(SyntaxKind.PartialKeyword);
+        internal static bool IsPartial(this IMethodSymbol value) => value.HasModifier(SyntaxKind.PartialKeyword);
 
         internal static bool IsPubliclyVisible(this ISymbol symbol)
         {
@@ -1383,6 +1404,6 @@ namespace MiKoSolutions.Analyzers
             return typeName;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
     }
 }

@@ -18,10 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSimpleAssignmentExpression, SyntaxKind.SimpleAssignmentExpression);
+            context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.SimpleAssignmentExpression);
         }
 
-        private static bool IsAssignmentOrDeclaration(StatementSyntax statement, AssignmentExpressionSyntax assignment)
+        private static bool IsAssignmentOrDeclaration(AssignmentExpressionSyntax assignment, StatementSyntax statement)
         {
             if (statement.DescendantNodes().Contains(assignment))
             {
@@ -49,30 +49,30 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return symbol?.Kind == SymbolKind.Local;
         }
 
-        private void AnalyzeSimpleAssignmentExpression(SyntaxNodeAnalysisContext context)
+        private void Analyze(SyntaxNodeAnalysisContext context)
         {
             var node = (AssignmentExpressionSyntax)context.Node;
-            var issue = AnalyzeSimpleAssignmentExpression(node, context.SemanticModel);
+            var issue = Analyze(node, context.SemanticModel);
 
             ReportDiagnostics(context, issue);
         }
 
-        private Diagnostic AnalyzeSimpleAssignmentExpression(AssignmentExpressionSyntax statement, SemanticModel semanticModel)
+        private Diagnostic Analyze(AssignmentExpressionSyntax assignment, SemanticModel semanticModel)
         {
-            if (statement.Left is IdentifierNameSyntax i)
+            if (assignment.Left is IdentifierNameSyntax i)
             {
-                foreach (var ancestor in statement.Ancestors())
+                foreach (var ancestor in assignment.Ancestors())
                 {
                     switch (ancestor)
                     {
                         case BlockSyntax block:
                             return IsLocalSymbol(i, semanticModel)
-                                   ? AnalyzeSimpleAssignmentExpression(block.Statements, statement)
+                                   ? Analyze(assignment, block.Statements)
                                    : null;
 
                         case SwitchSectionSyntax section:
                             return IsLocalSymbol(i, semanticModel)
-                                   ? AnalyzeSimpleAssignmentExpression(section.Statements, statement)
+                                   ? Analyze(assignment, section.Statements)
                                    : null;
 
                         case IfStatementSyntax _:
@@ -91,17 +91,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return null;
         }
 
-        private Diagnostic AnalyzeSimpleAssignmentExpression(SyntaxList<StatementSyntax> statements, AssignmentExpressionSyntax statement)
+        private Diagnostic Analyze(AssignmentExpressionSyntax assignment, SyntaxList<StatementSyntax> statements)
         {
-            var callLineSpan = statement.GetLocation().GetLineSpan();
+            var callLineSpan = assignment.GetLocation().GetLineSpan();
 
-            var noBlankLinesBefore = statements
-                                     .Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
-                                     .Any(_ => IsAssignmentOrDeclaration(_, statement) is false);
+            var noBlankLinesBefore = statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _))
+                                               .Any(_ => IsAssignmentOrDeclaration(assignment, _) is false);
 
             if (noBlankLinesBefore)
             {
-                return Issue(statement.Left, true, false);
+                return Issue(assignment.Left, true, false);
             }
 
             return null;

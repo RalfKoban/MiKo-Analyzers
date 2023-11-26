@@ -7,18 +7,19 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2080_CodeFixProvider)), Shared]
     public sealed class MiKo_2080_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
 //// ncrunch: collect values off
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().ToHashSet()
-                                                                                                           .OrderBy(_ => _.Length)
-                                                                                                           .ThenBy(_ => _)
-                                                                                                           .ToArray();
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().ToHashSet() // avoid duplicates
+                                                                                                           .ToArray(_ => _, AscendingStringComparer.Default);
+
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
                                                                                                                      .ThenBy(_ => _)
                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                                      .ToArray();
@@ -47,15 +48,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  "TypeGuid of ",
                                                                                                  "TypeGuids for ", // typo
                                                                                                  "TypeGuids of ", // typo
-                                                                                             }.Distinct()
-                                                                                              .OrderBy(_ => _.Length)
-                                                                                              .ThenBy(_ => _)
-                                                                                              .ToArray();
+                                                                                             }.ToHashSet() // avoid duplicates
+                                                                                              .ToArray(AscendingStringComparer.Default);
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeGuidReplacementMap = TypeGuidReplacementMapKeys.OrderByDescending(_ => _.Length)
                                                                                                                                      .ThenBy(_ => _)
                                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, "The unique identifier for the type of "))
                                                                                                                                      .ToArray();
+
 //// ncrunch: collect values default
 
         private static readonly IReadOnlyCollection<string> CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
