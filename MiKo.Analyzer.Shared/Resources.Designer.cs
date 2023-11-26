@@ -2828,6 +2828,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove suffix &apos;EventArgs&apos;.
+        /// </summary>
+        public static string MiKo_1075_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1075_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event argument types should follow the pattern that they inherit from &apos;System.EventArgs&apos; and their names end with &apos;EventArgs&apos;.
+        ///Types that end their names with &apos;EventArgs&apos; but do not follow that pattern lie about being event arguments types. Such types should not end their names with &apos;EventArgs&apos; at all..
+        /// </summary>
+        public static string MiKo_1075_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1075_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1075_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1075_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-&apos;System.EventArgs&apos; types should not be suffixed with &apos;EventArgs&apos;.
+        /// </summary>
+        public static string MiKo_1075_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1075_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         public static string MiKo_1080_Description {
@@ -7988,6 +8025,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete XML fragment.
+        /// </summary>
+        public static string MiKo_2229_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2229_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML fragments in XML documentation are a left over and were not recognized by the developer. However, they may end up in documentation that is available to everybody and therefore should be avoided..
+        /// </summary>
+        public static string MiKo_2229_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2229_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete XML fragment &apos;{0}&apos;.
+        /// </summary>
+        public static string MiKo_2229_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2229_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation should not contain left-over XML fragments.
+        /// </summary>
+        public static string MiKo_2229_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2229_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
@@ -10342,6 +10415,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change &quot;n&apos;t&quot; to &quot; not&quot;.
+        /// </summary>
+        public static string MiKo_3064_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3064_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.
+        ///It would therefore be better to clearly highlight the contradiction..
+        /// </summary>
+        public static string MiKo_3064_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3064_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use contradiction &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_3064_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3064_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log messages should not use the contradiction &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_3064_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3064_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
         ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
         /// </summary>
@@ -10585,8 +10695,16 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
-        ///Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a &apos;shared&apos; variable and do a break afterwards..
+        ///   Looks up a localized string similar to Apply a default value.
+        /// </summary>
+        public static string MiKo_3078_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3078_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Explicitly setting values for &apos;Enum&apos; members prevents change of meanings when the Enum gets modified, may it be by adding, removing, renaming or resorting different values..
         /// </summary>
         public static string MiKo_3078_Description {
             get {
@@ -10595,7 +10713,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place switch statement in separate method and return value within case blocks.
+        ///   Looks up a localized string similar to Set a default value.
         /// </summary>
         public static string MiKo_3078_MessageFormat {
             get {
@@ -10604,7 +10722,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use &apos;switch ... return&apos; instead of &apos;switch ... break&apos; when assigning variables.
+        ///   Looks up a localized string similar to Enum members should have a default value.
         /// </summary>
         public static string MiKo_3078_Title {
             get {
@@ -10645,6 +10763,34 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3079_Title {
             get {
                 return ResourceManager.GetString("MiKo_3079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
+        ///Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a &apos;shared&apos; variable and do a break afterwards..
+        /// </summary>
+        public static string MiKo_3080_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3080_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch statement in separate method and return value within case blocks.
+        /// </summary>
+        public static string MiKo_3080_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3080_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;switch ... return&apos; instead of &apos;switch ... break&apos; when assigning variables.
+        /// </summary>
+        public static string MiKo_3080_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3080_Title", resourceCulture);
             }
         }
         
@@ -13566,7 +13712,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below type.
+        ///   Looks up a localized string similar to Align open brace directly below type.
         /// </summary>
         public static string MiKo_6030_CodeFixTitle {
             get {
@@ -13584,7 +13730,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below type.
+        ///   Looks up a localized string similar to Align open brace directly below type.
         /// </summary>
         public static string MiKo_6030_MessageFormat {
             get {
@@ -13602,7 +13748,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place ternary operator directly below condition.
+        ///   Looks up a localized string similar to Align ternary operator directly below condition.
         /// </summary>
         public static string MiKo_6031_CodeFixTitle {
             get {
@@ -13620,7 +13766,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place ternary operator directly below condition.
+        ///   Looks up a localized string similar to Align ternary operator directly below condition.
         /// </summary>
         public static string MiKo_6031_MessageFormat {
             get {
@@ -13638,7 +13784,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place parameter outdented below method.
+        ///   Looks up a localized string similar to Align parameter outdented below method.
         /// </summary>
         public static string MiKo_6032_CodeFixTitle {
             get {
@@ -13656,7 +13802,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place parameter &apos;{0}&apos; outdented below method.
+        ///   Looks up a localized string similar to Align parameter &apos;{0}&apos; outdented below method.
         /// </summary>
         public static string MiKo_6032_MessageFormat {
             get {
@@ -13674,7 +13820,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below case.
+        ///   Looks up a localized string similar to Align open brace directly below case.
         /// </summary>
         public static string MiKo_6033_CodeFixTitle {
             get {
@@ -13693,7 +13839,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below case.
+        ///   Looks up a localized string similar to Align open brace directly below case.
         /// </summary>
         public static string MiKo_6033_MessageFormat {
             get {
@@ -13783,7 +13929,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place block directly below arrow.
+        ///   Looks up a localized string similar to Align block directly below arrow.
         /// </summary>
         public static string MiKo_6036_CodeFixTitle {
             get {
@@ -13801,7 +13947,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place lambda block directly below arrow.
+        ///   Looks up a localized string similar to Align lambda block directly below arrow.
         /// </summary>
         public static string MiKo_6036_MessageFormat {
             get {
@@ -14179,7 +14325,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below switch.
+        ///   Looks up a localized string similar to Align open brace directly below switch.
         /// </summary>
         public static string MiKo_6047_CodeFixTitle {
             get {
@@ -14198,7 +14344,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place open brace directly below switch.
+        ///   Looks up a localized string similar to Align open brace directly below switch.
         /// </summary>
         public static string MiKo_6047_MessageFormat {
             get {
@@ -14288,7 +14434,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place argument outdented below method call.
+        ///   Looks up a localized string similar to Align argument outdented below method call.
         /// </summary>
         public static string MiKo_6050_CodeFixTitle {
             get {
@@ -14306,7 +14452,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place argument &apos;{0}&apos; outdented below method call.
+        ///   Looks up a localized string similar to Align argument &apos;{0}&apos; outdented below method call.
         /// </summary>
         public static string MiKo_6050_MessageFormat {
             get {
@@ -14320,6 +14466,78 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_6050_Title {
             get {
                 return ResourceManager.GetString("MiKo_6050_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6051_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the colons leading the calls of other constructors are placed on the same line as the calls themselves..
+        /// </summary>
+        public static string MiKo_6051_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6051_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6051_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colon of constructor call shall be placed on same line as constructor call.
+        /// </summary>
+        public static string MiKo_6051_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6051_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6052_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the colons leading the list of base types are placed on the same line as the first base types..
+        /// </summary>
+        public static string MiKo_6052_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6052_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place colon on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6052_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colon of list of base types shall be placed on same line as first base type.
+        /// </summary>
+        public static string MiKo_6052_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6052_Title", resourceCulture);
             }
         }
     }

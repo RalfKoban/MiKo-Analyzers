@@ -365,7 +365,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 markdownBuilder.AppendFormat(
                                          tableFormat,
                                          descriptor.Id,
-                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"),
+                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("|", "&#124;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace("#", "&num;"),
                                          descriptor.IsEnabledByDefault ? Check : NoCheck,
                                          codeFixProviders.Contains(descriptor.Id) ? Check : NoCheck);
             }

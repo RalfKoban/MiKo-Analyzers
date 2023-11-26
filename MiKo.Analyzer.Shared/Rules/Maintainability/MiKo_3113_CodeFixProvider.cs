@@ -125,9 +125,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argument = arguments.First();
 
-                    if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NullLiteralExpression))
+                    if (argument.Expression is LiteralExpressionSyntax literal)
                     {
-                        return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
+                        if (literal.IsKind(SyntaxKind.NullLiteralExpression))
+                        {
+                            return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
+                        }
+
+                        if (literal.IsKind(SyntaxKind.TrueLiteralExpression))
+                        {
+                            return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
+                        }
+
+                        if (literal.IsKind(SyntaxKind.FalseLiteralExpression))
+                        {
+                            return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
+                        }
                     }
 
                     return AssertThat(expression, Is("EqualTo", arguments.First()), arguments, removeNameColon: true);
@@ -137,9 +150,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argument = arguments.First();
 
-                    if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.NullLiteralExpression))
+                    if (argument.Expression is LiteralExpressionSyntax literal)
                     {
-                        return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
+                        if (literal.IsKind(SyntaxKind.NullLiteralExpression))
+                        {
+                            return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
+                        }
+
+                        if (literal.IsKind(SyntaxKind.TrueLiteralExpression))
+                        {
+                            return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
+                        }
+
+                        if (literal.IsKind(SyntaxKind.FalseLiteralExpression))
+                        {
+                            return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
+                        }
                     }
 
                     return AssertThat(expression, Is("Not", "EqualTo", argument), arguments, removeNameColon: true);
