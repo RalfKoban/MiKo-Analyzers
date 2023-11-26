@@ -48,14 +48,8 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
             {
                 switch (member)
                 {
-                    case ConstructorDeclarationSyntax _:
-                    case DestructorDeclarationSyntax _:
-                    case IndexerDeclarationSyntax _:
-                    case PropertyDeclarationSyntax _:
-                    case EventDeclarationSyntax _:
-                    case MethodDeclarationSyntax _:
-                    case ConversionOperatorDeclarationSyntax _:
-                    case OperatorDeclarationSyntax _:
+                    case BaseMethodDeclarationSyntax _:
+                    case BasePropertyDeclarationSyntax _:
                     {
                         foreach (var block in member.DescendantNodes<BlockSyntax>())
                         {

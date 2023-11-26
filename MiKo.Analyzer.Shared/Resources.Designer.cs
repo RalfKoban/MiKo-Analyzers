@@ -12119,6 +12119,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If methods start with &apos;Begin&apos; or &apos;Enter&apos; they probably have counterparts that start with &apos;End&apos; or &apos;Exit&apos;. Such methods are considered to define some kind of scope (for example, &apos;BeginUpdate&apos; and &apos;EndUpdate&apos; defines a scope for an update operation).
+        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
+        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3214_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3214_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename scope-defining method to not start with &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3214_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3214_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interfaces do not contain &apos;Begin/End&apos; or &apos;Enter/Exit&apos; scope-defining methods.
+        /// </summary>
+        public static string MiKo_3214_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3214_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
