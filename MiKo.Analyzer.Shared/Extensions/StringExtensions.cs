@@ -1024,27 +1024,27 @@ namespace System
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ToLowerCase(this string value) => value?.ToLower(CultureInfo.InvariantCulture);
+        public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToLowerCase(this char value) => char.ToLowerInvariant(value);
+        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source);
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the characters are lower-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the character are lower-case.
         /// </returns>
-        public static string ToLowerCase(this ReadOnlySpan<char> value)
+        public static string ToLowerCase(this ReadOnlySpan<char> source)
         {
-            var characters = value.ToArray();
+            var characters = source.ToArray();
 
             for (var index = 0; index < characters.Length; index++)
             {
-                characters[index] = value[index].ToLowerCase();
+                characters[index] = source[index].ToLowerCase();
             }
 
             return new string(characters);
@@ -1053,33 +1053,33 @@ namespace System
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </returns>
-        public static string ToLowerCaseAt(this string value, int index)
+        public static string ToLowerCaseAt(this string source, int index)
         {
-            if (value is null)
+            if (source is null)
             {
                 return null;
             }
 
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value;
+                return source;
             }
 
-            if (value[index].IsLowerCase())
+            if (source[index].IsLowerCase())
             {
-                return value;
+                return source;
             }
 
-            var characters = value.ToCharArray();
+            var characters = source.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
             return new string(characters);
@@ -1088,66 +1088,66 @@ namespace System
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </returns>
-        public static string ToLowerCaseAt(this ReadOnlySpan<char> value, int index)
+        public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            if (value[index].IsLowerCase())
+            if (source[index].IsLowerCase())
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            var characters = value.ToArray();
-            characters[index] = value[index].ToLowerCase();
+            var characters = source.ToArray();
+            characters[index] = source[index].ToLowerCase();
 
             return new string(characters);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToUpperCase(this char value) => char.ToUpperInvariant(value);
+        public static char ToUpperCase(this char source) => char.ToUpperInvariant(source);
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </returns>
-        public static string ToUpperCaseAt(this string value, int index)
+        public static string ToUpperCaseAt(this string source, int index)
         {
-            if (value is null)
+            if (source is null)
             {
                 return null;
             }
 
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value;
+                return source;
             }
 
-            if (value[index].IsUpperCase())
+            if (source[index].IsUpperCase())
             {
-                return value;
+                return source;
             }
 
-            var characters = value.ToCharArray();
+            var characters = source.ToCharArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
@@ -1156,28 +1156,28 @@ namespace System
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </returns>
-        public static string ToUpperCaseAt(this ReadOnlySpan<char> value, int index)
+        public static string ToUpperCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            if (value[index].IsUpperCase())
+            if (source[index].IsUpperCase())
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            var characters = value.ToArray();
+            var characters = source.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
