@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 423 rules that are currently provided by the analyzer.
+The following tables list all the 424 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -106,6 +106,7 @@ The following tables list all the 423 rules that are currently provided by the a
 |MiKo_1073|Boolean fields should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1074|Objects used to lock on should be suffixed with 'Lock'|&#x2713;|\-|
 |MiKo_1075|Non-'System.EventArgs' types should not be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
+|MiKo_1076|Prism event types should be suffixed with 'Event'|&#x2713;|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
