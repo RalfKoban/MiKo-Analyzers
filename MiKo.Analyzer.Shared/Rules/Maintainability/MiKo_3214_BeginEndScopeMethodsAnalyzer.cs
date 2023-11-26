@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -16,31 +14,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static readonly string[] ScopeIndicators = { "Begin", "End", "Enter", "Exit", "Leave" };
 
-        public MiKo_3214_BeginEndScopeMethodsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3214_BeginEndScopeMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInterface, SyntaxKind.InterfaceDeclaration);
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Interface;
 
-        private void AnalyzeInterface(SyntaxNodeAnalysisContext context)
+        protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var issues = Analyze((InterfaceDeclarationSyntax)context.Node);
-
-            ReportDiagnostics(context, issues);
-        }
-
-        private IEnumerable<Diagnostic> Analyze(TypeDeclarationSyntax syntax)
-        {
-            foreach (var method in syntax.Members.OfType<MethodDeclarationSyntax>())
+            foreach (var method in symbol.GetMethods())
             {
-                var identifier = method.Identifier;
-                var name = identifier.ValueText;
-
+                var name = method.Name;
                 var indicator = ScopeIndicators.FirstOrDefault(_ => name.StartsWith(_, StringComparison.OrdinalIgnoreCase));
 
                 if (indicator != null)
                 {
-                    yield return Issue(identifier, indicator);
+                    yield return Issue(method, indicator);
                 }
             }
         }

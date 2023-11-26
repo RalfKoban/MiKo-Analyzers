@@ -12130,7 +12130,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rename scope-defining method to not start with &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Rename scope-defining method to not start with &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_3214_MessageFormat {
             get {
