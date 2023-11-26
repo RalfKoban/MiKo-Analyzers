@@ -10415,6 +10415,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change &quot;n&apos;t&quot; to &quot; not&quot;.
+        /// </summary>
+        public static string MiKo_3064_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3064_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.
+        ///It would therefore be better to clearly highlight the contradiction..
+        /// </summary>
+        public static string MiKo_3064_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3064_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use contradiction &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_3064_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3064_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log messages should not use the contradiction &quot;n&apos;t&quot;.
+        /// </summary>
+        public static string MiKo_3064_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3064_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
         ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
         /// </summary>

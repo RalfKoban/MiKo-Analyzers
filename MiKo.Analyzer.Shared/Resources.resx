@@ -3683,6 +3683,19 @@ Therefore, the logger should be requested via a string that acts as category.</v
   <data name="MiKo_3063_Title" xml:space="preserve">
     <value>End non-exceptional log messages with a dot</value>
   </data>
+  <data name="MiKo_3064_CodeFixTitle" xml:space="preserve">
+    <value>Change "n't" to " not"</value>
+  </data>
+  <data name="MiKo_3064_Description" xml:space="preserve">
+    <value>It may happen to read over and not recognize a contradiction. This then leads to unintentional errors.
+It would therefore be better to clearly highlight the contradiction.</value>
+  </data>
+  <data name="MiKo_3064_MessageFormat" xml:space="preserve">
+    <value>Do not use contradiction "n't"</value>
+  </data>
+  <data name="MiKo_3064_Title" xml:space="preserve">
+    <value>Log messages should not use the contradiction "n't"</value>
+  </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
 It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null.</value>

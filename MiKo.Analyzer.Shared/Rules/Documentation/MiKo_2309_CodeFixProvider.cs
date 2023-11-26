@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -18,35 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (MiKo_2213_DocumentationContainsNtContradictionAnalyzer.CommentHasIssue(comment.TrimEnd()))
+            if (MiKo_2309_CommentContainsNtContradictionAnalyzer.CommentHasIssue(comment.AsSpan().TrimEnd()))
             {
-                return SyntaxFactory.Comment(GetFixedText(comment));
+                var text = new StringBuilder(comment).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap).ToString();
+
+                return SyntaxFactory.Comment(text);
             }
 
             return original;
         }
-
-        private static string GetFixedText(string text) => new StringBuilder(text).ReplaceWithCheck("adnt", "ad not")
-                                                                                  .ReplaceWithCheck("an't", "annot")
-                                                                                  .ReplaceWithCheck("arent", "are not")
-                                                                                  .ReplaceWithCheck("Arent", "Are not")
-                                                                                  .ReplaceWithCheck("asnt", "as not")
-                                                                                  .ReplaceWithCheck("avent", "ave not")
-                                                                                  .ReplaceWithCheck("cant", "cannot")
-                                                                                  .ReplaceWithCheck("Cant", "Cannot")
-                                                                                  .ReplaceWithCheck("dont", "do not")
-                                                                                  .ReplaceWithCheck("Dont", "Do not")
-                                                                                  .ReplaceWithCheck("eednt", "eed not")
-                                                                                  .ReplaceWithCheck("erent", "ere not")
-                                                                                  .ReplaceWithCheck("idnt", "id not")
-                                                                                  .ReplaceWithCheck("oesnt", "oes not")
-                                                                                  .ReplaceWithCheck("ouldnt", "ould not")
-                                                                                  .ReplaceWithCheck("snt", "s not")
-                                                                                  .ReplaceWithCheck("wont", "will not")
-                                                                                  .ReplaceWithCheck("won't", "will not")
-                                                                                  .ReplaceWithCheck("Wont", "Will not")
-                                                                                  .ReplaceWithCheck("Won't", "Will not")
-                                                                                  .ReplaceWithCheck("n't", " not")
-                                                                                  .ToString();
     }
 }

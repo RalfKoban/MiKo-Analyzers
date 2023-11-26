@@ -358,19 +358,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return false;
         }
 
-        private static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset, int endOffset)
-        {
-            if (position == -1)
-            {
-                return null;
-            }
-
-            var start = spanStart + position + startOffset; // find start position for underlining
-            var end = start + value.Length - startOffset - endOffset; // find end position
-
-            return CreateLocation(syntaxTree, start, end);
-        }
-
         private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, StringComparison comparison, int startOffset, int endOffset)
         {
             if (text.Length <= 2 && text.IsNullOrWhiteSpace())
