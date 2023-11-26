@@ -85,7 +85,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var startingPart = text.AsSpan(0, text.IndexOf(textToReplace, StringComparison.Ordinal));
+                    var start = text.IndexOf(textToReplace, StringComparison.Ordinal);
+
+                    if (start < 0)
+                    {
+                        // does not seem to fit
+                        continue;
+                    }
+
+                    var startingPart = text.AsSpan(0, start);
                     var lastWord = startingPart.LastWord().ToString();
 
                     // let's see if we have to deal with 'does' or 'is' but need to have plural

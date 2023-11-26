@@ -233,6 +233,26 @@ public interface ITestMe
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
+        [TestCase("This will start", "This starts", @"The return value will be <see langword=""false""/>.", @"The return value is <see langword=""false""/>.")]
+        public void Code_gets_fixed_when_on_separate_lines(string originalPhrase, string fixedPhrase, string originalReturn, string fixedReturn)
+        {
+            const string Template = @"
+using System;
+
+public interface ITestMe
+{
+    /// <summary>
+    /// #1# something.
+    /// Even some other thing.
+    /// </summary>
+    /// <returns>#2#</returns>
+    int DoSomething()
+}
+";
+
+            VerifyCSharpFix(Template.Replace("#1#", originalPhrase).Replace("#2#", originalReturn), Template.Replace("#1#", fixedPhrase).Replace("#2#", fixedReturn));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2049_WillBePhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2049_WillBePhraseAnalyzer();
