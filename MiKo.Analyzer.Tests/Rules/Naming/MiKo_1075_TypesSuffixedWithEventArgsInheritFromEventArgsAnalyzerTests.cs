@@ -38,17 +38,68 @@ public class TestMeEventArgs : EventArgs
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_non_EventArgs_type_incorrectly_named_EventArgs() => An_issue_is_reported_for(@"
+        [TestCase("MyEventArg")]
+        [TestCase("MyEventsArg")]
+        [TestCase("MyEventArgs")]
+        [TestCase("MyEventsArgs")]
+        public void An_issue_is_reported_for_non_EventArgs_type_incorrectly_named_(string name) => An_issue_is_reported_for(@"
 using System;
 
-public class MyEventArgs
+public class " + name + @"
 {
 }
 ");
 
+        [TestCase("MyEventArg")]
+        [TestCase("MyEventsArg")]
+        [TestCase("MyEventArgs")]
+        [TestCase("MyEventsArgs")]
+        public void An_issue_is_reported_for_Prism_event_type_incorrectly_named_(string name) => An_issue_is_reported_for(@"
+
+namespace Microsoft.Practices.Prism.Events
+{
+    public abstract class EventBase { }
+}
+
+namespace MyNamespace
+{
+    using Microsoft.Practices.Prism.Events;
+
+    public class " + name + @" : EventBase
+    {
+    }
+}
+");
+
+        [TestCase("using System; class TestMeEventArg { }", "using System; class TestMe { }")]
         [TestCase("using System; class TestMeEventArgs { }", "using System; class TestMe { }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
+
+        [TestCase("TestMeEventArg", "TestMeEvent")]
+        [TestCase("TestMeEventsArg", "TestMeEvent")]
+        [TestCase("TestMeEventArgs", "TestMeEvent")]
+        [TestCase("TestMeEventsArgs", "TestMeEvent")]
+        public void Code_gets_fixed_for_Prism_event_(string originalName, string fixedName)
+        {
+            const string Template = @"
+
+namespace Microsoft.Practices.Prism.Events
+{
+    public abstract class EventBase { }
+}
+
+namespace MyNamespace
+{
+    using Microsoft.Practices.Prism.Events;
+
+    public class ### : EventBase
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
 
         protected override string GetDiagnosticId() => MiKo_1075_TypesSuffixedWithEventArgsInheritFromEventArgsAnalyzer.Id;
 
