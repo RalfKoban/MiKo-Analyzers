@@ -129,6 +129,17 @@ public enum TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Left_shifting_One_leads_to_correct_values() => Assert.Multiple(() =>
+                                                                                        {
+                                                                                            Assert.That(1 << 0, Is.EqualTo(1));
+                                                                                            Assert.That(1 << 1, Is.EqualTo(2));
+                                                                                            Assert.That(1 << 2, Is.EqualTo(4));
+                                                                                            Assert.That(1 << 3, Is.EqualTo(8));
+                                                                                            Assert.That(1 << 4, Is.EqualTo(16));
+                                                                                            Assert.That(1 << 5, Is.EqualTo(32));
+                                                                                        });
+
         protected override string GetDiagnosticId() => MiKo_3078_EnumMembersHaveValueAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3078_EnumMembersHaveValueAnalyzer();

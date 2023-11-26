@@ -488,17 +488,6 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)
-        {
-            switch (value)
-            {
-                case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
-                case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
-                default:
-                    return Enumerable.Empty<string>();
-            }
-        }
-
         internal static string GetName(this BasePropertyDeclarationSyntax value)
         {
             switch (value)
@@ -630,11 +619,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+        internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this XmlAttributeSyntax value) => value?.Name.GetName();
 
@@ -648,7 +635,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
-//// ncrunch: collect values default
+        internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
+                case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
+                default:
+                    return Enumerable.Empty<string>();
+            }
+        }
+
+        internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+
+        //// ncrunch: collect values default
 
         internal static string GetXmlTagName(this SyntaxNode value)
         {
