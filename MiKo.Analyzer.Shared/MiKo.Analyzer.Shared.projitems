@@ -566,6 +566,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1074_LockIdentifiersAreSuffixedWithLockAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1075_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1075_TypesSuffixedWithEventArgsInheritFromEventArgsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1076_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1076_PrismEventTypeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1080_UseNumbersInsteadOfWordingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1081_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1081_MethodsWithNumberSuffixAnalyzer.cs" />

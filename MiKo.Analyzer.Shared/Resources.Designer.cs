@@ -2865,6 +2865,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change suffix to &apos;Event&apos;.
+        /// </summary>
+        public static string MiKo_1076_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1076_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prism event types follow the pattern defined by Prism and end their names with &apos;Event&apos;..
+        /// </summary>
+        public static string MiKo_1076_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1076_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1076_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1076_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prism event types should be suffixed with &apos;Event&apos;.
+        /// </summary>
+        public static string MiKo_1076_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1076_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         public static string MiKo_1080_Description {

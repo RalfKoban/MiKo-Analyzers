@@ -921,6 +921,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
                                                                   && value.SpecialType == SpecialType.None
+                                                                  && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
                                                                   && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
 
         internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
