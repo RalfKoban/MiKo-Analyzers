@@ -10621,34 +10621,6 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
-        ///Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a &apos;shared&apos; variable and do a break afterwards..
-        /// </summary>
-        public static string MiKo_3078_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3078_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Place switch statement in separate method and return value within case blocks.
-        /// </summary>
-        public static string MiKo_3078_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3078_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use &apos;switch ... return&apos; instead of &apos;switch ... break&apos; when assigning variables.
-        /// </summary>
-        public static string MiKo_3078_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3078_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Replace with hex value.
         /// </summary>
         public static string MiKo_3079_CodeFixTitle {
@@ -10681,6 +10653,34 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3079_Title {
             get {
                 return ResourceManager.GetString("MiKo_3079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code that assigns variables defined inside methods by using switch statements makes the method more complex and difficult to read.
+        ///Most times, such code can be simplified by refactoring the complete switch statement into an own method where the different switch sections simply returning the values instead of assigning them to a &apos;shared&apos; variable and do a break afterwards..
+        /// </summary>
+        public static string MiKo_3080_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3080_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch statement in separate method and return value within case blocks.
+        /// </summary>
+        public static string MiKo_3080_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3080_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;switch ... return&apos; instead of &apos;switch ... break&apos; when assigning variables.
+        /// </summary>
+        public static string MiKo_3080_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3080_Title", resourceCulture);
             }
         }
         

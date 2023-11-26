@@ -9,13 +9,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3078_SwitchReturnInsteadSwitchBreakAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3078";
+        public const string Id = "MiKo_3080";
 
         private static readonly SyntaxKind[] Declarations = { SyntaxKind.MethodDeclaration, SyntaxKind.IndexerDeclaration, SyntaxKind.ConstructorDeclaration };
 
-        public MiKo_3078_SwitchReturnInsteadSwitchBreakAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
