@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 foreach (var token in GetTextTokens(argument))
                 {
-                    var text = token.ValueText;
+                    var text = token.Text; // use 'Text' and not 'ValueText' here because otherwise the indices do not match (as 'Text' still contains the " )
 
                     foreach (var value in Constants.Comments.NotContradictionPhrase)
                     {
