@@ -340,8 +340,8 @@ The following tables list all the 420 rules that are currently provided by the a
 |MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required|&#x2713;|&#x2713;|
 |MiKo_3076|Do not initialize static member with static member below or in other type part|&#x2713;|\-|
 |MiKo_3077|Properties that return an Enum should have a default value|&#x2713;|&#x2713;|
-|MiKo_3078|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
 |MiKo_3079|HResults should be written in hexadecimal|&#x2713;|&#x2713;|
+|MiKo_3080|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
 |MiKo_3081|Prefer pattern matching over a logical NOT condition|&#x2713;|&#x2713;|
 |MiKo_3082|Prefer pattern matching over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
 |MiKo_3083|Prefer pattern matching for null checks|&#x2713;|&#x2713;|
