@@ -672,6 +672,31 @@ namespace MiKoSolutions.Analyzers
                                                                            "neednt",
                                                                        };
 
+            internal static readonly KeyValuePair<string, string>[] NotContradictionReplacementMap =
+                                                                                                     {
+                                                                                                         new KeyValuePair<string, string>("adnt", "ad not"),
+                                                                                                         new KeyValuePair<string, string>("an't", "annot"),
+                                                                                                         new KeyValuePair<string, string>("arent", "are not"),
+                                                                                                         new KeyValuePair<string, string>("Arent", "Are not"),
+                                                                                                         new KeyValuePair<string, string>("asnt", "as not"),
+                                                                                                         new KeyValuePair<string, string>("avent", "ave not"),
+                                                                                                         new KeyValuePair<string, string>("cant", "cannot"),
+                                                                                                         new KeyValuePair<string, string>("Cant", "Cannot"),
+                                                                                                         new KeyValuePair<string, string>("dont", "do not"),
+                                                                                                         new KeyValuePair<string, string>("Dont", "Do not"),
+                                                                                                         new KeyValuePair<string, string>("eednt", "eed not"),
+                                                                                                         new KeyValuePair<string, string>("erent", "ere not"),
+                                                                                                         new KeyValuePair<string, string>("idnt", "id not"),
+                                                                                                         new KeyValuePair<string, string>("oesnt", "oes not"),
+                                                                                                         new KeyValuePair<string, string>("ouldnt", "ould not"),
+                                                                                                         new KeyValuePair<string, string>("snt", "s not"),
+                                                                                                         new KeyValuePair<string, string>("wont", "will not"),
+                                                                                                         new KeyValuePair<string, string>("won't", "will not"),
+                                                                                                         new KeyValuePair<string, string>("Wont", "Will not"),
+                                                                                                         new KeyValuePair<string, string>("Won't", "Will not"),
+                                                                                                         new KeyValuePair<string, string>("n't", " not"),
+                                                                                                     };
+
             internal static readonly string[] IntentionallyPhrase =
                                                                     {
                                                                         "intentionally",
@@ -779,6 +804,12 @@ namespace MiKoSolutions.Analyzers
             internal const string IValueConverterFullName = "System.Windows.Data.IValueConverter";
 
             internal static readonly string[] DefaultPropertyParameterNames = { DefaultPropertyParameterName };
+
+            internal static readonly ISet<string> FlagsAttributeNames = new HashSet<string>
+                                                                            {
+                                                                                "Flags",
+                                                                                nameof(FlagsAttribute),
+                                                                            };
 
             internal static readonly ISet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
                                                                                       .Select(_ => _.Name)

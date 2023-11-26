@@ -64,6 +64,14 @@ namespace MiKoSolutions.Analyzers
 
 //// ncrunch: collect values off
 
+        internal static SyntaxToken FindToken<T>(this T value, Diagnostic diagnostic) where T : SyntaxNode
+        {
+            var position = diagnostic.Location.SourceSpan.Start;
+            var token = value.FindToken(position, true);
+
+            return token;
+        }
+
         internal static T FirstAncestor<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault();
 
         internal static T FirstAncestor<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.Ancestors<T>().FirstOrDefault(predicate);
@@ -480,17 +488,6 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)
-        {
-            switch (value)
-            {
-                case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
-                case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
-                default:
-                    return Enumerable.Empty<string>();
-            }
-        }
-
         internal static string GetName(this BasePropertyDeclarationSyntax value)
         {
             switch (value)
@@ -512,6 +509,8 @@ namespace MiKoSolutions.Analyzers
         internal static string GetName(this DestructorDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this EnumDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this EnumMemberDeclarationSyntax value) => value?.Identifier.ValueText;
 
         internal static string GetName(this EventDeclarationSyntax value) => value?.Identifier.ValueText;
 
@@ -585,6 +584,7 @@ namespace MiKoSolutions.Analyzers
                 case BasePropertyDeclarationSyntax s: return s.GetName();
                 case BaseTypeDeclarationSyntax s: return s.GetName();
                 case BaseFieldDeclarationSyntax s: return s.GetName();
+                case EnumMemberDeclarationSyntax s: return s.GetName();
                 default:
                     return string.Empty;
             }
@@ -619,11 +619,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+        internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this VariableDeclaratorSyntax value) => value?.Identifier.ValueText;
-
-        internal static string GetName(this UsingDirectiveSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this XmlAttributeSyntax value) => value?.Name.GetName();
 
@@ -637,7 +635,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static string GetName(this XmlNameSyntax value) => value?.LocalName.ValueText;
 
-//// ncrunch: collect values default
+        internal static IEnumerable<string> GetNames(this BaseFieldDeclarationSyntax value)
+        {
+            switch (value)
+            {
+                case FieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
+                case EventFieldDeclarationSyntax s: return s.Declaration.Variables.GetNames();
+                default:
+                    return Enumerable.Empty<string>();
+            }
+        }
+
+        internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
+
+        //// ncrunch: collect values default
 
         internal static string GetXmlTagName(this SyntaxNode value)
         {
@@ -2123,9 +2134,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
 
-        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivias) where T : SyntaxNode
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
         {
-            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivias));
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
+        }
+
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
+        {
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
         }
 
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
@@ -2369,6 +2385,24 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode => value.WithLeadingTriviaFrom(token)
                                                                                                           .WithTrailingTriviaFrom(token);
+
+        internal static T WithAdditionalLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            var trivia = node.GetLeadingTrivia();
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
+        }
+
+        internal static T WithAdditionalLeadingTriviaFrom<T>(this T value, SyntaxToken token) where T : SyntaxNode
+        {
+            var trivia = token.LeadingTrivia;
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
+        }
 
         internal static T WithLeadingTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode
         {

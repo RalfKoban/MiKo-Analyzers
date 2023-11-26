@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 417 rules that are currently provided by the analyzer.
+The following tables list all the 423 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -105,6 +105,7 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1073|Boolean fields should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1074|Objects used to lock on should be suffixed with 'Lock'|&#x2713;|\-|
+|MiKo_1075|Non-'System.EventArgs' types should not be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
@@ -257,6 +258,7 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_2226|Documentation should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
 |MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
+|MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -331,6 +333,7 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
 |MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
 |MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
+|MiKo_3064|Log messages should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|\-|
@@ -339,8 +342,9 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required|&#x2713;|&#x2713;|
 |MiKo_3076|Do not initialize static member with static member below or in other type part|&#x2713;|\-|
 |MiKo_3077|Properties that return an Enum should have a default value|&#x2713;|&#x2713;|
-|MiKo_3078|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
+|MiKo_3078|Enum members should have a default value|&#x2713;|&#x2713;|
 |MiKo_3079|HResults should be written in hexadecimal|&#x2713;|&#x2713;|
+|MiKo_3080|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
 |MiKo_3081|Prefer pattern matching over a logical NOT condition|&#x2713;|&#x2713;|
 |MiKo_3082|Prefer pattern matching over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
 |MiKo_3083|Prefer pattern matching for null checks|&#x2713;|&#x2713;|
@@ -461,3 +465,5 @@ The following tables list all the 417 rules that are currently provided by the a
 |MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|\-|
 |MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
+|MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
+|MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|

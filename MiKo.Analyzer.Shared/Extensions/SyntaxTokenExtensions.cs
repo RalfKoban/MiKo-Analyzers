@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithLeadingEmptyLine(this SyntaxToken value) => value.WithLeadingTrivia(value.LeadingTrivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed));
 
-        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
@@ -169,6 +169,34 @@ namespace MiKoSolutions.Analyzers
             var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia)
+        {
+            return value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia)
+        {
+            return value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxNode node)
+        {
+            var trivia = node.GetLeadingTrivia();
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxToken token)
+        {
+            var trivia = token.LeadingTrivia;
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
         }
 
         internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count) => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically

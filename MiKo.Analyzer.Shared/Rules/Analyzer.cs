@@ -88,6 +88,19 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(SyntaxTree syntaxTree, int start, int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
 
+        protected static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset = 0, int endOffset = 0)
+        {
+            if (position == -1)
+            {
+                return null;
+            }
+
+            var start = spanStart + position + startOffset; // find start position for underlining
+            var end = start + value.Length - startOffset - endOffset; // find end position
+
+            return CreateLocation(syntaxTree, start, end);
+        }
+
         protected static void ReportDiagnostics(CodeBlockAnalysisContext context, Diagnostic issue)
         {
             if (issue != null)

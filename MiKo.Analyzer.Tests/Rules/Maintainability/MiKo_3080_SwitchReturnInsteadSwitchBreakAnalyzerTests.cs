@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    internal sealed class MiKo_3078_SwitchReturnInsteadSwitchBreakAnalyzerTests : CodeFixVerifier
+    internal sealed class MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_factory_that_directly_returns_value_instead_of_assigning_it_to_variable() => No_issue_is_reported_for(@"
@@ -285,8 +285,8 @@ public class TestMe
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3078_SwitchReturnInsteadSwitchBreakAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3078_SwitchReturnInsteadSwitchBreakAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3080_SwitchReturnInsteadSwitchBreakAnalyzer();
     }
 }
