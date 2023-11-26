@@ -12,18 +12,42 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1075";
 
+        private const string EventArg = "EventArg";
+        private const string EventArgs = nameof(System.EventArgs);
+        private const string EventsArg = nameof(EventsArg);
+        private const string EventsArgs = nameof(EventsArgs);
+
+        private static readonly ISet<string> EventArgSuffixes = new HashSet<string>
+                                                                    {
+                                                                        EventArgs,
+                                                                        EventArg,
+                                                                        EventsArgs,
+                                                                        EventsArg,
+                                                                    };
+
         public MiKo_1075_TypesSuffixedWithEventArgsInheritFromEventArgsAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => FindBetterName(symbol);
+        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => FindBetterName((INamedTypeSymbol)symbol);
 
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.Name.EndsWith(nameof(EventArgs), StringComparison.Ordinal);
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.Name.EndsWithAny(EventArgSuffixes, StringComparison.Ordinal);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsEventArgs()
                                                                                                                     ? Enumerable.Empty<Diagnostic>()
                                                                                                                     : new[] { Issue(symbol, FindBetterName(symbol)) };
 
-        private static string FindBetterName(ISymbol symbol) => symbol.Name.Without(nameof(EventArgs));
+        private static string FindBetterName(INamedTypeSymbol symbol)
+        {
+            var betterName = symbol.Name
+                                   .Without(EventArgs)
+                                   .Without(EventArg)
+                                   .Without(EventsArgs)
+                                   .Without(EventsArg);
+
+            return symbol.IsPrismEvent()
+                   ? betterName + "Event" // prism events should be suffixed with 'Event'
+                   : betterName;
+        }
     }
 }
