@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] AssertionMethods =
                                                             {
                                                                 nameof(Assert.That),
-                                                                nameof(Assert.IsTrue),
-                                                                nameof(Assert.True),
-                                                                nameof(Assert.IsFalse),
-                                                                nameof(Assert.False),
+                                                                "Assert.IsTrue",
+                                                                "Assert.True",
+                                                                "Assert.IsFalse",
+                                                                "Assert.False",
                                                             };
 
         private static readonly string[] Operators =

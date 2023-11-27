@@ -15,10 +15,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                       {
                                                           nameof(Assert),
                                                           nameof(Assume),
-                                                          nameof(CollectionAssert),
-                                                          nameof(DirectoryAssert),
-                                                          nameof(FileAssert),
-                                                          nameof(StringAssert),
+                                                          "CollectionAssert",
+                                                          "DirectoryAssert",
+                                                          "FileAssert",
+                                                          "StringAssert",
                                                       };
 
         [Test]
