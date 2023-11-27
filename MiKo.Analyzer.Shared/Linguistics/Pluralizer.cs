@@ -119,6 +119,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName;
                 }
 
+                if (proposedName.EndsWith("rivia", comparison))
+                {
+                    return proposedName; // keep 'trivia'
+                }
+
                 if (proposedName.EndsWith("child", comparison))
                 {
                     return proposedName + "ren";
