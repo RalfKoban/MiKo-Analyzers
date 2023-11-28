@@ -12324,7 +12324,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place Dispose method after constructors and finalizers.
+        ///   Looks up a localized string similar to Place &apos;Dispose&apos; directly after all ctors and finalizers.
         /// </summary>
         public static string MiKo_4003_CodeFixTitle {
             get {
@@ -12342,7 +12342,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place &apos;{0}&apos; directly after all ctors and finalizers.
+        ///   Looks up a localized string similar to Place &apos;Dispose&apos; directly after all ctors and finalizers.
         /// </summary>
         public static string MiKo_4003_MessageFormat {
             get {
