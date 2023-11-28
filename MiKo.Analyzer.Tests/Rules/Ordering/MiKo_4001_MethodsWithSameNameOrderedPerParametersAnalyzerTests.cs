@@ -586,6 +586,30 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_ctors_on_structs_that_do_not_have_a_parameterless_ctor()
+        {
+            const string OriginalCode = @"
+public readonly struct TestMe
+{
+    public TestMe(string s1, string s2) { }
+
+    public TestMe(string s) { }
+}
+";
+
+            const string FixedCode = @"
+public readonly struct TestMe
+{
+    public TestMe(string s) { }
+
+    public TestMe(string s1, string s2) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();
