@@ -49,6 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "The read-only collection of ", string.Empty },
                                                                                     { "The readonly collection with ", string.Empty },
                                                                                     { "The read-only collection with ", string.Empty },
+                                                                                    { Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase1, string.Empty },
+                                                                                    { Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase2, string.Empty },
                                                                                 };
 
         private static readonly Dictionary<string, string> ByteArrayReplacementMap = new Dictionary<string, string>
@@ -79,6 +81,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                              { "The array of bytes which contains ", string.Empty },
                                                                                              { "The array of ", string.Empty },
                                                                                              { "The array with ", string.Empty },
+                                                                                             { Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase1, string.Empty },
+                                                                                             { Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase2, string.Empty },
                                                                                          };
 
         private static readonly string[] ByteArrayContinueTexts =

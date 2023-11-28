@@ -133,6 +133,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Comments
         {
+            internal const string AlmostCorrectTaskReturnTypeStartingPhrase1 = "A task that represents the asynchronous operation. The Result is ";
+            internal const string AlmostCorrectTaskReturnTypeStartingPhrase2 = "An task that represents the asynchronous operation. The Result is ";
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
@@ -432,7 +434,7 @@ namespace MiKoSolutions.Analyzers
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that represents"),
                                                                                };
 
-            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The {0} property on the task object returns a {1} that {2} ";
+            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The value of the {0} parameter returns a {1} that {2} ";
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                                                                                    {

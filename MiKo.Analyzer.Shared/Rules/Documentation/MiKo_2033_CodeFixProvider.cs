@@ -31,6 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          "with",
                                                      };
 
+        private static readonly string[] AlmostCorrectTaskReturnTypeStartingPhrases =
+                                                                                      {
+                                                                                          Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase1,
+                                                                                          Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase2,
+                                                                                      };
+
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
@@ -66,6 +72,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     newComment = newComment.ReplaceNode(last, last.WithoutTrailingXmlComment().WithTrailingXmlComment());
 
                     return newComment;
+                }
+            }
+
+            if (comment.Content.Count > 0)
+            {
+                if (comment.Content[0] is XmlTextSyntax startText)
+                {
+                    comment = ReplaceText(comment, startText, AlmostCorrectTaskReturnTypeStartingPhrases, string.Empty);
                 }
             }
 
@@ -135,6 +149,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Return ";
             yield return "returns ";
             yield return "return ";
+
+            foreach (var phrase in AlmostCorrectTaskReturnTypeStartingPhrases)
+            {
+                yield return phrase;
+            }
         }
     }
 }

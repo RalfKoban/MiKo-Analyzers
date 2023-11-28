@@ -117,6 +117,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "A task that can be used to await.";
             yield return "A task that can be used to await and";
             yield return "A task that can be used to await";
+            yield return Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase1;
+            yield return Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase2;
 
             foreach (var start in new[] { "A result", "A task", "The task" })
             {

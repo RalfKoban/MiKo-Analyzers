@@ -378,6 +378,7 @@ public class TestMe
         [TestCase("A task to await", "")]
         [TestCase("An awaitable task.", "")]
         [TestCase("An awaitable task", "")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "")]
         public void Code_gets_fixed_for_Task_with_generic_collection_(string originalText, string fixedText)
         {
             var originalCode = @"
@@ -408,7 +409,8 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"</returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"
+    /// </returns>
     public Task<IList<int>> DoSomething { get; set; }
 }
 ";
@@ -416,10 +418,11 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_Task_with_array()
+        [TestCase("Some integers.", "some integers.")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
+        public void Code_gets_fixed_for_Task_with_array_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -431,13 +434,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
+    /// " + originalText + @"
     /// </returns>
     public Task<int[]> DoSomething { get; set; }
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -449,19 +452,20 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains an array of some integers.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains an array of " + fixedText + @"
     /// </returns>
     public Task<int[]> DoSomething { get; set; }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_Task_with_byte_array()
+        [TestCase("Some data.", "some data.")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
+        public void Code_gets_fixed_for_Task_with_byte_array_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -473,13 +477,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some data.
+    /// " + originalText + @"
     /// </returns>
     public Task<byte[]> DoSomething { get; set; }
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -491,13 +495,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a byte array containing some data.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a byte array containing " + fixedText + @"
     /// </returns>
     public Task<byte[]> DoSomething { get; set; }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;

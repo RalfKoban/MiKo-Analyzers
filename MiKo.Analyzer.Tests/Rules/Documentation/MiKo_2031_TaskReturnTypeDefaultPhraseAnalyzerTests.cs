@@ -239,6 +239,7 @@ public class TestMe
         [TestCase(@"An awaitable task. The new <see cref=""string"" />.", @"the new <see cref=""string"" />.")]
         [TestCase("An awaitable task.", "")]
         [TestCase("An awaitable task", "")]
+        [TestCase("An task that represents the operation. The Result is a project.", "a project.")]
         public void Code_gets_fixed_for_generic_method_(string originalText, string fixedText)
         {
             var originalCode = @"

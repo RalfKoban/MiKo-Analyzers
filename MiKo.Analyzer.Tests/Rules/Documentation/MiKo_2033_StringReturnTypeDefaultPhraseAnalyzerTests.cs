@@ -341,7 +341,45 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains something.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains something.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_almost_correct_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The Result is something.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains something.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -547,7 +585,7 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> containing the <c>Foo</c>.</returns>
+    /// <returns>A task representing the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> containing the <c>Foo</c>.</returns>
     public Task<string> DoSomething(object o) => null;
 }
 ";
@@ -562,7 +600,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains the <c>Foo</c>.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains the <c>Foo</c>.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -584,7 +622,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task representing the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> containing the <c>Foo</c>.
+    /// A task representing the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> containing the <c>Foo</c>.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -600,7 +638,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains the <c>Foo</c>.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains the <c>Foo</c>.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }

@@ -23,6 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "A task that has the result ",
                                                        "A task that will complete with a result of ",
                                                        "a task that will complete with a result of ",
+                                                       "A task that represents the asynchronous operation. The Result indicates whether ",
+                                                       "a task that represents the asynchronous operation. The Result indicates whether ",
                                                        "TRUE:",
                                                        "True:",
                                                        "true:",
