@@ -450,6 +450,50 @@ public class TestMe : IDisposable
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_class_with_public_Dispose_method_after_other_methods_and_properties()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    public void A() { }
+
+    public void Dispose() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    public void Dispose() { }
+
+    public void A() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         //// TODO RKN: partial parts
 
         protected override string GetDiagnosticId() => MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer.Id;

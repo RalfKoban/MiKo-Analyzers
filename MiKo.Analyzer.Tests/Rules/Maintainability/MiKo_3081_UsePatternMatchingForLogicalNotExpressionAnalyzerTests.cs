@@ -76,20 +76,16 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_logical_NOT_condition() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Expression_argument() => No_issue_is_reported_for(@"
 using System;
+using System.Linq.Expressions;
 
 public class TestMe
 {
-    public bool DoSomething(bool a)
-    {
-        if (!a)
-            return true;
-        else
-            return false;
-    }
-}
-");
+    public bool DoSomething(bool a) => DoSomething(_ => !_);
+
+    public bool DoSomething(Expression<Func<bool, bool>> expression) => expression != null;
+}");
 
         [Test]
         public void No_issue_is_reported_for_logical_comparison() => No_issue_is_reported_for(@"
@@ -126,6 +122,37 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_logical_NOT_condition_to_invert_value() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private bool m_field;
+
+    public void Invert()
+    {
+        m_field = !m_field;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_logical_NOT_condition() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool a)
+    {
+        if (!a)
+            return true;
+        else
+            return false;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_logical_NOT_condition_with_method() => An_issue_is_reported_for(@"
 using System;
 
@@ -146,21 +173,9 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void No_issue_is_reported_for_Expression_argument() => No_issue_is_reported_for(@"
-using System;
-using System.Linq.Expressions;
-
-public class TestMe
-{
-    public bool DoSomething(bool a) => DoSomething(_ => !_);
-
-    public bool DoSomething(Expression<Func<bool, bool>> expression) => expression != null;
-}");
-
         [TestCase(
-             "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
-             "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }")]
+                     "class TestMe { bool DoSomething(bool a) { if (!a) return true; return false; } }",
+                     "class TestMe { bool DoSomething(bool a) { if (a is false) return true; return false; } }")]
         [TestCase(
              "class TestMe { bool DoSomething(bool a) { return !a; } }",
              "class TestMe { bool DoSomething(bool a) { return a is false; } }")]
