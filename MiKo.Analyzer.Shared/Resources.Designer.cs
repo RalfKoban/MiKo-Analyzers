@@ -2865,6 +2865,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change suffix to &apos;Event&apos;.
+        /// </summary>
+        public static string MiKo_1076_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1076_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prism event types follow the pattern defined by Prism and end their names with &apos;Event&apos;..
+        /// </summary>
+        public static string MiKo_1076_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1076_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; instead.
+        /// </summary>
+        public static string MiKo_1076_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1076_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prism event types should be suffixed with &apos;Event&apos;.
+        /// </summary>
+        public static string MiKo_1076_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1076_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         public static string MiKo_1080_Description {
@@ -12083,6 +12119,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If methods start with &apos;Begin&apos; or &apos;Enter&apos; they probably have counterparts that start with &apos;End&apos; or &apos;Exit&apos;. Such methods are considered to define some kind of scope (for example, &apos;BeginUpdate&apos; and &apos;EndUpdate&apos; defines a scope for an update operation).
+        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
+        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string MiKo_3214_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3214_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename scope-defining method to not start with &apos;{1}&apos;.
+        /// </summary>
+        public static string MiKo_3214_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3214_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interfaces do not contain &apos;Begin/End&apos; or &apos;Enter/Exit&apos; scope-defining methods.
+        /// </summary>
+        public static string MiKo_3214_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3214_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
@@ -12259,7 +12324,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place Dispose method after constructors and finalizers.
+        ///   Looks up a localized string similar to Place &apos;Dispose&apos; directly after all ctors and finalizers.
         /// </summary>
         public static string MiKo_4003_CodeFixTitle {
             get {
@@ -12277,7 +12342,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place &apos;{0}&apos; directly after all ctors and finalizers.
+        ///   Looks up a localized string similar to Place &apos;Dispose&apos; directly after all ctors and finalizers.
         /// </summary>
         public static string MiKo_4003_MessageFormat {
             get {

@@ -17,6 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (PrefixUnaryExpressionSyntax)context.Node;
+
+            if (node.Operand is IdentifierNameSyntax right && node.Parent is AssignmentExpressionSyntax assignment && assignment.Left is IdentifierNameSyntax left)
+            {
+                if (right.Identifier.ValueText == left.Identifier.ValueText)
+                {
+                    // same identifier, do not report
+                    return;
+                }
+            }
+
             var semanticModel = context.SemanticModel;
 
             if (node.IsExpression(semanticModel))
