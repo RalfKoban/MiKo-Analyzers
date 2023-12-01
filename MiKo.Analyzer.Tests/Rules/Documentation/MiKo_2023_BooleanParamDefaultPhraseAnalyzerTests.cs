@@ -21,6 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Distinct().ToArray();
         private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Distinct().ToArray();
         private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Distinct().ToArray();
+        private static readonly string[] DefaultCases = CreateDefaultCases().Distinct().ToArray();
 
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
@@ -274,6 +275,135 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_special_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">Indicated whether something. " + defaultCase + @".</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to indicate that something; otherwise, <see langword=""false""/>.
+    /// " + defaultCase + @".
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition""><see langword=""true""/> if some condition. Otherwise <see langword=""false""/>. " + defaultCase + @".</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// " + defaultCase + @".
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_phrase_with_separate_line_for_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition""><see langword=""true""/> if some condition. Otherwise <see langword=""false""/>.
+    /// " + defaultCase + @".</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// " + defaultCase + @".
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_same_line_without_links_for_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">true if some condition, false otherwise. " + defaultCase + @".</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            var fixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// " + defaultCase + @".
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]
@@ -626,6 +756,18 @@ public class TestMe
             {
                 yield return phrase;
                 yield return phrase.ToLowerCaseAt(0);
+            }
+        }
+
+        [ExcludeFromCodeCoverage]
+        private static IEnumerable<string> CreateDefaultCases()
+        {
+            var starts = new[] { "The default is", "Default is", "Defaults to" };
+            var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true", @"<see langword=""false""/>", @"<see langref=""false""/>", "false" };
+
+            foreach (var phrase in from start in starts from boolean in booleans select $"{start} {boolean}")
+            {
+                yield return phrase;
             }
         }
     }
