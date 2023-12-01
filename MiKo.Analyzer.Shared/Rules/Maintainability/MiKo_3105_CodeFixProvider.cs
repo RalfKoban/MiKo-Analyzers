@@ -519,9 +519,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 }
             }
 
-            if (args[0].Expression is TypeOfExpressionSyntax typeOfExpression)
+            switch (args[0].Expression)
             {
-                return AssertThat(args[1], Throws("TypeOf", typeOfExpression.Type), args);
+                case TypeOfExpressionSyntax typeOfExpression:
+                    return AssertThat(args[1], Throws("TypeOf", typeOfExpression.Type), args);
+
+                case IdentifierNameSyntax identifier:
+                    return AssertThat(args[1], Throws("TypeOf", Argument(identifier)), args);
             }
 
             return AssertThat(args[1], Throws("Nothing"), args);
