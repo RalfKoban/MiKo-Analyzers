@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
+        private const string OrNotPhrase = " or not";
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
@@ -77,6 +78,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(",  otherwise", ";  otherwise"),
                                                                                                  new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
                                                                                                  new KeyValuePair<string, string>("; Otherwise; ", "; "),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
                                                                                                  new KeyValuePair<string, string>(". ", "; "))
                                                                                 .Distinct()
                                                                                 .ToArray();
@@ -152,6 +156,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement)
         {
+            subText = ModifyOrNotPart(subText);
+
             foreach (var conditional in Conditionals)
             {
                 if (subText.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
@@ -219,6 +225,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return comment;
+        }
+
+        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text)
+        {
+            if (text.EndsWith(OrNotPhrase, StringComparison.Ordinal))
+            {
+                return text.WithoutSuffix(OrNotPhrase);
+            }
+
+            return text;
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)

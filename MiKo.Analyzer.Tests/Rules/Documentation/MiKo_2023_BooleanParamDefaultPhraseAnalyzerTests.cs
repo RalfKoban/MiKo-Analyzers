@@ -278,6 +278,37 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_on_same_line_for_Or_not_special_phrase_([ValueSource(nameof(IndicatePhrases))] string phrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">" + phrase + @" some condition is met or not.</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to indicate that some condition is met; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_on_same_line_for_special_phrase_with_default_case_([ValueSource(nameof(DefaultCases))] string defaultCase)
         {
             var originalCode = @"
@@ -441,9 +472,13 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> if some condition. <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> if some condition; otherwise <see langword=""false""/>.")]
         [TestCase(@"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if some condition or not; <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if some condition or not, <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/>: if some condition.")]
+        [TestCase(@"<see langword=""true""/>: if some condition or not.")]
         [TestCase(@"<see langref=""true""/> if some condition")]
         [TestCase(@"<see langref=""true""/>: if some condition")]
+        [TestCase(@"<see langref=""true""/>: if some condition or not")]
         [TestCase("<b>true</b> if some condition; <b>false</b> otherwise.")]
         [TestCase("<b>true</b>: if some condition; <b>false</b> otherwise.")]
         [TestCase("<c>true</c> if some condition; <c>false</c> otherwise.")]
