@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -719,6 +721,9 @@ namespace Bla
         [TestCase(
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] public void Do() => Assert.Throws(typeof(ApplicationException), () => throw new Exception(), ""some message""); }",
              @"using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] public void Do() => Assert.That(() => throw new Exception(), Throws.TypeOf<ApplicationException>(), ""some message""); }")]
+        [TestCase(
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] public void Do(Type exceptionType) => Assert.Throws(exceptionType, () => throw new Exception()); }",
+             "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] public void Do(Type exceptionType) => Assert.That(() => throw new Exception(), Throws.TypeOf(exceptionType)); }")]
         [TestCase(
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] public void Do() => Assert.DoesNotThrow(() => throw new ArgumentException()); }",
              "using System; using NUnit.Framework; [TestFixture] class TestMe { [Test] public void Do() => Assert.That(() => throw new ArgumentException(), Throws.Nothing); }")]
