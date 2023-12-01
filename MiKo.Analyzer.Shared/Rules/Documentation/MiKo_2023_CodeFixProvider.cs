@@ -40,6 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>("false", string.Empty),
                                                                                                  new KeyValuePair<string, string>("False", string.Empty),
                                                                                                  new KeyValuePair<string, string>("FALSE", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("if you want to", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" indicating if ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" indicating whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determine if ", Replacement),

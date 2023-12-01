@@ -474,6 +474,8 @@ public class TestMe
         [TestCase(@"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> if some condition or not; <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/> if some condition or not, <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if you want to some condition, <see langword=""false""/> otherwise.")]
+        [TestCase(@"<see langword=""true""/> if you want to some condition or not, <see langword=""false""/> otherwise.")]
         [TestCase(@"<see langword=""true""/>: if some condition.")]
         [TestCase(@"<see langword=""true""/>: if some condition or not.")]
         [TestCase(@"<see langref=""true""/> if some condition")]
