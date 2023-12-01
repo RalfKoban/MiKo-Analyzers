@@ -6,7 +6,6 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -93,78 +92,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
-            var splitComment = SplitDefaultParts(comment, out var defaultPhrases);
+            var splitComment = SplitCommentAtText(comment, DefaultPhrases, out var defaultPhrases);
             var remainingComment = FixRemainingComment(splitComment);
 
             if (defaultPhrases.Any())
             {
-                var contents = remainingComment.Content
-                                               .AddRange(defaultPhrases)
-                                               .Add(XmlText(string.Empty).WithTrailingXmlComment());
+                var contents = remainingComment.Content.AddRange(defaultPhrases).Add(TrailingNewLineXmlText());
+
                 return remainingComment.WithContent(contents);
             }
 
             return remainingComment;
-        }
-
-        private static XmlElementSyntax SplitDefaultParts(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> defaultPhrases)
-        {
-            var contents = comment.Content;
-
-            defaultPhrases = SyntaxFactory.List<XmlNodeSyntax>();
-
-            for (var i = 0; i < contents.Count; i++)
-            {
-                if (contents[i] is XmlTextSyntax t)
-                {
-                    var text = t.GetTextWithoutTrivia();
-
-                    if (text.ContainsAny(DefaultPhrases))
-                    {
-                        var textTokens = t.TextTokens;
-
-                        for (var index = 0; index < textTokens.Count; index++)
-                        {
-                            var token = textTokens[index];
-                            var tokenText = token.Text;
-                            var defaultPhrasePosition = tokenText.IndexOfAny(DefaultPhrases, StringComparison.Ordinal);
-
-                            if (defaultPhrasePosition > 0)
-                            {
-                                var next = i + 1;
-
-                                var beforeText = tokenText.AsSpan(0, defaultPhrasePosition).TrimEnd(Constants.TrailingSentenceMarkers).ToString();
-                                var remainingText = tokenText.Substring(defaultPhrasePosition);
-
-                                if (beforeText.Length > 0)
-                                {
-                                    var newT = t.ReplaceToken(token, token.WithText(beforeText));
-
-                                    contents = contents.Replace(t, newT);
-                                }
-                                else
-                                {
-                                    contents = contents.Remove(t);
-
-                                    next--;
-                                }
-
-                                // place others at end of default phrases
-                                defaultPhrases = defaultPhrases.Add(SyntaxFactory.XmlText(remainingText)).AddRange(contents.Skip(next));
-
-                                // take only those that do not come after the default phrases
-                                contents = SyntaxFactory.List(contents.Take(next));
-
-                                break;
-                            }
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            return comment.WithContent(contents);
         }
 
         private static XmlElementSyntax FixRemainingComment(XmlElementSyntax comment)
