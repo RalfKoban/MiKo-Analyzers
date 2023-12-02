@@ -710,13 +710,6 @@ namespace MiKoSolutions.Analyzers
                                                                         "purposely",
                                                                         "purposly", // typo by intent
                                                                     };
-
-            internal static readonly string[] OtherDefaultStartingPhrase =
-                                                                           {
-                                                                               "Default value is",
-                                                                               "Default is",
-                                                                               "Defaults to",
-                                                                           };
         }
 
         internal static class XmlTag

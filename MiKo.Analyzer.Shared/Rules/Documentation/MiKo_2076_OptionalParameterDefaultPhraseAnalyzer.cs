@@ -20,7 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string Phrase = Constants.Comments.DefaultStartingPhrase;
 
-        private static readonly string[] Phrases = Constants.Comments.OtherDefaultStartingPhrase;
+        private static readonly string[] Phrases =
+                                                   {
+                                                       "Default value is",
+                                                       "Default is",
+                                                       "Defaults to",
+                                                   };
 
         public MiKo_2076_OptionalParameterDefaultPhraseAnalyzer() : base(Id)
         {
