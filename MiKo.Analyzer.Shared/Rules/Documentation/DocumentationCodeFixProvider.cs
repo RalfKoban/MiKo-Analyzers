@@ -650,60 +650,100 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
 
-        protected static XmlElementSyntax SplitCommentAtText(XmlElementSyntax comment, string[] phrases, out SyntaxList<XmlNodeSyntax> partsAfterPhrases)
+        protected static XmlElementSyntax SplitCommentAfterFirstSentence(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> partsAfterSentence)
         {
             var contents = comment.Content;
+            var count = contents.Count;
 
-            partsAfterPhrases = SyntaxFactory.List<XmlNodeSyntax>();
+            partsAfterSentence = SyntaxFactory.List<XmlNodeSyntax>();
 
-            for (var i = 0; i < contents.Count; i++)
+            for (var i = 0; i < count; i++)
             {
                 if (contents[i] is XmlTextSyntax t)
                 {
                     var text = t.GetTextWithoutTrivia();
 
-                    if (text.ContainsAny(phrases))
+                    var dotIndex = text.IndexOf('.');
+
+                    if (dotIndex <= -1)
                     {
-                        var textTokens = t.TextTokens;
+                        // there is no dot, so continue
+                        continue;
+                    }
 
-                        for (var index = 0; index < textTokens.Count; index++)
+                    var textTokens = t.TextTokens;
+                    var textTokensCount = textTokens.Count;
+
+                    for (var index = 0; index < textTokensCount; index++)
+                    {
+                        var token = textTokens[index];
+                        var tokenText = token.Text;
+                        var dotPosition = tokenText.IndexOf('.');
+
+                        if (dotPosition <= -1)
                         {
-                            var token = textTokens[index];
-                            var tokenText = token.Text;
-                            var phrasePosition = tokenText.IndexOfAny(phrases, StringComparison.Ordinal);
-
-                            if (phrasePosition > 0)
-                            {
-                                var next = i + 1;
-
-                                var beforeText = tokenText.AsSpan(0, phrasePosition).TrimEnd(Constants.TrailingSentenceMarkers).ToString();
-                                var remainingText = tokenText.Substring(phrasePosition);
-
-                                if (beforeText.Length > 0)
-                                {
-                                    var newT = t.ReplaceToken(token, token.WithText(beforeText));
-
-                                    contents = contents.Replace(t, newT);
-                                }
-                                else
-                                {
-                                    contents = contents.Remove(t);
-
-                                    next--;
-                                }
-
-                                // place others at end
-                                partsAfterPhrases = partsAfterPhrases.Add(SyntaxFactory.XmlText(remainingText)).AddRange(contents.Skip(next));
-
-                                // take only those that do not come after the default phrases
-                                contents = SyntaxFactory.List(contents.Take(next));
-
-                                break;
-                            }
+                            // there is no dot, so continue
+                            continue;
                         }
+
+                        // we found a dot
+                        var next = i;
+
+                        var beforeText = tokenText.AsSpan(0, dotPosition).TrimStart().TrimEnd(Constants.TrailingSentenceMarkers);
+                        var remainingText = tokenText.AsSpan(dotPosition + 1).TrimStart(); // keep space at the end
+
+                        if (beforeText.Length == 0)
+                        {
+                            contents = contents.Remove(t);
+                        }
+                        else
+                        {
+                            var newT = t.ReplaceToken(token, token.WithText(beforeText));
+
+                            contents = contents.Replace(t, newT);
+
+                            next++;
+                        }
+
+                        // place others at end
+                        if (remainingText.IsNullOrWhiteSpace() is false)
+                        {
+                            partsAfterSentence = partsAfterSentence.Add(XmlText(remainingText));
+                        }
+
+                        var nextIndex = index + 1;
+
+                        if (nextIndex < textTokensCount)
+                        {
+                            var nextToken = textTokens[nextIndex];
+
+                            if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                nextIndex++; // do not keep the new-line token
+                            }
+
+                            var tokens = textTokens.Skip(nextIndex).ToList();
+
+                            if (tokens.Count > 0)
+                            {
+                                var firstToken = tokens[0];
+
+                                tokens[0] = firstToken.WithText(firstToken.ValueText.TrimStart()) // adjust starting text
+                                                      .WithTriviaFrom(nextToken); // adjust trivia as we skip over next token
+                            }
+
+                            partsAfterSentence = partsAfterSentence.Add(XmlText(tokens)); // keep remaining text tokens
+                        }
+
+                        partsAfterSentence = partsAfterSentence.AddRange(contents.Skip(next)); // keep remaining comment
+
+                        // take only those that do not come after the default phrases
+                        contents = SyntaxFactory.List(contents.Take(next));
 
                         break;
                     }
+
+                    break;
                 }
             }
 
@@ -727,6 +767,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
         protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
+
+        protected static XmlTextSyntax XmlText(ReadOnlySpan<char> text) => XmlText(text.ToString());
 
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
