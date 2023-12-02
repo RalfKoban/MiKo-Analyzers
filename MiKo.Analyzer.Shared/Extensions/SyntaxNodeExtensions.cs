@@ -2626,6 +2626,16 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
+        internal static SyntaxList<XmlNodeSyntax> WithoutTrailingXmlComment(this SyntaxList<XmlNodeSyntax> value)
+        {
+            if (value.LastOrDefault() is XmlTextSyntax text)
+            {
+                return value.Replace(text, text.WithoutTrailingXmlComment());
+            }
+
+            return value;
+        }
+
         internal static XmlTextSyntax WithoutTrailingXmlComment(this XmlTextSyntax value)
         {
             if (value.TextTokens.Count > 2)
