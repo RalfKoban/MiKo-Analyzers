@@ -624,7 +624,7 @@ public class TestMe
         [TestCase("<value>true</value>: Activates some stuff.", @"<see langword=""true""/> to activate some stuff; otherwise, <see langword=""false""/>.")]
         [TestCase("A flag that indicates whether items shall be updated.", @"<see langword=""true""/> to indicate that items shall be updated; otherwise, <see langword=""false""/>.")]
 
-        [TestCase(@"Set to <see langword=""true""/> if you want to do something, <see langword=""false""/> otherwise.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
+        [TestCase(@"Set to <see langword=""true""/> if you want to do something, <see langword=""false""/> otherwise.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
         [TestCase(@"some data if <see langword=""true""/>, some other data if <see langword=""false""/>. Default value is <see langword=""false""/>.", @"<see langword=""true""/> to some data; otherwise, <see langword=""false""/>. Default value is <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"<see langword=""true""/> if the items shall be selected.<see langword=""false""/> otherwise.", @"<see langword=""true""/> to select the items; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         public void Code_gets_fixed_on_same_line_for_phrase_(string originalPhrase, string fixedPhrase)
@@ -685,6 +685,40 @@ public class TestMe
     /// <param name=""condition"">
     /// <see langword=""true""/> to do some stuff inside; otherwise, <see langword=""false""/>.
     /// In such case only other stuff shall be done.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_mixed_multi_line_for_phrase()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">Determines whether something is done. 
+    /// Something else is skipped.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to indicate that something is done; otherwise, <see langword=""false""/>.
+    /// Something else is skipped.
     /// </param>
     public void DoSomething(bool condition) { }
 }
