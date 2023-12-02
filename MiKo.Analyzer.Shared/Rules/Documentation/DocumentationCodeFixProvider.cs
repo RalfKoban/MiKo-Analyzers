@@ -698,7 +698,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                         else
                         {
-                            var newT = t.ReplaceToken(token, token.WithText(beforeText));
+                            var newT = XmlText(beforeText).WithTriviaFrom(t);
 
                             contents = contents.Replace(t, newT);
 
