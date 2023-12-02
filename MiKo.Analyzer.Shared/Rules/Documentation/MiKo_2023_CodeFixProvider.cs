@@ -75,6 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(" to , ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to ; ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to : ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to  to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to  ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" that to ", " that "),
