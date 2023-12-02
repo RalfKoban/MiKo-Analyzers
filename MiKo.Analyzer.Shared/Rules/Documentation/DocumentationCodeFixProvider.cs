@@ -402,9 +402,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
                 {
-                    return IsCref(emptyElement.Attributes);
+                    return IsCref(element.Attributes);
                 }
 
                 case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
@@ -425,9 +425,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
                 {
-                    return IsCref(emptyElement.Attributes, type);
+                    return IsCref(element.Attributes, type);
                 }
 
                 case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
@@ -448,9 +448,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
                 {
-                    return IsCref(emptyElement.Attributes, type);
+                    return IsCref(element.Attributes, type);
                 }
 
                 case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
@@ -484,9 +484,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             switch (value)
             {
-                case XmlEmptyElementSyntax emptyElement when emptyElement.GetName() == Constants.XmlTag.See:
+                case XmlEmptyElementSyntax element when element.GetName() == Constants.XmlTag.See:
                 {
-                    return IsCref(emptyElement.Attributes, type, member);
+                    return IsCref(element.Attributes, type, member);
                 }
 
                 case XmlElementSyntax element when element.GetName() == Constants.XmlTag.See:
@@ -650,6 +650,106 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword_True() => SeeLangword("true");
 
+        protected static XmlElementSyntax SplitCommentAfterFirstSentence(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> partsAfterSentence)
+        {
+            var contents = comment.Content;
+            var count = contents.Count;
+
+            partsAfterSentence = SyntaxFactory.List<XmlNodeSyntax>();
+
+            for (var i = 0; i < count; i++)
+            {
+                if (contents[i] is XmlTextSyntax t)
+                {
+                    var text = t.GetTextWithoutTrivia();
+
+                    var dotIndex = text.IndexOf('.');
+
+                    if (dotIndex <= -1)
+                    {
+                        // there is no dot, so continue
+                        continue;
+                    }
+
+                    var textTokens = t.TextTokens;
+                    var textTokensCount = textTokens.Count;
+
+                    for (var index = 0; index < textTokensCount; index++)
+                    {
+                        var token = textTokens[index];
+                        var tokenText = token.Text;
+                        var dotPosition = tokenText.IndexOf('.');
+
+                        if (dotPosition <= -1)
+                        {
+                            // there is no dot, so continue
+                            continue;
+                        }
+
+                        // we found a dot
+                        var next = i;
+
+                        var beforeText = tokenText.AsSpan(0, dotPosition).TrimStart().TrimEnd(Constants.TrailingSentenceMarkers);
+                        var remainingText = tokenText.AsSpan(dotPosition + 1).TrimStart(); // keep space at the end
+
+                        if (beforeText.Length == 0)
+                        {
+                            contents = contents.Remove(t);
+                        }
+                        else
+                        {
+                            var newT = t.ReplaceToken(token, token.WithText(beforeText));
+
+                            contents = contents.Replace(t, newT);
+
+                            next++;
+                        }
+
+                        // place others at end
+                        if (remainingText.IsNullOrWhiteSpace() is false)
+                        {
+                            partsAfterSentence = partsAfterSentence.Add(XmlText(remainingText));
+                        }
+
+                        var nextIndex = index + 1;
+
+                        if (nextIndex < textTokensCount)
+                        {
+                            var nextToken = textTokens[nextIndex];
+
+                            if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                            {
+                                nextIndex++; // do not keep the new-line token
+                            }
+
+                            var tokens = textTokens.Skip(nextIndex).ToList();
+
+                            if (tokens.Count > 0)
+                            {
+                                var firstToken = tokens[0];
+
+                                tokens[0] = firstToken.WithText(firstToken.ValueText.TrimStart()) // adjust starting text
+                                                      .WithTriviaFrom(nextToken); // adjust trivia as we skip over next token
+                            }
+
+                            partsAfterSentence = partsAfterSentence.Add(XmlText(tokens)); // keep remaining text tokens
+                        }
+
+                        partsAfterSentence = partsAfterSentence.AddRange(contents.Skip(next)); // keep remaining comment
+
+                        // take only those that do not come after the default phrases
+                        contents = SyntaxFactory.List(contents.Take(next));
+
+                        break;
+                    }
+
+                    break;
+                }
+            }
+
+            return comment.WithContent(contents);
+        }
+
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
         {
             var token = name.AsToken();
@@ -665,6 +765,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, SyntaxFactory.List(contents));
 
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
+
+        protected static XmlTextSyntax TrailingNewLineXmlText() => XmlText(string.Empty).WithTrailingXmlComment();
+
+        protected static XmlTextSyntax XmlText(ReadOnlySpan<char> text) => XmlText(text.ToString());
 
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 

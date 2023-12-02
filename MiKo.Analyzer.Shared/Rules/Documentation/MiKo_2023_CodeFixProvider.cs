@@ -6,7 +6,6 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,10 +15,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
+        private const string OrNotPhrase = " or not";
+        private const string OtherwiseReplacement = ";  otherwise";
+
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
-        private static readonly string[] DefaultPhrases = new[] { Constants.Comments.DefaultStartingPhrase }.Concat(Constants.Comments.OtherDefaultStartingPhrase).ToArray();
+        private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", OtherwiseReplacement);
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap(
                                                                                                  new KeyValuePair<string, string>("'true'", string.Empty),
@@ -40,6 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>("false", string.Empty),
                                                                                                  new KeyValuePair<string, string>("False", string.Empty),
                                                                                                  new KeyValuePair<string, string>("FALSE", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("if you want to", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" indicating if ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" indicating whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determine if ", Replacement),
@@ -75,9 +78,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(" to to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to  ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" that to ", " that "),
-                                                                                                 new KeyValuePair<string, string>(",  otherwise", ";  otherwise"),
+                                                                                                 new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
                                                                                                  new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
                                                                                                  new KeyValuePair<string, string>("; Otherwise; ", "; "),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
                                                                                                  new KeyValuePair<string, string>(". ", "; "))
                                                                                 .Distinct()
                                                                                 .ToArray();
@@ -93,81 +99,56 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
-            var splitComment = SplitDefaultParts(comment, out var defaultPhrases);
-            var remainingComment = FixRemainingComment(splitComment);
+            // fix ". Otherwise ..." comments so that they will not get split
+            var mergedComment = Comment(comment, new[] { OtherwisePair.Key }, new[] { OtherwisePair });
 
-            if (defaultPhrases.Any())
+            var firstSentence = SplitCommentAfterFirstSentence(mergedComment, out var partsAfterSentence);
+
+            var count = partsAfterSentence.Count;
+
+            if (count <= 0)
             {
-                var contents = remainingComment.Content
-                                               .AddRange(defaultPhrases)
-                                               .Add(XmlText(string.Empty).WithTrailingXmlComment());
-                return remainingComment.WithContent(contents);
+                return FixText(firstSentence);
             }
 
-            return remainingComment;
+            // fix "otherwise false" parts in 'partsAfterSequence' so that they become part of 'firstSentence'
+            MoveOtherwisePartToFirstSentence(ref firstSentence, ref partsAfterSentence);
+
+            var firstComment = FixText(firstSentence);
+
+            if (partsAfterSentence.Any())
+            {
+                var contents = firstComment.Content.WithoutTrailingXmlComment()
+                                           .AddRange(partsAfterSentence.WithoutTrailingXmlComment())
+                                           .Add(TrailingNewLineXmlText());
+
+                return firstComment.WithContent(contents);
+            }
+
+            return firstComment;
         }
 
-        private static XmlElementSyntax SplitDefaultParts(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> defaultPhrases)
+        private static void MoveOtherwisePartToFirstSentence(ref XmlElementSyntax firstSentence, ref SyntaxList<XmlNodeSyntax> partsAfterSentence)
         {
-            var contents = comment.Content;
+            var part = partsAfterSentence[0];
 
-            defaultPhrases = SyntaxFactory.List<XmlNodeSyntax>();
-
-            for (var i = 0; i < contents.Count; i++)
+            if (part.IsSeeLangwordBool())
             {
-                if (contents[i] is XmlTextSyntax t)
+                partsAfterSentence = partsAfterSentence.Remove(part);
+
+                var firstSentenceContents = firstSentence.Content.Add(part);
+
+                if (partsAfterSentence.FirstOrDefault() is XmlTextSyntax t)
                 {
-                    var text = t.GetTextWithoutTrivia();
-
-                    if (text.ContainsAny(DefaultPhrases))
-                    {
-                        var textTokens = t.TextTokens;
-
-                        for (var index = 0; index < textTokens.Count; index++)
-                        {
-                            var token = textTokens[index];
-                            var tokenText = token.Text;
-                            var defaultPhrasePosition = tokenText.IndexOfAny(DefaultPhrases, StringComparison.Ordinal);
-
-                            if (defaultPhrasePosition > 0)
-                            {
-                                var next = i + 1;
-
-                                var beforeText = tokenText.AsSpan(0, defaultPhrasePosition).TrimEnd(Constants.TrailingSentenceMarkers).ToString();
-                                var remainingText = tokenText.Substring(defaultPhrasePosition);
-
-                                if (beforeText.Length > 0)
-                                {
-                                    var newT = t.ReplaceToken(token, token.WithText(beforeText));
-
-                                    contents = contents.Replace(t, newT);
-                                }
-                                else
-                                {
-                                    contents = contents.Remove(t);
-
-                                    next--;
-                                }
-
-                                // place others at end of default phrases
-                                defaultPhrases = defaultPhrases.Add(SyntaxFactory.XmlText(remainingText)).AddRange(contents.Skip(next));
-
-                                // take only those that do not come after the default phrases
-                                contents = SyntaxFactory.List(contents.Take(next));
-
-                                break;
-                            }
-                        }
-
-                        break;
-                    }
+                    partsAfterSentence = partsAfterSentence.Remove(t);
+                    firstSentenceContents = firstSentenceContents.Add(t);
                 }
-            }
 
-            return comment.WithContent(contents);
+                firstSentence = firstSentence.WithContent(firstSentenceContents);
+            }
         }
 
-        private static XmlElementSyntax FixRemainingComment(XmlElementSyntax comment)
+        private static XmlElementSyntax FixText(XmlElementSyntax comment)
         {
             var contents = comment.Content;
 
@@ -214,6 +195,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement)
         {
+            subText = ModifyOrNotPart(subText);
+
             foreach (var conditional in Conditionals)
             {
                 if (subText.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
@@ -281,6 +264,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return comment;
+        }
+
+        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text)
+        {
+            if (text.EndsWith(OrNotPhrase, StringComparison.Ordinal))
+            {
+                return text.WithoutSuffix(OrNotPhrase);
+            }
+
+            return text;
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
