@@ -79,6 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(" to to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to  ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" that to ", " that "),
+                                                                                                 new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
                                                                                                  new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
                                                                                                  new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
                                                                                                  new KeyValuePair<string, string>("; Otherwise; ", "; "),
@@ -119,8 +120,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (partsAfterSentence.Any())
             {
+                partsAfterSentence = partsAfterSentence.WithoutLeadingXmlComment().WithoutTrailingXmlComment();
+            }
+
+            if (partsAfterSentence.Any())
+            {
                 var contents = firstComment.Content.WithoutTrailingXmlComment()
-                                           .AddRange(partsAfterSentence.WithoutTrailingXmlComment())
+                                           .Add(TrailingNewLineXmlText())
+                                           .AddRange(partsAfterSentence)
                                            .Add(TrailingNewLineXmlText());
 
                 return firstComment.WithContent(contents);
