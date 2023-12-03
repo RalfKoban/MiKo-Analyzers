@@ -23,6 +23,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Distinct().ToArray();
         private static readonly string[] DefaultCases = CreateDefaultCases().Distinct().ToArray();
 
+        private static readonly string[] TruePhrases =
+                                                       {
+                                                           @"<see langword=""true""/> if some condition. Otherwise <see langword=""false""/>.",
+                                                           @"<see langword=""true""/> if some condition.<see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/> if some condition. <see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/> if some condition; otherwise <see langword=""false""/>.",
+                                                           @"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/> if some condition or not; <see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/> if some condition or not, <see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/> if you want to some condition, <see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/> if you want to some condition or not, <see langword=""false""/> otherwise.",
+                                                           @"<see langword=""true""/>: if some condition.",
+                                                           @"<see langword=""true""/>: if some condition or not.",
+                                                           @"<see langref=""true""/> if some condition",
+                                                           @"<see langref=""true""/>: if some condition",
+                                                           @"<see langref=""true""/>: if some condition or not",
+                                                           "<b>true</b> if some condition; <b>false</b> otherwise.",
+                                                           "<b>true</b>: if some condition; <b>false</b> otherwise.",
+                                                           "<c>true</c> if some condition; <c>false</c> otherwise.",
+                                                           "<c>true</c>: if some condition; <c>false</c> otherwise.",
+                                                           "<value>true</value> if some condition; <value>false</value> otherwise.",
+                                                           "<value>true</value>: if some condition; <value>false</value> otherwise.",
+                                                           "True if some condition. Otherwise false.",
+                                                           "True, if some condition. Otherwise false.",
+                                                           "True: if some condition. Otherwise False.",
+                                                           "TRUE: if some condition. Otherwise FALSE.",
+                                                           @"""true"": if some condition. Otherwise ""false"".",
+                                                           @"""True"": if some condition. Otherwise ""False"".",
+                                                           @"""TRUE"": if some condition. Otherwise ""FALSE"".",
+                                                           "'true': if some condition. Otherwise 'false'.",
+                                                           "'True': if some condition. Otherwise 'False'.",
+                                                           "'TRUE': if some condition. Otherwise 'FALSE'.",
+                                                       };
+
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
 using System;
@@ -468,36 +502,8 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [TestCase(@"<see langword=""true""/> if some condition. Otherwise <see langword=""false""/>.")]
-        [TestCase(@"<see langword=""true""/> if some condition. <see langword=""false""/> otherwise.")]
-        [TestCase(@"<see langword=""true""/> if some condition; otherwise <see langword=""false""/>.")]
-        [TestCase(@"<see langword=""true""/> if some condition; <see langword=""false""/> otherwise.")]
-        [TestCase(@"<see langword=""true""/> if some condition or not; <see langword=""false""/> otherwise.")]
-        [TestCase(@"<see langword=""true""/> if some condition or not, <see langword=""false""/> otherwise.")]
-        [TestCase(@"<see langword=""true""/> if you want to some condition, <see langword=""false""/> otherwise.")]
-        [TestCase(@"<see langword=""true""/> if you want to some condition or not, <see langword=""false""/> otherwise.")]
-        [TestCase(@"<see langword=""true""/>: if some condition.")]
-        [TestCase(@"<see langword=""true""/>: if some condition or not.")]
-        [TestCase(@"<see langref=""true""/> if some condition")]
-        [TestCase(@"<see langref=""true""/>: if some condition")]
-        [TestCase(@"<see langref=""true""/>: if some condition or not")]
-        [TestCase("<b>true</b> if some condition; <b>false</b> otherwise.")]
-        [TestCase("<b>true</b>: if some condition; <b>false</b> otherwise.")]
-        [TestCase("<c>true</c> if some condition; <c>false</c> otherwise.")]
-        [TestCase("<c>true</c>: if some condition; <c>false</c> otherwise.")]
-        [TestCase("<value>true</value> if some condition; <value>false</value> otherwise.")]
-        [TestCase("<value>true</value>: if some condition; <value>false</value> otherwise.")]
-        [TestCase("True if some condition. Otherwise false.")]
-        [TestCase("True, if some condition. Otherwise false.")]
-        [TestCase("True: if some condition. Otherwise False.")]
-        [TestCase("TRUE: if some condition. Otherwise FALSE.")]
-        [TestCase("\"true\": if some condition. Otherwise \"false\".")]
-        [TestCase("\"True\": if some condition. Otherwise \"False\".")]
-        [TestCase("\"TRUE\": if some condition. Otherwise \"FALSE\".")]
-        [TestCase("'true': if some condition. Otherwise 'false'.")]
-        [TestCase("'True': if some condition. Otherwise 'False'.")]
-        [TestCase("'TRUE': if some condition. Otherwise 'FALSE'.")]
-        public void Code_gets_fixed_on_same_line_for_true_phrase_(string phrase)
+        [Test]
+        public void Code_gets_fixed_on_same_line_for_true_phrase_([ValueSource(nameof(TruePhrases))] string phrase)
         {
             var originalCode = @"
 using System;
@@ -507,6 +513,39 @@ public class TestMe
     /// <summary>
     /// </summary>
     /// <param name=""condition"">" + phrase + @"</param>
+    public void DoSomething(bool condition) { }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// <see langword=""true""/> to some condition; otherwise, <see langword=""false""/>.
+    /// </param>
+    public void DoSomething(bool condition) { }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_on_different_line_for_true_phrase_([ValueSource(nameof(TruePhrases))] string phrase)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    /// <param name=""condition"">
+    /// " + phrase + @"
+    /// </param>
     public void DoSomething(bool condition) { }
 }
 ";
