@@ -133,8 +133,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static class Comments
         {
-            internal const string AlmostCorrectTaskReturnTypeStartingPhrase1 = "A task that represents the asynchronous operation. The Result is ";
-            internal const string AlmostCorrectTaskReturnTypeStartingPhrase2 = "An task that represents the asynchronous operation. The Result is ";
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
             internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";

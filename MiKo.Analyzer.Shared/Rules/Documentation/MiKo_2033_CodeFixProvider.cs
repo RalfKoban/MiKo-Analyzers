@@ -31,12 +31,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          "with",
                                                      };
 
-        private static readonly string[] AlmostCorrectTaskReturnTypeStartingPhrases =
-                                                                                      {
-                                                                                          Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase1,
-                                                                                          Constants.Comments.AlmostCorrectTaskReturnTypeStartingPhrase2,
-                                                                                      };
-
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))

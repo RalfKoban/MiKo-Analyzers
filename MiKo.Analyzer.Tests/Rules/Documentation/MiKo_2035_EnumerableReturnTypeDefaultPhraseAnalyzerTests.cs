@@ -378,7 +378,7 @@ public class TestMe
         [TestCase("A task to await", "")]
         [TestCase("An awaitable task.", "")]
         [TestCase("An awaitable task", "")]
-        [TestCase("A task that represents the asynchronous operation. The Result is something", "")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
         public void Code_gets_fixed_for_Task_with_generic_collection_(string originalText, string fixedText)
         {
             var originalCode = @"
@@ -409,8 +409,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"
-    /// </returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"</returns>
     public Task<IList<int>> DoSomething { get; set; }
 }
 ";
