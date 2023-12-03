@@ -2475,6 +2475,25 @@ namespace MiKoSolutions.Analyzers
             return value;
         }
 
+        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingXmlComment(this SyntaxList<XmlNodeSyntax> value)
+        {
+            if (value.FirstOrDefault() is XmlTextSyntax text)
+            {
+                var replacement = text.WithoutLeadingXmlComment();
+
+                // ensure that we have some text tokens
+                if (replacement.TextTokens.Count > 0)
+                {
+                    return value.Replace(text, replacement.WithoutLeadingTrivia());
+                }
+
+                // remove text as no tokens remain
+                return value.Remove(text);
+            }
+
+            return value;
+        }
+
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, string text) => value.Content.WithoutText(text);
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, string text)
@@ -2630,7 +2649,16 @@ namespace MiKoSolutions.Analyzers
         {
             if (value.LastOrDefault() is XmlTextSyntax text)
             {
-                return value.Replace(text, text.WithoutTrailingXmlComment());
+                var replacement = text.WithoutTrailingXmlComment();
+
+                // ensure that we have some text tokens
+                if (replacement.TextTokens.Count > 0)
+                {
+                    return value.Replace(text, replacement);
+                }
+
+                // remove text as no tokens remain
+                return value.Remove(text);
             }
 
             return value;
@@ -2638,13 +2666,29 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax WithoutTrailingXmlComment(this XmlTextSyntax value)
         {
-            if (value.TextTokens.Count > 2)
-            {
-                // remove last "\r\n" token and remove '  /// ' trivia of last token
-                return value.WithoutLastXmlNewLine();
-            }
+            var tokens = value.TextTokens;
 
-            return value;
+            switch (tokens.Count)
+            {
+                case 0:
+                    return value;
+
+                case 1:
+                    var token = tokens[0];
+
+                    if (token.HasTrailingTrivia)
+                    {
+                        return value.WithTextTokens(tokens.Replace(token, token.WithoutTrailingTrivia()));
+                    }
+
+                    return value;
+
+                default:
+                {
+                    // remove last "\r\n" token and remove '  /// ' trivia of last token
+                    return value.WithoutLastXmlNewLine();
+                }
+            }
         }
 
         internal static XmlElementSyntax WithoutWhitespaceOnlyComment(this XmlElementSyntax value)

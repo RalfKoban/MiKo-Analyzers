@@ -617,7 +617,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
 
-        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment) => CombineTexts(comment.Without(comment.Content.Where(_ => _.IsBooleanTag())));
+        protected static XmlElementSyntax RemoveBooleansTags(XmlElementSyntax comment)
+        {
+            var withoutBooleans = comment.Without(comment.Content.Where(_ => _.IsBooleanTag()));
+            var combinedTexts = CombineTexts(withoutBooleans);
+
+            return CombineTexts(combinedTexts);
+        }
 
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
@@ -652,102 +658,79 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax SplitCommentAfterFirstSentence(XmlElementSyntax comment, out SyntaxList<XmlNodeSyntax> partsAfterSentence)
         {
-            var contents = comment.Content;
-            var count = contents.Count;
+            var partsForFirstSentence = new List<XmlNodeSyntax>();
+            var partsForOtherSentences = new List<XmlNodeSyntax>();
 
-            partsAfterSentence = SyntaxFactory.List<XmlNodeSyntax>();
+            var commentContents = comment.Content;
+            var commentContentsCount = commentContents.Count;
 
-            for (var i = 0; i < count; i++)
+            for (var index = 0; index < commentContentsCount; index++)
             {
-                if (contents[i] is XmlTextSyntax t)
+                var node = commentContents[index];
+
+                if (node is XmlTextSyntax text)
                 {
-                    var text = t.GetTextWithoutTrivia();
-
-                    var dotIndex = text.IndexOf('.');
-
-                    if (dotIndex <= -1)
-                    {
-                        // there is no dot, so continue
-                        continue;
-                    }
-
-                    var textTokens = t.TextTokens;
+                    var textTokens = text.TextTokens;
                     var textTokensCount = textTokens.Count;
 
-                    for (var index = 0; index < textTokensCount; index++)
+                    for (var tokenIndex = 0; tokenIndex < textTokensCount; tokenIndex++)
                     {
-                        var token = textTokens[index];
-                        var tokenText = token.Text;
-                        var dotPosition = tokenText.IndexOf('.');
+                        var token = textTokens[tokenIndex];
 
-                        if (dotPosition <= -1)
+                        if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
                         {
-                            // there is no dot, so continue
                             continue;
                         }
 
-                        // we found a dot
-                        var next = i;
+                        var dotPosition = token.Text.IndexOf('.');
 
-                        var beforeText = tokenText.AsSpan(0, dotPosition).TrimStart().TrimEnd(Constants.TrailingSentenceMarkers);
-                        var remainingText = tokenText.AsSpan(dotPosition + 1).TrimStart(); // keep space at the end
-
-                        if (beforeText.Length == 0)
+                        if (dotPosition < 0)
                         {
-                            contents = contents.Remove(t);
-                        }
-                        else
-                        {
-                            var newT = XmlText(beforeText).WithTriviaFrom(t);
-
-                            contents = contents.Replace(t, newT);
-
-                            next++;
+                            continue;
                         }
 
-                        // place others at end
-                        if (remainingText.IsNullOrWhiteSpace() is false)
+                        // we found the dot
+                        var tokensBeforeDot = textTokens.Take(tokenIndex).ToList();
+                        var tokensAfterDot = textTokens.Skip(tokenIndex + 1).ToList();
+
+                        // split text into 2 parts
+                        var valueText = token.ValueText;
+                        var dotPos = valueText.IndexOf('.') + 1;
+
+                        var firstText = valueText.Substring(0, dotPos);
+                        var lastText = valueText.AsSpan(dotPos).TrimStart().ToString();
+
+                        tokensBeforeDot.Add(token.WithText(firstText));
+
+                        if (lastText.Length > 0)
                         {
-                            partsAfterSentence = partsAfterSentence.Add(XmlText(remainingText));
+                            tokensAfterDot.Add(token.WithText(lastText));
                         }
 
-                        var nextIndex = index + 1;
-
-                        if (nextIndex < textTokensCount)
+                        if (tokensBeforeDot.Any())
                         {
-                            var nextToken = textTokens[nextIndex];
-
-                            if (nextToken.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
-                            {
-                                nextIndex++; // do not keep the new-line token
-                            }
-
-                            var tokens = textTokens.Skip(nextIndex).ToList();
-
-                            if (tokens.Count > 0)
-                            {
-                                var firstToken = tokens[0];
-
-                                tokens[0] = firstToken.WithText(firstToken.ValueText.TrimStart()) // adjust starting text
-                                                      .WithTriviaFrom(nextToken); // adjust trivia as we skip over next token
-                            }
-
-                            partsAfterSentence = partsAfterSentence.Add(XmlText(tokens)); // keep remaining text tokens
+                            partsForFirstSentence.Add(XmlText(tokensBeforeDot).WithLeadingTriviaFrom(text));
                         }
 
-                        partsAfterSentence = partsAfterSentence.AddRange(contents.Skip(next)); // keep remaining comment
+                        if (tokensAfterDot.Any())
+                        {
+                            partsForOtherSentences.Add(XmlText(tokensAfterDot));
+                        }
 
-                        // take only those that do not come after the default phrases
-                        contents = SyntaxFactory.List(contents.Take(next));
+                        partsForOtherSentences.AddRange(commentContents.Skip(index + 1));
 
-                        break;
+                        partsAfterSentence = SyntaxFactory.List(partsForOtherSentences);
+
+                        return comment.WithContent(SyntaxFactory.List(partsForFirstSentence));
                     }
-
-                    break;
                 }
+
+                partsForFirstSentence.Add(node);
             }
 
-            return comment.WithContent(contents);
+            partsAfterSentence = SyntaxFactory.List<XmlNodeSyntax>();
+
+            return comment;
         }
 
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
@@ -772,7 +755,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
-        protected static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
+        protected static XmlTextSyntax XmlText(SyntaxTokenList textTokens)
+        {
+            if (textTokens.Count == 0)
+            {
+                return SyntaxFactory.XmlText();
+            }
+
+            return SyntaxFactory.XmlText(textTokens);
+        }
 
         protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
 
