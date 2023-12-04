@@ -152,7 +152,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return "a collection of ";
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
+        {
+            // ensure that end tag is on different line
+            var adjustedComment = comment.WithContent(comment.Content.WithoutTrailingXmlComment())
+                                         .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+
+            return Comment(adjustedComment, ReplacementMapKeys, ReplacementMap);
+        }
 
         private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
         {
