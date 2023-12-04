@@ -14,6 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2033_CodeFixProvider)), Shared]
     public sealed class MiKo_2033_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+        private const string SpecialAlmostCorrectTaskStartingPhraseIncomplete = "A task that represents the asynchronous operation. The ";
+        private const string SpecialAlmostCorrectTaskStartingPhrase = "A task that represents the asynchronous operation. The value of the ";
+
         private static readonly string[] TaskParts = Constants.Comments.StringTaskReturnTypeStartingPhraseTemplate.FormatWith("|", "|", "contains").Split('|');
         private static readonly string[] StringParts = Constants.Comments.StringReturnTypeStartingPhraseTemplate.FormatWith("|", "that contains").Split('|');
 
@@ -36,16 +39,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                                      .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
+        private static readonly KeyValuePair<string, string> SpecialText = new KeyValuePair<string, string>("property on the task object returns", "parameter returns");
+
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2033_CodeFixTitle;
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
         {
-            if (comment.Content.Count > 5)
+            var content = comment.Content;
+
+            if (content.Count > 5)
             {
                 // we might have an almost complete string
-                if (comment.Content[0] is XmlTextSyntax startText && IsSeeCrefTaskResult(comment.Content[1]))
+                if (content[0] is XmlTextSyntax startText && IsSeeCrefTaskResult(content[1]))
                 {
                     var newComment = ReplaceText(comment, startText, "representing", "that represents");
 
@@ -68,10 +75,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return newComment;
                 }
             }
-
-            if (comment.Content.Count > 0)
+            else if (content.Count == 5)
             {
-                if (comment.Content[0] is XmlTextSyntax startText)
+                if (content[0] is XmlTextSyntax start && IsSeeCref(content[1]) && content[2] is XmlTextSyntax middle && IsSeeCref(content[3]) && content[4] is XmlTextSyntax)
+                {
+                    // seems like some almost correct text
+                    return comment.ReplaceNodes(
+                                            new[] { start, middle },
+                                            (_, rewritten) => rewritten.ReplaceText(SpecialAlmostCorrectTaskStartingPhrase, SpecialAlmostCorrectTaskStartingPhraseIncomplete) // replace with incomplete one so that the correct one will not get broken
+                                                                       .ReplaceText(SpecialAlmostCorrectTaskStartingPhraseIncomplete, SpecialAlmostCorrectTaskStartingPhrase) // now replace with correct one (the line before is needed here to not break the text)
+                                                                       .ReplaceText("property on the task object", "parameter"));
+                }
+            }
+
+            if (content.Count > 0)
+            {
+                if (content[0] is XmlTextSyntax startText)
                 {
                     comment = ReplaceText(comment, startText, AlmostCorrectTaskReturnTypeStartingPhrases, string.Empty);
                 }

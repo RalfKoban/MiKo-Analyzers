@@ -1929,6 +1929,46 @@ namespace MiKoSolutions.Analyzers
             return SyntaxFactory.List(result);
         }
 
+        internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
+        {
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
+
+            var textTokens = value.TextTokens;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var index = 0; index < textTokensCount; index++)
+            {
+                var token = textTokens[index];
+
+                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                {
+                    continue;
+                }
+
+                var text = token.ValueText;
+
+                var replaced = false;
+
+                var result = new StringBuilder(text);
+
+                if (text.Contains(phrase))
+                {
+                    result.ReplaceWithCheck(phrase, replacement);
+
+                    replaced = true;
+                }
+
+                if (replaced)
+                {
+                    map[token] = token.WithText(result);
+                }
+            }
+
+            return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
+        }
+
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
         {
             var map = new Dictionary<SyntaxToken, SyntaxToken>();
