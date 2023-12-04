@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,73 +14,82 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2035_CodeFixProvider)), Shared]
     public sealed class MiKo_2035_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
-                                                                                {
-                                                                                    { "A list of ", string.Empty },
-                                                                                    { "A list with ", string.Empty },
-                                                                                    { "A readonly collection of ", string.Empty },
-                                                                                    { "A read-only collection of ", string.Empty },
-                                                                                    { "A readonly collection with ", string.Empty },
-                                                                                    { "A read-only collection with ", string.Empty },
-                                                                                    { "A task that can be used to await.", string.Empty },
-                                                                                    { "A task that can be used to await", string.Empty },
-                                                                                    { "A task to await.", string.Empty },
-                                                                                    { "A task to await", string.Empty },
-                                                                                    { "An awaitable task.", string.Empty },
-                                                                                    { "An awaitable task", string.Empty },
-                                                                                    { "An enumerable of ", string.Empty },
-                                                                                    { "An enumerable with ", string.Empty },
-                                                                                    { "Collection of ", string.Empty },
-                                                                                    { "Collection with ", string.Empty },
-                                                                                    { "List of ", string.Empty },
-                                                                                    { "List with ", string.Empty },
-                                                                                    { "Readonly collection of ", string.Empty },
-                                                                                    { "Read-only collection of ", string.Empty },
-                                                                                    { "Readonly collection with ", string.Empty },
-                                                                                    { "Read-only collection with ", string.Empty },
-                                                                                    { "The array of ", string.Empty },
-                                                                                    { "The array with ", string.Empty },
-                                                                                    { "The collection of ", string.Empty },
-                                                                                    { "The collection with ", string.Empty },
-                                                                                    { "The enumerable of ", string.Empty },
-                                                                                    { "The enumerable with ", string.Empty },
-                                                                                    { "The list of ", string.Empty },
-                                                                                    { "The list with ", string.Empty },
-                                                                                    { "The readonly collection of ", string.Empty },
-                                                                                    { "The read-only collection of ", string.Empty },
-                                                                                    { "The readonly collection with ", string.Empty },
-                                                                                    { "The read-only collection with ", string.Empty },
-                                                                                };
+        private static readonly string[] ReplacementMapKeys = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                                                    {
+                                                                                                                        "A list of ",
+                                                                                                                        "A list with ",
+                                                                                                                        "A readonly collection of ",
+                                                                                                                        "A read-only collection of ",
+                                                                                                                        "A readonly collection with ",
+                                                                                                                        "A read-only collection with ",
+                                                                                                                        "A task that can be used to await.",
+                                                                                                                        "A task that can be used to await",
+                                                                                                                        "A task to await.",
+                                                                                                                        "A task to await",
+                                                                                                                        "An awaitable task.",
+                                                                                                                        "An awaitable task",
+                                                                                                                        "An enumerable of ",
+                                                                                                                        "An enumerable with ",
+                                                                                                                        "Collection of ",
+                                                                                                                        "Collection with ",
+                                                                                                                        "List of ",
+                                                                                                                        "List with ",
+                                                                                                                        "Readonly collection of ",
+                                                                                                                        "Read-only collection of ",
+                                                                                                                        "Readonly collection with ",
+                                                                                                                        "Read-only collection with ",
+                                                                                                                        "The array of ",
+                                                                                                                        "The array with ",
+                                                                                                                        "The collection of ",
+                                                                                                                        "The collection with ",
+                                                                                                                        "The enumerable of ",
+                                                                                                                        "The enumerable with ",
+                                                                                                                        "The list of ",
+                                                                                                                        "The list with ",
+                                                                                                                        "The readonly collection of ",
+                                                                                                                        "The read-only collection of ",
+                                                                                                                        "The readonly collection with ",
+                                                                                                                        "The read-only collection with ",
+                                                                                                                    }).ToArray();
 
-        private static readonly Dictionary<string, string> ByteArrayReplacementMap = new Dictionary<string, string>
-                                                                                         {
-                                                                                             { "A array of byte containing ", string.Empty },
-                                                                                             { "A array of byte that contains ", string.Empty },
-                                                                                             { "A array of byte which contains ", string.Empty },
-                                                                                             { "A array of bytes containing ", string.Empty },
-                                                                                             { "A array of bytes that contains ", string.Empty },
-                                                                                             { "A array of bytes which contains ", string.Empty },
-                                                                                             { "A array of ", string.Empty },
-                                                                                             { "A array with ", string.Empty },
-                                                                                             { "An array of byte containing ", string.Empty },
-                                                                                             { "An array of byte that contains ", string.Empty },
-                                                                                             { "An array of byte which contains ", string.Empty },
-                                                                                             { "An array of bytes containing ", string.Empty },
-                                                                                             { "An array of bytes that contains ", string.Empty },
-                                                                                             { "An array of bytes which contains ", string.Empty },
-                                                                                             { "An array of ", string.Empty },
-                                                                                             { "An array with ", string.Empty },
-                                                                                             { "Array of ", string.Empty },
-                                                                                             { "Array with ", string.Empty },
-                                                                                             { "The array of byte containing ", string.Empty },
-                                                                                             { "The array of byte that contains ", string.Empty },
-                                                                                             { "The array of byte which contains ", string.Empty },
-                                                                                             { "The array of bytes containing ", string.Empty },
-                                                                                             { "The array of bytes that contains ", string.Empty },
-                                                                                             { "The array of bytes which contains ", string.Empty },
-                                                                                             { "The array of ", string.Empty },
-                                                                                             { "The array with ", string.Empty },
-                                                                                         };
+        private static readonly Dictionary<string, string> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
+                                                                                              .ThenBy(_ => _)
+                                                                                              .ToDictionary(_ => _, _ => string.Empty);
+
+        private static readonly string[] ByteArrayReplacementMapKeys = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                                                             {
+                                                                                                                                 "A array of byte containing ",
+                                                                                                                                 "A array of byte that contains ",
+                                                                                                                                 "A array of byte which contains ",
+                                                                                                                                 "A array of bytes containing ",
+                                                                                                                                 "A array of bytes that contains ",
+                                                                                                                                 "A array of bytes which contains ",
+                                                                                                                                 "A array of ",
+                                                                                                                                 "A array with ",
+                                                                                                                                 "An array of byte containing ",
+                                                                                                                                 "An array of byte that contains ",
+                                                                                                                                 "An array of byte which contains ",
+                                                                                                                                 "An array of bytes containing ",
+                                                                                                                                 "An array of bytes that contains ",
+                                                                                                                                 "An array of bytes which contains ",
+                                                                                                                                 "An array of ",
+                                                                                                                                 "An array with ",
+                                                                                                                                 "Array of ",
+                                                                                                                                 "Array with ",
+                                                                                                                                 "The array of byte containing ",
+                                                                                                                                 "The array of byte that contains ",
+                                                                                                                                 "The array of byte which contains ",
+                                                                                                                                 "The array of bytes containing ",
+                                                                                                                                 "The array of bytes that contains ",
+                                                                                                                                 "The array of bytes which contains ",
+                                                                                                                                 "The array of ",
+                                                                                                                                 "The array with ",
+                                                                                                                             })
+                                                                                                                 .ToArray();
+
+        private static readonly Dictionary<string, string> ByteArrayReplacementMap = ByteArrayReplacementMapKeys.OrderByDescending(_ => _.Length)
+                                                                                                                .ThenBy(_ => _)
+                                                                                                                .ToDictionary(_ => _, _ => string.Empty);
 
         private static readonly string[] ByteArrayContinueTexts =
                                                                   {
@@ -142,11 +152,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return "a collection of ";
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
+        {
+            // ensure that end tag is on different line
+            var adjustedComment = comment.WithContent(comment.Content.WithoutTrailingXmlComment())
+                                         .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+
+            return Comment(adjustedComment, ReplacementMapKeys, ReplacementMap);
+        }
 
         private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
         {
-            var preparedComment = Comment(comment, ByteArrayReplacementMap.Keys, ByteArrayReplacementMap);
+            var preparedComment = Comment(comment, ByteArrayReplacementMapKeys, ByteArrayReplacementMap);
 
             var contents = preparedComment.Content;
 

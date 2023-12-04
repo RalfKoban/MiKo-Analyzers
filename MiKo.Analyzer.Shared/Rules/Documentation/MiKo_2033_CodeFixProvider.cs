@@ -69,6 +69,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
+            if (comment.Content.Count > 0)
+            {
+                if (comment.Content[0] is XmlTextSyntax startText)
+                {
+                    comment = ReplaceText(comment, startText, AlmostCorrectTaskReturnTypeStartingPhrases, string.Empty);
+                }
+            }
+
             // we have to replace the XmlText if it is part of the first item of context
             return Comment(comment, TaskParts[0], SeeCrefTaskResult(), TaskParts[1], SeeCref("string"), TaskParts[2], comment.Content.ToArray());
         }
@@ -135,6 +143,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Return ";
             yield return "returns ";
             yield return "return ";
+
+            foreach (var phrase in AlmostCorrectTaskReturnTypeStartingPhrases)
+            {
+                yield return phrase;
+            }
         }
     }
 }
