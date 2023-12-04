@@ -112,27 +112,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Comment(comment, "A ", SeeCref("string"), " that represents the current object.");
             }
 
-            if (contents.Count == 1)
+            // we might have an almost complete string
+            if (contents.Count >= 3 && contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
             {
-                // fix start text
-                contents = PrepareComment(comment).Content;
-            }
-            else if (contents.Count >= 3)
-            {
-                // we might have an almost complete string
-                if (contents[0] is XmlTextSyntax startText && IsSeeCref(contents[1], "string") && contents[2] is XmlTextSyntax continueText)
+                if (startText.TextTokens.Any(_ => _.ValueText.AsSpan().TrimStart().Equals(commentStart, StringComparison.Ordinal)))
                 {
-                    if (startText.TextTokens.Any(_ => _.ValueText.AsSpan().TrimStart().Equals(commentStart, StringComparison.Ordinal)))
-                    {
-                        var newComment = ReplaceText(comment, continueText, TextParts, "that contains");
+                    var newComment = ReplaceText(comment, continueText, TextParts, "that contains");
 
-                        if (ReferenceEquals(comment, newComment) is false)
-                        {
-                            return newComment;
-                        }
+                    if (ReferenceEquals(comment, newComment) is false)
+                    {
+                        return newComment;
                     }
                 }
             }
+
+            // fix start text
+            contents = PrepareComment(comment).Content;
 
             // we have to replace the XmlText if it is part of the first item of context
             return Comment(comment, commentStart, SeeCref("string"), commentEnd, contents.ToArray());

@@ -758,6 +758,42 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_with_see_Cref_([Values("that returns", "which returns", "returning", "which contains", "that contains", "containing")] string text)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A string " + text + @" the <see cref=""int""/> and/or <see cref=""bool""/> value of the operation.
+    /// </value>
+    public string Something => ""Something"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains the <see cref=""int""/> and/or <see cref=""bool""/> value of the operation.
+    /// </value>
+    public string Something => ""Something"";
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_overridden_ToString_method()
         {
             const string OriginalCode = @"
