@@ -20,10 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                  "containing",
                                                                  "that contains",
                                                                  "which contains",
+                                                                 "that represents the operation.",
                                                                  "that represents the asynchronous operation.",
                                                              };
 
-        private static readonly string[] TextParts = CreateTextParts().ToArray();
+        private static readonly string[] TextParts = CreateTextParts().OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
         public override string FixableDiagnosticId => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
 
@@ -117,6 +118,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "A task that can be used to await.";
             yield return "A task that can be used to await and";
             yield return "A task that can be used to await";
+
+            foreach (var phrase in AlmostCorrectTaskReturnTypeStartingPhrases)
+            {
+                yield return phrase;
+            }
 
             foreach (var start in new[] { "A result", "A task", "The task" })
             {
