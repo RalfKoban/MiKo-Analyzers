@@ -558,13 +558,13 @@ namespace System
             return text;
         }
 
-        public static string SecondWord(this string text) => SecondWord(text.AsSpan()).ToString();
+        public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
 
-        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
+        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> value) => value.WithoutFirstWord().FirstWord();
 
-        public static string ThirdWord(this string text) => ThirdWord(text.AsSpan()).ToString();
+        public static string ThirdWord(this string value) => ThirdWord(value.AsSpan()).ToString();
 
-        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
+        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> value) => value.WithoutFirstWord().WithoutFirstWord().FirstWord();
 
         public static string LastWord(this string value)
         {
@@ -616,20 +616,20 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
-        public static string GetNameOnlyPart(this string fullName) => GetNameOnlyPart(fullName.AsSpan());
+        public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
-        public static string GetNameOnlyPart(this ReadOnlySpan<char> fullName)
+        public static string GetNameOnlyPart(this ReadOnlySpan<char> value)
         {
-            var genericIndexStart = fullName.IndexOf('<');
-            var genericIndexEnd = fullName.LastIndexOf('>');
+            var genericIndexStart = value.IndexOf('<');
+            var genericIndexEnd = value.LastIndexOf('>');
 
             if (genericIndexStart > 0 && genericIndexEnd > 0)
             {
                 var indexAfterGenericStart = genericIndexStart + 1;
 
-                var namePart = fullName.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
-                var genericParts = fullName.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart)
-                                           .SplitBy(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
+                var namePart = value.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
+                var genericParts = value.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart)
+                                        .SplitBy(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
                 var count = genericParts.Count();
 
                 if (count > 0)
@@ -649,16 +649,16 @@ namespace System
                 }
             }
 
-            return fullName.GetPartAfterLastDot().ToString();
+            return value.GetPartAfterLastDot().ToString();
         }
 
-        public static string GetNameOnlyPartWithoutGeneric(this ReadOnlySpan<char> fullName)
+        public static string GetNameOnlyPartWithoutGeneric(this ReadOnlySpan<char> value)
         {
-            var genericIndexStart = fullName.IndexOf('<');
+            var genericIndexStart = value.IndexOf('<');
 
             var name = genericIndexStart > 0
-                       ? fullName.Slice(0, genericIndexStart)
-                       : fullName;
+                       ? value.Slice(0, genericIndexStart)
+                       : value;
 
             return name.GetPartAfterLastDot().ToString();
         }
@@ -675,20 +675,20 @@ namespace System
 
         public static ReadOnlySpan<char> GetPartAfterLastDot(this ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
-        public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
+        public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string symbolName)
+        public static bool HasEntityMarker(this string value)
         {
-            var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
+            var hasMarker = value.ContainsAny(Constants.Markers.Entities);
 
             if (hasMarker)
             {
-                if (symbolName.ContainsAny(Constants.Markers.ViewModels))
+                if (value.ContainsAny(Constants.Markers.ViewModels))
                 {
                     return false;
                 }
 
-                if (symbolName.ContainsAny(Constants.Markers.SpecialModels))
+                if (value.ContainsAny(Constants.Markers.SpecialModels))
                 {
                     return false;
                 }
@@ -893,16 +893,16 @@ namespace System
 
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
-        public static bool IsHyperlink(this string text)
+        public static bool IsHyperlink(this string value)
         {
-            if (text.IsNullOrWhiteSpace())
+            if (value.IsNullOrWhiteSpace())
             {
                 return false;
             }
 
             try
             {
-                return Regex.IsMatch(text, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+                return Regex.IsMatch(value, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
             }
             catch (RegexMatchTimeoutException)
             {
@@ -1355,6 +1355,20 @@ namespace System
                    : value.Substring(0, length);
         }
 
+        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length <= 0
+                   ? value.Remove(0, value.Length)
+                   : value.Remove(0, length);
+        }
+
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
         {
             return RemoveSuffixes(RemoveSuffixes(value)); // do it twice to remove consecutive suffixes
@@ -1383,20 +1397,6 @@ namespace System
             }
         }
 
-        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? value.Remove(0, value.Length)
-                   : value.Remove(0, length);
-        }
-
-        public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> text) => new WordsReadOnlySpanEnumerator(text);
+        public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
     }
 }
