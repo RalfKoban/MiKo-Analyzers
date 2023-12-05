@@ -38,7 +38,21 @@ public class TestMe
 
         [TestCase("CreateModel")]
         [TestCase("CreateModels")]
-        [TestCase("CreateitemModel")]
+        [TestCase("CreateItemModel")]
+        [TestCase("CreateModelItem")]
+        public void No_issue_is_reported_for_test_method_(string name) => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+public class TestMe
+{
+    [Test]
+    public void " + name + @"() { }
+}
+");
+
+        [TestCase("CreateModel")]
+        [TestCase("CreateModels")]
+        [TestCase("CreateItemModel")]
         [TestCase("CreateModelItem")]
         public void An_issue_is_reported_for_invalid_method_(string name) => An_issue_is_reported_for(@"
 public class TestMe
