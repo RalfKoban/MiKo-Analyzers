@@ -61,14 +61,14 @@ namespace System
             return results;
         }
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this string text, char separatorChar, StringSplitOptions options) => SplitBy(text.AsSpan(), new[] { separatorChar }, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this string value, char separatorChar, StringSplitOptions options) => SplitBy(value.AsSpan(), new[] { separatorChar }, options);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this string text, char[] separatorChars, StringSplitOptions options) => SplitBy(text.AsSpan(), separatorChars, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this string value, char[] separatorChars, StringSplitOptions options) => SplitBy(value.AsSpan(), separatorChars, options);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> text, char[] separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(text, separatorChars, options);
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, char[] separatorChars, StringSplitOptions options) => new SplitReadOnlySpanEnumerator(value, separatorChars, options);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this string text, params char[] separatorChars) => SplitBy(text.AsSpan(), separatorChars, StringSplitOptions.None);
+        public static SplitReadOnlySpanEnumerator SplitBy(this string value, params char[] separatorChars) => SplitBy(value.AsSpan(), separatorChars, StringSplitOptions.None);
 
-        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> text, params char[] separatorChars) => SplitBy(text, separatorChars, StringSplitOptions.None);
+        public static SplitReadOnlySpanEnumerator SplitBy(this ReadOnlySpan<char> value, params char[] separatorChars) => SplitBy(value, separatorChars, StringSplitOptions.None);
     }
 }

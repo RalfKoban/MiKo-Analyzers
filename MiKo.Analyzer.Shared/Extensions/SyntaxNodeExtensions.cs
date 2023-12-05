@@ -1205,9 +1205,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsInside(this SyntaxNode node, ISet<SyntaxKind> kinds)
+        internal static bool IsInside(this SyntaxNode value, ISet<SyntaxKind> kinds)
         {
-            foreach (var ancestor in node.Ancestors())
+            foreach (var ancestor in value.Ancestors())
             {
                 var kind = ancestor.Kind();
 
@@ -1234,9 +1234,9 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax syntax)
+        internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax value)
         {
-            if (syntax.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
+            if (value.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
             {
                 return IsMoqCall(lambda);
             }
@@ -1244,9 +1244,9 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsMoqCall(this LambdaExpressionSyntax lambda)
+        internal static bool IsMoqCall(this LambdaExpressionSyntax value)
         {
-            if (lambda.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
+            if (value.Parent is ArgumentSyntax a && a.Parent?.Parent is InvocationExpressionSyntax i && i.Expression is MemberAccessExpressionSyntax m)
             {
                 switch (m.GetName())
                 {
@@ -2042,9 +2042,9 @@ namespace MiKoSolutions.Analyzers
             return value.ReplaceTokens(map.Keys, (original, rewritten) => map[original]);
         }
 
-        internal static bool ReturnsImmediately(this IfStatementSyntax node)
+        internal static bool ReturnsImmediately(this IfStatementSyntax value)
         {
-            switch (node?.Statement)
+            switch (value?.Statement)
             {
                 case ReturnStatementSyntax _:
                 case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
@@ -2055,9 +2055,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool ReturnsImmediately(this ElseClauseSyntax node)
+        internal static bool ReturnsImmediately(this ElseClauseSyntax value)
         {
-            switch (node?.Statement)
+            switch (value?.Statement)
             {
                 case ReturnStatementSyntax _:
                 case BlockSyntax block when block.Statements.FirstOrDefault() is ReturnStatementSyntax:
@@ -2259,25 +2259,25 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }
 
-        internal static T WithAdditionalLeadingSpacesOnDescendants<T>(this T node, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
+        internal static T WithAdditionalLeadingSpacesOnDescendants<T>(this T value, IReadOnlyCollection<SyntaxNodeOrToken> descendants, int additionalSpaces) where T : SyntaxNode
         {
             if (additionalSpaces == 0)
             {
-                return node;
+                return value;
             }
 
             if (descendants.Count == 0)
             {
-                return node;
+                return value;
             }
 
-            return node.ReplaceSyntax(
-                                  descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
-                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                  descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
-                                  (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
-                                  Enumerable.Empty<SyntaxTrivia>(),
-                                  (original, rewritten) => rewritten);
+            return value.ReplaceSyntax(
+                                   descendants.Where(_ => _.IsNode).Select(_ => _.AsNode()),
+                                   (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                   descendants.Where(_ => _.IsToken).Select(_ => _.AsToken()),
+                                   (original, rewritten) => rewritten.WithAdditionalLeadingSpaces(additionalSpaces),
+                                   Enumerable.Empty<SyntaxTrivia>(),
+                                   (original, rewritten) => rewritten);
         }
 
         internal static T WithLeadingSpaces<T>(this T value, int count) where T : SyntaxNode

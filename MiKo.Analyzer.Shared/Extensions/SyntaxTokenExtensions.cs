@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers
     {
         internal static IEnumerable<T> Ancestors<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
 
-        internal static SyntaxToken AsToken(this SyntaxKind kind) => SyntaxFactory.Token(kind);
+        internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
         internal static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
