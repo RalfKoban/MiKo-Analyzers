@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -657,7 +658,7 @@ public class TestMe
                                   "Is fired ",
                               };
 
-            return phrases.Concat(phrases.Select(_ => _.ToLower())).Distinct().OrderBy(_ => _).ToArray();
+            return phrases.Concat(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).Distinct().OrderBy(_ => _).ToArray();
         }
     }
 }
