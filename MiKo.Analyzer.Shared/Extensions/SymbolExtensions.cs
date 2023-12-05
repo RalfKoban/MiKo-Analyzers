@@ -1205,9 +1205,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this IMethodSymbol value) => value.HasModifier(SyntaxKind.PartialKeyword);
 
-        internal static bool IsPubliclyVisible(this ISymbol symbol)
+        internal static bool IsPubliclyVisible(this ISymbol value)
         {
-            switch (symbol.DeclaredAccessibility)
+            switch (value.DeclaredAccessibility)
             {
                 case Accessibility.NotApplicable:
                 case Accessibility.Private:
