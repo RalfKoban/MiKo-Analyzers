@@ -432,7 +432,7 @@ namespace MiKoSolutions.Analyzers
                                                                                    AlternativeStringReturnTypeStartingPhraseTemplate.FormatWith("<see cref=\"System.String\" />", "that represents"),
                                                                                };
 
-            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The {0} property on the task object returns a {1} that {2} ";
+            internal static readonly string StringTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task") + " The value of the {0} parameter returns a {1} that {2} ";
 
             internal static readonly string[] StringTaskReturnTypeStartingPhrase =
                                                                                    {

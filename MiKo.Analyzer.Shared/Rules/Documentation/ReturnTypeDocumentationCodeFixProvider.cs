@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnTypeDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
+        protected static readonly string[] AlmostCorrectTaskReturnTypeStartingPhrases = CreateAlmostCorrectTaskReturnTypeStartingPhrases().OrderByDescending(_ => _.Length)
+                                                                                                                                          .ThenBy(_ => _)
+                                                                                                                                          .ToArray();
+
         protected static XmlEmptyElementSyntax SeeCrefTaskResult()
         {
             var type = SyntaxFactory.ParseTypeName("Task<TResult>");
@@ -90,6 +95,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method) => Comment(document, comment, method.GetName(), method.ReturnType);
 
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
+
+//// ncrunch: collect values off
+        private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
+        {
+            const string Result = "result";
+
+            var starts = new[] { "a task", "an task" };
+            var continuations = new[] { "that represents", "which represents", "representing" };
+            var operations = new[] { "the operation", "the asynchronous operation" };
+            var finalVerbs = new[] { "is", "indicates if", "indicates whether", "indicates" };
+
+            foreach (var start in starts)
+            {
+                foreach (var continuation in continuations)
+                {
+                    foreach (var operation in operations)
+                    {
+                        foreach (var verb in finalVerbs)
+                        {
+                            yield return $"{start} {continuation} {operation}. The {Result} {verb} ";
+                            yield return $"{start} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+                            yield return $"{start.ToUpperCaseAt(0)} {continuation} {operation}. The {Result} {verb} ";
+                            yield return $"{start.ToUpperCaseAt(0)} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+
+                            yield return $"Returns {start} {continuation} {operation}. The {Result} {verb} ";
+                            yield return $"Returns {start} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+                        }
+                    }
+                }
+            }
+        }
+//// ncrunch: collect values default
 
         private SyntaxNode Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
                                                                                                                              ? GenericComment(document, comment, memberName, genericReturnType)
