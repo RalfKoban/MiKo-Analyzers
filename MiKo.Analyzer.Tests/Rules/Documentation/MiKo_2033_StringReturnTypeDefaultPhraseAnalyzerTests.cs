@@ -146,7 +146,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <" + xmlTag + @">
-    /// A task that represents the asynchronous operation. The <see cref=""System.Threading.Tasks.Task{TResult}.Result" + "\"" + space + @" /> property on the task object returns a <see cref=""System.String" + "\"" + space + @"/> that contains something.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""System.Threading.Tasks.Task{TResult}.Result" + "\"" + space + @" /> parameter returns a <see cref=""System.String" + "\"" + space + @"/> that contains something.
     /// </" + xmlTag + @">
     public " + returnType + @" DoSomething(object o) => null;
 }
@@ -341,7 +341,83 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains something.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_almost_correct_generic_method()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The Result is something.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains something.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_almost_correct_phrase()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
     /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains something.
+    /// </returns>
+    public Task<string> DoSomething(object o) => null;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains something.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -547,7 +623,7 @@ public class TestMe
     /// <summary>
     /// Does something.
     /// </summary>
-    /// <returns>A task representing the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> containing the <c>Foo</c>.</returns>
+    /// <returns>A task representing the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> containing the <c>Foo</c>.</returns>
     public Task<string> DoSomething(object o) => null;
 }
 ";
@@ -562,7 +638,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains the <c>Foo</c>.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains the <c>Foo</c>.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -584,7 +660,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task representing the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> containing the <c>Foo</c>.
+    /// A task representing the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> containing the <c>Foo</c>.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -600,7 +676,7 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The <see cref=""Task{TResult}.Result""/> property on the task object returns a <see cref=""string""/> that contains the <c>Foo</c>.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter returns a <see cref=""string""/> that contains the <c>Foo</c>.
     /// </returns>
     public Task<string> DoSomething(object o) => null;
 }
@@ -673,6 +749,42 @@ public class TestMe
     /// </summary>
     /// <value>
     /// A <see cref=""string""/> that contains something.
+    /// </value>
+    public string Something => ""Something"";
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_non_generic_method_and_almost_correct_phrase_with_see_Cref_([Values("that returns", "which returns", "returning", "which contains", "that contains", "containing")] string text)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A string " + text + @" the <see cref=""int""/> and/or <see cref=""bool""/> value of the operation.
+    /// </value>
+    public string Something => ""Something"";
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// Gets something.
+    /// </summary>
+    /// <value>
+    /// A <see cref=""string""/> that contains the <see cref=""int""/> and/or <see cref=""bool""/> value of the operation.
     /// </value>
     public string Something => ""Something"";
 }

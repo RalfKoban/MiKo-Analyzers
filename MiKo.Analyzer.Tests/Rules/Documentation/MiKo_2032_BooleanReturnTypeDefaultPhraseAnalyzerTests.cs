@@ -566,13 +566,25 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase("A task that represents the asynchronous operation. The Result indicates whether something.")]
+        [TestCase("A task that represents the operation. The Result indicates whether something.")]
+        [TestCase("A task representing the asynchronous operation. The Result indicates whether something.")]
+        [TestCase("A task representing the operation. The Result indicates whether something.")]
+        [TestCase("An task that represents the asynchronous operation. The Result indicates whether something.")]
+        [TestCase("An task that represents the operation. The Result indicates whether something.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something, otherwise, <see langword=""false""/>.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"A task that has the result <see langword=""true""/> if something, otherwise the task has the result <see langword=""false""/>.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, otherwise, <see langword=""false""/>.")]
         [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
-        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"Returns a task that completes with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"Returns a task that completes with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
-        [TestCase(@"A task that has the result <see langword=""true""/> if something, otherwise the task has the result <see langword=""false""/>.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_generic_method_(string comment)
         {
             var originalCode = @"
