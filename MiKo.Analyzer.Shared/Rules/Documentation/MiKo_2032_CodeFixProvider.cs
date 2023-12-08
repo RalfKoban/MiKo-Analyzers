@@ -39,6 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                              "TRUE,",
                                                                                                              "True,",
                                                                                                              "true,",
+                                                                                                             "TRUE means that",
+                                                                                                             "True means that",
+                                                                                                             "true means that",
                                                                                                              "TRUE means",
                                                                                                              "True means",
                                                                                                              "true means",
@@ -80,12 +83,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                     "If ",
                                                                     "When ",
                                                                     "Whether ",
+                                                                    "In case that ",
                                                                     "In case ",
+                                                                    "Means that ",
                                                                     "Means ",
                                                                     "if ",
                                                                     "when ",
                                                                     "whether ",
+                                                                    "in case that ",
                                                                     "in case ",
+                                                                    "means that ",
                                                                     "means ",
                                                                 };
 
@@ -111,6 +118,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " in other cases",
                                                                      " in other case",
                                                                      ", ; else",
+                                                                     ", else",
+                                                                     " Otherwise ",
+                                                                     " Otherwise",
                                                                  };
 
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
@@ -275,7 +285,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // clean up comment and remove middle parts before the <see langword=""false""/>
             if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
-                var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                var replacement = last.WithoutTrailingXmlComment()
+                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                                      .WithoutTrailingXmlComment()
                                       .WithoutTrailing(SimpleTrailingPhrases)
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 
