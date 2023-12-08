@@ -119,6 +119,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " in other case",
                                                                      ", ; else",
                                                                      ", else",
+                                                                     " Otherwise ",
+                                                                     " Otherwise",
                                                                  };
 
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
@@ -283,7 +285,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // clean up comment and remove middle parts before the <see langword=""false""/>
             if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
-                var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                var replacement = last.WithoutTrailingXmlComment()
+                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                                      .WithoutTrailingXmlComment()
                                       .WithoutTrailing(SimpleTrailingPhrases)
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 

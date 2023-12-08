@@ -2602,7 +2602,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
 
-        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text) => value.WithoutTrailing(new[] { text });
+
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts)
         {
             var textTokens = value.TextTokens.ToList();
 
@@ -2625,14 +2627,17 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
+                foreach (var text in texts)
                 {
-                    var modifiedText = originalText.WithoutSuffix(text);
+                    if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var modifiedText = originalText.WithoutSuffix(text);
 
-                    textTokens[i] = token.WithText(modifiedText);
-                    replaced = true;
+                        textTokens[i] = token.WithText(modifiedText);
+                        replaced = true;
 
-                    break;
+                        break;
+                    }
                 }
             }
 
@@ -2643,8 +2648,6 @@ namespace MiKoSolutions.Analyzers
 
             return value;
         }
-
-        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts) => texts.Aggregate(value, WithoutTrailing);
 
         internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
         {

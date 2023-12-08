@@ -853,6 +853,41 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_fix_recognizes_Otherwise_at_end_of_first_line_in_multi_line_comment_([Values("Otherwise ", "Otherwise")] string lastWordOnFirstLine)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something is there. " + lastWordOnFirstLine + @"
+    /// <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something is there; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer();
