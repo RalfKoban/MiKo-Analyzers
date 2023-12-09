@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -43,11 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var field = Comment(XmlElement(Constants.XmlTag.Value), ValueText[0], SeeCref(type), ValueText[1]);
 
             return syntax.WithoutTrivia()
-                         .WithContent(SyntaxFactory.List<XmlNodeSyntax>(new[]
-                                                                            {
-                                                                                summary.WithTrailingXmlComment(),
-                                                                                field.WithEndOfLine(),
-                                                                            }))
+                         .WithContent(summary.WithTrailingXmlComment(), field.WithEndOfLine())
                          .WithLeadingXmlCommentExterior();
         }
     }

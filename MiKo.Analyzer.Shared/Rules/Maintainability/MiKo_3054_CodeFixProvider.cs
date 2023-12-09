@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var variableDeclarator = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(identifier), default, SyntaxFactory.EqualsValueClause(assignment));
 
             var type = SyntaxFactory.ParseTypeName(Constants.DependencyProperty.TypeName);
-            var variableDeclaration = SyntaxFactory.VariableDeclaration(type, SyntaxFactory.SeparatedList(new[] { variableDeclarator }));
+            var variableDeclaration = SyntaxFactory.VariableDeclaration(type, new[] { variableDeclarator }.ToSeparatedSyntaxList());
 
             var field = SyntaxFactory.FieldDeclaration(
                                                    default,

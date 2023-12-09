@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 return SyntaxFactory.XmlElement(
                                             comment.StartTag,
-                                            SyntaxFactory.List(contents),
+                                            contents.ToSyntaxList(),
                                             comment.EndTag.WithLeadingXmlComment());
             }
 
