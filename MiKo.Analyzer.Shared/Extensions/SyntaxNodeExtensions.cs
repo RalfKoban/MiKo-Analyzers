@@ -2334,7 +2334,7 @@ namespace MiKoSolutions.Analyzers
         {
             var oldModifiers = value.Modifiers;
 
-            var newModifiers = SyntaxFactory.TokenList(modifiers.Select(_ => _.AsToken()));
+            var newModifiers = modifiers.ToTokenList();
 
             if (oldModifiers.Count > 0)
             {
@@ -3218,6 +3218,6 @@ namespace MiKoSolutions.Analyzers
 
         private static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
-        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
+        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
     }
 }
