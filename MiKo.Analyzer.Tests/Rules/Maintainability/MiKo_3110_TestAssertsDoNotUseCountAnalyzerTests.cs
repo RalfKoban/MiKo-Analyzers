@@ -13,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private static readonly string[] AssertionMethods =
                                                             {
-                                                                nameof(Assert.AreEqual),
-                                                                nameof(Assert.AreNotEqual),
-                                                                nameof(Assert.AreSame),
-                                                                nameof(Assert.AreNotSame),
-                                                                nameof(Assert.Less),
-                                                                nameof(Assert.LessOrEqual),
-                                                                nameof(Assert.Greater),
-                                                                nameof(Assert.GreaterOrEqual),
+                                                                "AreEqual",
+                                                                "AreNotEqual",
+                                                                "AreSame",
+                                                                "AreNotSame",
+                                                                "Less",
+                                                                "LessOrEqual",
+                                                                "Greater",
+                                                                "GreaterOrEqual",
                                                             };
 
         [Test]
