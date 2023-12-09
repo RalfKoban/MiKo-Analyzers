@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var indentation = spaces + Constants.Indentation;
 
             return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
-                        .WithStatements(SyntaxFactory.List(block.Statements.Select(_ => GetUpdatedStatement(_, indentation))))
+                        .WithStatements(block.Statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
         }
 

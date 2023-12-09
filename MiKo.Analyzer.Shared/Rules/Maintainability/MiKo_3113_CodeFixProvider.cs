@@ -358,7 +358,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ImplicitArrayCreationExpressionSyntax GetAsArray(SeparatedSyntaxList<ArgumentSyntax> arguments)
         {
-            var parameters = SyntaxFactory.SeparatedList(arguments.Select(_ => _.Expression));
+            var parameters = arguments.Select(_ => _.Expression).ToSeparatedSyntaxList();
             var initializer = SyntaxFactory.InitializerExpression(SyntaxKind.ArrayInitializerExpression, parameters);
             var array = SyntaxFactory.ImplicitArrayCreationExpression(initializer);
 

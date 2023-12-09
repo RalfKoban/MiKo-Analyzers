@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var argumentSyntax = argumentList.Arguments.First();
 
-            return argumentList.WithArguments(SyntaxFactory.SeparatedList(new[] { argumentSyntax.WithoutTrivia() }))
+            return argumentList.WithArguments(new[] { argumentSyntax.WithoutTrivia() }.ToSeparatedSyntaxList())
                                .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
                                .WithCloseParenToken(argumentList.CloseParenToken.WithoutLeadingTrivia());
         }
