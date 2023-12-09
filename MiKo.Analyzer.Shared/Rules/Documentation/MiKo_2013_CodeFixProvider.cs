@@ -122,7 +122,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 textTokens.RemoveAt(textTokens.Count - 1);
             }
 
-            return comment.WithTextTokens(SyntaxFactory.TokenList(textTokens));
+            return comment.WithTextTokens(textTokens.ToTokenList());
         }
 
         private static SyntaxToken XmlTextToken(string text) => text.AsToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
