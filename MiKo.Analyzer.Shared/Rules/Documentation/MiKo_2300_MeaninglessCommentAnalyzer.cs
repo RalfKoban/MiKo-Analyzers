@@ -90,6 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "nothing",
                                                               "special handling",
                                                               "initializer",
+                                                              "typo by intent",
                                                           };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)
