@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -240,7 +241,7 @@ public class TestMe
             var phrases = new[] { "Check if ", "Checks if ", "Test if ", "Tests if " };
 
             var results = new List<string>(phrases);
-            results.AddRange(phrases.Select(_ => _.ToUpper()));
+            results.AddRange(phrases.Select(_ => _.ToUpper(CultureInfo.CurrentCulture)));
             results.AddRange(phrases.Select(_ => "Asynchronously " + _));
             results.Sort();
 

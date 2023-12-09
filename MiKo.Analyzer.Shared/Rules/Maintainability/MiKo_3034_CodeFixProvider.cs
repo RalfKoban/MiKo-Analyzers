@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var name = SyntaxFactory.ParseName("CallerMemberName");
             var attribute = SyntaxFactory.Attribute(name);
-            var attributeList = SyntaxFactory.AttributeList().WithAttributes(SyntaxFactory.SeparatedList(new[] { attribute }));
+            var attributeList = SyntaxFactory.AttributeList(new[] { attribute }.ToSeparatedSyntaxList());
 
             return parameter.WithAttributeLists(new SyntaxList<AttributeListSyntax>(attributeList))
                             .WithDefault(SyntaxFactory.EqualsValueClause(NullLiteral()));

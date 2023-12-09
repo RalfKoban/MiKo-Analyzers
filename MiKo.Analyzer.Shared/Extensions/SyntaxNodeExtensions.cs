@@ -1926,7 +1926,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return SyntaxFactory.List(result);
+            return result.ToSyntaxList();
         }
 
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
@@ -2208,13 +2208,13 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(SyntaxFactory.List(contents));
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(contents.ToSyntaxList());
 
-        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(SyntaxFactory.List(contents));
+        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, IEnumerable<XmlNodeSyntax> contents) => value.WithContent(contents.ToSyntaxList());
 
-        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(SyntaxFactory.List(contents));
+        internal static DocumentationCommentTriviaSyntax WithContent(this DocumentationCommentTriviaSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(contents.ToSyntaxList());
 
-        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(SyntaxFactory.List(contents));
+        internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(contents.ToSyntaxList());
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
@@ -2334,7 +2334,7 @@ namespace MiKoSolutions.Analyzers
         {
             var oldModifiers = value.Modifiers;
 
-            var newModifiers = SyntaxFactory.TokenList(modifiers.Select(_ => _.AsToken()));
+            var newModifiers = modifiers.ToTokenList();
 
             if (oldModifiers.Count > 0)
             {
@@ -2595,14 +2595,16 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return SyntaxFactory.List(contents);
+            return contents.ToSyntaxList();
         }
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, params string[] texts) => value.Content.WithoutText(texts);
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
 
-        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text)
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text) => value.WithoutTrailing(new[] { text });
+
+        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts)
         {
             var textTokens = value.TextTokens.ToList();
 
@@ -2625,14 +2627,17 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
+                foreach (var text in texts)
                 {
-                    var modifiedText = originalText.WithoutSuffix(text);
+                    if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var modifiedText = originalText.WithoutSuffix(text);
 
-                    textTokens[i] = token.WithText(modifiedText);
-                    replaced = true;
+                        textTokens[i] = token.WithText(modifiedText);
+                        replaced = true;
 
-                    break;
+                        break;
+                    }
                 }
             }
 
@@ -2643,8 +2648,6 @@ namespace MiKoSolutions.Analyzers
 
             return value;
         }
-
-        internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, params string[] texts) => texts.Aggregate(value, WithoutTrailing);
 
         internal static XmlTextSyntax WithoutTrailingCharacters(this XmlTextSyntax value, char[] characters)
         {
@@ -3215,6 +3218,6 @@ namespace MiKoSolutions.Analyzers
 
         private static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
-        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
+        private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
     }
 }

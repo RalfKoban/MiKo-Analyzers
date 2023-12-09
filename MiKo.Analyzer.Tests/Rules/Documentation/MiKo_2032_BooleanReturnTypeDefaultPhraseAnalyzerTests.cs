@@ -238,7 +238,9 @@ public class TestMe
         [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
         [TestCase("When the stuff is done, True; False else.", "the stuff is done")]
         [TestCase("In case the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("In case that the stuff is done, True; else False.", "the stuff is done")]
         [TestCase("If <see langword=\"true\"/> calling method should return, otherwise not", "calling method should return")]
+        [TestCase("<see langword=\"true\"/> in case that the stuff is done, in all other cases returns <see langword=\"false\"/>.", "the stuff is done")]
         public void Code_gets_fixed_for_non_generic_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
@@ -339,6 +341,7 @@ public class TestMe
         [TestCase("true: if something, else it returns false.")]
         [TestCase("true, if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
+        [TestCase("true, if something, false else.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
         {
             var originalCode = @"
@@ -819,6 +822,7 @@ public class TestMe
         [TestCase("Whether ")]
         [TestCase("True when")]
         [TestCase("True means")]
+        [TestCase("True means that")]
         [TestCase("True of")] // typo
         public void Code_gets_fixed_for_specific_starting_phrase_(string comment)
         {
@@ -841,6 +845,41 @@ public class TestMe
     /// <summary>Does something.</summary>
     /// <returns>
     /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_fix_recognizes_Otherwise_at_end_of_first_line_in_multi_line_comment_([Values("Otherwise ", "Otherwise")] string lastWordOnFirstLine)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something is there. " + lastWordOnFirstLine + @"
+    /// <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something is there; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -48,7 +49,7 @@ namespace TestHelper
                                      {
                                          Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
 
-                                         var message = result.GetMessage();
+                                         var message = result.GetMessage(null);
 
                                          Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
 
@@ -128,7 +129,7 @@ namespace TestHelper
 
                 foreach (var result in results)
                 {
-                    yield return result.GetMessage() + "[" + file + "]";
+                    yield return result.GetMessage(CultureInfo.CurrentCulture) + "[" + file + "]";
                 }
             }
         }
@@ -159,16 +160,24 @@ namespace TestHelper
         /// <summary>
         /// Applies a C# <see cref="DiagnosticAnalyzer"/> on the single inputted string and returns the found results.
         /// </summary>
-        /// <param name="source">A class in the form of a string to run the analyzer on.</param>
-        /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
+        /// <param name="source">
+        /// A class in the form of a string to run the analyzer on.
+        /// </param>
+        /// <returns>
+        /// An array of Diagnostics that surfaced in the source code, sorted by Location.
+        /// </returns>
         protected Diagnostic[] GetDiagnostics(string source) => GetDiagnostics(new[] { source });
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,
         /// then verifies each of them.
         /// </summary>
-        /// <param name="sources">An array of strings to create source documents from to run the analyzers on.</param>
-        /// <returns>An array of Diagnostics that surfaced in the source code, sorted by Location.</returns>
+        /// <param name="sources">
+        /// An array of strings to create source documents from to run the analyzers on.
+        /// </param>
+        /// <returns>
+        /// An array of Diagnostics that surfaced in the source code, sorted by Location.
+        /// </returns>
         private Diagnostic[] GetDiagnostics(string[] sources) => GetSortedDiagnostics(sources, LanguageNames.CSharp, GetObjectUnderTest());
     }
 }

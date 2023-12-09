@@ -5,6 +5,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
@@ -133,6 +137,22 @@ namespace System
                 return indices;
             }
         }
+
+        public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.IdentifierToken:
+                    return SyntaxFactory.Identifier(source);
+
+                default:
+                    return SyntaxFactory.Token(default, kind, source, source, default);
+            }
+        }
+
+        public static InterpolatedStringTextSyntax AsInterpolatedString(this ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
+
+        public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));

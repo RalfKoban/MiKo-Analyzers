@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -1027,8 +1028,8 @@ public class TestMe
             results.AddRange(types);
             results.AddRange(phrases);
             results.AddRange(from type in types from phrase in phrases select type + " " + phrase);
-            results.AddRange(phrases.Select(_ => _.ToLower()));
-            results.AddRange(phrases.Select(_ => _.ToUpper()));
+            results.AddRange(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture)));
+            results.AddRange(phrases.Select(_ => _.ToUpper(CultureInfo.CurrentCulture)));
 
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");

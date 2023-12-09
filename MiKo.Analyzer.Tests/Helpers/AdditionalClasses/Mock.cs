@@ -1,5 +1,6 @@
 ﻿#pragma warning disable IDE0130 // Namespace does not match folder structure
 #pragma warning disable SA1402 // File may only contain a single type
+#pragma warning disable CA1805 // Do not initialize unnecessarily
 
 using System;
 using System.Linq.Expressions;
@@ -35,5 +36,6 @@ namespace Moq
     }
 }
 
+#pragma warning restore CA1805 // Do not initialize unnecessarily
 #pragma warning restore SA1402 // File may only contain a single type
 #pragma warning restore IDE0130 // Namespace does not match folder structure

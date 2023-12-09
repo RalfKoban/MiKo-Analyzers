@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CombineTexts(result);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, SyntaxFactory.List(nodes));
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, nodes.ToSyntaxList());
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
@@ -160,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, commentStart, link, commentEnd, commendEndNodes.ToArray());
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, SyntaxFactory.List(nodes));
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, params XmlNodeSyntax[] nodes) => Comment(comment, nodes.ToSyntaxList());
 
         protected static XmlElementSyntax Comment(
                                               XmlElementSyntax comment,
@@ -719,9 +719,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         partsForOtherSentences.AddRange(commentContents.Skip(index + 1));
 
-                        partsAfterSentence = SyntaxFactory.List(partsForOtherSentences);
+                        partsAfterSentence = partsForOtherSentences.ToSyntaxList();
 
-                        return comment.WithContent(SyntaxFactory.List(partsForFirstSentence));
+                        return comment.WithContent(partsForFirstSentence.ToSyntaxList());
                     }
                 }
 
@@ -745,7 +745,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, new SyntaxList<XmlNodeSyntax>(content));
 
-        protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, SyntaxFactory.List(contents));
+        protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
 
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
@@ -765,7 +765,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.XmlText(textTokens);
         }
 
-        protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(SyntaxFactory.TokenList(textTokens));
+        protected static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
 
         private static IEnumerable<XmlNodeSyntax> CommentEnd(string commentEnd, params XmlNodeSyntax[] commendEndNodes)
         {
