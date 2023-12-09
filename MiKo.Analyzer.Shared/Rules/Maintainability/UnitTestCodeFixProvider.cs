@@ -28,7 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     otherArguments = otherArguments.Select(_ => _.WithNameColon(null));
                 }
 
-                // TODO RKN: convert otherArguments into interpolated string; split message into interpolated string texts
+                // var contents = new List<InterpolatedStringContentSyntax>();
+                // var interpolatedString = SyntaxFactory.InterpolatedStringExpression(SyntaxKind.InterpolatedStringStartToken.AsToken(), SyntaxFactory.List(contents));
+                // args.Add(Argument(interpolatedString));// TODO RKN: convert otherArguments into interpolated string; split message into interpolated string texts
                 // SyntaxFactory.InterpolatedStringText();
                 // SyntaxFactory.InterpolatedStringExpression();
                 args.AddRange(otherArguments);
