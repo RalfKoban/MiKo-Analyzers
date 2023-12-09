@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -66,7 +67,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                                              analyzer.DiagnosticId + "_MessageFormat",
                                                                                                              analyzer.DiagnosticId + "_Title",
                                                                                                          }
-                                                                                                     .Where(_ => string.IsNullOrWhiteSpace(ResourceManager.GetString(_)))
+                                                                                                     .Where(_ => string.IsNullOrWhiteSpace(ResourceManager.GetString(_, CultureInfo.CurrentUICulture)))
                                                                                                      .ToList();
 
                                                                                       findings.Sort();
@@ -87,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                                                                       analyzer.DiagnosticId + "_Title",
                                                                                                                                       analyzer.DiagnosticId + "_CodeFixTitle",
                                                                                                                                   }
-                                                                                                                              .Where(_ => ResourceManager.GetString(_)?.Contains("  ") is true)
+                                                                                                                              .Where(_ => ResourceManager.GetString(_, CultureInfo.CurrentUICulture)?.Contains("  ") is true)
                                                                                                                               .ToList();
 
                                                                                                                findings.Sort();
@@ -103,7 +104,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                         {
                                                                                             var key = analyzer.DiagnosticId + "_Title";
 
-                                                                                            var title = ResourceManager.GetString(key);
+                                                                                            var title = ResourceManager.GetString(key, CultureInfo.CurrentUICulture);
 
                                                                                             Assert.Multiple(() =>
                                                                                                                  {
@@ -120,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                           {
                                                                                               var key = analyzer.DiagnosticId + "_Description";
 
-                                                                                              Assert.That(ResourceManager.GetString(key), Does.EndWith(".").Or.EndsWith(")"), $"'{key}' is incorrect.{Environment.NewLine}");
+                                                                                              Assert.That(ResourceManager.GetString(key, CultureInfo.CurrentUICulture), Does.EndWith(".").Or.EndsWith(")"), $"'{key}' is incorrect.{Environment.NewLine}");
                                                                                           }
                                                                                       });
 
@@ -131,7 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                           {
                                                                                               var key = analyzer.DiagnosticId + "_MessageFormat";
 
-                                                                                              var message = ResourceManager.GetString(key);
+                                                                                              var message = ResourceManager.GetString(key, CultureInfo.CurrentUICulture);
 
                                                                                               Assert.Multiple(() =>
                                                                                                                    {
@@ -148,7 +149,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                                                                                {
                                                                                                    var key = analyzer.DiagnosticId + "_CodeFixTitle";
 
-                                                                                                   var codefixTitle = ResourceManager.GetString(key);
+                                                                                                   var codefixTitle = ResourceManager.GetString(key, CultureInfo.CurrentUICulture);
 
                                                                                                    Assert.Multiple(() =>
                                                                                                                         {
@@ -165,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                  {
                                      foreach (var analyzer in AllAnalyzers)
                                      {
-                                         Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat"), Does.Not.Contain(word));
+                                         Assert.That(ResourceManager.GetString(analyzer.DiagnosticId + "_MessageFormat", CultureInfo.CurrentUICulture), Does.Not.Contain(word));
                                      }
                                  });
         }
@@ -277,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                      {
                                          var resourceKey = CreateResourceKey(provider);
 
-                                         var expectedTitle = Resources.ResourceManager.GetString(resourceKey) ?? "< - missing title - >";
+                                         var expectedTitle = Resources.ResourceManager.GetString(resourceKey, CultureInfo.CurrentUICulture) ?? "< - missing title - >";
 
                                          var codeFixTitle = provider.GetType().GetProperty("Title", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(provider).ToString();
 
@@ -339,7 +340,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var markdownBuilder = new StringBuilder().AppendLine()
                                                      .AppendLine("## Available Rules")
-                                                     .AppendLine($"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
+                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
 
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
@@ -352,20 +353,20 @@ namespace MiKoSolutions.Analyzers.Rules
                 {
                     category = descriptor.Category;
 
-                    markdownBuilder
-                        .AppendLine()
-                        .AppendLine("### " + category)
-                        .AppendFormat(tableFormat, "ID", "Title", "Enabled by default", "CodeFix available")
-                        .AppendFormat(tableFormat, ":-", ":----", ":----------------:", ":---------------:");
+                    markdownBuilder.AppendLine()
+                                   .AppendLine("### " + category)
+                                   .AppendFormat(CultureInfo.CurrentCulture, tableFormat, "ID", "Title", "Enabled by default", "CodeFix available")
+                                   .AppendFormat(CultureInfo.CurrentCulture, tableFormat, ":-", ":----", ":----------------:", ":---------------:");
                 }
 
                 const string Check = "&#x2713;";
                 const string NoCheck = "\\-";
 
                 markdownBuilder.AppendFormat(
+                                         CultureInfo.CurrentCulture,
                                          tableFormat,
                                          descriptor.Id,
-                                         descriptor.Title.ToString().Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("|", "&#124;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace("#", "&num;"),
+                                         descriptor.Title.ToString(CultureInfo.CurrentCulture).Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("|", "&#124;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace("#", "&num;"),
                                          descriptor.IsEnabledByDefault ? Check : NoCheck,
                                          codeFixProviders.Contains(descriptor.Id) ? Check : NoCheck);
             }

@@ -161,13 +161,13 @@ public class TestMe
         [TestCase("{B19F1C23-57F6-4a4E-aa69-5EE303F5184B}")]
         [TestCase("B19F1C23-57F6-4a4E-aa69-5EE303F5184B")]
         [TestCase("B19F1C2357F64a4Eaa695EE303F5184B")]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Guid(string guid) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_Guid_(string value) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// Does something inside " + guid + @" that is very important.
+    /// Does something inside " + value + @" that is very important.
     /// </summary>
     public void DoSomething()
     {

@@ -63,6 +63,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return original;
         }
 
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => root.WithoutUsing("NUnit.Framework.Legacy"); // remove unused "using NUnit.Framework.Legacy;"
+
         private static ExpressionSyntax UpdatedSyntax(Document document, MemberAccessExpressionSyntax syntax, SeparatedSyntaxList<ArgumentSyntax> args, string typeName)
         {
             var methodName = syntax.GetName();

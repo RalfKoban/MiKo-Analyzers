@@ -19,6 +19,7 @@ using Microsoft.CodeAnalysis.Text;
 using MiKoSolutions.Analyzers.Rules;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
@@ -47,6 +48,7 @@ namespace TestHelper
         private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
         private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
+        private static readonly MetadataReference NUnitLegacyReference = MetadataReference.CreateFromFile(typeof(DirectoryAssert).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
         private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
         private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
@@ -208,6 +210,7 @@ namespace TestHelper
                                                .AddMetadataReference(projectId, CSharpSymbolsReference)
                                                .AddMetadataReference(projectId, CodeAnalysisReference)
                                                .AddMetadataReference(projectId, NUnitReference)
+                                               .AddMetadataReference(projectId, NUnitLegacyReference)
                                                .AddMetadataReference(projectId, MiKoAnalyzersReference)
                                                .AddMetadataReference(projectId, MiKoAnalyzersTestsReference)
                                                .AddMetadataReference(projectId, NetStandardReference)

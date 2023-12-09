@@ -988,6 +988,7 @@ namespace MiKoSolutions.Analyzers
                                                                             {
                                                                                 "NUnit.Framework",
                                                                                 "NUnit.Framework.Constraints",
+                                                                                "NUnit.Framework.Legacy",
                                                                             };
 
             internal static readonly ISet<string> KnownWindowsEventHandlers = new HashSet<string>

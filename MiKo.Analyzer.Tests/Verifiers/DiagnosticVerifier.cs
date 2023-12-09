@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -48,7 +49,7 @@ namespace TestHelper
                                      {
                                          Assert.That(result.Id, Is.EqualTo(GetDiagnosticId()));
 
-                                         var message = result.GetMessage();
+                                         var message = result.GetMessage(null);
 
                                          Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
 
@@ -128,7 +129,7 @@ namespace TestHelper
 
                 foreach (var result in results)
                 {
-                    yield return result.GetMessage() + "[" + file + "]";
+                    yield return result.GetMessage(CultureInfo.CurrentCulture) + "[" + file + "]";
                 }
             }
         }
