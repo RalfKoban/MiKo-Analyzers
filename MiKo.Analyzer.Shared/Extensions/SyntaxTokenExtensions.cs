@@ -17,18 +17,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
-        internal static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
-        {
-            switch (kind)
-            {
-                case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(source);
-
-                default:
-                    return SyntaxFactory.Token(default, kind, source, source, default);
-            }
-        }
-
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
         internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();

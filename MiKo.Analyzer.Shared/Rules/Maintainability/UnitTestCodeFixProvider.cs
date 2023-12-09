@@ -10,6 +10,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UnitTestCodeFixProvider : MaintainabilityCodeFixProvider
     {
+        private const int FormatIdentifierLength = 3; // '{0}' has length of 3
+
+        private static readonly string[] FormatIdentifiers = Enumerable.Range(0, 10).Select(_ => $"{{{_}}}").ToArray(); // use '{0}' till '{9}'
+
         protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 1, bool removeNameColon = false) // skip the first argument
             => AssertThat(Argument(expression), constraint, arguments, skip, removeNameColon);
 
@@ -21,19 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments.Count > skip)
             {
-                var otherArguments = arguments.Skip(skip);
+                var otherArguments = removeNameColon
+                                     ? arguments.Skip(skip).Select(_ => _.WithNameColon(null))
+                                     : arguments.Skip(skip);
 
-                if (removeNameColon)
-                {
-                    otherArguments = otherArguments.Select(_ => _.WithNameColon(null));
-                }
-
-                // var contents = new List<InterpolatedStringContentSyntax>();
-                // var interpolatedString = SyntaxFactory.InterpolatedStringExpression(SyntaxKind.InterpolatedStringStartToken.AsToken(), SyntaxFactory.List(contents));
-                // args.Add(Argument(interpolatedString));// TODO RKN: convert otherArguments into interpolated string; split message into interpolated string texts
-                // SyntaxFactory.InterpolatedStringText();
-                // SyntaxFactory.InterpolatedStringExpression();
-                args.AddRange(otherArguments);
+                args.Add(ConvertToInterpolatedStringArgument(otherArguments.ToList()));
             }
 
             return AssertThat(args.ToArray());
@@ -165,6 +161,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return Array.Empty<TypeSyntax>();
+        }
+
+        private static ArgumentSyntax ConvertToInterpolatedStringArgument(List<ArgumentSyntax> otherArguments)
+        {
+            var argument = otherArguments[0];
+
+            if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.StringLiteralExpression))
+            {
+                var formatMessage = literal.Token.ValueText.AsSpan();
+
+                if (formatMessage.ContainsAny(FormatIdentifiers))
+                {
+                    return Argument(ConvertToInterpolatedString(formatMessage, otherArguments));
+                }
+            }
+
+            return argument;
+        }
+
+        private static InterpolatedStringExpressionSyntax ConvertToInterpolatedString(ReadOnlySpan<char> formatMessage, IReadOnlyList<ArgumentSyntax> otherArguments)
+        {
+            var contents = new List<InterpolatedStringContentSyntax>();
+
+            int index;
+
+            while ((index = formatMessage.IndexOfAny(FormatIdentifiers, StringComparison.Ordinal)) > -1)
+            {
+                if (index > 0)
+                {
+                    // we have some text at the start, so add this before the other text
+                    contents.Add(formatMessage.Slice(0, index).AsInterpolatedString());
+                }
+
+                var identifierNumber = formatMessage.Slice(index, FormatIdentifierLength).TrimStart('{').TrimEnd('}').ToString();
+
+                if (int.TryParse(identifierNumber, out var number) && number < otherArguments.Count)
+                {
+                    contents.Add(SyntaxFactory.Interpolation(otherArguments[number + 1].Expression));
+                }
+
+                formatMessage = formatMessage.Slice(index + FormatIdentifierLength);
+            }
+
+            // add remaining text
+            if (formatMessage.Length > 0)
+            {
+                contents.Add(formatMessage.AsInterpolatedString());
+            }
+
+            return SyntaxFactory.InterpolatedStringExpression(SyntaxKind.InterpolatedStringStartToken.AsToken(), contents.ToSyntaxList());
         }
     }
 }

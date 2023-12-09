@@ -612,8 +612,8 @@ namespace Bla
              "public void Do() => Assert.IsAssignableFrom(typeof(object), new object());",
              "public void Do() => Assert.That(new object(), Is.AssignableFrom<object>());")]
         [TestCase(
-             "public void Do() => Assert.IsAssignableFrom(typeof(object), new object(), \"should be assignable\");",
-             "public void Do() => Assert.That(new object(), Is.AssignableFrom<object>(), \"should be assignable\");")]
+             @"public void Do() => Assert.IsAssignableFrom(typeof(object), new object(), ""should be assignable"");",
+             @"public void Do() => Assert.That(new object(), Is.AssignableFrom<object>(), ""should be assignable"");")]
         [TestCase(
              "public void Do() => Assert.IsAssignableFrom<object>(new object());",
              "public void Do() => Assert.That(new object(), Is.AssignableFrom<object>());")]
@@ -621,8 +621,8 @@ namespace Bla
              "public void Do() => Assert.IsNotAssignableFrom(typeof(object), new object());",
              "public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>());")]
         [TestCase(
-             "public void Do() => Assert.IsNotAssignableFrom(typeof(object), new object(), \"should be not assignable\");",
-             "public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>(), \"should be not assignable\");")]
+             @"public void Do() => Assert.IsNotAssignableFrom(typeof(object), new object(), ""should be not assignable"");",
+             @"public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>(), ""should be not assignable"");")]
         [TestCase(
              "public void Do() => Assert.IsNotAssignableFrom<object>(new object());",
              "public void Do() => Assert.That(new object(), Is.Not.AssignableFrom<object>());")]
@@ -652,10 +652,10 @@ namespace Bla
              "public void Do(Type type) => Assert.That(type, Is.AssignableFrom<object>());")]
         [TestCase(
             @"public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.IsTrue(expectedType.IsAssignableFrom(type), ""{0} should implement {1}."", type.FullName, expectedType.FullName); }",
-            @"public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.AssignableFrom(type), ""{0} should implement {1}."", type.FullName, expectedType.FullName); }")]
+            @"public void AssertIsType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.AssignableFrom(type), $""{type.FullName} should implement {expectedType.FullName}.""); }")]
         [TestCase(
              @"public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.IsFalse(expectedType.IsAssignableFrom(type), ""{0} should not implement {1}."", type.FullName, expectedType.FullName); }",
-             @"public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.Not.AssignableFrom(type), ""{0} should not implement {1}."", type.FullName, expectedType.FullName); }")]
+             @"public void AssertIsNotType<T>(Type type) { var expectedType = typeof(T); Assert.That(expectedType, Is.Not.AssignableFrom(type), $""{type.FullName} should not implement {expectedType.FullName}.""); }")]
 
         // misc
         [TestCase(
