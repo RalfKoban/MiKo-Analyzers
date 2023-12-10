@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var list = GetListElement(node);
                     var itemsToReplace = list.DescendantNodes<XmlElementSyntax>().Where(_ => _.GetName() == Constants.XmlTag.Description);
 
-                    return syntax.ReplaceNodes(itemsToReplace, (original, rewritten) => SyntaxFactory.XmlElement(Constants.XmlTag.Term, original.Content));
+                    return syntax.ReplaceNodes(itemsToReplace, (_, rewritten) => SyntaxFactory.XmlElement(Constants.XmlTag.Term, rewritten.Content));
                 }
 
                 case Constants.XmlTag.ListHeader:
@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                     ? Constants.XmlTag.Term
                                                                                                     : Constants.XmlTag.Description;
 
-                                                                                      return SyntaxFactory.XmlElement(newName, original.Content);
+                                                                                      return SyntaxFactory.XmlElement(newName, rewritten.Content);
                                                                                   });
                     }
 

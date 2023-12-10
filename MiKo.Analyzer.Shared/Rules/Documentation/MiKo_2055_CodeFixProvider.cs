@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var updatedSyntax = syntax.ReplaceNodes(
                                                 syntax.GetExceptionXmls().Where(_ => _.IsExceptionCommentFor<ArgumentOutOfRangeException>()),
-                                                (original, rewritten) => GetFixedExceptionCommentForArgumentOutOfRangeException(original));
+                                                (_, rewritten) => GetFixedExceptionCommentForArgumentOutOfRangeException(rewritten));
 
             return updatedSyntax;
         }

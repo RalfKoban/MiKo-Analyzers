@@ -35,26 +35,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var nodes = comment.DescendantNodes<XmlEmptyElementSyntax>(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
-            return comment.ReplaceNodes(nodes, (original, rewritten) =>
-                                                                       {
-                                                                           var attribute = rewritten.Attributes.First() as XmlTextAttributeSyntax;
-                                                                           var text = attribute.GetTextWithoutTrivia();
+            return comment.ReplaceNodes(nodes, (_, rewritten) =>
+                                                                {
+                                                                    var attribute = rewritten.Attributes.First() as XmlTextAttributeSyntax;
+                                                                    var text = attribute.GetTextWithoutTrivia();
 
-                                                                           return SeeLangword(text.ToLowerCase());
-                                                                       });
+                                                                    return SeeLangword(text.ToLowerCase());
+                                                                });
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongNonEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
             var nodes = comment.DescendantNodes<XmlElementSyntax>(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
 
-            return comment.ReplaceNodes(nodes, (original, rewritten) =>
-                                                                       {
-                                                                           var attribute = rewritten.StartTag.Attributes.First() as XmlTextAttributeSyntax;
-                                                                           var text = attribute.GetTextWithoutTrivia();
+            return comment.ReplaceNodes(nodes, (_, rewritten) =>
+                                                                {
+                                                                    var attribute = rewritten.StartTag.Attributes.First() as XmlTextAttributeSyntax;
+                                                                    var text = attribute.GetTextWithoutTrivia();
 
-                                                                           return SeeLangword(text.ToLowerCase());
-                                                                       });
+                                                                    return SeeLangword(text.ToLowerCase());
+                                                                });
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongTag(DocumentationCommentTriviaSyntax comment)
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // replace all '<value>true</value>', '<value>false</value>' and '<value>null</value>'
             var nodes = comment.DescendantNodes<XmlElementSyntax>(_ => _.IsWrongBooleanTag() || _.IsWrongNullTag()).ToList();
 
-            return comment.ReplaceNodes(nodes, (original, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));
+            return comment.ReplaceNodes(nodes, (_, rewritten) => SeeLangword(rewritten.Content.ToString().ToLowerCase()));
         }
 
         private static DocumentationCommentTriviaSyntax ReplaceText(DocumentationCommentTriviaSyntax comment)
