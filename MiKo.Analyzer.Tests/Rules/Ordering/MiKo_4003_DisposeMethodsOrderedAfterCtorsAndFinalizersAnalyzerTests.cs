@@ -415,6 +415,46 @@ public class TestMe : IDisposable
         }
 
         [Test]
+        public void Code_gets_fixed_for_method_inside_public_region_with_finalizer_only()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    #region Public methods
+
+    public void DoSomething() { }
+
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    #region Public methods
+
+    public void Dispose() { }
+
+    public void DoSomething() { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_method_inside_region_with_finalizer_only()
         {
             const string OriginalCode = @"
