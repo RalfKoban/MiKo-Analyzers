@@ -1915,7 +1915,7 @@ namespace MiKoSolutions.Analyzers
             // 3. Loop over all annotated nodes and replace them with the replacement nodes (document.GetAnnotatedNodes(annotation))
             var annotation = new SyntaxAnnotation();
 
-            var result = value.ReplaceNodes(nodes, (original, rewritten) => original.WithAnnotation(annotation));
+            var result = value.ReplaceNodes(nodes, (_, rewritten) => rewritten.WithAnnotation(annotation));
 
             while (true)
             {

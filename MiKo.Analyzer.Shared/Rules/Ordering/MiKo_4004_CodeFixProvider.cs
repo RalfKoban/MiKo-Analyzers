@@ -43,12 +43,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                    new[] { targetMethod, disposeMethod },
                                                    (original, rewritten) =>
                                                                            {
-                                                                               if (original == targetMethod)
+                                                                               if (rewritten.IsEquivalentTo(targetMethod))
                                                                                {
                                                                                    return targetMethod.WithAnnotation(targetAnnotation);
                                                                                }
 
-                                                                               if (original == disposeMethod)
+                                                                               if (rewritten.IsEquivalentTo(disposeMethod))
                                                                                {
                                                                                    return disposeMethod.WithAnnotation(disposeAnnotation);
                                                                                }

@@ -105,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                                    return rewritten.WithAdditionalTrailingTrivia(triviaToAdd);
                                                                                }
 
-                                                                               return null;
+                                                                               return original;
                                                                            });
                     }
                 }
@@ -136,7 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                        return rewritten.WithFirstLeadingTrivia(triviaToAdd);
                                                                    }
 
-                                                                   return null;
+                                                                   return original;
                                                                });
         }
 
