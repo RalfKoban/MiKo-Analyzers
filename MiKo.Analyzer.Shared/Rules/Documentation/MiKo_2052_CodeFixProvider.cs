@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var updatedSyntax = syntax.ReplaceNodes(
                                                 syntax.GetExceptionXmls().Where(_ => _.IsExceptionCommentFor<ArgumentNullException>()),
-                                                (original, rewritten) => GetFixedExceptionCommentForArgumentNullException(original));
+                                                (_, rewritten) => GetFixedExceptionCommentForArgumentNullException(rewritten));
 
             return updatedSyntax;
         }
