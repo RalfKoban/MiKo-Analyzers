@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -11,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4003_CodeFixProvider)), Shared]
     public sealed class MiKo_4003_CodeFixProvider : OrderingCodeFixProvider
     {
+        private const string DisposeAnnotationKind = "dispose method";
+
         public override string FixableDiagnosticId => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_4003_CodeFixTitle;
@@ -19,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var disposeMethod = (MethodDeclarationSyntax)syntax;
 
-            var annotation = new SyntaxAnnotation("dispose method");
+            var annotation = new SyntaxAnnotation(DisposeAnnotationKind);
 
             // remove method so that it can be added again
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(disposeMethod);
@@ -31,65 +34,97 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 // none found, so insert method before first method
                 var method = modifiedType.FirstChild<MethodDeclarationSyntax>();
 
-                return MoveRegions(modifiedType.InsertNodeBefore(method, disposeMethod.WithAnnotation(annotation)), disposeMethod, annotation);
+                modifiedType = MoveRegions(modifiedType.InsertNodeBefore(method, disposeMethod.WithAnnotation(annotation)), disposeMethod);
+            }
+            else
+            {
+                // insert method after found ctor or finalizer
+                modifiedType = MoveRegions(modifiedType.InsertNodeAfter(syntaxNode, disposeMethod.WithAnnotation(annotation)), disposeMethod);
             }
 
-            // insert method after found ctor or finalizer
-            return MoveRegions(modifiedType.InsertNodeAfter(syntaxNode, disposeMethod.WithAnnotation(annotation)), disposeMethod, annotation);
+            return modifiedType.WithoutAnnotations(annotation);
         }
 
-        private static BaseTypeDeclarationSyntax MoveRegions(BaseTypeDeclarationSyntax typeSyntax, SyntaxNode originalDisposeMethod, SyntaxAnnotation annotation)
+        private static BaseTypeDeclarationSyntax MoveRegions(BaseTypeDeclarationSyntax typeSyntax, SyntaxNode originalDisposeMethod)
         {
-            if (IsSingleNodeInsideRegion(originalDisposeMethod) is false)
+            var disposeMethod = typeSyntax.GetAnnotatedNodes(DisposeAnnotationKind).First();
+
+            if (IsSingleNodeInsideRegion(originalDisposeMethod))
             {
-                // seems like other methods or stuff is inside the "#region", so we do not move the "#endregion" around
-                return typeSyntax;
+                if (disposeMethod.TryGetLeadingRegion(out var regionTrivia))
+                {
+                    var relatedDirectives = regionTrivia.GetRelatedDirectives();
+
+                    if (relatedDirectives.Count == 2)
+                    {
+                        var endRegionTrivia = relatedDirectives[1].ParentTrivia;
+                        var parent = endRegionTrivia.Token.Parent;
+
+                        if (parent != null)
+                        {
+                            var triviaToRemove = GetTriviaToRemove(endRegionTrivia);
+
+                            // add an additional trivia here because the "#endregion" should be followed by an empty line
+                            var triviaToAdd = GetTriviaToAdd(triviaToRemove, SyntaxFactory.EndOfLine(string.Empty));
+
+                            if (typeSyntax.IsEquivalentTo(parent))
+                            {
+                                // seems like "#endregion" was at the very end of the type, so remove it
+                                var syntax = typeSyntax.Without(triviaToRemove);
+
+                                // and add "#endregion" to the trailing of the dispose method
+                                disposeMethod = syntax.GetAnnotatedNodes(DisposeAnnotationKind).First();
+
+                                return syntax.ReplaceNode(disposeMethod, disposeMethod.WithAdditionalTrailingTrivia(triviaToAdd));
+                            }
+
+                            return typeSyntax.ReplaceNodes(
+                                                       new[] { parent, disposeMethod },
+                                                       (original, rewritten) =>
+                                                                               {
+                                                                                   if (rewritten.IsEquivalentTo(parent))
+                                                                                   {
+                                                                                       return rewritten.Without(triviaToRemove);
+                                                                                   }
+
+                                                                                   if (rewritten.IsEquivalentTo(disposeMethod))
+                                                                                   {
+                                                                                       return rewritten.WithAdditionalTrailingTrivia(triviaToAdd);
+                                                                                   }
+
+                                                                                   return null;
+                                                                               });
+                        }
+                    }
+                }
             }
 
-            var disposeMethod = typeSyntax.GetAnnotatedNodes(annotation).First();
-
-            if (disposeMethod.TryGetLeadingRegion(out var regionTrivia))
+            // seems like other methods or stuff are inside the "#region", so we do not move the "#endregion" around, but maybe the "#region"
+            if (disposeMethod.NextSibling() is MethodDeclarationSyntax method)
             {
-                var relatedDirectives = regionTrivia.GetRelatedDirectives();
-
-                if (relatedDirectives.Count == 2)
+                if (method.TryGetLeadingRegion(out var regionDirective))
                 {
-                    var endRegionTrivia = relatedDirectives[1].ParentTrivia;
-                    var parent = endRegionTrivia.Token.Parent;
+                    var triviaToRemove = GetTriviaToRemove(regionDirective.ParentTrivia);
 
-                    if (parent != null)
-                    {
-                        var triviaToRemove = GetTriviaToRemove(endRegionTrivia);
-                        var triviaToAdd = GetTriviaToAdd(triviaToRemove);
+                    // add an additional line break here because the "#region" should be followed by an empty line
+                    var triviaToAdd = GetTriviaToAdd(triviaToRemove, SyntaxFactory.CarriageReturnLineFeed);
 
-                        if (typeSyntax.IsEquivalentTo(parent))
-                        {
-                            // seems like "#endregion" was at the very end of the type, so remove it
-                            var syntax = typeSyntax.Without(triviaToRemove);
-
-                            // and add "#endregion" to the trailing of the dispose method
-                            disposeMethod = syntax.GetAnnotatedNodes(annotation).First();
-
-                            return syntax.ReplaceNode(disposeMethod, disposeMethod.WithAdditionalTrailingTrivia(triviaToAdd));
-                        }
-
-                        return typeSyntax.ReplaceNodes(
-                                                   new[] { parent, disposeMethod },
-                                                   (original, rewritten) =>
+                    return typeSyntax.ReplaceNodes(
+                                               new[] { method, disposeMethod },
+                                               (original, rewritten) =>
+                                                                       {
+                                                                           if (rewritten.IsEquivalentTo(method))
                                                                            {
-                                                                               if (rewritten.IsEquivalentTo(parent))
-                                                                               {
-                                                                                   return rewritten.Without(triviaToRemove);
-                                                                               }
+                                                                               return rewritten.Without(triviaToRemove);
+                                                                           }
 
-                                                                               if (rewritten.IsEquivalentTo(disposeMethod))
-                                                                               {
-                                                                                   return rewritten.WithAdditionalTrailingTrivia(triviaToAdd);
-                                                                               }
+                                                                           if (rewritten.IsEquivalentTo(disposeMethod))
+                                                                           {
+                                                                               return rewritten.WithFirstLeadingTrivia(triviaToAdd);
+                                                                           }
 
-                                                                               return null;
-                                                                           });
-                    }
+                                                                           return null;
+                                                                       });
                 }
             }
 
@@ -144,13 +179,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return result;
         }
 
-        private static SyntaxTrivia[] GetTriviaToAdd(SyntaxTrivia[] trivia)
+        private static SyntaxTrivia[] GetTriviaToAdd(SyntaxTrivia[] triviaToRemove, SyntaxTrivia additionalTrivia)
         {
-            var result = new SyntaxTrivia[trivia.Length + 1];
-            trivia.CopyTo(result, 0);
+            var result = new SyntaxTrivia[triviaToRemove.Length + 1];
+            result[triviaToRemove.Length] = additionalTrivia;
 
-            // add an additional empty line here because the "#endregion" should be followed by an empty line
-            result[trivia.Length] = SyntaxFactory.EndOfLine(string.Empty);
+            triviaToRemove.CopyTo(result, 0);
 
             return result;
         }

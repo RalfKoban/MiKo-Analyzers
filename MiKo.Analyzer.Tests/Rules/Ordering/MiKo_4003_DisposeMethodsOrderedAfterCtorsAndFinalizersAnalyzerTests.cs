@@ -211,7 +211,7 @@ public class TestMe : IDisposable
 ");
 
         [Test]
-        public void Code_gets_fixed_for_interface_implementation_and_ctor_and_finalizer()
+        public void Code_gets_fixed_for_method_with_interface_implementation_and_ctor_and_finalizer()
         {
             const string OriginalCode = @"
 using System;
@@ -247,7 +247,7 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_ctor_and_finalizer()
+        public void Code_gets_fixed_for_method_with_ctor_and_finalizer()
         {
             const string OriginalCode = @"
 using System;
@@ -283,7 +283,7 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_ctor_only()
+        public void Code_gets_fixed_for_method_with_ctor_only()
         {
             const string OriginalCode = @"
 using System;
@@ -315,7 +315,7 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_finalizer_only()
+        public void Code_gets_fixed_for_method_with_finalizer_only()
         {
             const string OriginalCode = @"
 using System;
@@ -347,7 +347,7 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_no_ctor_or_finalizer()
+        public void Code_gets_fixed_for_method_with_no_ctor_or_finalizer()
         {
             const string OriginalCode = @"
 using System;
@@ -367,46 +367,6 @@ public class TestMe : IDisposable
 {
     public void Dispose() { }
 
-    public void DoSomething() { }
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_commented_method_with_no_ctor_or_finalizer()
-        {
-            const string OriginalCode = @"
-using System;
-
-public class TestMe : IDisposable
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    public void DoSomething() { }
-
-    /// <summary>
-    /// Some dispose comment.
-    /// </summary>
-    public void Dispose() { }
-}
-";
-
-            const string FixedCode = @"
-using System;
-
-public class TestMe : IDisposable
-{
-    /// <summary>
-    /// Some dispose comment.
-    /// </summary>
-    public void Dispose() { }
-
-    /// <summary>
-    /// Does something.
-    /// </summary>
     public void DoSomething() { }
 }
 ";
@@ -488,6 +448,98 @@ public class TestMe : IDisposable
     #endregion
 
     public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_with_no_ctor_or_finalizer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_public_region_with_finalizer_only()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    #region Public methods
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    #region Public methods
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    #endregion
 }
 ";
 
