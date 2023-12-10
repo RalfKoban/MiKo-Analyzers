@@ -455,7 +455,7 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_method_inside_region_with_finalizer_only()
+        public void Code_gets_fixed_for_method_inside_own_region_with_finalizer_only()
         {
             const string OriginalCode = @"
 using System;
@@ -495,7 +495,65 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_commented_method_inside_region_with_no_ctor_or_finalizer()
+        public void Code_gets_fixed_for_commented_method_inside_public_region_with_no_ctor_or_finalizer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Public methods
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() => DoSomethingCore();
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// Does something internally.
+    /// </summary>
+    private void DoSomethingCore() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Public methods
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() => DoSomethingCore();
+
+    #endregion
+
+    /// <summary>
+    /// Does something internally.
+    /// </summary>
+    private void DoSomethingCore() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_own_region_with_no_ctor_or_finalizer()
         {
             const string OriginalCode = @"
 using System;
@@ -553,7 +611,65 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_commented_method_inside_region_with_no_ctor_or_finalizer_but_field_as_last()
+        public void Code_gets_fixed_for_commented_method_inside_public_region_with_no_ctor_or_finalizer_but_field_as_last()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Public methods
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// My field.
+    /// </summary>
+    private int m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Public methods
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    #endregion
+
+    /// <summary>
+    /// My field.
+    /// </summary>
+    private int m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_own_region_with_no_ctor_or_finalizer_but_field_as_last()
         {
             const string OriginalCode = @"
 using System;
@@ -611,7 +727,55 @@ public class TestMe : IDisposable
         }
 
         [Test]
-        public void Code_gets_fixed_for_commented_method_inside_region_with_no_other_member()
+        public void Code_gets_fixed_for_commented_method_inside_public_region_with_no_other_member()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Public methods
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Public methods
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_own_region_with_no_other_member()
         {
             const string OriginalCode = @"
 using System;
