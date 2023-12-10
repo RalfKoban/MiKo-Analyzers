@@ -2170,18 +2170,54 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool TryGetLeadingRegion(this SyntaxNode source, out DirectiveTriviaSyntax result)
+        {
+            var leadingTrivia = source.GetLeadingTrivia();
+
+            var count = leadingTrivia.Count;
+
+            if (count > 0)
+            {
+                for (var index = 0; index < count; index++)
+                {
+                    var t = leadingTrivia[index];
+
+                    if (t.IsKind(SyntaxKind.RegionDirectiveTrivia))
+                    {
+                        result = t.GetStructure() as DirectiveTriviaSyntax;
+
+                        return true;
+                    }
+                }
+            }
+
+            result = null;
+
+            return false;
+        }
+
         internal static string ToCleanedUpString(this ExpressionSyntax source) => source?.ToString().Without(Constants.WhiteSpaces);
 
         internal static T WithAnnotation<T>(this T value, SyntaxAnnotation annotation) where T : SyntaxNode => value.WithAdditionalAnnotations(annotation);
 
         internal static T WithAdditionalLeadingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
         {
-            return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
+            return value.WithAdditionalLeadingTrivia(trivia.ToArray());
         }
 
         internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
         {
             return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
+        }
+
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
+        {
+            return value.WithAdditionalTrailingTrivia(trivia.ToArray());
+        }
+
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
+        {
+            return value.WithTrailingTrivia(value.GetTrailingTrivia().AddRange(trivia));
         }
 
         internal static T WithAttribute<T>(this T value, XmlAttributeSyntax attribute) where T : XmlNodeSyntax
@@ -2218,7 +2254,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithFirstLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
+        internal static T WithFirstLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
         {
             // Attention: leading trivia contains XML comments, so we have to keep them!
             var leadingTrivia = value.GetLeadingTrivia();
@@ -2231,7 +2267,7 @@ namespace MiKoSolutions.Analyzers
                     leadingTrivia = leadingTrivia.RemoveAt(0);
                 }
 
-                return value.WithLeadingTrivia(leadingTrivia.Insert(0, trivia));
+                return value.WithLeadingTrivia(leadingTrivia.InsertRange(0, trivia));
             }
 
             return value.WithLeadingTrivia(trivia);
@@ -2388,6 +2424,8 @@ namespace MiKoSolutions.Analyzers
         internal static T Without<T>(this T value, IEnumerable<SyntaxNode> nodes) where T : SyntaxNode => value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
 
         internal static T Without<T>(this T value, params SyntaxNode[] nodes) where T : SyntaxNode => value.Without((IEnumerable<SyntaxNode>)nodes);
+
+        internal static T Without<T>(this T value, IEnumerable<SyntaxTrivia> trivia) where T : SyntaxNode => value.ReplaceTrivia(trivia, (original, rewritten) => default);
 
         internal static SyntaxList<XmlNodeSyntax> WithoutFirstXmlNewLine(this SyntaxList<XmlNodeSyntax> values)
         {

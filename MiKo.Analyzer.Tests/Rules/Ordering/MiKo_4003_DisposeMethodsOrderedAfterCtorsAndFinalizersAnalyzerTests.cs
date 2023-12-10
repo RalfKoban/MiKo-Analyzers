@@ -414,6 +414,210 @@ public class TestMe : IDisposable
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_method_inside_region_with_finalizer_only()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    public void DoSomething() { }
+
+    #region Disposal
+
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    ~TestMe() { }
+
+    #region Disposal
+
+    public void Dispose() { }
+
+    #endregion
+
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_region_with_no_ctor_or_finalizer()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() => DoSomethingCore();
+
+    #region Disposal
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// Does something internally.
+    /// </summary>
+    private void DoSomethingCore() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Disposal
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() => DoSomethingCore();
+
+    /// <summary>
+    /// Does something internally.
+    /// </summary>
+    private void DoSomethingCore() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_region_with_no_ctor_or_finalizer_but_field_as_last()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    #region Disposal
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// My field.
+    /// </summary>
+    private int m_field;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Disposal
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    /// <summary>
+    /// My field.
+    /// </summary>
+    private int m_field;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_method_inside_region_with_no_other_member()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+
+    #region Disposal
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Disposal
+
+    /// <summary>
+    /// Some dispose comment.
+    /// </summary>
+    public void Dispose() { }
+
+    #endregion
+
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         //// TODO RKN: partial parts
 
         protected override string GetDiagnosticId() => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;
