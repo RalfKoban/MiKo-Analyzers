@@ -1234,7 +1234,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool IsSingleNodeInsideRegion(this SyntaxNode value)
+        internal static bool IsOnlyNodeInsideRegion(this SyntaxNode value)
         {
             if (value.TryGetLeadingRegion(out var regionTrivia))
             {

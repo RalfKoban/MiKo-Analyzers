@@ -48,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var disposeMethod = typeSyntax.GetAnnotatedNodes(DisposeAnnotationKind).First();
 
-            if (originalDisposeMethod.IsSingleNodeInsideRegion())
+            if (originalDisposeMethod.IsOnlyNodeInsideRegion())
             {
                 if (disposeMethod.TryGetLeadingRegion(out var regionTrivia))
                 {
