@@ -1236,7 +1236,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsOnlyNodeInsideRegion(this SyntaxNode value)
         {
-            if (value.TryGetLeadingRegion(out var regionTrivia))
+            if (value.TryGetRegionDirective(out var regionTrivia))
             {
                 var relatedDirectives = regionTrivia.GetRelatedDirectives();
 
@@ -2201,7 +2201,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool TryGetLeadingRegion(this SyntaxNode source, out DirectiveTriviaSyntax result)
+        internal static bool TryGetRegionDirective(this SyntaxNode source, out DirectiveTriviaSyntax result)
         {
             if (source.HasStructuredTrivia)
             {
