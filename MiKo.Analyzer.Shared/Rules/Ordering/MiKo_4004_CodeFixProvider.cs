@@ -8,9 +8,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4004_CodeFixProvider)), Shared]
-    public sealed class MiKo_4004_CodeFixProvider : OrderingCodeFixProvider
+    public sealed class MiKo_4004_CodeFixProvider : DisposeOrderingCodeFixProvider
     {
-        private const string DisposeAnnotationKind = "dispose method";
         private const string TargetAnnotationKind = "target method";
 
         public override string FixableDiagnosticId => MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer.Id;
@@ -28,11 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
-            return MoveDisposeMethod(document, typeSyntax, syntax);
-        }
-
-        private static SyntaxNode MoveDisposeMethod(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax)
-        {
             var disposeMethod = (MethodDeclarationSyntax)syntax;
             var targetMethod = FindTargetMethod(document, typeSyntax, disposeMethod);
 
@@ -42,19 +36,19 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var modifiedType = typeSyntax.ReplaceNodes(
                                                    new[] { targetMethod, disposeMethod },
                                                    (original, rewritten) =>
-                                                                           {
-                                                                               if (rewritten.IsEquivalentTo(targetMethod))
-                                                                               {
-                                                                                   return targetMethod.WithAnnotation(targetAnnotation);
-                                                                               }
+                                                       {
+                                                           if (rewritten.IsEquivalentTo(targetMethod))
+                                                           {
+                                                               return targetMethod.WithAnnotation(targetAnnotation);
+                                                           }
 
-                                                                               if (rewritten.IsEquivalentTo(disposeMethod))
-                                                                               {
-                                                                                   return disposeMethod.WithAnnotation(disposeAnnotation);
-                                                                               }
+                                                           if (rewritten.IsEquivalentTo(disposeMethod))
+                                                           {
+                                                               return disposeMethod.WithAnnotation(disposeAnnotation);
+                                                           }
 
-                                                                               return original;
-                                                                           });
+                                                           return original;
+                                                       });
 
             // remove dispose method from modified type to place it at correct location
             var annotatedDisposeMethod = modifiedType.GetAnnotatedNodes(disposeAnnotation).OfType<MethodDeclarationSyntax>().First();
@@ -63,7 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             // find target method to insert dispose method before that
             var annotatedTargetMethod = modifiedType.GetAnnotatedNodes(targetAnnotation).OfType<MethodDeclarationSyntax>().First();
 
-            return modifiedType.InsertNodeBefore(annotatedTargetMethod, disposeMethod);
+            return MoveRegionsWithDisposeAnnotation(modifiedType.InsertNodeBefore(annotatedTargetMethod, annotatedDisposeMethod), disposeMethod);
         }
 
         private static MethodDeclarationSyntax FindTargetMethod(Document document, BaseTypeDeclarationSyntax typeSyntax, MethodDeclarationSyntax disposeMethod)

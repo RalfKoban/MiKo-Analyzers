@@ -651,6 +651,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingLocalVariableCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\NamingNamespaceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\ParameterNamingCodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\DisposeOrderingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4001_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4002_CodeFixProvider.cs" />
