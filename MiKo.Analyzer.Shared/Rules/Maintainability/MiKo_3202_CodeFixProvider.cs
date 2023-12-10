@@ -78,9 +78,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                     : syntax.Statement;
 
                     // we found a follow up, so we fix the block first and then the document
-                    var newBlock = block.ReplaceNodes(new[] { syntax, other }, (original, rewritten) => rewritten.IsKind(SyntaxKind.IfStatement)
-                                                                                                        ? newIf.WithStatement(SyntaxFactory.Block(other.WithoutLeadingEndOfLine()))
-                                                                                                        : statement.WithAdditionalLeadingSpaces(Constants.Indentation * -1).WithLeadingEmptyLine());
+                    var newBlock = block.ReplaceNodes(new[] { syntax, other }, (_, rewritten) => rewritten.IsKind(SyntaxKind.IfStatement)
+                                                                                                 ? newIf.WithStatement(SyntaxFactory.Block(other.WithoutLeadingEndOfLine()))
+                                                                                                 : statement.WithAdditionalLeadingSpaces(Constants.Indentation * -1).WithLeadingEmptyLine());
 
                     return root.ReplaceNode(block, newBlock);
                 }
