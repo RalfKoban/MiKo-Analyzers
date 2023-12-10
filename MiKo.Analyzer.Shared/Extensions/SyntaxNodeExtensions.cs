@@ -1234,6 +1234,37 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsSingleNodeInsideRegion(this SyntaxNode value)
+        {
+            if (value.TryGetLeadingRegion(out var regionTrivia))
+            {
+                var relatedDirectives = regionTrivia.GetRelatedDirectives();
+
+                if (relatedDirectives.Count == 2)
+                {
+                    var endRegionTrivia = relatedDirectives[1];
+
+                    var otherSyntaxNode = endRegionTrivia.ParentTrivia.Token.Parent;
+
+                    if (otherSyntaxNode != null)
+                    {
+                        if (otherSyntaxNode.IsEquivalentTo(value.NextSibling()))
+                        {
+                            return true;
+                        }
+
+                        if (otherSyntaxNode.IsEquivalentTo(value.Parent))
+                        {
+                            // seems like same type
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax value)
         {
             if (value.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)

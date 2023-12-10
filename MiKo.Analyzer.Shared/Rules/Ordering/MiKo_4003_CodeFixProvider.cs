@@ -1,5 +1,4 @@
-﻿using System;
-using System.Composition;
+﻿using System.Composition;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -49,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var disposeMethod = typeSyntax.GetAnnotatedNodes(DisposeAnnotationKind).First();
 
-            if (IsSingleNodeInsideRegion(originalDisposeMethod))
+            if (originalDisposeMethod.IsSingleNodeInsideRegion())
             {
                 if (disposeMethod.TryGetLeadingRegion(out var regionTrivia))
                 {
@@ -129,37 +128,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             }
 
             return typeSyntax;
-        }
-
-        private static bool IsSingleNodeInsideRegion(SyntaxNode node)
-        {
-            if (node.TryGetLeadingRegion(out var regionTrivia))
-            {
-                var relatedDirectives = regionTrivia.GetRelatedDirectives();
-
-                if (relatedDirectives.Count == 2)
-                {
-                    var endRegionTrivia = relatedDirectives[1];
-
-                    var otherSyntaxNode = endRegionTrivia.ParentTrivia.Token.Parent;
-
-                    if (otherSyntaxNode != null)
-                    {
-                        if (otherSyntaxNode.IsEquivalentTo(node.NextSibling()))
-                        {
-                            return true;
-                        }
-
-                        if (otherSyntaxNode.IsEquivalentTo(node.Parent))
-                        {
-                            // seems like same type
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
         }
 
         private static SyntaxNode FindLastCtorOrFinalizer(SyntaxNode modifiedType)
