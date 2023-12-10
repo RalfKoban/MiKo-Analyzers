@@ -2172,21 +2172,24 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool TryGetLeadingRegion(this SyntaxNode source, out DirectiveTriviaSyntax result)
         {
-            var leadingTrivia = source.GetLeadingTrivia();
-
-            var count = leadingTrivia.Count;
-
-            if (count > 0)
+            if (source.HasStructuredTrivia)
             {
-                for (var index = 0; index < count; index++)
+                var leadingTrivia = source.GetLeadingTrivia();
+
+                var count = leadingTrivia.Count;
+
+                if (count > 0)
                 {
-                    var t = leadingTrivia[index];
-
-                    if (t.IsKind(SyntaxKind.RegionDirectiveTrivia))
+                    for (var index = 0; index < count; index++)
                     {
-                        result = t.GetStructure() as DirectiveTriviaSyntax;
+                        var t = leadingTrivia[index];
 
-                        return true;
+                        if (t.IsKind(SyntaxKind.RegionDirectiveTrivia))
+                        {
+                            result = t.GetStructure() as DirectiveTriviaSyntax;
+
+                            return true;
+                        }
                     }
                 }
             }
