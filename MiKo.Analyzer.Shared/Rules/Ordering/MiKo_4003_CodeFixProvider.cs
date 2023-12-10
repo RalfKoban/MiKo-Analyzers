@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4003_CodeFixProvider)), Shared]
-    public sealed class MiKo_4003_CodeFixProvider : OrderingCodeFixProvider
+    public sealed class MiKo_4003_CodeFixProvider : DisposeOrderingCodeFixProvider
     {
         public override string FixableDiagnosticId => MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer.Id;
 
@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var disposeMethod = (MethodDeclarationSyntax)syntax;
+
+            var annotation = new SyntaxAnnotation(DisposeAnnotationKind);
 
             // remove method so that it can be added again
             var modifiedType = typeSyntax.RemoveNodeAndAdjustOpenCloseBraces(disposeMethod);
@@ -27,19 +29,22 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 // none found, so insert method before first method
                 var method = modifiedType.FirstChild<MethodDeclarationSyntax>();
 
-                return modifiedType.InsertNodeBefore(method, disposeMethod);
+                modifiedType = MoveRegionsWithDisposeAnnotation(modifiedType.InsertNodeBefore(method, disposeMethod.WithAnnotation(annotation)), disposeMethod);
+            }
+            else
+            {
+                // insert method after found ctor or finalizer
+                modifiedType = MoveRegionsWithDisposeAnnotation(modifiedType.InsertNodeAfter(syntaxNode, disposeMethod.WithAnnotation(annotation)), disposeMethod);
             }
 
-            // insert method after found ctor or finalizer
-            return modifiedType.InsertNodeAfter(syntaxNode, disposeMethod);
+            return modifiedType.WithoutAnnotations(annotation);
         }
 
         private static SyntaxNode FindLastCtorOrFinalizer(SyntaxNode modifiedType)
         {
-            SyntaxNode ctor = modifiedType.LastChild<ConstructorDeclarationSyntax>();
             SyntaxNode finalizer = modifiedType.LastChild<DestructorDeclarationSyntax>();
 
-            return finalizer ?? ctor;
+            return finalizer ?? modifiedType.LastChild<ConstructorDeclarationSyntax>();
         }
     }
 }

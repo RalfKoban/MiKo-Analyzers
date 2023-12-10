@@ -128,5 +128,57 @@ namespace MiKoSolutions.Analyzers
         {
             return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
         }
+
+        internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count)
+        {
+            if (count > 0)
+            {
+                var parent = value.Token;
+
+                var leadingTrivia = parent.LeadingTrivia;
+                var nextLeadingIndex = leadingTrivia.IndexOf(value) + 1;
+
+                if (nextLeadingIndex > 0)
+                {
+                    return leadingTrivia.Skip(nextLeadingIndex).Take(count);
+                }
+
+                var trailingTrivia = parent.TrailingTrivia;
+                var nextTrailingIndex = trailingTrivia.IndexOf(value) + 1;
+
+                if (nextTrailingIndex > 0)
+                {
+                    return trailingTrivia.Skip(nextTrailingIndex).Take(count);
+                }
+            }
+
+            return Enumerable.Empty<SyntaxTrivia>();
+        }
+
+        internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count)
+        {
+            if (count > 0)
+            {
+                var parent = value.Token;
+
+                var leadingTrivia = parent.LeadingTrivia;
+                var index = leadingTrivia.IndexOf(value);
+
+                if (index >= 0)
+                {
+                    return leadingTrivia.Take(index).Reverse().Take(count).Reverse();
+                }
+
+                var trailingTrivia = parent.TrailingTrivia;
+                index = trailingTrivia.IndexOf(value);
+
+                if (index >= 0)
+                {
+                    return trailingTrivia.Take(index).Reverse().Take(count).Reverse();
+                }
+            }
+
+            return Enumerable.Empty<SyntaxTrivia>();
+        }
     }
 }

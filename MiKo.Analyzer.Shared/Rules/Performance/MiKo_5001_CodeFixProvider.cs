@@ -272,7 +272,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                                                                                if (nodesToRemove.Contains(original))
                                                                                {
                                                                                    // annotate it so that we can find it again as left-over when it comes to deleting it
-                                                                                   return original.WithAnnotation(new SyntaxAnnotation(DeleteAnnotation));
+                                                                                   return rewritten.WithAnnotation(new SyntaxAnnotation(DeleteAnnotation));
                                                                                }
 
                                                                                if (nodesToReplace.TryGetValue(original, out var replacement))

@@ -18,30 +18,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var updatedSyntax = syntax.ReplaceNodes(
                                                 syntax.GetExceptionXmls(),
-                                                (original, rewritten) =>
-                                                                        {
-                                                                            if (original.IsExceptionCommentFor<ArgumentNullException>())
-                                                                            {
-                                                                                return GetFixedExceptionCommentForArgumentNullException(original);
-                                                                            }
+                                                (_, rewritten) =>
+                                                                 {
+                                                                     if (rewritten.IsExceptionCommentFor<ArgumentNullException>())
+                                                                     {
+                                                                         return GetFixedExceptionCommentForArgumentNullException(rewritten);
+                                                                     }
 
-                                                                            if (original.IsExceptionCommentFor<ObjectDisposedException>())
-                                                                            {
-                                                                                return original.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
-                                                                            }
+                                                                     if (rewritten.IsExceptionCommentFor<ObjectDisposedException>())
+                                                                     {
+                                                                         return rewritten.WithContent(XmlText(Constants.Comments.ObjectDisposedExceptionPhrase).WithLeadingXmlComment().WithTrailingXmlComment());
+                                                                     }
 
-                                                                            if (original.IsExceptionCommentFor<ArgumentOutOfRangeException>())
-                                                                            {
-                                                                                return GetFixedExceptionCommentForArgumentOutOfRangeException(original);
-                                                                            }
+                                                                     if (rewritten.IsExceptionCommentFor<ArgumentOutOfRangeException>())
+                                                                     {
+                                                                         return GetFixedExceptionCommentForArgumentOutOfRangeException(rewritten);
+                                                                     }
 
-                                                                            if (original.IsExceptionCommentFor<ArgumentException>())
-                                                                            {
-                                                                                return GetFixedExceptionCommentForArgumentException(original);
-                                                                            }
+                                                                     if (rewritten.IsExceptionCommentFor<ArgumentException>())
+                                                                     {
+                                                                         return GetFixedExceptionCommentForArgumentException(rewritten);
+                                                                     }
 
-                                                                            return GetFixedStartingPhrase(original);
-                                                                        });
+                                                                     return GetFixedStartingPhrase(rewritten);
+                                                                 });
 
             return updatedSyntax;
         }
