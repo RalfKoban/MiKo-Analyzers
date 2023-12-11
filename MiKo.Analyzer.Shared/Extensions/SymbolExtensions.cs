@@ -1404,6 +1404,6 @@ namespace MiKoSolutions.Analyzers
             return typeName;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
     }
 }

@@ -83,12 +83,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                "do nothing",
                                                                "ignore this",
                                                                "ignore",
+                                                               "initializers are allowed",
                                                                "intentionally left empty",
+                                                               "it is a mock",
+                                                               "it is just a mock",
+                                                               "it is only a mock",
+                                                               "it's a mock",
+                                                               "just a mock",
+                                                               "just mocked",
                                                                "No-Op",
                                                                "not needed",
+                                                               "nothing to do here",
                                                                "nothing to do",
                                                                "special handling",
-                                                               "initializers are allowed",
                                                            };
 
         [Test]
