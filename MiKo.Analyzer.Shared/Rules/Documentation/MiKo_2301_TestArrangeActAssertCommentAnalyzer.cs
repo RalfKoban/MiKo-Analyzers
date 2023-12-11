@@ -36,7 +36,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static bool CommentContainsArrangeActAssert(ReadOnlySpan<char> comment) => comment.StartsWithAny(Phrases, StringComparison.OrdinalIgnoreCase);
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        {
+            if (symbol == null)
+            {
+                // seems like fields or so, ignore those
+                return false;
+            }
+
+            return symbol.IsTestMethod() || symbol.ContainingType.IsTestClass();
+        }
 
         protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentContainsArrangeActAssert(comment);
     }
