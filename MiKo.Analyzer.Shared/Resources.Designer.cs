@@ -4617,7 +4617,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2004_MessageFormat {
             get {
@@ -4861,7 +4861,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Documentation to: &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Change documentation to: &apos;{1}&apos;.
         /// </summary>
         public static string MiKo_2014_MessageFormat {
             get {
@@ -8815,7 +8815,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set &apos;paramName&apos; parameter to {1}.
+        ///   Looks up a localized string similar to Change &apos;paramName&apos; parameter to {1}.
         /// </summary>
         public static string MiKo_3011_MessageFormat {
             get {

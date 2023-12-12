@@ -6,6 +6,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
@@ -261,7 +263,7 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
+        [Test, RequiresCapability("SSD")]
         public void Code_gets_fixed_for_non_constant_boolean_field_([ValueSource(nameof(WrongBooleanPhrases))] string originalComment)
         {
             const string Template = @"
