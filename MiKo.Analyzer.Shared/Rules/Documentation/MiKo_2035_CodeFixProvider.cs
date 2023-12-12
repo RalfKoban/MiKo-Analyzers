@@ -14,43 +14,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2035_CodeFixProvider)), Shared]
     public sealed class MiKo_2035_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        private static readonly string[] ReplacementMapKeys = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
-                                                                                                                    {
-                                                                                                                        "A list of ",
-                                                                                                                        "A list with ",
-                                                                                                                        "A readonly collection of ",
-                                                                                                                        "A read-only collection of ",
-                                                                                                                        "A readonly collection with ",
-                                                                                                                        "A read-only collection with ",
-                                                                                                                        "A task that can be used to await.",
-                                                                                                                        "A task that can be used to await",
-                                                                                                                        "A task to await.",
-                                                                                                                        "A task to await",
-                                                                                                                        "An awaitable task.",
-                                                                                                                        "An awaitable task",
-                                                                                                                        "An enumerable of ",
-                                                                                                                        "An enumerable with ",
-                                                                                                                        "Collection of ",
-                                                                                                                        "Collection with ",
-                                                                                                                        "List of ",
-                                                                                                                        "List with ",
-                                                                                                                        "Readonly collection of ",
-                                                                                                                        "Read-only collection of ",
-                                                                                                                        "Readonly collection with ",
-                                                                                                                        "Read-only collection with ",
-                                                                                                                        "The array of ",
-                                                                                                                        "The array with ",
-                                                                                                                        "The collection of ",
-                                                                                                                        "The collection with ",
-                                                                                                                        "The enumerable of ",
-                                                                                                                        "The enumerable with ",
-                                                                                                                        "The list of ",
-                                                                                                                        "The list with ",
-                                                                                                                        "The readonly collection of ",
-                                                                                                                        "The read-only collection of ",
-                                                                                                                        "The readonly collection with ",
-                                                                                                                        "The read-only collection with ",
-                                                                                                                    }).ToArray();
+        private static readonly string[] Phrases = CreatePhrases().ToHashSet(_ => _ + " ").ToArray();
+
+        private static readonly string[] TaskPhrases =
+                                                       {
+                                                           "A task that can be used to await.",
+                                                           "A task that can be used to await",
+                                                           "A task to await.",
+                                                           "A task to await",
+                                                           "An awaitable task.",
+                                                           "An awaitable task",
+                                                       };
+
+        private static readonly string[] ReplacementMapKeys = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(TaskPhrases).Concat(Phrases).ToArray();
 
         private static readonly Dictionary<string, string> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
                                                                                               .ThenBy(_ => _)
@@ -189,5 +165,50 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return preparedComment;
         }
+
+//// ncrunch: collect values off
+        private static IEnumerable<string> CreatePhrases()
+        {
+            var startingWords = new[] { "a", "an", "the" };
+            var modifications = new[] { "readonly", "read-only", "read only" };
+            var collections = new[] { "array", "list", "dictionary", "enumerable", "hash set", "hash table", "hashed set", "hashed table", "hashing set", "hashing table", "hashset", "hashSet", "hashtable", "hashTable", "map", "queue", "stack" };
+            var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
+
+            foreach (var collection in collections)
+            {
+                foreach (var preposition in prepositions)
+                {
+                    var phrase = string.Concat(collection, " ", preposition);
+
+                    yield return phrase;
+                    yield return phrase.ToUpperCaseAt(0);
+
+                    foreach (var modification in modifications)
+                    {
+                        var modificationPhrase = string.Concat(modification, " ", phrase);
+
+                        yield return modificationPhrase;
+                        yield return modificationPhrase.ToUpperCaseAt(0);
+
+                        foreach (var startingWord in startingWords)
+                        {
+                            var shortStartingPhrase = string.Concat(startingWord, " ", collection);
+                            var startingPhrase = string.Concat(startingWord, " ", phrase);
+                            var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
+
+                            yield return shortStartingPhrase;
+                            yield return shortStartingPhrase.ToUpperCaseAt(0);
+
+                            yield return startingPhrase;
+                            yield return startingPhrase.ToUpperCaseAt(0);
+
+                            yield return modifiedStartingPhrase;
+                            yield return modifiedStartingPhrase.ToUpperCaseAt(0);
+                        }
+                    }
+                }
+            }
+        }
+//// ncrunch: collect values default
     }
 }
