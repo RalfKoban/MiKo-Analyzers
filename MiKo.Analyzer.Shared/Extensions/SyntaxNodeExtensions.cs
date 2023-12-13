@@ -1887,6 +1887,8 @@ namespace MiKoSolutions.Analyzers
             return results;
         }
 
+        internal static T RemoveTrivia<T>(this T node, SyntaxTrivia trivia) where T : SyntaxNode => node.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
+
         internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, SyntaxNode node)
         {
             // to avoid line-ends before the first node, we simply create a new open brace without the problematic trivia
@@ -2201,9 +2203,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool TryGetRegionDirective(this SyntaxNode source, out DirectiveTriviaSyntax result)
+        internal static bool HasRegionDirective(this SyntaxNode value) => value != null && value.HasStructuredTrivia && value.GetLeadingTrivia().Any(SyntaxKind.RegionDirectiveTrivia);
+
+        internal static bool TryGetRegionDirective(this SyntaxNode source, out DirectiveTriviaSyntax regionDirective)
         {
-            if (source.HasStructuredTrivia)
+            if (source != null && source.HasStructuredTrivia)
             {
                 var leadingTrivia = source.GetLeadingTrivia();
 
@@ -2217,7 +2221,7 @@ namespace MiKoSolutions.Analyzers
 
                         if (t.IsKind(SyntaxKind.RegionDirectiveTrivia))
                         {
-                            result = t.GetStructure() as DirectiveTriviaSyntax;
+                            regionDirective = t.GetStructure() as DirectiveTriviaSyntax;
 
                             return true;
                         }
@@ -2225,7 +2229,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            result = null;
+            regionDirective = null;
 
             return false;
         }
