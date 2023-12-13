@@ -308,7 +308,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
         /// </summary>
         public static string MiKo_1001_HelpLinkUri {
             get {
@@ -344,7 +344,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
+        ///   Looks up a localized string similar to To follow the .NET Framework Design Guidelines, parameters of event handlers should be named &apos;sender&apos; and &apos;e&apos;..
         /// </summary>
         public static string MiKo_1002_Description {
             get {
@@ -353,7 +353,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
         /// </summary>
         public static string MiKo_1002_HelpLinkUri {
             get {
@@ -371,7 +371,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should be named according the .NET Framework Guidelines for event handlers.
+        ///   Looks up a localized string similar to Parameters should be named according the .NET Framework Design Guidelines for event handlers.
         /// </summary>
         public static string MiKo_1002_Title {
             get {
@@ -398,7 +398,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/event-pattern.
         /// </summary>
         public static string MiKo_1003_HelpLinkUri {
             get {
@@ -416,7 +416,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Event handling method names should follow the .NET Framework Best Practices.
+        ///   Looks up a localized string similar to Event handling method names should follow the .NET Framework Design Guidelines.
         /// </summary>
         public static string MiKo_1003_Title {
             get {
@@ -561,7 +561,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named &apos;d&apos; and &apos;e&apos;..
+        ///   Looks up a localized string similar to To follow the .NET Framework Design Guidelines, parameters of DependencyProperty event handlers should be named &apos;d&apos; and &apos;e&apos;..
         /// </summary>
         public static string MiKo_1008_Description {
             get {
@@ -579,7 +579,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers.
+        ///   Looks up a localized string similar to Parameters should be named according the .NET Framework Design Guidelines for DependencyProperty event handlers.
         /// </summary>
         public static string MiKo_1008_Title {
             get {
@@ -1805,7 +1805,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
         /// </summary>
         public static string MiKo_1046_HelpLinkUri {
             get {
@@ -1850,7 +1850,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap.
         /// </summary>
         public static string MiKo_1047_HelpLinkUri {
             get {
@@ -2149,7 +2149,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
         /// </summary>
         public static string MiKo_1055_HelpLinkUri {
             get {
@@ -2185,7 +2185,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
         /// </summary>
         public static string MiKo_1056_HelpLinkUri {
             get {
@@ -2230,7 +2230,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
         /// </summary>
         public static string MiKo_1057_HelpLinkUri {
             get {
@@ -2266,7 +2266,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
         /// </summary>
         public static string MiKo_1058_HelpLinkUri {
             get {
@@ -2506,7 +2506,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters.
         /// </summary>
         public static string MiKo_1065_HelpLinkUri {
             get {
@@ -2524,7 +2524,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operator parameters should be named according the .NET Framework Guidelines for operator overloads.
+        ///   Looks up a localized string similar to Operator parameters should be named according the .NET Framework Design Guidelines for operator overloads.
         /// </summary>
         public static string MiKo_1065_Title {
             get {
@@ -4181,7 +4181,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces.
         /// </summary>
         public static string MiKo_1400_HelpLinkUri {
             get {
@@ -4626,7 +4626,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers.
+        ///   Looks up a localized string similar to Documentation of event handler parameter names should follow .NET Framework Design Guidelines for event handlers.
         /// </summary>
         public static string MiKo_2004_Title {
             get {
@@ -5816,7 +5816,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments.
         /// </summary>
         public static string MiKo_2041_HelpLinkUri {
             get {
@@ -5861,7 +5861,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para.
         /// </summary>
         public static string MiKo_2042_HelpLinkUri {
             get {
@@ -7166,7 +7166,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list.
         /// </summary>
         public static string MiKo_2204_HelpLinkUri {
             get {
@@ -8495,7 +8495,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
         /// </summary>
         public static string MiKo_3001_HelpLinkUri {
             get {
@@ -8549,7 +8549,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease usage, events should follow the .NET Framework Guidelines for Event Design..
+        ///   Looks up a localized string similar to To ease usage, events should follow the .NET Framework Design Guidelines for Event Design..
         /// </summary>
         public static string MiKo_3003_Description {
             get {
@@ -8558,7 +8558,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event.
         /// </summary>
         public static string MiKo_3003_HelpLinkUri {
             get {
@@ -8576,7 +8576,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Events should follow .NET Framework Guidelines for events.
+        ///   Looks up a localized string similar to Events should follow .NET Framework Design Guidelines for events.
         /// </summary>
         public static string MiKo_3003_Title {
             get {
@@ -8761,7 +8761,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
         /// </summary>
         public static string MiKo_3010_HelpLinkUri {
             get {
@@ -8806,7 +8806,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception.
         /// </summary>
         public static string MiKo_3011_HelpLinkUri {
             get {
@@ -8960,7 +8960,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
         /// </summary>
         public static string MiKo_3015_HelpLinkUri {
             get {
@@ -9007,7 +9007,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types.
         /// </summary>
         public static string MiKo_3016_HelpLinkUri {
             get {
@@ -9079,7 +9079,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose.
         /// </summary>
         public static string MiKo_3018_HelpLinkUri {
             get {
@@ -9326,7 +9326,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
         /// </summary>
         public static string MiKo_3027_HelpLinkUri {
             get {
@@ -9743,7 +9743,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design.
         /// </summary>
         public static string MiKo_3040_HelpLinkUri {
             get {
@@ -10077,7 +10077,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
         /// </summary>
         public static string MiKo_3050_HelpLinkUri {
             get {
@@ -10123,7 +10123,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property.
         /// </summary>
         public static string MiKo_3051_HelpLinkUri {
             get {
@@ -10168,7 +10168,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey.
         /// </summary>
         public static string MiKo_3052_HelpLinkUri {
             get {
@@ -10205,7 +10205,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
         /// </summary>
         public static string MiKo_3053_HelpLinkUri {
             get {
@@ -10252,7 +10252,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly.
         /// </summary>
         public static string MiKo_3054_HelpLinkUri {
             get {
@@ -12144,6 +12144,51 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3214_Title {
             get {
                 return ResourceManager.GetString("MiKo_3214_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert &apos;Predicate&apos; into &apos;Func&apos;.
+        /// </summary>
+        public static string MiKo_3215_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3215_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To standardize delegates and follow the .NET Framework Design Guidelines for callbacks, callbacks of type &apos;Predicate&lt;T&gt;&apos; should be of type &apos;Func&lt;T, bool&gt;&apos; instead..
+        /// </summary>
+        public static string MiKo_3215_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3215_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks.
+        /// </summary>
+        public static string MiKo_3215_HelpLinkUri {
+            get {
+                return ResourceManager.GetString("MiKo_3215_HelpLinkUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;Func&lt;{0}, bool&gt;&apos; instead of &apos;Predicate&lt;{0}&gt;&apos;.
+        /// </summary>
+        public static string MiKo_3215_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3215_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Callbacks should be &apos;Func&lt;T, bool&gt;&apos; instead of &apos;Predicate&lt;bool&gt;&apos;.
+        /// </summary>
+        public static string MiKo_3215_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3215_Title", resourceCulture);
             }
         }
         

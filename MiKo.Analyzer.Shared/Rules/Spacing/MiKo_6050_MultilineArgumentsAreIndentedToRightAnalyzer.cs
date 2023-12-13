@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -60,15 +61,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (inspectedLines.Add(argumentPosition.Line))
                 {
-                    // this is a new found line, so inspect start position
+                    // this is a new-found line, so inspect start position
                     if (argumentPosition.Character != characterPosition)
                     {
-                        yield return Issue(argument.ToString(), argument);
+                        yield return Issue(argument.ToString().AsSpan().HumanizedTakeFirst(50), argument);
                     }
                 }
                 else
                 {
-                    // line was already known, eg. due to a leading argument
+                    // line was already known, e.g. due to a leading argument
                 }
             }
         }
