@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 425 rules that are currently provided by the analyzer.
+The following tables list all the 426 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -33,13 +33,13 @@ The following tables list all the 425 rules that are currently provided by the a
 |:-|:----|:----------------:|:---------------:|
 |MiKo_1000|'System.EventArgs' types should be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
 |MiKo_1001|'System.EventArgs' parameters should be named 'e'|&#x2713;|&#x2713;|
-|MiKo_1002|Parameters should be named according the .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
-|MiKo_1003|Event handling method names should follow the .NET Framework Best Practices|&#x2713;|&#x2713;|
+|MiKo_1002|Parameters should be named according the .NET Framework Design Guidelines for event handlers|&#x2713;|&#x2713;|
+|MiKo_1003|Event handling method names should follow the .NET Framework Design Guidelines|&#x2713;|&#x2713;|
 |MiKo_1004|Events should not contain term 'Event' in their names|&#x2713;|&#x2713;|
 |MiKo_1005|'System.EventArgs' variables should be named properly|&#x2713;|&#x2713;|
 |MiKo_1006|Events should use 'EventHandler&lt;T&gt;' with 'EventArgs' which are named after the event|&#x2713;|\-|
 |MiKo_1007|Events and their corresponding 'EventArgs' types should be located in the same namespace|&#x2713;|\-|
-|MiKo_1008|Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers|&#x2713;|&#x2713;|
+|MiKo_1008|Parameters should be named according the .NET Framework Design Guidelines for DependencyProperty event handlers|&#x2713;|&#x2713;|
 |MiKo_1009|'System.EventHandler' variables should be named properly|&#x2713;|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names|&#x2713;|&#x2713;|
 |MiKo_1011|Methods should not contain 'Do' in their names|&#x2713;|&#x2713;|
@@ -95,7 +95,7 @@ The following tables list all the 425 rules that are currently provided by the a
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
 |MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type|&#x2713;|\-|
-|MiKo_1065|Operator parameters should be named according the .NET Framework Guidelines for operator overloads|&#x2713;|&#x2713;|
+|MiKo_1065|Operator parameters should be named according the .NET Framework Design Guidelines for operator overloads|&#x2713;|&#x2713;|
 |MiKo_1066|Constructor parameters that are assigned to a property should be named after the property|&#x2713;|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names|&#x2713;|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'|&#x2713;|\-|
@@ -162,7 +162,7 @@ The following tables list all the 425 rules that are currently provided by the a
 |MiKo_2001|Events should be documented properly|&#x2713;|&#x2713;|
 |MiKo_2002|EventArgs should be documented properly|&#x2713;|&#x2713;|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase|&#x2713;|&#x2713;|
-|MiKo_2004|Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
+|MiKo_2004|Documentation of event handler parameter names should follow .NET Framework Design Guidelines for event handlers|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly|&#x2713;|\-|
 |MiKo_2006|Routed events should be documented as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2010|Sealed classes should document being sealed|&#x2713;|&#x2713;|
@@ -278,7 +278,7 @@ The following tables list all the 425 rules that are currently provided by the a
 |MiKo_3000|Do not use empty regions|&#x2713;|\-|
 |MiKo_3001|Custom delegates should not be used|&#x2713;|\-|
 |MiKo_3002|Classes should not have too many dependencies|&#x2713;|\-|
-|MiKo_3003|Events should follow .NET Framework Guidelines for events|&#x2713;|\-|
+|MiKo_3003|Events should follow .NET Framework Design Guidelines for events|&#x2713;|\-|
 |MiKo_3004|Property setters of EventArgs shall be private|&#x2713;|\-|
 |MiKo_3005|Methods named 'Try' should follow the Trier-Doer-Pattern|&#x2713;|\-|
 |MiKo_3006|'CancellationToken' parameter should be last method parameter|&#x2713;|\-|
@@ -388,6 +388,7 @@ The following tables list all the 425 rules that are currently provided by the a
 |MiKo_3212|Do not confuse developers by providing other Dispose methods|&#x2713;|\-|
 |MiKo_3213|Parameterless Dispose method follows Basic Dispose pattern|&#x2713;|\-|
 |MiKo_3214|Interfaces do not contain 'Begin/End' or 'Enter/Exit' scope-defining methods|&#x2713;|\-|
+|MiKo_3215|Callbacks should be 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;bool&gt;'|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|

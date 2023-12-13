@@ -17,7 +17,7 @@ namespace System.Linq
             }
         }
 
-        internal static bool All(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
+        internal static bool All(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -33,7 +33,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All<T>(this SyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool All<T>(this SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -49,7 +49,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All<T>(this SeparatedSyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool All<T>(this SeparatedSyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -80,7 +80,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool All(this SyntaxTokenList value, Predicate<SyntaxToken> predicate)
+        internal static bool All(this SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -96,7 +96,7 @@ namespace System.Linq
             return true;
         }
 
-        internal static bool Any(this SyntaxTriviaList value, Predicate<SyntaxTrivia> filter)
+        internal static bool Any(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -112,7 +112,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any<T>(this SyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool Any<T>(this SyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -128,7 +128,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any<T>(this SeparatedSyntaxList<T> value, Predicate<T> predicate) where T : SyntaxNode
+        internal static bool Any<T>(this SeparatedSyntaxList<T> value, Func<T, bool> predicate) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -144,7 +144,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any(this ReadOnlySpan<char> value, Predicate<char> filter)
+        internal static bool Any(this ReadOnlySpan<char> value, Func<char, bool> filter)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
@@ -159,7 +159,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static bool Any(this SyntaxTokenList value, Predicate<SyntaxToken> predicate)
+        internal static bool Any(this SyntaxTokenList value, Func<SyntaxToken, bool> predicate)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
@@ -218,7 +218,7 @@ namespace System.Linq
             return false;
         }
 
-        internal static int Count<T>(this ImmutableArray<T> source, Predicate<T> filter) where T : class, ISymbol
+        internal static int Count<T>(this ImmutableArray<T> source, Func<T, bool> filter) where T : class, ISymbol
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceLength = source.Length;
@@ -235,7 +235,7 @@ namespace System.Linq
             return count;
         }
 
-        internal static int Count<T>(this SeparatedSyntaxList<T> source, Predicate<T> filter) where T : SyntaxNode
+        internal static int Count<T>(this SeparatedSyntaxList<T> source, Func<T, bool> filter) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
