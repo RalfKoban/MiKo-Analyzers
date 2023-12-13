@@ -444,6 +444,23 @@ namespace System.Linq
 
         internal static int IndexOf<T>(this T[] source, T value) => Array.IndexOf(source, value);
 
+        internal static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var index = 0;
+
+            foreach (var value in source)
+            {
+                if (predicate(value))
+                {
+                    return index;
+                }
+
+                index++;
+            }
+
+            return -1;
+        }
+
         internal static bool None(this SyntaxTriviaList source) => source.Any() is false;
 
         internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Any() is false;

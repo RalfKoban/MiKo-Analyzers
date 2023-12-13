@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case BlockSyntax block:
                 {
                     // remove trivia from block and add new item
-                    var newBlock = block.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
+                    var newBlock = block.RemoveTrivia(trivia);
 
                     var statement = newBlock.Statements.LastOrDefault();
 
@@ -41,15 +41,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case LocalDeclarationStatementSyntax declaration when declaration.DescendantNodes<InitializerExpressionSyntax>().Any():
                 {
                     // remove trivia from declaration and add new item
-                    var newDeclaration = declaration.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker)
+                    var newDeclaration = declaration.RemoveTrivia(trivia)
                                                     .WithAdditionalLeadingTrivia(trivia, SyntaxFactory.ElasticCarriageReturnLineFeed);
 
                     return root.ReplaceNode(declaration, newDeclaration);
                 }
             }
 
-            // TODO RKN: Find trivia in new root
-            return root.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
+            return root.RemoveTrivia(trivia);
         }
     }
 }
