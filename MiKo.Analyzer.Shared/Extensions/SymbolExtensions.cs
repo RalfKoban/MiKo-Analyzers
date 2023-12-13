@@ -581,7 +581,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool AnyBaseType(this ITypeSymbol value, Predicate<ITypeSymbol> callback)
+        internal static bool AnyBaseType(this ITypeSymbol value, Func<ITypeSymbol, bool> callback)
         {
             var symbol = value;
 
