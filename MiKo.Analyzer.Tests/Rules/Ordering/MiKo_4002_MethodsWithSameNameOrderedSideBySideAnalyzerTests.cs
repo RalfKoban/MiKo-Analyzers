@@ -446,6 +446,46 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test, Ignore("Just for the moment")]
+        public void Code_gets_fixed_for_class_using_IEquatable_within_regions()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public override bool Equals(object o) => Equals(o as TestMe);
+
+    public override int GetHashCode() => 42;
+
+    #region IEquatable members
+
+    public bool Equals(TestMe other) => true;
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public override bool Equals(object o) => Equals(o as TestMe);
+
+    #region IEquatable members
+
+    public bool Equals(TestMe other) => true;
+
+    #endregion
+
+    public override int GetHashCode() => 42;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer();

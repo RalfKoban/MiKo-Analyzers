@@ -2215,7 +2215,8 @@ namespace MiKoSolutions.Analyzers
 
                 if (count > 0)
                 {
-                    for (var index = 0; index < count; index++)
+                    // we want the innermost region, so we traverse backwards here
+                    for (var index = count - 1; index >= 0; index--)
                     {
                         var t = leadingTrivia[index];
 

@@ -914,6 +914,162 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_3_uncommented_methods_within_region_if_method_with_most_parameters_is_1st_and_inside_own_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Public members
+
+    #region Special region
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #endregion
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #region Special region
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #endregion
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_3_uncommented_methods_within_region_if_method_with_most_parameters_is_2nd_and_inside_own_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething(int i)
+    { }
+
+    #region Special region
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #endregion
+
+    public void DoSomething()
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #region Special region
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #endregion
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_4_uncommented_methods_within_region_if_method_with_most_parameters_is_3rd_and_inside_own_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething(int i, int j)
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #region Special region
+
+    public void DoSomething(int i, int j, int k)
+    { }
+
+    #endregion
+
+    public void DoSomething()
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #region Special region
+
+    public void DoSomething(int i, int j, int k)
+    { }
+
+    #endregion
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();

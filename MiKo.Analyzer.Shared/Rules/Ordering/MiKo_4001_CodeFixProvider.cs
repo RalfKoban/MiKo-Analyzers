@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 modifiedType = modifiedType.InsertNodesAfter(node, replacements);
 
                 // adjust #region directive
-                modifiedType = AdjustRegion(modifiedType, replacements, typeSyntax, methodNodes);
+                modifiedType = MoveRegion(modifiedType, replacements, typeSyntax, methodNodes);
             }
 
             return modifiedType;
@@ -77,67 +77,89 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             return replacements;
         }
 
-        private static BaseTypeDeclarationSyntax AdjustRegion(BaseTypeDeclarationSyntax modifiedType, IEnumerable<SyntaxNode> replacedMethods, SyntaxNode originalType, IEnumerable<SyntaxNode> originalMethods)
+        private static BaseTypeDeclarationSyntax MoveRegion(BaseTypeDeclarationSyntax modifiedType, IEnumerable<SyntaxNode> replacedMethods, SyntaxNode originalType, IEnumerable<SyntaxNode> originalMethods)
         {
-            var methodWithRegion = replacedMethods.FirstOrDefault(_ => _.HasRegionDirective());
+            var modifiedMethodWithRegion = replacedMethods.FirstOrDefault(_ => _.HasRegionDirective());
 
-            if (methodWithRegion.TryGetRegionDirective(out var region))
+            if (modifiedMethodWithRegion.TryGetRegionDirective(out var region))
             {
-                var regionTrivia = region.ParentTrivia;
+                var modifiedRegionTrivia = region.ParentTrivia;
 
                 // determine indices in original code, to apply regions properly
                 var originalMethodWithRegion = originalMethods.FirstOrDefault(_ => _.HasRegionDirective());
-                var originalRegionIndex = originalType.ChildNodes().IndexOf(_ => _.IsEquivalentTo(originalMethodWithRegion));
 
-                var oldRegionStartNode = modifiedType.FirstChild(_ => _.IsEquivalentTo(methodWithRegion));
-                var newRegionStartNode = modifiedType.ChildNodes().ElementAt(originalRegionIndex);
+                if (originalMethodWithRegion.IsOnlyNodeInsideRegion())
+                {
+                    const string AnnotationKind = "move region";
 
-                modifiedType = modifiedType.ReplaceNodes(
-                                                     new[] { oldRegionStartNode, newRegionStartNode },
-                                                     (original, rewritten) =>
+                    var nodeToAnnotate = modifiedType.FirstChild(_ => _.IsEquivalentTo(modifiedMethodWithRegion));
+
+                    var annotatedType = modifiedType.ReplaceNode(nodeToAnnotate, nodeToAnnotate.WithAnnotation(new SyntaxAnnotation(AnnotationKind)));
+                    var annotatedMethod = annotatedType.GetAnnotatedNodes(AnnotationKind).First();
+
+                    var adjustedType = MoveCompleteRegion(annotatedType, annotatedMethod, AnnotationKind);
+
+                    // return MoveWithOverlappingRegion(modifiedType, modifiedMethodWithRegion, modifiedRegionTrivia, originalType, originalMethodWithRegion);
+                    return adjustedType.WithoutAnnotations(AnnotationKind);
+                }
+
+                return MoveWithOverlappingRegion(modifiedType, modifiedMethodWithRegion, modifiedRegionTrivia, originalType, originalMethodWithRegion);
+            }
+
+            return modifiedType;
+        }
+
+        private static BaseTypeDeclarationSyntax MoveWithOverlappingRegion(BaseTypeDeclarationSyntax modifiedType, SyntaxNode modifiedMethodWithRegion, SyntaxTrivia modifiedRegionTrivia, SyntaxNode originalType, SyntaxNode originalMethodWithRegion)
+        {
+            var originalRegionIndex = originalType.ChildNodes().IndexOf(_ => _.IsEquivalentTo(originalMethodWithRegion));
+
+            var oldRegionStartNode = modifiedType.FirstChild(_ => _.IsEquivalentTo(modifiedMethodWithRegion));
+            var newRegionStartNode = modifiedType.ChildNodes().ElementAt(originalRegionIndex);
+
+            modifiedType = modifiedType.ReplaceNodes(
+                                                 new[] { oldRegionStartNode, newRegionStartNode },
+                                                 (original, rewritten) =>
+                                                                         {
+                                                                             if (rewritten.IsEquivalentTo(oldRegionStartNode))
                                                                              {
-                                                                                 if (rewritten.IsEquivalentTo(oldRegionStartNode))
+                                                                                 if (rewritten.TryGetRegionDirective(out var regionDirective))
                                                                                  {
-                                                                                     if (rewritten.TryGetRegionDirective(out var regionDirective))
-                                                                                     {
-                                                                                         var trivia = regionDirective.ParentTrivia.Token.LeadingTrivia;
-                                                                                         var index = trivia.IndexOf(SyntaxKind.RegionDirectiveTrivia);
-
-                                                                                         if (index > 0)
-                                                                                         {
-                                                                                             // some comments available, so do not delete them (but keep end-of-line)
-                                                                                             return rewritten.WithLeadingTrivia(trivia.Skip(index + 1));
-                                                                                         }
-
-                                                                                         return rewritten.RemoveTrivia(regionDirective.ParentTrivia);
-                                                                                     }
-                                                                                 }
-                                                                                 else if (rewritten.IsEquivalentTo(newRegionStartNode))
-                                                                                 {
-                                                                                     var trivia = regionTrivia.Token.LeadingTrivia;
-                                                                                     var index = trivia.IndexOf(SyntaxKind.SingleLineDocumentationCommentTrivia);
+                                                                                     var trivia = regionDirective.ParentTrivia.Token.LeadingTrivia;
+                                                                                     var index = trivia.IndexOf(SyntaxKind.RegionDirectiveTrivia);
 
                                                                                      if (index > 0)
                                                                                      {
-                                                                                         // some comments available, so do not copy them (and also remove end-of-line)
-                                                                                         rewritten = rewritten.WithFirstLeadingTrivia(trivia.Take(index - 1).ToArray());
-                                                                                     }
-                                                                                     else
-                                                                                     {
-                                                                                         rewritten = rewritten.WithLeadingTrivia(trivia);
+                                                                                         // some comments available, so do not delete them (but keep end-of-line)
+                                                                                         return rewritten.WithLeadingTrivia(trivia.Skip(index + 1));
                                                                                      }
 
-                                                                                     if (original.PreviousSibling() != null)
-                                                                                     {
-                                                                                         // add an empty line only in case we did not move the method to be the very first
-                                                                                         return rewritten.WithLeadingEmptyLine();
-                                                                                     }
+                                                                                     return rewritten.RemoveTrivia(regionDirective.ParentTrivia);
+                                                                                 }
+                                                                             }
+                                                                             else if (rewritten.IsEquivalentTo(newRegionStartNode))
+                                                                             {
+                                                                                 var trivia = modifiedRegionTrivia.Token.LeadingTrivia;
+                                                                                 var index = trivia.IndexOf(SyntaxKind.SingleLineDocumentationCommentTrivia);
+
+                                                                                 if (index > 0)
+                                                                                 {
+                                                                                     // some comments available, so do not copy them (and also remove end-of-line)
+                                                                                     rewritten = rewritten.WithFirstLeadingTrivia(trivia.Take(index - 1).ToArray());
+                                                                                 }
+                                                                                 else
+                                                                                 {
+                                                                                     rewritten = rewritten.WithLeadingTrivia(trivia);
                                                                                  }
 
-                                                                                 return rewritten;
-                                                                             });
-            }
+                                                                                 if (original.PreviousSibling() != null)
+                                                                                 {
+                                                                                     // add an empty line only in case we did not move the method to be the very first
+                                                                                     return rewritten.WithLeadingEmptyLine();
+                                                                                 }
+                                                                             }
 
+                                                                             return rewritten;
+                                                                         });
             return modifiedType;
         }
     }
