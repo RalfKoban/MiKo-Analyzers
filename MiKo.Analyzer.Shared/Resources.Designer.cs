@@ -3498,6 +3498,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename parameter to match overload.
+        /// </summary>
+        public static string MiKo_1099_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1099_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameters on method overloads should have the same name. The reason is that most likely these parameters represent the same inputs accross the different overloads which should be reflected in their names..
+        /// </summary>
+        public static string MiKo_1099_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1099_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{1}&apos; to match overload.
+        /// </summary>
+        public static string MiKo_1099_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1099_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matching parameters on method overloads should have identical names.
+        /// </summary>
+        public static string MiKo_1099_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1099_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A class that is marked as a unit test class should indicate via its name which type it tests.
         ///The name should be constructed by having the name of the type under test as prefix and &apos;Tests&apos; as suffix (e.g. for class &apos;MyXyzClass&apos; the test class should be named &apos;MyXyzClassTests&apos;)..
         /// </summary>

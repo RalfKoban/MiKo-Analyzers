@@ -1304,6 +1304,18 @@ A type implements interface 'IPart'. So it should be named accordingly, such as 
   <data name="MiKo_1098_Title" xml:space="preserve">
     <value>Type names should reflect the business interface(s) they implement</value>
   </data>
+  <data name="MiKo_1099_CodeFixTitle" xml:space="preserve">
+    <value>Rename parameter to match overload</value>
+  </data>
+  <data name="MiKo_1099_Description" xml:space="preserve">
+    <value>Parameters on method overloads should have the same name. The reason is that most likely these parameters represent the same inputs accross the different overloads which should be reflected in their names.</value>
+  </data>
+  <data name="MiKo_1099_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' to match overload</value>
+  </data>
+  <data name="MiKo_1099_Title" xml:space="preserve">
+    <value>Matching parameters on method overloads should have identical names</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
