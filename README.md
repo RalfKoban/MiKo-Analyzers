@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 426 rules that are currently provided by the analyzer.
+The following tables list all the 427 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -125,6 +125,7 @@ The following tables list all the 426 rules that are currently provided by the a
 |MiKo_1096|Names should use 'Failed' instead of 'NotSuccessful'|&#x2713;|\-|
 |MiKo_1097|Parameter names should not follow the naming scheme for fields|&#x2713;|&#x2713;|
 |MiKo_1098|Type names should reflect the business interface(s) they implement|&#x2713;|\-|
+|MiKo_1099|Matching parameters on method overloads should have identical names|&#x2713;|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'|&#x2713;|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test' in their names|&#x2713;|&#x2713;|
