@@ -12229,6 +12229,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Make field read-only.
+        /// </summary>
+        public static string MiKo_3216_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3216_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static fields that get their values pre-assigned are most probably meant to solely have those values. Therefore such fields should be read-only..
+        /// </summary>
+        public static string MiKo_3216_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3216_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make field read-only.
+        /// </summary>
+        public static string MiKo_3216_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3216_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static fields with initializers should be read-only.
+        /// </summary>
+        public static string MiKo_3216_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3216_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
