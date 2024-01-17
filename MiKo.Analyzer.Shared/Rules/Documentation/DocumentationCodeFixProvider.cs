@@ -385,7 +385,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetParameterName(XmlElementSyntax syntax) => syntax.GetAttributes<XmlNameAttributeSyntax>().First().Identifier.GetName();
 
-        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlAttributeSyntax, XmlNameAttributeSyntax>().First().Identifier.GetName();
+        protected static string GetParameterName(XmlEmptyElementSyntax syntax) => syntax.Attributes.OfType<XmlAttributeSyntax, XmlNameAttributeSyntax>()[0].Identifier.GetName();
 
         protected static XmlCrefAttributeSyntax GetSeeCref(SyntaxNode value) => value.GetCref(Constants.XmlTag.See);
 
@@ -793,16 +793,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 textCommentEnd = XmlText(commentEnd);
             }
 
+            var length = commendEndNodes.Length;
+
             // if there are more than 1 item contained, also remove the new line and /// from the last item
-            if (commendEndNodes.Length > 1)
+            if (length > 1)
             {
-                if (commendEndNodes.Last() is XmlTextSyntax additionalText)
+                if (commendEndNodes[length - 1] is XmlTextSyntax additionalText)
                 {
-                    commendEndNodes[commendEndNodes.Length - 1] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
+                    commendEndNodes[length - 1] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
                 }
             }
 
-            var result = new List<XmlNodeSyntax>(commendEndNodes.Length);
+            var result = new List<XmlNodeSyntax>(length);
             result.Add(textCommentEnd);
             result.AddRange(commendEndNodes.Skip(skip));
 

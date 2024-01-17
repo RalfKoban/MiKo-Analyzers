@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 result.Add(text);
             }
 
-            result[result.Count - 1] = result.Last().WithTrailingXmlComment();
+            result[result.Count - 1] = result[result.Count - 1].WithTrailingXmlComment();
 
             return result;
         }
@@ -119,9 +119,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 items.Add(item.WithLeadingXmlComment());
             }
 
-            if (items.Count > 0)
+            var itemsCount = items.Count;
+
+            if (itemsCount > 0)
             {
-                items[items.Count - 1] = items[items.Count - 1].WithTrailingXmlComment();
+                items[itemsCount - 1] = items[itemsCount - 1].WithTrailingXmlComment();
             }
 
             var list = XmlElement(Constants.XmlTag.List, items);

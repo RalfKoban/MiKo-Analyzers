@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (otherStatements.Count > 0 && otherStatements.Count <= MaximumAllowedFollowUpStatements)
                 {
-                    if (otherStatements.Any(_ => _.IsAnyKind(ForbiddenFollowUps)))
+                    if (otherStatements.Exists(_ => _.IsAnyKind(ForbiddenFollowUps)))
                     {
                         // we assume that those follow ups also contain code, so inverting would make the code less readable
                         return;

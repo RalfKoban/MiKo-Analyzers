@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var node = context.Node;
             var parent = node.Parent;
 
-            if (parent != null && SyntaxKinds.Any(_ => _ == parent.Kind()))
+            if (parent != null && SyntaxKinds.Exists(_ => _ == parent.Kind()))
             {
                 if (IsViolation(context, parent))
                 {

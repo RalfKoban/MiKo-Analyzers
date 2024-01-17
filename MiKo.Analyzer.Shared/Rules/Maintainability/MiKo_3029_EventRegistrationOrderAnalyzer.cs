@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                 var addedIdentifier = addedHandler.GetName();
 
                                 // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
-                                var handler = subtractAssignmentsForInvestigation.FirstOrDefault(_ => _.Right is IdentifierNameSyntax removedHandler && removedHandler.GetName() == addedIdentifier);
+                                var handler = subtractAssignmentsForInvestigation.Find(_ => _.Right is IdentifierNameSyntax removedHandler && removedHandler.GetName() == addedIdentifier);
 
                                 if (handler is null)
                                 {

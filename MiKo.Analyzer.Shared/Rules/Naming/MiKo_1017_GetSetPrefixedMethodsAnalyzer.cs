@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (StrangePrefixes.Any(_ => HasStrangePrefix(symbol, _)))
+            if (StrangePrefixes.Exists(_ => HasStrangePrefix(symbol, _)))
             {
                 yield return Issue(symbol, FindBetterName(symbol));
             }
