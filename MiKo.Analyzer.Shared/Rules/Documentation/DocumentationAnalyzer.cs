@@ -389,7 +389,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    if (alreadyReportedLocations.Exists(_ => location.IntersectsWith(_)))
                     {
                         // already reported, so ignore it
                         continue;
@@ -435,7 +435,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                     else
                     {
-                        if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                        if (alreadyReportedLocations.Exists(_ => location.IntersectsWith(_)))
                         {
                             // already reported, so ignore it
                             continue;
@@ -492,7 +492,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    if (alreadyReportedLocations.Any(_ => location.IntersectsWith(_)))
+                    if (alreadyReportedLocations.Exists(_ => location.IntersectsWith(_)))
                     {
                         // already reported, so ignore it
                         continue;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -319,6 +320,12 @@ namespace System.Linq
                 yield return item;
             }
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool Exists<T>(this T[] value, Predicate<T> match) => Array.Exists(value, match);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static T Find<T>(this T[] value, Predicate<T> match) => Array.Find(value, match);
 
         internal static SyntaxToken First(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
@@ -888,8 +895,10 @@ namespace System.Linq
 
         internal static TSource[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) => source.OrderBy(keySelector, comparer).ToArray();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer) => new HashSet<T>(source, comparer);
 
         internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
@@ -941,11 +950,17 @@ namespace System.Linq
             return target;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxToken> source) => SyntaxFactory.TokenList(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static bool TrueForAll<T>(this T[] source, Predicate<T> match) => Array.TrueForAll(source, match);
 
         internal static IEnumerable<SyntaxToken> Where(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {

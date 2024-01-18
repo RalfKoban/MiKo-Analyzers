@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             foreach (var method in symbol.GetMethods())
             {
                 var name = method.Name;
-                var indicator = ScopeIndicators.FirstOrDefault(_ => name.StartsWith(_, StringComparison.OrdinalIgnoreCase));
+                var indicator = ScopeIndicators.Find(_ => name.StartsWith(_, StringComparison.OrdinalIgnoreCase));
 
                 if (indicator != null)
                 {

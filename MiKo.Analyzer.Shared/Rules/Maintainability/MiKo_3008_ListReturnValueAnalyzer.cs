@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return null;
             }
 
-            if (ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric))
+            if (ForbiddenTypes.Exists(returnType.ImplementsPotentialGeneric))
             {
                 // detect for same assembly to avoid AD0001 (which reports that the return type is in a different compilation than the method/property)
                 var sameAssembly = method.ContainingAssembly.Equals(returnType.ContainingAssembly, SymbolEqualityComparer.IncludeNullability);

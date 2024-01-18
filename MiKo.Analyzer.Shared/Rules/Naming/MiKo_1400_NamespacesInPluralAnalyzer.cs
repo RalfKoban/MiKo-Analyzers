@@ -81,10 +81,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
             var namespaceNames = names.ToList();
+            var namespaceNamesCount = namespaceNames.Count;
 
-            if (namespaceNames.Count > 1)
+            if (namespaceNamesCount > 1)
             {
-                var namePart = namespaceNames.Last();
+                var namePart = namespaceNames[namespaceNamesCount - 1];
 
                 var name = namePart.ValueText;
                 var betterName = FindBetterName(name);

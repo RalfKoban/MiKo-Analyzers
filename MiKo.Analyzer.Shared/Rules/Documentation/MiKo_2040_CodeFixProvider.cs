@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var part in parts)
                 {
-                    if (Phrases.Any(_ => _.Equals(part, StringComparison.OrdinalIgnoreCase)))
+                    if (Phrases.Exists(_ => _.Equals(part, StringComparison.OrdinalIgnoreCase)))
                     {
                         result.Add(SeeLangword(part.ToLowerCase()));
                     }
