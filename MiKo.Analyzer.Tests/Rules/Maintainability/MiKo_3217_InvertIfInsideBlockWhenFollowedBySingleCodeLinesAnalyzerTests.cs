@@ -780,6 +780,86 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_with_complex_AND_condition_with_negative_parts()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        while(true)
+        {
+            if (!flag1 && !flag2)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        while(true)
+        {
+            if (flag1 || flag2)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_complex_OR_condition_with_negative_parts()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        while(true)
+        {
+            if (!flag1 || !flag2)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        while(true)
+        {
+            if (flag1 && flag2)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer();
