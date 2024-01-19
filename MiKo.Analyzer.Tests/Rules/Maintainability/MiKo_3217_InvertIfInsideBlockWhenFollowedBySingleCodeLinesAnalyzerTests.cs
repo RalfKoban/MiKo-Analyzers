@@ -168,6 +168,55 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_try_block() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                continue;
+            }
+
+            try
+            {
+                DoSomething(false);
+            }
+            finally
+            {
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_using() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag, IDisposable items)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                continue;
+            }
+
+            using (items)
+            {
+                DoSomething(false);
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_positive_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
