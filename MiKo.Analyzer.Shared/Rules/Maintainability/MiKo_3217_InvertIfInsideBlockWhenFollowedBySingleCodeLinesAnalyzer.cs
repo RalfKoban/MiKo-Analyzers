@@ -30,12 +30,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
 
+        private static bool IsNegative(SyntaxNode condition)
+        {
+            foreach (var node in condition.DescendantNodesAndSelf())
+            {
+                if (node.IsKind(SyntaxKind.LogicalNotExpression))
+                {
+                    return true;
+                }
+
+                if (node is IsPatternExpressionSyntax pattern && pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {
             var node = (IfStatementSyntax)context.Node;
 
             // do not invert in case of an else block
-            if (node.Else is null && node.Parent is BlockSyntax block)
+            if (node.Else is null && node.Parent is BlockSyntax block && IsNegative(node.Condition))
             {
                 var statements = block.Statements;
 

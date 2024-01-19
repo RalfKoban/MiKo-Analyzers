@@ -265,7 +265,26 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_void_method_with_positive_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_void_method_with_positive_pattern_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag is true)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_positive_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -303,6 +322,25 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_void_method_with_negative_pattern_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag is false)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_negative_condition_if_statement_inside_loop_and_no_else_block_and_1_preceding_and_1_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -324,7 +362,26 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_with_positive_condition()
+        public void An_issue_is_reported_for_void_method_with_complex_negative_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        while(true)
+        {
+            if (flag || !flag2)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_with_negative_pattern_condition()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -333,7 +390,7 @@ public class TestMe
     {
         while(true)
         {
-            if (flag)
+            if (flag is false)
             {
                 continue;
             }
@@ -351,7 +408,7 @@ public class TestMe
     {
         while(true)
         {
-            if (flag is false)
+            if (flag)
             {
                 DoSomething(flag);
             }
