@@ -12265,6 +12265,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invert if to simplify.
+        /// </summary>
+        public static string MiKo_3217_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3217_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read..
+        /// </summary>
+        public static string MiKo_3217_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3217_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if to simplify.
+        /// </summary>
+        public static string MiKo_3217_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3217_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If-continue statements can be inverted when followed by single line.
+        /// </summary>
+        public static string MiKo_3217_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3217_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

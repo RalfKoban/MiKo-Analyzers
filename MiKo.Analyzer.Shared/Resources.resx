@@ -4330,6 +4330,18 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
   <data name="MiKo_3216_Title" xml:space="preserve">
     <value>Static fields with initializers should be read-only</value>
   </data>
+  <data name="MiKo_3217_CodeFixTitle" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3217_Description" xml:space="preserve">
+    <value>In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read.</value>
+  </data>
+  <data name="MiKo_3217_MessageFormat" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3217_Title" xml:space="preserve">
+    <value>If-continue statements can be inverted when followed by single line</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
