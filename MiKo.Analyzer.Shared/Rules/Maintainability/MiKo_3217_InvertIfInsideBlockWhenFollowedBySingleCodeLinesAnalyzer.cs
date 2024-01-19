@@ -20,6 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                               SyntaxKind.ForEachStatement,
                                                                               SyntaxKind.TryStatement,
                                                                               SyntaxKind.UsingStatement,
+                                                                              SyntaxKind.IfStatement,
+                                                                              SyntaxKind.LocalFunctionStatement,
                                                                           };
 
         public MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer() : base(Id, (SymbolKind)(-1))

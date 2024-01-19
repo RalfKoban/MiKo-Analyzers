@@ -217,6 +217,54 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_if_block() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        while(true)
+        {
+            if (flag1)
+            {
+                continue;
+            }
+
+            if (flag2)
+            {
+                DoSomething(false, true);
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_local_function() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag1)
+    {
+        while(true)
+        {
+            if (flag1)
+            {
+                continue;
+            }
+
+            void SomethingLocal(bool flag2)
+            {
+                DoSomething(false);
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_positive_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
