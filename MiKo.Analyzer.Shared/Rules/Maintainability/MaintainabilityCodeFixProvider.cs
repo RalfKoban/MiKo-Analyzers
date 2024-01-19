@@ -112,6 +112,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return binary.WithOperatorToken(replacement.AsToken());
                 }
 
+                case BinaryExpressionSyntax binary when binary.IsKind(SyntaxKind.LogicalAndExpression):
+                {
+                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
+                }
+
+                case BinaryExpressionSyntax binary when binary.IsKind(SyntaxKind.LogicalOrExpression):
+                {
+                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
+                }
+
                 case IsPatternExpressionSyntax pattern:
                 {
                     if (pattern.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax literal)

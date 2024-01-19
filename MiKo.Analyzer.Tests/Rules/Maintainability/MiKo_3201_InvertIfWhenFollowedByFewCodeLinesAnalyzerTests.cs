@@ -1258,6 +1258,94 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_with_complex_logical_AND_condition()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        if (!flag1 && !flag2)
+        {
+            return;
+        }
+
+        DoSomethingElse(1);
+        DoSomethingElse(2);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        if (flag1 || flag2)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_complex_logical_OR_condition()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        if (!flag1 || !flag2)
+        {
+            return;
+        }
+
+        DoSomethingElse(1);
+        DoSomethingElse(2);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2)
+    {
+        if (flag1 && flag2)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer();
