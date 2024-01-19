@@ -78,6 +78,96 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_another_while_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                continue;
+            }
+
+            while (true)
+            {
+                DoSomething(false);
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_another_do_while_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                continue;
+            }
+
+            do
+            {
+                DoSomething(false);
+            } while (true);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_another_for_loop() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                continue;
+            }
+
+            for (var i = 0; i < 10; i++)
+            {
+                DoSomething(false);
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_if_statement_inside_loop_and_no_else_block_and_followed_by_another_foreach_loop() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public void DoSomething(bool flag, IEnumerable<int> items)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                continue;
+            }
+
+            foreach (var i in items)
+            {
+                DoSomething(false);
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_void_method_with_positive_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
