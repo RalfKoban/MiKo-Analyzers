@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var baseTypeName = symbol.BaseType.Name;
 
             // interface should be first after base type
-            return types.Any(_ => _ == baseTypeName) && index == 1;
+            return types.Contains(baseTypeName) && index == 1;
         }
 
         private static BaseListSyntax GetBaseListSyntax(INamedTypeSymbol symbol)

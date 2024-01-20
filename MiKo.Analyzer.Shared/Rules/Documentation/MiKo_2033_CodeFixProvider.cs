@@ -39,8 +39,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                                      .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
-        private static readonly KeyValuePair<string, string> SpecialText = new KeyValuePair<string, string>("property on the task object returns", "parameter returns");
-
         public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2033_CodeFixTitle;

@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return null;
             }
 
-            if (ForbiddenTypes.Any(returnType.ImplementsPotentialGeneric))
+            if (ForbiddenTypes.Exists(returnType.ImplementsPotentialGeneric))
             {
                 return IssueOnType(returnType, method);
             }
