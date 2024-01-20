@@ -4248,6 +4248,18 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3202_Title" xml:space="preserve">
     <value>Use positive conditions when returning in all paths</value>
   </data>
+  <data name="MiKo_3203_CodeFixTitle" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3203_Description" xml:space="preserve">
+    <value>In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read.</value>
+  </data>
+  <data name="MiKo_3203_MessageFormat" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3203_Title" xml:space="preserve">
+    <value>If-continue statements can be inverted when followed by single line</value>
+  </data>
   <data name="MiKo_3210_Description" xml:space="preserve">
     <value>Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that's why they have fewer parameters.
 So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
@@ -4329,18 +4341,6 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
   </data>
   <data name="MiKo_3216_Title" xml:space="preserve">
     <value>Static fields with initializers should be read-only</value>
-  </data>
-  <data name="MiKo_3217_CodeFixTitle" xml:space="preserve">
-    <value>Invert if to simplify</value>
-  </data>
-  <data name="MiKo_3217_Description" xml:space="preserve">
-    <value>In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read.</value>
-  </data>
-  <data name="MiKo_3217_MessageFormat" xml:space="preserve">
-    <value>Invert if to simplify</value>
-  </data>
-  <data name="MiKo_3217_Title" xml:space="preserve">
-    <value>If-continue statements can be inverted when followed by single line</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>

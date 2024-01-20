@@ -10,12 +10,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3217_CodeFixProvider)), Shared]
-    public sealed class MiKo_3217_CodeFixProvider : MaintainabilityCodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3203_CodeFixProvider)), Shared]
+    public sealed class MiKo_3203_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.Id;
 
-        protected override string Title => Resources.MiKo_3217_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3203_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<IfStatementSyntax>().FirstOrDefault();
 

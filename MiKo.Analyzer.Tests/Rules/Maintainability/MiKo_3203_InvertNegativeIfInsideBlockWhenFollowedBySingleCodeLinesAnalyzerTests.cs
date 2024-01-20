@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_non_void_method_without_if_statement() => No_issue_is_reported_for(@"
@@ -860,10 +860,10 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3217_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3203_CodeFixProvider();
     }
 }
