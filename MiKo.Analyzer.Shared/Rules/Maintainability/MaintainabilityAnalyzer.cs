@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
@@ -58,5 +59,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected virtual IEnumerable<Diagnostic> Analyze(IFieldSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
 
         protected virtual IEnumerable<Diagnostic> Analyze(IEventSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+
+        protected Diagnostic IssueOnType(ITypeSymbol type, ISymbol container)
+        {
+            // detect for same assembly to avoid AD0001 (which reports that the return type is in a different compilation than the method/property)
+            var sameAssembly = container.ContainingAssembly.Equals(type.ContainingAssembly, SymbolEqualityComparer.IncludeNullability);
+
+            if (type.Locations.IsEmpty || sameAssembly is false)
+            {
+                switch (container.GetSyntax())
+                {
+                    case MethodDeclarationSyntax method: return Issue(type.ToString(), method.ReturnType);
+                    case BasePropertyDeclarationSyntax property: return Issue(type.ToString(), property.Type);
+                }
+            }
+
+            return Issue(type);
+        }
     }
 }

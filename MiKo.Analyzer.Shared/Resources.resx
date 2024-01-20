@@ -4342,6 +4342,17 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
   <data name="MiKo_3216_Title" xml:space="preserve">
     <value>Static fields with initializers should be read-only</value>
   </data>
+  <data name="MiKo_3217_Description" xml:space="preserve">
+    <value>Generic types that have other generic types as type arguments are hard to understand and maintain.
+This is because it's hard to find out what's meant, in addition it seems like there is some type information hiding within the generics due to primitive obsession.
+Instead, it would be much easier to see what is meant if non-generic types would be used as type arguments.</value>
+  </data>
+  <data name="MiKo_3217_MessageFormat" xml:space="preserve">
+    <value>Do not use generic type with generic type arguments</value>
+  </data>
+  <data name="MiKo_3217_Title" xml:space="preserve">
+    <value>Do not use generic types that have other generic types as type arguments</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
