@@ -12040,6 +12040,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invert if to simplify.
+        /// </summary>
+        public static string MiKo_3203_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3203_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read..
+        /// </summary>
+        public static string MiKo_3203_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3203_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if to simplify.
+        /// </summary>
+        public static string MiKo_3203_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3203_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If-continue statements can be inverted when followed by single line.
+        /// </summary>
+        public static string MiKo_3203_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3203_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that&apos;s why they have fewer parameters.
         ///So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
         ///Same applies to abstract methods..
@@ -12261,42 +12297,6 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3216_Title {
             get {
                 return ResourceManager.GetString("MiKo_3216_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invert if to simplify.
-        /// </summary>
-        public static string MiKo_3217_CodeFixTitle {
-            get {
-                return ResourceManager.GetString("MiKo_3217_CodeFixTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read..
-        /// </summary>
-        public static string MiKo_3217_Description {
-            get {
-                return ResourceManager.GetString("MiKo_3217_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invert if to simplify.
-        /// </summary>
-        public static string MiKo_3217_MessageFormat {
-            get {
-                return ResourceManager.GetString("MiKo_3217_MessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If-continue statements can be inverted when followed by single line.
-        /// </summary>
-        public static string MiKo_3217_Title {
-            get {
-                return ResourceManager.GetString("MiKo_3217_Title", resourceCulture);
             }
         }
         

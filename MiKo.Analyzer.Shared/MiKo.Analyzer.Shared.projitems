@@ -415,6 +415,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3202_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3203_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3210_MethodsWithOverloadsAreNotAbstractOrVirtualAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3211_PublicTypesShouldNotHaveFinalizerAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3212_DoNotProvideUnexpectedDisposeMethodsAnalyzer.cs" />
@@ -424,8 +426,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3215_PredicateUsageAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3216_AssignedStaticFieldsAreReadOnlyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3216_CodeFixProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3217_CodeFixProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3301_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_CodeFixProvider.cs" />

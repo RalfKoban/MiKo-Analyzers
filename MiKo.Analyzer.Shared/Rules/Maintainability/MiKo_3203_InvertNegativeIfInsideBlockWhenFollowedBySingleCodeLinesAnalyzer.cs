@@ -8,9 +8,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer : MaintainabilityAnalyzer
     {
-        public const string Id = "MiKo_3217";
+        public const string Id = "MiKo_3203";
 
         private static readonly ISet<SyntaxKind> ForbiddenFollowUps = new HashSet<SyntaxKind>
                                                                           {
@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                               SyntaxKind.LocalFunctionStatement,
                                                                           };
 
-        public MiKo_3217_InvertIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
