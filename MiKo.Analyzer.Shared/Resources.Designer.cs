@@ -12301,6 +12301,35 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generic types that have other generic types as type arguments are hard to understand and maintain.
+        ///This is because it&apos;s hard to find out what&apos;s meant, in addition it seems like there is some type information hiding within the generics due to primitive obsession.
+        ///Instead, it would be much easier to see what is meant if non-generic types would be used as type arguments..
+        /// </summary>
+        public static string MiKo_3217_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3217_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use generic type with generic type arguments.
+        /// </summary>
+        public static string MiKo_3217_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3217_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use generic types that have other generic types as type arguments.
+        /// </summary>
+        public static string MiKo_3217_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3217_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
-    //// TODO: Potential NRE in code? --> AD0001 reports that
-
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3008_ListReturnValueAnalyzer : MaintainabilityAnalyzer
     {
@@ -65,17 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (ForbiddenTypes.Exists(returnType.ImplementsPotentialGeneric))
             {
-                // detect for same assembly to avoid AD0001 (which reports that the return type is in a different compilation than the method/property)
-                var sameAssembly = method.ContainingAssembly.Equals(returnType.ContainingAssembly, SymbolEqualityComparer.IncludeNullability);
-
-                if (returnType.Locations.IsEmpty || sameAssembly is false)
-                {
-                    var syntax = (MethodDeclarationSyntax)method.GetSyntax();
-
-                    return Issue(returnTypeString, syntax.ReturnType);
-                }
-
-                return Issue(returnType);
+                return IssueOnType(returnType, method);
             }
 
             return null;
