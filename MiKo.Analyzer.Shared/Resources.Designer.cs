@@ -12076,6 +12076,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invert if to simplify.
+        /// </summary>
+        public static string MiKo_3204_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3204_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In case an if statement has a negative condition but also an else clause, that if statement can be inverted into a positive one. Doing so makes the method easier to read and understand..
+        /// </summary>
+        public static string MiKo_3204_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3204_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert if to simplify.
+        /// </summary>
+        public static string MiKo_3204_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3204_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Negative If statements can be inverted when they have an else clause.
+        /// </summary>
+        public static string MiKo_3204_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3204_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that&apos;s why they have fewer parameters.
         ///So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
         ///Same applies to abstract methods..

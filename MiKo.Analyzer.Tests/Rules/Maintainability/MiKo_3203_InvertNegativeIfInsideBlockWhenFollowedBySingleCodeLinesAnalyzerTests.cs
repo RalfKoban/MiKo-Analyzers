@@ -461,6 +461,48 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_with_comment_before_if()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            // some comment
+            if (!flag)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            // some comment
+            if (flag)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_with_comment_inside_if()
         {
             const string OriginalCode = @"
@@ -674,6 +716,45 @@ public class TestMe
         while(true)
         {
             if (!flag) continue; // some comment
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            // some comment
+            if (flag)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_negative_condition_and_continue_without_block_on_separate_line_with_comment_behind_if_closing_parenthesis()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (!flag) // some comment
+                continue;
 
             DoSomething(flag);
         }
