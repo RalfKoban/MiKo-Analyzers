@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 430 rules that are currently provided by the analyzer.
+The following tables list all the 431 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -385,6 +385,7 @@ The following tables list all the 430 rules that are currently provided by the a
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|
+|MiKo_3204|Negative If statements can be inverted when they have an else clause|&#x2713;|&#x2713;|
 |MiKo_3210|Only the longest overloads should be virtual or abstract|&#x2713;|\-|
 |MiKo_3211|Public types should not have finalizers|&#x2713;|\-|
 |MiKo_3212|Do not confuse developers by providing other Dispose methods|&#x2713;|\-|

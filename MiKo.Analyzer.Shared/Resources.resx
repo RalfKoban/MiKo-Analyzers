@@ -4260,6 +4260,18 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3203_Title" xml:space="preserve">
     <value>If-continue statements can be inverted when followed by single line</value>
   </data>
+  <data name="MiKo_3204_CodeFixTitle" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3204_Description" xml:space="preserve">
+    <value>In case an if statement has a negative condition but also an else clause, that if statement can be inverted into a positive one. Doing so makes the method easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3204_MessageFormat" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3204_Title" xml:space="preserve">
+    <value>Negative If statements can be inverted when they have an else clause</value>
+  </data>
   <data name="MiKo_3210_Description" xml:space="preserve">
     <value>Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that's why they have fewer parameters.
 So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.

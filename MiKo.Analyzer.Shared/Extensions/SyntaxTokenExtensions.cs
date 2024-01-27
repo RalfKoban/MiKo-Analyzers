@@ -82,7 +82,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxTrivia[] GetComment(this SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();
 
-        internal static bool HasComment(this SyntaxToken value) => value.HasLeadingComment() || value.HasTrailingComment();
+        internal static bool HasComment(this SyntaxToken value) => value.GetAllTrivia().Any(_ => _.IsComment());
 
         internal static bool HasLeadingComment(this SyntaxToken value) => value.LeadingTrivia.Any(_ => _.IsComment());
 

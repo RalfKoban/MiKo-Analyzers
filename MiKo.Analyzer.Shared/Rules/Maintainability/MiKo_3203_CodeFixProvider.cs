@@ -40,9 +40,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     var condition = ifStatement.Condition;
                     var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition))
+                                           .WithCloseParenToken(ifStatement.CloseParenToken.WithoutTrailingTrivia())
                                            .WithStatement(SyntaxFactory.Block(others));
 
-                    var comment = GetComment(ifStatement.Statement);
+                    var comment = GetComment(ifStatement);
 
                     if (comment.Length > 0)
                     {
@@ -58,8 +59,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return root;
         }
 
-        private static SyntaxTrivia[] GetComment(StatementSyntax statement)
+        private static SyntaxTrivia[] GetComment(IfStatementSyntax ifStatement)
         {
+            var statement = ifStatement.Statement;
+
+            var closeParenToken = ifStatement.CloseParenToken;
+
+            if (closeParenToken.HasTrailingComment())
+            {
+                return closeParenToken.GetComment();
+            }
+
             if (statement is BlockSyntax block)
             {
                 statement = block.Statements.FirstOrDefault();
@@ -67,14 +77,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (statement is ContinueStatementSyntax cs)
             {
-                if (cs.ContinueKeyword.HasComment())
+                var continueKeyword = cs.ContinueKeyword;
+
+                if (continueKeyword.HasComment())
                 {
-                    return cs.ContinueKeyword.GetComment();
+                    return continueKeyword.GetComment();
                 }
 
-                if (cs.SemicolonToken.HasComment())
+                var semicolonToken = cs.SemicolonToken;
+
+                if (semicolonToken.HasComment())
                 {
-                    return cs.SemicolonToken.GetComment();
+                    return semicolonToken.GetComment();
                 }
             }
 
