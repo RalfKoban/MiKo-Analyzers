@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (Constants.Comments.EventSourcePhrase.None(_ => _ == phrase))
                 {
-                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), Constants.Comments.EventSourcePhrase.ElementAt(0), new Dictionary<string, string> { { IsSender, string.Empty } });
+                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), Constants.Comments.EventSourcePhrase[0], new Dictionary<string, string> { { IsSender, string.Empty } });
                 }
             }
 
@@ -73,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (phrases.None(_ => _ == phrase))
                 {
-                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases.ElementAt(0), new Dictionary<string, string>());
+                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0], new Dictionary<string, string>());
                 }
             }
         }

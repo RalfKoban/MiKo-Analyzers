@@ -137,20 +137,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // get rid of all texts that do not have any contents as they would cause a NullReferenceException inside Roslyn
             replacements.RemoveAll(_ => _ is XmlTextSyntax t && t.TextTokens.Count == 0);
 
-            if (replacements.Count == 0)
+            var replacementsCount = replacements.Count;
+
+            if (replacementsCount == 0)
             {
                 // nothing to replace
                 return new[] { text };
             }
 
             // Remove the last <para/> tag if it there is no more text available after it
-            if (replacements.Count >= 3)
+            if (replacementsCount >= 3)
             {
-                if (replacements.Last() is XmlTextSyntax t && t.TextTokens.All(_ => _.ValueText.IsNullOrWhiteSpace()) && replacements[replacements.Count - 2] is XmlEmptyElementSyntax e && e.IsPara())
+                if (replacements[replacementsCount - 1] is XmlTextSyntax t && t.TextTokens.All(_ => _.ValueText.IsNullOrWhiteSpace()) && replacements[replacementsCount - 2] is XmlEmptyElementSyntax e && e.IsPara())
                 {
-                    if (replacements[replacements.Count - 3] is XmlTextSyntax textBeforeParaNode)
+                    if (replacements[replacementsCount - 3] is XmlTextSyntax textBeforeParaNode)
                     {
-                        replacements[replacements.Count - 3] = textBeforeParaNode.WithoutTrailingXmlComment();
+                        replacements[replacementsCount - 3] = textBeforeParaNode.WithoutTrailingXmlComment();
                     }
 
                     replacements.Remove(e);

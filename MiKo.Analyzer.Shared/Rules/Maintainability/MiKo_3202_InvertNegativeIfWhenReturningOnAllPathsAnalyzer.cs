@@ -8,11 +8,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     /// <inheritdoc/>
     /// <seealso cref="MiKo_3087_AvoidComplexNegativeConditionsAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer : InvertNegativeIfAnalyzer
     {
         public const string Id = "MiKo_3202";
 
-        public MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer() : base(Id)
         {
         }
 
@@ -43,33 +43,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case ParenthesizedExpressionSyntax parenthesized:
                         node = parenthesized;
-
-                        continue;
-
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        private static bool IsNegative(SyntaxNode condition)
-        {
-            var expression = condition;
-
-            while (true)
-            {
-                if (expression.IsKind(SyntaxKind.LogicalNotExpression))
-                {
-                    return true;
-                }
-
-                switch (expression)
-                {
-                    case IsPatternExpressionSyntax pattern when pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression):
-                        return true;
-
-                    case ParenthesizedExpressionSyntax parenthesized:
-                        expression = parenthesized.Expression;
 
                         continue;
 

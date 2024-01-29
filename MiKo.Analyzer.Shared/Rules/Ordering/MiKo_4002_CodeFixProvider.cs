@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var methodsOrderedByParameters = MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.GetMethodsOrderedByStatics(methods, methodName);
 
             var methodNodes = methodsOrderedByParameters.Select(_ => _.GetSyntax()).ToList();
-            var orientationNode = methodNodes.First();
+            var orientationNode = methodNodes[0];
 
             // insert nodes after smallest
             methodNodes.Remove(orientationNode);

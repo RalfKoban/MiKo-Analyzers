@@ -1586,12 +1586,14 @@ namespace MiKoSolutions.Analyzers
                     {
                         foreach (var token in attribute.DescendantTokens())
                         {
-                            if ("true".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                            var tokenValueText = token.ValueText;
+
+                            if ("true".Equals(tokenValueText, StringComparison.OrdinalIgnoreCase))
                             {
                                 return true;
                             }
 
-                            if ("false".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                            if ("false".Equals(tokenValueText, StringComparison.OrdinalIgnoreCase))
                             {
                                 return true;
                             }
@@ -3004,7 +3006,7 @@ namespace MiKoSolutions.Analyzers
         {
             var usings = value.DescendantNodes<UsingDirectiveSyntax>().ToList();
 
-            if (usings.Any(_ => _.Name?.ToFullString() == usingNamespace))
+            if (usings.Exists(_ => _.Name?.ToFullString() == usingNamespace))
             {
                 // already set
                 return value;
@@ -3044,7 +3046,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return value.InsertNodeAfter(usings.Last(), directive);
+            return value.InsertNodeAfter(usings[usingsCount - 1], directive);
         }
 
         internal static SyntaxNode WithoutUsing(this SyntaxNode value, string usingNamespace)

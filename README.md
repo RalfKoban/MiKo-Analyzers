@@ -7,7 +7,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 
 ## Build / Project status
-[![Maintenance](https://img.shields.io/maintenance/yes/2023.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
+[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
 [![Build status](https://ci.appveyor.com/api/projects/status/qanrqn7r4q9frr9m/branch/master?svg=true)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/branch/master)
 [![codecov](https://codecov.io/gh/RalfKoban/MiKo-Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/RalfKoban/MiKo-Analyzers)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 426 rules that are currently provided by the analyzer.
+The following tables list all the 431 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -125,6 +125,7 @@ The following tables list all the 426 rules that are currently provided by the a
 |MiKo_1096|Names should use 'Failed' instead of 'NotSuccessful'|&#x2713;|\-|
 |MiKo_1097|Parameter names should not follow the naming scheme for fields|&#x2713;|&#x2713;|
 |MiKo_1098|Type names should reflect the business interface(s) they implement|&#x2713;|\-|
+|MiKo_1099|Matching parameters on method overloads should have identical names|&#x2713;|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'|&#x2713;|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test' in their names|&#x2713;|&#x2713;|
@@ -383,12 +384,16 @@ The following tables list all the 426 rules that are currently provided by the a
 |MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
+|MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|
+|MiKo_3204|Negative If statements can be inverted when they have an else clause|&#x2713;|&#x2713;|
 |MiKo_3210|Only the longest overloads should be virtual or abstract|&#x2713;|\-|
 |MiKo_3211|Public types should not have finalizers|&#x2713;|\-|
 |MiKo_3212|Do not confuse developers by providing other Dispose methods|&#x2713;|\-|
 |MiKo_3213|Parameterless Dispose method follows Basic Dispose pattern|&#x2713;|\-|
 |MiKo_3214|Interfaces do not contain 'Begin/End' or 'Enter/Exit' scope-defining methods|&#x2713;|\-|
 |MiKo_3215|Callbacks should be 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;bool&gt;'|&#x2713;|&#x2713;|
+|MiKo_3216|Static fields with initializers should be read-only|&#x2713;|&#x2713;|
+|MiKo_3217|Do not use generic types that have other generic types as type arguments|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
