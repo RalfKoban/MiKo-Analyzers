@@ -61,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 {
                     var startingLine = disposeMethod.GetStartingLine();
 
-                    if (otherMethodStartingLines.Any(_ => _ <= startingLine))
+                    if (otherMethodStartingLines.Exists(_ => _ <= startingLine))
                     {
                         yield return Issue(disposeMethod);
                     }

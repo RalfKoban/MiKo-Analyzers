@@ -203,7 +203,7 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>To ease maintenance, parameters that inherit from 'System.EventArgs' should be named 'e' .</value>
   </data>
   <data name="MiKo_1001_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_1001_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -215,16 +215,16 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Rename event argument</value>
   </data>
   <data name="MiKo_1002_Description" xml:space="preserve">
-    <value>To follow the .NET Framework Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
+    <value>To follow the .NET Framework Design Guidelines, parameters of event handlers should be named 'sender' and 'e'.</value>
   </data>
   <data name="MiKo_1002_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_1002_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1002_Title" xml:space="preserve">
-    <value>Parameters should be named according the .NET Framework Guidelines for event handlers</value>
+    <value>Parameters should be named according the .NET Framework Design Guidelines for event handlers</value>
   </data>
   <data name="MiKo_1003_CodeFixTitle" xml:space="preserve">
     <value>Rename method according to event pattern</value>
@@ -233,13 +233,13 @@ Following code constructs increase the Cyclomatic Complexity (CC) by +1:
     <value>Event handlers should start with 'On', followed by the name of the event, to indicate that they handle events.</value>
   </data>
   <data name="MiKo_1003_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/csharp/event-pattern</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/csharp/event-pattern</value>
   </data>
   <data name="MiKo_1003_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1003_Title" xml:space="preserve">
-    <value>Event handling method names should follow the .NET Framework Best Practices</value>
+    <value>Event handling method names should follow the .NET Framework Design Guidelines</value>
   </data>
   <data name="MiKo_1004_CodeFixTitle" xml:space="preserve">
     <value>Remove 'Event' suffix</value>
@@ -288,13 +288,13 @@ Example: A 'Loaded' event should use an 'EventHandler&lt;LoadedEventArgs&gt;'.</
     <value>Rename DependencyProperty event handler argument</value>
   </data>
   <data name="MiKo_1008_Description" xml:space="preserve">
-    <value>To follow the .NET Framework Guidelines, parameters of DependencyProperty event handlers should be named 'd' and 'e'.</value>
+    <value>To follow the .NET Framework Design Guidelines, parameters of DependencyProperty event handlers should be named 'd' and 'e'.</value>
   </data>
   <data name="MiKo_1008_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1008_Title" xml:space="preserve">
-    <value>Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers</value>
+    <value>Parameters should be named according the .NET Framework Design Guidelines for DependencyProperty event handlers</value>
   </data>
   <data name="MiKo_1009_CodeFixTitle" xml:space="preserve">
     <value>Name event handler variable 'handler'</value>
@@ -704,7 +704,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>To ease maintenance, methods that follow the Task-based Asynchronous Pattern (TAP) should be suffixed with 'Async'.</value>
   </data>
   <data name="MiKo_1046_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
   </data>
   <data name="MiKo_1046_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -719,7 +719,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>To ease maintenance, methods that do not follow the Task-based Asynchronous Pattern (TAP) should not be suffixed with 'Async' as that would indicate that they would follow the pattern.</value>
   </data>
   <data name="MiKo_1047_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
   </data>
   <data name="MiKo_1047_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -820,7 +820,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>To indicate that fields are the containers for specific dependency properties, those fields should be suffixed with 'Property' (similar as in the .NET Framework).</value>
   </data>
   <data name="MiKo_1055_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_1055_MessageFormat" xml:space="preserve">
     <value>Name it '{1}' instead</value>
@@ -832,7 +832,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>To indicate that fields are the containers for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework).</value>
   </data>
   <data name="MiKo_1056_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_1056_MessageFormat" xml:space="preserve">
     <value>Name it {1} instead</value>
@@ -847,7 +847,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>To indicate that fields are the keys for specific dependency properties, those fields should be suffixed with 'Key' (similar as in the .NET Framework).</value>
   </data>
   <data name="MiKo_1057_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
   </data>
   <data name="MiKo_1057_MessageFormat" xml:space="preserve">
     <value>Name it '{1}' instead</value>
@@ -859,7 +859,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>To indicate that fields are the keys for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework).</value>
   </data>
   <data name="MiKo_1058_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
   </data>
   <data name="MiKo_1058_MessageFormat" xml:space="preserve">
     <value>Name it {1} instead</value>
@@ -949,13 +949,13 @@ In addition, they distract the reader's attention as they have to translate the 
 For binary operator overloads use the names 'left' and 'right', for unary operator overloads use the name 'value'.</value>
   </data>
   <data name="MiKo_1065_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters</value>
   </data>
   <data name="MiKo_1065_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1065_Title" xml:space="preserve">
-    <value>Operator parameters should be named according the .NET Framework Guidelines for operator overloads</value>
+    <value>Operator parameters should be named according the .NET Framework Design Guidelines for operator overloads</value>
   </data>
   <data name="MiKo_1066_CodeFixTitle" xml:space="preserve">
     <value>Rename parameter to match its property</value>
@@ -1304,6 +1304,18 @@ A type implements interface 'IPart'. So it should be named accordingly, such as 
   <data name="MiKo_1098_Title" xml:space="preserve">
     <value>Type names should reflect the business interface(s) they implement</value>
   </data>
+  <data name="MiKo_1099_CodeFixTitle" xml:space="preserve">
+    <value>Rename parameter to match overload</value>
+  </data>
+  <data name="MiKo_1099_Description" xml:space="preserve">
+    <value>Parameters on method overloads should have the same name. The reason is that most likely these parameters represent the same inputs accross the different overloads which should be reflected in their names.</value>
+  </data>
+  <data name="MiKo_1099_MessageFormat" xml:space="preserve">
+    <value>Name it '{1}' to match overload</value>
+  </data>
+  <data name="MiKo_1099_Title" xml:space="preserve">
+    <value>Matching parameters on method overloads should have identical names</value>
+  </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
     <value>A class that is marked as a unit test class should indicate via its name which type it tests.
 The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
@@ -1544,7 +1556,7 @@ Example:
     <value>Namespaces group functionalities, so their names should be in plural.</value>
   </data>
   <data name="MiKo_1400_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces</value>
   </data>
   <data name="MiKo_1400_MessageFormat" xml:space="preserve">
     <value>Use plural for namespace, such as '{1}'</value>
@@ -1692,10 +1704,10 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Event method parameters should define what exactly they are.</value>
   </data>
   <data name="MiKo_2004_MessageFormat" xml:space="preserve">
-    <value>Set Documentation to: '{1}'</value>
+    <value>Change documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2004_Title" xml:space="preserve">
-    <value>Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers</value>
+    <value>Documentation of event handler parameter names should follow .NET Framework Design Guidelines for event handlers</value>
   </data>
   <data name="MiKo_2005_Description" xml:space="preserve">
     <value>Documentation should not contain the term 'event arg'. Instead, it should contain the reference to the specific class, such as '&lt;see cref="XyzEventArgs" /&gt;'.</value>
@@ -1774,7 +1786,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Dispose methods should be documented in the same way as they are documented by the .NET Framework.</value>
   </data>
   <data name="MiKo_2014_MessageFormat" xml:space="preserve">
-    <value>Set Documentation to: '{1}'</value>
+    <value>Change documentation to: '{1}'</value>
   </data>
   <data name="MiKo_2014_Title" xml:space="preserve">
     <value>Dispose methods should be documented as done by the .NET Framework</value>
@@ -2093,7 +2105,7 @@ Or with: '{3}'</value>
     <value>The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other XML tags in parallel to the &lt;summary&gt;.</value>
   </data>
   <data name="MiKo_2041_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
   </data>
   <data name="MiKo_2041_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not contain: '&lt;{0}/&gt;'</value>
@@ -2108,7 +2120,7 @@ Or with: '{3}'</value>
     <value>The documentation should use the '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' or '&lt;p/&gt;' HTML tags.</value>
   </data>
   <data name="MiKo_2042_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
   </data>
   <data name="MiKo_2042_MessageFormat" xml:space="preserve">
     <value>Use '&lt;para/&gt;' instead of '{1}'</value>
@@ -2549,7 +2561,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
 This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted and hard to read.</value>
   </data>
   <data name="MiKo_2204_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
   </data>
   <data name="MiKo_2204_MessageFormat" xml:space="preserve">
     <value>Use &lt;list&gt; to list items in documentation</value>
@@ -3016,7 +3028,7 @@ Such empty regions solely clutter the code without providing any benefit at all.
     <value>To ease maintenance, use the pre-defined .NET Framework delegate types such as 'Action', 'Func' or 'Expression' instead of custom delegates.</value>
   </data>
   <data name="MiKo_3001_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
   </data>
   <data name="MiKo_3001_MessageFormat" xml:space="preserve">
     <value>Use 'Action', 'Func' or 'Expression' instead</value>
@@ -3034,16 +3046,16 @@ Such empty regions solely clutter the code without providing any benefit at all.
     <value>Classes should not have too many dependencies</value>
   </data>
   <data name="MiKo_3003_Description" xml:space="preserve">
-    <value>To ease usage, events should follow the .NET Framework Guidelines for Event Design.</value>
+    <value>To ease usage, events should follow the .NET Framework Design Guidelines for Event Design.</value>
   </data>
   <data name="MiKo_3003_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/event</value>
   </data>
   <data name="MiKo_3003_MessageFormat" xml:space="preserve">
     <value>Use 'EventHandler' or 'EventHandler&lt;T&gt;' instead</value>
   </data>
   <data name="MiKo_3003_Title" xml:space="preserve">
-    <value>Events should follow .NET Framework Guidelines for events</value>
+    <value>Events should follow .NET Framework Design Guidelines for events</value>
   </data>
   <data name="MiKo_3004_Description" xml:space="preserve">
     <value>EventArgs exist only to raise events and to pass some data that to the listening event handlers.
@@ -3108,7 +3120,7 @@ That is they should return a Boolean and have the last parameter as [out] parame
     <value>Specific kinds of exceptions are reserved and thrown by the execution engine (CLR) and in most cases indicate a bug.</value>
   </data>
   <data name="MiKo_3010_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
   </data>
   <data name="MiKo_3010_MessageFormat" xml:space="preserve">
     <value>Do not create a '{0}'</value>
@@ -3123,10 +3135,10 @@ That is they should return a Boolean and have the last parameter as [out] parame
     <value>Thrown ArgumentExceptions (or its subtypes) should contain the name of the parameter that caused the exception to be thrown.</value>
   </data>
   <data name="MiKo_3011_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types#argumentexception-argumentnullexception-and-argumentoutofrangeexception</value>
   </data>
   <data name="MiKo_3011_MessageFormat" xml:space="preserve">
-    <value>Set 'paramName' parameter to {1}</value>
+    <value>Change 'paramName' parameter to {1}</value>
   </data>
   <data name="MiKo_3011_Title" xml:space="preserve">
     <value>Thrown ArgumentExceptions (or its subtypes) shall provide the correct parameter name</value>
@@ -3175,7 +3187,7 @@ That is they should return a Boolean and have the last parameter as [out] parame
 If the method call does not have any argument or if the failure does not involve the arguments themselves, then InvalidOperationException should be used.</value>
   </data>
   <data name="MiKo_3015_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
   </data>
   <data name="MiKo_3015_MessageFormat" xml:space="preserve">
     <value>Throw an 'InvalidOperationException' instead</value>
@@ -3192,7 +3204,7 @@ If you want to indicate a problem for the parameter, throw an ArgumentException 
 If it's no issue of the parameter itself, throw an InvalidOperationException instead.</value>
   </data>
   <data name="MiKo_3016_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/using-standard-exception-types</value>
   </data>
   <data name="MiKo_3016_MessageFormat" xml:space="preserve">
     <value>Throw an 'ArgumentException' or 'InvalidOperationException' instead</value>
@@ -3216,7 +3228,7 @@ If it's no issue of the parameter itself, throw an InvalidOperationException ins
     <value>Already disposed instances of disposable types should indicate that they are disposed when invoking methods on them. That makes it easier to spot bugs because the user code should never access already disposed types.</value>
   </data>
   <data name="MiKo_3018_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/implementing-dispose</value>
   </data>
   <data name="MiKo_3018_MessageFormat" xml:space="preserve">
     <value>Throw ObjectDisposedException if disposed</value>
@@ -3301,7 +3313,7 @@ In most cases this is not wanted. The object reference shall be the same, only t
     <value>Marking parameters for future usage leads to a bad design. It is unclear whether the parameter will ever be used. It is also unclear whether the type of the parameter will match future needs. In future, you can always override methods and add new parameters.</value>
   </data>
   <data name="MiKo_3027_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
   </data>
   <data name="MiKo_3027_MessageFormat" xml:space="preserve">
     <value>Do not reserve '{0}' for future usage</value>
@@ -3448,7 +3460,7 @@ Such properties should be methods instead to make it clear that they behave diff
     <value>To ease maintenance and increase readability, do not use Booleans unless you are absolutely sure there will never be a need for more than two values. Instead, use an Enum.</value>
   </data>
   <data name="MiKo_3040_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/parameter-design</value>
   </data>
   <data name="MiKo_3040_MessageFormat" xml:space="preserve">
     <value>Use an Enum instead</value>
@@ -3560,7 +3572,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
     <value>Fields that are the back of a DependencyProperty should be made 'public static readonly' to allow the .NET framework and other clients to find and access those fields.</value>
   </data>
   <data name="MiKo_3050_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_3050_MessageFormat" xml:space="preserve">
     <value>Make it 'public static readonly'</value>
@@ -3576,7 +3588,7 @@ Failures inside the delegate(s) are really hard to tackle down because an except
 In addition, the correct property names, property types and owing types should be provided.</value>
   </data>
   <data name="MiKo_3051_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
   </data>
   <data name="MiKo_3051_MessageFormat" xml:space="preserve">
     <value>Use '{1}' instead</value>
@@ -3591,7 +3603,7 @@ In addition, the correct property names, property types and owing types should b
     <value>Fields that are the back of a DependencyPropertyKey should be made non-public, 'static readonly' to prevent clients to find and access those fields.</value>
   </data>
   <data name="MiKo_3052_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
   </data>
   <data name="MiKo_3052_MessageFormat" xml:space="preserve">
     <value>Make it non-public 'static readonly'</value>
@@ -3604,7 +3616,7 @@ In addition, the correct property names, property types and owing types should b
 In addition, the correct property names, property types and owing types should be provided.</value>
   </data>
   <data name="MiKo_3053_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
   </data>
   <data name="MiKo_3053_MessageFormat" xml:space="preserve">
     <value>Use '{1}' instead</value>
@@ -3621,7 +3633,7 @@ To made them available, it is recommended to expose a dependency property identi
 That can be done by exposing the value of 'DependencyPropertyKey.DependencyProperty' as a 'public static readonly' field on the specific class.</value>
   </data>
   <data name="MiKo_3054_HelpLinkUri" xml:space="preserve">
-    <value>https://docs.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
+    <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencyproperty.registerreadonly</value>
   </data>
   <data name="MiKo_3054_MessageFormat" xml:space="preserve">
     <value>Expose a DependencyProperty identifier for the read-only dependency property '{0}'</value>
@@ -4236,6 +4248,30 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3202_Title" xml:space="preserve">
     <value>Use positive conditions when returning in all paths</value>
   </data>
+  <data name="MiKo_3203_CodeFixTitle" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3203_Description" xml:space="preserve">
+    <value>In case an if statement contains only a continue statement and is followed also by a single code line, that if statement can be inverted. Doing so makes the method easier to read.</value>
+  </data>
+  <data name="MiKo_3203_MessageFormat" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3203_Title" xml:space="preserve">
+    <value>If-continue statements can be inverted when followed by single line</value>
+  </data>
+  <data name="MiKo_3204_CodeFixTitle" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3204_Description" xml:space="preserve">
+    <value>In case an if statement has a negative condition but also an else clause, that if statement can be inverted into a positive one. Doing so makes the method easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3204_MessageFormat" xml:space="preserve">
+    <value>Invert if to simplify</value>
+  </data>
+  <data name="MiKo_3204_Title" xml:space="preserve">
+    <value>Negative If statements can be inverted when they have an else clause</value>
+  </data>
   <data name="MiKo_3210_Description" xml:space="preserve">
     <value>Methods that share the same name within a type are called overloads. In general, overloads with fewer parameters call the ones with more parameters and provide some default values - that's why they have fewer parameters.
 So, when inheriting is needed and such overload method needs to be overridden by an inherited class, then the overload to override should be the one with the most parameters.
@@ -4290,6 +4326,44 @@ By doing so developers can simply place the call inside a 'using' to guarantee t
   </data>
   <data name="MiKo_3214_Title" xml:space="preserve">
     <value>Interfaces do not contain 'Begin/End' or 'Enter/Exit' scope-defining methods</value>
+  </data>
+  <data name="MiKo_3215_CodeFixTitle" xml:space="preserve">
+    <value>Convert 'Predicate' into 'Func'</value>
+  </data>
+  <data name="MiKo_3215_Description" xml:space="preserve">
+    <value>To standardize delegates and follow the .NET Framework Design Guidelines for callbacks, callbacks of type 'Predicate&lt;T&gt;' should be of type 'Func&lt;T, bool&gt;' instead.</value>
+  </data>
+  <data name="MiKo_3215_HelpLinkUri" xml:space="preserve">
+    <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/events-and-callbacks</value>
+  </data>
+  <data name="MiKo_3215_MessageFormat" xml:space="preserve">
+    <value>Use 'Func&lt;{0}, bool&gt;' instead of 'Predicate&lt;{0}&gt;'</value>
+  </data>
+  <data name="MiKo_3215_Title" xml:space="preserve">
+    <value>Callbacks should be 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;bool&gt;'</value>
+  </data>
+  <data name="MiKo_3216_CodeFixTitle" xml:space="preserve">
+    <value>Make field read-only</value>
+  </data>
+  <data name="MiKo_3216_Description" xml:space="preserve">
+    <value>Static fields that get their values pre-assigned are most probably meant to solely have those values. Therefore such fields should be read-only.</value>
+  </data>
+  <data name="MiKo_3216_MessageFormat" xml:space="preserve">
+    <value>Make field read-only</value>
+  </data>
+  <data name="MiKo_3216_Title" xml:space="preserve">
+    <value>Static fields with initializers should be read-only</value>
+  </data>
+  <data name="MiKo_3217_Description" xml:space="preserve">
+    <value>Generic types that have other generic types as type arguments are hard to understand and maintain.
+This is because it's hard to find out what's meant, in addition it seems like there is some type information hiding within the generics due to primitive obsession.
+Instead, it would be much easier to see what is meant if non-generic types would be used as type arguments.</value>
+  </data>
+  <data name="MiKo_3217_MessageFormat" xml:space="preserve">
+    <value>Do not use generic type with generic type arguments</value>
+  </data>
+  <data name="MiKo_3217_Title" xml:space="preserve">
+    <value>Do not use generic types that have other generic types as type arguments</value>
   </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>

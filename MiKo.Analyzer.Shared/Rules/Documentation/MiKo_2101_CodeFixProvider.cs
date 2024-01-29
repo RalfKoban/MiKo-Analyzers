@@ -114,7 +114,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 result.Add(text);
             }
 
-            result[result.Count - 1] = result.Last().WithTrailingXmlComment();
+            result[result.Count - 1] = result[result.Count - 1].WithTrailingXmlComment();
 
             return result;
         }

@@ -147,7 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // only check for methods with names as ctors cannot be registered for event handlers or callbacks
                 if (methodName != null)
                 {
-                    if (eventAssignments.Value.Any(_ => _.Right is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == methodName))
+                    if (eventAssignments.Value.Exists(_ => _.Right is IdentifierNameSyntax identifier && identifier.Identifier.ValueText == methodName))
                     {
                         // seems to be an assignment so we do not report that parameter
                         continue;

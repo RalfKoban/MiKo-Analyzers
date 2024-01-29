@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
         {
-            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (comments.Any(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
                 // fitting comment
             }
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var summary = comment.GetSummaryXmls().First();
 
-                yield return Issue(symbol.Name, summary.GetContentsLocation(), phrases.First());
+                yield return Issue(symbol.Name, summary.GetContentsLocation(), phrases[0]);
             }
         }
     }

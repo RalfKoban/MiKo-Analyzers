@@ -1586,12 +1586,14 @@ namespace MiKoSolutions.Analyzers
                     {
                         foreach (var token in attribute.DescendantTokens())
                         {
-                            if ("true".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                            var tokenValueText = token.ValueText;
+
+                            if ("true".Equals(tokenValueText, StringComparison.OrdinalIgnoreCase))
                             {
                                 return true;
                             }
 
-                            if ("false".Equals(token.ValueText, StringComparison.OrdinalIgnoreCase))
+                            if ("false".Equals(tokenValueText, StringComparison.OrdinalIgnoreCase))
                             {
                                 return true;
                             }
@@ -1886,6 +1888,8 @@ namespace MiKoSolutions.Analyzers
 
             return results;
         }
+
+        internal static T RemoveTrivia<T>(this T node, SyntaxTrivia trivia) where T : SyntaxNode => node.ReplaceTrivia(trivia, SyntaxFactory.ElasticMarker);
 
         internal static BaseTypeDeclarationSyntax RemoveNodeAndAdjustOpenCloseBraces(this BaseTypeDeclarationSyntax value, SyntaxNode node)
         {
@@ -2201,9 +2205,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool TryGetRegionDirective(this SyntaxNode source, out DirectiveTriviaSyntax result)
+        internal static bool HasRegionDirective(this SyntaxNode value) => value != null && value.HasStructuredTrivia && value.GetLeadingTrivia().Any(SyntaxKind.RegionDirectiveTrivia);
+
+        internal static bool TryGetRegionDirective(this SyntaxNode source, out DirectiveTriviaSyntax regionDirective)
         {
-            if (source.HasStructuredTrivia)
+            if (source != null && source.HasStructuredTrivia)
             {
                 var leadingTrivia = source.GetLeadingTrivia();
 
@@ -2217,7 +2223,7 @@ namespace MiKoSolutions.Analyzers
 
                         if (t.IsKind(SyntaxKind.RegionDirectiveTrivia))
                         {
-                            result = t.GetStructure() as DirectiveTriviaSyntax;
+                            regionDirective = t.GetStructure() as DirectiveTriviaSyntax;
 
                             return true;
                         }
@@ -2225,7 +2231,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            result = null;
+            regionDirective = null;
 
             return false;
         }
@@ -2457,9 +2463,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static T Without<T>(this T value, IEnumerable<SyntaxNode> nodes) where T : SyntaxNode => value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
 
-        internal static T Without<T>(this T value, params SyntaxNode[] nodes) where T : SyntaxNode => value.Without((IEnumerable<SyntaxNode>)nodes);
-
         internal static T Without<T>(this T value, IEnumerable<SyntaxTrivia> trivia) where T : SyntaxNode => value.ReplaceTrivia(trivia, (original, rewritten) => default);
+
+        internal static T Without<T>(this T value, params SyntaxNode[] nodes) where T : SyntaxNode => value.Without((IEnumerable<SyntaxNode>)nodes);
 
         internal static SyntaxList<XmlNodeSyntax> WithoutFirstXmlNewLine(this SyntaxList<XmlNodeSyntax> values)
         {
@@ -2999,7 +3005,7 @@ namespace MiKoSolutions.Analyzers
         {
             var usings = value.DescendantNodes<UsingDirectiveSyntax>().ToList();
 
-            if (usings.Any(_ => _.Name?.ToFullString() == usingNamespace))
+            if (usings.Exists(_ => _.Name?.ToFullString() == usingNamespace))
             {
                 // already set
                 return value;
@@ -3039,7 +3045,7 @@ namespace MiKoSolutions.Analyzers
                 }
             }
 
-            return value.InsertNodeAfter(usings.Last(), directive);
+            return value.InsertNodeAfter(usings[usingsCount - 1], directive);
         }
 
         internal static SyntaxNode WithoutUsing(this SyntaxNode value, string usingNamespace)
