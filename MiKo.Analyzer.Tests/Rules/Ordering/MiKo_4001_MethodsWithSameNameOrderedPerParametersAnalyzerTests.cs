@@ -610,6 +610,310 @@ public readonly struct TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_class_with_2_identically_named_methods_in_wrong_order_within_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething()
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_3_identically_named_methods_in_wrong_mixed_order_within_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething(int i, int j)
+    { }
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_4_identically_named_methods_in_correct_order_and_params_method_at_beginning_within_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething(params int[] i)
+    { }
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething(int i, int j)
+    { }
+
+    public void DoSomething(params int[] i)
+    { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_uncommented_methods_within_region_after_constructors()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    #region Public members
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoSomething()
+    { }
+
+    #endregion
+
+    #region Private members
+
+    private void DoAnything()
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    #region Public members
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #endregion
+
+    #region Private members
+
+    private void DoAnything()
+    { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_commented_methods_within_region_after_constructors()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    #region Public members
+
+    /// <summary>Comment #1</summary>
+    public void DoSomething(int i)
+    { }
+
+    /// <summary>Comment #2</summary>
+    public void DoSomething()
+    { }
+
+    #endregion
+
+    #region Private members
+
+    private void DoAnything()
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    #region Public members
+
+    /// <summary>Comment #2</summary>
+    public void DoSomething()
+    { }
+
+    /// <summary>Comment #1</summary>
+    public void DoSomething(int i)
+    { }
+
+    #endregion
+
+    #region Private members
+
+    private void DoAnything()
+    { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_uncommented_methods_within_region_if_another_method_is_between_them()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    #region Public members
+
+    public void DoSomething(int i)
+    { }
+
+    public void DoAnything(int i)
+    { }
+
+    public void DoSomething()
+    { }
+
+    #endregion
+
+    #region Private members
+
+    private void DoAnything()
+    { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public TestMe()
+    { }
+
+    #region Public members
+
+    public void DoAnything(int i)
+    { }
+
+    public void DoSomething()
+    { }
+
+    public void DoSomething(int i)
+    { }
+
+    #endregion
+
+    #region Private members
+
+    private void DoAnything()
+    { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer();

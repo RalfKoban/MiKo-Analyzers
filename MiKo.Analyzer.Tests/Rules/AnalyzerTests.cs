@@ -326,7 +326,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 var number = thousand + j;
                 var prefix = $"MiKo_{number:####}";
 
-                if (diagnosticIds.All(_ => _.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) is false))
+                if (diagnosticIds.TrueForAll(_ => _.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) is false))
                 {
                     gaps.Add(prefix);
                 }

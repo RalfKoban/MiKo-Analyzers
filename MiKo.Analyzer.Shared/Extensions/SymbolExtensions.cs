@@ -448,7 +448,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
 
-        internal static bool Implements(this ITypeSymbol value, string interfaceType)
+        internal static bool Implements(this ITypeSymbol value, string interfaceTypeName)
         {
             switch (value.SpecialType)
             {
@@ -492,7 +492,7 @@ namespace MiKoSolutions.Analyzers
 
             var fullName = value.ToString();
 
-            if (fullName == interfaceType)
+            if (fullName == interfaceTypeName)
             {
                 return true;
             }
@@ -501,7 +501,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var fullInterfaceName = implementedInterface.ToString();
 
-                if (fullInterfaceName == interfaceType)
+                if (fullInterfaceName == interfaceTypeName)
                 {
                     return true;
                 }
@@ -581,7 +581,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool AnyBaseType(this ITypeSymbol value, Predicate<ITypeSymbol> callback)
+        internal static bool AnyBaseType(this ITypeSymbol value, Func<ITypeSymbol, bool> callback)
         {
             var symbol = value;
 
@@ -649,7 +649,7 @@ namespace MiKoSolutions.Analyzers
         // ReSharper disable once AssignNullToNotNullAttribute
         internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, typeof(T).FullName);
 
-        internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
+        internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName)
         {
             if (value is null)
             {
@@ -686,7 +686,7 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
-                    return value.AnyBaseType(_ => baseClass == _.ToString());
+                    return value.AnyBaseType(_ => baseClassName == _.ToString());
                 }
 
                 default:
@@ -1178,7 +1178,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var ns = method.ContainingNamespace;
 
-                    if (ns.Name == "Linq" && ns.ContainingNamespace.Name == "System")
+                    if (ns.Name == nameof(System.Linq) && ns.ContainingNamespace.Name == nameof(System))
                     {
                         return true;
                     }
@@ -1404,6 +1404,6 @@ namespace MiKoSolutions.Analyzers
             return typeName;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
     }
 }
