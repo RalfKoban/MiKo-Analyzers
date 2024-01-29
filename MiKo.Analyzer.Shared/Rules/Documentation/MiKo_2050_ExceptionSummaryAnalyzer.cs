@@ -149,13 +149,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
         {
-            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (comments.Any(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
                 // fitting comment
             }
             else
             {
-                yield return Issue(symbol, constant, phrases.First());
+                yield return Issue(symbol, constant, phrases[0]);
             }
         }
 

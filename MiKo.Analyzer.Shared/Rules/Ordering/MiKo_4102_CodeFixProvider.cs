@@ -22,14 +22,14 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var otherMethods = modifiedType.ChildNodes<MethodDeclarationSyntax>().ToList();
 
-            var precedingNode = otherMethods.FirstOrDefault(_ => _.IsTestSetUpMethod())
-                             ?? otherMethods.FirstOrDefault(_ => _.IsTestOneTimeTearDownMethod())
-                             ?? otherMethods.FirstOrDefault(_ => _.IsTestOneTimeSetUpMethod());
+            var precedingNode = otherMethods.Find(_ => _.IsTestSetUpMethod())
+                             ?? otherMethods.Find(_ => _.IsTestOneTimeTearDownMethod())
+                             ?? otherMethods.Find(_ => _.IsTestOneTimeSetUpMethod());
 
             if (precedingNode is null)
             {
                 // place before all other nodes as there is no set-up or one-time method
-                return modifiedType.InsertNodeBefore(otherMethods.First(), method);
+                return modifiedType.InsertNodeBefore(otherMethods[0], method);
             }
 
             // we have to add the trivia to the method (as the original one belonged to the open brace token which we removed above)

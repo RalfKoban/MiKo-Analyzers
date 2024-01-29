@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 var childNodes = modifiedType.ChildNodes().ToList();
                 methodNodes = methodNodes.Select(_ => childNodes.First(_.IsEquivalentTo)).ToList();
 
-                var orientationNode = methodNodes.First();
+                var orientationNode = methodNodes[0];
 
                 // insert nodes after smallest
                 methodNodes.Remove(orientationNode);
