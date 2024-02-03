@@ -2423,6 +2423,15 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2077_Title" xml:space="preserve">
     <value>&lt;summary&gt; documentation should not contain &lt;code&gt;</value>
   </data>
+  <data name="MiKo_2078_Description" xml:space="preserve">
+    <value>Code snippets most often act as examples, so they normally contain source code. However, in case they contain plain XML, then they will not be converted into documentation so that the resulting online help (or IntelliSense) information will not show them at all.</value>
+  </data>
+  <data name="MiKo_2078_MessageFormat" xml:space="preserve">
+    <value>&lt;code&gt; should not contain XML</value>
+  </data>
+  <data name="MiKo_2078_Title" xml:space="preserve">
+    <value>&lt;code&gt; documentation should not contain XML tags</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>

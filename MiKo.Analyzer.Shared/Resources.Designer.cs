@@ -6795,6 +6795,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code snippets most often act as examples, so they normally contain source code. However, in case they contain plain XML, then they will not be converted into documentation so that the resulting online help (or IntelliSense) information will not show them at all..
+        /// </summary>
+        public static string MiKo_2078_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2078_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;code&gt; should not contain XML.
+        /// </summary>
+        public static string MiKo_2078_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2078_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;code&gt; documentation should not contain XML tags.
+        /// </summary>
+        public static string MiKo_2078_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2078_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         public static string MiKo_2080_CodeFixTitle {
