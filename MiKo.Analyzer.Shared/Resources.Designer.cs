@@ -12393,6 +12393,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension methods are a great way to extend types with additional functionality. Such extension methods are defined in static types specifically designed for that. However, other types that are not intended to contain extension methods should not unexpectedly contain them..
+        /// </summary>
+        public static string MiKo_3218_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3218_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change from extension method into normal static method.
+        /// </summary>
+        public static string MiKo_3218_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3218_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not define extension methods in unexpected places.
+        /// </summary>
+        public static string MiKo_3218_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3218_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {

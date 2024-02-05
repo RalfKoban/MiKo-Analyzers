@@ -4374,6 +4374,15 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3217_Title" xml:space="preserve">
     <value>Do not use generic types that have other generic types as type arguments</value>
   </data>
+  <data name="MiKo_3218_Description" xml:space="preserve">
+    <value>Extension methods are a great way to extend types with additional functionality. Such extension methods are defined in static types specifically designed for that. However, other types that are not intended to contain extension methods should not unexpectedly contain them.</value>
+  </data>
+  <data name="MiKo_3218_MessageFormat" xml:space="preserve">
+    <value>Change from extension method into normal static method</value>
+  </data>
+  <data name="MiKo_3218_Title" xml:space="preserve">
+    <value>Do not define extension methods in unexpected places</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
