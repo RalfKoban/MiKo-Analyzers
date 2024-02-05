@@ -119,6 +119,8 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_ThrowsException", "Method_name_throws_exception_if_some_condition")]
         [TestCase("MethodName_SomeCondition_TrueReturned", "Method_name_returns_true_if_some_condition")]
         [TestCase("MethodName_SomeCondition_ObjectReturned", "Method_name_returns_object_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_GuidEmptyReturned", "Method_name_returns_empty_guid_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_StringEmptyReturned", "Method_name_returns_empty_string_if_some_condition")]
         [TestCase("MethodName_SomeCondition_Returned", "Method_name_returns_some_condition")]
         [TestCase("MethodName_WhenSomeCondition_ThrowsException", "Method_name_throws_exception_if_some_condition")]
         [TestCase("MethodName_XYZObject_ThrowsException", "Method_name_throws_exception_if_XYZ_object")]

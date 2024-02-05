@@ -169,6 +169,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             .ReplaceWithCheck("not_implemented_exception", nameof(NotImplementedException))
                                                             .ReplaceWithCheck("task_canceled_exception", nameof(TaskCanceledException))
                                                             .ReplaceWithCheck("operation_canceled_exception", nameof(OperationCanceledException))
+                                                            .ReplaceWithCheck("_guid_empty", "_empty_guid")
+                                                            .ReplaceWithCheck("_string_empty", "_empty_string")
                                                             .ReplaceWithCheck("_in_return_", "<1>")
                                                             .ReplaceWithCheck("_to_return_", "<2>")
                                                             .ReplaceWithCheck("_not_throw_", "<3>")
