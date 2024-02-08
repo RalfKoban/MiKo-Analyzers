@@ -196,7 +196,32 @@ namespace System
             var valueLength = value.Length;
             var findingLength = finding.Length;
 
-            if (findingLength > valueLength)
+            var difference = findingLength - valueLength;
+
+            if (difference == 0)
+            {
+                return QuickEquals();
+
+                bool QuickEquals()
+                {
+                    const int QuickInspectionChars = 2;
+
+                    if (valueLength > QuickInspectionChars)
+                    {
+                        var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
+                        var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
+
+                        if (valueSpan.CompareTo(findingSpan, comparison) != 0)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return value.Equals(finding, comparison);
+                }
+            }
+
+            if (difference > 0)
             {
                 switch (comparison)
                 {
