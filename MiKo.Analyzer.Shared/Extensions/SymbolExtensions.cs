@@ -991,7 +991,18 @@ namespace MiKoSolutions.Analyzers
             return argumentType.IsException();
         }
 
-        internal static bool IsFactory(this ITypeSymbol value) => value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+        internal static bool IsFactory(this ITypeSymbol value)
+        {
+            switch (value?.TypeKind)
+            {
+                case TypeKind.Class:
+                case TypeKind.Interface:
+                    return value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+
+                default:
+                    return false;
+            }
+        }
 
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
