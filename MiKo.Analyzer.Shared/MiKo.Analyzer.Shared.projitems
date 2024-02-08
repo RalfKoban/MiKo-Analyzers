@@ -437,6 +437,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3401_NamespaceDepthAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3501_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3501_DoNotUseSuppressNullableWarningOnConditionalAccessAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\StringMaintainabilityCodeFixProvider.cs" />

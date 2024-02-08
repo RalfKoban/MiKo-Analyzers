@@ -4417,6 +4417,18 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_3401_Title" xml:space="preserve">
     <value>Namespace hierarchies should not be too deep</value>
   </data>
+  <data name="MiKo_3501_CodeFixTitle" xml:space="preserve">
+    <value>Remove suppressed nullable warning</value>
+  </data>
+  <data name="MiKo_3501_Description" xml:space="preserve">
+    <value>Suppressing nullable warnings on Null-conditional operators is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null.</value>
+  </data>
+  <data name="MiKo_3501_MessageFormat" xml:space="preserve">
+    <value>Do not suppress nullable warning</value>
+  </data>
+  <data name="MiKo_3501_Title" xml:space="preserve">
+    <value>Do not suppress nullable warnings on Null-conditional operators</value>
+  </data>
   <data name="MiKo_4001_CodeFixTitle" xml:space="preserve">
     <value>Place and order method side-by-side with overloads</value>
   </data>
