@@ -100,10 +100,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var preparedComment = Comment(comment, MethodReplacementMapKeys, MethodReplacementMap);
 
-            if (preparedComment.Content.Count > 2)
+            var content = preparedComment.Content;
+
+            if (content.Count > 2)
             {
-                var content1 = preparedComment.Content[0];
-                var content2 = preparedComment.Content[1];
+                var content1 = content[0];
+                var content2 = content[1];
 
                 if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.IsWhiteSpaceOnlyText())
                 {
