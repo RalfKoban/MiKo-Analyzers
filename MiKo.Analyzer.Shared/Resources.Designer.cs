@@ -12556,6 +12556,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove suppressed nullable warning.
+        /// </summary>
+        public static string MiKo_3502_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3502_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suppressing nullable warnings on Linq calls that can return &apos;null&apos; is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null..
+        /// </summary>
+        public static string MiKo_3502_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3502_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suppress nullable warning.
+        /// </summary>
+        public static string MiKo_3502_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3502_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suppress nullable warnings on Linq calls.
+        /// </summary>
+        public static string MiKo_3502_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3502_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place and order method side-by-side with overloads.
         /// </summary>
         public static string MiKo_4001_CodeFixTitle {
