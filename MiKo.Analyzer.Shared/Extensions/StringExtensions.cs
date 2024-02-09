@@ -724,7 +724,7 @@ namespace System
 
         public static bool HasEntityMarker(this string value)
         {
-            var hasMarker = value.ContainsAny(Constants.Markers.Entities);
+            var hasMarker = value.ContainsAny(Constants.Markers.Models);
 
             if (hasMarker)
             {
