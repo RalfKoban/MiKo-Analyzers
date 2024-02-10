@@ -6795,6 +6795,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code snippets most often act as examples, so they normally contain source code. However, in case they contain plain XML, then they will not be converted into documentation so that the resulting online help (or IntelliSense) information will not show them at all..
+        /// </summary>
+        public static string MiKo_2078_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2078_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;code&gt; should not contain XML.
+        /// </summary>
+        public static string MiKo_2078_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2078_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;code&gt; documentation should not contain XML tags.
+        /// </summary>
+        public static string MiKo_2078_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2078_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         public static string MiKo_2080_CodeFixTitle {
@@ -12366,6 +12393,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension methods are a great way to extend types with additional functionality. Such extension methods are defined in static types specifically designed for that. However, other types that are not intended to contain extension methods should not unexpectedly contain them..
+        /// </summary>
+        public static string MiKo_3218_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3218_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change from extension method into normal static method.
+        /// </summary>
+        public static string MiKo_3218_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3218_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not define extension methods in unexpected places.
+        /// </summary>
+        public static string MiKo_3218_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3218_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         public static string MiKo_3301_CodeFixTitle {
@@ -12462,6 +12516,78 @@ namespace MiKoSolutions.Analyzers {
         public static string MiKo_3401_Title {
             get {
                 return ResourceManager.GetString("MiKo_3401_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove suppressed nullable warning.
+        /// </summary>
+        public static string MiKo_3501_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3501_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suppressing nullable warnings on Null-conditional operators is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null..
+        /// </summary>
+        public static string MiKo_3501_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3501_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suppress nullable warning.
+        /// </summary>
+        public static string MiKo_3501_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3501_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suppress nullable warnings on Null-conditional operators.
+        /// </summary>
+        public static string MiKo_3501_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3501_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove suppressed nullable warning.
+        /// </summary>
+        public static string MiKo_3502_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3502_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suppressing nullable warnings on Linq calls that can return &apos;null&apos; is confusing to developers. Either something can be null or it cannot be null; but it cannot be both null and not null..
+        /// </summary>
+        public static string MiKo_3502_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3502_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suppress nullable warning.
+        /// </summary>
+        public static string MiKo_3502_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3502_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not suppress nullable warnings on Linq calls.
+        /// </summary>
+        public static string MiKo_3502_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3502_Title", resourceCulture);
             }
         }
         

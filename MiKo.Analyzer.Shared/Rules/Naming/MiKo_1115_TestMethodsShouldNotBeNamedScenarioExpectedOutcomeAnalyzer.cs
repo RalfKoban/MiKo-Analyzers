@@ -12,10 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1115";
 
-        private const string Returned = "Returned";
         private const string If = "If";
         private const string When = "When";
         private const string And = "And";
+        private const string Returned = "Returned";
+        private const string Returns = "Returns";
+        private const string Throws = "Throws";
 
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
@@ -34,8 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] SpecialFirstPhrases =
                                                                {
-                                                                   "Returns",
-                                                                   "Throws",
+                                                                   Returns,
+                                                                   Throws,
                                                                };
 
         public MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
@@ -76,33 +78,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static bool HasIssue(string methodName)
         {
             var parts = methodName.SplitBy(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
-            var count = parts.Count();
+            var first = true;
 
-            if (count >= 1)
+            foreach (ReadOnlySpan<char> part in parts)
             {
-                var first = true;
-
-                foreach (ReadOnlySpan<char> part in parts)
+                if (part[0].IsUpperCase() is false)
                 {
-                    if (part[0].IsUpperCase() is false)
-                    {
-                        return false;
-                    }
+                    return false;
+                }
 
-                    // jump over first part
-                    if (first && part.StartsWithAny(SpecialFirstPhrases, StringComparison.Ordinal))
-                    {
-                        first = false;
-
-                        continue;
-                    }
-
+                // jump over first part
+                if (first && part.StartsWithAny(SpecialFirstPhrases, StringComparison.Ordinal))
+                {
                     first = false;
 
-                    if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
+                    continue;
+                }
+
+                first = false;
+
+                if (part.ContainsAny(ExpectedOutcomeMarkers, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
                 }
             }
 
@@ -115,104 +112,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             switch (parts.Length)
             {
-                case 2:
-                {
-                    if (parts[1].Contains("ThrowsExceptionIf", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // it seems like this is in normal order, so do not change the order
-                        result = null;
-
-                        return false;
-                    }
-
-                    var addIf = IsIfRequired(parts[0], parts[1]);
-
-                    var builder = new StringBuilder(name.Length);
-                    FixReturn(builder, parts[1]);
-
-                    if (addIf)
-                    {
-                        builder.Append(If);
-                    }
-
-                    FixReturn(builder, parts[0]);
-
-                    builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
-
-                    result = builder.ToString();
-
-                    return true;
-                }
-
-                case 3:
-                {
-                    var addIf = IsIfRequired(parts[1], parts[2]);
-
-                    var builder = new StringBuilder(name.Length);
-                    FixReturn(builder, parts[0]);
-                    FixReturn(builder, parts[2]);
-
-                    if (addIf)
-                    {
-                        builder.Append(If);
-                    }
-
-                    FixReturn(builder, parts[1]);
-
-                    builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
-
-                    result = builder.ToString();
-
-                    return true;
-                }
-
-                case 4:
-                {
-                    if (parts[2].StartsWith(And, StringComparison.Ordinal))
-                    {
-                        // it seems like this is in normal order and a combination of 2 scenarios, so do not change the order
-                        result = null;
-
-                        return false;
-                    }
-
-                    var useWhen = parts[1].StartsWith(When, StringComparison.Ordinal);
-                    var addIf = useWhen is false && IsIfRequired(parts[2], parts[3]);
-
-                    var capacity = parts[0].Length + parts[1].Length + parts[2].Length + parts[3].Length + And.Length;
-
-                    if (addIf)
-                    {
-                        capacity += If.Length;
-                    }
-
-                    var builder = new StringBuilder(capacity);
-                    FixReturn(builder, parts[0]);
-                    FixReturn(builder, parts[3]);
-
-                    if (addIf)
-                    {
-                        builder.Append(If);
-                    }
-
-                    if (useWhen)
-                    {
-                        FixReturn(builder, parts[1]);
-                        FixReturn(builder, parts[2]);
-                    }
-                    else
-                    {
-                        FixReturn(builder, parts[2]);
-                        builder.Append(And);
-                        FixReturn(builder, parts[1]);
-                    }
-
-                    builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
-
-                    result = builder.ToString();
-
-                    return true;
-                }
+                case 2: return TryGetInOrder(parts[0], parts[1], out result);
+                case 3: return TryGetInOrder(parts[0], parts[1], parts[2], out result);
+                case 4: return TryGetInOrder(parts[0], parts[1], parts[2], parts[3], out result);
 
                 default:
                 {
@@ -223,14 +125,136 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool IsIfRequired(string part1, string part2) => part1.StartsWith(If, StringComparison.Ordinal) is false
-                                                                     && part2.Equals(Returned, StringComparison.OrdinalIgnoreCase) is false;
+        private static bool TryGetInOrder(string part0, string part1, out string result)
+        {
+            if (part1.StartsWith(Throws, StringComparison.OrdinalIgnoreCase) && part1.Contains(If, StringComparison.Ordinal))
+            {
+                // it seems like this is in normal order, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            var addIf = IsIfRequired(part0, part1);
+
+            var builder = new StringBuilder(part0.Length + part1.Length);
+            FixReturn(builder, part1);
+
+            if (addIf)
+            {
+                builder.Append(If);
+            }
+
+            FixReturn(builder, part0);
+
+            builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
+
+            result = builder.ToString();
+
+            return true;
+        }
+
+        private static bool TryGetInOrder(string part0, string part1, string part2, out string result)
+        {
+            if (part1.StartsWith(Throws, StringComparison.OrdinalIgnoreCase))
+            {
+                // it seems like this is in normal order, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            var addIf = IsIfRequired(part1, part2);
+
+            var builder = new StringBuilder(part0.Length + part1.Length + part2.Length);
+            FixReturn(builder, part0);
+            FixReturn(builder, part2);
+
+            if (addIf)
+            {
+                builder.Append(If);
+            }
+
+            FixReturn(builder, part1);
+
+            builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
+
+            result = builder.ToString();
+
+            return true;
+        }
+
+        private static bool TryGetInOrder(string part0, string part1, string part2, string part3, out string result)
+        {
+            if (part2.StartsWith(And, StringComparison.Ordinal))
+            {
+                // it seems like this is in normal order and a combination of 2 scenarios, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            if (part1.StartsWith(Throws, StringComparison.OrdinalIgnoreCase))
+            {
+                // it seems like this is in normal order, so do not change the order
+                result = null;
+
+                return false;
+            }
+
+            var useWhen = part1.StartsWith(When, StringComparison.Ordinal);
+            var addIf = useWhen is false && IsIfRequired(part2, part3);
+
+            var capacity = part0.Length + part1.Length + part2.Length + part3.Length + And.Length;
+
+            if (addIf)
+            {
+                capacity += If.Length;
+            }
+
+            var builder = new StringBuilder(capacity);
+            FixReturn(builder, part0);
+            FixReturn(builder, part3);
+
+            if (addIf)
+            {
+                builder.Append(If);
+            }
+
+            if (useWhen)
+            {
+                FixReturn(builder, part1);
+                FixReturn(builder, part2);
+            }
+            else
+            {
+                FixReturn(builder, part2);
+                builder.Append(And);
+                FixReturn(builder, part1);
+            }
+
+            builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
+
+            result = builder.ToString();
+
+            return true;
+        }
+
+        private static bool IsIfRequired(string part1, string part2)
+        {
+            if (part1.StartsWith(If, StringComparison.OrdinalIgnoreCase) || part2.Equals(Returned, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         private static void FixReturn(StringBuilder builder, string original)
         {
             if (original.EndsWith(Returned, StringComparison.OrdinalIgnoreCase))
             {
-                builder.Append("Returns").Append(original, 0, original.Length - Returned.Length);
+                builder.Append(Returns).Append(original, 0, original.Length - Returned.Length);
             }
             else
             {

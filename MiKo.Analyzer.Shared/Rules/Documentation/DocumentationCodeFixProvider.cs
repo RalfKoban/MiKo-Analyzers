@@ -62,7 +62,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static T Comment<T>(T syntax, IReadOnlyCollection<string> terms, IEnumerable<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
         {
-            var textMap = CreateReplacementTextMap(terms.Min(_ => _.Length));
+            var minimumLength = terms.Min(_ => _.Length);
+
+            var textMap = CreateReplacementTextMap(minimumLength);
 
             if (textMap is null)
             {
@@ -110,6 +112,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap)
                                                                               .ToString()
                                                                               .AdjustFirstWord(firstWordHandling);
+
+                            if (originalText.Equals(replacedText))
+                            {
+                                // replacement with itself does not make any sense
+                                continue;
+                            }
 
                             var newToken = token.WithText(replacedText);
 
