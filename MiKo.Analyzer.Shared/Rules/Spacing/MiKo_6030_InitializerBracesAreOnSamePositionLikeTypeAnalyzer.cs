@@ -24,19 +24,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 case ArrayCreationExpressionSyntax a: return a.Type.GetStartPosition();
                 case ObjectCreationExpressionSyntax o: return o.Type.GetStartPosition();
                 case ImplicitArrayCreationExpressionSyntax ia: return ia.CloseBracketToken.GetStartPosition();
+                case AssignmentExpressionSyntax a: return GetAfterEndPosition(a.OperatorToken);
 
                 // consider reduced array initializers
-                case EqualsValueClauseSyntax e:
-                {
-                    var position = e.EqualsToken.GetEndPosition();
-
-                    return new LinePosition(position.Line, position.Character + 1);
-                }
+                case EqualsValueClauseSyntax e: return GetAfterEndPosition(e.EqualsToken);
 
                 default:
-                {
                     return initializer.Parent.GetStartPosition();
-                }
+            }
+
+            LinePosition GetAfterEndPosition(SyntaxToken token)
+            {
+                var position = token.GetEndPosition();
+
+                return new LinePosition(position.Line, position.Character + 1);
             }
         }
 
