@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [TestFixture]
@@ -271,6 +272,174 @@ public class TestMe
     /// Does something with C.
     /// </summary>
     private int C(object o) => 1;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_using_regions_when_commented_method_to_move_is_at_end_of_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Private static methods
+
+    /// <summary>
+    /// Does something with A.
+    /// </summary>
+    private static int A() => 0815;
+
+    #endregion
+
+    #region Private methods
+
+    /// <summary>
+    /// Does something with B.
+    /// </summary>
+    private int B() => 4711;
+
+    /// <summary>
+    /// Does something with C.
+    /// </summary>
+    private int C(object o) => 1;
+
+    /// <summary>
+    /// Does something else with B.
+    /// </summary>
+    private int B(object o) => 2;
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Private static methods
+
+    /// <summary>
+    /// Does something with A.
+    /// </summary>
+    private static int A() => 0815;
+
+    #endregion
+
+    #region Private methods
+
+    /// <summary>
+    /// Does something with B.
+    /// </summary>
+    private int B() => 4711;
+
+    /// <summary>
+    /// Does something else with B.
+    /// </summary>
+    private int B(object o) => 2;
+
+    /// <summary>
+    /// Does something with C.
+    /// </summary>
+    private int C(object o) => 1;
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_using_regions_when_uncommented_method_to_move_is_at_end_of_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Private static methods
+
+    private static int A() => 0815;
+
+    #endregion
+
+    #region Private methods
+
+    private int B() => 4711;
+
+    private int C(object o) => 1;
+
+    private int B(object o) => 2;
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Private static methods
+
+    private static int A() => 0815;
+
+    #endregion
+
+    #region Private methods
+
+    private int B() => 4711;
+
+    private int B(object o) => 2;
+
+    private int C(object o) => 1;
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_using_regions_when_uncommented_method_to_move_is_at_end_of_region_but_needs_to_be_placed_in_other_region()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    #region Private static methods
+
+    private static int A() => 0815;
+
+    #endregion
+
+    #region Private methods
+
+    private int B() => 4711;
+
+    private int C(object o) => 1;
+
+    private static int A(object o) => 2;
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    #region Private static methods
+
+    private static int A() => 0815;
+
+    private static int A(object o) => 2;
+
+    #endregion
+
+    #region Private methods
+
+    private int B() => 4711;
+
+    private int C(object o) => 1;
+
+    #endregion
 }
 ";
 

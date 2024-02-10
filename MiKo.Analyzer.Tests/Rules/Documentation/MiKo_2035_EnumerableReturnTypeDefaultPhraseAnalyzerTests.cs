@@ -1,12 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
+
+using NCrunch.Framework;
 
 using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -30,6 +36,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       };
 
         private static readonly string[] EnumerableReturnValues = EnumerableOnlyReturnValues.Concat(EnumerableTaskReturnValues).ToArray();
+
+        private static readonly string[] StartingPhrases = CreateStartingPhrases().Distinct().ToArray();
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
@@ -297,9 +305,30 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [Test, RequiresCapability("SSD")]
+        public void Code_gets_fixed_for_non_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ### some integers.
+    /// </returns>
+    public IEnumerable DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A collection of"));
+        }
+
         [TestCase("Some integers.", "A collection of some integers.")]
-        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
-        [TestCase("A list of some integers.", "A collection of some integers.")]
+        [TestCase("The mapping information.", "A collection of the mapping information.")]
         public void Code_gets_fixed_for_non_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
@@ -314,40 +343,38 @@ public class TestMe
     /// <returns>
     /// ###
     /// </returns>
-    public IList DoSomething { get; set; }
+    public IEnumerable DoSomething { get; set; }
 }
 ";
 
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
+        [Test, RequiresCapability("SSD")]
+        public void Code_gets_fixed_for_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
+        {
+            const string Template = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ### some integers.
+    /// </returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", "A collection of"));
+        }
+
         [TestCase("Some integers.", "A collection of some integers.")]
-        [TestCase("A list of some integers.", "A collection of some integers.")]
-        [TestCase("A list with some integers.", "A collection of some integers.")]
-        [TestCase("A readonly collection of some integers.", "A collection of some integers.")]
-        [TestCase("A read-only collection of some integers.", "A collection of some integers.")]
-        [TestCase("A readonly collection with some integers.", "A collection of some integers.")]
-        [TestCase("A read-only collection with some integers.", "A collection of some integers.")]
-        [TestCase("An enumerable of some integers.", "A collection of some integers.")]
-        [TestCase("An enumerable with some integers.", "A collection of some integers.")]
-        [TestCase("Collection of some integers.", "A collection of some integers.")]
-        [TestCase("Collection with some integers.", "A collection of some integers.")]
-        [TestCase("List of some integers.", "A collection of some integers.")]
-        [TestCase("List with some integers.", "A collection of some integers.")]
-        [TestCase("Readonly collection of some integers.", "A collection of some integers.")]
-        [TestCase("Read-only collection of some integers.", "A collection of some integers.")]
-        [TestCase("Readonly collection with some integers.", "A collection of some integers.")]
-        [TestCase("Read-only collection with some integers.", "A collection of some integers.")]
-        [TestCase("The array of some integers.", "A collection of some integers.")]
-        [TestCase("The array with some integers.", "A collection of some integers.")]
-        [TestCase("The collection of some integers.", "A collection of some integers.")]
-        [TestCase("The collection with some integers.", "A collection of some integers.")]
-        [TestCase("The enumerable of some integers.", "A collection of some integers.")]
-        [TestCase("The enumerable with some integers.", "A collection of some integers.")]
-        [TestCase("The list of some integers.", "A collection of some integers.")]
-        [TestCase("The list with some integers.", "A collection of some integers.")]
-        [TestCase("The readonly collection of some integers.", "A collection of some integers.")]
-        [TestCase("The readonly collection with some integers.", "A collection of some integers.")]
+        [TestCase("The mapping information.", "A collection of the mapping information.")]
         public void Code_gets_fixed_for_generic_collection_(string originalPhrase, string fixedPhrase)
         {
             const string Template = @"
@@ -377,6 +404,7 @@ public class TestMe
         [TestCase("A task to await", "")]
         [TestCase("An awaitable task.", "")]
         [TestCase("An awaitable task", "")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
         public void Code_gets_fixed_for_Task_with_generic_collection_(string originalText, string fixedText)
         {
             var originalCode = @"
@@ -407,7 +435,8 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"</returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"
+    /// </returns>
     public Task<IList<int>> DoSomething { get; set; }
 }
 ";
@@ -415,10 +444,11 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_Task_with_array()
+        [TestCase("Some integers.", "some integers.")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
+        public void Code_gets_fixed_for_Task_with_array_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -430,13 +460,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some integers.
+    /// " + originalText + @"
     /// </returns>
     public Task<int[]> DoSomething { get; set; }
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -448,19 +478,20 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains an array of some integers.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains an array of " + fixedText + @"
     /// </returns>
     public Task<int[]> DoSomething { get; set; }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_Task_with_byte_array()
+        [TestCase("Some data.", "some data.")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
+        public void Code_gets_fixed_for_Task_with_byte_array_(string originalText, string fixedText)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -472,13 +503,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// Some data.
+    /// " + originalText + @"
     /// </returns>
     public Task<byte[]> DoSomething { get; set; }
 }
 ";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -490,13 +521,13 @@ public class TestMe
     /// Does something.
     /// </summary>
     /// <returns>
-    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a byte array containing some data.
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a byte array containing " + fixedText + @"
     /// </returns>
     public Task<byte[]> DoSomething { get; set; }
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
@@ -504,5 +535,49 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2035_CodeFixProvider();
+
+        [ExcludeFromCodeCoverage]
+        private static IEnumerable<string> CreateStartingPhrases()
+        {
+            var startingWords = new[] { "a", "an", "the" };
+            var modifications = new[] { "readonly", "read-only", "read only" };
+            var collections = new[] { "array", "list", "dictionary", "enumerable", "queue", "stack", "map", "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table" };
+            var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
+
+            foreach (var collection in collections)
+            {
+                foreach (var preposition in prepositions)
+                {
+                    var phrase = string.Concat(collection, " ", preposition);
+
+                    yield return phrase;
+                    yield return phrase.ToUpperCaseAt(0);
+
+                    foreach (var modification in modifications)
+                    {
+                        var modificationPhrase = string.Concat(modification, " ", phrase);
+
+                        yield return modificationPhrase;
+                        yield return modificationPhrase.ToUpperCaseAt(0);
+
+                        foreach (var startingWord in startingWords)
+                        {
+                            var shortStartingPhrase = string.Concat(startingWord, " ", collection);
+                            var startingPhrase = string.Concat(startingWord, " ", phrase);
+                            var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
+
+                            yield return shortStartingPhrase;
+                            yield return shortStartingPhrase.ToUpperCaseAt(0);
+
+                            yield return startingPhrase;
+                            yield return startingPhrase.ToUpperCaseAt(0);
+
+                            yield return modifiedStartingPhrase;
+                            yield return modifiedStartingPhrase.ToUpperCaseAt(0);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

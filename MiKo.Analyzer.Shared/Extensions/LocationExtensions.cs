@@ -19,6 +19,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this Location value) => value.GetLineSpan().EndLinePosition;
 
+        internal static int GetPositionWithinStartLine(this Location value) => value.GetStartPosition().Character;
+
         internal static int GetStartingLine(this Location value) => value.GetStartPosition().Line;
 
         internal static int GetEndingLine(this Location value) => value.GetEndPosition().Line;
@@ -29,7 +31,7 @@ namespace MiKoSolutions.Analyzers
         {
             var tree = value.SourceTree;
 
-            if (tree == null)
+            if (tree is null)
             {
                 return null;
             }

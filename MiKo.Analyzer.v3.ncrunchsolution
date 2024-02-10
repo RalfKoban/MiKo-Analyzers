@@ -1,16 +1,34 @@
 ﻿<SolutionConfiguration>
   <Settings>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
+    <ClientRdiStorageDirectory>_NCrunch_RDI</ClientRdiStorageDirectory>
+    <CollectValues>True</CollectValues>
     <HotSpotsExclusionList>
       <Value>Rules\Analyzer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
     </HotSpotsExclusionList>
     <MetricsExclusionList>
       <Value>Resources.Designer.cs:MiKo.Analyzer\MiKo.Analyzer.csproj</Value>
       <Value>MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj</Value>
+      <Value>..\MiKo.Analyzer.Shared\Resources.Designer.cs:MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj</Value>
     </MetricsExclusionList>
     <NCrunchCacheStoragePath>Z:\_NCrunch_MiKo.Analyzer</NCrunchCacheStoragePath>
     <PipelineOptimisationPriority>Throughput</PipelineOptimisationPriority>
-    <SlidingBuildDelayInMilliseconds>500</SlidingBuildDelayInMilliseconds>
+    <RdiConfigured>True</RdiConfigured>
+    <RestrictToString>False</RestrictToString>
+    <SlidingBuildDelayInMilliseconds>750</SlidingBuildDelayInMilliseconds>
     <SolutionConfigured>True</SolutionConfigured>
   </Settings>
+  <EngineModes>
+    <EngineMode>
+      <Name>MiKoAnalyzers-RDI Run impacted tests automatically, others manually</Name>
+      <Settings>
+        <AlignOutOfDateStatusWithImpactStatus>True</AlignOutOfDateStatusWithImpactStatus>
+        <AllowParallelTestExecution>True</AllowParallelTestExecution>
+        <AutoPinNewTests>True</AutoPinNewTests>
+        <FastLaneThreads>0</FastLaneThreads>
+        <FastLaneThresholdInMilliseconds>50</FastLaneThresholdInMilliseconds>
+        <TestsToExecuteAutomatically>(HasCategory 'Always impacted' OR IsImpacted OR IsPinned OR IsFailing)</TestsToExecuteAutomatically>
+      </Settings>
+    </EngineMode>
+  </EngineModes>
 </SolutionConfiguration>

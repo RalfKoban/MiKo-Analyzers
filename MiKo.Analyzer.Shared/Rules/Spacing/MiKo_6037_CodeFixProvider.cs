@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override string Title => Resources.MiKo_6037_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var argumentSyntax = argumentList.Arguments.First();
 
-            return argumentList.WithArguments(SyntaxFactory.SeparatedList(new[] { argumentSyntax.WithoutTrivia() }))
+            return argumentList.WithArguments(new[] { argumentSyntax.WithoutTrivia() }.ToSeparatedSyntaxList())
                                .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
                                .WithCloseParenToken(argumentList.CloseParenToken.WithoutLeadingTrivia());
         }

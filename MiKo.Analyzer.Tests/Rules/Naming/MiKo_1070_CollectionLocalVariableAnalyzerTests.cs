@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -32,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "gateways",
                                                             "someTrivia",
                                                             "textTokens",
+                                                            "trivia",
                                                         };
 
         private static readonly string[] WrongNames =
@@ -285,6 +287,7 @@ public class TestMe
         [TestCase("resultWithData", "resultsWithData")]
         [TestCase("resultInSomething", "resultsInSomething")]
         [TestCase("resultFromSomething", "resultsFromSomething")]
+        [TestCase("triviaList", "trivia")]
         public void Code_gets_fixed_for_variable_(string originalName, string fixedName)
         {
             const string Template = @"

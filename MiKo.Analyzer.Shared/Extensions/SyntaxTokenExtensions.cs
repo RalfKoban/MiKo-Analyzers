@@ -15,9 +15,15 @@ namespace MiKoSolutions.Analyzers
     {
         internal static IEnumerable<T> Ancestors<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.Ancestors<T>();
 
+        internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
+
         internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
 
+        internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();
+
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
+
+        internal static int GetPositionWithinStartLine(this SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
 
         internal static LinePosition GetStartPosition(this SyntaxToken value) => value.GetLocation().GetStartPosition();
 
@@ -74,9 +80,34 @@ namespace MiKoSolutions.Analyzers
             return symbol;
         }
 
+        internal static SyntaxTrivia[] GetComment(this SyntaxToken value) => value.GetAllTrivia().Where(_ => _.IsComment()).ToArray();
+
+        internal static bool HasComment(this SyntaxToken value) => value.GetAllTrivia().Any(_ => _.IsComment());
+
+        internal static bool HasLeadingComment(this SyntaxToken value) => value.LeadingTrivia.Any(_ => _.IsComment());
+
         internal static bool HasTrailingComment(this SyntaxToken value) => value.TrailingTrivia.Any(_ => _.IsComment());
 
         internal static bool IsDefaultValue(this SyntaxToken value) => value.IsKind(SyntaxKind.None);
+
+        internal static bool IsAnyKind(this SyntaxToken value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
+
+        internal static bool IsAnyKind(this SyntaxToken value, params SyntaxKind[] kinds)
+        {
+            var valueKind = value.Kind();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery  : For performance reasons we use indexing instead of an enumerator
+            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use indexing instead of an enumerator
+            for (var index = 0; index < kinds.Length; index++)
+            {
+                if (kinds[index] == valueKind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         internal static IReadOnlyList<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
         {
@@ -90,8 +121,6 @@ namespace MiKoSolutions.Analyzers
 
             var results = new List<SyntaxToken>();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < sourceCount; index++)
             {
                 var item = source[index];
@@ -117,31 +146,49 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static SyntaxToken ToSyntaxToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
-        {
-            switch (kind)
-            {
-                case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(source);
-
-                default:
-                    return SyntaxFactory.Token(default, kind, source, source, default);
-            }
-        }
+        internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxKind> source) => source.Select(_ => _.AsToken()).ToTokenList();
 
         internal static SyntaxToken WithEndOfLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
         internal static SyntaxToken WithLeadingEmptyLine(this SyntaxToken value) => value.WithLeadingTrivia(value.LeadingTrivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed));
 
-        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+        internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         internal static SyntaxToken WithLeadingSpace(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
 
         internal static SyntaxToken WithAdditionalLeadingSpaces(this SyntaxToken value, int additionalSpaces)
         {
-            var currentSpaces = value.GetStartPosition().Character;
+            var currentSpaces = value.GetPositionWithinStartLine();
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia)
+        {
+            return value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia)
+        {
+            return value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxNode node)
+        {
+            var trivia = node.GetLeadingTrivia();
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
+        }
+
+        internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxToken token)
+        {
+            var trivia = token.LeadingTrivia;
+
+            return trivia.Count > 0
+                   ? value.WithAdditionalLeadingTrivia(trivia)
+                   : value;
         }
 
         internal static SyntaxToken WithLeadingSpaces(this SyntaxToken value, int count) => value.WithLeadingTrivia(Enumerable.Repeat(SyntaxFactory.Space, count)); // use non-elastic one to prevent formatting to be done automatically

@@ -55,6 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                         return null;
                     }
 
+                    if (methodCall.IsInsideMoqCall())
+                    {
+                        // ignore Moq calls
+                        return null;
+                    }
+
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
 
                     return Issue(enclosingMethod.Name, methodCall.Name, methodName, methodName.Without(Format));

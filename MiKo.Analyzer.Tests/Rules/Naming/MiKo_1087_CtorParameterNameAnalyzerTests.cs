@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -15,34 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [Test]
         public void No_issue_is_reported_for_primary_constructor_on_record() => No_issue_is_reported_for(@"
 public sealed record TestMe(int X, int Y, double Distance);
-");
-
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
-        [Test]
-        public void Issue_For_ctor_is_reported() => An_issue_is_reported_for(3, @"
-using System;
-
-public class BaseClass
-{
-    public BaseClass()
-    {
-    }
-
-    public BaseClass(int a, int b)
-    {
-    }
-
-    public BaseClass(int c, int d, int e)
-    {
-    }
-}
-
-public class ChildClass : BaseClass
-{
-    public ChildClass(int x, int y, int z) : base(x, y, z)
-    {
-    }
-}
 ");
 
         [Test]
@@ -113,6 +86,72 @@ public class BaseClass
 public class ChildClass : BaseClass
 {
     public ChildClass(int a, int b) : base(a.ToString())
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_if_the_base_constructor_has_more_parameters_than_the_inherited_one_but_the_code_cannot_yet_compile() => No_issue_is_reported_for(@"
+using System;
+
+public class BaseClass
+{
+    public BaseClass(int a, int b, int c)
+    {
+    }
+}
+
+public class ChildClass : BaseClass
+{
+    public ChildClass(int a, int b) : base(a, b)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_if_the_base_constructor_has_less_parameters_than_the_inherited_one_but_the_code_cannot_yet_compile() => No_issue_is_reported_for(@"
+using System;
+
+public class BaseClass
+{
+    public BaseClass(int a, int b)
+    {
+    }
+}
+
+public class ChildClass : BaseClass
+{
+    public ChildClass(int x, int y, int a, int b) : base(a, b, x)
+    {
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_ctor_if_the_names_to_not_match() => An_issue_is_reported_for(3, @"
+using System;
+
+public class BaseClass
+{
+    public BaseClass()
+    {
+    }
+
+    public BaseClass(int a, int b)
+    {
+    }
+
+    public BaseClass(int c, int d, int e)
+    {
+    }
+}
+
+public class ChildClass : BaseClass
+{
+    public ChildClass(int x, int y, int z) : base(x, y, z)
     {
     }
 }

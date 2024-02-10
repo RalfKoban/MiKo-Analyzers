@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3054_CodeFixProvider)), Shared]
     public sealed class MiKo_3054_CodeFixProvider : MaintainabilityCodeFixProvider
     {
+        private static readonly SyntaxKind[] PublicStaticReadOnly = { SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword };
+
         public override string FixableDiagnosticId => MiKo_3054_DependencyPropertyKeyUsageOfDependencyPropertyAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_3054_CodeFixTitle;
@@ -20,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             var declarator = (VariableDeclaratorSyntax)syntax;
 
@@ -31,12 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var variableDeclarator = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(identifier), default, SyntaxFactory.EqualsValueClause(assignment));
 
             var type = SyntaxFactory.ParseTypeName(Constants.DependencyProperty.TypeName);
-            var variableDeclaration = SyntaxFactory.VariableDeclaration(type, SyntaxFactory.SeparatedList(new[] { variableDeclarator }));
+            var variableDeclaration = SyntaxFactory.VariableDeclaration(type, new[] { variableDeclarator }.ToSeparatedSyntaxList());
 
-            var field = SyntaxFactory.FieldDeclaration(
-                                                   default,
-                                                   TokenList(SyntaxKind.PublicKeyword, SyntaxKind.StaticKeyword, SyntaxKind.ReadOnlyKeyword),
-                                                   variableDeclaration);
+            var field = SyntaxFactory.FieldDeclaration(default, PublicStaticReadOnly.ToTokenList(), variableDeclaration);
 
             var originalField = syntax.FirstAncestorOrSelf<FieldDeclarationSyntax>();
 

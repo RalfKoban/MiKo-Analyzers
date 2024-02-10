@@ -3,13 +3,16 @@
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture]
+    [TestFixture, RequiresCapability("SSD")]
     public sealed class MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BooleanOnlyReturnValues =
@@ -235,7 +238,9 @@ public class TestMe
         [TestCase("If the stuff is done, True; False else.", "the stuff is done")]
         [TestCase("When the stuff is done, True; False else.", "the stuff is done")]
         [TestCase("In case the stuff is done, True; False else.", "the stuff is done")]
+        [TestCase("In case that the stuff is done, True; else False.", "the stuff is done")]
         [TestCase("If <see langword=\"true\"/> calling method should return, otherwise not", "calling method should return")]
+        [TestCase("<see langword=\"true\"/> in case that the stuff is done, in all other cases returns <see langword=\"false\"/>.", "the stuff is done")]
         public void Code_gets_fixed_for_non_generic_method_(string comment, string fixedPhrase)
         {
             var originalCode = @"
@@ -336,7 +341,7 @@ public class TestMe
         [TestCase("true: if something, else it returns false.")]
         [TestCase("true, if something, else it returns false.")]
         [TestCase("true if something, else with false.")]
-        [TestCase("true if something else will return with false.")]
+        [TestCase("true, if something, false else.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_non_generic_method_(string comment)
         {
             var originalCode = @"
@@ -347,6 +352,63 @@ public class TestMe
 {
     /// <summary>Does something.</summary>
     /// <returns>" + comment + @"</returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [TestCase(@"<see langword=""false""/> in any other case.")]
+        [TestCase(@"<see langword=""false""/> in any other cases.")]
+        [TestCase(@"<see langword=""false""/> in any of the other cases.")]
+        [TestCase(@"<see langword=""false""/> in all other case.")]
+        [TestCase(@"<see langword=""false""/> in all other cases.")]
+        [TestCase(@"<see langword=""false""/> in all of the other cases.")]
+        [TestCase(@"<see langword=""false""/> in each other case.")]
+        [TestCase(@"<see langword=""false""/> in each other cases.")]
+        [TestCase(@"<see langword=""false""/> in each of the other cases.")]
+        [TestCase(@"<see langword=""false""/> in the other cases.")]
+        [TestCase(@"<see langword=""false""/> in the other case.")]
+        [TestCase(@"<see langword=""false""/> in other cases.")]
+        [TestCase(@"<see langword=""false""/> in other case.")]
+        [TestCase("false in any other case.")]
+        [TestCase("false in any other cases.")]
+        [TestCase("false in any of the other cases.")]
+        [TestCase("false in all other case.")]
+        [TestCase("false in all other cases.")]
+        [TestCase("false in all of the other cases.")]
+        [TestCase("false in each other case.")]
+        [TestCase("false in each other cases.")]
+        [TestCase("false in each of the other cases.")]
+        [TestCase("false in the other cases.")]
+        [TestCase("false in the other case.")]
+        [TestCase("false in other cases.")]
+        [TestCase("false in other case.")]
+        public void Code_gets_fixed_for_almost_correct_comment_with_trailing_other_cases_(string comment)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns><see langword=""true""/> if something, " + comment + @"</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -507,13 +569,25 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase("A task that represents the asynchronous operation. The Result indicates whether something.")]
+        [TestCase("A task that represents the operation. The Result indicates whether something.")]
+        [TestCase("A task representing the asynchronous operation. The Result indicates whether something.")]
+        [TestCase("A task representing the operation. The Result indicates whether something.")]
+        [TestCase("An task that represents the asynchronous operation. The Result indicates whether something.")]
+        [TestCase("An task that represents the operation. The Result indicates whether something.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something, otherwise, <see langword=""false""/>.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that completes with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"A task that has the result <see langword=""true""/> if something, otherwise the task has the result <see langword=""false""/>.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, otherwise, <see langword=""false""/>.")]
         [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; <see langword=""false""/> otherwise.")]
-        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"A task that will complete with a result of <see langword=""true""/> if something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"Returns a task that completes with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
+        [TestCase(@"Returns a task that completes with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, <see langword=""false""/> otherwise.")]
         [TestCase(@"Returns a task that will complete with a result of <see langword=""true""/> if something, returns <see langword=""false""/> otherwise.")]
-        [TestCase(@"A task that has the result <see langword=""true""/> if something, otherwise the task has the result <see langword=""false""/>.")]
         public void Code_gets_fixed_for_almost_correct_comment_on_generic_method_(string comment)
         {
             var originalCode = @"
@@ -748,6 +822,7 @@ public class TestMe
         [TestCase("Whether ")]
         [TestCase("True when")]
         [TestCase("True means")]
+        [TestCase("True means that")]
         [TestCase("True of")] // typo
         public void Code_gets_fixed_for_specific_starting_phrase_(string comment)
         {
@@ -770,6 +845,41 @@ public class TestMe
     /// <summary>Does something.</summary>
     /// <returns>
     /// <see langword=""true""/> if something; otherwise, <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_fix_recognizes_Otherwise_at_end_of_first_line_in_multi_line_comment_([Values("Otherwise ", "Otherwise")] string lastWordOnFirstLine)
+        {
+            var originalCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something is there. " + lastWordOnFirstLine + @"
+    /// <see langword=""false""/>.
+    /// </returns>
+    public bool DoSomething(object o) => throw new NotSupportedException();
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>Does something.</summary>
+    /// <returns>
+    /// <see langword=""true""/> if something is there; otherwise, <see langword=""false""/>.
     /// </returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }

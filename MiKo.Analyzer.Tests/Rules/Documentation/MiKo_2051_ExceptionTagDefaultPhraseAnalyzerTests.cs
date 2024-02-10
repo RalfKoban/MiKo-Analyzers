@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -9,6 +10,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -190,7 +192,7 @@ public class TestMe
 }
 ";
 
-            var fixedCode = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -205,13 +207,13 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
         public void Code_gets_fixed_for_ObjectDisposedException_with_para_tag()
         {
-            var originalCode = @"
+            const string OriginalCode = @"
 using System;
 
 public class TestMe
@@ -228,7 +230,7 @@ public class TestMe
 }
 ";
 
-            var fixedCode = @"
+            const string FixedCode = @"
 using System;
 
 public class TestMe
@@ -243,7 +245,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         [TestCase(nameof(ArgumentNullException), "If null")]
@@ -656,7 +658,7 @@ public class TestMe
                                   "Is fired ",
                               };
 
-            return phrases.Concat(phrases.Select(_ => _.ToLower())).Distinct().OrderBy(_ => _).ToArray();
+            return phrases.Concat(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).Distinct().OrderBy(_ => _).ToArray();
         }
     }
 }

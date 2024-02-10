@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -78,8 +77,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case AttributeArgumentSyntax _:
                     case EnumMemberDeclarationSyntax _:
                     case PragmaWarningDirectiveTriviaSyntax _:
-                    case LocalDeclarationStatementSyntax variable when variable.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
-                    case FieldDeclarationSyntax field when field.Modifiers.Any(_ => _.IsKind(SyntaxKind.ConstKeyword)):
+                    case LocalDeclarationStatementSyntax variable when variable.IsConst:
+                    case FieldDeclarationSyntax field when field.IsConst():
                         return true;
                 }
             }

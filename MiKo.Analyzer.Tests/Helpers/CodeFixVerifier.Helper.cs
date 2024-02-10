@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 
@@ -7,6 +8,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 
+//// ncrunch: collect values off
 namespace TestHelper
 {
     /// <summary>
@@ -24,7 +26,7 @@ namespace TestHelper
 
             if (char.IsLower(value[0]))
             {
-                return char.ToUpper(value[0]) + value[1..];
+                return char.ToUpper(value[0], CultureInfo.CurrentCulture) + value[1..];
             }
 
             return value;

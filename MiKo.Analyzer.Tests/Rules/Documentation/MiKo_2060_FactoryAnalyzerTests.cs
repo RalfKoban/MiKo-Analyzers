@@ -4,16 +4,19 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture]
+    [TestFixture, RequiresCapability("SSD")]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Distinct().ToArray();
+        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Distinct().OrderBy(_ => _.Length).ThenBy(_ => _).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
@@ -319,6 +322,7 @@ public interface ITestMeFactory
         [TestCase("This method creates a")]
         [TestCase("Used for creating a")]
         [TestCase("Used to create a")]
+        [TestCase(@"Creates an <see cref=""string""/> with a")]
         public void Code_gets_fixed_for_method_summary_(string summary)
         {
             var originalCode = @"
@@ -345,7 +349,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_based_on_()
+        public void Code_gets_fixed_for_specific_method_summary_that_continues_with_based_on()
         {
             const string OriginalCode = @"
 public class TestMeFactory
@@ -544,6 +548,67 @@ internal interface IFactory
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
+        [TestCase("Construct a instance")]
+        [TestCase("Construct a new instance")]
+        [TestCase("Construct an instance")]
+        [TestCase("Construct instances")]
+        [TestCase("Construct new instances")]
+        [TestCase("Constructs a instance")]
+        [TestCase("Constructs a new instance")]
+        [TestCase("Constructs an instance")]
+        [TestCase("Constructs instances")]
+        [TestCase("Constructs new instances")]
+        [TestCase("Create a instance")]
+        [TestCase("Create a new instance")]
+        [TestCase("Create an instance")]
+        [TestCase("Create instances")]
+        [TestCase("Create new instances")]
+        [TestCase("Creates a instance")]
+        [TestCase("Creates an instance")]
+        [TestCase("Creates an new instance")]
+        [TestCase("Creates instances")]
+        [TestCase("Creates new instances")]
+        [TestCase("Creates and initializes a new instance")]
+        [TestCase("Creates and initializes new instances")]
+        [TestCase("Create and initialize a new instance")]
+        [TestCase("Create and initialize new instances")]
+        [TestCase("Creates and provides a new instance")]
+        [TestCase("Creates and provides new instances")]
+        [TestCase("Creates and returns a new instance")]
+        [TestCase("Creates and returns new instances")]
+        [TestCase("Return a new instance")]
+        [TestCase("Return new instances")]
+        [TestCase("Returns a new instance")]
+        [TestCase("Returns new instances")]
+        [TestCase("Get a new instance")]
+        [TestCase("Get new instances")]
+        [TestCase("Gets a new instance")]
+        [TestCase("Gets new instances")]
+        public void Code_gets_fixed_for_almost_correct_interface_summary_starting_phrase_(string summary)
+        {
+            var originalCode = @"
+/// <summary>
+/// " + summary + @" of the <see cref=""IXyz""/> type.
+/// </summary>
+internal interface IFactory
+{
+    IXyz Create();
+}
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Provides support for creating instances of the <see cref=""IXyz""/> type.
+/// </summary>
+internal interface IFactory
+{
+    IXyz Create();
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2060_FactoryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2060_FactoryAnalyzer();
@@ -589,8 +654,6 @@ internal interface IFactory
                                           "An interface to create",
                                           "An interface which is implemented by factories that create",
                                           "An interface which is implemented by factories which create",
-                                          "Create",
-                                          "Creates",
                                           "Defines a factory that can create",
                                           "Defines a factory that creates",
                                           "Defines a factory that provides",
@@ -732,6 +795,8 @@ internal interface IFactory
                     }
                 }
             }
+
+            yield return "Implementations create ";
         }
     }
 }

@@ -2,7 +2,6 @@
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -16,9 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return syntax.ReplaceTokens(
-                                        syntax.DescendantTokens(SyntaxKind.XmlTextLiteralToken),
-                                        (original, rewritten) => original.WithText(original.Text.Replace("..", ".")));
+            var token = syntax.FindToken(diagnostic);
+
+            return syntax.ReplaceToken(token, token.WithText(token.ValueText.Replace("..", ".")));
         }
     }
 }

@@ -5,7 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using MiKoSolutions.Analyzers;
+using MiKoSolutions.Analyzers.Linguistics;
 
 // ReSharper disable once CheckNamespace
 namespace System
@@ -14,6 +19,49 @@ namespace System
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
+        public static string AdjustFirstWord(this string value, FirstWordHandling handling)
+        {
+            bool HasFlag(FirstWordHandling flag) => (handling & flag) == flag;
+
+            if (value.StartsWith('<'))
+            {
+                return value;
+            }
+
+            var word = value.FirstWord();
+
+            if (HasFlag(FirstWordHandling.MakeLowerCase))
+            {
+                word = word.ToLowerCaseAt(0);
+            }
+
+            if (HasFlag(FirstWordHandling.MakeUpperCase))
+            {
+                word = word.ToUpperCaseAt(0);
+            }
+
+            // build continuation here because the word length may change based on the infinite term
+            var continuation = value.AsSpan().TrimStart().Slice(word.Length).ToString();
+
+            if (HasFlag(FirstWordHandling.MakeInfinite))
+            {
+                word = Verbalizer.MakeInfiniteVerb(word);
+            }
+
+            var text = word + continuation;
+
+            if (HasFlag(FirstWordHandling.KeepLeadingSpace))
+            {
+                // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space and we would fix it in a wrong way)
+                if (value.StartsWith(' '))
+                {
+                    return " " + text;
+                }
+            }
+
+            return text;
+        }
+
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
@@ -21,14 +69,17 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            if (finding.Length > value.Length)
+            var valueLength = value.Length;
+            var findingLength = finding.Length;
+
+            if (findingLength > valueLength)
             {
                 return Array.Empty<int>();
             }
 
             var indices = new List<int>();
 
-            for (var index = 0; ; index += finding.Length)
+            for (var index = 0; ; index += findingLength)
             {
                 index = value.IndexOf(finding, index, comparison);
 
@@ -87,8 +138,26 @@ namespace System
             }
         }
 
+        public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.IdentifierToken:
+                    return SyntaxFactory.Identifier(source);
+
+                default:
+                    return SyntaxFactory.Token(default, kind, source, source, default);
+            }
+        }
+
+        public static InterpolatedStringTextSyntax AsInterpolatedString(this ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
+
+        public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
+
+//// ncrunch: collect values off
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -124,7 +193,35 @@ namespace System
 
         public static bool Contains(this string value, string finding, StringComparison comparison)
         {
-            if (finding.Length > value.Length)
+            var valueLength = value.Length;
+            var findingLength = finding.Length;
+
+            var difference = findingLength - valueLength;
+
+            if (difference == 0)
+            {
+                return QuickEquals();
+
+                bool QuickEquals()
+                {
+                    const int QuickInspectionChars = 2;
+
+                    if (valueLength > QuickInspectionChars)
+                    {
+                        var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
+                        var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
+
+                        if (valueSpan.CompareTo(findingSpan, comparison) != 0)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return value.Equals(finding, comparison);
+                }
+            }
+
+            if (difference > 0)
             {
                 switch (comparison)
                 {
@@ -276,6 +373,8 @@ namespace System
 
             return false;
         }
+
+//// ncrunch: collect values default
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
@@ -504,6 +603,43 @@ namespace System
             return text;
         }
 
+        public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
+
+        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> value) => value.WithoutFirstWord().FirstWord();
+
+        public static string ThirdWord(this string value) => ThirdWord(value.AsSpan()).ToString();
+
+        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> value) => value.WithoutFirstWord().WithoutFirstWord().FirstWord();
+
+        public static string LastWord(this string value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var span = value.AsSpan();
+            var word = LastWord(span);
+
+            return word != span
+                   ? word.ToString()
+                   : value;
+        }
+
+        public static ReadOnlySpan<char> LastWord(this ReadOnlySpan<char> value)
+        {
+            var text = value.TrimEnd();
+
+            var lastSpace = text.LastIndexOfAny(Constants.WhiteSpaceCharacters) + 1;
+
+            if (lastSpace <= 0)
+            {
+                return text;
+            }
+
+            return text.Slice(lastSpace);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
 
@@ -525,20 +661,20 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
 
-        public static string GetNameOnlyPart(this string fullName) => GetNameOnlyPart(fullName.AsSpan());
+        public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
-        public static string GetNameOnlyPart(this ReadOnlySpan<char> fullName)
+        public static string GetNameOnlyPart(this ReadOnlySpan<char> value)
         {
-            var genericIndexStart = fullName.IndexOf('<');
-            var genericIndexEnd = fullName.LastIndexOf('>');
+            var genericIndexStart = value.IndexOf('<');
+            var genericIndexEnd = value.LastIndexOf('>');
 
             if (genericIndexStart > 0 && genericIndexEnd > 0)
             {
                 var indexAfterGenericStart = genericIndexStart + 1;
 
-                var namePart = fullName.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
-                var genericParts = fullName.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart)
-                                           .SplitBy(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
+                var namePart = value.Slice(0, genericIndexStart).GetPartAfterLastDot().ToString();
+                var genericParts = value.Slice(indexAfterGenericStart, genericIndexEnd - indexAfterGenericStart)
+                                        .SplitBy(GenericTypeArgumentSeparator, StringSplitOptions.RemoveEmptyEntries);
                 var count = genericParts.Count();
 
                 if (count > 0)
@@ -558,16 +694,16 @@ namespace System
                 }
             }
 
-            return fullName.GetPartAfterLastDot().ToString();
+            return value.GetPartAfterLastDot().ToString();
         }
 
-        public static string GetNameOnlyPartWithoutGeneric(this ReadOnlySpan<char> fullName)
+        public static string GetNameOnlyPartWithoutGeneric(this ReadOnlySpan<char> value)
         {
-            var genericIndexStart = fullName.IndexOf('<');
+            var genericIndexStart = value.IndexOf('<');
 
             var name = genericIndexStart > 0
-                       ? fullName.Slice(0, genericIndexStart)
-                       : fullName;
+                       ? value.Slice(0, genericIndexStart)
+                       : value;
 
             return name.GetPartAfterLastDot().ToString();
         }
@@ -584,20 +720,20 @@ namespace System
 
         public static ReadOnlySpan<char> GetPartAfterLastDot(this ReadOnlySpan<char> value) => value.Slice(value.LastIndexOf('.') + 1);
 
-        public static bool HasCollectionMarker(this string symbolName) => symbolName.EndsWithAny(Constants.Markers.Collections);
+        public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string symbolName)
+        public static bool HasEntityMarker(this string value)
         {
-            var hasMarker = symbolName.ContainsAny(Constants.Markers.Entities);
+            var hasMarker = value.ContainsAny(Constants.Markers.Models);
 
             if (hasMarker)
             {
-                if (symbolName.ContainsAny(Constants.Markers.ViewModels))
+                if (value.ContainsAny(Constants.Markers.ViewModels))
                 {
                     return false;
                 }
 
-                if (symbolName.ContainsAny(Constants.Markers.SpecialModels))
+                if (value.ContainsAny(Constants.Markers.SpecialModels))
                 {
                     return false;
                 }
@@ -760,16 +896,16 @@ namespace System
 
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
-        public static bool IsHyperlink(this string text)
+        public static bool IsHyperlink(this string value)
         {
-            if (text.IsNullOrWhiteSpace())
+            if (value.IsNullOrWhiteSpace())
             {
                 return false;
             }
 
             try
             {
-                return Regex.IsMatch(text, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
+                return Regex.IsMatch(value, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
             }
             catch (RegexMatchTimeoutException)
             {
@@ -808,6 +944,18 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNumber(this char value) => char.IsNumber(value);
 
+        public static bool IsPascalCasing(this string value)
+        {
+            try
+            {
+                return Regex.IsMatch(value, "[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSentenceEnding(this char value)
         {
@@ -831,10 +979,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
-
-        public static string SecondWord(this string text) => SecondWord(text.AsSpan()).ToString();
-
-        public static ReadOnlySpan<char> SecondWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().FirstWord();
 
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
@@ -924,32 +1068,28 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
 
-        public static string ThirdWord(this string text) => ThirdWord(text.AsSpan()).ToString();
-
-        public static ReadOnlySpan<char> ThirdWord(this ReadOnlySpan<char> text) => text.WithoutFirstWord().WithoutFirstWord().FirstWord();
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ToLowerCase(this string value) => value?.ToLower(CultureInfo.InvariantCulture);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToLowerCase(this char value) => char.ToLowerInvariant(value);
+        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source);
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the characters are lower-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the character are lower-case.
         /// </returns>
-        public static string ToLowerCase(this ReadOnlySpan<char> value)
+        public static string ToLowerCase(this ReadOnlySpan<char> source)
         {
-            var characters = value.ToArray();
+            var characters = source.ToArray();
 
             for (var index = 0; index < characters.Length; index++)
             {
-                characters[index] = value[index].ToLowerCase();
+                characters[index] = source[index].ToLowerCase();
             }
 
             return new string(characters);
@@ -958,33 +1098,33 @@ namespace System
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </returns>
-        public static string ToLowerCaseAt(this string value, int index)
+        public static string ToLowerCaseAt(this string source, int index)
         {
-            if (value is null)
+            if (source is null)
             {
                 return null;
             }
 
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value;
+                return source;
             }
 
-            if (value[index].IsLowerCase())
+            if (source[index].IsLowerCase())
             {
-                return value;
+                return source;
             }
 
-            var characters = value.ToCharArray();
+            var characters = source.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
             return new string(characters);
@@ -993,66 +1133,66 @@ namespace System
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into lower-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
         /// </returns>
-        public static string ToLowerCaseAt(this ReadOnlySpan<char> value, int index)
+        public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            if (value[index].IsLowerCase())
+            if (source[index].IsLowerCase())
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            var characters = value.ToArray();
-            characters[index] = value[index].ToLowerCase();
+            var characters = source.ToArray();
+            characters[index] = source[index].ToLowerCase();
 
             return new string(characters);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToUpperCase(this char value) => char.ToUpperInvariant(value);
+        public static char ToUpperCase(this char source) => char.ToUpperInvariant(source);
 
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </returns>
-        public static string ToUpperCaseAt(this string value, int index)
+        public static string ToUpperCaseAt(this string source, int index)
         {
-            if (value is null)
+            if (source is null)
             {
                 return null;
             }
 
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value;
+                return source;
             }
 
-            if (value[index].IsUpperCase())
+            if (source[index].IsUpperCase())
             {
-                return value;
+                return source;
             }
 
-            var characters = value.ToCharArray();
+            var characters = source.ToCharArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
@@ -1061,28 +1201,28 @@ namespace System
         /// <summary>
         /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </summary>
-        /// <param name="value">
+        /// <param name="source">
         /// The original text.
         /// </param>
         /// <param name="index">
-        /// The zero-based index inside <paramref name="value"/> that shall be changed into upper-case.
+        /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
         /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
         /// </returns>
-        public static string ToUpperCaseAt(this ReadOnlySpan<char> value, int index)
+        public static string ToUpperCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= value.Length)
+            if (index >= source.Length)
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            if (value[index].IsUpperCase())
+            if (source[index].IsUpperCase())
             {
-                return value.ToString();
+                return source.ToString();
             }
 
-            var characters = value.ToArray();
+            var characters = source.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
@@ -1246,6 +1386,6 @@ namespace System
             }
         }
 
-        public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> text) => new WordsReadOnlySpanEnumerator(text);
+        public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
     }
 }

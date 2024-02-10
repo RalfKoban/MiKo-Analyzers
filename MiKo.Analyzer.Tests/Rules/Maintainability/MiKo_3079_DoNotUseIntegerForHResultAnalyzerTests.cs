@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -18,7 +19,7 @@ public class TestMe
 {
     public int DoSomething()
     {
-        return " + number.ToString("D") + @";
+        return " + number.ToString("D", null) + @";
     }
 }
 ");
@@ -31,7 +32,7 @@ public class TestMe
 {
     public int DoSomething()
     {
-        return " + unchecked((int)number).ToString("D") + @";
+        return " + unchecked((int)number).ToString("D", null) + @";
     }
 }
 ");
@@ -46,7 +47,7 @@ public class TestMe
 {
     public int DoSomething()
     {
-        return " + unchecked((int)number).ToString("D") + @";
+        return " + unchecked((int)number).ToString("D", null) + @";
     }
 }
 ";
@@ -58,7 +59,7 @@ public class TestMe
 {
     public int DoSomething()
     {
-        return unchecked((int)0x" + number.ToString("X") + @");
+        return unchecked((int)0x" + number.ToString("X", null) + @");
     }
 }
 ";

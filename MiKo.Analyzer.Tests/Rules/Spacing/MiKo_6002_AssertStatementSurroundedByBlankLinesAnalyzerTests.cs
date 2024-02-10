@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -14,15 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                       {
                                                           nameof(Assert),
                                                           nameof(Assume),
-                                                          nameof(CollectionAssert),
-                                                          nameof(DirectoryAssert),
-                                                          nameof(FileAssert),
-                                                          nameof(StringAssert),
+                                                          "CollectionAssert",
+                                                          "DirectoryAssert",
+                                                          "FileAssert",
+                                                          "StringAssert",
                                                       };
 
         [Test]
         public void No_issue_is_reported_for_Attribute_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -39,6 +41,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_Assertion_followed_by_another_Assertion_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -56,6 +59,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_Assertion_followed_by_if_block_separated_by_blank_line_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -77,6 +81,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_Assertion_preceded_by_if_block_separated_by_blank_line_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -98,6 +103,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_Assertion_followed_by_if_block_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -118,6 +124,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_Assertion_inside_switch_section_followed_by_blank_line_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -140,6 +147,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_Assertion_inside_switch_section_followed_by_code_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -161,6 +169,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_Assertion_preceded_by_if_block_([ValueSource(nameof(Assertions))] string assertion) => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {

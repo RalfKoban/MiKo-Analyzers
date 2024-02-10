@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var affectedNodes = syntax.DescendantNodes<XmlTextSyntax>(_ => _.GetLocation().Contains(diagnostic.Location));
 
-            return syntax.ReplaceNodes(affectedNodes, (original, rewritten) => MiKo_2049_WillBePhraseAnalyzer.GetBetterText(original, diagnostic));
+            return syntax.ReplaceNodes(affectedNodes, (_, rewritten) => MiKo_2049_WillBePhraseAnalyzer.GetBetterText(rewritten, diagnostic));
         }
     }
 }

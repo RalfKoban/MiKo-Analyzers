@@ -42,16 +42,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                   ? SyntaxKind.StaticKeyword
                                   : SyntaxKind.SealedKeyword;
 
-                    var modifiers = CreateModifiers(classDeclaration, keyword);
-
-                    return classDeclaration.WithModifiers(modifiers);
+                    return classDeclaration.WithAdditionalModifier(keyword);
                 }
 
                 case RecordDeclarationSyntax recordDeclaration:
                 {
-                    var modifiers = CreateModifiers(recordDeclaration, SyntaxKind.SealedKeyword);
-
-                    return recordDeclaration.WithModifiers(modifiers);
+                    return recordDeclaration.WithAdditionalModifier(SyntaxKind.SealedKeyword);
                 }
 
                 default:
@@ -72,18 +68,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
-        }
-
-        private static SyntaxTokenList CreateModifiers(MemberDeclarationSyntax declaration, SyntaxKind keyword)
-        {
-            var modifiers = declaration.Modifiers;
-            var position = modifiers.IndexOf(SyntaxKind.PartialKeyword);
-
-            var syntaxToken = SyntaxFactory.Token(keyword);
-
-            return position > -1
-                   ? modifiers.Insert(position, syntaxToken)
-                   : modifiers.Add(syntaxToken);
         }
     }
 }

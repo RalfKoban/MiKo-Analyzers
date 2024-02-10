@@ -7,7 +7,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 
 
 ## Build / Project status
-[![Maintenance](https://img.shields.io/maintenance/yes/2023.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
+[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/RalfKoban/MiKo-Analyzers)
 [![Build status](https://ci.appveyor.com/api/projects/status/qanrqn7r4q9frr9m/branch/master?svg=true)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/branch/master)
 [![codecov](https://codecov.io/gh/RalfKoban/MiKo-Analyzers/branch/master/graph/badge.svg)](https://codecov.io/gh/RalfKoban/MiKo-Analyzers)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/18917.svg)](https://scan.coverity.com/projects/ralfkoban-miko-analyzers)
@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 401 rules that are currently provided by the analyzer.
+The following tables list all the 435 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -33,13 +33,13 @@ The following tables list all the 401 rules that are currently provided by the a
 |:-|:----|:----------------:|:---------------:|
 |MiKo_1000|'System.EventArgs' types should be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
 |MiKo_1001|'System.EventArgs' parameters should be named 'e'|&#x2713;|&#x2713;|
-|MiKo_1002|Parameters should be named according the .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
-|MiKo_1003|Event handling method names should follow the .NET Framework Best Practices|&#x2713;|&#x2713;|
+|MiKo_1002|Parameters should be named according the .NET Framework Design Guidelines for event handlers|&#x2713;|&#x2713;|
+|MiKo_1003|Event handling method names should follow the .NET Framework Design Guidelines|&#x2713;|&#x2713;|
 |MiKo_1004|Events should not contain term 'Event' in their names|&#x2713;|&#x2713;|
 |MiKo_1005|'System.EventArgs' variables should be named properly|&#x2713;|&#x2713;|
 |MiKo_1006|Events should use 'EventHandler&lt;T&gt;' with 'EventArgs' which are named after the event|&#x2713;|\-|
 |MiKo_1007|Events and their corresponding 'EventArgs' types should be located in the same namespace|&#x2713;|\-|
-|MiKo_1008|Parameters should be named according the .NET Framework Guidelines for DependencyProperty event handlers|&#x2713;|&#x2713;|
+|MiKo_1008|Parameters should be named according the .NET Framework Design Guidelines for DependencyProperty event handlers|&#x2713;|&#x2713;|
 |MiKo_1009|'System.EventHandler' variables should be named properly|&#x2713;|&#x2713;|
 |MiKo_1010|Methods should not contain 'CanExecute' or 'Execute' in their names|&#x2713;|&#x2713;|
 |MiKo_1011|Methods should not contain 'Do' in their names|&#x2713;|&#x2713;|
@@ -95,7 +95,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
 |MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
 |MiKo_1064|Parameter names reflect their meaning and not their type|&#x2713;|\-|
-|MiKo_1065|Operator parameters should be named according the .NET Framework Guidelines for operator overloads|&#x2713;|&#x2713;|
+|MiKo_1065|Operator parameters should be named according the .NET Framework Design Guidelines for operator overloads|&#x2713;|&#x2713;|
 |MiKo_1066|Constructor parameters that are assigned to a property should be named after the property|&#x2713;|&#x2713;|
 |MiKo_1067|Methods should not contain 'Perform' in their names|&#x2713;|&#x2713;|
 |MiKo_1068|Workflow methods should be named 'CanRun' or 'Run'|&#x2713;|\-|
@@ -105,6 +105,8 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_1072|Boolean properties or methods should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1073|Boolean fields should be named as statements and not as questions|&#x2713;|\-|
 |MiKo_1074|Objects used to lock on should be suffixed with 'Lock'|&#x2713;|\-|
+|MiKo_1075|Non-'System.EventArgs' types should not be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
+|MiKo_1076|Prism event types should be suffixed with 'Event'|&#x2713;|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
@@ -123,6 +125,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_1096|Names should use 'Failed' instead of 'NotSuccessful'|&#x2713;|\-|
 |MiKo_1097|Parameter names should not follow the naming scheme for fields|&#x2713;|&#x2713;|
 |MiKo_1098|Type names should reflect the business interface(s) they implement|&#x2713;|\-|
+|MiKo_1099|Matching parameters on method overloads should have identical names|&#x2713;|&#x2713;|
 |MiKo_1100|Test classes should start with the name of the type under test|&#x2713;|\-|
 |MiKo_1101|Test classes should end with 'Tests'|&#x2713;|&#x2713;|
 |MiKo_1102|Test methods should not contain 'Test' in their names|&#x2713;|&#x2713;|
@@ -134,10 +137,11 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_1108|Do not name variables, parameters, fields and properties 'Mock', 'Stub', 'Fake' or 'Shim'|&#x2713;|&#x2713;|
 |MiKo_1109|Prefix testable types with 'Testable' instead of using the 'Ut' suffix|&#x2713;|&#x2713;|
 |MiKo_1110|Test methods with parameters should be suffixed with underscore|&#x2713;|&#x2713;|
-|MiKo_1111|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
+|MiKo_1111|Test methods without parameters should not be suffixed with underscore|&#x2713;|&#x2713;|
 |MiKo_1112|Do not name test data 'arbitrary'|&#x2713;|&#x2713;|
 |MiKo_1113|Test methods should not be named according BDD style|&#x2713;|\-|
 |MiKo_1114|Test methods should not be named 'HappyPath' or 'BadPath'|&#x2713;|\-|
+|MiKo_1115|Test methods should be named in a fluent way|&#x2713;|&#x2713;|
 |MiKo_1200|Name exceptions in catch blocks consistently|&#x2713;|&#x2713;|
 |MiKo_1201|Name exceptions as parameters consistently|&#x2713;|&#x2713;|
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
@@ -159,7 +163,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_2001|Events should be documented properly|&#x2713;|&#x2713;|
 |MiKo_2002|EventArgs should be documented properly|&#x2713;|&#x2713;|
 |MiKo_2003|Documentation of event handlers should have a default starting phrase|&#x2713;|&#x2713;|
-|MiKo_2004|Documentation of event handler parameter names should follow .NET Framework Guidelines for event handlers|&#x2713;|&#x2713;|
+|MiKo_2004|Documentation of event handler parameter names should follow .NET Framework Design Guidelines for event handlers|&#x2713;|&#x2713;|
 |MiKo_2005|Textual references to EventArgs should be documented properly|&#x2713;|\-|
 |MiKo_2006|Routed events should be documented as done by the .NET Framework|&#x2713;|&#x2713;|
 |MiKo_2010|Sealed classes should document being sealed|&#x2713;|&#x2713;|
@@ -220,9 +224,10 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_2075|Documentation should use the term 'callback' instead of 'action', 'func' or 'function'|&#x2713;|&#x2713;|
 |MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|&#x2713;|
 |MiKo_2077|&lt;summary&gt; documentation should not contain &lt;code&gt;|&#x2713;|\-|
+|MiKo_2078|&lt;code&gt; documentation should not contain XML tags|&#x2713;|\-|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
-|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|\-|
+|MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|&#x2713;|
 |MiKo_2090|Documentation for equality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2091|Documentation for inequality operator shall have default phrase|&#x2713;|&#x2713;|
 |MiKo_2100|&lt;example&gt; documentation should start with descriptive default phrase|&#x2713;|&#x2713;|
@@ -243,25 +248,27 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_2213|Documentation should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_2214|Documentation should not contain empty lines|&#x2713;|&#x2713;|
 |MiKo_2215|Sentences in documentation shall be short|&#x2713;|\-|
-|MiKo_2216|Do use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
+|MiKo_2216|Use &lt;paramref&gt; instead of &lt;param&gt; to reference parameters|&#x2713;|&#x2713;|
 |MiKo_2217|&lt;list&gt; documentation is done properly|&#x2713;|&#x2713;|
 |MiKo_2218|Documentation should use shorter terms instead of longer term 'used to/in/by'|&#x2713;|&#x2713;|
 |MiKo_2219|Do not use question or explamation marks in documentation|&#x2713;|\-|
 |MiKo_2220|Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'|&#x2713;|&#x2713;|
 |MiKo_2221|Documentation should not use empty XML tags|&#x2713;|\-|
 |MiKo_2222|Documentation should use the term 'identification' instead of 'ident'|&#x2713;|&#x2713;|
-|MiKo_2223|Documentation links references via &lt;see cref=&quot;...&quot;/&gt;|&#x2713;|\-|
+|MiKo_2223|Documentation links references via &lt;see cref="..."/&gt;|&#x2713;|\-|
 |MiKo_2224|Documentation should have XML tags and texts placed on separate lines|&#x2713;|&#x2713;|
 |MiKo_2225|Code marked with &lt;c&gt; tags should be placed on single line|&#x2713;|&#x2713;|
 |MiKo_2226|Documentation should explain the 'Why' and not the 'That'|&#x2713;|\-|
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
+|MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
+|MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
 |MiKo_2303|Do not end comments with a period|&#x2713;|&#x2713;|
 |MiKo_2304|Do not formulate comments as questions|&#x2713;|\-|
 |MiKo_2305|Do not use double periods in comments|&#x2713;|&#x2713;|
-|MiKo_2306|Do end comments with a period|\-|\-|
+|MiKo_2306|End comments with a period|\-|\-|
 |MiKo_2307|Comments should use the phrase 'failed' instead of 'was not successful'|&#x2713;|&#x2713;|
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
@@ -273,7 +280,7 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3000|Do not use empty regions|&#x2713;|\-|
 |MiKo_3001|Custom delegates should not be used|&#x2713;|\-|
 |MiKo_3002|Classes should not have too many dependencies|&#x2713;|\-|
-|MiKo_3003|Events should follow .NET Framework Guidelines for events|&#x2713;|\-|
+|MiKo_3003|Events should follow .NET Framework Design Guidelines for events|&#x2713;|\-|
 |MiKo_3004|Property setters of EventArgs shall be private|&#x2713;|\-|
 |MiKo_3005|Methods named 'Try' should follow the Trier-Doer-Pattern|&#x2713;|\-|
 |MiKo_3006|'CancellationToken' parameter should be last method parameter|&#x2713;|\-|
@@ -327,8 +334,9 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3055|ViewModels should implement INotifyPropertyChanged|&#x2713;|\-|
 |MiKo_3060|Debug.Assert or Trace.Assert shall not be used|&#x2713;|&#x2713;|
 |MiKo_3061|Loggers shall use a proper log category|&#x2713;|\-|
-|MiKo_3062|Do end log messages for exceptions with a colon|&#x2713;|&#x2713;|
-|MiKo_3063|Do end non-exceptional log messages with a dot|&#x2713;|&#x2713;|
+|MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
+|MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
+|MiKo_3064|Log messages should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|\-|
@@ -337,8 +345,9 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3075|Internal and private types should be either static or sealed unless derivation from them is required|&#x2713;|&#x2713;|
 |MiKo_3076|Do not initialize static member with static member below or in other type part|&#x2713;|\-|
 |MiKo_3077|Properties that return an Enum should have a default value|&#x2713;|&#x2713;|
-|MiKo_3078|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
+|MiKo_3078|Enum members should have a default value|&#x2713;|&#x2713;|
 |MiKo_3079|HResults should be written in hexadecimal|&#x2713;|&#x2713;|
+|MiKo_3080|Use 'switch ... return' instead of 'switch ... break' when assigning variables|&#x2713;|\-|
 |MiKo_3081|Prefer pattern matching over a logical NOT condition|&#x2713;|&#x2713;|
 |MiKo_3082|Prefer pattern matching over a logical comparison with 'true' or 'false'|&#x2713;|&#x2713;|
 |MiKo_3083|Prefer pattern matching for null checks|&#x2713;|&#x2713;|
@@ -353,6 +362,8 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3094|Do not invoke methods or properties of parameters inside locks|&#x2713;|\-|
 |MiKo_3095|Code blocks should not be empty|&#x2713;|\-|
 |MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
+|MiKo_3097|Do not cast to type and return object|&#x2713;|\-|
+|MiKo_3098|Justifications of suppressed messages shall explain|&#x2713;|\-|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -367,13 +378,29 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_3111|Assertions should use 'Is.Zero' instead of 'Is.EqualTo(0)'|&#x2713;|&#x2713;|
 |MiKo_3112|Assertions should use 'Is.Empty' instead of 'Has.Count.Zero'|&#x2713;|&#x2713;|
 |MiKo_3113|Do not use FluentAssertions|&#x2713;|&#x2713;|
-|MiKo_3114|Use &apos;Mock.Of&lt;T&gt;()&apos; instead of &apos;new Mock&lt;T&gt;().Object&apos;|&#x2713;|&#x2713;|
+|MiKo_3114|Use 'Mock.Of&lt;T&gt;()' instead of 'new Mock&lt;T&gt;().Object'|&#x2713;|&#x2713;|
 |MiKo_3115|Test methods should contain code|&#x2713;|\-|
 |MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
+|MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
+|MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
+|MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
+|MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|
+|MiKo_3204|Negative If statements can be inverted when they have an else clause|&#x2713;|&#x2713;|
+|MiKo_3210|Only the longest overloads should be virtual or abstract|&#x2713;|\-|
+|MiKo_3211|Public types should not have finalizers|&#x2713;|\-|
+|MiKo_3212|Do not confuse developers by providing other Dispose methods|&#x2713;|\-|
+|MiKo_3213|Parameterless Dispose method follows Basic Dispose pattern|&#x2713;|\-|
+|MiKo_3214|Interfaces do not contain 'Begin/End' or 'Enter/Exit' scope-defining methods|&#x2713;|\-|
+|MiKo_3215|Callbacks should be 'Func&lt;T, bool&gt;' instead of 'Predicate&lt;bool&gt;'|&#x2713;|&#x2713;|
+|MiKo_3216|Static fields with initializers should be read-only|&#x2713;|&#x2713;|
+|MiKo_3217|Do not use generic types that have other generic types as type arguments|&#x2713;|\-|
+|MiKo_3218|Do not define extension methods in unexpected places|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
+|MiKo_3501|Do not suppress nullable warnings on Null-conditional operators|&#x2713;|&#x2713;|
+|MiKo_3502|Do not suppress nullable warnings on Linq calls|&#x2713;|&#x2713;|
 
 ### Ordering
 |ID|Title|Enabled by default|CodeFix available|
@@ -400,6 +427,8 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_5013|Do not create empty arrays|&#x2713;|&#x2713;|
 |MiKo_5014|Do not create empty lists if the return value is read-only|&#x2713;|&#x2713;|
 |MiKo_5015|Do not intern string literals|&#x2713;|&#x2713;|
+|MiKo_5016|Use a HashSet for lookups in 'List.RemoveAll'|&#x2713;|\-|
+|MiKo_5017|Fields or variables assigned with string literals should be constant|&#x2713;|&#x2713;|
 
 ### Spacing
 |ID|Title|Enabled by default|CodeFix available|
@@ -421,8 +450,9 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_6015|do/while loops should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6016|using statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6017|switch statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6018|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6019|continue statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_6020|break statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6020|throw statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6021|ArgumentNullException.ThrowIfNull statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6022|ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6023|ObjectDisposedException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|
@@ -444,4 +474,8 @@ The following tables list all the 401 rules that are currently provided by the a
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
-|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|&#x2713;|
+|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|\-|
+|MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
+|MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
+|MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|

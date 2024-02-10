@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -100,8 +101,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "class TestMe { int i1 = 42; }",
-                                                         "class TestMe { int i = 42; }");
+                                                     "class TestMe { int i1 = 42; }",
+                                                     "class TestMe { int i = 42; }");
 
         protected override string GetDiagnosticId() => MiKo_1083_FieldsWithNumberSuffixAnalyzer.Id;
 

@@ -29,6 +29,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.AddAccessorDeclaration);
             context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.RemoveAccessorDeclaration);
+
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.FieldDeclaration);
+            context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.EventFieldDeclaration);
         }
 
         protected abstract bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel);
@@ -56,18 +59,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(context.GetEnclosingMethod()))
             {
-                if (context.Node is BaseMethodDeclarationSyntax method)
+                var node = context.Node;
+
+                if (node is BaseMethodDeclarationSyntax method)
                 {
                     AnalyzeComment(context, method);
                 }
-                else if (context.Node is AccessorDeclarationSyntax accessor)
+                else if (node is AccessorDeclarationSyntax accessor)
                 {
                     AnalyzeComment(context, accessor);
+                }
+                else if (node is BaseFieldDeclarationSyntax field)
+                {
+                    AnalyzeComment(context, field);
                 }
             }
         }
 
         private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseMethodDeclarationSyntax node)
+        {
+            var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
+
+            ReportDiagnostics(context, issues);
+        }
+
+        private void AnalyzeComment(SyntaxNodeAnalysisContext context, BaseFieldDeclarationSyntax node)
         {
             var issues = AnalyzeCommentTrivia(node, context.SemanticModel);
 
@@ -81,7 +97,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             ReportDiagnostics(context, issues);
         }
 
+        private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
+        {
+            if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
+            {
+                return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
+            }
+
+            return CommentHasIssue(trivia, semanticModel);
+        }
+
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
+            {
+                var hasIssue = AnalyzeComment(trivia, semanticModel);
+
+                if (hasIssue)
+                {
+                    var name = node.GetName();
+
+                    foreach (var issue in CollectIssues(name, trivia))
+                    {
+                        yield return issue;
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseFieldDeclarationSyntax node, SemanticModel semanticModel)
         {
             foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
             {
@@ -125,23 +169,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case BasePropertyDeclarationSyntax b:
                         return b.GetName();
 
-                    // TODO RKN:
-                    // case EventFieldDeclarationSyntax ef:
-                    //     return ef.GetName();
+                    case EventFieldDeclarationSyntax ef:
+                        return ef.GetName();
                 }
 
                 return string.Empty;
             }
-        }
-
-        private bool AnalyzeComment(SyntaxTrivia trivia, SemanticModel semanticModel)
-        {
-            if (trivia.IsSpanningMultipleLines() && IgnoreMultipleLines)
-            {
-                return false; // ignore comment is multi-line comment (could also have with empty lines in between the different comment lines)
-            }
-
-            return CommentHasIssue(trivia, semanticModel);
         }
     }
 }

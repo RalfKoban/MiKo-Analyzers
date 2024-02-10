@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Performance
 {
     [TestFixture]
@@ -46,6 +47,19 @@ public class TestMe
     public void DoSomething()
     {
         var i = " + creation + @";
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_valid_assignment_to_strong_typed_variable() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] values = { 42 };
     }
 }
 ");
@@ -99,6 +113,19 @@ public class TestMe
     public void DoSomething()
     {
         var i = " + creation + @";
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_assignment_to_strong_typed_variable() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        byte[] empty = { };
     }
 }
 ");
@@ -162,6 +189,24 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_wrong_assignment_to_strong_typed_variable()
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        byte[] empty = ###;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "{ }"), Template.Replace("###", "Array.Empty<byte>()"));
+        }
+
+        [Test]
         public void Code_gets_fixed_for_wrong_assignment_to_parameter_([ValueSource(nameof(WrongArrayCreations))] string creation)
         {
             const string Template = @"
@@ -175,6 +220,30 @@ public class TestMe
     }
 
     public void DoSomething(int[] array)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", creation), Template.Replace("###", "Array.Empty<int>()"));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_wrong_assignment_to_parameters_spanning_multiple_lines_([ValueSource(nameof(WrongArrayCreations))] string creation)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        DoSomething(
+                 ###,
+                 ###);
+    }
+
+    public void DoSomething(int[] array1, int[] array2)
     {
     }
 }

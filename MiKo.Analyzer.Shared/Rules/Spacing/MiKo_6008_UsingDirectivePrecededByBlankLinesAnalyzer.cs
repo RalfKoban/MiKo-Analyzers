@@ -63,15 +63,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static string GetName(NameSyntax node)
         {
+            var syntax = node;
+
             while (true)
             {
-                if (node is QualifiedNameSyntax q)
+                if (syntax is QualifiedNameSyntax q)
                 {
-                    node = q.Left;
+                    syntax = q.Left;
                 }
                 else
                 {
-                    return node.GetName();
+                    return syntax.GetName();
                 }
             }
         }

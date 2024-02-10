@@ -8,35 +8,35 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet()
-                                                                                                                   .OrderBy(_ => _.Length)
-                                                                                                                   .ThenBy(_ => _)
-                                                                                                                   .ToArray();
+        private static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet() // avoid duplicates
+                                                                                                                   .ToArray(AscendingStringComparer.Default);
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                                             .ThenBy(_ => _)
-                                                                                                                             .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                                             .ToArray();
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                             .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
-        private static readonly IReadOnlyCollection<string> MethodReplacementMapKeys = CreateMethodReplacementMapKeys().ToHashSet()
-                                                                                                                       .OrderBy(_ => _.Length)
-                                                                                                                       .ThenBy(_ => _)
-                                                                                                                       .ToArray();
+        private static readonly IReadOnlyCollection<string> MethodReplacementMapKeys = CreateMethodReplacementMapKeys().ToHashSet() // avoid duplicates
+                                                                                                                       .ToArray(AscendingStringComparer.Default);
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap = MethodReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                                                 .ThenBy(_ => _)
-                                                                                                                                 .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                                                 .ToArray();
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap = MethodReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                                                 .ToArray(_ => _.Key, AscendingStringComparer.Default);
+
+        private static readonly IReadOnlyCollection<string> InstancesReplacementMapKeys = MethodReplacementMapKeys;
+
+        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> InstancesReplacementMap = InstancesReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, "instances of the "))
+                                                                                                                                       .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
         private static readonly Dictionary<string, string> CleanupReplacementMap = new Dictionary<string, string>
                                                                                        {
                                                                                            { " based on ", " default values for " },
                                                                                            { " with for ", " with " },
+                                                                                           { " with with ", " with " },
                                                                                            { " type with type.", " type with default values." },
                                                                                            { " type with that ", " type with default values that " },
                                                                                            { " type with which ", " type with default values which " },
@@ -58,6 +58,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case InterfaceDeclarationSyntax _:
                     {
                         var preparedComment = PrepareTypeComment(summary);
+
+                        if (preparedComment == summary)
+                        {
+                            preparedComment = Comment(summary, InstancesReplacementMapKeys, InstancesReplacementMap);
+                        }
 
                         return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
                     }
@@ -89,19 +94,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return summary;
         }
 
-        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment)
-        {
-            return Comment(comment, TypeReplacementMapKeys, TypeReplacementMap);
-        }
+        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment) => Comment(comment, TypeReplacementMapKeys, TypeReplacementMap);
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
         {
             var preparedComment = Comment(comment, MethodReplacementMapKeys, MethodReplacementMap);
 
-            if (preparedComment.Content.Count > 2)
+            var content = preparedComment.Content;
+
+            if (content.Count > 2)
             {
-                var content1 = preparedComment.Content[0];
-                var content2 = preparedComment.Content[1];
+                var content1 = content[0];
+                var content2 = content[1];
 
                 if (content2.IsKind(SyntaxKind.XmlEmptyElement) && content1.IsWhiteSpaceOnlyText())
                 {
@@ -112,10 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return preparedComment;
         }
 
-        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment)
-        {
-            return Comment(comment, CleanupReplacementMap.Keys, CleanupReplacementMap);
-        }
+        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment) => Comment(comment, CleanupReplacementMap.Keys, CleanupReplacementMap);
 
         private static IEnumerable<string> CreateTypeReplacementMapKeys()
         {
@@ -209,12 +210,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 continuations.Add(article);
             }
 
-            foreach (var continuation in continuations)
-            {
-                yield return "Create " + continuation;
-                yield return "Creates " + continuation;
-            }
-
             foreach (var phrase in phrases)
             {
                 foreach (var continuation in continuations)
@@ -250,6 +245,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return phrase + " " + continuation;
                 }
             }
+
+            yield return "Implementations create ";
         }
 
         private static IEnumerable<string> CreateMethodReplacementMapKeys()
@@ -281,21 +278,49 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var continuation in continuations)
                 {
+                    yield return word + continuation + " an new instances of the ";
+                    yield return word + continuation + " an new instances of an ";
+                    yield return word + continuation + " an new instances of a ";
+                    yield return word + continuation + " an new instances of ";
                     yield return word + continuation + " an new instance of the ";
+                    yield return word + continuation + " an new instance of an ";
+                    yield return word + continuation + " an new instance of a ";
                     yield return word + continuation + " an new instance of ";
+                    yield return word + continuation + " an instances of the ";
+                    yield return word + continuation + " an instances of an ";
+                    yield return word + continuation + " an instances of a ";
+                    yield return word + continuation + " an instances of ";
                     yield return word + continuation + " an instance of the ";
+                    yield return word + continuation + " an instance of an ";
+                    yield return word + continuation + " an instance of a ";
                     yield return word + continuation + " an instance of ";
                     yield return word + continuation + " an ";
                     yield return word + continuation + " a factory ";
+                    yield return word + continuation + " a new instances of the ";
+                    yield return word + continuation + " a new instances of an ";
+                    yield return word + continuation + " a new instances of a ";
+                    yield return word + continuation + " a new instances of ";
                     yield return word + continuation + " a new instance of the ";
+                    yield return word + continuation + " a new instance of an ";
+                    yield return word + continuation + " a new instance of a ";
                     yield return word + continuation + " a new instance of ";
+                    yield return word + continuation + " a instances of the ";
+                    yield return word + continuation + " a instances of an ";
+                    yield return word + continuation + " a instances of a ";
+                    yield return word + continuation + " a instances of ";
                     yield return word + continuation + " a instance of the ";
+                    yield return word + continuation + " a instance of an ";
+                    yield return word + continuation + " a instance of a ";
                     yield return word + continuation + " a instance of ";
-                    yield return word + continuation + " a new";
+                    yield return word + continuation + " a new ";
                     yield return word + continuation + " a ";
                     yield return word + continuation + " instances of the ";
+                    yield return word + continuation + " instances of an ";
+                    yield return word + continuation + " instances of a ";
                     yield return word + continuation + " instances of ";
                     yield return word + continuation + " new instances of the ";
+                    yield return word + continuation + " new instances of an ";
+                    yield return word + continuation + " new instances of a ";
                     yield return word + continuation + " new instances of ";
                 }
             }

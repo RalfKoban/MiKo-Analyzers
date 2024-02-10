@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        .Distinct()
                                                        .ToList();
 
-                if (typeUnderTestNames.Any(_ => TestClassStartsWithName(symbol, _)))
+                if (typeUnderTestNames.Exists(_ => TestClassStartsWithName(symbol, _)))
                 {
                     // names seem to match
                     return Enumerable.Empty<Diagnostic>();
@@ -49,9 +49,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 if (typeUnderTestNames.Any())
                 {
                     // non-matching types, maybe we have some base types and have to investigate the creation methods
-                    return TestClassIsNamedAfterCreatedTypeUnderTest(symbol)
-                           ? Enumerable.Empty<Diagnostic>()
-                           : new[] { Issue(symbol, typeUnderTestNames.First() + Constants.TestsSuffix) };
+                    if (TestClassIsNamedAfterCreatedTypeUnderTest(symbol))
+                    {
+                        return Enumerable.Empty<Diagnostic>();
+                    }
+
+                    return new[] { Issue(symbol, typeUnderTestNames[0] + Constants.TestsSuffix) };
                 }
             }
 

@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string Text = Constants.Comments.FieldIsReadOnly;
 
             return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            comment.WithoutText(Text).Add(XmlText(Text)),
-                                            comment.EndTag.WithLeadingXmlComment()); // place on new line
+                                        comment.StartTag,
+                                        comment.WithoutText(Text).Add(XmlText(Text)),
+                                        comment.EndTag.WithLeadingXmlComment()); // place on new line
         }
     }
 }

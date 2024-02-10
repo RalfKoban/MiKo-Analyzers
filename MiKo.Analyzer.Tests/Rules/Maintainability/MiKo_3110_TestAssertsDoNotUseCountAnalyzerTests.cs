@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -12,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private static readonly string[] AssertionMethods =
                                                             {
-                                                                nameof(Assert.AreEqual),
-                                                                nameof(Assert.AreNotEqual),
-                                                                nameof(Assert.AreSame),
-                                                                nameof(Assert.AreNotSame),
-                                                                nameof(Assert.Less),
-                                                                nameof(Assert.LessOrEqual),
-                                                                nameof(Assert.Greater),
-                                                                nameof(Assert.GreaterOrEqual),
+                                                                "AreEqual",
+                                                                "AreNotEqual",
+                                                                "AreSame",
+                                                                "AreNotSame",
+                                                                "Less",
+                                                                "LessOrEqual",
+                                                                "Greater",
+                                                                "GreaterOrEqual",
                                                             };
 
         [Test]
@@ -119,7 +120,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Count_property_in_an_Assert_That_test_method_() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Count_property_in_an_Assert_That_test_method() => An_issue_is_reported_for(@"
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -138,7 +139,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_Length_property_in_an_Assert_That_test_method_() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Length_property_in_an_Assert_That_test_method() => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
 namespace Bla

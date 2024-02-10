@@ -5,9 +5,11 @@ using System.Collections.Immutable;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
+// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class Analyzer : DiagnosticAnalyzer
@@ -19,16 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules
             DiagnosticId = diagnosticId;
 
             Rule = KnownRules.GetOrAdd(
-                                       diagnosticId,
-                                       id => new DiagnosticDescriptor(
-                                                                      id,
-                                                                      LocalizableResource(id, "Title"),
-                                                                      LocalizableResource(id, "MessageFormat"),
-                                                                      category,
-                                                                      DiagnosticSeverity.Warning,
-                                                                      IsEnabledByDefault,
-                                                                      LocalizableResource(id, "Description"),
-                                                                      LocalizableResource(id, "HelpLinkUri")?.ToString()));
+                                   diagnosticId,
+                                   id => new DiagnosticDescriptor(
+                                                              id,
+                                                              LocalizableResource(id, "Title"),
+                                                              LocalizableResource(id, "MessageFormat"),
+                                                              category,
+                                                              Severity,
+                                                              IsEnabledByDefault,
+                                                              LocalizableResource(id, "Description"),
+                                                              LocalizableResource(id, "HelpLinkUri")?.ToString()));
         }
 
         protected Analyzer(string category, string diagnosticId, SymbolKind symbolKind) : this(category, diagnosticId) => SymbolKind = symbolKind;
@@ -41,11 +43,15 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected SymbolKind SymbolKind { get; } = SymbolKind.Alias;
 
+        protected virtual DiagnosticSeverity Severity => DiagnosticSeverity.Warning;
+
         protected virtual bool IsEnabledByDefault => true;
 
         protected virtual bool CanRunConcurrently => true;
 
         protected virtual bool IsUnitTestAnalyzer => false;
+
+        public static void Reset() => KnownRules.Clear();
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Analyzer%20Actions%20Semantics.md for more information
@@ -82,7 +88,26 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static Location CreateLocation(SyntaxTree syntaxTree, int start, int end) => Location.Create(syntaxTree, TextSpan.FromBounds(start, end));
 
-        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+        protected static Location CreateLocation(string value, SyntaxTree syntaxTree, int spanStart, int position, int startOffset = 0, int endOffset = 0)
+        {
+            if (position == -1)
+            {
+                return null;
+            }
+
+            var start = spanStart + position + startOffset; // find start position for underlining
+            var end = start + value.Length - startOffset - endOffset; // find end position
+
+            return CreateLocation(syntaxTree, start, end);
+        }
+
+        protected static void ReportDiagnostics(CodeBlockAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                ReportDiagnostics(context, new[] { issue });
+            }
+        }
 
         protected static void ReportDiagnostics(CodeBlockAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -107,7 +132,13 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+        protected static void ReportDiagnostics(SymbolAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                ReportDiagnostics(context, new[] { issue });
+            }
+        }
 
         protected static void ReportDiagnostics(SymbolAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -132,7 +163,13 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue) => ReportDiagnostics(context, new[] { issue });
+        protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, Diagnostic issue)
+        {
+            if (issue != null)
+            {
+                ReportDiagnostics(context, new[] { issue });
+            }
+        }
 
         protected static void ReportDiagnostics(SyntaxNodeAnalysisContext context, IEnumerable<Diagnostic> issues)
         {
@@ -201,6 +238,14 @@ namespace MiKoSolutions.Analyzers.Rules
         protected void AnalyzeParameter(SymbolAnalysisContext context) => ReportDiagnostics<IParameterSymbol>(context, AnalyzeParameter);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>();
+
+        protected Diagnostic Issue(CastExpressionSyntax cast)
+        {
+            // underline only the cast itself, not the complete expression
+            var location = CreateLocation(cast, cast.OpenParenToken.SpanStart, cast.CloseParenToken.Span.End);
+
+            return Issue(location);
+        }
 
         protected Diagnostic Issue(ISymbol symbol, Dictionary<string, string> properties = null) => CreateIssue(symbol.Locations[0], properties, GetSymbolName(symbol));
 

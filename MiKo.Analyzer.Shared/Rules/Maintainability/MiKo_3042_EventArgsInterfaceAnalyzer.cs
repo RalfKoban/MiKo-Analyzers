@@ -34,8 +34,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         var baseTypes = baseList.Types;
 
-                        // ReSharper disable once ForCanBeConvertedToForeach
-                        for (var index = 0; index < baseTypes.Count; index++)
+                        // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                        var baseTypesCount = baseTypes.Count;
+
+                        for (var index = 0; index < baseTypesCount; index++)
                         {
                             var type = baseTypes[index];
                             var typeName = type.Type.GetName();

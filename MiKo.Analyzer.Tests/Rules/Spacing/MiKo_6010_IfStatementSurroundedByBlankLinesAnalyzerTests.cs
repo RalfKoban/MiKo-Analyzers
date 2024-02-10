@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -153,6 +154,70 @@ namespace Bla
             if (condition)
             {
             }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_block_as_statement_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+            {
+            }
+            condition = true;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_as_statement_after_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+            if (condition)
+                condition = false;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_if_as_statement_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+                condition = true;
+            condition = true;
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_single_line_if_as_statement_before_variable_assignment_in_method() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition) condition = true;
+            condition = true;
         }
     }
 }
@@ -465,6 +530,115 @@ namespace Bla
 
                     break;
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_if_as_statement_after_variable_assignment_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+            if (condition)
+                condition = false;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething()
+        {
+            var condition = true;
+
+            if (condition)
+                condition = false;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_if_as_statement_before_variable_assignment_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+                condition = true;
+            condition = true;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition)
+                condition = true;
+
+            condition = true;
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_single_line_if_as_statement_before_variable_assignment_in_method()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition) condition = true;
+            condition = true;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class TestMe
+    {
+        public void DoSomething(bool condition)
+        {
+            if (condition) condition = true;
+
+            condition = true;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -20,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             var propertySyntax = (PropertyDeclarationSyntax)syntax;
 
@@ -31,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 // append a semicolon to the end
                 var initializer = CreateInitializer(document, propertySyntax.Type);
-                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".ToSyntaxToken(SyntaxKind.SemicolonToken));
+                var updatedNode = propertySyntax.WithInitializer(initializer).WithSemicolonToken(";".AsToken(SyntaxKind.SemicolonToken));
 
                 return root.ReplaceNode(propertySyntax, updatedNode);
             }

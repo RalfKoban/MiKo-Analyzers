@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -48,9 +49,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                       };
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string guid) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_Guid_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => An_issue_is_reported_for(@"
 /// <" + xmlTag + @">
-/// The " + guid.Trim() + @" something.
+/// The " + wrongValue.Trim() + @" something.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
@@ -69,10 +70,10 @@ public sealed class TestMe { }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_Guid_in_code_tag_([Values("c", "code")] string xmlTag, [ValueSource(nameof(WrongGuids))] string guid) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Guid_in_code_tag_([Values("c", "code")] string xmlTag, [ValueSource(nameof(WrongGuids))] string wrongValue) => No_issue_is_reported_for(@"
 /// <summary>
 /// <" + xmlTag + @">
-/// The " + guid.Trim() + @" something.
+/// The " + wrongValue.Trim() + @" something.
 /// </" + xmlTag + @">
 /// </summary>
 public sealed class TestMe { }

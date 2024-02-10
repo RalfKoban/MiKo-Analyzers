@@ -20,16 +20,16 @@ namespace MiKoSolutions.Analyzers
     internal static class SymbolExtensions
     {
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormat = new SymbolDisplayFormat(
-                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+                                                                                                      SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                      SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                      SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                      miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers | SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
 
         private static readonly SymbolDisplayFormat FullyQualifiedDisplayFormatWithoutAlias = new SymbolDisplayFormat(
-                                                                                                          SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
-                                                                                                          SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-                                                                                                          SymbolDisplayGenericsOptions.IncludeTypeParameters,
-                                                                                                          miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
+                                                                                                                  SymbolDisplayGlobalNamespaceStyle.OmittedAsContaining,
+                                                                                                                  SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+                                                                                                                  SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                                                                                                                  miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
 
         private static readonly string[] GeneratedCSharpFileExtensions =
                                                                          {
@@ -127,8 +127,6 @@ namespace MiKoSolutions.Analyzers
 
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
-
-        internal static bool HasAttribute(this ISymbol value, IEnumerable<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
 
         internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
 
@@ -335,6 +333,20 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static SyntaxToken GetModifier(this IMethodSymbol value, SyntaxKind kind)
+        {
+            var syntax = (BaseMethodDeclarationSyntax)value.GetSyntax();
+
+            return syntax.Modifiers.First(kind);
+        }
+
+        internal static SyntaxToken GetModifier(this IParameterSymbol value, SyntaxKind kind)
+        {
+            var syntax = value.GetSyntax();
+
+            return syntax.Modifiers.First(kind);
+        }
+
         internal static ITypeSymbol GetReturnType(this IPropertySymbol value) => value.GetMethod?.ReturnType ?? value.SetMethod?.Parameters[0].Type;
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetStartingLine();
@@ -426,13 +438,17 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
+        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
+
         internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
 
+        internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
+
         internal static bool Implements<T>(this ITypeSymbol value) => Implements(value, typeof(T).FullName);
 
-        internal static bool Implements(this ITypeSymbol value, string interfaceType)
+        internal static bool Implements(this ITypeSymbol value, string interfaceTypeName)
         {
             switch (value.SpecialType)
             {
@@ -476,7 +492,7 @@ namespace MiKoSolutions.Analyzers
 
             var fullName = value.ToString();
 
-            if (fullName == interfaceType)
+            if (fullName == interfaceTypeName)
             {
                 return true;
             }
@@ -485,7 +501,7 @@ namespace MiKoSolutions.Analyzers
             {
                 var fullInterfaceName = implementedInterface.ToString();
 
-                if (fullInterfaceName == interfaceType)
+                if (fullInterfaceName == interfaceTypeName)
                 {
                     return true;
                 }
@@ -565,7 +581,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool AnyBaseType(this ITypeSymbol value, Predicate<ITypeSymbol> callback)
+        internal static bool AnyBaseType(this ITypeSymbol value, Func<ITypeSymbol, bool> callback)
         {
             var symbol = value;
 
@@ -633,7 +649,7 @@ namespace MiKoSolutions.Analyzers
         // ReSharper disable once AssignNullToNotNullAttribute
         internal static bool InheritsFrom<T>(this ITypeSymbol value) => InheritsFrom(value, typeof(T).FullName);
 
-        internal static bool InheritsFrom(this ITypeSymbol value, string baseClass)
+        internal static bool InheritsFrom(this ITypeSymbol value, string baseClassName)
         {
             if (value is null)
             {
@@ -670,7 +686,7 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
-                    return value.AnyBaseType(_ => baseClass == _.ToString());
+                    return value.AnyBaseType(_ => baseClassName == _.ToString());
                 }
 
                 default:
@@ -903,6 +919,11 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsPrismEvent(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
+                                                                  && value.SpecialType == SpecialType.None
+                                                                  && value.ToString() != "Microsoft.Practices.Prism.Events.EventBase"
+                                                                  && value.InheritsFrom("Microsoft.Practices.Prism.Events.EventBase");
+
         internal static bool IsEventArgs(this ITypeSymbol value) => value.TypeKind == TypeKind.Class
                                                                  && value.SpecialType == SpecialType.None
                                                                  && value.InheritsFrom<EventArgs>();
@@ -970,7 +991,18 @@ namespace MiKoSolutions.Analyzers
             return argumentType.IsException();
         }
 
-        internal static bool IsFactory(this ITypeSymbol value) => value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+        internal static bool IsFactory(this ITypeSymbol value)
+        {
+            switch (value?.TypeKind)
+            {
+                case TypeKind.Class:
+                case TypeKind.Interface:
+                    return value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+
+                default:
+                    return false;
+            }
+        }
 
         internal static bool IsGenerated(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.GeneratedAttributeNames);
 
@@ -1157,7 +1189,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     var ns = method.ContainingNamespace;
 
-                    if (ns.Name == "Linq" && ns.ContainingNamespace.Name == "System")
+                    if (ns.Name == nameof(System.Linq) && ns.ContainingNamespace.Name == nameof(System))
                     {
                         return true;
                     }
@@ -1182,11 +1214,11 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsPartial(this ITypeSymbol value) => value.Locations.Length > 1;
 
-        internal static bool IsPartial(this IMethodSymbol value) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(_ => _.IsKind(SyntaxKind.PartialKeyword));
+        internal static bool IsPartial(this IMethodSymbol value) => value.HasModifier(SyntaxKind.PartialKeyword);
 
-        internal static bool IsPubliclyVisible(this ISymbol symbol)
+        internal static bool IsPubliclyVisible(this ISymbol value)
         {
-            switch (symbol.DeclaredAccessibility)
+            switch (value.DeclaredAccessibility)
             {
                 case Accessibility.NotApplicable:
                 case Accessibility.Private:
@@ -1383,6 +1415,6 @@ namespace MiKoSolutions.Analyzers
             return typeName;
         }
 
-        private static bool IsTestSpecificMethod(this IMethodSymbol value, IEnumerable<string> attributeNames) => value.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
+        private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
     }
 }

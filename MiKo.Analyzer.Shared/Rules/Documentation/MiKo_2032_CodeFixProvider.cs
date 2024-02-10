@@ -17,45 +17,58 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] GenericStartParts = Constants.Comments.BooleanTaskReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] GenericEndParts = Constants.Comments.BooleanTaskReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
 
-        private static readonly string[] Phrases =
-                                                   {
-                                                       " if ",
-                                                       "A task that has the result ",
-                                                       "A task that will complete with a result of ",
-                                                       "a task that will complete with a result of ",
-                                                       "TRUE:",
-                                                       "True:",
-                                                       "true:",
-                                                       "TRUE,",
-                                                       "True,",
-                                                       "true,",
-                                                       "TRUE means",
-                                                       "True means",
-                                                       "true means",
-                                                       "TRUE when",
-                                                       "True when",
-                                                       "true when",
-                                                       "TRUE of",
-                                                       "True of",
-                                                       "true of",
-                                                       "TRUE",
-                                                       "True",
-                                                       "true",
-                                                       "FALSE:",
-                                                       "False:",
-                                                       "false:",
-                                                       "FALSE,",
-                                                       "False,",
-                                                       "false,",
-                                                       "FALSE",
-                                                       "False",
-                                                       "false",
-                                                       "Returns",
-                                                       "returns",
-                                                       "will return",
-                                                   };
+        private static readonly string[] Phrases = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                                         {
+                                                                                                             " if ",
+                                                                                                             "A task that has the result ",
+                                                                                                             "A task that completes with a result of ",
+                                                                                                             "a task that completes with a result of ",
+                                                                                                             "A task that will complete with a result of ",
+                                                                                                             "a task that will complete with a result of ",
+                                                                                                             "A task that represents the operation. The Result indicates whether ",
+                                                                                                             "a task that represents the operation. The Result indicates whether ",
+                                                                                                             "A task that represents the asynchronous operation. The Result indicates whether ",
+                                                                                                             "a task that represents the asynchronous operation. The Result indicates whether ",
+                                                                                                             "A task representing the operation. The Result indicates whether ",
+                                                                                                             "a task representing the operation. The Result indicates whether ",
+                                                                                                             "A task representing the asynchronous operation. The Result indicates whether ",
+                                                                                                             "a task representing the asynchronous operation. The Result indicates whether ",
+                                                                                                             "TRUE:",
+                                                                                                             "True:",
+                                                                                                             "true:",
+                                                                                                             "TRUE,",
+                                                                                                             "True,",
+                                                                                                             "true,",
+                                                                                                             "TRUE means that",
+                                                                                                             "True means that",
+                                                                                                             "true means that",
+                                                                                                             "TRUE means",
+                                                                                                             "True means",
+                                                                                                             "true means",
+                                                                                                             "TRUE when",
+                                                                                                             "True when",
+                                                                                                             "true when",
+                                                                                                             "TRUE of",
+                                                                                                             "True of",
+                                                                                                             "true of",
+                                                                                                             "TRUE",
+                                                                                                             "True",
+                                                                                                             "true",
+                                                                                                             "FALSE:",
+                                                                                                             "False:",
+                                                                                                             "false:",
+                                                                                                             "FALSE,",
+                                                                                                             "False,",
+                                                                                                             "false,",
+                                                                                                             "FALSE",
+                                                                                                             "False",
+                                                                                                             "false",
+                                                                                                             "Returns",
+                                                                                                             "returns",
+                                                                                                             "will return",
+                                                                                                         }).OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
-        private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().ToArray();
+        private static readonly string[] SimpleStartingPhrases = CreateSimpleStartingPhrases().OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
         private static readonly string[] DelimiterPhrases =
                                                             {
@@ -70,12 +83,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                     "If ",
                                                                     "When ",
                                                                     "Whether ",
+                                                                    "In case that ",
                                                                     "In case ",
+                                                                    "Means that ",
                                                                     "Means ",
                                                                     "if ",
                                                                     "when ",
                                                                     "whether ",
+                                                                    "in case that ",
                                                                     "in case ",
+                                                                    "means that ",
                                                                     "means ",
                                                                 };
 
@@ -87,13 +104,30 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " otherwise the task has the result",
                                                                      " else it",
                                                                      " else with",
+                                                                     " in all of the other cases",
+                                                                     " in all other cases",
+                                                                     " in all other case",
+                                                                     " in any of the other cases",
+                                                                     " in any other cases",
+                                                                     " in any other case",
+                                                                     " in each of the other cases",
+                                                                     " in each other cases",
+                                                                     " in each other case",
+                                                                     " in the other cases",
+                                                                     " in the other case",
+                                                                     " in other cases",
+                                                                     " in other case",
                                                                      ", ; else",
+                                                                     ", else",
+                                                                     " Otherwise ",
+                                                                     " Otherwise",
                                                                  };
 
         public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
+//// ncrunch: collect values off
         internal static IEnumerable<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
@@ -132,14 +166,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return $"Indicates {condition} ";
             }
         }
+//// ncrunch: collect values default
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                                                ? Comment(comment, GenericStartParts, GenericEndParts)
-                                                                                                                                                                : comment;
+                                                                                                                                                            ? Comment(comment, GenericStartParts, GenericEndParts)
+                                                                                                                                                            : comment;
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => CommentCanBeFixed(comment)
-                                                                                                                                                            ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
-                                                                                                                                                            : comment;
+                                                                                                                                                        ? Comment(comment, NonGenericStartParts, NonGenericEndParts)
+                                                                                                                                                        : comment;
 
         // introduced as workaround for issue #399
         private static bool CommentCanBeFixed(SyntaxNode syntax)
@@ -250,7 +285,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // clean up comment and remove middle parts before the <see langword=""false""/>
             if (nodes.LastOrDefault() is XmlTextSyntax last)
             {
-                var replacement = last.WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                var replacement = last.WithoutTrailingXmlComment()
+                                      .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers)
+                                      .WithoutTrailingXmlComment()
                                       .WithoutTrailing(SimpleTrailingPhrases)
                                       .WithoutTrailingCharacters(Constants.TrailingSentenceMarkers);
 

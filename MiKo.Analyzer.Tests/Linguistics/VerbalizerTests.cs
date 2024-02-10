@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     [TestFixture]
@@ -131,6 +132,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("accesses", ExpectedResult = true)]
         [TestCase("adapts", ExpectedResult = true)]
         [TestCase("adopts", ExpectedResult = true)]
+        [TestCase("adopter", ExpectedResult = false)]
+        [TestCase("adopters", ExpectedResult = false)]
+        [TestCase("catches", ExpectedResult = true)]
+        [TestCase("catchers", ExpectedResult = false)]
         [TestCase("caches", ExpectedResult = true)]
         [TestCase("continues", ExpectedResult = true)]
         [TestCase("does", ExpectedResult = true)]
@@ -142,6 +147,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("test", ExpectedResult = false)]
         [TestCase("tests", ExpectedResult = true)]
         [TestCase("will", ExpectedResult = true)]
+        [TestCase("merge", ExpectedResult = false)]
+        [TestCase("merges", ExpectedResult = true)]
+        [TestCase("mergers", ExpectedResult = false)]
+        [TestCase("manage", ExpectedResult = false)]
+        [TestCase("manages", ExpectedResult = true)]
+        [TestCase("manager", ExpectedResult = false)]
+        [TestCase("managers", ExpectedResult = false)]
+        [TestCase("transistors", ExpectedResult = false)]
+        [TestCase("transcriptors", ExpectedResult = false)]
         public static bool IsThirdPersonSingularVerb_detects_3rd_person_singular_verb_(string name) => Verbalizer.IsThirdPersonSingularVerb(name);
 
         [TestCase("adapting", ExpectedResult = "adapting")]

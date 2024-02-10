@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -17,11 +18,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         internal static readonly string[] CommandStartingPhrases =
                                                                    {
                                                                        "A command ",
+                                                                       "A standard command ",
+                                                                       "A toggle command ",
+                                                                       "The command ",
+                                                                       "The standard command ",
+                                                                       "The toggle command ",
+                                                                       "This command ",
+                                                                       "This standard command ",
+                                                                       "This toggle command ",
                                                                        "Command ",
                                                                        "command ",
+                                                                       "A class ",
+                                                                       "The class ",
+                                                                       "This class ",
                                                                    };
 
-        private static readonly Dictionary<string, string> CommandReplacementMap = CreateReplacementMap();
+        private static readonly Dictionary<string, string> CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
+                                                                                                                       .ThenBy(_ => _.Key)
+                                                                                                                       .ToDictionary(_ => _.Key, _ => _.Value);
 
         public override string FixableDiagnosticId => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
 
@@ -29,29 +43,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
-            var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap);
+            var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap, FirstWordHandling.MakeLowerCase);
 
-            return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeInfinite);
+            return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeInfinite);
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
-
-        private static Dictionary<string, string> CreateReplacementMap()
-        {
-            var entries = CreateCommandReplacementMapEntries().OrderBy(_ => _.Key[0]).ToList(); // sort by first character
-
-            var result = new Dictionary<string, string>(entries.Count);
-
-            foreach (var entry in entries)
-            {
-                if (result.ContainsKey(entry.Key) is false)
-                {
-                    result[entry.Key] = entry.Value;
-                }
-            }
-
-            return result;
-        }
 
         private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
         {
@@ -59,26 +56,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                   {
                                       "that can",
                                       "that will",
+                                      "that offers to",
+                                      "that tries to",
                                       "that",
                                       "which can",
                                       "which will",
+                                      "which offers to",
+                                      "which tries to",
                                       "which",
                                       "will",
                                       "to",
                                       "for",
+                                      "can be used to",
+                                      "is used to",
+                                      "offers to",
+                                      "tries to",
                                   };
 
             var results = new List<KeyValuePair<string, string>>();
 
             foreach (var phrase in CommandStartingPhrases)
             {
-                var start = phrase.AsSpan().Trim();
+                var start = phrase.AsSpan().Trim().ToString();
 
                 foreach (var middle in middleParts)
                 {
-                    results.Add(new KeyValuePair<string, string>(string.Concat(start.ToString(), " ", middle, " "), string.Empty));
+                    results.Add(new KeyValuePair<string, string>(string.Concat(start, " ", middle, " "), string.Empty));
                 }
+
+                results.Add(new KeyValuePair<string, string>(string.Concat(start, " "), string.Empty));
             }
+
+            results.Add(new KeyValuePair<string, string>(string.Concat("Offers to", " "), string.Empty));
+            results.Add(new KeyValuePair<string, string>(string.Concat("Tries to", " "), string.Empty));
 
             return results;
         }

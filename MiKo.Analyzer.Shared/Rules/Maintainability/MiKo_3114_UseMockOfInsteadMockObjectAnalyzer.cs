@@ -23,15 +23,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             types = null;
 
-            if (node.GetName() == "Object" && node.Expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == "Mock" && o.Type is GenericNameSyntax genericName)
+            if (node.GetName() == "Object")
             {
-                types = genericName.TypeArgumentList.Arguments.ToArray();
+                var expression = node.Expression;
+
+                if (expression is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    // let's see if we can fix it in case we remove the surrounding parenthesis
+                    expression = parenthesized.Expression;
+                }
+
+                if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
+                {
+                    types = genericName.TypeArgumentList.Arguments.ToArray();
+                }
             }
 
             return types != null;
         }
 
-        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("Moq.Mock") != null;
+        protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {

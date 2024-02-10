@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Extensions
 {
     [TestFixture]
@@ -104,7 +105,8 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             Assert.Multiple(() =>
                                  {
-                                     Assert.That("bla blubb".FirstWord(), Is.EqualTo("bla"), "without whitespace");
+                                     Assert.That("bla".FirstWord(), Is.EqualTo("bla"), "without whitespace");
+                                     Assert.That("bla blubb".FirstWord(), Is.EqualTo("bla"), "without whitespace at both ends");
                                      Assert.That("bla blubb ".FirstWord(), Is.EqualTo("bla"), "without whitespace at start");
                                      Assert.That(" bla blubb".FirstWord(), Is.EqualTo("bla"), "with single whitespace at start");
                                      Assert.That("    bla blubb".FirstWord(), Is.EqualTo("bla"), "with multiple whitespace at start");
@@ -121,6 +123,22 @@ namespace MiKoSolutions.Analyzers.Extensions
                                      Assert.That("bla blubb ".SecondWord(), Is.EqualTo("blubb"), "with single whitespace at end");
                                      Assert.That("bla blubb    ".SecondWord(), Is.EqualTo("blubb"), "with multiple whitespaces at end");
                                      Assert.That("bla blubb blubdiblub".SecondWord(), Is.EqualTo("blubb"), "with 3 words");
+                                 });
+        }
+
+        [Test]
+        public static void LastWord_returns_only_last_word()
+        {
+            Assert.Multiple(() =>
+                                 {
+                                     Assert.That(((string)null).LastWord(), Is.Null, "with null as text");
+                                     Assert.That(string.Empty.LastWord(), Is.EqualTo(string.Empty), "with empty text");
+                                     Assert.That("   ".LastWord(), Is.EqualTo(string.Empty), "with whitespace-only text");
+                                     Assert.That("bla".LastWord(), Is.EqualTo("bla"), "without whitespace");
+                                     Assert.That("bla blubb".LastWord(), Is.EqualTo("blubb"), "without whitespace at end");
+                                     Assert.That(" bla blubb ".LastWord(), Is.EqualTo("blubb"), "with single whitespace at end");
+                                     Assert.That(" bla blubb   ".LastWord(), Is.EqualTo("blubb"), "with multiple whitespace at end");
+                                     Assert.That(" bla          ".LastWord(), Is.EqualTo("bla"), "only word with multiple whitespaces at end");
                                  });
         }
 

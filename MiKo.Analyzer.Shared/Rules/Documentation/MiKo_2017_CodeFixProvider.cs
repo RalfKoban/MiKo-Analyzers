@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var readOnlyMarker = string.Empty;
 
-            if (fieldDeclaration.Modifiers.Any(_ => _.IsKind(SyntaxKind.ReadOnlyKeyword)))
+            if (fieldDeclaration.IsReadOnly())
             {
                 readOnlyMarker = " " + Constants.Comments.FieldIsReadOnly;
             }
@@ -44,11 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var field = Comment(XmlElement(Constants.XmlTag.Value), ValueText[0], SeeCref(type), ValueText[1]);
 
             return syntax.WithoutTrivia()
-                         .WithContent(SyntaxFactory.List<XmlNodeSyntax>(new[]
-                                                                            {
-                                                                                summary.WithTrailingXmlComment(),
-                                                                                field.WithEndOfLine(),
-                                                                            }))
+                         .WithContent(summary.WithTrailingXmlComment(), field.WithEndOfLine())
                          .WithLeadingXmlCommentExterior();
         }
     }

@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -52,7 +53,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_with_return_inside_callback() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_ctor_with_return_inside_parameterized_lambda_callback() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 
@@ -68,6 +69,27 @@ public class TestMe
 
                             return result;
                         };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_ctor_with_return_inside_non_parameterized_lambda_callback() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private Func<int, int> field;
+
+    public TestMe(int value)
+    {
+        field = i =>
+                    {
+                        var result = new Random().Next(i, value);
+
+                        return result;
+                    };
     }
 }
 ");

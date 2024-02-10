@@ -19,15 +19,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
         {
-            if (symbol.IsConstructor() is false)
+            if (symbol.IsConstructor())
             {
-                return false;
+                return IsParameterlessCtor(symbol)
+                    || IsMessageCtor(symbol)
+                    || IsMessageExceptionCtor(symbol)
+                    || symbol.IsSerializationConstructor();
             }
 
-            return IsParameterlessCtor(symbol)
-                || IsMessageCtor(symbol)
-                || IsMessageExceptionCtor(symbol)
-                || symbol.IsSerializationConstructor();
+            return false;
         }
 
         // overridden because we want to inspect the methods of the type as well
@@ -149,13 +149,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
         {
-            if (comments.Any(_ => phrases.Any(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (comments.Any(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
                 // fitting comment
             }
             else
             {
-                yield return Issue(symbol, constant, phrases.First());
+                yield return Issue(symbol, constant, phrases[0]);
             }
         }
 

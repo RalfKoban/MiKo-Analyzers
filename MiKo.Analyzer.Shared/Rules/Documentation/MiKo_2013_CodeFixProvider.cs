@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -17,10 +18,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] StartingPhrases =
                                                            {
+                                                               "Contains",
+                                                               "Define",
+                                                               "Defined",
                                                                "Defines",
+                                                               "Describe",
+                                                               "Described",
+                                                               "Describes",
+                                                               "Identified",
+                                                               "Identifies",
+                                                               "Identify",
+                                                               "Indicate",
+                                                               "Indicated",
                                                                "Indicates",
+                                                               "Present",
+                                                               "Presents",
+                                                               "Provide",
+                                                               "Provides",
+                                                               "Represent",
+                                                               "Represents",
+                                                               "Specified",
                                                                "Specifies",
+                                                               "Specify",
                                                            };
+
+        private static readonly string[] EnumStartingPhrases = CreateEnumStartingPhrases().ToArray();
 
         public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
 
@@ -45,16 +67,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 return SyntaxFactory.XmlElement(
-                                                comment.StartTag,
-                                                SyntaxFactory.List(contents),
-                                                comment.EndTag.WithLeadingXmlComment());
+                                            comment.StartTag,
+                                            contents.ToSyntaxList(),
+                                            comment.EndTag.WithLeadingXmlComment());
             }
 
             // happens if we start e.g. with a <see link
             return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
-                                            comment.EndTag.WithLeadingXmlComment());
+                                        comment.StartTag,
+                                        originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
+                                        comment.EndTag.WithLeadingXmlComment());
         }
 
         private static XmlNodeSyntax NewXmlComment(XmlTextSyntax comment, string text)
@@ -78,8 +100,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     existingText = existingText.WithoutFirstWord();
                 }
 
+                var continuation = new StringBuilder(existingText.Trim().ToString()).ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
+
                 textTokens.RemoveAt(0);
-                textTokens.Insert(0, XmlTextToken(text + existingText.Trim().ToString()));
+                textTokens.Insert(0, XmlTextToken(text + continuation));
             }
             else
             {
@@ -98,9 +122,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 textTokens.RemoveAt(textTokens.Count - 1);
             }
 
-            return comment.WithTextTokens(SyntaxFactory.TokenList(textTokens));
+            return comment.WithTextTokens(textTokens.ToTokenList());
         }
 
-        private static SyntaxToken XmlTextToken(string text) => text.ToSyntaxToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
+        private static SyntaxToken XmlTextToken(string text) => text.AsToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
+
+//// ncrunch: collect values off
+        private static IEnumerable<string> CreateEnumStartingPhrases()
+        {
+            foreach (var start in new[] { "Declaration", "Enum", "Enumeration", "Flagged enum", "Flagged enumeration", "Flags enum", "Flags enumeration", "State" })
+            {
+                yield return start + " of ";
+                yield return start + " for ";
+
+                yield return start + " contains ";
+                yield return start + " describes ";
+                yield return start + " represents ";
+
+                yield return start + " containing ";
+                yield return start + " describing ";
+                yield return start + " representing ";
+
+                yield return start + " that contains ";
+                yield return start + " that describes ";
+                yield return start + " that represents ";
+
+                yield return start + " which contains ";
+                yield return start + " which describes ";
+                yield return start + " which represents ";
+
+                yield return start + " ";
+            }
+        }
+//// ncrunch: collect values default
     }
 }

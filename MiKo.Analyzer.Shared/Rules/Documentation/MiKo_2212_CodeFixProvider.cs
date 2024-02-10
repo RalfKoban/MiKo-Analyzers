@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -16,13 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var affectedTokens = syntax.GetXmlTextTokens()
-                                       .Where(_ => _.GetLocation().Contains(diagnostic.Location))
-                                       .Where(_ => _.ValueText.Contains(Constants.Comments.WasNotSuccessfulPhrase));
+            var token = syntax.FindToken(diagnostic);
 
-            return syntax.ReplaceTokens(affectedTokens, (original, rewritten) => original.WithText(GetFixedText(original.Text)));
+            return syntax.ReplaceToken(token, token.WithText(token.ValueText.Replace(Constants.Comments.WasNotSuccessfulPhrase, "failed")));
         }
-
-        private static string GetFixedText(string text) => text.Replace(Constants.Comments.WasNotSuccessfulPhrase, "failed");
     }
 }

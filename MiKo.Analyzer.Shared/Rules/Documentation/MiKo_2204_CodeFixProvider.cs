@@ -40,8 +40,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var textTokens = text.TextTokens;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < textTokens.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var textTokensCount = textTokens.Count;
+
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
                 var valueText = token.ValueText.AsSpan().Trim();
@@ -80,7 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 result.Add(text);
             }
 
-            result[result.Count - 1] = result.Last().WithTrailingXmlComment();
+            result[result.Count - 1] = result[result.Count - 1].WithTrailingXmlComment();
 
             return result;
         }
@@ -117,13 +119,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 items.Add(item.WithLeadingXmlComment());
             }
 
-            if (items.Count > 0)
+            var itemsCount = items.Count;
+
+            if (itemsCount > 0)
             {
-                items[items.Count - 1] = items[items.Count - 1].WithTrailingXmlComment();
+                items[itemsCount - 1] = items[itemsCount - 1].WithTrailingXmlComment();
             }
 
             var list = XmlElement(Constants.XmlTag.List, items);
-            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.ToSyntaxToken());
+            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.AsToken());
 
             return list.AddStartTagAttributes(listType).WithLeadingXmlComment();
         }

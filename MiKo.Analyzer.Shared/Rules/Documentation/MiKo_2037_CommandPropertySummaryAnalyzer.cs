@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (summaries.None(_ => _.StartsWithAny(phrases, StringComparison.Ordinal)))
             {
-                yield return Issue(symbol, Constants.XmlTag.Summary, phrases.First());
+                yield return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
             }
         }
 

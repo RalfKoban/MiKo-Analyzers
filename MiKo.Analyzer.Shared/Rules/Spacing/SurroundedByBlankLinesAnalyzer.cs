@@ -17,8 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var list = node.GetLeadingTrivia();
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < list.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var listCount = list.Count;
+
+            for (var index = 0; index < listCount; index++)
             {
                 var trivia = list[index];
 

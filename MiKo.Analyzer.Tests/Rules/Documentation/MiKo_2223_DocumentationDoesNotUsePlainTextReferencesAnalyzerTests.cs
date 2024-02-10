@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -160,13 +161,13 @@ public class TestMe
         [TestCase("{B19F1C23-57F6-4a4E-aa69-5EE303F5184B}")]
         [TestCase("B19F1C23-57F6-4a4E-aa69-5EE303F5184B")]
         [TestCase("B19F1C2357F64a4Eaa695EE303F5184B")]
-        public void No_issue_is_reported_for_correctly_documented_method_with_Guid(string guid) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_Guid_(string value) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     /// <summary>
-    /// Does something inside " + guid + @" that is very important.
+    /// Does something inside " + value + @" that is very important.
     /// </summary>
     public void DoSomething()
     {
@@ -516,6 +517,60 @@ public class TestMe
     public void DoSomething()
     {
     }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface() => An_issue_is_reported_for(@"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    void DoSomething();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_array_return_type() => An_issue_is_reported_for(@"
+using System;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    byte[] DoSomething();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_generic_return_value_that_contains_an_array() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    IEnumerable<byte[]> DoSomething();
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_incorrectly_documented_method_on_interface_with_generic_array_return_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public interface TestMe
+{
+    /// <summary>
+    /// Does something regarding object.ToString() that is very important.
+    /// </summary>
+    IEnumerable<int>[] DoSomething();
 }
 ");
 

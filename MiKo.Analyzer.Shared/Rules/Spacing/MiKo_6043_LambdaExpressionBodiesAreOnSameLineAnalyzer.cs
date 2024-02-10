@@ -118,7 +118,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var text = lambda.ToFullString().Without(Constants.WhiteSpaces);
 
-            var completeLength = lambda.GetStartPosition().Character + text.Length;
+            var completeLength = lambda.GetPositionWithinStartLine() + text.Length;
 
             return completeLength <= MaxLineLength;
         }

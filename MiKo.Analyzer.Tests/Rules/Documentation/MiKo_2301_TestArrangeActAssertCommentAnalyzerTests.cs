@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -45,6 +46,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         "Verification.",
                                                         "Verifications.",
                                                     };
+
+        [Test]
+        public void No_issue_is_reported_for_uncommented_non_test_field() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int m_field;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_uncommented_test_field() => No_issue_is_reported_for(@"
+using System;
+
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    private int m_field;
+}
+");
 
         [Test]
         public void No_issue_is_reported_for_commented_non_test_method() => No_issue_is_reported_for(@"

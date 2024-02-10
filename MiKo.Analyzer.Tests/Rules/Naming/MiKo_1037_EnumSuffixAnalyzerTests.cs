@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -59,13 +60,13 @@ public enum TestMeEnums
         [TestCase("struct")]
         [TestCase("enum")]
         public void Code_gets_fixed_(string type) => VerifyCSharpFix(
-                                                         "using System; " + type + " TestMeEnum { }",
-                                                         "using System; " + type + " TestMe { }");
+                                                                 "using System; " + type + " TestMeEnum { }",
+                                                                 "using System; " + type + " TestMe { }");
 
         [Test]
         public void Code_gets_fixed_for_Flags() => VerifyCSharpFix(
-                                                              "using System; [Flags] enum TestMeEnum { }",
-                                                              "using System; [Flags] enum TestMes { }");
+                                                               "using System; [Flags] enum TestMeEnum { }",
+                                                               "using System; [Flags] enum TestMes { }");
 
         protected override string GetDiagnosticId() => MiKo_1037_EnumSuffixAnalyzer.Id;
 

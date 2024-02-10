@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -22,9 +20,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return syntax.ReplaceTokens(
-                                        syntax.DescendantTokens(SyntaxKind.XmlTextLiteralToken).Where(_ => _.GetLocation().Contains(diagnostic.Location)),
-                                        (original, rewritten) => original.WithText(ReplaceText(original.Text)));
+            var token = syntax.FindToken(diagnostic);
+
+            return syntax.ReplaceToken(token, token.WithText(ReplaceText(token.Text)));
         }
 
         private static StringBuilder ReplaceText(string originalText)

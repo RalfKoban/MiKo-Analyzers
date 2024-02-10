@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -674,6 +675,7 @@ public class TestMe
     };
 }
 ";
+
             const string FixedCode = @"
 using System;
 
@@ -706,6 +708,7 @@ public class TestMe
                             };
 }
 ";
+
             const string FixedCode = @"
 using System;
 
@@ -716,6 +719,58 @@ public class TestMe
                                     1, 2, 3,
                                     4, 5, 6,
                                 };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_assignment_of_collection_initializer()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> MyProperty { get; set; }
+
+    public TestMe Create()
+    {
+        var result = new TestMe
+                         {
+                            MyProperty =
+                                    {
+                                        1, 2, 3,
+                                        4, 5, 6,
+                                    },
+                         };
+
+        return result;
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    public List<int> MyProperty { get; set; }
+
+    public TestMe Create()
+    {
+        var result = new TestMe
+                         {
+                            MyProperty =
+                                         {
+                                             1, 2, 3,
+                                             4, 5, 6,
+                                         },
+                         };
+
+        return result;
 }
 ";
 

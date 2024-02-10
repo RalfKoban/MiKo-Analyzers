@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
 
-        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             var typeSyntax = syntax.FirstAncestorOrSelf<BaseTypeDeclarationSyntax>();
 

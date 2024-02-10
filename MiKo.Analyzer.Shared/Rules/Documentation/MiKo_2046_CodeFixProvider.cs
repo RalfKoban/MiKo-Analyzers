@@ -14,13 +14,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2046_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var name = MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer.GetReferencedName(syntax);
+            if (syntax != null)
+            {
+                var name = MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer.GetReferencedName(syntax);
 
-            return TypeParamRef(name);
+                return TypeParamRef(name);
+            }
+
+            return null;
         }
     }
 }

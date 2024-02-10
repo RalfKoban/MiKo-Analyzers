@@ -41,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             var proposedName = name.AsSpan().WithoutSuffixes(suffixes);
 
-            if (proposedName.EndsWithAny(Constants.Markers.Entities) && proposedName.EndsWithAny(Constants.Markers.ViewModels) is false)
+            if (proposedName.EndsWithAny(Constants.Markers.Models) && proposedName.EndsWithAny(Constants.Markers.ViewModels) is false)
             {
-                proposedName = proposedName.WithoutSuffixes(Constants.Markers.Entities);
+                proposedName = proposedName.WithoutSuffixes(Constants.Markers.Models);
             }
 
             if (name.Length != proposedName.Length)
@@ -119,6 +119,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName;
                 }
 
+                if (proposedName.EndsWith("rivia", comparison))
+                {
+                    return proposedName; // keep 'trivia'
+                }
+
                 if (proposedName.EndsWith("child", comparison))
                 {
                     return proposedName + "ren";
@@ -161,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (pluralName.HasEntityMarker())
             {
-                pluralName = pluralName.Without(Constants.Markers.Entities);
+                pluralName = pluralName.Without(Constants.Markers.Models);
             }
 
             // we might end with an 's' when shortened, so inspect for that as well

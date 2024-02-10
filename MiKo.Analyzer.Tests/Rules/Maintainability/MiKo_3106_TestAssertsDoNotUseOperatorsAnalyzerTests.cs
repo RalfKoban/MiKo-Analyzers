@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -12,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] AssertionMethods =
                                                             {
                                                                 nameof(Assert.That),
-                                                                nameof(Assert.IsTrue),
-                                                                nameof(Assert.True),
-                                                                nameof(Assert.IsFalse),
-                                                                nameof(Assert.False),
+                                                                "IsTrue",
+                                                                "True",
+                                                                "IsFalse",
+                                                                "False",
                                                             };
 
         private static readonly string[] Operators =
@@ -56,6 +57,7 @@ public class TestMe
         [Test]
         public void No_issue_is_reported_for_correct_usage_in_a_test_method_([ValueSource(nameof(Tests))] string test) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -72,6 +74,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_correct_usage_in_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -89,6 +92,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_correct_usage_in_a_non_test_class() => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -113,6 +117,7 @@ namespace Bla
                                                                                                                 {
                                                                                                                     An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -142,6 +147,7 @@ namespace Bla
                                                                                                                                   {
                                                                                                                                       An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -163,6 +169,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_an_operator_in_a_non_test_class_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -179,6 +186,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_a_Logical_Not_operator_in_a_non_test_class() => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -195,6 +203,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_a_boolean_pattern_in_a_non_test_class_([Values("is true", "is false")] string pattern) => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -211,6 +220,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_a_null_pattern_in_a_non_test_class() => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -229,6 +239,7 @@ namespace Bla
 using System;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -245,6 +256,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_an_operator_in_an_Assert_Multiple_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -265,6 +277,7 @@ namespace Bla
         [Test]
         public void An_issue_is_reported_for_a_boolean_operation_in_a_non_test_class_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {
@@ -281,6 +294,7 @@ namespace Bla
         [Test]
         public void No_issue_is_reported_for_NUnit_Contains_operation_in_a_test_class() => No_issue_is_reported_for(@"
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Bla
 {

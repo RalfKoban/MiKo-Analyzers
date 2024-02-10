@@ -147,6 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "crypt", // decrypt/encrypt
                                                                    "dopt", // adopt
                                                                    "dopts", // adopts
+                                                                   "enum",
                                                                    "ires",
                                                                    "ixtures",
                                                                    "kept",
@@ -172,6 +173,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Identifier",
                                                             "Identity",
                                                             "Identities",
+                                                            "next",
+                                                            "Next",
+                                                            "text",
+                                                            "Text",
                                                         };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)

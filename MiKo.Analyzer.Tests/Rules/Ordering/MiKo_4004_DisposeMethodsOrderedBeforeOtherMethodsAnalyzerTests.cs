@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     [TestFixture]
@@ -443,6 +444,462 @@ public class TestMe : IDisposable
     private void Dispose(bool disposing) { }
 
     private void C() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_public_Dispose_method_after_other_methods_and_properties()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    public void A() { }
+
+    public void Dispose() { }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    public void Dispose() { }
+
+    public void A() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_Dispose_interface_method_after_other_public_methods_when_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void A() { }
+
+    #region Disposal
+
+    void IDisposable.Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Disposal
+
+    void IDisposable.Dispose() { }
+
+    #endregion
+
+    public void A() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_public_Dispose_method_after_other_public_methods_when_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void A() { }
+
+    #region Disposal
+
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    #region Disposal
+
+    public void Dispose() { }
+
+    #endregion
+
+    public void A() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_protected_Dispose_method_after_other_protected_methods_when_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    protected void B() { }
+
+    #region Disposal
+
+    protected void Dispose(bool disposing) { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    #region Disposal
+
+    protected void Dispose(bool disposing) { }
+
+    #endregion
+
+    protected void B() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_protected_Dispose_method_after_other_protected_methods_when_both_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    #region Protected methods
+
+    protected void B() { }
+
+    protected void Dispose(bool disposing) { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    #region Protected methods
+
+    protected void Dispose(bool disposing) { }
+
+    protected void B() { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_private_Dispose_method_after_other_private_methods_when_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    protected void B() { }
+
+    private void C() { }
+
+    #region Disposal
+
+    private void Dispose(bool disposing) { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    protected void B() { }
+
+    #region Disposal
+
+    private void Dispose(bool disposing) { }
+
+    #endregion
+
+    private void C() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_private_Dispose_method_after_other_private_methods_when_both_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    protected void B() { }
+
+    #region Private methods
+
+    private void C() { }
+
+    private void Dispose(bool disposing) { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public void Dispose() { }
+
+    public void A() { }
+
+    protected void B() { }
+
+    #region Private methods
+
+    private void Dispose(bool disposing) { }
+
+    private void C() { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_public_Dispose_method_after_other_methods_and_properties_when_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    public void A() { }
+
+    #region Disposal
+
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    #region Disposal
+
+    public void Dispose() { }
+
+    #endregion
+
+    public void A() { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_public_Dispose_method_after_other_methods_and_properties_when_both_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    #region Public methods
+
+    public void A() { }
+
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    public static void DoSomething() { }
+
+    #region Public methods
+
+    public void Dispose() { }
+
+    public void A() { }
+
+    #endregion
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_public_Dispose_method_after_other_methods_and_properties_when_all_public_put_in_region()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    #region Public methods
+
+    public static void DoSomething() { }
+
+    public void A() { }
+
+    public void Dispose() { }
+
+    #endregion
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IDisposable
+{
+    public TestMe() { }
+
+    public string Name { get; set; }
+
+    public event EventHandler MyEvent;
+
+    #region Public methods
+
+    public static void DoSomething() { }
+
+    public void Dispose() { }
+
+    public void A() { }
+
+    #endregion
 }
 ";
 

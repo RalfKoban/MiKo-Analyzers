@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -79,8 +80,8 @@ public class TestMe
 
         [Test]
         public void Code_gets_fixed() => VerifyCSharpFix(
-                                                         "using System; public class TestMe { public void DoSomething(Action action) { } }",
-                                                         "using System; public class TestMe { public void DoSomething(Action callback) { } }");
+                                                     "using System; public class TestMe { public void DoSomething(Action action) { } }",
+                                                     "using System; public class TestMe { public void DoSomething(Action callback) { } }");
 
         protected override string GetDiagnosticId() => MiKo_1051_DelegateParameterNameSuffixAnalyzer.Id;
 

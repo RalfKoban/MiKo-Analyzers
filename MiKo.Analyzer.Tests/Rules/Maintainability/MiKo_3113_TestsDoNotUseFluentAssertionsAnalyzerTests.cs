@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -14,8 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            {
                                                                                new object[] { "element1.Equals(element2).Should().BeTrue()", "Assert.That(element1.Equals(element2), Is.True)" },
                                                                                new object[] { @"element1.Equals(element2).Should().BeTrue(""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().Be(true)", "Assert.That(element1.Equals(element2), Is.True)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().Be(true, ""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().NotBe(true)", "Assert.That(element1.Equals(element2), Is.False)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().NotBe(true, ""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
                                                                                new object[] { "element1.Equals(element2).Should().BeFalse()", "Assert.That(element1.Equals(element2), Is.False)" },
                                                                                new object[] { @"element1.Equals(element2).Should().BeFalse(""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().Be(false)", "Assert.That(element1.Equals(element2), Is.False)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().Be(false, ""some message"")", @"Assert.That(element1.Equals(element2), Is.False, ""some message"")" },
+                                                                               new object[] { "element1.Equals(element2).Should().NotBe(false)", "Assert.That(element1.Equals(element2), Is.True)" },
+                                                                               new object[] { @"element1.Equals(element2).Should().NotBe(false, ""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
                                                                                new object[] { "element1.Should().BeNull()", "Assert.That(element1, Is.Null)" },
                                                                                new object[] { @"element1.Should().BeNull(""some message"")", @"Assert.That(element1, Is.Null, ""some message"")" },
                                                                                new object[] { "element1.Should().Be(null)", "Assert.That(element1, Is.Null)" },
@@ -47,12 +56,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { @"element1.Should().Contain(_ => _ == ""abc"")", @"Assert.That(element1, Has.Some.Matches<string>(_ => _ == ""abc""))" },
                                                                                new object[] { @"element1.Should().Contain(_ => _ == ""abc"", ""some message"")", @"Assert.That(element1, Has.Some.Matches<string>(_ => _ == ""abc""), ""some message"")" },
                                                                                new object[] { @"element1.Should().Contain(_ => _ == ""abc"", reason: ""some message"")", @"Assert.That(element1, Has.Some.Matches<string>(_ => _ == ""abc""), ""some message"")" },
-                                                                               new object[] { @"element1.Should().Contain(_ => _ == ""abc"", ""some {0} message"", 1)", @"Assert.That(element1, Has.Some.Matches<string>(_ => _ == ""abc""), ""some {0} message"", 1)" },
+                                                                               new object[] { @"element1.Should().Contain(_ => _ == ""abc"", ""some {0} message"", 1)", @"Assert.That(element1, Has.Some.Matches<string>(_ => _ == ""abc""), $""some {1} message"")" },
                                                                                new object[] { "element1.Should().ContainSingle()", "Assert.That(element1, Has.Exactly(1).Items)" },
                                                                                new object[] { @"element1.Should().ContainSingle(_ => _ == ""abc"")", @"Assert.That(element1, Has.One.Matches<string>(_ => _ == ""abc""))" },
                                                                                new object[] { @"element1.Should().ContainSingle(_ => _ == ""abc"", ""some message"")", @"Assert.That(element1, Has.One.Matches<string>(_ => _ == ""abc""), ""some message"")" },
                                                                                new object[] { @"element1.Should().ContainSingle(_ => _ == ""abc"", reason: ""some message"")", @"Assert.That(element1, Has.One.Matches<string>(_ => _ == ""abc""), ""some message"")" },
-                                                                               new object[] { @"element1.Should().ContainSingle(_ => _ == ""abc"", ""some {0} message"", 1)", @"Assert.That(element1, Has.One.Matches<string>(_ => _ == ""abc""), ""some {0} message"", 1)" },
+                                                                               new object[] { @"element1.Should().ContainSingle(_ => _ == ""abc"", ""some {0} message"", 1)", @"Assert.That(element1, Has.One.Matches<string>(_ => _ == ""abc""), $""some {1} message"")" },
                                                                                new object[] { @"element1.Should().OnlyContain(_ => _ == ""abc"")", @"Assert.That(element1, Has.All.Matches<string>(_ => _ == ""abc""))" },
                                                                                new object[] { @"element1.Should().OnlyContain(_ => _ == ""abc"", ""some message"")", @"Assert.That(element1, Has.All.Matches<string>(_ => _ == ""abc""), ""some message"")" },
                                                                                new object[] { @"element1.Should().OnlyContain(_ => _ == ""abc"", reason: ""some message"")", @"Assert.That(element1, Has.All.Matches<string>(_ => _ == ""abc""), ""some message"")" },
@@ -165,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { "element1.Should().BeOfType(typeof(List<string>))", "Assert.That(element1, Is.TypeOf(typeof(List<string>)))" },
                                                                                new object[] { @"element1.Should().BeOfType(typeof(List<string>), ""some message"")", @"Assert.That(element1, Is.TypeOf(typeof(List<string>)), ""some message"")" },
                                                                                new object[] { "element1.Should().BeXmlSerializable()", "Assert.That(element1, Is.XmlSerializable)" },
-                                                                               new object[] { "element1.Should().BeBinarySerializable()", "Assert.That(element1, Is.BinarySerializable)" },
+                                                                               //// new object[] { "element1.Should().BeBinarySerializable()", "Assert.That(element1, Is.BinarySerializable)" }, // ignore this as NUnit 4 no longer supports 'Is.BinarySerializable'
                                                                                new object[] { "element1.Should().OnlyHaveUniqueItems()", "Assert.That(element1, Is.Unique)" },
                                                                                new object[] { @"element1.Should().OnlyHaveUniqueItems(""some message"")", @"Assert.That(element1, Is.Unique, ""some message"")" },
                                                                                new object[] { "element1.Should().BeOneOf(element2)", "Assert.That(element1, Is.AnyOf(element2))" },
@@ -180,6 +189,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { @"element1.Should().BeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Ordered.Descending, ""some message"")" },
                                                                                new object[] { "element1.Should().NotBeInDescendingOrder()", "Assert.That(element1, Is.Not.Ordered.Descending)" },
                                                                                new object[] { @"element1.Should().NotBeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Not.Ordered.Descending, ""some message"")" },
+                                                                               new object[] { @"element1.ShouldBeEquivalentTo(""some message"")", @"Assert.That(element1, Is.EquivalentTo(""some message""))" },
                                                                            };
 
         // for yet unknown reasons those elements cannot be fixed when available multiple times

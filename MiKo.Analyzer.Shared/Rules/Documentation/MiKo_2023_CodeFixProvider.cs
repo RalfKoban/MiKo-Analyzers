@@ -15,67 +15,78 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
+        private const string OrNotPhrase = " or not";
+        private const string OtherwiseReplacement = ";  otherwise";
+
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
+        private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", OtherwiseReplacement);
+
         private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap(
-                                                                                                     new KeyValuePair<string, string>("'true'", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("'True'", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("'TRUE'", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("\"true\"", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("\"True\"", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("\"TRUE\"", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("true", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("True", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("TRUE", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("'false'", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("'False'", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("'FALSE'", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("\"false\"", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("\"False\"", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("\"FALSE\"", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("false", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("False", string.Empty),
-                                                                                                     new KeyValuePair<string, string>("FALSE", string.Empty),
-                                                                                                     new KeyValuePair<string, string>(" indicating if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" indicating whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to determine if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to determine whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to determines if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to determines whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to determining if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to determining whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to indicate if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to indicate whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to indicates if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to indicates whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to define if ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to define whether ", Replacement),
-                                                                                                     new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to in case ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to if given ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to when given ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to if set to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to when set to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to if ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to when ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to set to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to given ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to . if ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to , if ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to : if ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to , ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to ; ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to : ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to to ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" to  ", ReplacementTo),
-                                                                                                     new KeyValuePair<string, string>(" that to ", " that "),
-                                                                                                     new KeyValuePair<string, string>(",  otherwise", ";  otherwise"),
-                                                                                                     new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
-                                                                                                     new KeyValuePair<string, string>("; Otherwise; ", "; "),
-                                                                                                     new KeyValuePair<string, string>(". ", "; "))
+                                                                                                 new KeyValuePair<string, string>("'true'", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("'True'", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("'TRUE'", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("\"true\"", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("\"True\"", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("\"TRUE\"", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("true", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("True", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("TRUE", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("'false'", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("'False'", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("'FALSE'", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("\"false\"", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("\"False\"", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("\"FALSE\"", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("false", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("False", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("FALSE", string.Empty),
+                                                                                                 new KeyValuePair<string, string>("if you want to", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" indicating if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" indicating whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determine if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determine whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determines if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determines whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determining if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determining whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to indicate if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to indicate whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to indicates if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to indicates whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to define if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to define whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to in case ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to if given ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to when given ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to if set to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to when set to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to if ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to when ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to set to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to given ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to . if ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to , if ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to : if ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to , ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to ; ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to : ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to  to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to  ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" that to ", " that "),
+                                                                                                 new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
+                                                                                                 new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
+                                                                                                 new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
+                                                                                                 new KeyValuePair<string, string>("; Otherwise; ", "; "),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
+                                                                                                 new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
+                                                                                                 new KeyValuePair<string, string>(". ", "; "))
                                                                                 .Distinct()
                                                                                 .ToArray();
 
@@ -90,7 +101,66 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
         {
-            if (comment.Content.Count == 1 && comment.Content.First() is XmlTextSyntax t)
+            // fix ". Otherwise ..." comments so that they will not get split
+            var mergedComment = Comment(comment, new[] { OtherwisePair.Key }, new[] { OtherwisePair });
+
+            var firstSentence = SplitCommentAfterFirstSentence(mergedComment, out var partsAfterSentence);
+
+            var count = partsAfterSentence.Count;
+
+            if (count <= 0)
+            {
+                return FixText(firstSentence);
+            }
+
+            // fix "otherwise false" parts in 'partsAfterSequence' so that they become part of 'firstSentence'
+            MoveOtherwisePartToFirstSentence(ref firstSentence, ref partsAfterSentence);
+
+            var firstComment = FixText(firstSentence);
+
+            if (partsAfterSentence.Any())
+            {
+                partsAfterSentence = partsAfterSentence.WithoutLeadingXmlComment().WithoutTrailingXmlComment();
+            }
+
+            if (partsAfterSentence.Any())
+            {
+                var contents = firstComment.Content.WithoutTrailingXmlComment()
+                                           .Add(TrailingNewLineXmlText())
+                                           .AddRange(partsAfterSentence)
+                                           .Add(TrailingNewLineXmlText());
+
+                return firstComment.WithContent(contents);
+            }
+
+            return firstComment;
+        }
+
+        private static void MoveOtherwisePartToFirstSentence(ref XmlElementSyntax firstSentence, ref SyntaxList<XmlNodeSyntax> partsAfterSentence)
+        {
+            var part = partsAfterSentence[0];
+
+            if (part.IsSeeLangwordBool())
+            {
+                partsAfterSentence = partsAfterSentence.Remove(part);
+
+                var firstSentenceContents = firstSentence.Content.Add(part);
+
+                if (partsAfterSentence.FirstOrDefault() is XmlTextSyntax t)
+                {
+                    partsAfterSentence = partsAfterSentence.Remove(t);
+                    firstSentenceContents = firstSentenceContents.Add(t);
+                }
+
+                firstSentence = firstSentence.WithContent(firstSentenceContents);
+            }
+        }
+
+        private static XmlElementSyntax FixText(XmlElementSyntax comment)
+        {
+            var contents = comment.Content;
+
+            if (contents.Count == 1 && contents.First() is XmlTextSyntax t)
             {
                 var text = t.GetTextWithoutTrivia();
 
@@ -133,6 +203,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement)
         {
+            subText = ModifyOrNotPart(subText);
+
             foreach (var conditional in Conditionals)
             {
                 if (subText.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
@@ -200,6 +272,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return comment;
+        }
+
+        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text)
+        {
+            if (text.EndsWith(OrNotPhrase, StringComparison.Ordinal))
+            {
+                return text.WithoutSuffix(OrNotPhrase);
+            }
+
+            return text;
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)

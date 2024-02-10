@@ -27,6 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
+//// ncrunch: collect values off
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
@@ -45,8 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
         }
+//// ncrunch: collect values default
 
-        protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments));
+        protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(arguments.ToSeparatedSyntaxList());
 
         protected static InvocationExpressionSyntax Invocation(MemberAccessExpressionSyntax member, params ArgumentSyntax[] arguments)
         {
@@ -66,6 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+
+        protected static IsPatternExpressionSyntax IsFalsePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.FalseLiteralExpression));
+
+        protected static IsPatternExpressionSyntax IsTruePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.TrueLiteralExpression));
+
+        protected static IsPatternExpressionSyntax IsNullPattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.NullLiteralExpression));
+
+        protected static LiteralExpressionSyntax Literal(SyntaxKind expressionKind) => SyntaxFactory.LiteralExpression(expressionKind);
+
+        protected static PredefinedTypeSyntax PredefinedType(SyntaxKind kind) => SyntaxFactory.PredefinedType(kind.AsToken());
 
         protected static MemberAccessExpressionSyntax SimpleMemberAccess(ExpressionSyntax syntax, string name)
         {
@@ -139,6 +151,19 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any();
 
+        protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
+
+        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
+
+        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null;
+
+        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
+
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
+
+        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => null;
+
+//// ncrunch: collect values off
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
@@ -152,11 +177,21 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var newRoot = root;
 
+            var annotation = new SyntaxAnnotation("document adjustment");
+
             if (ReferenceEquals(updatedSyntax, syntax) is false)
             {
-                newRoot = updatedSyntax is null
-                          ? root.Without(syntax)
-                          : root.ReplaceNode(syntax, updatedSyntax);
+                if (updatedSyntax is null)
+                {
+                    newRoot = root.Without(syntax);
+                }
+                else
+                {
+                    newRoot = root.ReplaceNode(syntax, updatedSyntax.WithAnnotation(annotation));
+
+                    // let's see if the node now gets parents when we annotate it
+                    updatedSyntax = newRoot.GetAnnotatedNodes(annotation).First();
+                }
 
                 if (newRoot is null)
                 {
@@ -169,7 +204,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 return Task.FromResult(document);
             }
 
-            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, updatedSyntax, diagnostic) ?? newRoot;
+            var finalRoot = GetUpdatedSyntaxRoot(document, newRoot, updatedSyntax, annotation, diagnostic) ?? newRoot;
             var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
@@ -197,18 +232,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return Task.FromResult(newDocument);
         }
-
-        protected virtual SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => null;
-
-        protected virtual SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue) => trivia.Token;
-
-        protected virtual SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => null;
-
-        protected virtual SyntaxToken GetUpdatedToken(SyntaxToken token, Diagnostic issue) => token;
-
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic issue) => null;
-
-        protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxTrivia trivia, Diagnostic issue) => null;
 
         private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)
         {
@@ -244,5 +267,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
         }
+//// ncrunch: collect values default
     }
 }

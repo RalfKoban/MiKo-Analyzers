@@ -13,7 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3021";
 
-        private static readonly SyntaxKind[] EnclosingInvocationSyntaxKinds = { SyntaxKind.AwaitExpression, SyntaxKind.ReturnStatement, SyntaxKind.VariableDeclarator, SyntaxKind.ArrowExpressionClause };
+        private static readonly SyntaxKind[] EnclosingInvocationSyntaxKinds =
+                                                                              {
+                                                                                  SyntaxKind.AwaitExpression,
+                                                                                  SyntaxKind.ReturnStatement,
+                                                                                  SyntaxKind.VariableDeclarator,
+                                                                                  SyntaxKind.ArrowExpressionClause,
+                                                                              };
 
         public MiKo_3021_TaskRunAnalyzer() : base(Id)
         {

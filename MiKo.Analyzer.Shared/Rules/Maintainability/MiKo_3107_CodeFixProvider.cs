@@ -12,16 +12,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3107_CodeFixProvider)), Shared]
     public sealed class MiKo_3107_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
+        public override string FixableDiagnosticId => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
 
-        protected sealed override string Title => Resources.MiKo_3107_CodeFixTitle;
+        protected override string Title => Resources.MiKo_3107_CodeFixTitle;
 
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             return syntaxNodes.OfType<InvocationExpressionSyntax>().First();
         }
 
-        protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
+        protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var invocation = (InvocationExpressionSyntax)syntax;
 
@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return ReplacementFor(document, generic.TypeArgumentList.Arguments.First());
             }
 
-            return Literal(SyntaxKind.NullLiteralExpression);
+            return NullLiteral();
         }
 
         private static SyntaxNode ReplacementFor(Document document, TypeSyntax typeSyntax)
@@ -77,7 +77,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return SyntaxFactory.DefaultExpression(typeSyntax);
             }
 
-            return Literal(SyntaxKind.NullLiteralExpression);
+            return NullLiteral();
         }
     }
 }

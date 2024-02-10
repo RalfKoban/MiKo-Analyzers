@@ -1,12 +1,15 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 
+using NCrunch.Framework;
+
 using NUnit.Framework;
 
 using TestHelper;
 
+//// ncrunch: collect values off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
-    [TestFixture]
+    [TestFixture, RequiresCapability("SSD")]
     public sealed class MiKo_1080_UseNumbersInsteadOfWordingAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
