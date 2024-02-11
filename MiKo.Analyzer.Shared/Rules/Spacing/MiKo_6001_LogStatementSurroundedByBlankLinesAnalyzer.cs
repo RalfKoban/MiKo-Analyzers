@@ -24,6 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return true;
             }
 
+            if (context.Compilation.GetTypeByMetadataName(Constants.MicrosoftLogging.FullTypeName) != null)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -34,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 case Constants.ILog.TypeName when type.ContainingNamespace.Name == Constants.ILog.NamespaceName:
                 case Constants.SeriLog.TypeName when type.ContainingNamespace.Name == Constants.SeriLog.NamespaceName:
+                case Constants.MicrosoftLogging.TypeName when type.ContainingNamespace.FullyQualifiedName() == Constants.MicrosoftLogging.NamespaceName:
                     return true;
 
                 default:
