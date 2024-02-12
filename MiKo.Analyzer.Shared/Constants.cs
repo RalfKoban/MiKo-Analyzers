@@ -74,6 +74,13 @@ namespace MiKoSolutions.Analyzers
             internal const string Fatal = nameof(Fatal);
         }
 
+        internal static class MicrosoftLogging
+        {
+            internal const string NamespaceName = "Microsoft.Extensions.Logging";
+            internal const string TypeName = "ILogger";
+            internal const string FullTypeName = NamespaceName + "." + TypeName;
+        }
+
         internal static class Moq
         {
             internal const string Mock = nameof(Mock);
