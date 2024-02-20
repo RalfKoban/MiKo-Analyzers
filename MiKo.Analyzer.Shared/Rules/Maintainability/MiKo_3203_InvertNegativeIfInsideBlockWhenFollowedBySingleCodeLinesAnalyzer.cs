@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context)
         {
             // do not invert in case of an else block
-            if (node.Else is null && node.Parent is BlockSyntax block && IsNegative(node.Condition))
+            if (node.Else is null && node.Parent is BlockSyntax block && IsAnyNegative(node.Condition))
             {
                 var statements = block.Statements;
 

@@ -13,13 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6048";
 
-        private static readonly SyntaxKind[] Expressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
+        private static readonly SyntaxKind[] LogicalExpressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
 
         public MiKo_6048_LogicalConditionsAreOnSameLineAnalyzer() : base(Id)
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Expressions);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, LogicalExpressions);
 
         private static bool IsOnSingleLine(SyntaxNode syntax)
         {
@@ -73,8 +73,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             switch (syntax.Parent)
             {
-                case BinaryExpressionSyntax parent when parent.IsAnyKind(Expressions):
-                case ParenthesizedExpressionSyntax parenthesized when parenthesized.Parent.IsAnyKind(Expressions):
+                case BinaryExpressionSyntax parent when parent.IsAnyKind(LogicalExpressions):
+                case ParenthesizedExpressionSyntax parenthesized when parenthesized.Parent.IsAnyKind(LogicalExpressions):
                     return false; // ignore as the parent gets investigated already
 
                 default:
