@@ -10,26 +10,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class InvertNegativeIfAnalyzer : MaintainabilityAnalyzer
     {
+        private static readonly SyntaxKind[] BinaryConditions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
+
         protected InvertNegativeIfAnalyzer(string diagnosticId) : base(diagnosticId, (SymbolKind)(-1))
         {
         }
 
         protected static bool IsNegative(SyntaxNode condition)
         {
+            var positiveConditions = 0;
+            var negativeConditions = 0;
+
             foreach (var node in condition.DescendantNodesAndSelf())
             {
-                if (node.IsKind(SyntaxKind.LogicalNotExpression))
+                if (IsNegativeCore(node))
                 {
-                    return true;
+                    negativeConditions++;
                 }
-
-                if (node is IsPatternExpressionSyntax pattern && pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression))
+                else
                 {
-                    return true;
+                    if (node is BinaryExpressionSyntax binary && binary.IsAnyKind(BinaryConditions) && IsNegativeCore(binary.Left) is false && IsNegativeCore(binary.Right) is false)
+                    {
+                        positiveConditions++;
+                    }
                 }
             }
 
-            return false;
+            return negativeConditions > positiveConditions;
+
+            bool IsNegativeCore(SyntaxNode node) => node.IsKind(SyntaxKind.LogicalNotExpression) || (node is IsPatternExpressionSyntax pattern && pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression));
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
