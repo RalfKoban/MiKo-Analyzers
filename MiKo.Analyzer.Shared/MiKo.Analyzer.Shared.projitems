@@ -647,6 +647,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1114_TestMethodsShouldNotBeNamedBadOrHappyPathAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1115_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1116_TestMethodsShouldBeInPresentTenseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1200_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1200_ExceptionCatchBlockAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1201_CodeFixProvider.cs" />

@@ -4100,6 +4100,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test methods should be named as statements in present tense. So they can used as a kind of checked list that describes functionality which either passes or fails..
+        /// </summary>
+        public static string MiKo_1116_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1116_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use present tense.
+        /// </summary>
+        public static string MiKo_1116_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1116_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods shall be named in present tense.
+        /// </summary>
+        public static string MiKo_1116_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1116_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename exception.
         /// </summary>
         public static string MiKo_1200_CodeFixTitle {

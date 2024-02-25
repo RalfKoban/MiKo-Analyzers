@@ -1516,6 +1516,15 @@ Example:
   <data name="MiKo_1115_Title" xml:space="preserve">
     <value>Test methods should be named in a fluent way</value>
   </data>
+  <data name="MiKo_1116_Description" xml:space="preserve">
+    <value>Test methods should be named as statements in present tense. So they can used as a kind of checked list that describes functionality which either passes or fails.</value>
+  </data>
+  <data name="MiKo_1116_MessageFormat" xml:space="preserve">
+    <value>Use present tense</value>
+  </data>
+  <data name="MiKo_1116_Title" xml:space="preserve">
+    <value>Test methods shall be named in present tense</value>
+  </data>
   <data name="MiKo_1200_CodeFixTitle" xml:space="preserve">
     <value>Rename exception</value>
   </data>
