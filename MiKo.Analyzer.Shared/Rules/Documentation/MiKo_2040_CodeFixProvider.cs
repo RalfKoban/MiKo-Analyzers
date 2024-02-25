@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Phrases = MiKo_2040_LangwordAnalyzer.Phrases;
 
-        public override string FixableDiagnosticId => MiKo_2040_LangwordAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2040";
 
         protected override string Title => Resources.MiKo_2040_CodeFixTitle;
 

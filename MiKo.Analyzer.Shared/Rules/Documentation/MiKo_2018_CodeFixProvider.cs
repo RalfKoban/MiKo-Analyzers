@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string FixedAsyncStartingPhrase = AsyncStartingPhrase + StartingPhrase.ToLowerCaseAt(0);
 
-        public override string FixableDiagnosticId => MiKo_2018_ChecksSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2018";
 
         protected override string Title => Resources.MiKo_2018_CodeFixTitle.FormatWith(StartingPhrase);
 

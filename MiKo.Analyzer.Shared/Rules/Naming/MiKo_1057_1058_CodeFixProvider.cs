@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                          MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id,
                                                                                          MiKo_1058_DependencyPropertyKeyFieldPrefixAnalyzer.Id);
 
-        public override string FixableDiagnosticId => MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_1057_1058";
 
         protected override string Title => Resources.MiKo_1057_CodeFixTitle;
 

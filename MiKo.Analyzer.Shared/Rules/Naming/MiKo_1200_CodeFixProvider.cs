@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1200_CodeFixProvider)), Shared]
     public sealed class MiKo_1200_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1200_ExceptionCatchBlockAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_1200";
 
         protected override string Title => Resources.MiKo_1200_CodeFixTitle;
 

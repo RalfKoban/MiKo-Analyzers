@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class MiKo_2036_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2036";
 
         protected override bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any(MiKo_2036_PropertyDefaultValuePhraseAnalyzer.IsBooleanIssue);
 

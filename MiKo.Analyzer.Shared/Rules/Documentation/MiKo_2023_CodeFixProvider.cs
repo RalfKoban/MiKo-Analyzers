@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2023";
 
         protected override string Title => Resources.MiKo_2023_CodeFixTitle;
 

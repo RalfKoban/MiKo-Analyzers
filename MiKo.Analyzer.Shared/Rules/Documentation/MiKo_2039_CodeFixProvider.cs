@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().Distinct().ToDictionary(_ => _, _ => string.Empty);
 
-        public override string FixableDiagnosticId => MiKo_2039_ExtensionMethodsClassSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2039";
 
         protected override string Title => Resources.MiKo_2039_CodeFixTitle;
 

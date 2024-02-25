@@ -66,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "When this method returns, ", string.Empty },
                                                                                 };
 
-        public override string FixableDiagnosticId => MiKo_2022_OutParamDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2022";
 
         protected override string Title => Resources.MiKo_2022_CodeFixTitle;
 

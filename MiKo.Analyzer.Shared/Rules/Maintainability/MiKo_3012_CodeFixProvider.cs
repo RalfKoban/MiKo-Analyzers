@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3012_CodeFixProvider)), Shared]
     public sealed class MiKo_3012_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3012_ArgumentOutOfRangeExceptionActualValueAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3012";
 
         protected override string Title => Resources.MiKo_3012_CodeFixTitle;
 

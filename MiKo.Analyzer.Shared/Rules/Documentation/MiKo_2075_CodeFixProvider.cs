@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
-        public override string FixableDiagnosticId => MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2075";
 
         protected override string Title => Resources.MiKo_2075_CodeFixTitle.FormatWith(MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Replacement);
 

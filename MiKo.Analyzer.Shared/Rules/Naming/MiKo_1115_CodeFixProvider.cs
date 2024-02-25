@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1115_CodeFixProvider)), Shared]
     public sealed class MiKo_1115_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_1115";
 
         protected override string Title => Resources.MiKo_1115_CodeFixTitle;
 

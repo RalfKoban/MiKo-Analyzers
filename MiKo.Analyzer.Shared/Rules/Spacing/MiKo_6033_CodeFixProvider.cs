@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6033_CodeFixProvider)), Shared]
     public sealed class MiKo_6033_CodeFixProvider : SpacingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6033_CaseBlockBracesAreOnSamePositionLikeCaseKeywordAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_6033";
 
         protected override string Title => Resources.MiKo_6033_CodeFixTitle;
 

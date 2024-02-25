@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
-        public override string FixableDiagnosticId => MiKo_2072_TrySummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2072";
 
         protected override string Title => Resources.MiKo_2072_CodeFixTitle;
 

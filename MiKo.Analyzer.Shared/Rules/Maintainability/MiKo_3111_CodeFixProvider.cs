@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3111_CodeFixProvider)), Shared]
     public sealed class MiKo_3111_CodeFixProvider : UnitTestCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3111_TestAssertsUseZeroInsteadOfEqualToAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3111";
 
         protected override string Title => Resources.MiKo_3111_CodeFixTitle;
 

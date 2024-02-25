@@ -62,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2080";
 
         protected override string Title => Resources.MiKo_2080_CodeFixTitle;
 

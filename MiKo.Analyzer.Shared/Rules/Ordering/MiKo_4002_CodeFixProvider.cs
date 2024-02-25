@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4002_CodeFixProvider)), Shared]
     public sealed class MiKo_4002_CodeFixProvider : OrderingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_4002_MethodsWithSameNameOrderedSideBySideAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_4002";
 
         protected override string Title => Resources.MiKo_4002_CodeFixTitle;
 

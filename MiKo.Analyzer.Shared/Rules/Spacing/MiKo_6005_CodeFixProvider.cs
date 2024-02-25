@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         private static readonly SyntaxKind[] ReturnStatements = { SyntaxKind.ReturnStatement, SyntaxKind.YieldReturnStatement };
 
-        public override string FixableDiagnosticId => MiKo_6005_ReturnStatementPrecededByBlankLinesAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_6005";
 
         protected override string Title => Resources.MiKo_6005_CodeFixTitle;
 
