@@ -44,7 +44,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EnumStartingPhrases = CreateEnumStartingPhrases().ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2013";
 
         protected override string Title => Resources.MiKo_2013_CodeFixTitle.FormatWith(Phrase);
 

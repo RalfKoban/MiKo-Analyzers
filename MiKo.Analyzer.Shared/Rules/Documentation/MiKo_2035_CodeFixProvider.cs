@@ -79,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2035";
 
         protected override string Title => Resources.MiKo_2035_CodeFixTitle;
 

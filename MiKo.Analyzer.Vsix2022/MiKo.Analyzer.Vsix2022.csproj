@@ -77,6 +77,10 @@
       <Project>{cb799a10-4c44-498d-a682-0555347c207a}</Project>
       <Name>MiKo.Analyzer.2022</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MiKo.Analyzer.2022\MiKo.Analyzer.CodeFixes.2022.csproj">
+      <Project>{4d65c463-dd5c-4320-bc20-0411d0fd3999}</Project>
+      <Name>MiKo.Analyzer.CodeFixes.2022</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

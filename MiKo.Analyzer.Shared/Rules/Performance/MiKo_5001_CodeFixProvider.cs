@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             End = 1,
         }
 
-        public override string FixableDiagnosticId => MiKo_5001_DebugLogIsEnabledAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_5001";
 
         protected override string Title => Resources.MiKo_5001_CodeFixTitle;
 

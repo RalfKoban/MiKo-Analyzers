@@ -1,0 +1,80 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageId>MiKoSolutions.Analyzers</PackageId>
+    <PackageVersion>0.0.44</PackageVersion>
+    <Authors>Ralf Koban</Authors>
+    <PackageLicenseUrl>https://github.com/RalfKoban/MiKo-Analyzers/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/RalfKoban/MiKo-Analyzers</PackageProjectUrl>
+    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
+    <RepositoryUrl>https://github.com/RalfKoban/MiKo-Analyzers</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Description>A diagnostic extension for the .NET Compiler Platform ("Roslyn") that checks for different metrics such as Lines of Code or Cyclomatic Complexity; in addition to several documentation, maintainability, naming, ordering and performance rules.</Description>
+    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
+    <Copyright>Copyright © 2018-2023 by MiKo Solutions. All rights reserved.</Copyright>
+    <PackageTags>MiKoSolutions.Analyzers, analyzers, metrics</PackageTags>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <AssemblyName>MiKoSolutions.Analyzers.CodeFixes</AssemblyName>
+    <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
+    <AssemblyVersion>0.0.44.0</AssemblyVersion>
+    <FileVersion>0.0.44.0</FileVersion>
+    <Company>MiKo Solutions</Company>
+    <Version>0.0.44</Version>
+    <RepositoryType>GIT</RepositoryType>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.11.0" PrivateAssets="all" />
+    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Required by NCrunch on remote machines as those machines do not have the package installed -->
+  <ItemGroup Condition="'$(NCrunch)' != '1'">
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.SDK.Analyzers" Version="16.10.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+  </ItemGroup>
+
+  <Import Project="..\MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <None Include="..\MiKo.Analyzer.Shared\Resources.resx">
+      <Link>Resources.resx</Link>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>MiKoSolutions.Analyzers</CustomToolNamespace>
+    </None>
+    <None Include="..\MiKo.Analyzer.Shared\Resources.Designer.cs">
+      <Link>Resources.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -28,7 +28,7 @@
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
-   
+
   <ItemGroup Condition="'$(NCrunch)' != '1'">
     <PackageReference Include="Codecov" Version="1.10.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1">

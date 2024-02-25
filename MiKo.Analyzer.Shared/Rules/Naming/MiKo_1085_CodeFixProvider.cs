@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1085_CodeFixProvider)), Shared]
     public sealed class MiKo_1085_CodeFixProvider : ParameterNamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1085_ParametersWithNumberSuffixAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_1085";
 
         protected override string Title => Resources.MiKo_1085_CodeFixTitle;
 

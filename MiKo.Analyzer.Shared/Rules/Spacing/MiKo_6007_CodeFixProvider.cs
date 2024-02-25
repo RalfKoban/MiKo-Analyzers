@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6007_CodeFixProvider)), Shared]
     public sealed class MiKo_6007_CodeFixProvider : SurroundedByBlankLinesCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6007_ObjectUnderTestStatementSurroundedByBlankLinesAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_6007";
 
         protected override string Title => Resources.MiKo_6007_CodeFixTitle;
 

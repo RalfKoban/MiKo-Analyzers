@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " Otherwise",
                                                                  };
 
-        public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2032";
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 

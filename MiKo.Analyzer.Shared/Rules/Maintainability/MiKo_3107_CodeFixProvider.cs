@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3107_CodeFixProvider)), Shared]
     public sealed class MiKo_3107_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3107";
 
         protected override string Title => Resources.MiKo_3107_CodeFixTitle;
 

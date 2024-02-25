@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] SetOnly = Constants.Comments.CommandPropertySetterOnlySummaryStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] GetSet = Constants.Comments.CommandPropertyGetterSetterSummaryStartingPhraseTemplate.FormatWith('|').Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2037_CommandPropertySummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2037";
 
         protected override string Title => Resources.MiKo_2037_CodeFixTitle;
 

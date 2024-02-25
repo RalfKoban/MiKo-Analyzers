@@ -77,6 +77,10 @@
       <Project>{0e08768e-eb1c-4673-be1d-b396b28bba69}</Project>
       <Name>MiKo.Analyzer.2019</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MiKo.Analyzer.2019\MiKo.Analyzer.CodeFixes.2019.csproj">
+      <Project>{ef599f34-3f29-49ca-ae4b-ed1a2b6114df}</Project>
+      <Name>MiKo.Analyzer.CodeFixes.2019</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

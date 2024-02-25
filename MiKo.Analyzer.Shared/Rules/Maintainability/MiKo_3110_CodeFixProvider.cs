@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3110_CodeFixProvider)), Shared]
     public sealed class MiKo_3110_CodeFixProvider : UnitTestCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3110";
 
         protected override string Title => Resources.MiKo_3110_CodeFixTitle;
 

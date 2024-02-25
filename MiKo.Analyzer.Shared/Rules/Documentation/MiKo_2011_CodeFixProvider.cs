@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2011_CodeFixProvider)), Shared]
     public sealed class MiKo_2011_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2011_UnsealedClassSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2011";
 
         protected override string Title => Resources.MiKo_2011_CodeFixTitle;
 

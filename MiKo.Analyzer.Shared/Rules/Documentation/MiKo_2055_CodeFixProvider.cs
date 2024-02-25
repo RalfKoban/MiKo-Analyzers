@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2055_CodeFixProvider)), Shared]
     public sealed class MiKo_2055_CodeFixProvider : ExceptionDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2055_ArgumentOutOfRangeExceptionPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2055";
 
         protected override string Title => Resources.MiKo_2055_CodeFixTitle;
 

@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { $"{marker}.", $"{marker} ." }).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2070_ReturnsSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2070";
 
         protected override string Title => Resources.MiKo_2070_CodeFixTitle;
 

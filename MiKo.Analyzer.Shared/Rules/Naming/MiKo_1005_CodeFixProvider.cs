@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1005_CodeFixProvider)), Shared]
     public sealed class MiKo_1005_CodeFixProvider : NamingLocalVariableCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1005_EventArgsLocalVariableAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_1005";
 
         protected override string Title => Resources.MiKo_1005_CodeFixTitle;
 

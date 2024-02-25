@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3014_CodeFixProvider)), Shared]
     public sealed class MiKo_3014_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3014";
 
         protected override string Title => Resources.MiKo_3014_CodeFixTitle;
 

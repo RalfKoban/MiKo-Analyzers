@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                            { " type with which ", " type with default values which " },
                                                                                        };
 
-        public override string FixableDiagnosticId => MiKo_2060_FactoryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2060";
 
         protected override string Title => Resources.MiKo_2060_CodeFixTitle;
 
