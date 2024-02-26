@@ -880,6 +880,9 @@ Types that are named so should be better named directly after the interface they
   <data name="MiKo_1059_Title" xml:space="preserve">
     <value>Do not name types 'Impl' or 'Implementation'</value>
   </data>
+  <data name="MiKo_1060_CodeFixTitle" xml:space="preserve">
+    <value>Change to 'NotFound'</value>
+  </data>
   <data name="MiKo_1060_Description" xml:space="preserve">
     <value>Sometimes, developers try to report that an entity was not found.
 
@@ -890,7 +893,7 @@ The name of the exception is then sometimes 'GetXyzFailedException' which is not
 The same applies for 'XyzMissingException'. It is probably not missing (which means it should be actually there but is not); it is just not there and therefore cannot be found. So, 'XyzNotFoundException' would be a better, more precise name as well.</value>
   </data>
   <data name="MiKo_1060_MessageFormat" xml:space="preserve">
-    <value>Consider to name it '{0}'</value>
+    <value>Consider to name it '{1}' instead</value>
   </data>
   <data name="MiKo_1060_Title" xml:space="preserve">
     <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'</value>

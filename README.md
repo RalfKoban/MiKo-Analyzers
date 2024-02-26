@@ -90,7 +90,7 @@ The following tables list all the 436 rules that are currently provided by the a
 |MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework)|&#x2713;|&#x2713;|
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework)|&#x2713;|&#x2713;|
 |MiKo_1059|Do not name types 'Impl' or 'Implementation'|&#x2713;|&#x2713;|
-|MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'|&#x2713;|\-|
+|MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'|&#x2713;|&#x2713;|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be specific|&#x2713;|&#x2713;|
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
 |MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
