@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("class", "Something")]
         [TestCase("class", "IAbstraction")]
         [TestCase("class", "Abstraction")]
+        [TestCase("class", "ClassBasedOnSomething")]
         public void No_issue_is_reported_for_(string type, string name) => No_issue_is_reported_for(@"
 public " + type + " " + name + @"
 {
