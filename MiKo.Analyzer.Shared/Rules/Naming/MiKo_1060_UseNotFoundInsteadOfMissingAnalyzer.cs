@@ -11,15 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1060";
 
-        private const string BetterName = "BetterName";
-
         public MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
-
-        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => diagnostic.Properties.TryGetValue(BetterName, out var proposal)
-                                                                                        ? proposal
-                                                                                        : symbol.Name;
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEnum() || symbol.IsException();
 
@@ -54,16 +48,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (name.Contains("Missing"))
             {
-                var proposal = name.Replace("Missing", "NotFound");
+                var betterName = name.Replace("Missing", "NotFound");
 
-                return Issue(symbol, proposal, new Dictionary<string, string> { { BetterName, proposal } });
+                return Issue(symbol, betterName, new Dictionary<string, string> { { Constants.BetterName, betterName } });
             }
 
             if (name.StartsWith("Get", StringComparison.InvariantCulture) && name.Contains("Failed"))
             {
-                var proposal = name.Substring(3).Replace("Failed", "NotFound");
+                var betterName = name.Substring(3).Replace("Failed", "NotFound");
 
-                return Issue(symbol, proposal, new Dictionary<string, string> { { BetterName, proposal } });
+                return Issue(symbol, betterName, new Dictionary<string, string> { { Constants.BetterName, betterName } });
             }
 
             return null;

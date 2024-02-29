@@ -18,10 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => symbol.Name.Without(Suffix);
+        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation)
+        {
+            if (symbol.Name.EndsWith(Suffix, StringComparison.Ordinal))
+            {
+                var betterName = symbol.Name.Without(Suffix);
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IEventSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                                                ? new[] { Issue(symbol, FindBetterName(symbol)) }
-                                                                                                                : Enumerable.Empty<Diagnostic>();
+                return new[] { Issue(symbol, betterName, new Dictionary<string, string> { { Constants.BetterName, betterName } }) };
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+        }
     }
 }

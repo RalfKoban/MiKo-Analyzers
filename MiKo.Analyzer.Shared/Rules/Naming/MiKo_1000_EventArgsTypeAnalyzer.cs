@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1000";
 
-        private const string Proposal = "BetterName";
-
         private const string CorrectSuffix = nameof(EventArgs);
 
         private const string Arg = nameof(Arg);
@@ -36,8 +34,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => diagnostic.Properties[Proposal];
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsEventArgs();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
@@ -46,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var proposal = GetNameWithoutSuffix(symbol.Name) + CorrectSuffix;
 
-                yield return Issue(symbol, proposal, new Dictionary<string, string> { { Proposal, proposal } });
+                yield return Issue(symbol, proposal, new Dictionary<string, string> { { Constants.BetterName, proposal } });
             }
         }
 
