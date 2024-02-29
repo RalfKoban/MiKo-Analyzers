@@ -75,8 +75,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Has",
                                                                    "Invert",
                                                                    "Is",
+                                                                   "JumpTo",
                                                                    "Load",
                                                                    "Log",
+                                                                   "NavigateTo",
                                                                    "Open",
                                                                    "Parse",
                                                                    "Pause",
@@ -140,6 +142,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "InformsAbout",
                                                                  "InformedAbout",
                                                                  "BelongsTo",
+                                                             }.ToArray(_ => _, AscendingStringComparer.Default);
+
+        private static readonly string[] EndingPhrases = new[]
+                                                             {
+                                                                 "Position",
+                                                                 "Parenthesis",
+                                                                 "Situation",
                                                              }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
@@ -492,6 +501,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
+            if (HasAcceptableEndingPhrase(word))
+            {
+                return false;
+            }
+
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < Endings.Length; index++)
             {
@@ -529,6 +543,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value)
         {
             return value.ContainsAny(MiddlePhrases);
+        }
+
+        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value)
+        {
+            return value.EndsWithAny(EndingPhrases);
         }
     }
 }
