@@ -439,6 +439,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4102_TestTearDownMethodOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4103_TestOneTimeSetUpMethodOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4104_TestOneTimeTearDownMethodOrderingAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\Orderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\OrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\TestMethodsOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\ArrayCreationExpressionMaintainabilityAnalyzer.cs" />
