@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             return elseClause != null
                 && node.Parent is BlockSyntax
-                && IsNegative(node.Condition)
+                && IsMainlyNegative(node.Condition)
                 && elseClause.Statement.IsKind(SyntaxKind.IfStatement) is false;
         }
     }

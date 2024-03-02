@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (HasIssue(parameter.Type))
                 {
-                    yield return IssueOnType(parameter.Type, symbol);
+                    yield return IssueOnType(parameter.Type, parameter);
                 }
             }
         }

@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return false;
         }
 
-        private static bool HasNonAwaitedLocalDeclaration(IEnumerable<StatementSyntax> statements)
+        private static bool HasNonAwaitedLocalAssignment(IEnumerable<StatementSyntax> statements)
         {
             foreach (var statement in statements)
             {
@@ -45,6 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     case LocalDeclarationStatementSyntax l1 when l1.AwaitKeyword.IsKind(SyntaxKind.AwaitKeyword):
                     case LocalDeclarationStatementSyntax l2 when l2.Declaration.DescendantNodes().Any(_ => _.IsKind(SyntaxKind.AwaitExpression)):
+                        continue;
+
+                    case ExpressionStatementSyntax e when e.Expression is AssignmentExpressionSyntax assignment && assignment.Right is AwaitExpressionSyntax:
                         continue;
 
                     default:
@@ -111,8 +114,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     var callLineSpan = node.GetLocation().GetLineSpan();
 
-                    var noBlankLinesBefore = HasNonAwaitedLocalDeclaration(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
-                    var noBlankLinesAfter = HasNonAwaitedLocalDeclaration(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
+                    var noBlankLinesBefore = HasNonAwaitedLocalAssignment(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
+                    var noBlankLinesAfter = HasNonAwaitedLocalAssignment(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
 
                     if (noBlankLinesBefore || noBlankLinesAfter)
                     {

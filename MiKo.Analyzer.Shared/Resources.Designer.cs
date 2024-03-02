@@ -2330,6 +2330,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change to &apos;NotFound&apos;.
+        /// </summary>
+        public static string MiKo_1060_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1060_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sometimes, developers try to report that an entity was not found.
         ///
         ///For example, a repository is requested to return an entity &apos;Xyz&apos; (e.g. via method &apos;GetXyz&apos;). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
@@ -2345,7 +2354,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consider to name it &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Consider to name it &apos;{1}&apos; instead.
         /// </summary>
         public static string MiKo_1060_MessageFormat {
             get {
