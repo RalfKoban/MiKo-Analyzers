@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -74,7 +73,7 @@ namespace TestHelper
         /// </param>
         protected void VerifyCSharpFix(string oldSource, string newSource, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
         {
-            VerifyFix(LanguageNames.CSharp, GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
+            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
 
         /// <summary>
@@ -83,9 +82,6 @@ namespace TestHelper
         /// Then gets the string after the codefix is applied and compares it with the expected result.
         /// Note: If any codefix causes new diagnostics to show up, the test fails unless allowNewCompilerDiagnostics is set to true.
         /// </summary>
-        /// <param name="language">
-        /// The language the source code is in.
-        /// </param>
         /// <param name="analyzer">
         /// The analyzer to be applied to the source code.
         /// </param>
@@ -107,12 +103,12 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
-            var document = CreateDocument(oldSource, language);
+            var document = CreateDocument(oldSource);
             var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
