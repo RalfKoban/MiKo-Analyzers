@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             var identifier = (SimpleNameSyntax)syntax;
 
-            var name = identifier.GetName().WithoutSuffix(MiKo_5002_DebugFormatInsteadDebugLogAnalyzer.Format);
+            var name = identifier.GetName().WithoutSuffix("Format");
 
             return SyntaxFactory.IdentifierName(name);
         }
