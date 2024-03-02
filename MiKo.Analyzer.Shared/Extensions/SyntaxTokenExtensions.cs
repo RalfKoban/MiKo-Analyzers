@@ -34,12 +34,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static ISymbol GetSymbol(this SyntaxToken value, Compilation compilation)
         {
-            if (value.SyntaxTree is null)
+            var syntaxTree = value.SyntaxTree;
+
+            if (syntaxTree is null)
             {
                 return null;
             }
 
-            var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
+            var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
             return value.GetSymbol(semanticModel);
         }
