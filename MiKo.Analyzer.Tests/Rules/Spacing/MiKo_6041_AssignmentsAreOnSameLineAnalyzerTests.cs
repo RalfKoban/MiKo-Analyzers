@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [TestFixture]
     public sealed class MiKo_6041_AssignmentsAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] AssignmentOperators = { "+=", "-=" };
+        private static readonly string[] AssignmentOperators = { "=", "+=", "-=", "*=", "/=", "%=", ">>=", "<<=", "??=" };
 
         [Test]
         public void No_issue_is_reported_if_assignment_is_on_same_line() => No_issue_is_reported_for(@"

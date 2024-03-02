@@ -24,6 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                                                SyntaxKind.LeftShiftAssignmentExpression,
                                                                                SyntaxKind.RightShiftAssignmentExpression,
                                                                                SyntaxKind.CoalesceAssignmentExpression,
+                                                                               SyntaxKind.SimpleAssignmentExpression,
 
                                                                                // EqualsValueClauseSyntax
                                                                                SyntaxKind.EqualsValueClause,
