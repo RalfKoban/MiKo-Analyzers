@@ -116,7 +116,7 @@ namespace TestHelper
             for (var i = 0; i < attempts; ++i)
             {
                 var actions = new List<CodeAction>();
-                var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, d) => actions.Add(a), CancellationToken.None);
+                var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
                 codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
                 if (actions.Any() is false)
@@ -126,12 +126,12 @@ namespace TestHelper
 
                 if (codeFixIndex != null)
                 {
-                    document = ApplyFix(document, actions.ElementAt((int)codeFixIndex));
+                    document = ApplyFix(document, actions[(int)codeFixIndex]);
 
                     break;
                 }
 
-                document = ApplyFix(document, actions.ElementAt(0));
+                document = ApplyFix(document, actions[0]);
                 analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
 
                 var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));
