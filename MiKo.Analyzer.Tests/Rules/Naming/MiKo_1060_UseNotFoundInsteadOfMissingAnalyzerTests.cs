@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -78,8 +79,45 @@ public enum TestMe
 }
 ");
 
+        [TestCase("TestMeMissingException", "TestMeNotFoundException")]
+        [TestCase("GetTestMeFailedException", "TestMeNotFoundException")]
+        public void Code_gets_fixed_for_incorrectly_named_exception_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+public class ### : Exception
+{
+    public void DoSomething(object[] values)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("SomethingMissing", "SomethingNotFound")]
+        [TestCase("GetSomethingFailed", "SomethingNotFound")]
+        public void Code_gets_fixed_for_incorrectly_named_enum_member_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+public enum TestMe
+{
+    None = 0,
+    ### = 1,
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1060_UseNotFoundInsteadOfMissingAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1060_CodeFixProvider();
     }
 }

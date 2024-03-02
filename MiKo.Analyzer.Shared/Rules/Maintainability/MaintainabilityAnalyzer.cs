@@ -69,6 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     case MethodDeclarationSyntax method: return Issue(type.ToString(), method.ReturnType);
                     case BasePropertyDeclarationSyntax property: return Issue(type.ToString(), property.Type);
+                    case ParameterSyntax parameter: return Issue(type.ToString(), parameter.Type);
                 }
             }
 

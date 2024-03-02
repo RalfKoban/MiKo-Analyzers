@@ -32,29 +32,26 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        internal const string DefaultFilePathPrefix = "Test";
-        internal const string CSharpDefaultFileExt = "cs";
-        internal const string VisualBasicDefaultExt = "vb";
-        internal const string TestProjectName = "MiKoSolutions.Analyzers.AdHoc.TestProject";
+        private const string TestProjectName = "MiKoSolutions.Analyzers.AdHoc.TestProject";
 
+        private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
+        private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
+        private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
+        private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
         private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-        private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
+        private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
+        private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
+        private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
+        private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
+        private static readonly MetadataReference NUnitLegacyReference = MetadataReference.CreateFromFile(typeof(DirectoryAssert).Assembly.Location);
+        private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
         private static readonly MetadataReference SystemCompositionReference = MetadataReference.CreateFromFile(typeof(ImportAttribute).Assembly.Location);
+        private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
         private static readonly MetadataReference SystemLinqReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
         private static readonly MetadataReference SystemRuntimeReference = MetadataReference.CreateFromFile(typeof(DataContractAttribute).Assembly.Location); // needed also for other attributes
         private static readonly MetadataReference SystemTextReference = MetadataReference.CreateFromFile(typeof(Regex).Assembly.Location);
         private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
         private static readonly MetadataReference SystemXmlReference = MetadataReference.CreateFromFile(typeof(XmlNode).Assembly.Location);
-        private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
-        private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
-        private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
-        private static readonly MetadataReference NUnitLegacyReference = MetadataReference.CreateFromFile(typeof(DirectoryAssert).Assembly.Location);
-        private static readonly MetadataReference MiKoAnalyzersReference = MetadataReference.CreateFromFile(typeof(Analyzer).Assembly.Location);
-        private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
-        private static readonly MetadataReference AttributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
-        private static readonly MetadataReference AttributeTargetsReference = MetadataReference.CreateFromFile(typeof(AttributeTargets).Assembly.Location);
-        private static readonly MetadataReference DescriptionAttributeReference = MetadataReference.CreateFromFile(typeof(DescriptionAttribute).Assembly.Location);
-        private static readonly MetadataReference AspNetCoreMvcAbstractionsReference = MetadataReference.CreateFromFile(typeof(IModelBinder).Assembly.Location);
 
         /// <summary>
         /// Avoids error <c>CS0012: The type 'MulticastDelegate' is defined in an assembly that is not referenced. You must add a reference to assembly 'netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51'</c>.
@@ -144,15 +141,12 @@ namespace TestHelper
         /// <param name="source">
         /// Classes in the form of a string.
         /// </param>
-        /// <param name="language">
-        /// The language the source code is in.
-        /// </param>
         /// <returns>
         /// A Document created from the source string.
         /// </returns>
-        protected static Document CreateDocument(string source, string language = LanguageNames.CSharp)
+        protected static Document CreateDocument(string source)
         {
-            return CreateProject(new[] { source }, language).Documents.First();
+            return CreateProject(new[] { source }).Documents.First();
         }
 
         /// <summary>
@@ -161,18 +155,15 @@ namespace TestHelper
         /// <param name="sources">
         /// Classes in the form of strings.
         /// </param>
-        /// <param name="language">
-        /// The language the source classes are in.
-        /// </param>
         /// <param name="analyzers">
         /// The analyzers to be run on the sources.
         /// </param>
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(IReadOnlyCollection<string> sources, string language, params DiagnosticAnalyzer[] analyzers)
+        private static Diagnostic[] GetSortedDiagnostics(IReadOnlyCollection<string> sources, params DiagnosticAnalyzer[] analyzers)
         {
-            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, language));
+            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources));
         }
 
         /// <summary>
@@ -195,20 +186,12 @@ namespace TestHelper
         /// <param name="sources">
         /// Classes in the form of strings.
         /// </param>
-        /// <param name="language">
-        /// The language the source code is in.
-        /// </param>
         /// <returns>
         /// The <see cref="Document"/>s produced from the sources.
         /// </returns>
-        private static Document[] GetDocuments(IReadOnlyCollection<string> sources, string language)
+        private static Document[] GetDocuments(IReadOnlyCollection<string> sources)
         {
-            if (language != LanguageNames.CSharp && language != LanguageNames.VisualBasic)
-            {
-                throw new ArgumentException("Unsupported Language");
-            }
-
-            var project = CreateProject(sources, language);
+            var project = CreateProject(sources);
             var documents = project.Documents.ToArray();
 
             if (sources.Count != documents.Length)
@@ -225,21 +208,15 @@ namespace TestHelper
         /// <param name="sources">
         /// Classes in the form of strings.
         /// </param>
-        /// <param name="language">
-        /// The language the source code is in.
-        /// </param>
         /// <returns>
         /// A Project created out of the Documents created from the source strings.
         /// </returns>
-        private static Project CreateProject(IEnumerable<string> sources, string language = LanguageNames.CSharp)
+        private static Project CreateProject(IEnumerable<string> sources)
         {
-            var fileNamePrefix = DefaultFilePathPrefix;
-            var fileExt = language == LanguageNames.CSharp ? CSharpDefaultFileExt : VisualBasicDefaultExt;
-
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
 
             var solution = new AdhocWorkspace().CurrentSolution
-                                               .AddProject(projectId, TestProjectName, TestProjectName, language)
+                                               .AddProject(projectId, TestProjectName, TestProjectName, LanguageNames.CSharp)
                                                .AddMetadataReference(projectId, CorlibReference)
                                                .AddMetadataReference(projectId, SystemCoreReference)
                                                .AddMetadataReference(projectId, SystemCompositionReference)
@@ -265,7 +242,7 @@ namespace TestHelper
 
             foreach (var source in sources)
             {
-                var newFileName = fileNamePrefix + count + "." + fileExt;
+                var newFileName = "Test" + count + "." + "cs";
                 var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
                 solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
                 count++;

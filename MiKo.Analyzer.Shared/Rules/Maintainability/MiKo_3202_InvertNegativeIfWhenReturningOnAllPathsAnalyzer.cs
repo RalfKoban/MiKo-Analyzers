@@ -71,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var condition = GetCondition(context);
 
-            if (condition != null && IsNegative(condition))
+            if (condition != null && IsMainlyNegative(condition))
             {
                 ReportDiagnostics(context, Issue(condition));
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers
@@ -72,6 +71,13 @@ namespace MiKoSolutions.Analyzers
             internal const string Warning = nameof(Warning);
             internal const string Error = nameof(Error);
             internal const string Fatal = nameof(Fatal);
+        }
+
+        internal static class MicrosoftLogging
+        {
+            internal const string NamespaceName = "Microsoft.Extensions.Logging";
+            internal const string TypeName = "ILogger";
+            internal const string FullTypeName = NamespaceName + "." + TypeName;
         }
 
         internal static class Moq
@@ -891,15 +897,15 @@ namespace MiKoSolutions.Analyzers
             internal static readonly ISet<string> ImportAttributeNames = new HashSet<string>
                                                                              {
                                                                                  "Import",
-                                                                                 nameof(ImportAttribute),
+                                                                                 "ImportAttribute",
                                                                                  "ImportMany",
-                                                                                 nameof(ImportManyAttribute),
+                                                                                 "ImportManyAttribute",
                                                                              };
 
             internal static readonly ISet<string> ImportingConstructorAttributeNames = new HashSet<string>
                                                                                            {
                                                                                                "ImportingConstructor",
-                                                                                               nameof(ImportingConstructorAttribute),
+                                                                                               "ImportingConstructorAttribute",
                                                                                            };
 
             internal static readonly IEnumerable<string> TypeUnderTestRawFieldNames = new[]
