@@ -18,26 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol)
-        {
-            var returnTypeName = symbol.ReturnType.Name;
-
-            if (symbol.ContainingType.Name == returnTypeName + "Factory")
-            {
-                // we have a factory that has the name of the type to return, so the method shall be 'Create' only
-                return Prefix;
-            }
-
-            if (symbol.ReturnType.IsGeneric())
-            {
-                // we have a generic type, so we do not know an exact name
-                return Prefix;
-            }
-
-            // we have a concrete type but a multiple-types factory
-            return Prefix + returnTypeName;
-        }
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsFactory();
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
@@ -61,8 +41,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name.StartsWith(Prefix, StringComparison.Ordinal) is false)
             {
-                yield return Issue(symbol);
+                var betterName = FindBetterName(symbol);
+
+                yield return Issue(symbol, CreateBetterNameProposal(betterName));
             }
+        }
+
+        private static string FindBetterName(IMethodSymbol symbol)
+        {
+            var returnTypeName = symbol.ReturnType.Name;
+
+            if (symbol.ContainingType.Name == returnTypeName + "Factory")
+            {
+                // we have a factory that has the name of the type to return, so the method shall be 'Create' only
+                return Prefix;
+            }
+
+            if (symbol.ReturnType.IsGeneric())
+            {
+                // we have a generic type, so we do not know an exact name
+                return Prefix;
+            }
+
+            // we have a concrete type but a multiple-types factory
+            return Prefix + returnTypeName;
         }
     }
 }

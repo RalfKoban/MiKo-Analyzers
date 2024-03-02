@@ -15,7 +15,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override string Title => Resources.MiKo_1017_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
-
-        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1017_GetSetPrefixedMethodsAnalyzer.FindBetterName(symbol);
     }
 }

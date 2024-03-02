@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1042";
 
-        public const string ExpectedName = "cancellationToken";
+        private const string ExpectedName = "cancellationToken";
 
         public MiKo_1042_CancellationTokenParameterNameAnalyzer() : base(Id)
         {
@@ -21,6 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => from parameter in symbol.Parameters
                                                                                                                  where parameter.Type.IsCancellationToken() && parameter.Name != ExpectedName
-                                                                                                                 select Issue(parameter, ExpectedName);
+                                                                                                                 select Issue(parameter, ExpectedName, CreateBetterNameProposal(ExpectedName));
     }
 }

@@ -24,8 +24,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName() => "result";
-
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => AnalyzeIdentifiers(semanticModel, identifiers);
 
         private static string[] CreateWrongNames(IEnumerable<string> values, params string[] additionalValues)
@@ -95,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 
-                    yield return Issue(symbol, name);
+                    yield return Issue(symbol, name, CreateBetterNameProposal("result"));
                 }
             }
         }

@@ -16,31 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic)
-        {
-            // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
-            var count = CountArgumentSyntaxes(symbol.GetSyntax());
-
-            switch (count)
-            {
-                case 0:
-                case 1:
-                    return Constants.LambdaIdentifiers.Default;
-
-                case 2:
-                    return Constants.LambdaIdentifiers.Fallback;
-
-                case 3:
-                    return Constants.LambdaIdentifiers.Fallback2;
-
-                case 4:
-                    return Constants.LambdaIdentifiers.Fallback3;
-
-                default:
-                    return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, count));
-            }
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSimpleLambdaExpression, SyntaxKind.SimpleLambdaExpression);
@@ -76,6 +51,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return count;
         }
 
+        private static string FindBetterName(ParameterSyntax parameter)
+        {
+            // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
+            var count = CountArgumentSyntaxes(parameter);
+
+            switch (count)
+            {
+                case 0:
+                case 1:
+                    return Constants.LambdaIdentifiers.Default;
+
+                case 2:
+                    return Constants.LambdaIdentifiers.Fallback;
+
+                case 3:
+                    return Constants.LambdaIdentifiers.Fallback2;
+
+                case 4:
+                    return Constants.LambdaIdentifiers.Fallback3;
+
+                default:
+                    return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, count));
+            }
+        }
+
         private void AnalyzeSimpleLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (SimpleLambdaExpressionSyntax)context.Node;
@@ -106,7 +106,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return null;
 
                 default:
-                    return Issue(parameterName, identifier, Constants.LambdaIdentifiers.Default);
+                {
+                    var proposal = FindBetterName(parameter);
+
+                    return Issue(parameterName, identifier, proposal, CreateBetterNameProposal(proposal));
+                }
             }
         }
     }

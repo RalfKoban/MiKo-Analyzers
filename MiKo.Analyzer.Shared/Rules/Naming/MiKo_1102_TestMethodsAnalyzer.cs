@@ -20,21 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var symbolName = symbol.Name;
-            var marker = GetTestMarker(symbolName);
-            var phrases = new[]
-                              {
-                                  marker.SurroundedWith(Constants.Underscore),
-                                  Constants.Underscore + marker,
-                                  marker + Constants.Underscore,
-                                  marker,
-                              };
-
-            return symbolName.Without(phrases);
-        }
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.ContainingSymbol is IMethodSymbol method && ShallAnalyze(method);
@@ -45,7 +30,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Contains(TestMarker))
             {
-                yield return Issue(symbol, GetTestMarker(symbolName));
+                var betterName = FindBetterName(symbolName);
+
+                yield return Issue(symbol, GetTestMarker(symbolName), CreateBetterNameProposal(betterName));
             }
         }
 
@@ -54,6 +41,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var testCase = symbolName.Contains(TestCaseMarker, StringComparison.OrdinalIgnoreCase);
 
             return testCase ? TestCaseMarker : TestMarker;
+        }
+
+        private static string FindBetterName(string symbolName)
+        {
+            var marker = GetTestMarker(symbolName);
+            var phrases = new[]
+                              {
+                                  marker.SurroundedWith(Constants.Underscore),
+                                  Constants.Underscore + marker,
+                                  marker + Constants.Underscore,
+                                  marker,
+                              };
+
+            return symbolName.Without(phrases);
         }
     }
 }

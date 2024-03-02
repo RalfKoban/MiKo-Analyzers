@@ -15,8 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutSuffix(Constants.AsyncSuffix);
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol);
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false;
@@ -25,7 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
-                yield return Issue(symbol, FindBetterName(symbol));
+                var betterName = symbol.Name.WithoutSuffix(Constants.AsyncSuffix);
+
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
     }

@@ -22,26 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var symbolName = symbol.Name.Without(MockNames);
-
-            if (symbolName.IsNullOrWhiteSpace() || symbolName.StartsWithNumber())
-            {
-                return symbol.Name;
-            }
-
-            if (symbol is ILocalSymbol || symbol is IParameterSymbol)
-            {
-                if (symbol.Name[0].IsLowerCaseLetter())
-                {
-                    return symbolName.ToLowerCaseAt(0);
-                }
-            }
-
-            return symbolName;
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeParameter, SyntaxKind.Parameter);
@@ -73,13 +53,55 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
-                                                                                                                                                          let name = identifier.ValueText
-                                                                                                                                                          where name.Length > 3 && name.ContainsAny(MockNames)
-                                                                                                                                                          let symbol = identifier.GetSymbol(semanticModel)
-                                                                                                                                                          select symbol is null
-                                                                                                                                                                 ? Issue(identifier)
-                                                                                                                                                                 : Issue(symbol);
+        protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
+        {
+            foreach (var identifier in identifiers)
+            {
+                var name = identifier.ValueText;
+
+                if (name.Length < 4)
+                {
+                    continue;
+                }
+
+                if (name.ContainsAny(MockNames))
+                {
+                    var symbol = identifier.GetSymbol(semanticModel);
+
+                    if (symbol is null)
+                    {
+                        yield return Issue(identifier);
+                    }
+                    else
+                    {
+                        var betterName = FindBetterName(symbol);
+
+                        yield return Issue(symbol, CreateBetterNameProposal(betterName));
+                    }
+                }
+            }
+        }
+
+        private static string FindBetterName(ISymbol symbol)
+        {
+            var symbolName = symbol.Name;
+            var betterName = symbolName.Without(MockNames);
+
+            if (betterName.IsNullOrWhiteSpace() || betterName.StartsWithNumber())
+            {
+                return symbolName;
+            }
+
+            if (symbol is ILocalSymbol || symbol is IParameterSymbol)
+            {
+                if (symbolName[0].IsLowerCaseLetter())
+                {
+                    return betterName.ToLowerCaseAt(0);
+                }
+            }
+
+            return betterName;
+        }
 
         private static bool ShallAnalyze(INamedTypeSymbol type)
         {
@@ -150,7 +172,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var syntax = (ParameterSyntax)context.Node;
 
-                // ignore invocations eg. in lambdas
+                // ignore invocations e.g. in lambdas
                 if (syntax.GetEnclosing<InvocationExpressionSyntax>() is null)
                 {
                     AnalyzeIdentifiers(context, type, syntax.Identifier);

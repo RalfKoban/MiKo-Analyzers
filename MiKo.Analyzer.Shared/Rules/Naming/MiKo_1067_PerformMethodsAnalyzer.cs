@@ -20,13 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol)
-        {
-            var name = symbol.Name.Without(Phrase);
-
-            return Verbalizer.TryMakeVerb(name, out var result) ? result : name;
-        }
-
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -35,10 +28,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (ContainsPhrase(methodName) && ContainsPhrase(new StringBuilder(methodName).Without("Performance").Without("Performed").ToString()))
             {
-                yield return Issue(symbol);
+                var proposal = FindBetterName(methodName);
+
+                yield return Issue(symbol, CreateBetterNameProposal(proposal));
             }
         }
 
         private static bool ContainsPhrase(string methodName) => methodName.Contains(Phrase, StringComparison.Ordinal);
+
+        private static string FindBetterName(string symbolName)
+        {
+            var name = symbolName.Without(Phrase);
+
+            return Verbalizer.TryMakeVerb(name, out var result) ? result : name;
+        }
     }
 }
