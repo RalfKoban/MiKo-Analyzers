@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,7 +26,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ITypeSymbol symbol)
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.ContainsExtensionMethods();
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            if (symbol.Name.EndsWith(Suffix, StringComparison.Ordinal) is false)
+            {
+                var betterName = FindBetterName(symbol);
+
+                yield return Issue(symbol, Suffix, CreateBetterNameProposal(betterName));
+            }
+        }
+
+        private static string FindBetterName(ITypeSymbol symbol)
         {
             var symbolName = symbol.Name.AsSpan();
 
@@ -43,11 +54,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return symbolName.ToString() + Suffix;
         }
-
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol is INamedTypeSymbol type && type.ContainsExtensionMethods();
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                    : new[] { Issue(symbol, Suffix) };
     }
 }

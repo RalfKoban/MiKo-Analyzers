@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
+        protected static Dictionary<string, string> CreateBetterNameProposal(string betterName) => new Dictionary<string, string> { { Constants.BetterName, betterName } };
+
         protected static string FindBetterNameForEntityMarker(ISymbol symbol)
         {
             var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
@@ -139,9 +141,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name.HasEntityMarker())
             {
-                var expected = FindBetterNameForEntityMarker(symbol);
+                var betterName = FindBetterNameForEntityMarker(symbol);
 
-                yield return Issue(symbol, expected);
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
 
@@ -151,7 +153,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var betterName = Pluralizer.GetPluralName(symbol.Name, comparison, suffix);
 
-            return betterName.IsNullOrWhiteSpace() ? null : Issue(symbol, betterName);
+            if (betterName.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
         }
 
         protected void AnalyzeLocalDeclarationStatement(SyntaxNodeAnalysisContext context)

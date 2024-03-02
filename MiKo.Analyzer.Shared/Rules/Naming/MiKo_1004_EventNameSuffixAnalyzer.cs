@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,12 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name.EndsWith(Suffix, StringComparison.Ordinal))
             {
-                var betterName = symbol.Name.Without(Suffix);
+                var proposal = symbol.Name.Without(Suffix);
 
-                return new[] { Issue(symbol, betterName, new Dictionary<string, string> { { Constants.BetterName, betterName } }) };
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

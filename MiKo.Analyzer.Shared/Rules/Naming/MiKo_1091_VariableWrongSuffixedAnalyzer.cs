@@ -32,33 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var name = symbol.Name;
-
-            if (name.EndsWith(Constants.Entity, Comparison))
-            {
-                return name.WithoutSuffix(Constants.Entity);
-            }
-
-            if (name.EndsWith("Element", Comparison))
-            {
-                return name == "frameworkElement"
-                       ? "element"
-                       : name.WithoutSuffix("Element");
-            }
-
-            foreach (var pair in WrongSuffixes)
-            {
-                if (name.EndsWith(pair.Key, Comparison))
-                {
-                    return pair.Value;
-                }
-            }
-
-            return name;
-        }
-
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
         {
             foreach (var identifier in identifiers)
@@ -68,11 +41,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (name.EndsWith(Constants.Entity, Comparison))
                 {
-                    yield return Issue(name, location, name.WithoutSuffix(Constants.Entity));
+                    var betterName = name.WithoutSuffix(Constants.Entity);
+
+                    yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
                 }
                 else if (name.EndsWith("Element", Comparison))
                 {
-                    yield return Issue(name, location, name == "frameworkElement" ? "element" : name.WithoutSuffix("Element"));
+                    var betterName = name == "frameworkElement" ? "element" : name.WithoutSuffix("Element");
+
+                    yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
                 }
                 else
                 {
@@ -80,7 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     {
                         if (name.EndsWith(pair.Key, Comparison) && name.StartsWithAny(AcceptedPrefixes, Comparison) is false)
                         {
-                            yield return Issue(name, location, pair.Value);
+                            var betterName = pair.Value;
+
+                            yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
                         }
                     }
                 }

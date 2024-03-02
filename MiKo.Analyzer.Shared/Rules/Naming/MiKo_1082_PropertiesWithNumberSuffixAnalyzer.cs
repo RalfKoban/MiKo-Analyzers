@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,12 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IPropertySymbol symbol) => symbol.Name.WithoutNumberSuffix();
-
         protected override bool ShallAnalyze(IPropertySymbol symbol) => base.ShallAnalyze(symbol) && symbol.GetReturnType()?.Name.EndsWithNumber() is true;
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => symbol.Name.EndsWithCommonNumber()
-                                                                                                                   ? new[] { Issue(symbol) }
-                                                                                                                   : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation)
+        {
+            var symbolName = symbol.Name;
+
+            if (symbolName.EndsWithCommonNumber())
+            {
+                yield return Issue(symbol, CreateBetterNameProposal(symbolName.WithoutNumberSuffix()));
+            }
+        }
     }
 }

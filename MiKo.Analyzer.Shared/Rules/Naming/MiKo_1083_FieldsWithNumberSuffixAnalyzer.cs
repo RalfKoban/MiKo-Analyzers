@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public MiKo_1083_FieldsWithNumberSuffixAnalyzer() : base(Id, SymbolKind.Field)
         {
         }
-
-        internal static string FindBetterName(IFieldSymbol symbol) => symbol.Name.WithoutNumberSuffix();
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
@@ -34,8 +31,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return false;
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => symbol.Name.EndsWithCommonNumber()
-                                                                                                                ? new[] { Issue(symbol) }
-                                                                                                                : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
+        {
+            var symbolName = symbol.Name;
+
+            if (symbolName.EndsWithCommonNumber())
+            {
+                yield return Issue(symbol, CreateBetterNameProposal(symbolName.WithoutNumberSuffix()));
+            }
+        }
     }
 }

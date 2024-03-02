@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1104_CodeFixTitle;
 
-        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1104_TestTeardownMethodsAnalyzer.ExpectedName;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault(_ => _.IsAnyKind(MethodKinds));
     }
 }

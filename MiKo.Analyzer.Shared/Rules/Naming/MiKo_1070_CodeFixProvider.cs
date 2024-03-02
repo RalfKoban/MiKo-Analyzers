@@ -11,7 +11,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public override string FixableDiagnosticId => "MiKo_1070";
 
         protected override string Title => Resources.MiKo_1070_CodeFixTitle;
-
-        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1070_CollectionLocalVariableAnalyzer.FindBetterName(symbol);
     }
 }
