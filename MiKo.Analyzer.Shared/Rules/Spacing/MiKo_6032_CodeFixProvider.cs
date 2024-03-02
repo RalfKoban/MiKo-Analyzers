@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ParameterSyntax parameter)
             {
-                var position = MiKo_6032_MultilineParametersAreIndentedToRightAnalyzer.GetOutdentedStartPosition(parameter.FirstAncestor<ParameterListSyntax>());
+                var position = GetProposedLinePosition(issue);
                 var spaces = position.Character;
 
                 return parameter.WithLeadingSpaces(spaces);
