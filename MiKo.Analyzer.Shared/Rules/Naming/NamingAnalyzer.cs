@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected static Dictionary<string, string> CreateBetterNameProposal(string betterName) => new Dictionary<string, string> { { Constants.BetterName, betterName } };
+        protected static Dictionary<string, string> CreateBetterNameProposal(string betterName) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.BetterName, betterName } };
 
         protected static string FindBetterNameForEntityMarker(ISymbol symbol)
         {
