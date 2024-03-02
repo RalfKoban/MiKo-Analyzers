@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is BlockSyntax block && block.Parent is SwitchSectionSyntax section)
+            if (syntax is BlockSyntax block && block.Parent is SwitchSectionSyntax)
             {
-                var position = MiKo_6033_CaseBlockBracesAreOnSamePositionLikeCaseKeywordAnalyzer.GetStartPosition(section);
+                var position = GetProposedLinePosition(issue);
 
                 return GetUpdatedBlock(block, position.Character);
             }

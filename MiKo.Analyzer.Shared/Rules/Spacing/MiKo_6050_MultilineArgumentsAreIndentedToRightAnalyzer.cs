@@ -18,7 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetOutdentedStartPosition(ArgumentListSyntax argumentList)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ArgumentList);
+
+        private static LinePosition GetOutdentedStartPosition(ArgumentListSyntax argumentList)
         {
             var startPosition = argumentList.GetStartPosition();
             var characterPosition = startPosition.Character + argumentList.OpenParenToken.Span.Length;
@@ -37,8 +39,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return new LinePosition(startPosition.Line, characterPosition);
         }
-
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ArgumentList);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -64,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     // this is a new-found line, so inspect start position
                     if (argumentPosition.Character != characterPosition)
                     {
-                        yield return Issue(argument.ToString().AsSpan().HumanizedTakeFirst(50), argument);
+                        yield return Issue(argument.ToString().AsSpan().HumanizedTakeFirst(50), argument, CreateProposalForLinePosition(startPosition));
                     }
                 }
                 else

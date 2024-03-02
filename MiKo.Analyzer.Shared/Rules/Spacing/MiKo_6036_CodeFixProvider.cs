@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is LambdaExpressionSyntax lambda)
             {
-                var position = MiKo_6036_OpenBracesAreOnSamePositionLikeArrowOfLambdaAnalyzer.GetStartPosition(lambda);
+                var position = GetProposedLinePosition(issue);
 
                 var block = GetUpdatedBlock(lambda.Block, position.Character);
 

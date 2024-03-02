@@ -1177,6 +1177,11 @@ namespace MiKoSolutions.Analyzers
 
             internal const string NoLineBefore = "before";
             internal const string NoLineAfter = "after";
+
+            internal const string LineNumber = "LineNumber";
+            internal const string CharacterPosition = "CharacterPosition";
+            internal const string Spaces = "Spaces";
+            internal const string AdditionalSpaces = "AdditionalSpaces";
         }
     }
 }

@@ -15,7 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetStartPosition(LambdaExpressionSyntax lambda)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
+
+        private static LinePosition GetStartPosition(LambdaExpressionSyntax lambda)
         {
             var arrowToken = lambda.ArrowToken;
 
@@ -23,8 +25,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return new LinePosition(position.Line, position.Character + Constants.Indentation - arrowToken.Span.Length);
         }
-
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ParenthesizedLambdaExpression, SyntaxKind.SimpleLambdaExpression);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -38,12 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var openBraceToken = block.OpenBraceToken;
                 var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (operatorPosition.Line != openBracePosition.Line)
+                if (operatorPosition.Line != openBracePosition.Line && operatorPosition.Character != openBracePosition.Character)
                 {
-                    if (operatorPosition.Character != openBracePosition.Character)
-                    {
-                        ReportDiagnostics(context, Issue(openBraceToken));
-                    }
+                    var issue = Issue(openBraceToken, CreateProposalForLinePosition(operatorPosition));
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }

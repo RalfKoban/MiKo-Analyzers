@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ArgumentSyntax argument)
             {
-                var position = MiKo_6050_MultilineArgumentsAreIndentedToRightAnalyzer.GetOutdentedStartPosition(argument.FirstAncestor<ArgumentListSyntax>());
+                var position = GetProposedLinePosition(issue);
                 var additionalSpaces = position.Character - argument.GetPositionWithinStartLine();
 
                 var descendants = SelfAndDescendantsOnSeparateLines(argument);

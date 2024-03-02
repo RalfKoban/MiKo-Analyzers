@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is MemberAccessExpressionSyntax m)
             {
-                var spaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetSpaces(issue);
+                var spaces = GetProposedSpaces(issue);
 
                 return m.WithOperatorToken(m.OperatorToken.WithLeadingSpaces(spaces));
             }
@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     if (descendants.Count > 0)
                     {
-                        var additionalSpaces = MiKo_6040_MultiLineCallChainsAreOnSamePositionAnalyzer.GetDifference(issue);
+                        var additionalSpaces = GetProposedAdditionalSpaces(issue);
                         var updatedInvocation = invocation.WithAdditionalLeadingSpacesOnDescendants(descendants, additionalSpaces);
 
                         return root.ReplaceNode(invocation, updatedInvocation);

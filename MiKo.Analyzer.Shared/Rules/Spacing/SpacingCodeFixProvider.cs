@@ -1,14 +1,35 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SpacingCodeFixProvider : MiKoCodeFixProvider
     {
+        protected static LinePosition GetProposedLinePosition(Diagnostic diagnostic)
+        {
+            if (diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.LineNumber, out var lineNumber)
+             && diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.CharacterPosition, out var characterPosition))
+            {
+                return new LinePosition(int.Parse(lineNumber, NumberStyles.Integer), int.Parse(characterPosition, NumberStyles.Integer));
+            }
+
+            return LinePosition.Zero;
+        }
+
+        protected static int GetProposedSpaces(Diagnostic diagnostic) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Spaces, out var s)
+                                                                         ? int.Parse(s)
+                                                                         : 0;
+
+        protected static int GetProposedAdditionalSpaces(Diagnostic diagnostic) => diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.AdditionalSpaces, out var s)
+                                                                                   ? int.Parse(s)
+                                                                                   : 0;
+
         protected static List<SyntaxNodeOrToken> SelfAndDescendantsOnSeparateLines(SyntaxNode node)
         {
             var lines = new HashSet<int>();

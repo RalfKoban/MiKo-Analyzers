@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is InitializerExpressionSyntax initializer)
             {
-                var position = MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.GetStartPosition(initializer);
+                var position = GetProposedLinePosition(issue);
 
                 var spaces = position.Character;
 
