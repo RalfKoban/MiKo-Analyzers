@@ -141,7 +141,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{0e08768e-eb1c-4673-be1d-b396b28bba69}*SharedItemsImports = 5
-		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{4d65c463-dd5c-4320-bc20-0411d0fd3999}*SharedItemsImports = 5
+		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems*{4d65c463-dd5c-4320-bc20-0411d0fd3999}*SharedItemsImports = 5
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{8a34d670-6bbf-4d20-b18b-dd95bf3a9f71}*SharedItemsImports = 13
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems*{be0cd873-a12b-42df-b85c-07f681953597}*SharedItemsImports = 13
 		MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems*{cb799a10-4c44-498d-a682-0555347c207a}*SharedItemsImports = 5

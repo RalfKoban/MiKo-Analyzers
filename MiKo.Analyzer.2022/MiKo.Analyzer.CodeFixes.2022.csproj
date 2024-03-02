@@ -60,7 +60,7 @@
     <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
-  <Import Project="..\MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems" Label="Shared" />
+  <Import Project="..\MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.CodeFixes.projitems" Label="Shared" />
 
   <ItemGroup>
     <None Include="..\MiKo.Analyzer.Shared\Resources.resx">
