@@ -26,12 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var result = syntax;
 
-            if (issue.Properties.ContainsKey(SurroundedByBlankLinesAnalyzer.NoLineBefore))
+            if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.NoLineBefore))
             {
                 result = result.WithLeadingEmptyLine();
             }
 
-            if (issue.Properties.ContainsKey(SurroundedByBlankLinesAnalyzer.NoLineAfter))
+            if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.NoLineAfter))
             {
                 result = result.WithTrailingEmptyLine();
             }

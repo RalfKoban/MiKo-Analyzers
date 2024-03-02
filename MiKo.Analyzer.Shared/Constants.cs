@@ -6,8 +6,6 @@ namespace MiKoSolutions.Analyzers
 {
     public static class Constants
     {
-        internal const string BetterName = "BetterName";
-
         internal const int Indentation = 4;
 
         internal const string AsyncSuffix = "Async";
@@ -1171,6 +1169,14 @@ namespace MiKoSolutions.Analyzers
                                                                                       "WritingPrintTicketRequiredEventHandler",
                                                                                       "WritingProgressChangedEventHandler",
                                                                                   };
+        }
+
+        internal static class AnalyzerCodeFixSharedData
+        {
+            internal const string BetterName = "BetterName";
+
+            internal const string NoLineBefore = "before";
+            internal const string NoLineAfter = "after";
         }
     }
 }
