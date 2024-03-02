@@ -17,7 +17,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Description>A diagnostic extension for the .NET Compiler Platform ("Roslyn") that checks for different metrics such as Lines of Code or Cyclomatic Complexity; in addition to several documentation, maintainability, naming, ordering and performance rules.</Description>
     <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-    <Copyright>Copyright © 2018-2023 by MiKo Solutions. All rights reserved.</Copyright>
+    <Copyright>Copyright © 2018-2024 by MiKo Solutions. All rights reserved.</Copyright>
     <PackageTags>MiKoSolutions.Analyzers, analyzers, metrics</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <AssemblyName>MiKoSolutions.Analyzers</AssemblyName>
@@ -41,7 +41,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30">
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.9.28">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

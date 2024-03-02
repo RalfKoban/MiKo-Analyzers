@@ -333,6 +333,38 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_when_more_conditions_are_positive_than_negative() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (flag1 || flag2 || !flag3 || flag4)
+        {
+            return 42;
+        }
+
+        return -1;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_when_half_of_conditions_are_positive() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (flag1 || flag2 || !flag3 || !flag4)
+        {
+            return 42;
+        }
+
+        return -1;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_negative_if_statement_that_returns_and_follow_up_code_that_returns() => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -518,6 +550,22 @@ public class TestMe
 public class TestMe
 {
     public int DoSomething(bool flag) => (flag is false) ? -1 : 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_when_more_conditions_are_negative_than_positive() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (!flag1 && !flag2 && flag3 && !flag4)
+        {
+            return 42;
+        }
+
+        return -1;
+    }
 }
 ");
 
@@ -1210,6 +1258,42 @@ public class TestMe
             // some comment 1
             return true;
         }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_method_when_more_conditions_are_negative_than_positive()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (!flag1 && !flag2 && flag3 && !flag4)
+        {
+            return -1;
+        }
+
+        return 42;
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public int DoSomething(bool flag1, bool flag2, bool flag3, bool flag4)
+    {
+        if (flag1 || flag2 || flag3 is false || flag4)
+        {
+            return 42;
+        }
+
+        return -1;
     }
 }
 ";

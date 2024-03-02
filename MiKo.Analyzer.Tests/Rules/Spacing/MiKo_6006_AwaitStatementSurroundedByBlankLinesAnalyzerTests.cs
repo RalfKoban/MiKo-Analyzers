@@ -174,6 +174,29 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_multiple_awaited_calls_preceded_by_blank_line_if_their_results_get_assigned_to_same_local_variable() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+
+            var result = await Task.FromResult(true);
+            result |= await Task.FromResult(false);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_awaited_call_followed_by_blank_line() => No_issue_is_reported_for(@"
 using System.Threading.Tasks;
 

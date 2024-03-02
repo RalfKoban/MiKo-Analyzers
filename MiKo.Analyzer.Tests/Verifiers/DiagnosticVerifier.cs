@@ -17,7 +17,7 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, LanguageNames.CSharp, analyzers);
+        internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, analyzers);
 
         /// <summary>
         /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
@@ -178,6 +178,6 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        private Diagnostic[] GetDiagnostics(string[] sources) => GetSortedDiagnostics(sources, LanguageNames.CSharp, GetObjectUnderTest());
+        private Diagnostic[] GetDiagnostics(string[] sources) => GetSortedDiagnostics(sources, GetObjectUnderTest());
     }
 }
