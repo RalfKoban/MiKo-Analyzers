@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers
@@ -900,15 +899,15 @@ namespace MiKoSolutions.Analyzers
             internal static readonly ISet<string> ImportAttributeNames = new HashSet<string>
                                                                              {
                                                                                  "Import",
-                                                                                 nameof(ImportAttribute),
+                                                                                 "ImportAttribute",
                                                                                  "ImportMany",
-                                                                                 nameof(ImportManyAttribute),
+                                                                                 "ImportManyAttribute",
                                                                              };
 
             internal static readonly ISet<string> ImportingConstructorAttributeNames = new HashSet<string>
                                                                                            {
                                                                                                "ImportingConstructor",
-                                                                                               nameof(ImportingConstructorAttribute),
+                                                                                               "ImportingConstructorAttribute",
                                                                                            };
 
             internal static readonly IEnumerable<string> TypeUnderTestRawFieldNames = new[]

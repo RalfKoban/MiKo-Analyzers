@@ -34,20 +34,20 @@ namespace MiKoSolutions.Analyzers
 
         internal static ISymbol GetSymbol(this SyntaxToken value, Compilation compilation)
         {
-            if (value.SyntaxTree is null)
+            var syntaxTree = value.SyntaxTree;
+
+            if (syntaxTree is null)
             {
                 return null;
             }
 
-            var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
+            var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
             return value.GetSymbol(semanticModel);
         }
 
         internal static ISymbol GetSymbol(this SyntaxToken value, SemanticModel semanticModel)
         {
-            var position = value.GetLocation().SourceSpan.Start;
-            var name = value.ValueText;
             var syntaxNode = value.Parent;
 
             // try to find the node as that may be faster than to look them up
@@ -55,6 +55,8 @@ namespace MiKoSolutions.Analyzers
 
             if (symbol is null)
             {
+                var position = value.GetLocation().SourceSpan.Start;
+                var name = value.ValueText;
                 var symbols = semanticModel.LookupSymbols(position, name: name);
 
                 if (symbols.Length > 0)
