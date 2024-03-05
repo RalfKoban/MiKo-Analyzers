@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2004";
 
-        internal const string IsSender = "IsSender";
-
         public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
@@ -58,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (Constants.Comments.EventSourcePhrase.None(_ => _ == phrase))
                 {
-                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), Constants.Comments.EventSourcePhrase[0], new Dictionary<string, string> { { IsSender, string.Empty } });
+                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), Constants.Comments.EventSourcePhrase[0]);
                 }
             }
 
@@ -73,7 +71,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (phrases.None(_ => _ == phrase))
                 {
-                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0], new Dictionary<string, string>());
+                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0]);
                 }
             }
         }

@@ -159,6 +159,8 @@ namespace MiKoSolutions.Analyzers
             internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
             internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
             internal const string DeterminesWhetherPhrase = "Determines whether";
+            internal const string DisposeParameterPhrase = "Indicates whether unmanaged resources shall be freed.";
+            internal const string DisposeSummaryPhrase = "Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.";
             internal const string EnumStartingPhrase = "Defines values that specify ";
             internal const string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
             internal const string EventArgsSummaryStartingPhrase = "Provides data for the ";
@@ -1169,6 +1171,23 @@ namespace MiKoSolutions.Analyzers
                                                                                       "WritingPrintTicketRequiredEventHandler",
                                                                                       "WritingProgressChangedEventHandler",
                                                                                   };
+        }
+
+        internal static class AnalyzerCodeFixSharedData
+        {
+            internal const string BetterName = nameof(BetterName);
+
+            internal const string NoLineBefore = nameof(NoLineBefore);
+            internal const string NoLineAfter = nameof(NoLineAfter);
+
+            internal const string LineNumber = nameof(LineNumber);
+            internal const string CharacterPosition = nameof(CharacterPosition);
+            internal const string Spaces = nameof(Spaces);
+            internal const string AdditionalSpaces = nameof(AdditionalSpaces);
+
+            internal const string StartingPhrase = nameof(StartingPhrase);
+            internal const string EndingPhrase = nameof(EndingPhrase);
+            internal const string Phrase = nameof(Phrase);
         }
     }
 }

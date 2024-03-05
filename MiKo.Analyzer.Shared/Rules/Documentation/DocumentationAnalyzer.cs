@@ -16,6 +16,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected static Dictionary<string, string> CreateStartingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase } };
+
+        protected static Dictionary<string, string> CreateEndingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.EndingPhrase, phrase } };
+
+        protected static Dictionary<string, string> CreatePhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.Phrase, phrase } };
+
         /// <summary>
         /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
         /// </summary>
