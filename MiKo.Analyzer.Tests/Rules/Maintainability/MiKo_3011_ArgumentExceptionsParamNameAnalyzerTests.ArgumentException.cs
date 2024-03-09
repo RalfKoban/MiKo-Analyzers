@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public sealed partial class MiKo_3011_ArgumentExceptionsParamNameAnalyzerTests

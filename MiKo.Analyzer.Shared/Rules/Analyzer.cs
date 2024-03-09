@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-// ncrunch: collect values off
+// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class Analyzer : DiagnosticAnalyzer
