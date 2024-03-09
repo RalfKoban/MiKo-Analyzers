@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.ToArray();
 
-        private static readonly string[] Phrases = GetWithDelimiters(PhrasesMapKeys);
+        private static readonly string[] Phrases = PhrasesMapKeys.WithDelimiters();
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {

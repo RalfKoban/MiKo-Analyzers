@@ -1125,6 +1125,23 @@ namespace MiKoSolutions.Analyzers
             return null;
         }
 
+        internal static string GetReferencedName(this SyntaxNode node)
+        {
+            var name = node.GetCref().GetCrefType().GetName();
+
+            if (name.IsNullOrWhiteSpace())
+            {
+                var nameAttribute = node.GetNameAttribute();
+
+                if (nameAttribute != null)
+                {
+                    name = nameAttribute.TextTokens.First().ValueText;
+                }
+            }
+
+            return name;
+        }
+
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
 
         internal static bool HasLeadingComment(this SyntaxNode value) => value.GetLeadingTrivia().Any(_ => _.IsComment());

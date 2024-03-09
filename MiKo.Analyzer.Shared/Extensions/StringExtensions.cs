@@ -1228,6 +1228,42 @@ namespace System
             return new string(characters);
         }
 
+        /// <summary>
+        /// Encapsulates the given term with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="value">
+        /// The term to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string value) => WithDelimiters(new[] { value });
+
+        /// <summary>
+        /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="values">
+        /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string[] values)
+        {
+            var result = new List<string>();
+
+            foreach (var delimiter in Constants.Comments.Delimiters)
+            {
+                foreach (var phrase in values)
+                {
+                    result.Add(' ' + phrase + delimiter);
+                    result.Add('(' + phrase + delimiter);
+                }
+            }
+
+            return result.ToArray();
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, char character) => value.Without(character.ToString());
 

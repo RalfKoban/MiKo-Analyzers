@@ -19,12 +19,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return Comment(syntax, MiKo_2220_DocumentationShouldUseToSeekAnalyzer.Terms, ReplacementMap);
+            return Comment(syntax, Constants.Comments.FindTerms, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
-            return MiKo_2220_DocumentationShouldUseToSeekAnalyzer.Terms.ToDictionary(_ => _, _ => MiKo_2220_DocumentationShouldUseToSeekAnalyzer.Replacement);
+            return Constants.Comments.FindTerms.ToDictionary(_ => _, _ => Constants.Comments.ToSeekTerm);
         }
     }
 }

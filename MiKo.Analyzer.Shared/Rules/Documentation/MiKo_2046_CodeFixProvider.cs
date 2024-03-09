@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax != null)
             {
-                var name = MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer.GetReferencedName(syntax);
+                var name = syntax.GetReferencedName();
 
                 return TypeParamRef(name);
             }

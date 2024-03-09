@@ -18,21 +18,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return Comment(syntax, MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Terms, ReplacementMap);
+            return Comment(syntax, Constants.Comments.IdTerms, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
             var dictionary = new Dictionary<string, string>();
 
-            foreach (var term in MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Terms)
+            foreach (var term in Constants.Comments.IdTerms)
             {
                 var alternative = term.Replace('i', 'I');
 
                 var termWithA = "A " + term.TrimStart();
                 var alternativeWithA = "A " + alternative.TrimStart();
 
-                var replacement = term.Replace(MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer.Term, "identifier");
+                var replacement = term.Replace(Constants.Comments.IdTerm, "identifier");
                 var replacementWithA = "An " + replacement.TrimStart();
 
                 dictionary.Add(termWithA, replacementWithA);

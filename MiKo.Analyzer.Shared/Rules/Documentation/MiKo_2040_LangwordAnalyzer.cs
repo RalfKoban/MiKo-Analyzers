@@ -14,15 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2040";
 
-        internal static readonly string[] Phrases = { "true", "false", "null" };
+        private static readonly HashSet<string> WrongAttributes = Constants.Comments.LangwordWrongAttributes;
 
-        internal static readonly HashSet<string> WrongAttributes = new HashSet<string>
-                                                                       {
-                                                                           Constants.XmlTag.Attribute.Langref,
-                                                                           "langowrd", // find typos
-                                                                           "langwrod", // find typos
-                                                                           "langwowd", // find typos
-                                                                       };
+        private static readonly string[] Phrases = Constants.Comments.LangwordReferences;
 
         private static readonly KeyValuePair<string, string>[] StartParts = CreateStartParts();
 

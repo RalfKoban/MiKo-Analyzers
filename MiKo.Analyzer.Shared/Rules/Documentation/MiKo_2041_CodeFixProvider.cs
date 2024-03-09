@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var syntaxNodes = MiKo_2041_InvalidXmlInSummaryAnalyzer.GetIssues(syntax).ToList();
+            var syntaxNodes = syntax.GetSummaryXmls(Constants.Comments.InvalidSummaryCrefXmlTags).ToList();
             var replacements = syntaxNodes.Select(_ => _.WithLeadingXmlCommentExterior().WithEndOfLine()).ToArray();
 
             var updatedSyntax = syntax.Without(syntaxNodes).AddContent(replacements);
