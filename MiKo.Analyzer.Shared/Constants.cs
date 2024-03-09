@@ -767,6 +767,14 @@ namespace MiKoSolutions.Analyzers
                                                                       "The instance if ",
                                                                       "the instance if ",
                                                                   };
+
+            internal static readonly string[] EnumMemberWrongStartingWords =
+                                                                             {
+                                                                                 "Defines",
+                                                                                 "Indicates",
+                                                                                 "Represents",
+                                                                                 "Specifies",
+                                                                             };
         }
 
         internal static class XmlTag
@@ -1248,6 +1256,9 @@ namespace MiKoSolutions.Analyzers
             internal const string DefaultSeeLangwordValue = nameof(DefaultSeeLangwordValue);
             internal const string DefaultSeeCrefValue = nameof(DefaultSeeCrefValue);
             internal const string DefaultCodeValue = nameof(DefaultCodeValue);
+
+            internal const string TextKey = nameof(TextKey);
+            internal const string TextReplacementKey = nameof(TextReplacementKey);
         }
     }
 }

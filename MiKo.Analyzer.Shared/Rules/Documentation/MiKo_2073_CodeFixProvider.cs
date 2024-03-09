@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2073_CodeFixProvider)), Shared]
     public sealed class MiKo_2073_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private const string StartingPhrase = MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.StartingPhrase;
+        private const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
         private const string AsyncStartingPhrase = Constants.Comments.AsynchrounouslyStartingPhrase;
 
         private static readonly string FixedAsyncStartingPhrase = AsyncStartingPhrase + StartingPhrase.ToLowerCaseAt(0);

@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case PropertyDeclarationSyntax _:
                     case MethodDeclarationSyntax _:
                     {
-                        return FixComment(document, ancestor, syntax);
+                        return FixComment(ancestor, syntax, diagnostic);
                     }
                 }
             }
@@ -32,12 +32,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return null;
         }
 
-        protected override DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment)
+        protected override DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
         {
             if (exception.IsExceptionCommentFor<ObjectDisposedException>())
             {
-                var symbol = GetSymbol(document, syntax);
-                var phrase = MiKo_2056_ObjectDisposedExceptionPhraseAnalyzer.GetEndingPhrase(symbol);
+                var phrase = GetPhraseProposal(diagnostic);
 
                 var exceptionComment = CommentEndingWith(exception, phrase);
 

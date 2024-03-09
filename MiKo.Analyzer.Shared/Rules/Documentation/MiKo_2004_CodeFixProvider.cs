@@ -18,12 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (index == 0)
             {
                 // this is the sender
-                return Comment(comment, Constants.Comments.EventSourcePhrase);
+                return Comment(comment, GetPhraseProposal(issue));
             }
 
             // this is the event args
-            var startingPhrase = MiKo_2004_EventHandlerParametersAnalyzer.GetEventArgsStartingPhrase(parameter.Type.GetNameOnlyPart());
-            var endingPhrase = MiKo_2004_EventHandlerParametersAnalyzer.GetEventArgsEndingPhrase() + ".";
+            var startingPhrase = GetStartingPhraseProposal(issue);
+            var endingPhrase = GetEndingPhraseProposal(issue) + ".";
 
             return Comment(comment, startingPhrase, parameter.Type, endingPhrase);
         }

@@ -18,6 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static Dictionary<string, string> CreateStartingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase } };
 
+        protected static Dictionary<string, string> CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new Dictionary<string, string>
+                                                                                                                                       {
+                                                                                                                                           { Constants.AnalyzerCodeFixSharedData.StartingPhrase, startPhrase },
+                                                                                                                                           { Constants.AnalyzerCodeFixSharedData.EndingPhrase, endingPhrase },
+                                                                                                                                       };
+
         protected static Dictionary<string, string> CreateEndingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.EndingPhrase, phrase } };
 
         protected static Dictionary<string, string> CreatePhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.Phrase, phrase } };
