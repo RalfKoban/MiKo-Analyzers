@@ -16,30 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        /// <summary>
-        /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
-        /// </summary>
-        /// <param name="values">
-        /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
-        /// </param>
-        /// <returns>
-        /// An array of encapsulated terms.
-        /// </returns>
-        protected static string[] GetWithDelimiters(params string[] values)
-        {
-            var result = new List<string>();
+        protected static Dictionary<string, string> CreateStartingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase } };
 
-            foreach (var delimiter in Constants.Comments.Delimiters)
-            {
-                foreach (var phrase in values)
-                {
-                    result.Add(' ' + phrase + delimiter);
-                    result.Add('(' + phrase + delimiter);
-                }
-            }
+        protected static Dictionary<string, string> CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new Dictionary<string, string>
+                                                                                                                                       {
+                                                                                                                                           { Constants.AnalyzerCodeFixSharedData.StartingPhrase, startPhrase },
+                                                                                                                                           { Constants.AnalyzerCodeFixSharedData.EndingPhrase, endingPhrase },
+                                                                                                                                       };
 
-            return result.ToArray();
-        }
+        protected static Dictionary<string, string> CreateEndingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.EndingPhrase, phrase } };
+
+        protected static Dictionary<string, string> CreatePhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.Phrase, phrase } };
 
         protected static Location GetFirstLocation(SyntaxToken textToken, string value, StringComparison comparison = StringComparison.Ordinal, int startOffset = 0, int endOffset = 0)
         {

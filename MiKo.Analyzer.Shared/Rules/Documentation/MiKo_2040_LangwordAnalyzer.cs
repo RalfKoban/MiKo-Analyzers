@@ -14,15 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2040";
 
-        internal static readonly string[] Phrases = { "true", "false", "null" };
+        private static readonly HashSet<string> WrongAttributes = Constants.Comments.LangwordWrongAttributes;
 
-        internal static readonly HashSet<string> WrongAttributes = new HashSet<string>
-                                                                       {
-                                                                           Constants.XmlTag.Attribute.Langref,
-                                                                           "langowrd", // find typos
-                                                                           "langwrod", // find typos
-                                                                           "langwowd", // find typos
-                                                                       };
+        private static readonly string[] Phrases = Constants.Comments.LangwordReferences;
 
         private static readonly KeyValuePair<string, string>[] StartParts = CreateStartParts();
 
@@ -41,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : AnalyzeComment(symbol.Name, comment);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static KeyValuePair<string, string>[] CreateStartParts()
         {
             var results = new Dictionary<string, string>();
@@ -101,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string Proposal(string phrase) => $"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>";
 
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         private static string GetWrongText(SyntaxList<XmlAttributeSyntax> attributes)
         {

@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -186,7 +186,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_qualified_exception_only()
+        public void Code_gets_fixed_for_fully_qualified_exception()
         {
             const string OriginalCode = @"
 using System;
@@ -221,7 +221,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_for_exception_only()
+        public void Code_gets_fixed_for_named_exception()
         {
             const string OriginalCode = @"
 using System;
@@ -247,6 +247,49 @@ public class TestMe
     /// Some documentation.
     /// </summary>
     /// <exception cref=""ObjectDisposedException"">The object has been disposed.</exception>
+    public void DoSomething()
+    {
+    }
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_with_Close_method()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void Close()
+    {
+    }
+
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">The object.</exception>
+    public void DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void Close()
+    {
+    }
+
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    /// <exception cref=""ObjectDisposedException"">The object has been closed.</exception>
     public void DoSomething()
     {
     }

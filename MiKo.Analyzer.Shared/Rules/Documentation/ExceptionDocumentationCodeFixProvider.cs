@@ -137,15 +137,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        protected DocumentationCommentTriviaSyntax FixComment(Document document, SyntaxNode syntax, DocumentationCommentTriviaSyntax comment)
+        protected DocumentationCommentTriviaSyntax FixComment(SyntaxNode syntax, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
         {
             return comment.Content.OfType<XmlElementSyntax>()
                           .Where(_ => _.IsException())
-                          .Select(_ => FixExceptionComment(document, syntax, _, comment))
+                          .Select(_ => FixExceptionComment(syntax, _, comment, diagnostic))
                           .FirstOrDefault(_ => _ != null);
         }
 
-        protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(Document document, SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment) => null;
+        protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic) => null;
 
         private static IEnumerable<string> GetParameterReferences(string parameterName)
         {

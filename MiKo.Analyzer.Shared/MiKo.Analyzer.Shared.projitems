@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ArgumentExceptionPhraseAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationComment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ExampleDocumentationAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ExceptionDocumentationAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2000_MalformedDocumentationAnalyzer.cs" />

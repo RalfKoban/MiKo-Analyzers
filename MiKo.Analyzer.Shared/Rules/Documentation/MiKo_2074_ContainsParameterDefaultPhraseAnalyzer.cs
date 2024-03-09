@@ -13,9 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2074";
 
-        internal const string Phrase = " to seek.";
-
-        private static readonly string[] Phrases = { Phrase, " to locate." };
+        private static readonly string[] Phrases = { " to seek.", " to locate." };
 
         public MiKo_2074_ContainsParameterDefaultPhraseAnalyzer() : base(Id)
         {
@@ -27,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal) is false)
             {
-                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase);
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrases[0], CreatePhraseProposal(Phrases[0]));
             }
         }
     }

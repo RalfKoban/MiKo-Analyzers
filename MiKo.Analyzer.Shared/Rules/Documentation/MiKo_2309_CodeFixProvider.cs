@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (MiKo_2309_CommentContainsNtContradictionAnalyzer.CommentHasIssue(comment.AsSpan().TrimEnd()))
+            if (DocumentationComment.ContainsNotContradiction(comment.AsSpan().TrimEnd()))
             {
                 var text = new StringBuilder(comment).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap).ToString();
 

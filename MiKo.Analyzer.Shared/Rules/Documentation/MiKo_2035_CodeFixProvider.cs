@@ -166,7 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return preparedComment;
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreatePhrases()
         {
             var startingWords = new[] { "a", "an", "the" };
@@ -209,6 +209,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }

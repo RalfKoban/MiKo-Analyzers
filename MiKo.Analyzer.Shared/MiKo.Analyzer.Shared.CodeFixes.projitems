@@ -35,6 +35,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\CodeDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\CommentCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationCodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\DocumentationComment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ExampleDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\ExceptionDocumentationCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2000_CodeFixProvider.cs" />

@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var dictionary = new Dictionary<string, string>();
 
-            foreach (var phrase in MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.InstanceOfPhrase)
+            foreach (var phrase in Constants.Comments.InstanceOfPhrases)
             {
                 var upperCase = phrase[0].IsUpperCase();
 

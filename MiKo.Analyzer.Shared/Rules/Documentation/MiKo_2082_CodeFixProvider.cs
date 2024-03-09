@@ -28,12 +28,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var continuations = new[] { "that", "whether" };
 
-            foreach (var start in MiKo_2082_EnumMemberAnalyzer.StartingPhrases)
+            foreach (var start in Constants.Comments.EnumMemberWrongStartingWords)
             {
                 foreach (var continuation in continuations)
                 {
@@ -44,6 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " ";
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }
