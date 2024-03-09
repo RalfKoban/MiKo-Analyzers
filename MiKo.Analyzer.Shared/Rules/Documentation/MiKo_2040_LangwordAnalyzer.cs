@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                    : AnalyzeComment(symbol.Name, comment);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static KeyValuePair<string, string>[] CreateStartParts()
         {
             var results = new Dictionary<string, string>();
@@ -95,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string Proposal(string phrase) => $"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>";
 
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         private static string GetWrongText(SyntaxList<XmlAttributeSyntax> attributes)
         {

@@ -127,7 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static SyntaxToken XmlTextToken(string text) => text.AsToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateEnumStartingPhrases()
         {
             foreach (var start in new[] { "Declaration", "Enum", "Enumeration", "Flagged enum", "Flagged enumeration", "Flags enum", "Flags enumeration", "State" })
@@ -154,6 +154,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " ";
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }

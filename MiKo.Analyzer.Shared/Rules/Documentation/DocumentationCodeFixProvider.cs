@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, text[0], additionalComment);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string text, SyntaxList<XmlNodeSyntax> additionalComment)
         {
@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
         {
@@ -883,7 +883,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return t1.ToString() == t2.ToString();
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
             var modified = false;
@@ -921,6 +921,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return comment;
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }

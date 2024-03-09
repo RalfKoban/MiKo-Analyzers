@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var continuations = new[] { "that", "whether" };
@@ -44,6 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " ";
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }
