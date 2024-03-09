@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-// ncrunch: collect values off
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace System.Text
 {

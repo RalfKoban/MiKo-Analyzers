@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 using NUnit.Framework;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace TestHelper
 {
     /// <summary>

@@ -157,7 +157,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -374,7 +374,7 @@ namespace System
             return false;
         }
 
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
