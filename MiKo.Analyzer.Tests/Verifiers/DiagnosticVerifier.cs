@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace TestHelper
 {
     /// <summary>

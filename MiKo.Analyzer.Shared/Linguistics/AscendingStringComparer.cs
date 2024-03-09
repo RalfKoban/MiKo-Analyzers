@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     public sealed class AscendingStringComparer : IComparer<string>
