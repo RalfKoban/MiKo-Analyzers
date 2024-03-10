@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is BinaryExpressionSyntax binary)
             {
-                var spaces = MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer.GetSpaces(issue);
+                var spaces = GetProposedSpaces(issue);
 
                 var left = binary.Left;
                 var operatorToken = binary.OperatorToken;

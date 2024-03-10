@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ConditionalExpressionSyntax expression)
             {
-                var position = MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer.GetStartPosition(expression);
+                var position = GetProposedLinePosition(issue);
 
                 var spaces = position.Character;
 

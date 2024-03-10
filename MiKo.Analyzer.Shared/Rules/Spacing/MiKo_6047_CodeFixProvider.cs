@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is SwitchExpressionSyntax expression)
             {
-                var position = MiKo_6047_SwitchExpressionBracesAreOnSamePositionLikeSwitchKeywordAnalyzer.GetStartPosition(expression);
+                var position = GetProposedLinePosition(issue);
 
                 var spaces = position.Character;
                 var armSpaces = spaces + Constants.Indentation;
