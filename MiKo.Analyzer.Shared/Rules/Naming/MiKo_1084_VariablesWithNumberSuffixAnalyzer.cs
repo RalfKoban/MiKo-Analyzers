@@ -16,13 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => symbol.Name.WithoutNumberSuffix();
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithNumber();
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
                                                                                                                                                           let name = identifier.ValueText
                                                                                                                                                           where name.EndsWithCommonNumber()
-                                                                                                                                                          select Issue(name, identifier);
+                                                                                                                                                          select Issue(name, identifier, CreateBetterNameProposal(name.WithoutNumberSuffix()));
     }
 }

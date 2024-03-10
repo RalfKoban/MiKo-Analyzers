@@ -18,17 +18,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol) => NamesFinder.FindBetterTestName(symbol.Name);
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
         protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // do not consider local functions at all
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation) => HasIssue(symbol.Name)
-                                                                                                                 ? new[] { Issue(symbol) }
-                                                                                                                 : Enumerable.Empty<Diagnostic>();
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            if (HasIssue(symbol.Name))
+            {
+                var betterName = NamesFinder.FindBetterTestName(symbol.Name);
+
+                yield return Issue(symbol, CreateBetterNameProposal(betterName));
+            }
+        }
 
         private static bool HasIssue(string symbolName)
         {

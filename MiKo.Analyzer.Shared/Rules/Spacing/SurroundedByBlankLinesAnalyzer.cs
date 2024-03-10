@@ -6,9 +6,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     public abstract class SurroundedByBlankLinesAnalyzer : SpacingAnalyzer
     {
-        internal const string NoLineBefore = "before";
-        internal const string NoLineAfter = "after";
-
         protected SurroundedByBlankLinesAnalyzer(string id) : base(id, (SymbolKind)(-1))
         {
         }
@@ -95,12 +92,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (noBlankLinesBefore)
             {
-                dictionary.Add(NoLineBefore, string.Empty);
+                dictionary.Add(Constants.AnalyzerCodeFixSharedData.NoLineBefore, string.Empty);
             }
 
             if (noBlankLinesAfter)
             {
-                dictionary.Add(NoLineAfter, string.Empty);
+                dictionary.Add(Constants.AnalyzerCodeFixSharedData.NoLineAfter, string.Empty);
             }
 
             return Issue(location, dictionary);

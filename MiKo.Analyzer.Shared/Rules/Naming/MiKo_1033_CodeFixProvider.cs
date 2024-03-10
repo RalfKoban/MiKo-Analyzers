@@ -11,7 +11,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public override string FixableDiagnosticId => "MiKo_1033";
 
         protected override string Title => Resources.MiKo_1033_CodeFixTitle;
-
-        protected override string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => MiKo_1033_ParameterModelSuffixAnalyzer.FindBetterName(symbol);
     }
 }

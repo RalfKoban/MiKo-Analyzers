@@ -20,8 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => GetPluralName(symbol.Name, out _);
-
         protected override bool ShallAnalyze(ITypeSymbol symbol)
         {
             if (symbol.IsEnumerable())
@@ -74,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (pluralName != name)
                 {
-                    yield return Issue(originalName, identifier, pluralName);
+                    yield return Issue(originalName, identifier, pluralName, CreateBetterNameProposal(pluralName));
                 }
             }
         }

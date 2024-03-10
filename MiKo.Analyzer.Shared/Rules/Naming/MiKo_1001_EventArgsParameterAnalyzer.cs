@@ -15,20 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol)
-        {
-            var method = symbol.GetEnclosingMethod();
-
-            var applicableParameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
-
-            if (applicableParameters.Count == 1)
-            {
-                return method.Name == nameof(Equals) ? "other" : "e";
-            }
-
-            return GetNameForIndex(applicableParameters.IndexOf(symbol));
-        }
-
         internal static bool IsAccepted(IParameterSymbol parameter)
         {
             var method = parameter.GetEnclosingMethod();
@@ -100,10 +86,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (parameter.Name != expected)
                 {
-                    yield return Issue(parameter, expected);
+                    yield return Issue(parameter, expected, CreateBetterNameProposal(expected));
                 }
             }
         }
+
+        private static bool IsApplicable(ITypeSymbol type) => type.IsEventArgs() || type.IsDependencyPropertyChangedEventArgs();
 
         private static string GetNameForIndex(int i)
         {
@@ -117,13 +105,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool IsApplicable(ITypeSymbol type) => type.IsEventArgs() || type.IsDependencyPropertyChangedEventArgs();
-
         private static List<IParameterSymbol> GetParameters(IMethodSymbol method)
         {
             var parameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
 
             return parameters;
+        }
+
+        private static string FindBetterName(IParameterSymbol symbol)
+        {
+            var method = symbol.GetEnclosingMethod();
+
+            var applicableParameters = method.Parameters.Where(_ => IsApplicable(_.Type)).ToList();
+
+            if (applicableParameters.Count == 1)
+            {
+                return method.Name == nameof(Equals) ? "other" : "e";
+            }
+
+            return GetNameForIndex(applicableParameters.IndexOf(symbol));
         }
     }
 }

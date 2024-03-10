@@ -16,30 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] WrongSuffixes =
                                                          {
-                                                             "action",                                                              "delegate",                                                              "func",
-                                                             "Action",                                                              "Delegate",                                                              "Func",
+                                                             "action",
+                                                             "delegate",
+                                                             "func",
+                                                             "Action",
+                                                             "Delegate",
+                                                             "Func",
                                                          };
 
         public MiKo_1053_DelegateFieldNameSuffixAnalyzer() : base(Id, SymbolKind.Field)
         {
-        }
-
-        internal static string FindBetterName(IFieldSymbol symbol)
-        {
-            var symbolName = symbol.Name;
-
-            foreach (var suffix in WrongSuffixes.Where(symbolName.EndsWith))
-            {
-                var newName = symbolName.Without(suffix);
-                var upperCase = newName.Length > 0 && symbolName[newName.Length].IsUpperCase();
-                var correctSuffix = upperCase
-                                    ? "Callback"
-                                    : "callback";
-
-                return newName + correctSuffix;
-            }
-
-            return null;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
@@ -50,13 +36,36 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case TypeKind.Delegate:
                 case TypeKind.Class when symbolType.ToString() == TypeNames.Delegate:
-                    return symbol.Name.EndsWithAny(WrongNames)
-                           ? new[] { Issue(symbol) }
-                           : Enumerable.Empty<Diagnostic>();
+                {
+                    if (symbol.Name.EndsWithAny(WrongNames))
+                    {
+                        var betterName = FindBetterName(symbol);
+
+                        return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
+                    }
+
+                    return Enumerable.Empty<Diagnostic>();
+                }
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
             }
+        }
+
+        private static string FindBetterName(IFieldSymbol symbol)
+        {
+            var symbolName = symbol.Name;
+
+            foreach (var suffix in WrongSuffixes.Where(symbolName.EndsWith))
+            {
+                var newName = symbolName.Without(suffix);
+                var upperCase = newName.Length > 0 && symbolName[newName.Length].IsUpperCase();
+                var correctSuffix = upperCase ? "Callback" : "callback";
+
+                return newName + correctSuffix;
+            }
+
+            return null;
         }
     }
 }

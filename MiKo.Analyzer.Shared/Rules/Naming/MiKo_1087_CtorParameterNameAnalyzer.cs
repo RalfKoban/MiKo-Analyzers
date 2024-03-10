@@ -12,13 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1087";
 
-        private const string BetterName = "BetterName";
-
         public MiKo_1087_CtorParameterNameAnalyzer() : base(Id)
         {
         }
-
-        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => diagnostic.Properties[BetterName];
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor();
 
@@ -95,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                         if (baseParameterName != parameterName)
                         {
-                            yield return Issue(parameter, baseParameterName, new Dictionary<string, string> { { BetterName, baseParameterName } });
+                            yield return Issue(parameter, baseParameterName, CreateBetterNameProposal(baseParameterName));
                         }
                     }
                 }

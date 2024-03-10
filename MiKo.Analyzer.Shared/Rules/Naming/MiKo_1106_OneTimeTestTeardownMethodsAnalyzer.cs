@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1106";
 
-        public const string ExpectedName = "CleanupTestEnvironment";
+        private const string ExpectedName = "CleanupTestEnvironment";
 
         public MiKo_1106_OneTimeTestTeardownMethodsAnalyzer() : base(Id)
         {
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name != ExpectedName)
             {
-                yield return Issue(symbol, ExpectedName);
+                yield return Issue(symbol, ExpectedName, CreateBetterNameProposal(ExpectedName));
             }
         }
     }

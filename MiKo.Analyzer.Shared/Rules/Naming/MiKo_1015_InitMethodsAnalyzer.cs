@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => GetExpectedName(method.Name);
-
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -27,9 +25,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (methodName.StartsWith("Init", StringComparison.Ordinal) && methodName.StartsWith(Name, StringComparison.Ordinal) is false)
             {
-                var expectedName = FindBetterName(symbol);
+                var betterName = GetExpectedName(symbol.Name);
 
-                yield return Issue(symbol, expectedName);
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
 

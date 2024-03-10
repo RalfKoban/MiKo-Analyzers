@@ -21,7 +21,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol)
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
+
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsTestMethod() is false;
+
+        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod()
+                                                                                                                           ? Enumerable.Empty<Diagnostic>() // do not consider local functions inside tests
+                                                                                                                           : base.AnalyzeLocalFunctions(symbol, compilation);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
+        {
+            var proposal = FindBetterName(symbol);
+
+            if (proposal != null)
+            {
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+            }
+        }
+
+        private static string FindBetterName(IMethodSymbol symbol)
         {
             var methodName = symbol.Name;
             var escapedMethod = new StringBuilder(methodName);
@@ -63,24 +81,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return null;
-        }
-
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
-
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsTestMethod() is false;
-
-        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod()
-                                                                                                                           ? Enumerable.Empty<Diagnostic>() // do not consider local functions inside tests
-                                                                                                                           : base.AnalyzeLocalFunctions(symbol, compilation);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
-        {
-            var proposal = FindBetterName(symbol);
-
-            if (proposal != null)
-            {
-                yield return Issue(symbol, proposal);
-            }
         }
 
         private static bool ContainsPhrase(string methodName, string phrase = DoPhrase) => methodName.Contains(phrase, StringComparison.Ordinal);
