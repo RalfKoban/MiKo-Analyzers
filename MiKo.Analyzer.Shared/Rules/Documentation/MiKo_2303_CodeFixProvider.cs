@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString().AsSpan().TrimEnd();
 
-            if (MiKo_2303_CommentDoesNotEndWithPeriodAnalyzer.CommentHasIssue(comment))
+            if (DocumentationComment.EndsWithPeriod(comment))
             {
                 // ensure that there is no empty space at the end, after removing trailing dots
                 return SyntaxFactory.Comment(comment.TrimEnd('.').TrimEnd().ToString());

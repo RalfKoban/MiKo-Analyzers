@@ -18,9 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (MiKo_2307_CommentContainsWasNotSuccessfulAnalyzer.CommentHasIssue(comment.AsSpan().TrimEnd()))
+            const string Phrase = Constants.Comments.WasNotSuccessfulPhrase;
+
+            if (DocumentationComment.ContainsPhrase(Phrase, comment.AsSpan().TrimEnd()))
             {
-                return SyntaxFactory.Comment(comment.Replace(Constants.Comments.WasNotSuccessfulPhrase, "failed"));
+                return SyntaxFactory.Comment(comment.Replace(Phrase, "failed"));
             }
 
             return original;
