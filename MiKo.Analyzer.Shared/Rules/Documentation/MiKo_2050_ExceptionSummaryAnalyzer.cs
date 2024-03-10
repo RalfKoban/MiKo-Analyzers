@@ -111,18 +111,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (IsMessageCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase).ToArray());
             }
 
             if (IsMessageExceptionCtor(symbol))
             {
-                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase).ToArray());
+                return AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase).ToArray());
             }
 
             if (symbol.IsSerializationConstructor())
             {
                 return Enumerable.Empty<Diagnostic>()
-                                 .Concat(AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase).ToArray()))
+                                 .Concat(AnalyzeSummaryPhrase(symbol, summaries, defaultPhrases.Select(_ => _ + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase).ToArray()))
                                  .Concat(AnalyzeRemarksPhrase(symbol, Constants.Comments.ExceptionCtorSerializationParamRemarksPhrase));
             }
 
