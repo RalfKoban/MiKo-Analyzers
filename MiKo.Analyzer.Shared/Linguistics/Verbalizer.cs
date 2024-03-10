@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                              new KeyValuePair<string, string>("isition", "ire"),
                                                                              new KeyValuePair<string, string>("isation", "ise"),
                                                                              new KeyValuePair<string, string>("ization", "ize"),
+                                                                             new KeyValuePair<string, string>("vocation", "voke"),
                                                                              new KeyValuePair<string, string>("ation", "ate"),
                                                                              new KeyValuePair<string, string>("ction", "ct"),
                                                                              new KeyValuePair<string, string>("ption", "pt"),
