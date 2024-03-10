@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1018";
 
-        public const string BetterName = "BETTER_NAME";
-
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
         {
         }

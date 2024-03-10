@@ -11,8 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1109";
 
-        public const string Prefix = "Testable";
-        public const string Suffix = "Ut";
+        private const string Prefix = "Testable";
+        private const string Suffix = "Ut";
 
         public MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer() : base(Id, SymbolKind.NamedType)
         {
