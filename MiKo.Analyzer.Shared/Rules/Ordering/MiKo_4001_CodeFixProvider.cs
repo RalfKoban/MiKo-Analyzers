@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var methods = method.ContainingType.GetMembers(methodName).OfType<IMethodSymbol>();
 
-            var methodsOrderedByParameters = MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer.GetMethodsOrderedByParameters(methods, methodName);
+            var methodsOrderedByParameters = Orderer.GetMethodsOrderedByParameters(methods, methodName);
 
             var modifiedType = typeSyntax;
 
