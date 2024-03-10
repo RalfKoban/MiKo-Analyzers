@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers
 {
     public static class Constants
@@ -1172,3 +1173,5 @@ namespace MiKoSolutions.Analyzers
         }
     }
 }
+
+//// ncrunch: rdi default

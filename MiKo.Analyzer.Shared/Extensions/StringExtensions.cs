@@ -640,6 +640,8 @@ namespace System
             return text.Slice(lastSpace);
         }
 
+//// ncrunch: rdi off
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
 
@@ -660,6 +662,8 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
+
+//// ncrunch: rdi default
 
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
