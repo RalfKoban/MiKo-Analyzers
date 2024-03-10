@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2080_CodeFixProvider)), Shared]
     public sealed class MiKo_2080_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().ToHashSet() // avoid duplicates
                                                                                                            .ToArray(_ => _, AscendingStringComparer.Default);
@@ -56,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, "The unique identifier for the type of "))
                                                                                                                                      .ToArray();
 
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         private static readonly IReadOnlyCollection<string> CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
 
@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(fixedComment, CleanupMapKeys, CleanupMap);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var keys = Enumerable.Empty<string>()
@@ -214,6 +214,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Specifies an ";
             yield return "Specifies a ";
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }
