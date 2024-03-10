@@ -423,7 +423,7 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
-                                                                                         .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);
+                                                                                              .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);
 
         internal static string GetListType(this XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
 
