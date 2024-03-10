@@ -170,10 +170,10 @@ namespace MiKoSolutions.Analyzers
             internal const string EventSummaryStartingPhrase = "Occurs ";
             internal const string ExampleDefaultPhrase = "The following example demonstrates ";
             internal const string ExceptionCtorExceptionParamPhraseTemplate = "The exception that is the cause of the current exception.{0}If the {1} parameter is not {2}, the current exception is raised in a {3} block that handles the inner exception.";
-            internal const string ExceptionCtorExceptionParamSummaryContinueingPhrase = " and a reference to the inner exception that is the cause of this exception";
-            internal const string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
+            internal const string ExceptionCtorExceptionParamSummaryContinuingPhrase = " and a reference to the inner exception that is the cause of this exception";
+            internal const string ExceptionCtorMessageParamSummaryContinuingPhrase = " with a specified error message";
             internal const string ExceptionCtorSerializationParamRemarksPhrase = "This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.";
-            internal const string ExceptionCtorSerializationParamSummaryContinueingPhrase = " with serialized data";
+            internal const string ExceptionCtorSerializationParamSummaryContinuingPhrase = " with serialized data";
             internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
             internal const string ExceptionSplittingParaPhrase = "<para>" + SpecialOrPhrase + "</para>";
