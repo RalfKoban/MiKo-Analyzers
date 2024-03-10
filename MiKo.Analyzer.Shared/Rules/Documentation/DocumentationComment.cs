@@ -6,11 +6,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     internal static class DocumentationComment
     {
         private static readonly HashSet<char> AllowedChars = new HashSet<char>
-                                                             {
-                                                                 '.',
-                                                                 '/',
-                                                                 '\\',
-                                                             };
+                                                                 {
+                                                                     '.',
+                                                                     '/',
+                                                                     '\\',
+                                                                 };
 
         internal static bool EndsWithPeriod(ReadOnlySpan<char> comment) => comment.EndsWith('.')
                                                                         && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false
