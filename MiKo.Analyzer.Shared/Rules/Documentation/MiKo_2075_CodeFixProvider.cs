@@ -16,16 +16,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2075";
 
-        protected override string Title => Resources.MiKo_2075_CodeFixTitle.FormatWith(MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Replacement);
+        protected override string Title => Resources.MiKo_2075_CodeFixTitle.FormatWith(Constants.Comments.CallbackTerm);
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return Comment(syntax, MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Terms, ReplacementMap);
+            return Comment(syntax, Constants.Comments.ActionTerms, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
-            return MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Terms.ToDictionary(_ => _, _ => MiKo_2075_ActionFunctionParameterPhraseAnalyzer.Replacement);
+            return Constants.Comments.ActionTerms.ToDictionary(_ => _, _ => Constants.Comments.CallbackTerm);
         }
     }
 }

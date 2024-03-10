@@ -69,11 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
-            var fieldDeclaration = comment.FirstAncestorOrSelf<FieldDeclarationSyntax>();
-            var field = fieldDeclaration?.Declaration.Variables.First();
-
-            var symbol = (IFieldSymbol)GetSymbol(document, field);
-            var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
+            var phrase = GetStartingPhraseProposal(issue);
 
             var preparedComment = Comment(comment, TypeGuidReplacementMapKeys, TypeGuidReplacementMap);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);

@@ -20,7 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax.FindNode(diagnostic.Location.SourceSpan) is XmlElementSyntax node)
             {
-                var listType = GetListType(node);
+                var attribute = GetListElement(node).GetListType();
+                var listType = attribute.GetListType();
 
                 switch (listType.ToLowerCase())
                 {
@@ -115,7 +116,5 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax ReplaceNode(DocumentationCommentTriviaSyntax syntax, SyntaxNode node, XmlElementSyntax replacement) => syntax.ReplaceNode(node, replacement.WithoutWhitespaceOnlyComment());
 
         private static XmlElementSyntax GetListElement(SyntaxNode node) => node.FirstAncestorOrSelf<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.List);
-
-        private static string GetListType(SyntaxNode node) => MiKo_2217_XmlListElementAnalyzer.GetListType(MiKo_2217_XmlListElementAnalyzer.GetListType(GetListElement(node)));
     }
 }

@@ -13,9 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2024_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
-            return CommentStartingWith(comment, Constants.Comments.EnumParameterStartingPhrase);
+            var phrase = GetStartingPhraseProposal(issue);
+
+            return CommentStartingWith(comment, phrase);
         }
     }
 }

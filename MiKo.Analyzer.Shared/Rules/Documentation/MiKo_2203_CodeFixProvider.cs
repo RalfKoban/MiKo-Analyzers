@@ -18,14 +18,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return Comment(syntax, MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Phrases, ReplacementMap);
+            return Comment(syntax, Constants.Comments.GuidTermsWithDelimiters, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
             var dictionary = new Dictionary<string, string>();
 
-            foreach (var term in MiKo_2203_DocumentationUsesUniqueIdentifierInsteadOfGuidAnalyzer.Phrases)
+            foreach (var term in Constants.Comments.GuidTermsWithDelimiters)
             {
                 var termWithA = "A " + term.TrimStart();
 

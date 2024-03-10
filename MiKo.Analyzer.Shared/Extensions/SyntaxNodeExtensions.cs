@@ -422,7 +422,12 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-//// ncrunch: rdi off
+        internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
+                                                                                         .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);
+
+        internal static string GetListType(this XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
+
+        //// ncrunch: rdi off
 
         internal static string GetMethodName(this ParameterSyntax value)
         {
@@ -1123,6 +1128,23 @@ namespace MiKoSolutions.Analyzers
             }
 
             return null;
+        }
+
+        internal static string GetReferencedName(this SyntaxNode node)
+        {
+            var name = node.GetCref().GetCrefType().GetName();
+
+            if (name.IsNullOrWhiteSpace())
+            {
+                var nameAttribute = node.GetNameAttribute();
+
+                if (nameAttribute != null)
+                {
+                    name = nameAttribute.TextTokens.First().ValueText;
+                }
+            }
+
+            return name;
         }
 
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();

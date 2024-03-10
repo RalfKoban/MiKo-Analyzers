@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -16,15 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2049";
 
-        private const string TextKey = "TextKey";
-        private const string TextReplacementKey = "TextReplacementKey";
-
         private const string AcceptedPhrase = "willing";
-
-        private const string IsPhrase = "is";
-        private const string ArePhrase = "are";
-        private const string DoPhrase = "do";
-        private const string DoesPhrase = "does";
 
         private const string WillPhrase = "will";
         private const string NeverPhrase = "never";
@@ -52,73 +43,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] PhrasesMapKeys = PhrasesMap.Keys.ToArray();
 
-        private static readonly string[] Phrases = GetWithDelimiters(PhrasesMapKeys);
+        private static readonly string[] Phrases = PhrasesMapKeys.WithDelimiters();
 
         public MiKo_2049_WillBePhraseAnalyzer() : base(Id)
         {
-        }
-
-        internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
-        {
-            var properties = issue.Properties;
-            var textToReplace = properties[TextKey];
-            var textToReplaceWith = properties[TextReplacementKey];
-
-            var tokensToReplace = new Dictionary<SyntaxToken, SyntaxToken>();
-
-            var textTokens = node.TextTokens;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
-
-            for (var index = 0; index < textTokensCount; index++)
-            {
-                var token = textTokens[index];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralToken))
-                {
-                    var text = token.Text;
-
-                    if (text.Length <= Constants.EnvironmentNewLine.Length && text.IsNullOrWhiteSpace())
-                    {
-                        // do not bother with only empty text
-                        continue;
-                    }
-
-                    var start = text.IndexOf(textToReplace, StringComparison.Ordinal);
-
-                    if (start < 0)
-                    {
-                        // does not seem to fit
-                        continue;
-                    }
-
-                    var startingPart = text.AsSpan(0, start);
-                    var lastWord = startingPart.LastWord().ToString();
-
-                    // let's see if we have to deal with 'does' or 'is' but need to have plural
-                    if (Verbalizer.IsPlural(lastWord.AsSpan()))
-                    {
-                        if (textToReplaceWith.StartsWith(IsPhrase, StringComparison.Ordinal))
-                        {
-                            textToReplaceWith = ArePhrase + textToReplaceWith.Substring(2);
-                        }
-                        else if (textToReplaceWith.StartsWith(DoesPhrase, StringComparison.Ordinal))
-                        {
-                            textToReplaceWith = DoPhrase + textToReplaceWith.Substring(4);
-                        }
-                    }
-
-                    tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
-                }
-            }
-
-            if (tokensToReplace.Count > 0)
-            {
-                return node.ReplaceTokens(tokensToReplace.Keys, (original, rewritten) => tokensToReplace[original]);
-            }
-
-            return node;
         }
 
         protected override Diagnostic Issue(Location location, string replacement)
@@ -133,8 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var properties = new Dictionary<string, string>
                                  {
-                                     { TextKey, text },
-                                     { TextReplacementKey, replacement },
+                                     { Constants.AnalyzerCodeFixSharedData.TextKey, text },
+                                     { Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement },
                                  };
 
             return Issue(location, replacement, properties);

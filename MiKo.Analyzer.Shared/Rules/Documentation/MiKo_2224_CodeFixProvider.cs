@@ -58,12 +58,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var nodes = new List<SyntaxNode> { syntax };
 
-                if (issue.Properties.ContainsKey(MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer.AddSpaceBefore))
+                if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore))
                 {
                     nodes.Insert(0, NewLineXmlText());
                 }
 
-                if (issue.Properties.ContainsKey(MiKo_2224_DocumentationPlacesContentsOnSeparateLineAnalyzer.AddSpaceAfter))
+                if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter))
                 {
                     nodes.Add(NewLineXmlText());
                 }

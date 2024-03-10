@@ -12,8 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2014";
 
-        internal const string SummaryPhrase = "Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.";
-        internal const string ParameterPhrase = "Indicates whether unmanaged resources shall be freed.";
+        private const string SummaryPhrase = Constants.Comments.DisposeSummaryPhrase;
+        private const string ParameterPhrase = Constants.Comments.DisposeParameterPhrase;
 
         public MiKo_2014_DisposeDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
         {

@@ -640,6 +640,8 @@ namespace System
             return text.Slice(lastSpace);
         }
 
+//// ncrunch: rdi off
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
 
@@ -660,6 +662,8 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
+
+//// ncrunch: rdi default
 
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
@@ -1227,6 +1231,46 @@ namespace System
 
             return new string(characters);
         }
+
+//// ncrunch: rdi off
+
+        /// <summary>
+        /// Encapsulates the given term with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="value">
+        /// The term to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string value) => WithDelimiters(new[] { value });
+
+        /// <summary>
+        /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="values">
+        /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string[] values)
+        {
+            var result = new List<string>();
+
+            foreach (var delimiter in Constants.Comments.Delimiters)
+            {
+                foreach (var phrase in values)
+                {
+                    result.Add(' ' + phrase + delimiter);
+                    result.Add('(' + phrase + delimiter);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+//// ncrunch: rdi default
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, char character) => value.Without(character.ToString());

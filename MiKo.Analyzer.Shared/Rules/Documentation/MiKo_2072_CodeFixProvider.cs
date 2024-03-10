@@ -26,14 +26,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
-            const string SyncPhrase = MiKo_2072_TrySummaryAnalyzer.StartingPhrase + " ";
+            const string SyncPhrase = Constants.Comments.TryStartingPhrase + " ";
 
             var lowerCasePhrase = SyncPhrase.ToLowerCaseAt(0);
             var asyncPhrase = Constants.Comments.AsynchrounouslyStartingPhrase + lowerCasePhrase;
 
             var result = new Dictionary<string, string>();
 
-            foreach (var startingWord in MiKo_2072_TrySummaryAnalyzer.Words)
+            foreach (var startingWord in Constants.Comments.TryWords)
             {
                 var phrase = startingWord + " ";
                 var alternativePhrase = startingWord + " to ";

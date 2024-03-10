@@ -99,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2023_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             // fix ". Otherwise ..." comments so that they will not get split
             var mergedComment = Comment(comment, new[] { OtherwisePair.Key }, new[] { OtherwisePair });

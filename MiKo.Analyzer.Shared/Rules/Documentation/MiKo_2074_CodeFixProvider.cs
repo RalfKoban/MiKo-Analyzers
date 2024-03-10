@@ -13,15 +13,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2074_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
+            var phrase = GetPhraseProposal(issue);
+
             if (comment.Content.Count == 0)
             {
                 // we do not have a comment
-                return comment.WithContent(XmlText("The item" + MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Phrase));
+                return comment.WithContent(XmlText("The item" + phrase));
             }
 
-            return CommentEndingWith(comment, MiKo_2074_ContainsParameterDefaultPhraseAnalyzer.Phrase);
+            return CommentEndingWith(comment, phrase);
         }
     }
 }

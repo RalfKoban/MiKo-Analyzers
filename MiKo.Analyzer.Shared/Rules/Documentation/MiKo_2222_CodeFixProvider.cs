@@ -18,16 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            return Comment(syntax, MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Terms, ReplacementMap);
+            return Comment(syntax, Constants.Comments.IdentTerms, ReplacementMap);
         }
 
         private static Dictionary<string, string> CreateReplacementMap()
         {
             var dictionary = new Dictionary<string, string>();
 
-            foreach (var term in MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Terms)
+            foreach (var term in Constants.Comments.IdentTerms)
             {
-                var replacement = term.Replace(MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzer.Term, "identification");
+                var replacement = term.Replace(Constants.Comments.IdentTerm, "identification");
                 dictionary.Add(term, replacement);
 
                 // alternative 1

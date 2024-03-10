@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (MiKo_2305_CommentDoesNotContainDoublePeriodAnalyzer.CommentHasIssue(comment.AsSpan().TrimEnd()))
+            if (DocumentationComment.ContainsDoublePeriod(comment.AsSpan().TrimEnd()))
             {
                 return SyntaxFactory.Comment(comment.Replace("..", "."));
             }

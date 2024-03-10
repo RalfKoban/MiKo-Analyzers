@@ -13,17 +13,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override string Title => Resources.MiKo_2004_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             if (index == 0)
             {
                 // this is the sender
-                return Comment(comment, Constants.Comments.EventSourcePhrase);
+                return Comment(comment, GetPhraseProposal(issue));
             }
 
             // this is the event args
-            var startingPhrase = MiKo_2004_EventHandlerParametersAnalyzer.GetEventArgsStartingPhrase(parameter.Type.GetNameOnlyPart());
-            var endingPhrase = MiKo_2004_EventHandlerParametersAnalyzer.GetEventArgsEndingPhrase() + ".";
+            var startingPhrase = GetStartingPhraseProposal(issue);
+            var endingPhrase = GetEndingPhraseProposal(issue) + ".";
 
             return Comment(comment, startingPhrase, parameter.Type, endingPhrase);
         }

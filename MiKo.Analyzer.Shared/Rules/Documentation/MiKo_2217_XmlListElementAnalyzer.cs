@@ -19,11 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes<XmlElementSyntax>(_ => _.IsXmlTag(Constants.XmlTag.List));
 
-        internal static XmlTextAttributeSyntax GetListType(XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
-                                                                                         .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);
-
-        internal static string GetListType(XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
-
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             return GetProblematicElements(comment).SelectMany(AnalyzeList);
@@ -31,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list)
         {
-            var listType = GetListType(list);
+            var listType = list.GetListType();
 
             if (listType is null)
             {
@@ -46,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list, XmlTextAttributeSyntax listType)
         {
-            var type = GetListType(listType);
+            var type = listType.GetListType();
 
             switch (type.ToLowerCase())
             {

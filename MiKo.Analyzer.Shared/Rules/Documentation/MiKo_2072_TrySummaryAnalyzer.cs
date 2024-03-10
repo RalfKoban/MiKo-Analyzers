@@ -13,17 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2072";
 
-        internal const string StartingPhrase = "Attempts to";
-
-        internal static readonly string[] Words = { "Try", "Tries" };
-
         public MiKo_2072_TrySummaryAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
         protected override Diagnostic StartIssue(ISymbol symbol, SyntaxNode node) => null; // this is no issue as we do not start with any word
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, StartingPhrase);
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, Constants.Comments.TryStartingPhrase);
 
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
@@ -44,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         .ToString()
                                                         .FirstWord();
 
-            if (firstWord.EqualsAny(Words))
+            if (firstWord.EqualsAny(Constants.Comments.TryWords))
             {
                 problematicText = firstWord;
 
