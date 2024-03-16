@@ -777,6 +777,60 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_field_array_initializer_with_contained_implicit_object_creations()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                            {
+                              new() { Id = -1, Value = 4711 },
+                              new()
+                            {
+                                Id = 1,
+                                Value = 42,
+                            },
+                              new() { Id = 2, Value = 0815 },
+                            };
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                                {
+                                    new() { Id = -1, Value = 4711 },
+                                    new()
+                                        {
+                                            Id = 1,
+                                            Value = 42,
+                                        },
+                                    new() { Id = 2, Value = 0815 },
+                                };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer();
