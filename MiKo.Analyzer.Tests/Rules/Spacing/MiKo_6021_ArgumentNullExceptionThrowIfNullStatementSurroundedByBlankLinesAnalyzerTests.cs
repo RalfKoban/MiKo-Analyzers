@@ -107,6 +107,10 @@ namespace Bla
             ObjectDisposedException.ThrowIf(true, o1);
             ArgumentNullException.ThrowIfNull(o2);
             ArgumentException.ThrowIfNullOrEmpty(o3);
+            ArgumentOutOfRangeException.ThrowIfZero();
+            ArgumentOutOfRangeException.ThrowIfNegative();
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero();
+            ArgumentOutOfRangeException.ThrowIfGreaterThan();
 
             DoSomething(new object(), new object(), new object());
         }
