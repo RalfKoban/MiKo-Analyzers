@@ -14121,11 +14121,47 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ObjectDisposedException.ThrowIf statements should be surrounded by blank lines.
+        ///   Looks up a localized string similar to ArgumentOutOfRangeException.ThrowIf statements should be surrounded by blank lines.
         /// </summary>
         public static string MiKo_6023_Title {
             get {
                 return ResourceManager.GetString("MiKo_6023_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        public static string MiKo_6024_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6024_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate ThrowIf statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        public static string MiKo_6024_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6024_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround &apos;ThrowIf&apos; with a blank line.
+        /// </summary>
+        public static string MiKo_6024_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6024_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ObjectDisposedException.ThrowIf statements should be surrounded by blank lines.
+        /// </summary>
+        public static string MiKo_6024_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6024_Title", resourceCulture);
             }
         }
         
