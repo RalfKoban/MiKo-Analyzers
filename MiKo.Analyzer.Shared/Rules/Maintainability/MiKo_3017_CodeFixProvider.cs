@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (replacements.Any())
             {
-                return root.ReplaceNodes(replacements.Keys, (original, rewritten) => replacements[original]);
+                return root.ReplaceNodes(replacements.Keys, (original, rewritten) => replacements[rewritten]);
             }
 
             return root;

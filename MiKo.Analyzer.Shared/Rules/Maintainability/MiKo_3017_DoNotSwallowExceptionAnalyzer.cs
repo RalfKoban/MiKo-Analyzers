@@ -38,12 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // inspect method arguments
             var parameter = node.GetEnclosing<MethodDeclarationSyntax>()?.ParameterList.Parameters.FirstOrDefault(_ => _.Type.IsException());
 
-            if (parameter != null)
-            {
-                return parameter;
-            }
-
-            return null;
+            return parameter;
         }
 
         protected override bool ShallAnalyzeObjectCreation(ObjectCreationExpressionSyntax node, SemanticModel semanticModel)

@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (syntax is TypeOfExpressionSyntax)
             {
-                if (issue.Properties.TryGetValue(MiKo_3051_DependencyPropertyRegisterAnalyzer.Value, out var value))
+                if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.ParameterValue, out var value))
                 {
                     return TypeOf(value);
                 }

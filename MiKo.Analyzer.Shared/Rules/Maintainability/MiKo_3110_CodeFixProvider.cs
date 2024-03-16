@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var args = invocation.ArgumentList.Arguments;
 
-                    var fixedInvocation = UpdatedSyntax(maes, args, issue.Properties[MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Marker]);
+                    var fixedInvocation = UpdatedSyntax(maes, args, issue.Properties[Constants.AnalyzerCodeFixSharedData.Marker]);
 
                     if (fixedInvocation != null)
                     {

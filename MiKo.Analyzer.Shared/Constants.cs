@@ -1259,6 +1259,18 @@ namespace MiKoSolutions.Analyzers
 
             internal const string TextKey = nameof(TextKey);
             internal const string TextReplacementKey = nameof(TextReplacementKey);
+
+            internal const string GetPropertyName = nameof(GetPropertyName); // Cinch, use nameof()
+            internal const string CreateArgs = nameof(CreateArgs); // Cinch, use new PropertyChanged(nameof())
+            internal const string PropertyTypeName = nameof(PropertyTypeName);
+            internal const string PropertyName = nameof(PropertyName);
+
+            internal const string Position = nameof(Position);
+            internal const string IsFlagged = nameof(IsFlagged);
+
+            internal const string ParameterValue = nameof(ParameterValue);
+
+            internal const string Marker = nameof(Marker);
         }
     }
 }
