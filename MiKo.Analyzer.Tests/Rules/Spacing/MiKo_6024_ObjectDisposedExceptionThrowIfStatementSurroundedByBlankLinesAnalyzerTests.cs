@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public sealed class MiKo_6023_ObjectDisposedExceptionThrowIfStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6024_ObjectDisposedExceptionThrowIfStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"
@@ -87,6 +87,10 @@ namespace Bla
             ArgumentNullException.ThrowIfNull(o1);
             ObjectDisposedException.ThrowIf(true, o2);
             ArgumentException.ThrowIfNullOrEmpty(o3);
+            ArgumentOutOfRangeException.ThrowIfZero();
+            ArgumentOutOfRangeException.ThrowIfNegative();
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero();
+            ArgumentOutOfRangeException.ThrowIfGreaterThan();
 
             DoSomething(new object(), new object(), new object());
         }
@@ -232,10 +236,10 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6023_ObjectDisposedExceptionThrowIfStatementSurroundedByBlankLinesAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6024_ObjectDisposedExceptionThrowIfStatementSurroundedByBlankLinesAnalyzer();
 
-        protected override string GetDiagnosticId() => MiKo_6023_ObjectDisposedExceptionThrowIfStatementSurroundedByBlankLinesAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_6024_ObjectDisposedExceptionThrowIfStatementSurroundedByBlankLinesAnalyzer.Id;
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6023_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6024_CodeFixProvider();
     }
 }
