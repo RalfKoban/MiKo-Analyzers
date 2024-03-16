@@ -98,6 +98,12 @@ namespace MiKoSolutions.Analyzers
             internal const string Verifiable = nameof(Verifiable);
         }
 
+        internal static class FluentAssertions
+        {
+            internal const string Should = nameof(Should);
+            internal const string ShouldBeEquivalentTo = nameof(ShouldBeEquivalentTo);
+        }
+
         internal static class MaxNamingLengths
         {
             public const int Types = 40;

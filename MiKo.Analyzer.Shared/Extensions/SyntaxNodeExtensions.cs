@@ -3160,6 +3160,28 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static MemberAccessExpressionSyntax GetFluentAssertionShouldNode(this ExpressionStatementSyntax value)
+        {
+            var nodes = value.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+
+            foreach (var node in nodes)
+            {
+                var name = node.GetName();
+
+                switch (name)
+                {
+                    // we might have a lambda expression, so the given statement might not be the correct ancestor statement of the 'Should()' node, hence we have to determine whether it's the specific statement that has an issue
+                    case Constants.FluentAssertions.Should when node.FirstAncestor<ExpressionStatementSyntax>() == value:
+                        return node;
+
+                    case Constants.FluentAssertions.ShouldBeEquivalentTo when node.FirstAncestor<ExpressionStatementSyntax>() == value:
+                        return node;
+                }
+            }
+
+            return null;
+        }
+
         private static SeparatedSyntaxList<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)
         {
             var method = syntax.GetEnclosing<BaseMethodDeclarationSyntax>();

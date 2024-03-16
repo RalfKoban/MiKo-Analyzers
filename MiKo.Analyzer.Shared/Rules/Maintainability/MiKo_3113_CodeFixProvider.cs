@@ -23,10 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is ExpressionStatementSyntax statement)
             {
-                var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
+                var shouldNode = statement.GetFluentAssertionShouldNode();
                 var shouldName = shouldNode.GetName();
 
-                var assertThat = shouldName == "ShouldBeEquivalentTo"
+                var assertThat = shouldName == Constants.FluentAssertions.ShouldBeEquivalentTo
                                  ? ConvertShouldBeEquivalentToToAssertThat(document, shouldNode)
                                  : ConvertShouldToAssertThat(document, shouldNode);
 
