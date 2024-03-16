@@ -84,6 +84,8 @@ namespace MiKoSolutions.Analyzers
         internal static class Moq
         {
             internal const string Mock = nameof(Mock);
+            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+            internal const string Object = nameof(Object);
             internal const string Of = nameof(Of);
             internal const string Setup = nameof(Setup);
             internal const string SetupGet = nameof(SetupGet);
@@ -94,7 +96,6 @@ namespace MiKoSolutions.Analyzers
             internal const string VerifyAll = nameof(VerifyAll);
             internal const string Verify = nameof(Verify);
             internal const string Verifiable = nameof(Verifiable);
-            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
         }
 
         internal static class MaxNamingLengths

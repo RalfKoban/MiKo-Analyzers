@@ -1321,6 +1321,29 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool TryGetMoqTypes(this MemberAccessExpressionSyntax value, out TypeSyntax[] result)
+        {
+            result = null;
+
+            if (value.GetName() == Constants.Moq.Object)
+            {
+                var expression = value.Expression;
+
+                if (expression is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    // let's see if we can fix it in case we remove the surrounding parenthesis
+                    expression = parenthesized.Expression;
+                }
+
+                if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
+                {
+                    result = genericName.TypeArgumentList.Arguments.ToArray();
+                }
+            }
+
+            return result != null;
+        }
+
         internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
 
         internal static bool IsWrongNullTag(this SyntaxNode value) => value.IsCNull() || value.IsBNull() || value.IsValueNull() || value.IsCodeNull();
