@@ -229,7 +229,43 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlElementSyntax GetParameterComment(this DocumentationCommentTriviaSyntax value, string parameterName) => value.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Param && _.GetParameterName() == parameterName);
 
-//// ncrunch: rdi default
+        //// ncrunch: rdi default
+
+        internal static string GetIdentifierNameFromPropertyExpression(this PropertyDeclarationSyntax value)
+        {
+            var expression = value.GetPropertyExpression();
+
+            return expression is IdentifierNameSyntax identifier
+                   ? identifier.GetName()
+                   : null;
+        }
+
+        internal static ExpressionSyntax GetPropertyExpression(this PropertyDeclarationSyntax value)
+        {
+            if (value.ExpressionBody != null)
+            {
+                return value.ExpressionBody.Expression;
+            }
+
+            var accessorList = value.AccessorList;
+
+            if (accessorList != null)
+            {
+                var getter = accessorList.Accessors[0];
+
+                if (getter.ExpressionBody != null)
+                {
+                    return getter.ExpressionBody.Expression;
+                }
+
+                if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)
+                {
+                    return r.Expression;
+                }
+            }
+
+            return null;
+        }
 
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
