@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
-            var problematicNode = MiKo_3017_DoNotSwallowExceptionAnalyzer.FindProblematicSyntaxNode(o, GetSemanticModel(document));
+            var problematicNode = o.GetExceptionSwallowingNode(() => GetSemanticModel(document));
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 

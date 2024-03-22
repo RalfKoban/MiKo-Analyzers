@@ -301,6 +301,30 @@ namespace MiKoSolutions.Analyzers
             return condition;
         }
 
+        internal static SyntaxNode GetExceptionSwallowingNode(this ObjectCreationExpressionSyntax value, Func<SemanticModel> semanticModelCallback)
+        {
+            var catchClause = value.FirstAncestorOrSelf<CatchClauseSyntax>();
+
+            if (catchClause != null)
+            {
+                // we found an exception inside a catch block that does not get the caught exception as inner exception
+                return catchClause;
+            }
+
+            // inspect any 'if' or 'switch' or 'else if' to see if there is an exception involved
+            var expression = value.GetRelatedCondition()?.FirstDescendant<ExpressionSyntax>(_ => _.GetTypeSymbol(semanticModelCallback())?.IsException() is true);
+
+            if (expression != null)
+            {
+                return expression;
+            }
+
+            // inspect method arguments
+            var parameter = value.GetEnclosing<MethodDeclarationSyntax>()?.ParameterList.Parameters.FirstOrDefault(_ => _.Type.IsException());
+
+            return parameter;
+        }
+
         internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax value)
         {
             var parameters = CollectParameters(value);
