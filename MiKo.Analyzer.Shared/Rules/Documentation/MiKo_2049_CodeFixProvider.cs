@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (tokensToReplace.Count > 0)
             {
-                return node.ReplaceTokens(tokensToReplace.Keys, (original, rewritten) => tokensToReplace[original]);
+                return node.ReplaceTokens(tokensToReplace.Keys, (original, rewritten) => tokensToReplace[rewritten]);
             }
 
             return node;

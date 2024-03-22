@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class DependencyPropertyRegisterMaintainabilityAnalyzer : MaintainabilityAnalyzer
     {
-        internal const string Value = "ParameterValue";
-
         private readonly string m_invocation;
 
         protected DependencyPropertyRegisterMaintainabilityAnalyzer(string diagnosticId, string invocation) : base(diagnosticId, SymbolKind.Field) => m_invocation = invocation;
@@ -101,7 +99,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private Diagnostic ReportIssue(IFieldSymbol symbol, ArgumentSyntax argument, string parameter)
         {
-            return Issue(symbol.Name, argument, parameter, new Dictionary<string, string> { { Value, parameter } });
+            return Issue(symbol.Name, argument, parameter, new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.ParameterValue, parameter } });
         }
     }
 }

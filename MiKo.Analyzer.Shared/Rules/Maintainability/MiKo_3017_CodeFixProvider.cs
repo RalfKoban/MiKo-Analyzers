@@ -23,13 +23,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var o = (ObjectCreationExpressionSyntax)syntax;
 
-            var problematicNode = MiKo_3017_DoNotSwallowExceptionAnalyzer.FindProblematicSyntaxNode(o, GetSemanticModel(document));
+            var problematicNode = o.GetExceptionSwallowingNode(() => GetSemanticModel(document));
 
             var replacements = CreateReplacements(o.ArgumentList, problematicNode);
 
             if (replacements.Any())
             {
-                return root.ReplaceNodes(replacements.Keys, (original, rewritten) => replacements[original]);
+                return root.ReplaceNodes(replacements.Keys, (original, rewritten) => replacements[rewritten]);
             }
 
             return root;

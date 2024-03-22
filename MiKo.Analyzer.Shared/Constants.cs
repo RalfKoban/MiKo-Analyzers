@@ -84,6 +84,8 @@ namespace MiKoSolutions.Analyzers
         internal static class Moq
         {
             internal const string Mock = nameof(Mock);
+            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+            internal const string Object = nameof(Object);
             internal const string Of = nameof(Of);
             internal const string Setup = nameof(Setup);
             internal const string SetupGet = nameof(SetupGet);
@@ -94,7 +96,12 @@ namespace MiKoSolutions.Analyzers
             internal const string VerifyAll = nameof(VerifyAll);
             internal const string Verify = nameof(Verify);
             internal const string Verifiable = nameof(Verifiable);
-            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+        }
+
+        internal static class FluentAssertions
+        {
+            internal const string Should = nameof(Should);
+            internal const string ShouldBeEquivalentTo = nameof(ShouldBeEquivalentTo);
         }
 
         internal static class MaxNamingLengths
@@ -1259,6 +1266,18 @@ namespace MiKoSolutions.Analyzers
 
             internal const string TextKey = nameof(TextKey);
             internal const string TextReplacementKey = nameof(TextReplacementKey);
+
+            internal const string GetPropertyName = nameof(GetPropertyName); // Cinch, use nameof()
+            internal const string CreateArgs = nameof(CreateArgs); // Cinch, use new PropertyChanged(nameof())
+            internal const string PropertyTypeName = nameof(PropertyTypeName);
+            internal const string PropertyName = nameof(PropertyName);
+
+            internal const string Position = nameof(Position);
+            internal const string IsFlagged = nameof(IsFlagged);
+
+            internal const string ParameterValue = nameof(ParameterValue);
+
+            internal const string Marker = nameof(Marker);
         }
     }
 }
