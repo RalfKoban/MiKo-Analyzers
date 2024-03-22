@@ -141,6 +141,22 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_object_creation_with_local_variable() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string message, object value)
+    {
+        var someLongerValue = 0815;
+
+        return value is null
+               ? new ArgumentOutOfRangeException(paramName, someLongerValue, string.Empty)
+               : new ArgumentOutOfRangeException(paramName, someLongerValue, message);
+}");
+
+        [Test]
         public void An_issue_is_reported_for_object_creation_with_Linq() => An_issue_is_reported_for(@"
 using System;
 using System.Linq;

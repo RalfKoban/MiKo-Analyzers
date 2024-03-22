@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is MemberAccessExpressionSyntax node && MiKo_3114_UseMockOfInsteadMockObjectAnalyzer.HasIssue(node, out var types))
+            if (syntax is MemberAccessExpressionSyntax node && node.TryGetMoqTypes(out var types))
             {
                 return Invocation("Mock", "Of", types).WithTriviaFrom(node);
             }
