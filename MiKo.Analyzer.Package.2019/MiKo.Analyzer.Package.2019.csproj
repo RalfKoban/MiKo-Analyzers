@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageId>MiKoSolutions.Analyzers</PackageId>
+    <PackageVersion>0.0.44</PackageVersion>
+    <Authors>Ralf Koban</Authors>
+    <PackageLicenseUrl>https://github.com/RalfKoban/MiKo-Analyzers/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/RalfKoban/MiKo-Analyzers</PackageProjectUrl>
+    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
+    <RepositoryUrl>https://github.com/RalfKoban/MiKo-Analyzers</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Description>A diagnostic extension for the .NET Compiler Platform ("Roslyn") that checks for different metrics such as Lines of Code or Cyclomatic Complexity; in addition to several documentation, maintainability, naming, ordering and performance rules.</Description>
+    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
+    <Copyright>Copyright © 2018-2024 by MiKo Solutions. All rights reserved.</Copyright>
+    <PackageTags>MiKoSolutions.Analyzers, analyzers, metrics</PackageTags>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <RepositoryType>GIT</RepositoryType>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2019\MiKo.Analyzer.Codefixes.2019.csproj" />
+  </ItemGroup>  
+
+  <ItemGroup>
+    <None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <Target Name="_AddAnalyzersToOutput">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(OutputPath)\MiKo.Analyzer.2019.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\MiKo.Analyzer.CodeFixes.2019.dll" PackagePath="analyzers/dotnet/cs" />
+    </ItemGroup>
+  </Target>
+
+</Project>
