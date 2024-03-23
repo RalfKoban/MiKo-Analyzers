@@ -5,7 +5,6 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>MiKoSolutions.Analyzers.Vsix</RootNamespace>
-    <AssemblyName>MiKoSolutions.Analyzers.2022</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>

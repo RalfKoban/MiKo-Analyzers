@@ -36,8 +36,8 @@
 
   <Target Name="_AddAnalyzersToOutput">
     <ItemGroup>
-      <TfmSpecificPackageFile Include="$(OutputPath)\MiKo.Analyzer.2019.dll" PackagePath="analyzers/dotnet/cs" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\MiKo.Analyzer.CodeFixes.2019.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\MiKoSolutions.Analyzers.2019.dll" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\MiKoSolutions.Analyzers.CodeFixes.2019.dll" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>
 
