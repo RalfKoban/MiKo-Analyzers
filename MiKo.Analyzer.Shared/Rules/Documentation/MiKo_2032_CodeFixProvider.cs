@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
 //// ncrunch: rdi off
-        internal static IEnumerable<string> CreateSimpleStartingPhrases()
+        public static IEnumerable<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]
