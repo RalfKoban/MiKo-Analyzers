@@ -5,7 +5,7 @@ using System.Linq;
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers
 {
-    public static class Constants
+    internal static class Constants
     {
         internal const int Indentation = 4;
 

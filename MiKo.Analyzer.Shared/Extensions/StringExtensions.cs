@@ -15,7 +15,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 // ReSharper disable once CheckNamespace
 namespace System
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 

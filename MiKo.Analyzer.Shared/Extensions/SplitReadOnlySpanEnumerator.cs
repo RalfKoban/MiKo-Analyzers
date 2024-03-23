@@ -2,7 +2,7 @@
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
-    public ref struct SplitReadOnlySpanEnumerator
+    internal ref struct SplitReadOnlySpanEnumerator
     {
         private readonly char[] m_separatorChars;
         private readonly StringSplitOptions m_options;

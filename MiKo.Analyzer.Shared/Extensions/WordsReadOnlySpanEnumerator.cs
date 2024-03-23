@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
-    public ref struct WordsReadOnlySpanEnumerator
+    internal ref struct WordsReadOnlySpanEnumerator
     {
         private readonly ReadOnlySpan<char> m_text;
         private readonly int[] m_wordStartingPositions;
