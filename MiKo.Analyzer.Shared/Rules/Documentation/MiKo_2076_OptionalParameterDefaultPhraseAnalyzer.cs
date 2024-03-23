@@ -47,10 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var data = CreatePropertyData(parameter);
 
-            var properties = new Dictionary<string, string>();
-            properties.Add(data.Key, data.Value);
-
-            yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, properties);
+            yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } });
         }
 
         private static KeyValuePair<string, string> CreatePropertyData(IParameterSymbol parameter)
@@ -129,18 +126,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 default:
                 {
+                    var defaultValue = parameterType.Name;
+
                     if (parameterType.TypeKind == TypeKind.Struct)
                     {
-                        return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, parameterType.Name);
+                        return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
                     }
 
                     if (parameterType.IsEnum())
                     {
                         var defaultFieldValue = parameterType.GetFields().FirstOrDefault(_ => _.ConstantValue?.ToString() == "0");
 
-                        return defaultFieldValue != null
-                               ? new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, parameterType.Name + "." + defaultFieldValue.Name)
-                               : new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, parameterType.Name);
+                        if (defaultFieldValue != null)
+                        {
+                            defaultValue = defaultValue + "." + defaultFieldValue.Name;
+                        }
+
+                        return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue);
                     }
 
                     return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, "null");
