@@ -280,6 +280,10 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+#if NCRUNCH
+#else
+        [Parallelizable]
+#endif
         [Test]
         public void Code_gets_fixed_on_same_line_for_special_phrase_([ValueSource(nameof(IndicatePhrases))] string phrase)
         {
@@ -471,6 +475,10 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+#if NCRUNCH
+#else
+        [Parallelizable]
+#endif
         [Test]
         public void Code_gets_fixed_on_same_line_for_optional_parameter_phrase_([ValueSource(nameof(OptionalPhrases))] string phrase)
         {
