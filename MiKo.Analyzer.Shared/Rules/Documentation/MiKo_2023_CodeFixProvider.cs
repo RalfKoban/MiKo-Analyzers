@@ -152,10 +152,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax FixText(XmlElementSyntax comment)
         {
             var contents = comment.Content;
+            var count = contents.Count;
 
-            if (contents.Count == 1 && contents.First() is XmlTextSyntax t)
+            if (count == 0)
+            {
+                return FixEmptyComment(comment.WithContent(XmlText(string.Empty)));
+            }
+
+            if (count == 1 && contents.First() is XmlTextSyntax t)
             {
                 var text = t.GetTextWithoutTrivia();
+
+                if (text.IsEmpty)
+                {
+                    return FixEmptyComment(comment);
+                }
 
                 // determine whether we have a comment like:
                 //    true: some condition
@@ -192,6 +203,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var preparedComment3 = ModifyElseOtherwisePart(preparedComment2);
 
             return FixComment(preparedComment3);
+        }
+
+        private static XmlElementSyntax FixEmptyComment(XmlElementSyntax comment)
+        {
+            var startFixed = CommentStartingWith(comment, StartPhraseParts[0], SeeLangword_True(), Replacement + "TODO");
+            var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
+
+            return bothFixed;
         }
 
         private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement)
