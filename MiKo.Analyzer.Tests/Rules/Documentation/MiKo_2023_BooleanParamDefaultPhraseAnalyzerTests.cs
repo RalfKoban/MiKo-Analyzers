@@ -58,14 +58,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         static MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests()
         {
-            var limit = Environment.GetEnvironmentVariable("APP_VEYOR") != null
-                        ? 2500
-                        : int.MaxValue;
+            var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
 
-            IndicatePhrases = CreateIndicatePhrases().Distinct().Take(limit).ToArray();
-            OptionalPhrases = CreateOptionalPhrases().Distinct().Take(limit).ToArray();
-            ConditionalPhrases = CreateConditionalStartPhrases().Distinct().Take(limit).ToArray();
-            DefaultCases = CreateDefaultCases().Distinct().Take(limit).ToArray();
+            var limit = bool.TryParse(environmentVariable, out var value) && value ? 2500 : int.MaxValue;
+
+            IndicatePhrases = CreateIndicatePhrases().Take(limit).Distinct().ToArray();
+            OptionalPhrases = CreateOptionalPhrases().Take(limit).Distinct().ToArray();
+            ConditionalPhrases = CreateConditionalStartPhrases().Take(limit).Distinct().ToArray();
+            DefaultCases = CreateDefaultCases().Take(limit).Distinct().ToArray();
         }
 
         // ncrunch: no coverage end
