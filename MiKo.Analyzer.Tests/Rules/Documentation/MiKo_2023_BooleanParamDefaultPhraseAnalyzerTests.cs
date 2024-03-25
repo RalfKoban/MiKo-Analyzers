@@ -16,11 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
-// ncrunch: no coverage start
-        private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Distinct().ToArray();
-        private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Distinct().ToArray();
-        private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Distinct().ToArray();
-        private static readonly string[] DefaultCases = CreateDefaultCases().Distinct().ToArray();
+        // ncrunch: no coverage start
+        private static readonly string[] IndicatePhrases;
+        private static readonly string[] OptionalPhrases;
+        private static readonly string[] ConditionalPhrases;
+        private static readonly string[] DefaultCases;
 
         private static readonly string[] TruePhrases =
                                                        {
@@ -56,7 +56,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        };
 
-// ncrunch: no coverage end
+        static MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests()
+        {
+            var limit = Environment.GetEnvironmentVariable("APP_VEYOR") != null
+                        ? 2500
+                        : int.MaxValue;
+
+            IndicatePhrases = CreateIndicatePhrases().Distinct().Take(limit).ToArray();
+            OptionalPhrases = CreateOptionalPhrases().Distinct().Take(limit).ToArray();
+            ConditionalPhrases = CreateConditionalStartPhrases().Distinct().Take(limit).ToArray();
+            DefaultCases = CreateDefaultCases().Distinct().Take(limit).ToArray();
+        }
+
+        // ncrunch: no coverage end
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
 using System;
@@ -280,10 +292,6 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-#if NCRUNCH
-#else
-        [Parallelizable]
-#endif
         [Test]
         public void Code_gets_fixed_on_same_line_for_special_phrase_([ValueSource(nameof(IndicatePhrases))] string phrase)
         {
@@ -475,10 +483,6 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-#if NCRUNCH
-#else
-        [Parallelizable]
-#endif
         [Test]
         public void Code_gets_fixed_on_same_line_for_optional_parameter_phrase_([ValueSource(nameof(OptionalPhrases))] string phrase)
         {
