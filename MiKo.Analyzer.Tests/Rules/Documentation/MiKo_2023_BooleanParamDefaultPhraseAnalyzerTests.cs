@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         // ncrunch: no coverage start
-        private static readonly string[] IndicatePhrases;
-        private static readonly string[] OptionalPhrases;
-        private static readonly string[] ConditionalPhrases;
-        private static readonly string[] DefaultCases;
+        private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Take(TestLimit).Distinct().ToArray();
+        private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Take(TestLimit).Distinct().ToArray();
+        private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Take(TestLimit).Distinct().ToArray();
+        private static readonly string[] DefaultCases = CreateDefaultCases().Take(TestLimit).Distinct().ToArray();
 
         private static readonly string[] TruePhrases =
                                                        {
@@ -55,18 +55,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'True': if some condition. Otherwise 'False'.",
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        };
-
-        static MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests()
-        {
-            var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
-
-            var limit = bool.TryParse(environmentVariable, out var value) && value ? 2500 : int.MaxValue;
-
-            IndicatePhrases = CreateIndicatePhrases().Take(limit).Distinct().ToArray();
-            OptionalPhrases = CreateOptionalPhrases().Take(limit).Distinct().ToArray();
-            ConditionalPhrases = CreateConditionalStartPhrases().Take(limit).Distinct().ToArray();
-            DefaultCases = CreateDefaultCases().Take(limit).Distinct().ToArray();
-        }
 
         // ncrunch: no coverage end
         [Test]
