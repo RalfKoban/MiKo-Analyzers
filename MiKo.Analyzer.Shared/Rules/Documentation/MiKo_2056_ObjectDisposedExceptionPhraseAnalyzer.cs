@@ -19,10 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static string GetEndingPhrase(ISymbol symbol) => HasCloseMethod(symbol)
-                                                                  ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
-                                                                  : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
-
         protected override IEnumerable<Diagnostic> AnalyzeException(ISymbol symbol, XmlElementSyntax exceptionComment)
         {
             // get rid of the para tags as we are not interested into them
@@ -33,13 +29,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield break;
             }
 
-            // alternative check for Closed methods
-            if (HasCloseMethod(symbol) && comment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
+            var hasCloseMethod = HasCloseMethod(symbol);
+
+            if (hasCloseMethod && comment.EndsWith(Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase, Comparison))
             {
+                // allowed alternative for Closed methods
                 yield break;
             }
 
-            yield return ExceptionIssue(exceptionComment, Constants.Comments.ObjectDisposedExceptionEndingPhrase);
+            var endingPhrase = hasCloseMethod
+                               ? Constants.Comments.ObjectDisposedExceptionAlternatingEndingPhrase
+                               : Constants.Comments.ObjectDisposedExceptionEndingPhrase;
+
+            yield return ExceptionIssue(exceptionComment, endingPhrase);
         }
 
         private static bool HasCloseMethod(ISymbol symbol) => symbol.FindContainingType()

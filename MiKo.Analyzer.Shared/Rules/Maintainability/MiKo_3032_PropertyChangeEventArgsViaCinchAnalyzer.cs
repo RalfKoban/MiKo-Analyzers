@@ -14,11 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3032";
 
-        internal const string GetPropertyName = "GetPropertyName"; // use nameof()
-        internal const string CreateArgs = "CreateArgs"; // use new PropertyChanged(nameof())
-        internal const string PropertyTypeName = "Type";
-        internal const string PropertyName = "PropertyName";
-
         public MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer() : base(Id)
         {
         }
@@ -35,12 +30,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 switch (name)
                 {
-                    case GetPropertyName:
+                    case Constants.AnalyzerCodeFixSharedData.GetPropertyName:
                         ReportIssue(context, node.Parent, name, "nameof({0})");
 
                         break;
 
-                    case CreateArgs:
+                    case Constants.AnalyzerCodeFixSharedData.CreateArgs:
                         ReportIssue(context, node.Parent, name, "new PropertyChangedEventArgs(nameof({0}))");
 
                         break;
@@ -66,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var properties = new Dictionary<string, string>
                                      {
                                          { issueId, string.Empty },
-                                         { PropertyName, propertyName },
+                                         { Constants.AnalyzerCodeFixSharedData.PropertyName, propertyName },
                                      };
 
                 var semanticModel = context.SemanticModel;
@@ -80,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 // TODO: RKN return type as well "A.PropertyName" if the containing type does not inherit from the type or implement the interface
                 if (symbol.ContainingType.IsRelated(propertyType) is false)
                 {
-                    properties.Add(PropertyTypeName, type.GetNameOnlyPart());
+                    properties.Add(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, type.GetNameOnlyPart());
                 }
 
                 var issue = Issue(symbol?.Name, node, issueTemplate.FormatWith(propertyName), properties);

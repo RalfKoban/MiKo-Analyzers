@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (HasIssue(symbol))
             {
-                yield return Issue(symbol, Constants.ExceptionIdentifier, "exception");
+                yield return Issue(symbol, Constants.ExceptionIdentifier, "exception", CreateBetterNameProposal(Constants.ExceptionIdentifier));
             }
         }
 

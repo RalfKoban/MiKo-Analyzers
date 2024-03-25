@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { $"{marker}.", $"{marker} ." }).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2070_ReturnsSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2070";
 
         protected override string Title => Resources.MiKo_2070_CodeFixTitle;
 
@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var token = textTokens[index];
                     var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
 
-                    if (valueText.StartsWithAny(MiKo_2070_ReturnsSummaryAnalyzer.Phrases))
+                    if (valueText.StartsWithAny(Constants.Comments.ReturnWords))
                     {
                         var startText = GetCorrectStartText(summary);
                         var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString();

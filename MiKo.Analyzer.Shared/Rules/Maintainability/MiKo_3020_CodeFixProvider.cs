@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3020_CodeFixProvider)), Shared]
     public sealed class MiKo_3020_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3020_CompletedTaskAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3020";
 
         protected override string Title => Resources.MiKo_3020_CodeFixTitle;
 

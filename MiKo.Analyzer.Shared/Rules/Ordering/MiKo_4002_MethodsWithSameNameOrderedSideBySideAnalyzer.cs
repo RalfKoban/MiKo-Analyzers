@@ -17,12 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
-        internal static List<IMethodSymbol> GetMethodsOrderedByStatics(IEnumerable<IMethodSymbol> methods) => methods.OrderByDescending(_ => _.DeclaredAccessibility)
-                                                                                                                     .ThenByDescending(_ => _.IsStatic)
-                                                                                                                     .ToList();
-
-        internal static List<IMethodSymbol> GetMethodsOrderedByStatics(IEnumerable<IMethodSymbol> methods, string methodName) => GetMethodsOrderedByStatics(methods.Where(_ => _.Name == methodName));
-
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);

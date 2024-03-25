@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6047_CodeFixProvider)), Shared]
     public sealed class MiKo_6047_CodeFixProvider : SpacingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6047_SwitchExpressionBracesAreOnSamePositionLikeSwitchKeywordAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_6047";
 
         protected override string Title => Resources.MiKo_6047_CodeFixTitle;
 
@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is SwitchExpressionSyntax expression)
             {
-                var position = MiKo_6047_SwitchExpressionBracesAreOnSamePositionLikeSwitchKeywordAnalyzer.GetStartPosition(expression);
+                var position = GetProposedLinePosition(issue);
 
                 var spaces = position.Character;
                 var armSpaces = spaces + Constants.Indentation;

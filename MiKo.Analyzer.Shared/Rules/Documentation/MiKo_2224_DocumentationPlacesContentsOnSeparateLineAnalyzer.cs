@@ -14,9 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2224";
 
-        internal const string AddSpaceAfter = "AddSpaceAfter";
-        internal const string AddSpaceBefore = "AddSpaceBefore";
-
         private static readonly HashSet<string> Tags = new HashSet<string>
                                                            {
                                                                Constants.XmlTag.Overloads,
@@ -115,12 +112,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (onSameLineAsTextBefore)
             {
-                properties.Add(AddSpaceBefore, string.Empty);
+                properties.Add(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore, string.Empty);
             }
 
             if (onSameLineAsTextAfter)
             {
-                properties.Add(AddSpaceAfter, string.Empty);
+                properties.Add(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter, string.Empty);
             }
 
             return properties;

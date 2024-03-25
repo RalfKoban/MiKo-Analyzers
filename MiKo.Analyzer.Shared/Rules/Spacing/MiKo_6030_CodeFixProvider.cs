@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6030_CodeFixProvider)), Shared]
     public sealed class MiKo_6030_CodeFixProvider : SpacingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_6030";
 
         protected override string Title => Resources.MiKo_6030_CodeFixTitle;
 
@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is InitializerExpressionSyntax initializer)
             {
-                var position = MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer.GetStartPosition(initializer);
+                var position = GetProposedLinePosition(issue);
 
                 var spaces = position.Character;
 

@@ -16,7 +16,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 // ReSharper disable once CheckNamespace
 namespace System
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
@@ -1224,6 +1224,46 @@ namespace System
 
             return new string(characters);
         }
+
+//// ncrunch: rdi off
+
+        /// <summary>
+        /// Encapsulates the given term with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="value">
+        /// The term to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string value) => WithDelimiters(new[] { value });
+
+        /// <summary>
+        /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="values">
+        /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string[] values)
+        {
+            var result = new List<string>();
+
+            foreach (var delimiter in Constants.Comments.Delimiters)
+            {
+                foreach (var phrase in values)
+                {
+                    result.Add(' ' + phrase + delimiter);
+                    result.Add('(' + phrase + delimiter);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+//// ncrunch: rdi default
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, char character) => value.Without(character.ToString());

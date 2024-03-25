@@ -4,7 +4,7 @@
 // ReSharper disable once CheckNamespace
 namespace System.Text
 {
-    public static class StringBuilderExtensions
+    internal static class StringBuilderExtensions
     {
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
         {

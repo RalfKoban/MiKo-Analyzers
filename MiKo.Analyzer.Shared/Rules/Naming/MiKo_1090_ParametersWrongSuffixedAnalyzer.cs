@@ -32,33 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var name = symbol.Name;
-
-            if (name.EndsWith(Constants.Entity, Comparison))
-            {
-                return name.WithoutSuffix(Constants.Entity);
-            }
-
-            if (name.EndsWith("Element", Comparison))
-            {
-                return name == "frameworkElement"
-                       ? "element"
-                       : name.WithoutSuffix("Element");
-            }
-
-            foreach (var pair in WrongSuffixes)
-            {
-                if (name.EndsWith(pair.Key, Comparison))
-                {
-                    return pair.Value;
-                }
-            }
-
-            return name;
-        }
-
         protected override bool ShallAnalyze(IParameterSymbol symbol) => ShallAnalyze(symbol.GetEnclosingMethod());
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
@@ -67,23 +40,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.EndsWith(Constants.Entity, Comparison))
             {
-                yield return Issue(symbol, symbolName.WithoutSuffix(Constants.Entity));
+                var proposal = symbolName.WithoutSuffix(Constants.Entity);
+
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
 
             if (symbolName.EndsWith("Element", Comparison))
             {
-                var proposedAlternative = symbolName == "frameworkElement"
-                                          ? "element"
-                                          : symbolName.WithoutSuffix("Element");
+                var proposal = symbolName == "frameworkElement"
+                               ? "element"
+                               : symbolName.WithoutSuffix("Element");
 
-                yield return Issue(symbol, proposedAlternative);
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
 
             foreach (var pair in WrongSuffixes)
             {
                 if (symbolName.EndsWith(pair.Key, Comparison) && symbolName.StartsWithAny(Prefixes) is false)
                 {
-                    yield return Issue(symbol, pair.Value);
+                    var proposal = pair.Value;
+
+                    yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
                 }
             }
         }

@@ -17,10 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol) => symbol.Type.IsObject()
-                                                                          ? Parameter1
-                                                                          : Parameter2;
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsEventHandler()
@@ -30,18 +26,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var parameters = symbol.Parameters;
-
             var sender = parameters[0];
-            var e = parameters[1];
 
             if (sender.Name != Parameter1)
             {
-                yield return Issue(sender, Parameter1);
+                yield return Issue(sender, Parameter1, CreateBetterNameProposal(Parameter1));
             }
+
+            var e = parameters[1];
 
             if (e.Name != Parameter2)
             {
-                yield return Issue(e, Parameter2);
+                yield return Issue(e, Parameter2, CreateBetterNameProposal(Parameter2));
             }
         }
     }

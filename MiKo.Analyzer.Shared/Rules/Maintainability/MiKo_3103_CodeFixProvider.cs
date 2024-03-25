@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private const string DefaultFormat = "D";
 
-        public sealed override string FixableDiagnosticId => MiKo_3103_TestMethodsDoNotUseGuidNewGuidAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3103";
 
         protected sealed override string Title => Resources.MiKo_3103_CodeFixTitle;
 

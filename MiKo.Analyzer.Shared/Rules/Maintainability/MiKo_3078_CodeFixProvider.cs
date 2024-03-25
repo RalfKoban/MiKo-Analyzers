@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3078_CodeFixProvider)), Shared]
     public sealed class MiKo_3078_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3078_EnumMembersHaveValueAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3078";
 
         protected override string Title => Resources.MiKo_3078_CodeFixTitle;
 
@@ -22,12 +22,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is EnumMemberDeclarationSyntax member)
             {
-                var position = MiKo_3078_EnumMembersHaveValueAnalyzer.GetPosition(issue);
-                var isFlags = MiKo_3078_EnumMembersHaveValueAnalyzer.IsFlags(issue);
+                var isFlags = bool.Parse(issue.Properties[Constants.AnalyzerCodeFixSharedData.IsFlagged]);
+                var position = int.Parse(issue.Properties[Constants.AnalyzerCodeFixSharedData.Position]);
 
-                var expression = isFlags && position > 0
-                                 ? SyntaxFactory.BinaryExpression(SyntaxKind.LeftShiftExpression, Literal(1), Literal(position - 1))
-                                 : (ExpressionSyntax)Literal(position);
+                ExpressionSyntax expression;
+
+                if (isFlags && position > 0)
+                {
+                    expression = SyntaxFactory.BinaryExpression(SyntaxKind.LeftShiftExpression, Literal(1), Literal(position - 1));
+                }
+                else
+                {
+                    expression = Literal(position);
+                }
 
                 return member.WithEqualsValue(SyntaxFactory.EqualsValueClause(expression));
             }

@@ -20,27 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var betterName = symbol.Name.Without("Arbitrary");
-            var index = betterName.IndexOf(Phrase, StringComparison.Ordinal);
-
-            if (index < 0)
-            {
-                return betterName;
-            }
-
-            var characters = betterName.Without(Phrase);
-
-            if (characters.Length > 0)
-            {
-                return characters.ToLowerCaseAt(index);
-            }
-
-            // we cannot find a better name
-            return Phrase;
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             base.InitializeCore(context);
@@ -76,7 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     {
                         var symbol = identifier.GetSymbol(semanticModel);
 
-                        yield return Issue(symbol);
+                        var betterName = FindBetterName(symbol);
+
+                        yield return Issue(symbol, CreateBetterNameProposal(betterName));
                     }
                 }
             }
@@ -84,8 +65,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string name) => name?.Contains(Phrase, StringComparison.OrdinalIgnoreCase) is true;
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => HasIssue(symbol.Name)
-                                                                       ? new[] { Issue(symbol) }
-                                                                       : Enumerable.Empty<Diagnostic>();
+        private static string FindBetterName(ISymbol symbol)
+        {
+            var betterName = symbol.Name.Without("Arbitrary");
+            var index = betterName.IndexOf(Phrase, StringComparison.Ordinal);
+
+            if (index < 0)
+            {
+                return betterName;
+            }
+
+            var characters = betterName.Without(Phrase);
+
+            if (characters.Length > 0)
+            {
+                return characters.ToLowerCaseAt(index);
+            }
+
+            // we cannot find a better name
+            return Phrase;
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
+        {
+            if (HasIssue(symbol.Name))
+            {
+                var betterName = FindBetterName(symbol);
+
+                yield return Issue(symbol, CreateBetterNameProposal(betterName));
+            }
+        }
     }
 }

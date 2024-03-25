@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] SummaryText = Constants.Comments.RoutedEventFieldSummaryPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] ValueText = Constants.Comments.RoutedEventFieldValuePhraseTemplate.FormatWith("|").Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2006_RoutedEventFieldDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2006";
 
         protected override string Title => Resources.MiKo_2006_CodeFixTitle;
 

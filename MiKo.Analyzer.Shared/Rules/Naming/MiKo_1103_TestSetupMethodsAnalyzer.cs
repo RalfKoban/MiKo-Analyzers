@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1103";
 
-        public const string ExpectedName = "PrepareTest";
+        private const string ExpectedName = "PrepareTest";
 
         public MiKo_1103_TestSetupMethodsAnalyzer() : base(Id)
         {
@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (symbol.Name != ExpectedName)
             {
-                yield return Issue(symbol, ExpectedName);
+                yield return Issue(symbol, ExpectedName, CreateBetterNameProposal(ExpectedName));
             }
         }
     }

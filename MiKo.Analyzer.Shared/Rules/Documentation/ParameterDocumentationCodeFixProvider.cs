@@ -43,13 +43,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (parameter.GetName() == parameterName)
                 {
-                    return Comment(document, parameterCommentSyntax, parameter, index);
+                    return Comment(document, parameterCommentSyntax, parameter, index, issue);
                 }
             }
 
             return parameterCommentSyntax;
         }
 
-        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index);
+        protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue);
     }
 }

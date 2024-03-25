@@ -15,11 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static bool CommentHasIssue(ReadOnlySpan<char> comment) => comment.EndsWith('.')
-                                                                         && comment.EndsWith("...", StringComparison.OrdinalIgnoreCase) is false
-                                                                         && comment.EndsWith("etc.", StringComparison.OrdinalIgnoreCase) is false;
-
-        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => CommentHasIssue(comment);
+        protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel) => DocumentationComment.EndsWithPeriod(comment);
 
         protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
         {

@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -11,17 +10,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2216_CodeFixProvider)), Shared]
     public sealed class MiKo_2216_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2216_ParamInsteadOfParamRefAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2216";
 
         protected override string Title => Resources.MiKo_2216_CodeFixTitle;
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var elements = MiKo_2216_ParamInsteadOfParamRefAnalyzer.GetProblematicElements(syntax);
+            var issue = syntax.FindNode(diagnostic.Location.SourceSpan, true, true);
 
-            var issue = elements.First(_ => _.GetLocation().Equals(diagnostic.Location));
-
-            // TODO RKN: use this for bulk replace: return syntax.ReplaceNodes(elements, (original, rewritten) => GetUpdatedSyntax(original));
+            // TODO RKN: use this for bulk replace: return syntax.ReplaceNodes(elements, (original, rewritten) => GetUpdatedSyntax(rewritten));
             return syntax.ReplaceNode(issue, GetUpdatedSyntax(issue));
         }
 

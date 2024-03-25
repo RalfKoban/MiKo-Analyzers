@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -18,29 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         }
 
         protected override bool IsUnitTestAnalyzer => true;
-
-        internal static bool HasIssue(MemberAccessExpressionSyntax node, out TypeSyntax[] types)
-        {
-            types = null;
-
-            if (node.GetName() == "Object")
-            {
-                var expression = node.Expression;
-
-                if (expression is ParenthesizedExpressionSyntax parenthesized)
-                {
-                    // let's see if we can fix it in case we remove the surrounding parenthesis
-                    expression = parenthesized.Expression;
-                }
-
-                if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
-                {
-                    types = genericName.TypeArgumentList.Arguments.ToArray();
-                }
-            }
-
-            return types != null;
-        }
 
         protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.Moq.MockFullQualified) != null;
 
@@ -61,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node)
         {
-            if (HasIssue(node, out _))
+            if (node.TryGetMoqTypes(out _))
             {
                 yield return Issue(node);
             }
