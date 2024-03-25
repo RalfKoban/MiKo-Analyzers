@@ -44,33 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>("False", string.Empty),
                                                                                                  new KeyValuePair<string, string>("FALSE", string.Empty),
                                                                                                  new KeyValuePair<string, string>("if you want to", ReplacementTo),
-                                                                                                 new KeyValuePair<string, string>(" controlling if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" controlling whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" controlling whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" indicating if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" indicating whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" indicating whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to control if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to control whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to control whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determine if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determine whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determine whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determines if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determines whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determines whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determining if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determining whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to determining whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to indicate if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to indicate whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to indicate whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to indicates if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to indicates whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to indicates whether ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to define if ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to define whether or not ", Replacement),
-                                                                                                 new KeyValuePair<string, string>(" to define whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to in case ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to if given ", ReplacementTo),
@@ -108,6 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                 .ToArray();
 
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).Distinct().ToArray();
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeysInUpperCase = ReplacementMapKeys.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
 
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
@@ -188,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 //    false: some other condition'
                 var replacement = text.Contains(':') ? ReplacementTo : Replacement;
 
-                foreach (var key in ReplacementMapKeys)
+                foreach (var key in ReplacementMapKeysInUpperCase)
                 {
                     if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
                     {
@@ -335,7 +309,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
             var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
 
-            var starts = new List<string>();
+            var starts = new List<string> { string.Empty };
 
             foreach (var start in from startTerm in startTerms
                                   from optional in optionals
@@ -383,6 +357,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 "which indicates",
                                 "which specified", // be aware of typo
                                 "which specifies",
+
+                                "to control",
+                                "to define",
+                                "to determine",
+                                "to indicate",
+                                "to specify",
                             };
 
             foreach (var text in from start in starts
@@ -394,7 +374,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return text.ToLowerCaseAt(0);
             }
 
-            var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determinating", "Determing", "Indicating", "Specifying" };
+            var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
 
             foreach (var text in from startingVerb in startingVerbs
                                  from condition in conditions

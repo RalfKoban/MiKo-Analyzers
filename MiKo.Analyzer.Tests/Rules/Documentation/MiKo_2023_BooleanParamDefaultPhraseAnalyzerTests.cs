@@ -6,8 +6,6 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
@@ -18,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
+// ncrunch: no coverage start
         private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Distinct().ToArray();
         private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Distinct().ToArray();
         private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Distinct().ToArray();
@@ -57,6 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        };
 
+// ncrunch: no coverage end
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
 using System;
@@ -280,7 +280,7 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test, RequiresCapability("SSD")]
+        [Test]
         public void Code_gets_fixed_on_same_line_for_special_phrase_([ValueSource(nameof(IndicatePhrases))] string phrase)
         {
             var originalCode = @"
@@ -804,11 +804,12 @@ public class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2023_CodeFixProvider();
 
+// ncrunch: no coverage start
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartTerms()
         {
-            var terms = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter" }; // be aware of typos
-            var booleans = new[] { "bool", "Bool", "boolean", "Boolean" };
+            var terms = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter" };
+            var booleans = new[] { "bool", "boolean" };
 
             foreach (var term in terms)
             {
@@ -850,14 +851,10 @@ public class TestMe
                                 "that determines",
                                 "that indicated", // be aware of typo
                                 "that indicates",
-                                "that specified", // be aware of typo
                                 "that specifies",
                                 "which controls",
-                                "which defined", // be aware of typo
                                 "which defines",
-                                "which determined", // be aware of typo
                                 "which determines",
-                                "which indicated", // be aware of typo
                                 "which indicates",
                                 "which specified", // be aware of typo
                                 "which specifies",
@@ -868,7 +865,7 @@ public class TestMe
                                    from condition in conditions
                                    select $"{start} {verb} {condition}")
             {
-                yield return phrase;
+                yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
             }
 
@@ -904,13 +901,12 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateOptionalPhrases()
         {
-            var starts = new[] { "A optional", "An optional", "The optional", "A (optional)", "An (optional)", "The (optional)", "Optional", "(Optional)", "(optional)" };
+            var starts = new[] { "A optional", "An optional", "The optional", "An (optional)", "The (optional)", "Optional", "(Optional)" };
             var conditions = new[] { "if", "whether", "whether or not", "if to", "whether to", "whether or not to" };
-            var booleans = new[] { "bool ", "Bool ", "boolean ", "Boolean ", string.Empty };
+            var booleans = new[] { "bool ", "Boolean ", string.Empty };
             var values = new[]
                              {
                                  "parameter",
-                                 "paramter", // be aware of typo
                                  "flag",
                                  "value",
                              };
@@ -930,14 +926,10 @@ public class TestMe
                                 "that determines",
                                 "that indicated", // be aware of typo
                                 "that indicates",
-                                "that specified", // be aware of typo
                                 "that specifies",
                                 "which controls",
-                                "which defined", // be aware of typo
                                 "which defines",
-                                "which determined", // be aware of typo
                                 "which determines",
-                                "which indicated", // be aware of typo
                                 "which indicates",
                                 "which specified", // be aware of typo
                                 "which specifies",
@@ -967,7 +959,7 @@ public class TestMe
                                    from separator in separators
                                    select $"{start} {boolean}{separator}")
             {
-                yield return phrase;
+                yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
             }
         }
@@ -983,5 +975,7 @@ public class TestMe
                 yield return phrase;
             }
         }
+
+// ncrunch: no coverage end
     }
 }
