@@ -18,7 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string OrNotPhrase = " or not";
         private const string OtherwiseReplacement = ";  otherwise";
 
-        private static readonly string[] Conditionals = { "if", "when", "in case", "whether" };
+//// ncrunch: rdi off
+        private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
         private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", OtherwiseReplacement);
@@ -43,19 +44,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>("False", string.Empty),
                                                                                                  new KeyValuePair<string, string>("FALSE", string.Empty),
                                                                                                  new KeyValuePair<string, string>("if you want to", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" controlling if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" controlling whether or not ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" controlling whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" indicating if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" indicating whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" indicating whether ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to control if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to control whether or not ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to control whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determine if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determine whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determine whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determines if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determines whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determines whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determining if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to determining whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to determining whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to indicate if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to indicate whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to indicate whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to indicates if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to indicates whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to indicates whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to define if ", Replacement),
+                                                                                                 new KeyValuePair<string, string>(" to define whether or not ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to define whether ", Replacement),
                                                                                                  new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to in case ", ReplacementTo),
@@ -75,6 +89,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(" to , ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to ; ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to : ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to the to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to an to ", ReplacementTo),
+                                                                                                 new KeyValuePair<string, string>(" to a to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to  to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to to ", ReplacementTo),
                                                                                                  new KeyValuePair<string, string>(" to  ", ReplacementTo),
@@ -94,6 +111,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
 
@@ -293,65 +312,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return MakeFirstWordInfiniteVerb(result);
         }
 
+//// ncrunch: rdi off
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMap(params KeyValuePair<string, string>[] additionalPairs)
         {
-            var starts = new[]
-                             {
-                                 "A flag",
-                                 "A value",
-                                 "A (optional) parameter",
-                                 "A optional parameter",
-                                 "An (optional) parameter",
-                                 "An optional parameter",
-                                 "The (optional) parameter",
-                                 "The flag",
-                                 "The optional parameter",
-                                 "The value",
-                                 "Flag",
-                                 "Value",
-                                 "Optional parameter",
-                                 "(optional) parameter",
-                                 "(Optional) parameter",
-                             };
+            var texts = CreateStartTerms().Distinct().OrderByDescending(_ => _.Length).ToList();
 
-            var conditions = new[] { "if to", "if", "whether to", "whether" };
-
-            var verbs = new[]
-                            {
-                                "defining",
-                                "determining",
-                                "indicating",
-                                "that defined",
-                                "that defines",
-                                "that determined",
-                                "that determines",
-                                "that indicated",
-                                "that indicates",
-                                "which defined",
-                                "which defines",
-                                "which determined",
-                                "which determines",
-                                "which indicated",
-                                "which indicates",
-                            };
-
-            foreach (var text in from start in starts
-                                 from verb in verbs
-                                 from condition in conditions
-                                 select $"{start} {verb} {condition} ")
+            foreach (var text in texts)
             {
                 yield return new KeyValuePair<string, string>(text, Replacement);
-                yield return new KeyValuePair<string, string>(text.ToLowerCaseAt(0), Replacement);
-            }
-
-            var startingVerbs = new[] { "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Indicating" };
-
-            foreach (var text in from startingVerb in startingVerbs
-                                 from condition in conditions
-                                 select $"{startingVerb} {condition} ")
-            {
-                yield return new KeyValuePair<string, string>(text, Replacement);
-                yield return new KeyValuePair<string, string>(text.ToLowerCaseAt(0), Replacement);
             }
 
             foreach (var additionalPair in additionalPairs)
@@ -359,5 +327,84 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return additionalPair;
             }
         }
+
+        private static IEnumerable<string> CreateStartTerms()
+        {
+            var startTerms = new[] { "A", "An", "The", string.Empty };
+            var optionals = new[] { "Optional", "(optional)", "(Optional)", "optional", string.Empty };
+            var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
+            var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
+
+            var starts = new List<string>();
+
+            foreach (var start in from startTerm in startTerms
+                                  from optional in optionals
+                                  from boolean in booleans
+                                  from parameter in parameters
+                                  select string.Concat(startTerm, " ", optional, " ", boolean, " ", parameter))
+            {
+                if (start.IsNullOrWhiteSpace())
+                {
+                    continue;
+                }
+
+                var fixedStart = start.Replace("   ", " ").Replace("  ", " ").Trim();
+                starts.Add(fixedStart);
+            }
+
+            var conditions = new[] { "if to", "if", "whether or not to", "whether or not", "whether to", "whether" };
+
+            var verbs = new[]
+                            {
+                                "controling", // be aware of typo
+                                "controlling",
+                                "defining",
+                                "determining",
+                                "determinating", // be aware of typo
+                                "indicating",
+                                "specifying",
+
+                                "that controls",
+                                "that defined", // be aware of typo
+                                "that defines",
+                                "that determined", // be aware of typo
+                                "that determines",
+                                "that indicated", // be aware of typo
+                                "that indicates",
+                                "that specified", // be aware of typo
+                                "that specifies",
+
+                                "which controls",
+                                "which defined", // be aware of typo
+                                "which defines",
+                                "which determined", // be aware of typo
+                                "which determines",
+                                "which indicated", // be aware of typo
+                                "which indicates",
+                                "which specified", // be aware of typo
+                                "which specifies",
+                            };
+
+            foreach (var text in from start in starts
+                                 from verb in verbs
+                                 from condition in conditions
+                                 select $"{start} {verb} {condition} ".TrimStart())
+            {
+                yield return text.ToUpperCaseAt(0);
+                yield return text.ToLowerCaseAt(0);
+            }
+
+            var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determinating", "Determing", "Indicating", "Specifying" };
+
+            foreach (var text in from startingVerb in startingVerbs
+                                 from condition in conditions
+                                 select $"{startingVerb} {condition} ")
+            {
+                yield return text.ToUpperCaseAt(0);
+                yield return text.ToLowerCaseAt(0);
+            }
+        }
+
+        //// ncrunch: rdi default
     }
 }
