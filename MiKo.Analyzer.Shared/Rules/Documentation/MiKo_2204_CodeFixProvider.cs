@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "* ",
                                                    };
 
-        public override string FixableDiagnosticId => MiKo_2204_DocumentationShallUseListAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2204";
 
         protected override string Title => Resources.MiKo_2204_CodeFixTitle;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -21,7 +20,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ITypeSymbol symbol)
+        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(WrongNames); // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            var betterName = FindBetterName(symbol);
+
+            if (betterName.IsNullOrWhiteSpace() is false)
+            {
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+            }
+        }
+
+        private static string FindBetterName(ITypeSymbol symbol)
         {
             var symbolName = symbol.Name;
 
@@ -38,17 +49,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return betterName;
-        }
-
-        protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(WrongNames); // not only for enums, but also for other types (hence we do not use neither 'symbol.EnumUnderlyingType' nor 'symbol.IsEnum' here)
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
-        {
-            var betterName = FindBetterName(symbol);
-
-            return betterName.IsNullOrWhiteSpace()
-                   ? Enumerable.Empty<Diagnostic>()
-                   : new[] { Issue(symbol, betterName) };
         }
     }
 }

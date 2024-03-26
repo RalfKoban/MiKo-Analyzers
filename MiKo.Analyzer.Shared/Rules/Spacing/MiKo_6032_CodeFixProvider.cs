@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6032_CodeFixProvider)), Shared]
     public sealed class MiKo_6032_CodeFixProvider : SpacingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_6032_MultilineParametersAreIndentedToRightAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_6032";
 
         protected override string Title => Resources.MiKo_6032_CodeFixTitle;
 
@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ParameterSyntax parameter)
             {
-                var position = MiKo_6032_MultilineParametersAreIndentedToRightAnalyzer.GetOutdentedStartPosition(parameter.FirstAncestor<ParameterListSyntax>());
+                var position = GetProposedLinePosition(issue);
                 var spaces = position.Character;
 
                 return parameter.WithLeadingSpaces(spaces);

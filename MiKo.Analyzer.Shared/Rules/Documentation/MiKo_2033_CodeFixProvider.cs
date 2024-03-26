@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                                      .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
-        public override string FixableDiagnosticId => MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2033";
 
         protected override string Title => Resources.MiKo_2033_CodeFixTitle;
 

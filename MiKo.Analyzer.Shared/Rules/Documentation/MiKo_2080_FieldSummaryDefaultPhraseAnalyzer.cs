@@ -23,33 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static string GetStartingPhrase(IFieldSymbol symbol)
-        {
-            if (symbol.IsConst)
-            {
-                return StartingDefaultPhrase;
-            }
-
-            var type = symbol.Type;
-
-            if (type.IsBoolean())
-            {
-                return StartingBooleanDefaultPhrase;
-            }
-
-            if (type.IsGuid())
-            {
-                return StartingGuidDefaultPhrase;
-            }
-
-            if (type.IsEnumerable())
-            {
-                return StartingEnumerableDefaultPhrase;
-            }
-
-            return StartingDefaultPhrase;
-        }
-
         protected override bool ShallAnalyze(IFieldSymbol symbol)
         {
             if (symbol.ContainingType.IsEnum())
@@ -70,7 +43,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return base.ShallAnalyze(symbol);
         }
 
-        protected override Diagnostic StartIssue(ISymbol symbol, Location location) => Issue(symbol.Name, location, GetStartingPhrase((IFieldSymbol)symbol));
+        protected override Diagnostic StartIssue(ISymbol symbol, Location location)
+        {
+            var proposal = GetStartingPhrase((IFieldSymbol)symbol);
+
+            return Issue(symbol.Name, location, proposal, CreateStartingPhraseProposal(proposal));
+        }
 
         // TODO RKN: Move this to SummaryDocumentAnalyzer when finished
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
@@ -112,6 +90,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             problematicText = comment.FirstWord();
 
             return true;
+        }
+
+        private static string GetStartingPhrase(IFieldSymbol symbol)
+        {
+            if (symbol.IsConst)
+            {
+                return StartingDefaultPhrase;
+            }
+
+            var type = symbol.Type;
+
+            if (type.IsBoolean())
+            {
+                return StartingBooleanDefaultPhrase;
+            }
+
+            if (type.IsGuid())
+            {
+                return StartingGuidDefaultPhrase;
+            }
+
+            if (type.IsEnumerable())
+            {
+                return StartingEnumerableDefaultPhrase;
+            }
+
+            return StartingDefaultPhrase;
         }
     }
 }

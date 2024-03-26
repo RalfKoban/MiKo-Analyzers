@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string AllowedWordsForRule = AllowedWords.HumanizedConcatenated();
         private static readonly string ForbiddenWordsForRule = ForbiddenWords.HumanizedConcatenated();
 
-        private static readonly string[] ForbiddenPhrases = GetWithDelimiters(ForbiddenWords);
+        private static readonly string[] ForbiddenPhrases = ForbiddenWords.WithDelimiters();
 
         public MiKo_2015_FireMethodsAnalyzer() : base(Id, (SymbolKind)(-1))
         {

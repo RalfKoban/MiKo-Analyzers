@@ -5,6 +5,16 @@
 
 # Code files
 [*.{cs,vb}]
+charset = utf-8-bom
+indent_style = space
+indent_size = 4
+max_line_length = 240
+tab_width = 4
+
+dotnet_sort_system_directives_first = true # `using System.*;` comes first.
+dotnet_separate_import_directive_groups = true # we want separated using imports as those are easier to read
+csharp_using_directive_placement = outside_namespace:warning
+
 csharp_style_expression_bodied_methods = when_on_single_line            # Use expression body for methods (IDE0022)
 csharp_style_expression_bodied_local_functions = when_on_single_line    # Use expression body for local functions (IDE0061)
 csharp_indent_case_contents_when_block = false							# Formatting rule (IDE0055), see https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/csharp-formatting-options#csharp_indent_case_contents_when_block
@@ -15,6 +25,7 @@ dotnet_diagnostic.IDE0008.severity = none
 dotnet_diagnostic.IDE0010.severity = none # Add missing cases to switch statement (IDE0010)
 dotnet_diagnostic.IDE0022.severity = none # Use expression body for methods (IDE0022)
 dotnet_diagnostic.IDE0046.severity = none # Use conditional expression for return (IDE0046)
+dotnet_diagnostic.IDE0055.severity = none # Formatting rule 
 dotnet_diagnostic.IDE0058.severity = none # Remove unnecessary expression value (IDE0058)
 dotnet_diagnostic.IDE0061.severity = none # Use expression body for local functions (IDE0061)
 

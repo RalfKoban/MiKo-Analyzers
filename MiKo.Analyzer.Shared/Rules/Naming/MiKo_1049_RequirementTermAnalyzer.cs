@@ -19,20 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
-
-        internal static string FindBetterName(string symbolName)
-        {
-            var result = new StringBuilder(symbolName);
-
-            foreach (var pair in ReplacementMap)
-            {
-                result.ReplaceWithCheck(pair.Key, pair.Value);
-            }
-
-            return result.ToString();
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Event, SymbolKind.Field);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
@@ -91,6 +77,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        private static string FindBetterName(string symbolName)
+        {
+            var result = new StringBuilder(symbolName);
+
+            foreach (var pair in ReplacementMap)
+            {
+                result.ReplaceWithCheck(pair.Key, pair.Value);
+            }
+
+            return result.ToString();
+        }
+
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
             var symbolName = new StringBuilder(symbol.Name).ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
@@ -102,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return Constants.Markers.Requirements
                             .Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))
-                            .Select(_ => Issue(symbol, _));
+                            .Select(_ => Issue(symbol, _, CreateBetterNameProposal(FindBetterName(symbol.Name))));
         }
     }
 }

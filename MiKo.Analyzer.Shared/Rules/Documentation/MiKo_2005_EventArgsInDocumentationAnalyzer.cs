@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2005";
 
-        private static readonly string[] Phrases = GetWithDelimiters("event args", "event arg");
-
         public MiKo_2005_EventArgsInDocumentationAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -26,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                foreach (var location in GetAllLocations(token, Constants.Comments.EventArgsTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
                     yield return Issue(symbol.Name, location);
                 }

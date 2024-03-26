@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3062_CodeFixProvider)), Shared]
     public sealed class MiKo_3062_CodeFixProvider : StringMaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3062_ExceptionLogMessageEndsWithColonAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3062";
 
         protected override string Title => Resources.MiKo_3062_CodeFixTitle;
 

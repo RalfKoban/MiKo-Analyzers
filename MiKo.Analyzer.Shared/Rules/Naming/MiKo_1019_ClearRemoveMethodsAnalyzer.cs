@@ -19,10 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => method.Parameters.Any()
-                                                                       ? method.Name.Replace(Clear, Remove)
-                                                                       : method.Name.Replace(Remove, Clear);
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
@@ -37,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbol);
 
-                yield return Issue(symbol, betterName);
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
 
@@ -64,5 +60,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return false;
         }
+
+        private static string FindBetterName(IMethodSymbol method) => method.Parameters.Any()
+                                                                      ? method.Name.Replace(Clear, Remove)
+                                                                      : method.Name.Replace(Remove, Clear);
     }
 }

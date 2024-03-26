@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
-    public static class Verbalizer
+    internal static class Verbalizer
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 

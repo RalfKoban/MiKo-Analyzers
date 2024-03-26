@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2014_CodeFixProvider)), Shared]
     public sealed class MiKo_2014_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2014_DisposeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2014";
 
         protected override string Title => Resources.MiKo_2014_CodeFixTitle;
 
@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var method = syntax.FirstAncestorOrSelf<MethodDeclarationSyntax>();
 
-            var summary = Comment(SyntaxFactory.XmlSummaryElement(), MiKo_2014_DisposeDefaultPhraseAnalyzer.SummaryPhrase).WithTrailingXmlComment();
+            var summary = Comment(SyntaxFactory.XmlSummaryElement(), Constants.Comments.DisposeSummaryPhrase).WithTrailingXmlComment();
 
             var parameters = method.ParameterList.Parameters;
 
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return SyntaxFactory.DocumentationComment(summary.WithEndOfLine());
             }
 
-            var param = ParameterComment(parameters[0], MiKo_2014_DisposeDefaultPhraseAnalyzer.ParameterPhrase).WithEndOfLine();
+            var param = ParameterComment(parameters[0], Constants.Comments.DisposeParameterPhrase).WithEndOfLine();
 
             return SyntaxFactory.DocumentationComment(summary, param);
         }

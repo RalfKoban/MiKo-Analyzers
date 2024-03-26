@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -14,17 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1018";
 
-        public const string BetterName = "BETTER_NAME";
-
         public MiKo_1018_MethodNounSuffixAnalyzer() : base(Id)
         {
-        }
-
-        internal static string FindBetterName(Diagnostic diagnostic, ISymbol symbol)
-        {
-            var betterName = diagnostic.Properties[BetterName];
-
-            return betterName.IsNullOrWhiteSpace() ? symbol.Name : betterName;
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
@@ -39,13 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (Verbalizer.TryMakeVerb(symbol.Name, out var betterName))
             {
-                yield return Issue(
-                               symbol,
-                               betterName,
-                               new Dictionary<string, string>
-                                   {
-                                       { BetterName, betterName },
-                                   });
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
     }

@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "This event shall be raised ", string.Empty },
                                                                                 };
 
-        public override string FixableDiagnosticId => MiKo_2001_EventSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2001";
 
         protected override string Title => Resources.MiKo_2001_CodeFixTitle;
 

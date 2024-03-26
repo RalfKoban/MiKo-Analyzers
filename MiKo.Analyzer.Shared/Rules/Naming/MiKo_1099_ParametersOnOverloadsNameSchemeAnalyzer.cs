@@ -12,13 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1099";
 
-        private const string ProposedName = "ProposedName";
-
         public MiKo_1099_ParametersOnOverloadsNameSchemeAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
-
-        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic issue) => issue.Properties[ProposedName];
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
@@ -120,7 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     if (otherParameter.Type.Equals(referenceParameter.Type, SymbolEqualityComparer.Default))
                     {
                         // types are equal, so renamed
-                        yield return Issue(otherParameter, referenceParameterName, new Dictionary<string, string> { { ProposedName, referenceParameterName } });
+                        yield return Issue(otherParameter, referenceParameterName, CreateBetterNameProposal(referenceParameterName));
                     }
                     else
                     {

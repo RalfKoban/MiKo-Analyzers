@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
-    public static class Pluralizer
+    internal static class Pluralizer
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
 

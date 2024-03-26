@@ -12,16 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public const string Id = "MiKo_3078";
 
-        private const string Position = "Position";
-        private const string IsFlagged = "IsFlagged";
-
         public MiKo_3078_EnumMembersHaveValueAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
-
-        internal static int GetPosition(Diagnostic issue) => int.Parse(issue.Properties[Position]);
-
-        internal static bool IsFlags(Diagnostic issue) => bool.Parse(issue.Properties[IsFlagged]);
 
         protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.IsEnum();
 
@@ -39,8 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     yield return Issue(field, new Dictionary<string, string>
                                                   {
-                                                      { Position, fields.IndexOf(field).ToString("D") },
-                                                      { IsFlagged, isFlagged.ToString() },
+                                                      { Constants.AnalyzerCodeFixSharedData.Position, fields.IndexOf(field).ToString("D") },
+                                                      { Constants.AnalyzerCodeFixSharedData.IsFlagged, isFlagged.ToString() },
                                                   });
                 }
             }
