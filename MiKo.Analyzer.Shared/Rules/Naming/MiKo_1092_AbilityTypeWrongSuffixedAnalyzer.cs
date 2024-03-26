@@ -26,8 +26,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(INamedTypeSymbol symbol) => GetProposedName(symbol.Name);
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.Name.EndsWithAny(TypeSuffixes, Comparison);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
@@ -38,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var proposedName = GetProposedName(name);
 
-                yield return Issue(symbol, proposedName);
+                yield return Issue(symbol, proposedName, CreateBetterNameProposal(proposedName));
             }
         }
 

@@ -21,21 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol)
-        {
-            if (symbol.ContainingSymbol is IMethodSymbol method && IsConversionExtension(method))
-            {
-                return Source;
-            }
-
-            if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType == SpecialType.System_String)
-            {
-                return Format;
-            }
-
-            return symbol.Type.IsEnumerable() ? Values : Value;
-        }
-
         internal static bool IsStringFormatExtension(IParameterSymbol symbol) => symbol.ContainingSymbol is IMethodSymbol method && IsStringFormatExtension(method);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsExtensionMethod;
@@ -89,11 +74,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IsStringFormatExtension(IMethodSymbol method) => method.ReturnType.SpecialType == SpecialType.System_String && method.Name.StartsWith("Format", StringComparison.Ordinal);
 
+        private static string FindBetterName(IParameterSymbol symbol)
+        {
+            if (symbol.ContainingSymbol is IMethodSymbol method && IsConversionExtension(method))
+            {
+                return Source;
+            }
+
+            if (IsStringFormatExtension(symbol) && symbol.Type.SpecialType == SpecialType.System_String)
+            {
+                return Format;
+            }
+
+            return symbol.Type.IsEnumerable() ? Values : Value;
+        }
+
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names)
         {
             if (names.None(_ => _ == parameter.Name))
             {
-                yield return Issue(parameter, names.HumanizedConcatenated());
+                var proposal = FindBetterName(parameter);
+
+                yield return Issue(parameter, names.HumanizedConcatenated(), CreateBetterNameProposal(proposal));
             }
         }
     }

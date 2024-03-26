@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                       .Except("Contains") // special handling
                                                                                       .ToHashSet();
 
-        public override string FixableDiagnosticId => MiKo_3109_TestAssertsHaveMessageAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3109";
 
         protected override string Title => Resources.MiKo_3109_CodeFixTitle;
 

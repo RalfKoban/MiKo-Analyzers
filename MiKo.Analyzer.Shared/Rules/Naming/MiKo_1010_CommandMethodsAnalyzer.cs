@@ -27,8 +27,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol) => GetProposal(symbol.Name, nameof(ICommand.Execute));
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementationOf<ICommand>() is false && symbol.IsTestMethod() is false;
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
@@ -76,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var proposal = GetProposal(methodName, forbiddenName);
 
-                return Issue(method, proposal);
+                return Issue(method, proposal, CreateBetterNameProposal(proposal));
             }
 
             return null;

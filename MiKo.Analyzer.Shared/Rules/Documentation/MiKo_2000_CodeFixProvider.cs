@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                  { "&", "&amp;" },
                                                                              };
 
-        public override string FixableDiagnosticId => MiKo_2000_MalformedDocumentationAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2000";
 
         protected override string Title => Resources.MiKo_2000_CodeFixTitle;
 

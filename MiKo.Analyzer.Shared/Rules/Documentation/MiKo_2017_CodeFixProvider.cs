@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] SummaryText = Constants.Comments.DependencyPropertyFieldSummaryPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] ValueText = Constants.Comments.DependencyPropertyFieldValuePhraseTemplate.FormatWith("|").Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2017_DependencyPropertyDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2017";
 
         protected override string Title => Resources.MiKo_2017_CodeFixTitle;
 

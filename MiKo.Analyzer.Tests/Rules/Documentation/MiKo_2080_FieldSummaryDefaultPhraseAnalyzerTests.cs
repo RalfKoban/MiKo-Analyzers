@@ -420,8 +420,8 @@ public class TestMe
                                  "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
                                  "Contains a bool", "Contains a bool value", "Contains the bool value",
                              };
-            var middles = new[] { "indicating", "that indicates", "to indicate", "which indicates" };
-            var ends = new[] { "if", "that", "whether" };
+            var middles = new[] { "indicating", "that indicates", "to indicate", "which indicates", "controlling", "that controls", "to control", "which controls" };
+            var ends = new[] { "if", "that", "whether", "whether or not" };
 
             foreach (var start in starts)
             {
@@ -437,26 +437,66 @@ public class TestMe
                 }
             }
 
+            yield return "Controls if";
+            yield return "Controls that";
+            yield return "Controls whether";
+            yield return "Controls whether or not";
             yield return "Indicates if";
             yield return "Indicates that";
+
+            yield return "Controlling if";
+            yield return "Controlling that";
+            yield return "Controlling whether";
+            yield return "Controlling whether or not";
             yield return "Indicating if";
             yield return "Indicating that";
             yield return "Indicating whether";
+            yield return "Indicating whether or not";
+
+            yield return "Shall control if";
+            yield return "Shall control that";
+            yield return "Shall control whether";
+            yield return "Shall control whether or not";
             yield return "Shall indicate if";
             yield return "Shall indicate that";
             yield return "Shall indicate whether";
+            yield return "Shall indicate whether or not";
+
+            yield return "Should control if";
+            yield return "Should control that";
+            yield return "Should control whether";
+            yield return "Should control whether or not";
             yield return "Should indicate if";
             yield return "Should indicate that";
             yield return "Should indicate whether";
+            yield return "Should indicate whether or not";
+
+            yield return "To control if";
+            yield return "To control that";
+            yield return "To control whether";
+            yield return "To control whether or not";
             yield return "To indicate if";
             yield return "To indicate that";
             yield return "To indicate whether";
+            yield return "To indicate whether or not";
+
+            yield return "Will control if";
+            yield return "Will control that";
+            yield return "Will control whether";
+            yield return "Will control whether or not";
             yield return "Will indicate if";
             yield return "Will indicate that";
             yield return "Will indicate whether";
+            yield return "Will indicate whether or not";
+
+            yield return "Would control if";
+            yield return "Would control that";
+            yield return "Would control whether";
+            yield return "Would control whether or not";
             yield return "Would indicate if";
             yield return "Would indicate that";
             yield return "Would indicate whether";
+            yield return "Would indicate whether or not";
         }
     }
 }

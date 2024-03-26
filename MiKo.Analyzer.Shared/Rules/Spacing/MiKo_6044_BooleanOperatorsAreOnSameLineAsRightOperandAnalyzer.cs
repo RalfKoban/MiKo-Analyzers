@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -11,8 +9,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6044";
-
-        private const string Spaces = "SPACES";
 
         private static readonly SyntaxKind[] BinaryExpressions =
                                                                  {
@@ -27,8 +23,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static int GetSpaces(Diagnostic diagnostic) => int.Parse(diagnostic.Properties[Spaces]);
-
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, BinaryExpressions);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
@@ -40,7 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             if (startLine != rightPosition.Line)
             {
-                ReportDiagnostics(context, Issue(node.OperatorToken, new Dictionary<string, string> { { Spaces, rightPosition.Character.ToString("D") } }));
+                var issue = Issue(node.OperatorToken, CreateProposalForSpaces(rightPosition.Character));
+
+                ReportDiagnostics(context, issue);
             }
         }
     }

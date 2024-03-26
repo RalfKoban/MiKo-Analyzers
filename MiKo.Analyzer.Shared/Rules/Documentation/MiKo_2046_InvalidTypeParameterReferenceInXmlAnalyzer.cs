@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -21,23 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer() : base(Id, (SymbolKind)(-1))
         {
-        }
-
-        internal static string GetReferencedName(SyntaxNode node)
-        {
-            var name = node.GetCref().GetCrefType().GetName();
-
-            if (name.IsNullOrWhiteSpace())
-            {
-                var nameAttribute = node.GetNameAttribute();
-
-                if (nameAttribute != null)
-                {
-                    name = nameAttribute.TextTokens.First().ValueText;
-                }
-            }
-
-            return name;
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method);
@@ -80,7 +62,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (Tags.Contains(tag))
                             {
-                                var name = GetReferencedName(node);
+                                var name = node.GetReferencedName();
 
                                 if (names.Contains(name))
                                 {

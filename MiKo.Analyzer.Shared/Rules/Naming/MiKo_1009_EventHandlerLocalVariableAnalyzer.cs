@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName() => Handler;
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventHandler() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
@@ -30,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     var symbol = identifier.GetSymbol(semanticModel);
 
-                    yield return Issue(symbol, Handler);
+                    yield return Issue(symbol, Handler, CreateBetterNameProposal(Handler));
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Phrase = Constants.Comments.AsynchrounouslyStartingPhrase;
 
-        public override string FixableDiagnosticId => MiKo_2016_AsyncMethodDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2016";
 
         protected override string Title => Resources.MiKo_2016_CodeFixTitle.FormatWith(Phrase);
 

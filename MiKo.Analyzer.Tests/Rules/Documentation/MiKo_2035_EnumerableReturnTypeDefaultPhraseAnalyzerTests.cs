@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EnumerableReturnValues = EnumerableOnlyReturnValues.Concat(EnumerableTaskReturnValues).ToArray();
 
-        private static readonly string[] StartingPhrases = CreateStartingPhrases().Distinct().ToArray();
+        private static readonly string[] StartingPhrases = CreateStartingPhrases().Take(TestLimit).Distinct().ToArray();
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"

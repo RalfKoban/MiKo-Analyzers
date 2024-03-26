@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2018";
 
-        internal const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
+        private const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
 
         private static readonly string[] WrongPhrases = { "Check ", "Checks ", "Test ", "Tests ", "Determines if " };
 

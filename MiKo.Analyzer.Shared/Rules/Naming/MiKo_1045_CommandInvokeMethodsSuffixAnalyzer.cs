@@ -23,7 +23,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
+
+        private static string FindBetterName(ISymbol symbol)
         {
             // remove any starting 'Is' / 'Has' / 'Are'
             var betterName = WithoutIsHasArePrefix(symbol.Name.AsSpan().WithoutSuffix(Suffix));
@@ -81,8 +83,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeObjectCreation, SyntaxKind.ObjectCreationExpression);
-
         private void AnalyzeObjectCreation(SyntaxNodeAnalysisContext context)
         {
             var node = (ObjectCreationExpressionSyntax)context.Node;
@@ -129,7 +129,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (symbol != null)
                 {
-                    return Issue(symbol, FindBetterName(symbol));
+                    var betterName = FindBetterName(symbol);
+
+                    return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
                 }
             }
 

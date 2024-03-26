@@ -117,7 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         SyntaxKind.FieldDeclaration,
                                                                     };
 
-        public override string FixableDiagnosticId => MiKo_2012_MeaninglessSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2012";
 
         protected override string Title => Resources.MiKo_2012_CodeFixTitle;
 

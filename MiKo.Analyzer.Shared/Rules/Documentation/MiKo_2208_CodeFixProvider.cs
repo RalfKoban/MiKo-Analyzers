@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
-        public override string FixableDiagnosticId => MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2208";
 
         protected override string Title => Resources.MiKo_2208_CodeFixTitle;
 
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var dictionary = new Dictionary<string, string>();
 
-            foreach (var phrase in MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzer.InstanceOfPhrase)
+            foreach (var phrase in Constants.Comments.InstanceOfPhrases)
             {
                 var upperCase = phrase[0].IsUpperCase();
 

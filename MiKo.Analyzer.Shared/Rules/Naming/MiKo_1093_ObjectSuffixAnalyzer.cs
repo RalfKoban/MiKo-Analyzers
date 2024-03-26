@@ -21,17 +21,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var newName = symbol.Name.AsSpan();
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Namespace, SymbolKind.NamedType, SymbolKind.Property, SymbolKind.Field);
 
-            foreach (var suffix in WrongSuffixes)
-            {
-                if (newName.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
-                {
-                    newName = newName.WithoutSuffix(suffix);
-                }
-            }
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeName(symbol);
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
+
+        private static string FindBetterName(string symbolName, string foundSuffix)
+        {
+            var newName = symbolName.AsSpan().WithoutSuffix(foundSuffix);
 
             // do it twice as maybe the name is a combination of both words
             foreach (var suffix in WrongSuffixes)
@@ -45,16 +47,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return newName.ToString();
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Namespace, SymbolKind.NamedType, SymbolKind.Property, SymbolKind.Field);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamespaceSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(IPropertySymbol symbol, Compilation compilation) => AnalyzeName(symbol);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
-
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
             var symbolName = symbol.Name;
@@ -63,7 +55,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (symbolName.EndsWith(suffix, StringComparison.Ordinal))
                 {
-                    yield return Issue(symbol, suffix);
+                    var proposal = FindBetterName(symbol.Name, suffix);
+
+                    yield return Issue(symbol, suffix, CreateBetterNameProposal(proposal));
                 }
             }
         }

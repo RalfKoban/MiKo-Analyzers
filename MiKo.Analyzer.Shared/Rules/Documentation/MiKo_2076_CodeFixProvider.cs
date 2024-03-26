@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2076_CodeFixProvider)), Shared]
     public sealed class MiKo_2076_CodeFixProvider : DocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2076_OptionalParameterDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2076";
 
         protected override string Title => Resources.MiKo_2076_CodeFixTitle;
 
@@ -45,17 +45,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlNodeSyntax GetDefaultValueReference(Diagnostic issue)
         {
-            if (issue.Properties.TryGetValue(MiKo_2076_OptionalParameterDefaultPhraseAnalyzer.DefaultSeeLangwordValue, out var defaultValue))
+            if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, out var defaultValue))
             {
                 return SeeLangword(defaultValue);
             }
 
-            if (issue.Properties.TryGetValue(MiKo_2076_OptionalParameterDefaultPhraseAnalyzer.DefaultSeeCrefValue, out var defaultCrefValue))
+            if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, out var defaultCrefValue))
             {
                 return SeeCref(defaultCrefValue);
             }
 
-            if (issue.Properties.TryGetValue(MiKo_2076_OptionalParameterDefaultPhraseAnalyzer.DefaultCodeValue, out var defaultCodeValue))
+            if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, out var defaultCodeValue))
             {
                 return C(defaultCodeValue);
             }

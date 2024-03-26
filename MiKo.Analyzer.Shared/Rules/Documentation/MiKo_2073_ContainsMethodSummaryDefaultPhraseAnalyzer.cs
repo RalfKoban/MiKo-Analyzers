@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2073";
 
-        internal const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
+        private const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
 
         private static readonly string StartingPhraseFirstWord = StartingPhrase.FirstWord();
 

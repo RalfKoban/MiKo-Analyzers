@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2090_CodeFixProvider)), Shared]
     public sealed class MiKo_2090_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2090_EqualityOperatorAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2090";
 
         protected override string Title => Resources.MiKo_2090_CodeFixTitle;
 

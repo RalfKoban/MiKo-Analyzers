@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
                                                                                                                      .ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2003_EventHandlerSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2003";
 
         protected override string Title => Resources.MiKo_2003_CodeFixTitle;
 

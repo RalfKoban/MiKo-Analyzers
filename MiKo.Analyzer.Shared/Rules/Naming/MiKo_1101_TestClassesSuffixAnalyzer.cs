@@ -19,8 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ITypeSymbol symbol) => FindBetterName(symbol.Name);
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsTestClass();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
@@ -31,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var name = FindBetterName(className);
 
-                yield return Issue(symbol, name);
+                yield return Issue(symbol, name, CreateBetterNameProposal(name));
             }
         }
 

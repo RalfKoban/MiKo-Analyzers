@@ -19,8 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => method.Name + Constants.AsyncSuffix;
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased()
                                                                       && base.ShallAnalyze(symbol)
                                                                       && symbol.IsTestMethod() is false
@@ -39,7 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
             else
             {
-                yield return Issue(symbol, FindBetterName(symbol));
+                var betterName = symbol.Name + Constants.AsyncSuffix;
+
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
     }

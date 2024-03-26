@@ -19,12 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).ReplaceWithCheck("Fire", "Raise")
-                                                                                                     .ReplaceWithCheck("_fire", "_raise")
-                                                                                                     .ReplaceWithCheck("Firing", "Raising")
-                                                                                                     .ReplaceWithCheck("_firing", "_raising")
-                                                                                                     .ToString();
-
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -35,8 +29,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (forbidden)
             {
-                yield return Issue(symbol, FindBetterName(symbol));
+                var proposal = FindBetterName(symbol);
+
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
         }
+
+        private static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).ReplaceWithCheck("Fire", "Raise")
+                                                                                                    .ReplaceWithCheck("_fire", "_raise")
+                                                                                                    .ReplaceWithCheck("Firing", "Raising")
+                                                                                                    .ReplaceWithCheck("_firing", "_raising")
+                                                                                                    .ToString();
     }
 }

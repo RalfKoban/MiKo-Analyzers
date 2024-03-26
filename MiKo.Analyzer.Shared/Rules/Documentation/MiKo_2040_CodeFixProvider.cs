@@ -13,9 +13,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2040_CodeFixProvider)), Shared]
     public sealed class MiKo_2040_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        private static readonly string[] Phrases = MiKo_2040_LangwordAnalyzer.Phrases;
+        private static readonly string[] Phrases = Constants.Comments.LangwordReferences;
 
-        public override string FixableDiagnosticId => MiKo_2040_LangwordAnalyzer.Id;
+        private static readonly HashSet<string> WrongAttributes = Constants.Comments.LangwordWrongAttributes;
+
+        public override string FixableDiagnosticId => "MiKo_2040";
 
         protected override string Title => Resources.MiKo_2040_CodeFixTitle;
 
@@ -33,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
-            var nodes = comment.DescendantNodes<XmlEmptyElementSyntax>(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
+            var nodes = comment.DescendantNodes<XmlEmptyElementSyntax>(_ => _.IsSee(WrongAttributes) || _.IsSeeAlso(WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (_, rewritten) =>
                                                                 {
@@ -46,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax ReplaceWrongNonEmptySeeOrSeeAlso(DocumentationCommentTriviaSyntax comment)
         {
-            var nodes = comment.DescendantNodes<XmlElementSyntax>(_ => _.IsSee(MiKo_2040_LangwordAnalyzer.WrongAttributes) || _.IsSeeAlso(MiKo_2040_LangwordAnalyzer.WrongAttributes)).ToList();
+            var nodes = comment.DescendantNodes<XmlElementSyntax>(_ => _.IsSee(WrongAttributes) || _.IsSeeAlso(WrongAttributes)).ToList();
 
             return comment.ReplaceNodes(nodes, (_, rewritten) =>
                                                                 {
