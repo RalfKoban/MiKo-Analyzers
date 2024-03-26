@@ -925,7 +925,7 @@ public class TestMe
             foreach (var phrase in from start in starts
                                    from verb in verbs
                                    from condition in conditions
-                                   select $"{start} {verb} {condition}")
+                                   select string.Concat(start, " ", verb, " ", condition))
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
@@ -953,7 +953,7 @@ public class TestMe
 
             foreach (var phrase in from startingVerb in startingVerbs
                                    from condition in conditions
-                                   select $"{startingVerb} {condition}")
+                                   select string.Concat(startingVerb, " ", condition))
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
@@ -1002,7 +1002,7 @@ public class TestMe
                                    from condition in conditions
                                    from boolean in booleans
                                    from value in values
-                                   select $"{start} {boolean}{value} {verb} {condition}")
+                                   select string.Concat(start, " ", boolean, value, " ", verb, " ", condition))
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
@@ -1019,7 +1019,7 @@ public class TestMe
             foreach (var phrase in from start in starts
                                    from boolean in booleans
                                    from separator in separators
-                                   select $"{start} {boolean}{separator}")
+                                   select string.Concat(start, " ", boolean, separator))
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);

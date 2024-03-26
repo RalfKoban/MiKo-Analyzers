@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace System
 {
