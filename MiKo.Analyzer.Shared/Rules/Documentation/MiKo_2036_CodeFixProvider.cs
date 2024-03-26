@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,9 +8,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class MiKo_2036_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-        public sealed override string FixableDiagnosticId => MiKo_2036_PropertyDefaultValuePhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2036";
 
-        protected override bool IsApplicable(ImmutableArray<Diagnostic> diagnostics) => diagnostics.Any(MiKo_2036_PropertyDefaultValuePhraseAnalyzer.IsBooleanIssue);
+        protected override bool IsApplicable(ImmutableArray<Diagnostic> diagnostics)
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < diagnostics.Length; index++)
+            {
+                var diagnostic = diagnostics[index];
+                var properties = diagnostic.Properties;
+
+                if (properties.Count > 0 && properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.IsBoolean))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         protected override XmlElementSyntax NonGenericComment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => WithDefaultComment(document, comment, returnType);
 

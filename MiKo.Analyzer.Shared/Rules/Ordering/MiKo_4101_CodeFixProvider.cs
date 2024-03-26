@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_4101_CodeFixProvider)), Shared]
     public sealed class MiKo_4101_CodeFixProvider : OrderingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_4101_TestSetUpMethodOrderingAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_4101";
 
         protected override string Title => Resources.MiKo_4101_CodeFixTitle;
 

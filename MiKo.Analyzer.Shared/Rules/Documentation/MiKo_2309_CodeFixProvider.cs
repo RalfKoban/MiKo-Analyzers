@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2309_CodeFixProvider)), Shared]
     public sealed class MiKo_2309_CodeFixProvider : CommentCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2309_CommentContainsNtContradictionAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2309";
 
         protected override string Title => Resources.MiKo_2309_CodeFixTitle;
 
@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (MiKo_2309_CommentContainsNtContradictionAnalyzer.CommentHasIssue(comment.AsSpan().TrimEnd()))
+            if (DocumentationComment.ContainsPhrases(Constants.Comments.NotContradictionPhrase, comment.AsSpan().TrimEnd()))
             {
                 var text = new StringBuilder(comment).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap).ToString();
 

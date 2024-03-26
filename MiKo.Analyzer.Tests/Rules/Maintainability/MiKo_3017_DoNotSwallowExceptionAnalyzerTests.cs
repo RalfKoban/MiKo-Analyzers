@@ -225,6 +225,29 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_created_exception_without_inner_exception_in_catch_block_of_property_with_available_but_ignored_exception_instance() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string Something
+    {
+        get
+        {
+            try
+            {
+                return string.Empty;
+            }
+            catch (NotSupportedException ex)
+            {
+                throw new InvalidOperationException(""something went wrong here"");
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_created_exception_without_inner_exception_from_parameter()
         {
             const string OriginalCode = @"

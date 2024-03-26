@@ -12,20 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1056";
 
-        private const string Suffix = Constants.DependencyProperty.FieldSuffix;
-
-        // public static System.Windows.DependencyProperty Register(string name, Type propertyType, Type ownerType, System.Windows.PropertyMetadata typeMetadata);
-        private const string Invocation = Constants.DependencyProperty.Register;
-
         public MiKo_1056_DependencyPropertyFieldPrefixAnalyzer() : base(Id, SymbolKind.Field)
         {
-        }
-
-        internal static string FindBetterName(IFieldSymbol symbol)
-        {
-            var propertyName = FindPropertyNames(symbol).First();
-
-            return propertyName + Suffix;
         }
 
         protected override bool ShallAnalyze(IFieldSymbol symbol)
@@ -59,14 +47,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol, Compilation compilation)
         {
-            var propertyNames = FindPropertyNames(symbol);
+            var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyProperty.FieldSuffix, Constants.DependencyProperty.Register);
 
             if (propertyNames.Any())
             {
-                yield return Issue(symbol, propertyNames.Select(_ => _ + Suffix).HumanizedConcatenated());
+                var betterNames = propertyNames.Select(_ => _ + Constants.DependencyProperty.FieldSuffix).ToList();
+                var betterName = betterNames[0];
+
+                yield return Issue(symbol, betterNames.HumanizedConcatenated(), CreateBetterNameProposal(betterName));
             }
         }
-
-        private static IEnumerable<string> FindPropertyNames(IFieldSymbol symbol) => NamesFinder.FindPropertyNames(symbol, Suffix, Invocation);
     }
 }

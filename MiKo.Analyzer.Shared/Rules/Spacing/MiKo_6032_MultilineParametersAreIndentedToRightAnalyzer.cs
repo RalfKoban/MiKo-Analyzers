@@ -17,7 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetOutdentedStartPosition(ParameterListSyntax parameterList)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ParameterList);
+
+        private static LinePosition GetOutdentedStartPosition(ParameterListSyntax parameterList)
         {
             var startPosition = parameterList.GetStartPosition();
             var characterPosition = startPosition.Character + parameterList.OpenParenToken.Span.Length;
@@ -36,8 +38,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return new LinePosition(startPosition.Line, characterPosition);
         }
-
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ParameterList);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
@@ -60,15 +60,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (inspectedLines.Add(parameterPosition.Line))
                 {
-                    // this is a new found line, so inspect start position
+                    // this is a new-found line, so inspect start position
                     if (parameterPosition.Character != characterPosition)
                     {
-                        yield return Issue(parameter.GetName(), parameter);
+                        yield return Issue(parameter.GetName(), parameter, CreateProposalForLinePosition(startPosition));
                     }
                 }
                 else
                 {
-                    // line was already known, eg. due to a leading parameter
+                    // line was already known, e.g. due to a leading parameter
                 }
             }
         }

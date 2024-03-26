@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.TrimEnd(Constants.Underscore);
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Parameters.Length == 0 && symbol.IsTestMethod();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
@@ -28,11 +26,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            var endsWithUnderscore = symbol.Name.EndsWith(Constants.Underscore);
+            var symbolName = symbol.Name;
 
-            return endsWithUnderscore
-                   ? new[] { Issue(symbol) }
-                   : Enumerable.Empty<Diagnostic>();
+            if (symbolName.EndsWith(Constants.Underscore))
+            {
+                yield return Issue(symbol, CreateBetterNameProposal(symbolName.TrimEnd(Constants.Underscore)));
+            }
         }
     }
 }

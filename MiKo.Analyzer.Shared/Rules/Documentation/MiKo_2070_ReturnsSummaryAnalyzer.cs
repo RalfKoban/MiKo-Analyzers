@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2070";
 
-        internal static readonly string[] Phrases = { "Return", "Returns" };
-
         public MiKo_2070_ReturnsSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -58,7 +56,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             problematicText = valueText.FirstWord();
 
-            return firstWord.EqualsAny(Phrases);
+            return firstWord.EqualsAny(Constants.Comments.ReturnWords);
         }
 
         private static string GetProposal(ISymbol symbol)

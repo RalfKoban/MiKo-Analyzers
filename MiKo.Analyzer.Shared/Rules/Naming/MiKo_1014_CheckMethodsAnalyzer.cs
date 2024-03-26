@@ -22,17 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method)
-        {
-            var prefix = FindBetterPrefix(method);
-
-            var phrase = prefix == "Has" && method.Name != SpecialHasPhrase
-                         ? HasPhrase
-                         : Phrase;
-
-            return prefix + method.Name.Substring(phrase.Length);
-        }
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
@@ -50,8 +39,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbol);
 
-                yield return Issue(symbol, betterName);
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
+        }
+
+        private static string FindBetterName(IMethodSymbol method)
+        {
+            var prefix = FindBetterPrefix(method);
+
+            var phrase = prefix == "Has" && method.Name != SpecialHasPhrase
+                         ? HasPhrase
+                         : Phrase;
+
+            return prefix + method.Name.Substring(phrase.Length);
         }
 
         private static string FindBetterPrefix(IMethodSymbol method)

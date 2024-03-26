@@ -12,14 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2082";
 
-        internal static readonly string[] StartingPhrases =
-                                                            {
-                                                                "Defines",
-                                                                "Indicates",
-                                                                "Represents",
-                                                                "Specifies",
-                                                            };
-
         public MiKo_2082_EnumMemberAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
@@ -58,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var text = valueText.AsSpan().TrimStart();
 
-            var startsWith = text.StartsWithAny(StartingPhrases, comparison);
+            var startsWith = text.StartsWithAny(Constants.Comments.EnumMemberWrongStartingWords, comparison);
 
             problematicText = text.FirstWord().ToString();
 

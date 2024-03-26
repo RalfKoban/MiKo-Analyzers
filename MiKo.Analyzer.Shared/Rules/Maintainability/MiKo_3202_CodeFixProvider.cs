@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private static readonly SyntaxKind[] ReturnPoints = new[] { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
 
-        public override string FixableDiagnosticId => MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3202";
 
         protected override string Title => Resources.MiKo_3202_CodeFixTitle;
 

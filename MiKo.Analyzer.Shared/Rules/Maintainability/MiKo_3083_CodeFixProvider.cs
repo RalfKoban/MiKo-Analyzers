@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3083_CodeFixProvider)), Shared]
     public sealed class MiKo_3083_CodeFixProvider : UsePatternMatchingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3083_UsePatternMatchingForNullEqualsExpressionAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3083";
 
         protected override string Title => Resources.MiKo_3083_CodeFixTitle;
     }

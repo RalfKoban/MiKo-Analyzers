@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly string[] ActualMarkers = { "actual", "Actual" };
         private static readonly string[] ExpectedMarkers = { "expected", "Expected" };
 
-        public override string FixableDiagnosticId => MiKo_3105_TestMethodsUseAssertThatAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3105";
 
         protected override string Title => Resources.MiKo_3105_CodeFixTitle;
 

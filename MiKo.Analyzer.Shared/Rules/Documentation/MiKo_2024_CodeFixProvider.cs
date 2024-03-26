@@ -9,13 +9,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2024_CodeFixProvider)), Shared]
     public sealed class MiKo_2024_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2024_EnumParamDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2024";
 
         protected override string Title => Resources.MiKo_2024_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
-            return CommentStartingWith(comment, Constants.Comments.EnumParameterStartingPhrase);
+            var phrase = GetStartingPhraseProposal(issue);
+
+            return CommentStartingWith(comment, phrase);
         }
     }
 }

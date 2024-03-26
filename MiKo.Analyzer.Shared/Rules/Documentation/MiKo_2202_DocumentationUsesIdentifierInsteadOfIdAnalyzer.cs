@@ -13,10 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2202";
 
-        internal const string Term = "id";
-
-        internal static readonly string[] Terms = GetWithDelimiters(Term);
-
         public MiKo_2202_DocumentationUsesIdentifierInsteadOfIdAnalyzer() : base(Id)
         {
         }
@@ -29,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Terms, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                foreach (var location in GetAllLocations(token, Constants.Comments.IdTerms, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
                     yield return Issue(symbol.Name, location);
                 }

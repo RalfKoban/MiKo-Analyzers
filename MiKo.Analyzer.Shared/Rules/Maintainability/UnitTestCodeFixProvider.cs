@@ -19,9 +19,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static InvocationExpressionSyntax AssertThat(ArgumentSyntax argument, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 2, bool removeNameColon = false) // skip both arguments in the original call as we have to correct those
         {
-            var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip));
-            args.Add(argument);
-            args.Add(constraint);
+            var args = new List<ArgumentSyntax>(Math.Max(2, 2 + arguments.Count - skip))
+                           {
+                               argument,
+                               constraint,
+                           };
 
             if (arguments.Count > skip)
             {

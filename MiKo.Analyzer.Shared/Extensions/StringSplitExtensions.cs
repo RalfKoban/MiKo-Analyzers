@@ -4,7 +4,7 @@ using System.Linq;
 // ReSharper disable once CheckNamespace
 namespace System
 {
-    public static class StringSplitExtensions
+    internal static class StringSplitExtensions
     {
         public static IEnumerable<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {

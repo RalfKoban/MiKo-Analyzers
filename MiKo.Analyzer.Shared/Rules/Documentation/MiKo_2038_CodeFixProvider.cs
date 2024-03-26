@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                        .ThenBy(_ => _.Key)
                                                                                                                        .ToDictionary(_ => _.Key, _ => _.Value);
 
-        public override string FixableDiagnosticId => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2038";
 
         protected override string Title => Resources.MiKo_2038_CodeFixTitle;
 

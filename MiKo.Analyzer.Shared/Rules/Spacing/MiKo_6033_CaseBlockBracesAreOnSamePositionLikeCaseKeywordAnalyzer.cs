@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -17,31 +16,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetStartPosition(SwitchSectionSyntax section)
-        {
-            var caseKeyword = section.Labels.First().Keyword;
-
-            return caseKeyword.GetStartPosition();
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Sections);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is SwitchSectionSyntax section && section.Statements.First() is BlockSyntax block)
             {
-                var casePosition = GetStartPosition(section);
-
+                var caseToken = section.Labels.First().Keyword;
                 var openBraceToken = block.OpenBraceToken;
 
+                var casePosition = caseToken.GetStartPosition();
                 var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (casePosition.Line != openBracePosition.Line)
+                if (casePosition.Line != openBracePosition.Line && casePosition.Character != openBracePosition.Character)
                 {
-                    if (casePosition.Character != openBracePosition.Character)
-                    {
-                        ReportDiagnostics(context, Issue(openBraceToken));
-                    }
+                    var issue = Issue(openBraceToken, CreateProposalForLinePosition(casePosition));
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }
