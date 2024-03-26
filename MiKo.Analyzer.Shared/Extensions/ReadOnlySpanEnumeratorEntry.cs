@@ -1,4 +1,6 @@
-﻿// ReSharper disable once CheckNamespace
+﻿// ncrunch: no coverage start
+// ncrunch: rdi off
+// ReSharper disable once CheckNamespace
 namespace System
 {
     internal readonly ref struct ReadOnlySpanEnumeratorEntry
@@ -14,3 +16,5 @@ namespace System
         public override string ToString() => Text.ToString();
     }
 }
+
+// ncrunch: no coverage end

@@ -308,7 +308,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMap(params KeyValuePair<string, string>[] additionalPairs)
         {
-            var texts = CreateStartTerms().Distinct().OrderByDescending(_ => _.Length).ToList();
+            var texts = CreateStartTerms().OrderByDescending(_ => _.Length);
 
             foreach (var text in texts)
             {
@@ -387,7 +387,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var text in from start in starts
                                  from verb in verbs
                                  from condition in conditions
-                                 select $"{start} {verb} {condition} ".TrimStart())
+                                 select string.Concat(start, " ", verb, " ", condition, " ").TrimStart())
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);
@@ -397,7 +397,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var text in from startingVerb in startingVerbs
                                  from condition in conditions
-                                 select $"{startingVerb} {condition} ")
+                                 select string.Concat(startingVerb, " ", condition, " "))
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);

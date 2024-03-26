@@ -6,8 +6,6 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
@@ -305,7 +303,7 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test, RequiresCapability("SSD")]
+        [Test]
         public void Code_gets_fixed_for_non_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = @"
@@ -350,7 +348,7 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
-        [Test, RequiresCapability("SSD")]
+        [Test]
         public void Code_gets_fixed_for_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = @"
