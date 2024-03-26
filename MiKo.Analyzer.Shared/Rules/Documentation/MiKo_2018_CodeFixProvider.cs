@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // fix the wrong replacements (such as "Determines if " which was replaced into "Determines whether if " due to only first word was replaced)
             map.Add("whether if", "whether");
+            map.Add("whether that", "whether");
             map.Add("whether whether", "whether");
 
             return Comment(comment, new[] { firstWord }, map);
