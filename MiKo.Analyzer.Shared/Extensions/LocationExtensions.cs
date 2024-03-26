@@ -3,6 +3,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {

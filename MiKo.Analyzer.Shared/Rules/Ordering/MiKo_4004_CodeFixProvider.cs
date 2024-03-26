@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         private const string TargetAnnotationKind = "target method";
 
-        public override string FixableDiagnosticId => MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_4004";
 
         protected override string Title => Resources.MiKo_4004_CodeFixTitle;
 

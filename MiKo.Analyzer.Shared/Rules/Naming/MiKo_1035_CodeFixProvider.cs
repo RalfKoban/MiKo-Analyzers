@@ -11,11 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_1035_CodeFixProvider)), Shared]
     public sealed class MiKo_1035_CodeFixProvider : NamingCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_1035_PropertyModelSuffixAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_1035";
 
         protected override string Title => Resources.MiKo_1035_CodeFixTitle;
-
-        protected override string GetNewName(Diagnostic diagnostic, ISymbol symbol) => MiKo_1035_PropertyModelSuffixAnalyzer.FindBetterName((IPropertySymbol)symbol);
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<PropertyDeclarationSyntax>().FirstOrDefault();
     }

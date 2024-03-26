@@ -17,15 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol)
-        {
-            var method = symbol.GetEnclosingMethod();
-
-            return symbol.Equals(method.Parameters[0], SymbolEqualityComparer.Default)
-                   ? Parameter1
-                   : Parameter2;
-        }
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsDependencyObjectEventHandler();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsDependencyObjectEventHandler()
@@ -36,14 +27,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var parameters = symbol.Parameters;
 
-            if (parameters[0].Name != Parameter1)
+            var d = parameters[0];
+
+            if (d.Name != Parameter1)
             {
-                yield return Issue(parameters[0], Parameter1);
+                yield return Issue(d, Parameter1, CreateBetterNameProposal(Parameter1));
             }
 
-            if (parameters[1].Name != Parameter2)
+            var e = parameters[1];
+
+            if (e.Name != Parameter2)
             {
-                yield return Issue(parameters[1], Parameter2);
+                yield return Issue(e, Parameter2, CreateBetterNameProposal(Parameter2));
             }
         }
     }

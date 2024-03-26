@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2225_CodeFixProvider)), Shared]
     public sealed class MiKo_2225_CodeFixProvider : DocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2225_SpecialCodeTagCIsOnSameLineAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2225";
 
         protected override string Title => Resources.MiKo_2225_CodeFixTitle;
 

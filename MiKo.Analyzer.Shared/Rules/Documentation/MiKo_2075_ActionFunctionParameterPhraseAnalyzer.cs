@@ -12,11 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2075";
 
-        internal const string Replacement = "callback";
-
-        internal static readonly string[] Terms = { "action", "Action", "function", "Function", "func", "Func" };
-
-        private static readonly string[] Phrases = GetWithDelimiters(Terms);
+        private static readonly string[] ActionTermsWithDelimiters = Constants.Comments.ActionTerms.WithDelimiters();
 
         public MiKo_2075_ActionFunctionParameterPhraseAnalyzer() : base(Id)
         {
@@ -28,9 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Phrases, StringComparison.Ordinal, Offset, Offset))
+                foreach (var location in GetAllLocations(token, ActionTermsWithDelimiters, StringComparison.Ordinal, Offset, Offset))
                 {
-                    yield return Issue(location, Replacement);
+                    yield return Issue(location, Constants.Comments.CallbackTerm);
                 }
             }
         }

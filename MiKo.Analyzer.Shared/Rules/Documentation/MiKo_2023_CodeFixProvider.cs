@@ -77,22 +77,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
                                                                                                  new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
                                                                                                  new KeyValuePair<string, string>(". ", "; "))
-                                                                                .Distinct()
                                                                                 .ToArray();
 
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).Distinct().ToArray();
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeysInUpperCase = ReplacementMapKeys.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.ToHashSet(_ => _.Key).ToArray();
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeysInUpperCase = ReplacementMapKeys.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
 
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
 
 //// ncrunch: rdi default
 
-        public override string FixableDiagnosticId => MiKo_2023_BooleanParamDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2023";
 
         protected override string Title => Resources.MiKo_2023_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             // fix ". Otherwise ..." comments so that they will not get split
             var mergedComment = Comment(comment, new[] { OtherwisePair.Key }, new[] { OtherwisePair });
@@ -308,7 +307,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMap(params KeyValuePair<string, string>[] additionalPairs)
         {
-            var texts = CreateStartTerms().Distinct().OrderByDescending(_ => _.Length).ToList();
+            var texts = CreateStartTerms().ToHashSet().OrderByDescending(_ => _.Length);
 
             foreach (var text in texts)
             {
@@ -384,10 +383,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 "to specify",
                             };
 
-            foreach (var text in from start in starts
+            foreach (var text in from condition in conditions
                                  from verb in verbs
-                                 from condition in conditions
-                                 select $"{start} {verb} {condition} ".TrimStart())
+                                 from start in starts
+                                 select string.Concat(start, " ", verb, " ", condition, " ").TrimStart())
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);
@@ -395,9 +394,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
 
-            foreach (var text in from startingVerb in startingVerbs
-                                 from condition in conditions
-                                 select $"{startingVerb} {condition} ")
+            foreach (var text in from condition in conditions
+                                 from startingVerb in startingVerbs
+                                 select string.Concat(startingVerb, " ", condition, " "))
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);

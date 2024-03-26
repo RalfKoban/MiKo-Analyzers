@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Parts = Constants.Comments.EnumTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2034_EnumReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2034";
 
         protected override string Title => Resources.MiKo_2034_CodeFixTitle;
 

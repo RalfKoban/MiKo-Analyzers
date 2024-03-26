@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private const string Phrase = Constants.Comments.ValueConverterSummaryStartingPhrase;
 
-        public override string FixableDiagnosticId => MiKo_2048_ValueConverterSummaryDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2048";
 
         protected override string Title => Resources.MiKo_2048_CodeFixTitle.FormatWith(Phrase);
 

@@ -11,8 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1109";
 
-        public const string Prefix = "Testable";
-        public const string Suffix = "Ut";
+        private const string Prefix = "Testable";
+        private const string Suffix = "Ut";
 
         public MiKo_1109_TestableClassesShouldNotBeSuffixedWithUtAnalyzer() : base(Id, SymbolKind.NamedType)
         {
@@ -20,22 +20,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(INamedTypeSymbol symbol) => FindBetterName(symbol.Name);
-
-        internal static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
-                                                                    ? symbolName.WithoutSuffix(Suffix)
-                                                                    : Prefix + symbolName.WithoutSuffix(Suffix);
-
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
 
             if (symbolName.EndsWith(Suffix, StringComparison.Ordinal))
             {
-                var newName = FindBetterName(symbolName);
+                var betterName = FindBetterName(symbolName);
 
-                yield return Issue(symbol, newName);
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
+
+        private static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
+                                                                   ? symbolName.WithoutSuffix(Suffix)
+                                                                   : Prefix + symbolName.WithoutSuffix(Suffix);
     }
 }

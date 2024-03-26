@@ -13,13 +13,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2036";
 
-        private const string BooleanKey = "IsBoolean";
-
         public MiKo_2036_PropertyDefaultValuePhraseAnalyzer() : base(Id)
         {
         }
-
-        internal static bool IsBooleanIssue(Diagnostic diagnostic) => diagnostic.Properties.ContainsKey(BooleanKey);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Property);
 
@@ -54,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (returnType.IsBoolean())
             {
-                properties.Add(BooleanKey, string.Empty);
+                properties.Add(Constants.AnalyzerCodeFixSharedData.IsBoolean, string.Empty);
 
                 proposedEndingPhrase = Constants.Comments.DefaultLangwordPhrase.FormatWith("...");
 

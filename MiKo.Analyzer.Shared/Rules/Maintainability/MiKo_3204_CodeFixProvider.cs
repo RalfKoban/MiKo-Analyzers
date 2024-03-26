@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3204_CodeFixProvider)), Shared]
     public sealed class MiKo_3204_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3204_InvertNegativeIfWhenFollowedByElseBlockAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3204";
 
         protected override string Title => Resources.MiKo_3204_CodeFixTitle;
 

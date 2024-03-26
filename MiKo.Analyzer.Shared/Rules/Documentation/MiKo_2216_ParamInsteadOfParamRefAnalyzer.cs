@@ -15,25 +15,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static IEnumerable<SyntaxNode> GetProblematicElements(DocumentationCommentTriviaSyntax comment)
+        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var element in comment.DescendantNodes())
+            foreach (var element in FindProblematicElements(comment))
             {
-                if (element.IsXmlTag(Constants.XmlTag.Param))
-                {
-                    if (element.Parent is XmlElementSyntax)
-                    {
-                        yield return element;
-                    }
-                }
+                yield return Issue(element);
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        private static IEnumerable<SyntaxNode> FindProblematicElements(SyntaxNode comment)
         {
-            foreach (var element in GetProblematicElements(comment))
+            foreach (var element in comment.DescendantNodes())
             {
-                yield return Issue(element);
+                if (element.Parent is XmlElementSyntax && element.IsXmlTag(Constants.XmlTag.Param))
+                {
+                    yield return element;
+                }
             }
         }
     }

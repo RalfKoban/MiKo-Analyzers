@@ -1,10 +1,12 @@
-﻿// ReSharper disable once CheckNamespace
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+// ncrunch: rdi off
+// ncrunch: no coverage start
+// ReSharper disable once CheckNamespace
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
-    public ref struct WordsReadOnlySpanEnumerator
+    internal ref struct WordsReadOnlySpanEnumerator
     {
         private readonly ReadOnlySpan<char> m_text;
         private readonly int[] m_wordStartingPositions;
@@ -155,3 +157,5 @@ namespace System
         }
     }
 }
+
+// ncrunch: no coverage end

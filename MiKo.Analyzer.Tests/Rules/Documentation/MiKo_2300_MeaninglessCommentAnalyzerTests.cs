@@ -1,7 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
@@ -9,7 +7,7 @@ using TestHelper;
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture, RequiresCapability("SSD")]
+    [TestFixture]
     public sealed class MiKo_2300_MeaninglessCommentAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Comments =

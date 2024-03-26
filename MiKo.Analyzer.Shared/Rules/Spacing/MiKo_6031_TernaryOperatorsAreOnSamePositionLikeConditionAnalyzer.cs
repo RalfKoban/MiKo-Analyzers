@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -16,8 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         public MiKo_6031_TernaryOperatorsAreOnSamePositionLikeConditionAnalyzer() : base(Id)
         {
         }
-
-        internal static LinePosition GetStartPosition(ConditionalExpressionSyntax expression) => expression.Condition.GetStartPosition();
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, SyntaxKind.ConditionalExpression);
 
@@ -33,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var operatorToken = expression.QuestionToken;
 
-            var conditionPosition = GetStartPosition(expression);
+            var conditionPosition = expression.Condition.GetStartPosition();
             var operatorPosition = operatorToken.GetStartPosition();
 
             if (conditionPosition.Line != operatorPosition.Line)
@@ -43,12 +40,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (conditionPosition.Character != operatorPosition.Character)
                 {
-                    yield return Issue(operatorToken);
+                    yield return Issue(operatorToken, CreateProposalForLinePosition(conditionPosition));
                 }
 
                 if (conditionPosition.Character != colonPosition.Character)
                 {
-                    yield return Issue(colonToken);
+                    yield return Issue(colonToken, CreateProposalForLinePosition(conditionPosition));
                 }
             }
         }

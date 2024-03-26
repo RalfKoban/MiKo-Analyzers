@@ -14,13 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1066";
 
-        private const string BetterName = "BetterName";
-
         public MiKo_1066_CtorParametersNamedAsAssignedPropertiesAnalyzer() : base(Id)
         {
         }
-
-        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic) => diagnostic.Properties[BetterName];
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor() && symbol.Parameters.Any();
 
@@ -56,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                         // we found a property that gets assigned by a parameter with a wrong name
                                         var betterName = propertyName.ToLowerCaseAt(0);
 
-                                        yield return Issue(parameter, new Dictionary<string, string> { { BetterName, betterName } });
+                                        yield return Issue(parameter, CreateBetterNameProposal(betterName));
                                     }
                                 }
                             }

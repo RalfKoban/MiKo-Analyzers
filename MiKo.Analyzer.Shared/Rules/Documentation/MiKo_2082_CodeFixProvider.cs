@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2082_EnumMemberAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2082";
 
         protected override string Title => Resources.MiKo_2082_CodeFixTitle;
 
@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var continuations = new[] { "that", "whether" };
 
-            foreach (var start in MiKo_2082_EnumMemberAnalyzer.StartingPhrases)
+            foreach (var start in Constants.Comments.EnumMemberWrongStartingWords)
             {
                 foreach (var continuation in continuations)
                 {

@@ -15,15 +15,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutNumberSuffix();
-
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.EndsWithCommonNumber())
+            var symbolName = symbol.Name;
+
+            if (symbolName.EndsWithCommonNumber())
             {
-                yield return Issue(symbol);
+                yield return Issue(symbol, CreateBetterNameProposal(symbolName.WithoutNumberSuffix()));
             }
         }
     }
