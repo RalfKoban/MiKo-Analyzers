@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
+//// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace System
 {
@@ -156,8 +157,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
-
-//// ncrunch: rdi off
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -373,8 +372,6 @@ namespace System
 
             return false;
         }
-
-//// ncrunch: rdi default
 
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
@@ -640,8 +637,6 @@ namespace System
             return text.Slice(lastSpace);
         }
 
-//// ncrunch: rdi off
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0) => string.Format(format, arg0.ToString());
 
@@ -662,8 +657,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string FormatWith(this string format, char arg0, char arg1, char arg2, char arg3) => string.Format(format, arg0.ToString(), arg1.ToString(), arg2.ToString(), arg3.ToString());
-
-//// ncrunch: rdi default
 
         public static string GetNameOnlyPart(this string value) => GetNameOnlyPart(value.AsSpan());
 
