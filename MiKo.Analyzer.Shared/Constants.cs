@@ -10,6 +10,7 @@ namespace MiKoSolutions.Analyzers
         internal const int Indentation = 4;
 
         internal const string AsyncSuffix = "Async";
+        internal const string AsyncCoreSuffix = "AsyncCore";
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string TestsSuffix = "Tests";
 
@@ -862,9 +863,12 @@ namespace MiKoSolutions.Analyzers
         internal static class LambdaIdentifiers
         {
             internal const string Default = "_";
-            internal const string Fallback = "__";
-            internal const string Fallback2 = "___";
-            internal const string Fallback3 = "____";
+            internal const string Fallback0 = "_0";
+            internal const string Fallback1 = "_1";
+            internal const string Fallback2 = "_2";
+            internal const string Fallback3 = "_3";
+            internal const string Fallback4 = "_4";
+            internal const string Fallback5 = "_5";
         }
 
         internal static class Names
