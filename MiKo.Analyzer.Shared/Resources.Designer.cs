@@ -12438,7 +12438,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;virtual&apos; from member and instead provide a &apos;protected virtual&apos; member with name &apos;{0}&apos; that is called by this member.
+        ///   Looks up a localized string similar to Remove &apos;virtual&apos; and provide a &apos;protected virtual {0}&apos; member instead.
         /// </summary>
         internal static string MiKo_3219_MessageFormat {
             get {

@@ -16,7 +16,25 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Class && symbol.IsGenerated() is false;
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Class)
+            {
+                return false;
+            }
+
+            if (symbol.IsGenerated())
+            {
+                return false;
+            }
+
+            if (symbol.IsTestClass())
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {

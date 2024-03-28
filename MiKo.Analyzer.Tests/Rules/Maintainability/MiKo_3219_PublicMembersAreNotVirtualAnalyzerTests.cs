@@ -26,6 +26,17 @@ public interface TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"
+using NUnit.Framework;
+
+[TestFixture]
+public class TestMe
+{
+    public virtual string DoSomething() => string.Empty;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_generated_class() => No_issue_is_reported_for(@"
 [System.CodeDom.Compiler.GeneratedCodeAttribute()]
 public class TestMe
