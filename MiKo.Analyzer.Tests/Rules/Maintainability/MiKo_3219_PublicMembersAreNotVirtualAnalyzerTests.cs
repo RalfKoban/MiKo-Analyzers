@@ -26,6 +26,31 @@ public interface TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_generated_class() => No_issue_is_reported_for(@"
+[System.CodeDom.Compiler.GeneratedCodeAttribute()]
+public class TestMe
+{
+    public virtual string DoSomething() => string.Empty;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_generated_partial_class() => No_issue_is_reported_for(@"
+[System.CodeDom.Compiler.GeneratedCodeAttribute()]
+public partial class TestMe
+{
+    public virtual string DoSomething() => string.Empty;
+
+    partial void Initialize();
+}
+
+public partial class TestMe
+{
+    partial void Initialize() { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_static_method_with_visibility_([Values("private", "protected", "internal", "public")] string visibility) => No_issue_is_reported_for(@"
 public class TestMe
 {
