@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
+        protected override bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.TypeKind == TypeKind.Class;
+
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
             var members = symbol.GetMembers();
@@ -27,6 +29,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (member.IsVirtual && member.DeclaredAccessibility == Accessibility.Public)
                 {
+                    if (member is IMethodSymbol method && method.MethodKind != MethodKind.Ordinary)
+                    {
+                        // ignore non-ordinary methods
+                        continue;
+                    }
+
                     var node = member.GetSyntax();
                     var token = node.FirstChildToken(SyntaxKind.VirtualKeyword);
 

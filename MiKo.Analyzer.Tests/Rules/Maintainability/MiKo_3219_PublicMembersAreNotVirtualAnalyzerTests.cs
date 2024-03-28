@@ -18,6 +18,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_interface() => No_issue_is_reported_for(@"
+public interface TestMe
+{
+    string DoSomething();
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_static_method_with_visibility_([Values("private", "protected", "internal", "public")] string visibility) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    " + visibility + @" static int DoSomething(int value) => value;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_non_virtual_method_with_visibility_([Values("private", "protected", "internal", "public")] string visibility) => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -54,6 +70,18 @@ public class TestMe
 public class TestMe
 {
     public virtual int DoSomething(int value) => value;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_public_virtual_property() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public virtual int SomeProperty
+    {
+        get => 42;
+        set => throw new System.NotImplementedException();
+    }
 }
 ");
 
