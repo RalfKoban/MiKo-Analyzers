@@ -12429,6 +12429,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Public members should provide the right set of functionality for direct consumers of a class. In case extensibility is needed, they should call into a protected virtual member of the same name but suffixed with &apos;Core&apos; which then act as extensibility points and are easy to spot..
+        /// </summary>
+        internal static string MiKo_3219_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3219_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;virtual&apos; from member and instead provide a &apos;protected virtual&apos; member with name &apos;{0}&apos; that is called by this member.
+        /// </summary>
+        internal static string MiKo_3219_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3219_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public members should not be &apos;virtual&apos;.
+        /// </summary>
+        internal static string MiKo_3219_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3219_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
