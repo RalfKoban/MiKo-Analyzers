@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
             else if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
             {
-                var betterName = symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + "Core";
+                var betterName = symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + Constants.Core;
 
                 yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }

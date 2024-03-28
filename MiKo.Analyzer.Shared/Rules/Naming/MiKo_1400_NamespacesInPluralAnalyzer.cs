@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Build",
                                                                    "ComponentModel",
                                                                    "Composition",
-                                                                   "Core",
+                                                                   Constants.Core,
                                                                    "Data",
                                                                    "Design",
                                                                    "Documentation",
