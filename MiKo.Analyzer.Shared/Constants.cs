@@ -1285,5 +1285,3 @@ namespace MiKoSolutions.Analyzers
         }
     }
 }
-
-//// ncrunch: rdi default

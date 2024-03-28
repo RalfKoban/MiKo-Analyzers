@@ -16,7 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2023_BooleanParamDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
-        // ncrunch: no coverage start
+//// ncrunch: no coverage start
+
         private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Take(TestLimit).Distinct().ToArray();
         private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Take(TestLimit).Distinct().ToArray();
         private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Take(TestLimit).Distinct().ToArray();
@@ -56,7 +57,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
                                                        };
 
-        // ncrunch: no coverage end
+//// ncrunch: no coverage end
+
         [Test]
         public void No_issue_is_reported_for_undocumented_parameter() => No_issue_is_reported_for(@"
 using System;
@@ -866,7 +868,8 @@ public class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2023_CodeFixProvider();
 
-// ncrunch: no coverage start
+//// ncrunch: no coverage start
+
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartTerms()
         {
@@ -922,10 +925,12 @@ public class TestMe
                                 "which specifies",
                             };
 
-            foreach (var phrase in from start in starts
-                                   from verb in verbs
+            foreach (var phrase in from verb in verbs
+                                   select " " + verb + " " into middle // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from condition in conditions
-                                   select string.Concat(start, " ", verb, " ", condition))
+                                   select middle + condition into end // we have lots of loops, so cache data to avoid unnecessary calculations
+                                   from start in starts
+                                   select start + end)
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
@@ -997,12 +1002,16 @@ public class TestMe
                                 "which specifies",
                             };
 
-            foreach (var phrase in from start in starts
-                                   from verb in verbs
+            foreach (var phrase in from verb in verbs
+                                   select " " + verb + " " into v // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from condition in conditions
-                                   from boolean in booleans
+                                   select v + condition into c // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from value in values
-                                   select string.Concat(start, " ", boolean, value, " ", verb, " ", condition))
+                                   select value + c into vc // we have lots of loops, so cache data to avoid unnecessary calculations
+                                   from boolean in booleans
+                                   select " " + boolean + vc into end // we have lots of loops, so cache data to avoid unnecessary calculations
+                                   from start in starts
+                                   select (start + end).Replace("   ", " ").Replace("  ", " ").Trim())
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
@@ -1016,10 +1025,7 @@ public class TestMe
             var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true" };
             var separators = new[] { string.Empty, ":", ";", "," };
 
-            foreach (var phrase in from start in starts
-                                   from boolean in booleans
-                                   from separator in separators
-                                   select string.Concat(start, " ", boolean, separator))
+            foreach (var phrase in from separator in separators from boolean in booleans from start in starts select string.Concat(start, " ", boolean, separator))
             {
                 yield return phrase.ToUpperCaseAt(0);
                 yield return phrase.ToLowerCaseAt(0);
@@ -1032,12 +1038,12 @@ public class TestMe
             var starts = new[] { "The default is", "Default is", "Defaults to" };
             var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true", @"<see langword=""false""/>", @"<see langref=""false""/>", "false" };
 
-            foreach (var phrase in from start in starts from boolean in booleans select $"{start} {boolean}")
+            foreach (var phrase in from start in starts from boolean in booleans select string.Concat(start, " ", boolean))
             {
                 yield return phrase;
             }
         }
 
-// ncrunch: no coverage end
+//// ncrunch: no coverage end
     }
 }
