@@ -4386,6 +4386,15 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3218_Title" xml:space="preserve">
     <value>Do not define extension methods in unexpected places</value>
   </data>
+  <data name="MiKo_3219_Description" xml:space="preserve">
+    <value>Public members should provide the right set of functionality for direct consumers of a class. In case extensibility is needed, they should call into a protected virtual member of the same name but suffixed with 'Core' which then act as extensibility points and are easy to spot.</value>
+  </data>
+  <data name="MiKo_3219_MessageFormat" xml:space="preserve">
+    <value>Remove 'virtual' and provide a 'protected virtual {0}' member instead</value>
+  </data>
+  <data name="MiKo_3219_Title" xml:space="preserve">
+    <value>Public members should not be 'virtual'</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>

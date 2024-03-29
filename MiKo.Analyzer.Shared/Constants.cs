@@ -9,8 +9,9 @@ namespace MiKoSolutions.Analyzers
     {
         internal const int Indentation = 4;
 
+        internal const string Core = "Core";
         internal const string AsyncSuffix = "Async";
-        internal const string AsyncCoreSuffix = "AsyncCore";
+        internal const string AsyncCoreSuffix = AsyncSuffix + Core;
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string TestsSuffix = "Tests";
 
