@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 437 rules that are currently provided by the analyzer.
+The following tables lists all the 438 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -262,6 +262,7 @@ The following tables lists all the 437 rules that are currently provided by the 
 |MiKo_2227|Documentation should not contain ReSharper suppressions|&#x2713;|\-|
 |MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
 |MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
+|MiKo_2230|Documentation of return value should use &lt;list&gt; when there are values with specific meanings|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
