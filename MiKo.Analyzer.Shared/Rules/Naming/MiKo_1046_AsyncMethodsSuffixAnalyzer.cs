@@ -31,7 +31,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (methodName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal) || TaskFactoryMethods.Contains(methodName))
+            if (methodName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal)
+             || methodName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal)
+             || TaskFactoryMethods.Contains(methodName))
             {
                 // nothing to report here
             }

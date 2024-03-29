@@ -1,4 +1,6 @@
-﻿// ReSharper disable once CheckNamespace
+﻿// ncrunch: no coverage start
+// ncrunch: rdi off
+// ReSharper disable once CheckNamespace
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
@@ -137,3 +139,5 @@ namespace System
         }
     }
 }
+
+// ncrunch: no coverage end

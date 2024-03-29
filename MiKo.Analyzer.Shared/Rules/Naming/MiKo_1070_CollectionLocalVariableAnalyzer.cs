@@ -87,9 +87,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (name)
             {
                 case Constants.LambdaIdentifiers.Default:
-                case Constants.LambdaIdentifiers.Fallback:
+                case Constants.LambdaIdentifiers.Fallback0:
+                case Constants.LambdaIdentifiers.Fallback1:
                 case Constants.LambdaIdentifiers.Fallback2:
                 case Constants.LambdaIdentifiers.Fallback3:
+                case Constants.LambdaIdentifiers.Fallback4:
+                case Constants.LambdaIdentifiers.Fallback5:
                 case "map":
                 case "set":
                 case "list":

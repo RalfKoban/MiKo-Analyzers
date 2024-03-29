@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class MiKoCodeFixProvider : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
-
         public abstract string FixableDiagnosticId { get; }
+
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
 
         protected abstract string Title { get; }
 
