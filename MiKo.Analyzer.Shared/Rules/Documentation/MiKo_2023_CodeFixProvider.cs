@@ -77,11 +77,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                  new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
                                                                                                  new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
                                                                                                  new KeyValuePair<string, string>(". ", "; "))
-                                                                                .Distinct()
                                                                                 .ToArray();
 
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).Distinct().ToArray();
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeysInUpperCase = ReplacementMapKeys.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.ToHashSet(_ => _.Key).ToArray();
+        private static readonly IReadOnlyCollection<string> ReplacementMapKeysInUpperCase = ReplacementMapKeys.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
 
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
@@ -308,7 +307,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMap(params KeyValuePair<string, string>[] additionalPairs)
         {
-            var texts = CreateStartTerms().Distinct().OrderByDescending(_ => _.Length).ToList();
+            var texts = CreateStartTerms().ToHashSet().OrderByDescending(_ => _.Length);
 
             foreach (var text in texts)
             {
@@ -331,10 +330,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var starts = new List<string> { string.Empty };
 
             foreach (var start in from startTerm in startTerms
+                                  select startTerm + " " into s // we have lots of loops, so cache data to avoid unnecessary calculations
                                   from optional in optionals
+                                  select s + optional + " " into so // we have lots of loops, so cache data to avoid unnecessary calculations
                                   from boolean in booleans
+                                  select so + boolean + " " into begin // we have lots of loops, so cache data to avoid unnecessary calculations
                                   from parameter in parameters
-                                  select string.Concat(startTerm, " ", optional, " ", boolean, " ", parameter))
+                                  select begin + parameter)
             {
                 if (start.IsNullOrWhiteSpace())
                 {
@@ -384,10 +386,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 "to specify",
                             };
 
-            foreach (var text in from start in starts
+            foreach (var text in from condition in conditions
+                                 select " " + condition + " " into end // we have lots of loops, so cache data to avoid unnecessary calculations
                                  from verb in verbs
-                                 from condition in conditions
-                                 select $"{start} {verb} {condition} ".TrimStart())
+                                 select " " + verb + end into middle // we have lots of loops, so cache data to avoid unnecessary calculations
+                                 from start in starts
+                                 select (start + middle).TrimStart())
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);
@@ -395,9 +399,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
 
-            foreach (var text in from startingVerb in startingVerbs
-                                 from condition in conditions
-                                 select $"{startingVerb} {condition} ")
+            foreach (var text in from condition in conditions
+                                 select " " + condition + " " into c // we have lots of loops, so cache data to avoid unnecessary calculations
+                                 from startingVerb in startingVerbs
+                                 select startingVerb + c)
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);
