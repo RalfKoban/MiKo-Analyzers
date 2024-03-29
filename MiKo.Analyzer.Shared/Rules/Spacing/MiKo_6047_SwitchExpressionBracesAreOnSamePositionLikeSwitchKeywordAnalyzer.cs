@@ -17,30 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetStartPosition(SwitchExpressionSyntax syntax)
-        {
-            var position = syntax.SwitchKeyword.GetEndPosition();
-
-            return new LinePosition(position.Line, position.Character + 1);
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Expressions);
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is SwitchExpressionSyntax syntax)
             {
-                var switchPosition = GetStartPosition(syntax);
+                var position = syntax.SwitchKeyword.GetEndPosition();
+                var switchPosition = new LinePosition(position.Line, position.Character + 1);
 
                 var openBraceToken = syntax.OpenBraceToken;
                 var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (switchPosition.Line != openBracePosition.Line)
+                if (switchPosition.Line != openBracePosition.Line && switchPosition.Character != openBracePosition.Character)
                 {
-                    if (switchPosition.Character != openBracePosition.Character)
-                    {
-                        ReportDiagnostics(context, Issue(openBraceToken));
-                    }
+                    var issue = Issue(openBraceToken, CreateProposalForLinePosition(switchPosition));
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }

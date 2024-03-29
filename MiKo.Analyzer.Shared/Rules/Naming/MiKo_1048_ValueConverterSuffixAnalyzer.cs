@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,18 +11,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1048";
 
-        internal const string Suffix = "Converter";
+        private const string Suffix = "Converter";
 
         public MiKo_1048_ValueConverterSuffixAnalyzer() : base(Id, SymbolKind.NamedType)
         {
         }
 
-        internal static string FindBetterName(ITypeSymbol symbol) => symbol.Name + Suffix;
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsValueConverter() || symbol.IsMultiValueConverter();
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.Name.EndsWith(Suffix, StringComparison.Ordinal)
-                                                                                                                    ? Enumerable.Empty<Diagnostic>()
-                                                                                                                    : new[] { Issue(symbol, Suffix) };
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
+        {
+            var symbolName = symbol.Name;
+
+            if (symbolName.EndsWith(Suffix, StringComparison.Ordinal) is false)
+            {
+                yield return Issue(symbol, Suffix, CreateBetterNameProposal(symbolName + Suffix));
+            }
+        }
     }
 }

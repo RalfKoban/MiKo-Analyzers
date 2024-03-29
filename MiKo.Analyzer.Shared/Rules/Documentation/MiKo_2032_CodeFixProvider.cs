@@ -123,12 +123,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " Otherwise",
                                                                  };
 
-        public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2032";
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
 //// ncrunch: rdi off
-        internal static IEnumerable<string> CreateSimpleStartingPhrases()
+        public static IEnumerable<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]

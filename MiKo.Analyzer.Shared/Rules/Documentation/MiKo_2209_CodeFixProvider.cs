@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2209_CodeFixProvider)), Shared]
     public sealed class MiKo_2209_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2209_DocumentationDoesNotUseDoublePeriodsAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2209";
 
         protected override string Title => Resources.MiKo_2209_CodeFixTitle;
 

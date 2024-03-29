@@ -17,15 +17,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        internal static string GetIdentifierNameFromPropertyExpression(PropertyDeclarationSyntax syntax)
-        {
-            var expression = GetPropertyExpression(syntax);
-
-            return expression is IdentifierNameSyntax identifier
-                   ? identifier.GetName()
-                   : null;
-        }
-
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType().IsEnum();
 
         protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
@@ -54,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (property.IsReadOnly)
             {
-                var expression = GetPropertyExpression(syntax);
+                var expression = syntax.GetPropertyExpression();
 
                 switch (expression)
                 {
@@ -143,38 +134,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static IFieldSymbol GetBackingField(IPropertySymbol symbol, PropertyDeclarationSyntax syntax)
         {
-            var name = GetIdentifierNameFromPropertyExpression(syntax);
+            var name = syntax.GetIdentifierNameFromPropertyExpression();
 
             if (name != null)
             {
                 return symbol.ContainingType.GetFields().FirstOrDefault(_ => _.Name == name);
-            }
-
-            return null;
-        }
-
-        private static ExpressionSyntax GetPropertyExpression(PropertyDeclarationSyntax syntax)
-        {
-            if (syntax.ExpressionBody != null)
-            {
-                return syntax.ExpressionBody.Expression;
-            }
-
-            var accessorList = syntax.AccessorList;
-
-            if (accessorList != null)
-            {
-                var getter = accessorList.Accessors[0];
-
-                if (getter.ExpressionBody != null)
-                {
-                    return getter.ExpressionBody.Expression;
-                }
-
-                if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)
-                {
-                    return r.Expression;
-                }
             }
 
             return null;

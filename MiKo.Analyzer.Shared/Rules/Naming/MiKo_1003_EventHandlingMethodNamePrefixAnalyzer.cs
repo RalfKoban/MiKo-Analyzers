@@ -19,13 +19,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method)
-        {
-            var suffix = FindProperNameSuffix(method);
-
-            return Prefix + suffix;
-        }
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsEventHandler();
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => ShallAnalyze(symbol);
@@ -42,7 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (nameFits is false)
             {
-                yield return Issue(symbol, Prefix + suffix);
+                var proposal = Prefix + suffix;
+
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
         }
 

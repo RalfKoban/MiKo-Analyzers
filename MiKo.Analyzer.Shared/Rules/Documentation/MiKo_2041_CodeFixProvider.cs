@@ -10,13 +10,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2041_CodeFixProvider)), Shared]
     public sealed class MiKo_2041_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2041_InvalidXmlInSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2041";
 
         protected override string Title => Resources.MiKo_2041_CodeFixTitle;
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
-            var syntaxNodes = MiKo_2041_InvalidXmlInSummaryAnalyzer.GetIssues(syntax).ToList();
+            var syntaxNodes = syntax.GetSummaryXmls(Constants.Comments.InvalidSummaryCrefXmlTags).ToList();
             var replacements = syntaxNodes.Select(_ => _.WithLeadingXmlCommentExterior().WithEndOfLine()).ToArray();
 
             var updatedSyntax = syntax.Without(syntaxNodes).AddContent(replacements);

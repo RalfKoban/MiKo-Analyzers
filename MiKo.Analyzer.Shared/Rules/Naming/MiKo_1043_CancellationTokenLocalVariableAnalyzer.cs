@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1043";
 
-        public const string ExpectedName = "token";
+        private const string ExpectedName = "token";
 
         public MiKo_1043_CancellationTokenLocalVariableAnalyzer() : base(Id)
         {
@@ -22,6 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers) => from identifier in identifiers
                                                                                                                                                           where identifier.ValueText != ExpectedName
                                                                                                                                                           select identifier.GetSymbol(semanticModel) into symbol
-                                                                                                                                                          select Issue(symbol, ExpectedName);
+                                                                                                                                                          select Issue(symbol, ExpectedName, CreateBetterNameProposal(ExpectedName));
     }
 }

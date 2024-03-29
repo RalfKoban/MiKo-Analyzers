@@ -4,7 +4,7 @@ using System.Collections.Generic;
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
 {
-    public sealed class AscendingStringComparer : IComparer<string>
+    internal sealed class AscendingStringComparer : IComparer<string>
     {
         public static readonly AscendingStringComparer Default = new AscendingStringComparer();
 

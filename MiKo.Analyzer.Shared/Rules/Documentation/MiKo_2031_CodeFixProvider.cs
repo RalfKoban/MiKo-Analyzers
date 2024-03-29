@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TextParts = CreateTextParts().OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2031";
 
         protected override string Title => Resources.MiKo_2031_CodeFixTitle;
 

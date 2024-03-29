@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3110_CodeFixProvider)), Shared]
     public sealed class MiKo_3110_CodeFixProvider : UnitTestCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3110";
 
         protected override string Title => Resources.MiKo_3110_CodeFixTitle;
 
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var args = invocation.ArgumentList.Arguments;
 
-                    var fixedInvocation = UpdatedSyntax(maes, args, issue.Properties[MiKo_3110_TestAssertsDoNotUseCountAnalyzer.Marker]);
+                    var fixedInvocation = UpdatedSyntax(maes, args, issue.Properties[Constants.AnalyzerCodeFixSharedData.Marker]);
 
                     if (fixedInvocation != null)
                     {

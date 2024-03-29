@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                              { "Fire", "Throw" },
                                                                                          };
 
-        public override string FixableDiagnosticId => MiKo_2015_FireMethodsAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2015";
 
         protected override string Title => Resources.MiKo_2015_CodeFixTitle;
 

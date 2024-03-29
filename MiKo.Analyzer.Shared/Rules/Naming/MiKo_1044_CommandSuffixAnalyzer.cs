@@ -22,8 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol, Diagnostic diagnostic) => symbol.Name + Suffix;
-
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.NamedType, SymbolKind.Method, SymbolKind.Property, SymbolKind.Field);
 
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol.IsCommand();
@@ -72,9 +70,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeNames(ISymbol symbol, IEnumerable<string> suffixes)
         {
-            if (suffixes.None(_ => symbol.Name.EndsWith(_, StringComparison.Ordinal)))
+            var symbolName = symbol.Name;
+
+            if (suffixes.None(_ => symbolName.EndsWith(_, StringComparison.Ordinal)))
             {
-                yield return Issue(symbol, Suffix);
+                yield return Issue(symbol, Suffix, CreateBetterNameProposal(symbolName + Suffix));
             }
         }
     }

@@ -3,13 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>MiKoSolutions.Analyzers.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
-
-  <Import Project="..\MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.8" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MiKo.Analyzer.2022\MiKo.Analyzer.2022.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2022\MiKo.Analyzer.CodeFixes.2022.csproj" />
   </ItemGroup>
 
 </Project>

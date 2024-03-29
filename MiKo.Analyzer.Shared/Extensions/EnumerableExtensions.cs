@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace System.Linq
 {

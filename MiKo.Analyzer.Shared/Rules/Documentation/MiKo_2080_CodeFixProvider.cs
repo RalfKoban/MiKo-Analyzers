@@ -62,18 +62,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2080";
 
         protected override string Title => Resources.MiKo_2080_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
-            var fieldDeclaration = comment.FirstAncestorOrSelf<FieldDeclarationSyntax>();
-            var field = fieldDeclaration?.Declaration.Variables.First();
-
-            var symbol = (IFieldSymbol)GetSymbol(document, field);
-            var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
+            var phrase = GetStartingPhraseProposal(issue);
 
             var preparedComment = Comment(comment, TypeGuidReplacementMapKeys, TypeGuidReplacementMap);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);

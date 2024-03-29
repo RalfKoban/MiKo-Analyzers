@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3113_CodeFixProvider)), Shared]
     public sealed class MiKo_3113_CodeFixProvider : UnitTestCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3113";
 
         protected override string Title => Resources.MiKo_3113_CodeFixTitle;
 
@@ -23,10 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is ExpressionStatementSyntax statement)
             {
-                var shouldNode = MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzer.GetIssue(statement);
+                var shouldNode = statement.GetFluentAssertionShouldNode();
                 var shouldName = shouldNode.GetName();
 
-                var assertThat = shouldName == "ShouldBeEquivalentTo"
+                var assertThat = shouldName == Constants.FluentAssertions.ShouldBeEquivalentTo
                                  ? ConvertShouldBeEquivalentToToAssertThat(document, shouldNode)
                                  : ConvertShouldToAssertThat(document, shouldNode);
 

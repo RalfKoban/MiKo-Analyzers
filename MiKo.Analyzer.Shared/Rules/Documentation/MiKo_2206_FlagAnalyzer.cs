@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2206";
 
-        private static readonly string[] Phrases = GetWithDelimiters("flag", "flags");
-
         public MiKo_2206_FlagAnalyzer() : base(Id)
         {
         }
@@ -24,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, Phrases, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                foreach (var location in GetAllLocations(token, Constants.Comments.FlagTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
                     yield return Issue(location);
                 }

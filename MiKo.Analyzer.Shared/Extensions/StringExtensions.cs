@@ -16,7 +16,7 @@ using MiKoSolutions.Analyzers.Linguistics;
 // ReSharper disable once CheckNamespace
 namespace System
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
@@ -1114,13 +1114,13 @@ namespace System
         public static char ToLowerCase(this char source) => char.ToLowerInvariant(source);
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the characters are lower-case.
+        /// Gets a <see cref="string"/> where the characters are lower-case.
         /// </summary>
         /// <param name="source">
         /// The original text.
         /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the character are lower-case.
+        /// A <see cref="string"/> where the character are lower-case.
         /// </returns>
         public static string ToLowerCase(this ReadOnlySpan<char> source)
         {
@@ -1135,7 +1135,7 @@ namespace System
         }
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
+        /// Gets a <see cref="string"/> where the specified character is lower-case.
         /// </summary>
         /// <param name="source">
         /// The original text.
@@ -1144,7 +1144,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
+        /// A <see cref="string"/> where the specified character is lower-case.
         /// </returns>
         public static string ToLowerCaseAt(this string source, int index)
         {
@@ -1163,14 +1163,11 @@ namespace System
                 return source;
             }
 
-            var characters = source.ToCharArray();
-            characters[index] = characters[index].ToLowerCase();
-
-            return new string(characters);
+            return MakeLowerCaseAt(source, index);
         }
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the specified character is lower-case.
+        /// Gets a <see cref="string"/> where the specified character is lower-case.
         /// </summary>
         /// <param name="source">
         /// The original text.
@@ -1179,7 +1176,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the specified character is lower-case.
+        /// A <see cref="string"/> where the specified character is lower-case.
         /// </returns>
         public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
@@ -1193,17 +1190,14 @@ namespace System
                 return source.ToString();
             }
 
-            var characters = source.ToArray();
-            characters[index] = source[index].ToLowerCase();
-
-            return new string(characters);
+            return MakeLowerCaseAt(source, index);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static char ToUpperCase(this char source) => char.ToUpperInvariant(source);
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
+        /// Gets a <see cref="string"/> where the specified character is upper-case.
         /// </summary>
         /// <param name="source">
         /// The original text.
@@ -1212,7 +1206,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
+        /// A <see cref="string"/> where the specified character is upper-case.
         /// </returns>
         public static string ToUpperCaseAt(this string source, int index)
         {
@@ -1231,14 +1225,11 @@ namespace System
                 return source;
             }
 
-            var characters = source.ToCharArray();
-            characters[index] = characters[index].ToUpperCase();
-
-            return new string(characters);
+            return MakeUpperCaseAt(source, index);
         }
 
         /// <summary>
-        /// Gets an interned copy of the <see cref="string"/> where the specified character is upper-case.
+        /// Gets a <see cref="string"/> where the specified character is upper-case.
         /// </summary>
         /// <param name="source">
         /// The original text.
@@ -1247,7 +1238,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
-        /// An interned copy of the <see cref="string"/> where the specified character is upper-case.
+        /// A <see cref="string"/> where the specified character is upper-case.
         /// </returns>
         public static string ToUpperCaseAt(this ReadOnlySpan<char> source, int index)
         {
@@ -1261,10 +1252,43 @@ namespace System
                 return source.ToString();
             }
 
-            var characters = source.ToArray();
-            characters[index] = characters[index].ToUpperCase();
+            return MakeUpperCaseAt(source, index);
+        }
 
-            return new string(characters);
+        /// <summary>
+        /// Encapsulates the given term with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="value">
+        /// The term to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string value) => WithDelimiters(new[] { value });
+
+        /// <summary>
+        /// Encapsulates the given terms with a space or parenthesis before and a delimiter character behind.
+        /// </summary>
+        /// <param name="values">
+        /// The terms to place a space or parenthesis before and a delimiter character behind each single item.
+        /// </param>
+        /// <returns>
+        /// An array of encapsulated terms.
+        /// </returns>
+        public static string[] WithDelimiters(this string[] values)
+        {
+            var result = new List<string>();
+
+            foreach (var delimiter in Constants.Comments.Delimiters)
+            {
+                foreach (var phrase in values)
+                {
+                    result.Add(' ' + phrase + delimiter);
+                    result.Add('(' + phrase + delimiter);
+                }
+            }
+
+            return result.ToArray();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1440,5 +1464,37 @@ namespace System
         }
 
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
+
+        private static string MakeUpperCaseAt(string source, int index)
+        {
+            var characters = source.ToCharArray();
+            characters[index] = characters[index].ToUpperCase();
+
+            return new string(characters);
+        }
+
+        private static string MakeUpperCaseAt(ReadOnlySpan<char> source, int index)
+        {
+            var characters = source.ToArray();
+            characters[index] = characters[index].ToUpperCase();
+
+            return new string(characters);
+        }
+
+        private static string MakeLowerCaseAt(string source, int index)
+        {
+            var characters = source.ToCharArray();
+            characters[index] = characters[index].ToLowerCase();
+
+            return new string(characters);
+        }
+
+        private static string MakeLowerCaseAt(ReadOnlySpan<char> source, int index)
+        {
+            var characters = source.ToArray();
+            characters[index] = source[index].ToLowerCase();
+
+            return new string(characters);
+        }
     }
 }

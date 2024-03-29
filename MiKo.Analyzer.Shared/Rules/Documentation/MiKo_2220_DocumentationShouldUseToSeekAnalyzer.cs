@@ -12,11 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2220";
 
-        internal const string Replacement = "to seek";
-
-        internal static readonly string[] Terms = { "to find", "to inspect for", "to look for", "to test for" };
-
-        private static readonly string[] TermsWithDelimiters = GetWithDelimiters(Terms);
+        private static readonly string[] FindTermsWithDelimiters = Constants.Comments.FindTerms.WithDelimiters();
 
         public MiKo_2220_DocumentationShouldUseToSeekAnalyzer() : base(Id)
         {
@@ -28,9 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 const int Offset = 1; // we do not want to underline the first and last char
 
-                foreach (var location in GetAllLocations(token, TermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset))
+                foreach (var location in GetAllLocations(token, FindTermsWithDelimiters, StringComparison.OrdinalIgnoreCase, Offset, Offset))
                 {
-                    yield return Issue(symbol.Name, location, Replacement);
+                    yield return Issue(symbol.Name, location, Constants.Comments.ToSeekTerm);
                 }
             }
         }

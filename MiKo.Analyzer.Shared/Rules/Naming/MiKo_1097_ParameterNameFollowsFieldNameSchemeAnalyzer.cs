@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1097";
 
-        private const string FoundPrefix = "FoundPrefix";
-
         private static readonly string[] WrongPrefixes = Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0).ToArray();
         private static readonly char[] WrongPrefixChars = Constants.Markers.FieldPrefixes.Where(_ => _.Length > 1).Select(_ => _[0]).ToArray(); // we are not interested in '_' character
 
@@ -21,27 +19,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic issue)
-        {
-            var prefix = issue.Properties[FoundPrefix];
-
-            var betterName = symbol.Name.Substring(prefix.Length).ToLowerCaseAt(0);
-
-            return betterName;
-        }
-
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => AnalyzeName(symbol);
 
-        private static string FindWrongPrefix(ISymbol symbol)
+        private static string FindWrongPrefix(ReadOnlySpan<char> symbolName)
         {
-            var symbolName = symbol.Name.AsSpan();
-
             const int MinimalPrefixLength = 2;
 
             if (symbolName.Length >= MinimalPrefixLength)
             {
-                foreach (var wrongPrefix in WrongPrefixes)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < WrongPrefixes.Length; index++)
                 {
+                    var wrongPrefix = WrongPrefixes[index];
+
                     if (symbolName.StartsWith(wrongPrefix))
                     {
                         return wrongPrefix;
@@ -52,8 +42,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (prefix[1].IsUpperCase())
                 {
-                    foreach (var wrongPrefixChar in WrongPrefixChars)
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (var index = 0; index < WrongPrefixChars.Length; index++)
                     {
+                        var wrongPrefixChar = WrongPrefixChars[index];
+
                         if (prefix[0] == wrongPrefixChar)
                         {
                             return wrongPrefixChar.ToString();
@@ -65,13 +58,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return null;
         }
 
+        private static string FindBetterName(ReadOnlySpan<char> symbolName, string prefix) => symbolName.Slice(prefix.Length).ToLowerCaseAt(0);
+
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            var foundPrefix = FindWrongPrefix(symbol);
+            var symbolName = symbol.Name.AsSpan();
+
+            var foundPrefix = FindWrongPrefix(symbolName);
 
             if (foundPrefix != null)
             {
-                return new[] { Issue(symbol, foundPrefix, new Dictionary<string, string> { { FoundPrefix, foundPrefix } }) };
+                var proposal = FindBetterName(symbolName, foundPrefix);
+
+                return new[] { Issue(symbol, foundPrefix, CreateBetterNameProposal(proposal)) };
             }
 
             return Enumerable.Empty<Diagnostic>();

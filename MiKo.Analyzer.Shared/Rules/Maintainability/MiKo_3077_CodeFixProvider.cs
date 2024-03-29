@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3077_CodeFixProvider)), Shared]
     public sealed class MiKo_3077_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3077_EnumPropertyHasDefaultValueAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3077";
 
         protected override string Title => Resources.MiKo_3077_CodeFixTitle;
 
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             // fix backing fields (such as arrow clause or normal return statements)
-            var identifierName = MiKo_3077_EnumPropertyHasDefaultValueAnalyzer.GetIdentifierNameFromPropertyExpression(propertySyntax);
+            var identifierName = propertySyntax.GetIdentifierNameFromPropertyExpression();
 
             if (identifierName != null)
             {
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (classDeclarationSyntax != null)
                 {
-                    foreach (var field in classDeclarationSyntax.DescendantNodes<FieldDeclarationSyntax>())
+                    foreach (var field in classDeclarationSyntax.ChildNodes<FieldDeclarationSyntax>())
                     {
                         var declaration = field.Declaration;
 

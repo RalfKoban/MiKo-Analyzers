@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public const string Id = "MiKo_5002";
 
-        internal const string Format = nameof(Format);
-
         public MiKo_5002_DebugFormatInsteadDebugLogAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -63,7 +61,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);
 
-                    return Issue(enclosingMethod.Name, methodCall.Name, methodName, methodName.Without(Format));
+                    return Issue(enclosingMethod.Name, methodCall.Name, methodName, methodName.Without("Format"));
                 }
 
                 default:

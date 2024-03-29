@@ -15,8 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
         public static readonly IReadOnlyCollection<string> TypeReplacementMapKeys = CreateTypeReplacementMapKeys().ToHashSet() // avoid duplicates
-                                                                                                                   .ToArray(AscendingStringComparer.Default);
+                                                                                                                  .ToArray(AscendingStringComparer.Default);
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap = TypeReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                                              .ToArray(_ => _.Key, AscendingStringComparer.Default);
@@ -41,8 +42,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                            { " type with that ", " type with default values that " },
                                                                                            { " type with which ", " type with default values which " },
                                                                                        };
+//// ncrunch: rdi default
 
-        public override string FixableDiagnosticId => MiKo_2060_FactoryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2060";
 
         protected override string Title => Resources.MiKo_2060_CodeFixTitle;
 
@@ -117,6 +119,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment) => Comment(comment, CleanupReplacementMap.Keys, CleanupReplacementMap);
+
+//// ncrunch: rdi off
 
         private static IEnumerable<string> CreateTypeReplacementMapKeys()
         {
@@ -278,50 +282,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var continuation in continuations)
                 {
-                    yield return word + continuation + " an new instances of the ";
-                    yield return word + continuation + " an new instances of an ";
-                    yield return word + continuation + " an new instances of a ";
-                    yield return word + continuation + " an new instances of ";
-                    yield return word + continuation + " an new instance of the ";
-                    yield return word + continuation + " an new instance of an ";
-                    yield return word + continuation + " an new instance of a ";
-                    yield return word + continuation + " an new instance of ";
-                    yield return word + continuation + " an instances of the ";
-                    yield return word + continuation + " an instances of an ";
-                    yield return word + continuation + " an instances of a ";
-                    yield return word + continuation + " an instances of ";
-                    yield return word + continuation + " an instance of the ";
-                    yield return word + continuation + " an instance of an ";
-                    yield return word + continuation + " an instance of a ";
-                    yield return word + continuation + " an instance of ";
-                    yield return word + continuation + " an ";
-                    yield return word + continuation + " a factory ";
-                    yield return word + continuation + " a new instances of the ";
-                    yield return word + continuation + " a new instances of an ";
-                    yield return word + continuation + " a new instances of a ";
-                    yield return word + continuation + " a new instances of ";
-                    yield return word + continuation + " a new instance of the ";
-                    yield return word + continuation + " a new instance of an ";
-                    yield return word + continuation + " a new instance of a ";
-                    yield return word + continuation + " a new instance of ";
-                    yield return word + continuation + " a instances of the ";
-                    yield return word + continuation + " a instances of an ";
-                    yield return word + continuation + " a instances of a ";
-                    yield return word + continuation + " a instances of ";
-                    yield return word + continuation + " a instance of the ";
-                    yield return word + continuation + " a instance of an ";
-                    yield return word + continuation + " a instance of a ";
-                    yield return word + continuation + " a instance of ";
-                    yield return word + continuation + " a new ";
-                    yield return word + continuation + " a ";
-                    yield return word + continuation + " instances of the ";
-                    yield return word + continuation + " instances of an ";
-                    yield return word + continuation + " instances of a ";
-                    yield return word + continuation + " instances of ";
-                    yield return word + continuation + " new instances of the ";
-                    yield return word + continuation + " new instances of an ";
-                    yield return word + continuation + " new instances of a ";
-                    yield return word + continuation + " new instances of ";
+                    var start = word + continuation;
+
+                    yield return start + " an new instances of the ";
+                    yield return start + " an new instances of an ";
+                    yield return start + " an new instances of a ";
+                    yield return start + " an new instances of ";
+                    yield return start + " an new instance of the ";
+                    yield return start + " an new instance of an ";
+                    yield return start + " an new instance of a ";
+                    yield return start + " an new instance of ";
+                    yield return start + " an instances of the ";
+                    yield return start + " an instances of an ";
+                    yield return start + " an instances of a ";
+                    yield return start + " an instances of ";
+                    yield return start + " an instance of the ";
+                    yield return start + " an instance of an ";
+                    yield return start + " an instance of a ";
+                    yield return start + " an instance of ";
+                    yield return start + " an ";
+                    yield return start + " a factory ";
+                    yield return start + " a new instances of the ";
+                    yield return start + " a new instances of an ";
+                    yield return start + " a new instances of a ";
+                    yield return start + " a new instances of ";
+                    yield return start + " a new instance of the ";
+                    yield return start + " a new instance of an ";
+                    yield return start + " a new instance of a ";
+                    yield return start + " a new instance of ";
+                    yield return start + " a instances of the ";
+                    yield return start + " a instances of an ";
+                    yield return start + " a instances of a ";
+                    yield return start + " a instances of ";
+                    yield return start + " a instance of the ";
+                    yield return start + " a instance of an ";
+                    yield return start + " a instance of a ";
+                    yield return start + " a instance of ";
+                    yield return start + " a new ";
+                    yield return start + " a ";
+                    yield return start + " instances of the ";
+                    yield return start + " instances of an ";
+                    yield return start + " instances of a ";
+                    yield return start + " instances of ";
+                    yield return start + " new instances of the ";
+                    yield return start + " new instances of an ";
+                    yield return start + " new instances of a ";
+                    yield return start + " new instances of ";
                 }
             }
 
@@ -339,5 +345,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "This factory method creates ";
             yield return "This method creates ";
         }
+//// ncrunch: rdi default
     }
 }

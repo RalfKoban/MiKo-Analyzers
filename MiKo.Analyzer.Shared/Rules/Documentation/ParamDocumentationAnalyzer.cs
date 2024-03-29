@@ -15,16 +15,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeParameters(symbol, commentXml, comment);
 
-        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrase, StringComparison comparison = StringComparison.Ordinal)
+        protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
         {
-            if (comment.StartsWithAny(phrase, comparison) is false)
+            if (comment.StartsWithAny(phrases, comparison) is false)
             {
-                var useAllPhrases = phrase.Length > 1 && phrase[0].Length <= 10;
-                var proposal = useAllPhrases
-                               ? phrase.HumanizedConcatenated()
-                               : phrase[0].SurroundedWithApostrophe();
+                var phrase = phrases[0];
+                var preview = phrases.Length > 1 && phrase.Length <= 10
+                              ? phrases.HumanizedConcatenated()
+                              : phrase.SurroundedWithApostrophe();
 
-                yield return Issue(parameter.Name, GetIssueLocation(parameterComment), proposal);
+                yield return Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase));
             }
         }
 
@@ -37,12 +37,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var useAllPhrases = phrases.Length > 1 && phrases[0].Length <= 10;
-            var proposal = useAllPhrases
-                           ? phrases.HumanizedConcatenated()
-                           : phrases[0].SurroundedWithApostrophe();
+            var phrase = phrases[0];
+            var preview = phrases.Length > 1 && phrase.Length <= 10
+                          ? phrases.HumanizedConcatenated()
+                          : phrase.SurroundedWithApostrophe();
 
-            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), proposal) };
+            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase)) };
         }
 
         protected virtual Location GetIssueLocation(XmlElementSyntax parameterComment) => parameterComment.GetContentsLocation();

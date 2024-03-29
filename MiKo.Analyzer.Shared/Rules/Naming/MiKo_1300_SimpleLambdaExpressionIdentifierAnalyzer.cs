@@ -16,31 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol, Diagnostic diagnostic)
-        {
-            // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
-            var count = CountArgumentSyntaxes(symbol.GetSyntax());
-
-            switch (count)
-            {
-                case 0:
-                case 1:
-                    return Constants.LambdaIdentifiers.Default;
-
-                case 2:
-                    return Constants.LambdaIdentifiers.Fallback;
-
-                case 3:
-                    return Constants.LambdaIdentifiers.Fallback2;
-
-                case 4:
-                    return Constants.LambdaIdentifiers.Fallback3;
-
-                default:
-                    return string.Concat(Enumerable.Repeat(Constants.LambdaIdentifiers.Default, count));
-            }
-        }
-
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
             context.RegisterSyntaxNodeAction(AnalyzeSimpleLambdaExpression, SyntaxKind.SimpleLambdaExpression);
@@ -76,6 +51,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return count;
         }
 
+        private static string FindBetterName(ParameterSyntax parameter)
+        {
+            // find argument candidates to see how long the default identifier shall become (note that the own parent is included)
+            var count = CountArgumentSyntaxes(parameter);
+
+            switch (count)
+            {
+                case 0:
+                case 1:
+                    return Constants.LambdaIdentifiers.Default;
+
+                case 2:
+                    return Constants.LambdaIdentifiers.Fallback1;
+
+                case 3:
+                    return Constants.LambdaIdentifiers.Fallback2;
+
+                case 4:
+                    return Constants.LambdaIdentifiers.Fallback3;
+
+                case 5:
+                    return Constants.LambdaIdentifiers.Fallback4;
+
+                case 6:
+                    return Constants.LambdaIdentifiers.Fallback5;
+
+                default:
+                    return Constants.LambdaIdentifiers.Default + (count - 1);
+            }
+        }
+
         private void AnalyzeSimpleLambdaExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (SimpleLambdaExpressionSyntax)context.Node;
@@ -100,13 +106,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case null: // we do not have one
                 case Constants.LambdaIdentifiers.Default: // correct identifier (default one)
-                case Constants.LambdaIdentifiers.Fallback: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback0: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback1: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback3: // correct identifier (3rd fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback4: // correct identifier (4th fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback5: // correct identifier (5th fallback as there is already another identifier in the parent lambda expression)
                     return null;
 
                 default:
-                    return Issue(parameterName, identifier, Constants.LambdaIdentifiers.Default);
+                {
+                    var proposal = FindBetterName(parameter);
+
+                    return Issue(parameterName, identifier, proposal, CreateBetterNameProposal(proposal));
+                }
             }
         }
     }

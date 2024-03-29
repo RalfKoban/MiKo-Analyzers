@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2035_CodeFixProvider)), Shared]
     public sealed class MiKo_2035_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
         private static readonly string[] Phrases = CreatePhrases().ToHashSet(_ => _ + " ").ToArray();
 
         private static readonly string[] TaskPhrases =
@@ -79,7 +80,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
 
-        public override string FixableDiagnosticId => MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2035";
 
         protected override string Title => Resources.MiKo_2035_CodeFixTitle;
 
@@ -180,15 +183,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var phrase = string.Concat(collection, " ", preposition);
 
-                    yield return phrase;
                     yield return phrase.ToUpperCaseAt(0);
+                    yield return phrase.ToLowerCaseAt(0);
 
                     foreach (var modification in modifications)
                     {
                         var modificationPhrase = string.Concat(modification, " ", phrase);
 
-                        yield return modificationPhrase;
                         yield return modificationPhrase.ToUpperCaseAt(0);
+                        yield return modificationPhrase.ToLowerCaseAt(0);
 
                         foreach (var startingWord in startingWords)
                         {
@@ -196,14 +199,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             var startingPhrase = string.Concat(startingWord, " ", phrase);
                             var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                            yield return shortStartingPhrase;
                             yield return shortStartingPhrase.ToUpperCaseAt(0);
+                            yield return shortStartingPhrase.ToLowerCaseAt(0);
 
-                            yield return startingPhrase;
                             yield return startingPhrase.ToUpperCaseAt(0);
+                            yield return startingPhrase.ToLowerCaseAt(0);
 
-                            yield return modifiedStartingPhrase;
                             yield return modifiedStartingPhrase.ToUpperCaseAt(0);
+                            yield return modifiedStartingPhrase.ToLowerCaseAt(0);
                         }
                     }
                 }

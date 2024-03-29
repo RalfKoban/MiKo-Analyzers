@@ -46,20 +46,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
-
-        internal static string FindBetterName(string symbolName)
-        {
-            var name = symbolName.Replace("_Expect_", "_");
-
-            if (TryGetInOrder(name, out var nameInOrder))
-            {
-                return NamesFinder.FindBetterTestName(nameInOrder);
-            }
-
-            return NamesFinder.FindBetterTestName(name);
-        }
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -70,7 +56,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (HasIssue(methodName))
                 {
-                    yield return Issue(symbol);
+                    var betterName = FindBetterName(methodName);
+
+                    yield return Issue(symbol, CreateBetterNameProposal(betterName));
                 }
             }
         }
@@ -104,6 +92,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return false;
+        }
+
+        private static string FindBetterName(string symbolName)
+        {
+            var name = symbolName.Replace("_Expect_", "_");
+
+            if (TryGetInOrder(name, out var nameInOrder))
+            {
+                return NamesFinder.FindBetterTestName(nameInOrder);
+            }
+
+            return NamesFinder.FindBetterTestName(name);
         }
 
         private static bool TryGetInOrder(string name, out string result)
