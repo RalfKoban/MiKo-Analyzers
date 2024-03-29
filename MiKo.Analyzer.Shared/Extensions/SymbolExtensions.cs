@@ -415,7 +415,7 @@ namespace MiKoSolutions.Analyzers
                     return GetSyntax(parameter);
 
                 default:
-                    return value.GetSyntaxNodes().FirstOrDefault();
+                    return value?.GetSyntaxNodes().FirstOrDefault();
             }
         }
 
