@@ -21,9 +21,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            var symbolName = symbol.Name;
+
+            if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
-                var betterName = symbol.Name.WithoutSuffix(Constants.AsyncSuffix);
+                var betterName = symbolName.WithoutSuffix(Constants.AsyncSuffix);
+
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+            }
+            else if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
+            {
+                var betterName = symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + Constants.Core;
 
                 yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }

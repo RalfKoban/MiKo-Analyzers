@@ -22,9 +22,12 @@ public class TestMe
 ");
 
         [TestCase("_")]
-        [TestCase("__")]
-        [TestCase("___")]
-        [TestCase("____")]
+        [TestCase("_0")]
+        [TestCase("_1")]
+        [TestCase("_2")]
+        [TestCase("_3")]
+        [TestCase("_4")]
+        [TestCase("_5")]
         public void No_issue_is_reported_correctly_named_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -68,7 +71,7 @@ public class TestMe
         public void Code_gets_fixed_(string template)
         {
             var originalCode = template.Replace("#1#", "item").Replace("#2#", "c");
-            var fixedCode = template.Replace("#1#", "_").Replace("#2#", "__");
+            var fixedCode = template.Replace("#1#", "_").Replace("#2#", "_1");
 
             VerifyCSharpFix(originalCode, fixedCode);
         }

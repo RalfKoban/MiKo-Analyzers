@@ -15,7 +15,7 @@ using TestHelper;
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture, RequiresCapability("SSD")]
+    [TestFixture]
     public sealed class MiKo_2040_LangwordAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Terms = { "true", "false", "null", };

@@ -1,6 +1,8 @@
-﻿// ReSharper disable once CheckNamespace
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+// ncrunch: rdi off
+// ncrunch: no coverage start
+// ReSharper disable once CheckNamespace
 namespace System
 {
     // Must be a ref struct as it contains a ReadOnlySpan<char>
@@ -155,3 +157,5 @@ namespace System
         }
     }
 }
+
+// ncrunch: no coverage end

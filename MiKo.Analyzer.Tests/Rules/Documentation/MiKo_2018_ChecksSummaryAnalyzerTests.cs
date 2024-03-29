@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -16,7 +17,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2018_ChecksSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] AmbiguousPhrases = CreateAmbiguousPhrases();
+        private static readonly string[] AmbiguousSynchronousPhrases = { "Check if ", "Checks if ", "Test if ", "Tests if ", "Check that ", "Checks that ", "Test that ", "Tests that " };
+
+        private static readonly string[] AmbiguousPhrases = CreateAmbiguousPhrases(AmbiguousSynchronousPhrases);
 
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
@@ -152,13 +155,13 @@ public class TestMe : ITestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_Checks_if_phrase()
+        public void Code_gets_fixed_for_phrase_([ValueSource(nameof(AmbiguousSynchronousPhrases))] string phrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
-    /// Checks if it is there.
+    /// " + phrase + @"it is there.
     /// </summary>
     public bool IsSomething() => true;
 }
@@ -174,17 +177,17 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_Checks_if_phrase_with_leading_dot_after_XML_tag()
+        public void Code_gets_fixed_for_phrase_with_leading_dot_after_XML_tag_([ValueSource(nameof(AmbiguousSynchronousPhrases))] string phrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>.
-    /// Checks if it is there.
+    /// " + phrase + @"it is there.
     /// </summary>
     public bool IsSomething() => true;
 }
@@ -200,17 +203,17 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
-        public void Code_gets_fixed_for_Asynchronously_Checks_if_phrase()
+        public void Code_gets_fixed_for_Asynchronously_phrase_([ValueSource(nameof(AmbiguousSynchronousPhrases))] string phrase)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 public class TestMe
 {
     /// <summary>
-    /// Asynchronously checks if it is there.
+    /// Asynchronously " + phrase.ToLowerCaseAt(0) + @"it is there.
     /// </summary>
     public bool IsSomething() => true;
 }
@@ -226,7 +229,7 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2018_ChecksSummaryAnalyzer.Id;
@@ -236,13 +239,12 @@ public class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2018_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
-        private static string[] CreateAmbiguousPhrases()
+        private static string[] CreateAmbiguousPhrases(string[] phrases)
         {
-            var phrases = new[] { "Check if ", "Checks if ", "Test if ", "Tests if " };
-
             var results = new List<string>(phrases);
             results.AddRange(phrases.Select(_ => _.ToUpper(CultureInfo.CurrentCulture)));
-            results.AddRange(phrases.Select(_ => "Asynchronously " + _));
+            results.AddRange(phrases.Select(_ => "Asynchronously " + _.ToLowerCaseAt(0)));
+            results.AddRange(phrases.Select(_ => "Asynchronously " + _.ToUpperCaseAt(0)));
             results.Sort();
 
             return results.Distinct().ToArray();

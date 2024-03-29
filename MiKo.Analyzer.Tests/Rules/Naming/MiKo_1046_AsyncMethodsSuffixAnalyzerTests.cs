@@ -37,6 +37,16 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_correctly_named_async_void_core_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    protected async void DoSomethingAsyncCore() { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_async_void_method() => An_issue_is_reported_for(@"
 using System;
 
@@ -53,6 +63,16 @@ using System.Threading.Tasks;
 public class TestMe
 {
     public Task DoSomethingAsync() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_correctly_named_Task_core_method() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    protected Task DoSomethingAsyncCore() { }
 }
 ");
 
