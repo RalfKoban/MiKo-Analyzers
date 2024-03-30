@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         private static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
-                                                                                                                   ? documentation.GetSummaryXmls(InvalidTags)
-                                                                                                                   : Enumerable.Empty<XmlNodeSyntax>();
+                                                                                                               ? documentation.GetSummaryXmls(InvalidTags)
+                                                                                                               : Enumerable.Empty<XmlNodeSyntax>();
     }
 }
