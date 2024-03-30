@@ -375,6 +375,8 @@ public sealed class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2040_CodeFixProvider();
 
+//// ncrunch: no coverage start
+
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateWrongItems(bool withCode, params string[] tokens)
         {
@@ -449,5 +451,7 @@ public sealed class TestMe
                 }
             }
         }
+
+        //// ncrunch: no coverage end
     }
 }

@@ -1,4 +1,5 @@
-﻿// ReSharper disable once CheckNamespace
+﻿// ncrunch: rdi off
+// ReSharper disable once CheckNamespace
 namespace System
 {
     internal static class TimeSpanExtensions
