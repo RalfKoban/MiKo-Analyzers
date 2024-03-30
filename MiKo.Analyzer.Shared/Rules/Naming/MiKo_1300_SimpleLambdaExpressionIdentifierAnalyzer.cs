@@ -63,13 +63,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     return Constants.LambdaIdentifiers.Default;
 
                 case 2:
-                    return Constants.LambdaIdentifiers.Fallback1;
+                    return Constants.LambdaIdentifiers.Fallback2Underscores;
 
                 case 3:
-                    return Constants.LambdaIdentifiers.Fallback2;
+                    return Constants.LambdaIdentifiers.Fallback3Underscores;
 
                 case 4:
-                    return Constants.LambdaIdentifiers.Fallback3;
+                    return Constants.LambdaIdentifiers.Fallback4Underscores;
 
                 case 5:
                     return Constants.LambdaIdentifiers.Fallback4;
@@ -106,6 +106,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 case null: // we do not have one
                 case Constants.LambdaIdentifiers.Default: // correct identifier (default one)
+                case Constants.LambdaIdentifiers.Fallback2Underscores: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback3Underscores: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
+                case Constants.LambdaIdentifiers.Fallback4Underscores: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback0: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback1: // correct identifier (fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback2: // correct identifier (2nd fallback as there is already another identifier in the parent lambda expression)
