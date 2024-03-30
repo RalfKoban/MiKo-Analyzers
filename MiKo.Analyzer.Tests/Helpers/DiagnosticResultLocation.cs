@@ -1,5 +1,6 @@
 ﻿using System;
 
+//// ncrunch: rdi off
 namespace TestHelper
 {
     /// <summary>
