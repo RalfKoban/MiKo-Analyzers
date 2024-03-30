@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1093";
 
-        internal static readonly string[] WrongSuffixes =
+        private static readonly string[] WrongSuffixes =
                                                           {
                                                               "Object",
                                                               "Struct",
