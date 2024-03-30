@@ -330,10 +330,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var starts = new List<string> { string.Empty };
 
             foreach (var start in from startTerm in startTerms
+                                  select startTerm + " " into s // we have lots of loops, so cache data to avoid unnecessary calculations
                                   from optional in optionals
+                                  select s + optional + " " into so // we have lots of loops, so cache data to avoid unnecessary calculations
                                   from boolean in booleans
+                                  select so + boolean + " " into begin // we have lots of loops, so cache data to avoid unnecessary calculations
                                   from parameter in parameters
-                                  select string.Concat(startTerm, " ", optional, " ", boolean, " ", parameter))
+                                  select begin + parameter)
             {
                 if (start.IsNullOrWhiteSpace())
                 {
@@ -384,9 +387,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             };
 
             foreach (var text in from condition in conditions
+                                 select " " + condition + " " into end // we have lots of loops, so cache data to avoid unnecessary calculations
                                  from verb in verbs
+                                 select " " + verb + end into middle // we have lots of loops, so cache data to avoid unnecessary calculations
                                  from start in starts
-                                 select string.Concat(start, " ", verb, " ", condition, " ").TrimStart())
+                                 select (start + middle).TrimStart())
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);
@@ -395,8 +400,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
 
             foreach (var text in from condition in conditions
+                                 select " " + condition + " " into c // we have lots of loops, so cache data to avoid unnecessary calculations
                                  from startingVerb in startingVerbs
-                                 select string.Concat(startingVerb, " ", condition, " "))
+                                 select startingVerb + c)
             {
                 yield return text.ToUpperCaseAt(0);
                 yield return text.ToLowerCaseAt(0);

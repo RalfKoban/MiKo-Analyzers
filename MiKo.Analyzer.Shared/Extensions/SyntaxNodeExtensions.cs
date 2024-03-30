@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxNodeExtensions
     {
+//// ncrunch: rdi off
+
         internal static readonly SyntaxTrivia XmlCommentExterior = SyntaxFactory.DocumentationCommentExterior("/// ");
 
         internal static readonly SyntaxTrivia[] XmlCommentStart =
@@ -31,8 +33,6 @@ namespace MiKoSolutions.Analyzers
         private static readonly string[] Nulls = { "null", "Null", "NULL" };
 
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
-
-//// ncrunch: rdi off
 
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
@@ -713,8 +713,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
 
-        //// ncrunch: rdi default
-
         internal static string GetXmlTagName(this SyntaxNode value)
         {
             switch (value)
@@ -726,6 +724,8 @@ namespace MiKoSolutions.Analyzers
                 default: return string.Empty;
             }
         }
+
+//// ncrunch: rdi default
 
         internal static string GetNameOnlyPart(this TypeSyntax value) => value?.ToString().GetNameOnlyPart();
 
@@ -3419,10 +3419,14 @@ namespace MiKoSolutions.Analyzers
             return finalTrivia;
         }
 
+//// ncrunch: rdi off
+
         private static XmlTextSyntax XmlText(string text) => SyntaxFactory.XmlText(text);
 
         private static XmlTextSyntax XmlText(SyntaxTokenList textTokens) => SyntaxFactory.XmlText(textTokens);
 
         private static XmlTextSyntax XmlText(IEnumerable<SyntaxToken> textTokens) => XmlText(textTokens.ToTokenList());
+
+//// ncrunch: rdi default
     }
 }
