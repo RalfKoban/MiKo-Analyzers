@@ -22,6 +22,9 @@ public class TestMe
 ");
 
         [TestCase("_")]
+        [TestCase("__")]
+        [TestCase("___")]
+        [TestCase("____")]
         [TestCase("_0")]
         [TestCase("_1")]
         [TestCase("_2")]
@@ -71,7 +74,7 @@ public class TestMe
         public void Code_gets_fixed_(string template)
         {
             var originalCode = template.Replace("#1#", "item").Replace("#2#", "c");
-            var fixedCode = template.Replace("#1#", "_").Replace("#2#", "_1");
+            var fixedCode = template.Replace("#1#", "_").Replace("#2#", "__");
 
             VerifyCSharpFix(originalCode, fixedCode);
         }
