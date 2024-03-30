@@ -17,12 +17,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes<XmlElementSyntax>(_ => _.IsXmlTag(Constants.XmlTag.List));
-
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
             return GetProblematicElements(comment).SelectMany(AnalyzeList);
         }
+
+        private static IEnumerable<XmlElementSyntax> GetProblematicElements(DocumentationCommentTriviaSyntax comment) => comment.DescendantNodes<XmlElementSyntax>(_ => _.IsXmlTag(Constants.XmlTag.List));
 
         private IEnumerable<Diagnostic> AnalyzeList(XmlElementSyntax list)
         {

@@ -22,10 +22,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
-                                                                                                                ? documentation.GetSummaryXmls(InvalidTags)
-                                                                                                                : Enumerable.Empty<XmlNodeSyntax>();
-
         protected override IEnumerable<Diagnostic> AnalyzeSummary(ISymbol symbol, Compilation compilation, IEnumerable<string> summaries, DocumentationCommentTriviaSyntax comment)
         {
             var method = (IMethodSymbol)symbol;
@@ -38,5 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+
+        private static IEnumerable<XmlNodeSyntax> GetIssues(DocumentationCommentTriviaSyntax documentation) => documentation != null
+                                                                                                               ? documentation.GetSummaryXmls(InvalidTags)
+                                                                                                               : Enumerable.Empty<XmlNodeSyntax>();
     }
 }
