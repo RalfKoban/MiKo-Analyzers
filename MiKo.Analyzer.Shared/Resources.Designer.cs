@@ -15059,5 +15059,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6052_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on single line.
+        /// </summary>
+        internal static string MiKo_6053_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6053_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if &apos;single-line&apos; arguments are placed on a single line instead of splitting them over multiple lines..
+        /// </summary>
+        internal static string MiKo_6053_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6053_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on single line.
+        /// </summary>
+        internal static string MiKo_6053_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6053_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-line arguments shall be placed on single line.
+        /// </summary>
+        internal static string MiKo_6053_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6053_Title", resourceCulture);
+            }
+        }
     }
 }

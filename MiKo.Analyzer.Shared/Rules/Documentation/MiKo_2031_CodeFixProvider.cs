@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2031_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
+
         private static readonly string[] Parts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
         private static readonly string[] ContinueTextParts =

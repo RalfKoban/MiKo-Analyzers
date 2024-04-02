@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly Dictionary<string, string> CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
                                                                                                                        .ThenBy(_ => _.Key)
                                                                                                                        .ToDictionary(_ => _.Key, _ => _.Value);
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2038";
@@ -51,6 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
+
+//// ncrunch: rdi off
 
         private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
         {
@@ -95,4 +98,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
     }
+
+    //// ncrunch: rdi default
 }

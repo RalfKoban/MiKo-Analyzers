@@ -11,7 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2220_CodeFixProvider)), Shared]
     public sealed class MiKo_2220_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2220";
 
@@ -22,9 +26,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(syntax, Constants.Comments.FindTerms, ReplacementMap);
         }
 
+//// ncrunch: rdi off
+
         private static Dictionary<string, string> CreateReplacementMap()
         {
             return Constants.Comments.FindTerms.ToDictionary(_ => _, _ => Constants.Comments.ToSeekTerm);
         }
+
+//// ncrunch: rdi default
     }
 }
