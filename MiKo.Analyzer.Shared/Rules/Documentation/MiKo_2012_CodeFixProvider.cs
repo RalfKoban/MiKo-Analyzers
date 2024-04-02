@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2012_CodeFixProvider)), Shared]
     public sealed class MiKo_2012_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
         private static readonly string[] Verbs =
                                                  {
                                                      "Adopt",
@@ -116,6 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                         SyntaxKind.EventFieldDeclaration,
                                                                         SyntaxKind.FieldDeclaration,
                                                                     };
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2012";
 
@@ -279,6 +281,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return result;
         }
+
+//// ncrunch: rdi off
 
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
         {
@@ -463,5 +467,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+
+//// ncrunch: rdi default
     }
 }

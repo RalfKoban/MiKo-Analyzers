@@ -11,9 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnTypeDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         protected static readonly string[] AlmostCorrectTaskReturnTypeStartingPhrases = CreateAlmostCorrectTaskReturnTypeStartingPhrases().OrderByDescending(_ => _.Length)
                                                                                                                                           .ThenBy(_ => _)
                                                                                                                                           .ToArray();
+
+//// ncrunch: rdi default
 
         protected static XmlEmptyElementSyntax SeeCrefTaskResult()
         {

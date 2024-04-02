@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2033_CodeFixProvider)), Shared]
     public sealed class MiKo_2033_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private const string SpecialAlmostCorrectTaskStartingPhraseIncomplete = "A task that represents the asynchronous operation. The ";
         private const string SpecialAlmostCorrectTaskStartingPhrase = "A task that represents the asynchronous operation. The value of the ";
 
@@ -38,6 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                                      .ToArray(_ => _.Key, AscendingStringComparer.Default);
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2033";
 
@@ -133,6 +137,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
 
+//// ncrunch: rdi off
+
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var starts = new[] { "a ", "A ", string.Empty };
@@ -161,5 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return phrase;
             }
         }
+
+//// ncrunch: rdi default
     }
 }
