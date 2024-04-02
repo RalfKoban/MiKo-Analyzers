@@ -5258,4 +5258,16 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6052_Title" xml:space="preserve">
     <value>Colon of list of base types shall be placed on same line as first base type</value>
   </data>
+  <data name="MiKo_6053_CodeFixTitle" xml:space="preserve">
+    <value>Place argument on single line</value>
+  </data>
+  <data name="MiKo_6053_Description" xml:space="preserve">
+    <value>The code is easier to read if 'single-line' arguments are placed on a single line instead of splitting them over multiple lines.</value>
+  </data>
+  <data name="MiKo_6053_MessageFormat" xml:space="preserve">
+    <value>Place argument on single line</value>
+  </data>
+  <data name="MiKo_6053_Title" xml:space="preserve">
+    <value>Single-line arguments shall be placed on single line</value>
+  </data>
 </root>
