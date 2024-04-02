@@ -13,9 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2082_CodeFixProvider)), Shared]
     public sealed class MiKo_2082_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToArray();
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2082";
 
@@ -29,6 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var continuations = new[] { "that", "whether" };
@@ -44,6 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " ";
             }
         }
+
 //// ncrunch: rdi default
     }
 }
