@@ -755,6 +755,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
         }
 
+        /// <summary>
+        /// Creates an XML list of given list type.
+        /// </summary>
+        /// <remarks>
+        /// Adds leading XML comments (<c>/// </c>) to each item and a trailing XML comment (<c>/// </c>) to the last one.
+        /// </remarks>
+        /// <param name="listType">The type of the list.</param>
+        /// <param name="listItems">The items of the list.</param>
+        /// <returns>The created XML list.</returns>
+        protected static XmlElementSyntax XmlList(string listType, IEnumerable<XmlNodeSyntax> listItems)
+        {
+            var items = listItems.ToList();
+
+            var itemsCount = items.Count;
+
+            if (itemsCount > 0)
+            {
+                for (var index = 0; index < itemsCount; index++)
+                {
+                    items[index] = items[index].WithLeadingXmlComment();
+                }
+
+                items[itemsCount - 1] = items[itemsCount - 1].WithTrailingXmlComment();
+            }
+
+            var list = XmlElement(Constants.XmlTag.List, items);
+            var type = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, listType.AsToken());
+
+            return list.AddStartTagAttributes(type).WithLeadingXmlComment();
+        }
+
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
 
         protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, new SyntaxList<XmlNodeSyntax>(content));

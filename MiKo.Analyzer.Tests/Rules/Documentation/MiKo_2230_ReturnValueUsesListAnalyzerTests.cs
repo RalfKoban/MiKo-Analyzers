@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -113,8 +114,76 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_problematic_text_in_returns()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A value that indicates something being compared. The return value has these meanings: Value Meaning Less than zero Some text here. Zero Some other text here. Greater than zero Some even other text here.
+    /// </returns>
+    public int DoSomething()
+    { }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <returns>
+    /// A value that indicates something being compared. The return value has these meanings:
+    /// <list type=""table"">
+    /// <listheader><term>Value</term><description>Meaning</description></listheader>
+    /// <item><term>Less than zero</term><description>Some text here.</description></item>
+    /// <item><term>Zero</term><description>Some other text here.</description></item>
+    /// <item><term>Greater than zero</term><description>Some even other text here.</description></item>
+    /// </list>
+    /// </returns>
+    public int DoSomething()
+    { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_problematic_text_in_value()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <value>
+    /// A value that indicates something being compared. The return value has these meanings: Value Meaning Less than zero Some text here. Zero Some other text here. Greater than zero Some even other text here.
+    /// </value>
+    public int Something { get; set; }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <value>
+    /// A value that indicates something being compared. The return value has these meanings:
+    /// <list type=""table"">
+    /// <listheader><term>Value</term><description>Meaning</description></listheader>
+    /// <item><term>Less than zero</term><description>Some text here.</description></item>
+    /// <item><term>Zero</term><description>Some other text here.</description></item>
+    /// <item><term>Greater than zero</term><description>Some even other text here.</description></item>
+    /// </list>
+    /// </value>
+    public int Something { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2230_ReturnValueUsesListAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2230_ReturnValueUsesListAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2230_CodeFixProvider();
     }
 }

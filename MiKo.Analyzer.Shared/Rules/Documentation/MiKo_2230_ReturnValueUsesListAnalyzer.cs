@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var text = token.ValueText;
 
-                if (text.Contains("Value Meaning", StringComparison.Ordinal))
+                if (text.Contains(Constants.Comments.ValueMeaningPhrase, StringComparison.Ordinal))
                 {
                     yield return Issue(token);
                 }

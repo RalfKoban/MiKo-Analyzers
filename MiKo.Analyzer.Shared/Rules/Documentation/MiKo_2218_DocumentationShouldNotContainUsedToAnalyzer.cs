@@ -407,7 +407,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return issue;
                 }
 
-                foreach (var location in GetAllLocations(token, UsedToPhrase)) // do not use case insensitive here
+                foreach (var location in GetAllLocations(token, UsedToPhrase)) // do not use case-insensitive here
                 {
                     yield return Issue(location, UsedToReplacement);
                 }

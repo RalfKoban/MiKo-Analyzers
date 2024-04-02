@@ -5,7 +5,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -108,20 +107,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var description = XmlElement(Constants.XmlTag.Description, comment);
                 var item = XmlElement(Constants.XmlTag.Item, description);
 
-                items.Add(item.WithLeadingXmlComment());
+                items.Add(item);
             }
 
-            var itemsCount = items.Count;
-
-            if (itemsCount > 0)
-            {
-                items[itemsCount - 1] = items[itemsCount - 1].WithTrailingXmlComment();
-            }
-
-            var list = XmlElement(Constants.XmlTag.List, items);
-            var listType = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Type, Constants.XmlTag.ListType.Bullet.AsToken());
-
-            return list.AddStartTagAttributes(listType).WithLeadingXmlComment();
+            return XmlList(Constants.XmlTag.ListType.Bullet, items);
         }
     }
 }

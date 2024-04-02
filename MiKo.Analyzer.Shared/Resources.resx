@@ -2899,6 +2899,9 @@ Positive wording is much easier to understand as it is straight forward and come
   <data name="MiKo_2229_Title" xml:space="preserve">
     <value>Documentation should not contain left-over XML fragments</value>
   </data>
+  <data name="MiKo_2230_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;list&gt; for values and meaning</value>
+  </data>
   <data name="MiKo_2230_Description" xml:space="preserve">
     <value>When return values with specific meanings are documented via "Value Meaning", that documentation should be part of a &lt;list&gt;.
 This makes it easier to read because the XML documentation renderer will place the contents in a list.
