@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -32,22 +31,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static string[] GetCommentParts(PropertyDeclarationSyntax property)
         {
-            var isArrowGetterOnly = property.ChildNodes<ArrowExpressionClauseSyntax>().Any();
-
-            if (isArrowGetterOnly)
+            if (property.ExpressionBody != null)
             {
                 return GetOnly;
             }
 
             // try to find a getter
-            var getter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
+            var getter = property.GetGetter();
 
             if (getter is null || getter.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
                 return SetOnly;
             }
 
-            var setter = property.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
+            var setter = property.GetSetter();
 
             if (setter is null || setter.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
