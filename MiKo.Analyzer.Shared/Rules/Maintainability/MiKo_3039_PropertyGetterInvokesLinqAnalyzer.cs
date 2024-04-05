@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeGetAccessorDeclaration, SyntaxKind.GetAccessorDeclaration);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzePropertyDeclaration, SyntaxKind.PropertyDeclaration);
 
         private static SimpleNameSyntax FindNameSyntax(InvocationExpressionSyntax linq)
         {
@@ -29,22 +29,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context)
+        private void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var node = (AccessorDeclarationSyntax)context.Node;
+            if (context.Node is PropertyDeclarationSyntax property)
+            {
+                var expressionBody = property.ExpressionBody;
 
-            ReportDiagnostics(context, Analyze(node, context.SemanticModel));
+                if (expressionBody != null)
+                {
+                    ReportDiagnostics(context, Analyze(expressionBody, property, context.SemanticModel));
+                }
+                else
+                {
+                    var getter = property.GetGetter();
+                    if (getter != null)
+                    {
+                        ReportDiagnostics(context, Analyze(getter, property, context.SemanticModel));
+                    }
+                }
+            }
         }
 
-        private IEnumerable<Diagnostic> Analyze(AccessorDeclarationSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> Analyze(SyntaxNode node, PropertyDeclarationSyntax property, SemanticModel semanticModel)
         {
-            var property = node.GetEnclosing<PropertyDeclarationSyntax>();
-
-            if (property is null)
-            {
-                yield break;
-            }
-
             var propertyName = property.GetName();
 
             foreach (var linq in node.LinqExtensionMethods(semanticModel))
