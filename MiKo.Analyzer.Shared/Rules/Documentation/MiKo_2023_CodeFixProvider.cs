@@ -24,6 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", OtherwiseReplacement);
 
+        private static readonly string[] OtherwisePairKey = { OtherwisePair.Key };
+        private static readonly KeyValuePair<string, string>[] OtherwisePairArray = { OtherwisePair };
+
         private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap(
                                                                                                  new KeyValuePair<string, string>("'true'", string.Empty),
                                                                                                  new KeyValuePair<string, string>("'True'", string.Empty),
@@ -80,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                 .ToArray();
 
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = ReplacementMap.ToHashSet(_ => _.Key).ToArray();
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeysInUpperCase = ReplacementMapKeys.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
+        private static readonly string[] ReplacementMapKeysInUpperCase = ReplacementMapKeys.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
 
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
@@ -94,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             // fix ". Otherwise ..." comments so that they will not get split
-            var mergedComment = Comment(comment, new[] { OtherwisePair.Key }, new[] { OtherwisePair });
+            var mergedComment = Comment(comment, OtherwisePairKey, OtherwisePairArray);
 
             var firstSentence = SplitCommentAfterFirstSentence(mergedComment, out var partsAfterSentence);
 
@@ -172,8 +175,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 //    false: some other condition'
                 var replacement = text.Contains(':') ? ReplacementTo : Replacement;
 
-                foreach (var key in ReplacementMapKeysInUpperCase)
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var index = 0; index < ReplacementMapKeysInUpperCase.Length; index++)
                 {
+                    var key = ReplacementMapKeysInUpperCase[index];
+
                     if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
                     {
                         var subText = text.Slice(key.Length)
@@ -216,8 +222,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             subText = ModifyOrNotPart(subText);
 
-            foreach (var conditional in Conditionals)
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < Conditionals.Length; index++)
             {
+                var conditional = Conditionals[index];
+
                 if (subText.StartsWith(conditional, StringComparison.OrdinalIgnoreCase))
                 {
                     subText = subText.Slice(conditional.Length).TrimStart();
@@ -305,6 +314,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMap(params KeyValuePair<string, string>[] additionalPairs)
         {
             var texts = CreateStartTerms().ToHashSet().OrderByDescending(_ => _.Length);
@@ -329,22 +339,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var starts = new List<string> { string.Empty };
 
-            foreach (var start in from startTerm in startTerms
-                                  select startTerm + " " into s // we have lots of loops, so cache data to avoid unnecessary calculations
-                                  from optional in optionals
-                                  select s + optional + " " into so // we have lots of loops, so cache data to avoid unnecessary calculations
-                                  from boolean in booleans
-                                  select so + boolean + " " into begin // we have lots of loops, so cache data to avoid unnecessary calculations
-                                  from parameter in parameters
-                                  select begin + parameter)
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var startTerm in startTerms)
             {
-                if (start.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
+                // we have lots of loops, so cache data to avoid unnecessary calculations
+                var s = startTerm + " ";
 
-                var fixedStart = start.Replace("   ", " ").Replace("  ", " ").Trim();
-                starts.Add(fixedStart);
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var optional in optionals)
+                {
+                    // we have lots of loops, so cache data to avoid unnecessary calculations
+                    var optionalStart = s + optional + " ";
+
+                    // ReSharper disable once LoopCanBeConvertedToQuery
+                    foreach (var boolean in booleans)
+                    {
+                        // we have lots of loops, so cache data to avoid unnecessary calculations
+                        var optionalBooleanStart = optionalStart + boolean + " ";
+
+                        // ReSharper disable once LoopCanBeConvertedToQuery
+                        foreach (var parameter in parameters)
+                        {
+                            var start = optionalBooleanStart + parameter;
+                            var fixedStart = start.Replace("   ", " ").Replace("  ", " ").Trim();
+
+                            if (fixedStart.IsNullOrWhiteSpace() is false)
+                            {
+                                starts.Add(fixedStart);
+                            }
+                        }
+                    }
+                }
             }
 
             var conditions = new[] { "if to", "if", "whether or not to", "whether or not", "whether to", "whether" };
@@ -386,29 +411,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 "to specify",
                             };
 
-            foreach (var text in from condition in conditions
-                                 select " " + condition + " " into end // we have lots of loops, so cache data to avoid unnecessary calculations
-                                 from verb in verbs
-                                 select " " + verb + end into middle // we have lots of loops, so cache data to avoid unnecessary calculations
-                                 from start in starts
-                                 select (start + middle).TrimStart())
+            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+            for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
             {
-                yield return text.ToUpperCaseAt(0);
-                yield return text.ToLowerCaseAt(0);
+                var condition = conditions[conditionIndex];
+
+                // we have lots of loops, so cache data to avoid unnecessary calculations
+                var end = " " + condition + " ";
+
+                // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+                for (var verbIndex = 0; verbIndex < verbs.Length; verbIndex++)
+                {
+                    var verb = verbs[verbIndex];
+                    var middle = " " + verb + end;
+
+                    // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+                    for (var startIndex = 0; startIndex < starts.Count; startIndex++)
+                    {
+                        var start = starts[startIndex];
+                        var text = (start + middle).TrimStart();
+
+                        yield return text.ToUpperCaseAt(0);
+                        yield return text.ToLowerCaseAt(0);
+                    }
+                }
             }
 
             var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
 
-            foreach (var text in from condition in conditions
-                                 select " " + condition + " " into c // we have lots of loops, so cache data to avoid unnecessary calculations
-                                 from startingVerb in startingVerbs
-                                 select startingVerb + c)
+            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+            for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
             {
-                yield return text.ToUpperCaseAt(0);
-                yield return text.ToLowerCaseAt(0);
+                var condition = conditions[conditionIndex];
+
+                // we have lots of loops, so cache data to avoid unnecessary calculations
+                var end = " " + condition + " ";
+
+                // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+                for (var index = 0; index < startingVerbs.Length; index++)
+                {
+                    var startingVerb = startingVerbs[index];
+                    var text = startingVerb + end;
+
+                    yield return text.ToUpperCaseAt(0);
+                    yield return text.ToLowerCaseAt(0);
+                }
             }
         }
-
-        //// ncrunch: rdi default
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
     }
 }
