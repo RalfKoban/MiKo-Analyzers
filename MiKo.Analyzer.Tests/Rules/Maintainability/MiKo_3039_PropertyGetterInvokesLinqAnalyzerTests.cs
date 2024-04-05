@@ -60,6 +60,21 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_property_as_arrow_clause_without_Linq_extension() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla => new[] { ""a"" };
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_property_getter_as_arrow_clause_without_Linq_extension() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -93,6 +108,39 @@ namespace Bla
             {
                 return Enumerable.Empty<string>();
             }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_as_arrow_clause_with_Enumerable_Empty() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla => Enumerable.Empty<string>();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_getter_as_arrow_clause_with_Enumerable_Empty() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            get => Enumerable.Empty<string>();
         }
     }
 }
@@ -179,6 +227,38 @@ namespace Bla
 ");
 
         [Test]
+        public void An_issue_is_reported_for_property_as_arrow_clause_with_Linq_extension() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla => Enumerable.ToList(new[] { ""a"" });
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_as_arrow_clause_with_Linq_extension_and_elvis_operator() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private IEnumerable<string> _bla;
+
+        public IEnumerable<string> Bla => _bla?.Select(_ => _).ToList();
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_property_getter_with_yield() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -197,24 +277,6 @@ namespace Bla
                     yield return x;
                 }
             }
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_property_getter_as_arrow_clause_with_Enumerable_Empty() => No_issue_is_reported_for(@"
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public IEnumerable<string> Bla
-        {
-            get => Enumerable.Empty<string>();
         }
     }
 }

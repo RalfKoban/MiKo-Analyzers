@@ -204,6 +204,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static AccessorDeclarationSyntax GetGetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
+
+        internal static AccessorDeclarationSyntax GetSetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
+
         internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode value)
         {
             switch (value)
