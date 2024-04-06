@@ -9,11 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3039_PropertyGetterInvokesLinqAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3039_PropertyInvokesLinqAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3039";
 
-        public MiKo_3039_PropertyGetterInvokesLinqAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3039_PropertyInvokesLinqAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -33,26 +33,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (context.Node is PropertyDeclarationSyntax property)
             {
-                var expressionBody = property.ExpressionBody;
+                var issues = AnalyzePropertyDeclaration(property, context.SemanticModel);
 
-                if (expressionBody != null)
-                {
-                    ReportDiagnostics(context, Analyze(expressionBody, property, context.SemanticModel));
-                }
-                else
-                {
-                    var getter = property.GetGetter();
-                    if (getter != null)
-                    {
-                        ReportDiagnostics(context, Analyze(getter, property, context.SemanticModel));
-                    }
-                }
+                ReportDiagnostics(context, issues);
             }
         }
 
-        private IEnumerable<Diagnostic> Analyze(SyntaxNode node, PropertyDeclarationSyntax property, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzePropertyDeclaration(PropertyDeclarationSyntax property, SemanticModel semanticModel)
         {
             var propertyName = property.GetName();
+
+            return Enumerable.Empty<Diagnostic>()
+                             .Concat(AnalyzeProperty(property.ExpressionBody, propertyName, semanticModel))
+                             .Concat(AnalyzeProperty(property.GetGetter(), propertyName, semanticModel))
+                             .Concat(AnalyzeProperty(property.GetSetter(), propertyName, semanticModel));
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeProperty(SyntaxNode node, string propertyName, SemanticModel semanticModel)
+        {
+            if (node is null)
+            {
+                yield break;
+            }
 
             foreach (var linq in node.LinqExtensionMethods(semanticModel))
             {
