@@ -8,7 +8,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3039_PropertyGetterInvokesLinqAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3039_PropertyInvokesLinqAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_empty_methods() => No_issue_is_reported_for(@"
@@ -108,6 +108,64 @@ namespace Bla
             {
                 return Enumerable.Empty<string>();
             }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_getter_as_arrow_clause_with_Empty_Linq_extension() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            get => Enumerable.Empty<string>();
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_setter_with_Empty_Linq_extension() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            set
+            {
+                // just a fake setter that does not make any sense but wanted to have some Linq code
+                value = Enumerable.Empty<string>();
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_setter_as_arrow_clause_with_Empty_Linq_extension() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            set => value = Enumerable.Empty<string>();
         }
     }
 }
@@ -282,8 +340,91 @@ namespace Bla
 }
 ");
 
-        protected override string GetDiagnosticId() => MiKo_3039_PropertyGetterInvokesLinqAnalyzer.Id;
+        [Test]
+        public void An_issue_is_reported_for_property_setter_with_Linq_extension() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3039_PropertyGetterInvokesLinqAnalyzer();
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            set
+            {
+                // just a fake setter that does not make any sense but wanted to have some Linq code
+                value = Enumerable.ToList(new[] { ""a"" });
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_setter_with_cast_as_Linq_extension() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<short> Bla
+        {
+            set
+            {
+                // just a fake setter that does not make any sense but wanted to have some Linq code
+                value = new[] { 1, 2, 3 }.Cast<short>()));
+            }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_setter_as_arrow_clause_with_Linq_extension() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public IEnumerable<string> Bla
+        {
+            // just a fake setter that does not make any sense but wanted to have some Linq code
+            set => value = Enumerable.ToList(new[] { ""a"" });
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_setter_as_arrow_clause_with_Linq_extension_and_elvis_operator() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private IEnumerable<string> _bla;
+
+        public IEnumerable<string> Bla
+        {
+            set => _bla = value?.Select(_ => _).ToList();
+        }
+    }
+}
+");
+
+        protected override string GetDiagnosticId() => MiKo_3039_PropertyInvokesLinqAnalyzer.Id;
+
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3039_PropertyInvokesLinqAnalyzer();
     }
 }
