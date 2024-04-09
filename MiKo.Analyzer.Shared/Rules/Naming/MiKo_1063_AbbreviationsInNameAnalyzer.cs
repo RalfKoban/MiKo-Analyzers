@@ -116,6 +116,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Mnu", "MenuItem" },
                                                                                        { "Msg", "Message" },
                                                                                        { "Num", "Number" },
+                                                                                       { "Op", "Operation" },
                                                                                        { "Param", "Parameter" },
                                                                                        { "Params", "Parameters" },
                                                                                        { "Pos", "Position" },

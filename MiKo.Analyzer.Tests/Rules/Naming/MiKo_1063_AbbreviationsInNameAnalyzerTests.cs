@@ -117,6 +117,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Min",
                                                            "Msg",
                                                            "Num",
+                                                           "Op",
                                                            "Pos",
                                                            "Params",
                                                            "Proc",
