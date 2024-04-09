@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -107,6 +107,10 @@ namespace Bla
             ArgumentNullException.ThrowIfNull(o1);
             ArgumentException.ThrowIfNullOrEmpty(o2);
             ObjectDisposedException.ThrowIf(true, o3);
+            ArgumentOutOfRangeException.ThrowIfZero();
+            ArgumentOutOfRangeException.ThrowIfNegative();
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero();
+            ArgumentOutOfRangeException.ThrowIfGreaterThan();
 
             DoSomething(new object(), new object(), new object());
         }

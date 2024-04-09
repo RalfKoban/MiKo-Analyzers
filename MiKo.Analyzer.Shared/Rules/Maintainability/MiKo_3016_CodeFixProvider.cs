@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3016_CodeFixProvider)), Shared]
     public sealed class MiKo_3016_CodeFixProvider : ObjectCreationExpressionMaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3016_ArgumentNullExceptionThrownAtWrongPlaceAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3016";
 
         protected override string Title => Resources.MiKo_3016_CodeFixTitle;
 

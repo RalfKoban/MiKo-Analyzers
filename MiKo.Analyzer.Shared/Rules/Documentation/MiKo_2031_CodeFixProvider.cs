@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2031_CodeFixProvider)), Shared]
     public sealed class MiKo_2031_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly string[] Parts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", "|").Split('|');
 
         private static readonly string[] ContinueTextParts =
@@ -26,7 +28,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TextParts = CreateTextParts().OrderByDescending(_ => _.Length).ThenBy(_ => _).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2031_TaskReturnTypeDefaultPhraseAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2031";
 
         protected override string Title => Resources.MiKo_2031_CodeFixTitle;
 
@@ -107,6 +111,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
+//// ncrunch: rdi off
+
         private static IEnumerable<string> CreateTextParts()
         {
             yield return "An awaitable task.";
@@ -132,5 +138,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+
+//// ncrunch: rdi default
     }
 }

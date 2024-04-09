@@ -11,9 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ReturnTypeDocumentationCodeFixProvider : DocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         protected static readonly string[] AlmostCorrectTaskReturnTypeStartingPhrases = CreateAlmostCorrectTaskReturnTypeStartingPhrases().OrderByDescending(_ => _.Length)
                                                                                                                                           .ThenBy(_ => _)
                                                                                                                                           .ToArray();
+
+//// ncrunch: rdi default
 
         protected static XmlEmptyElementSyntax SeeCrefTaskResult()
         {
@@ -96,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected virtual SyntaxNode Comment(Document document, XmlElementSyntax comment, PropertyDeclarationSyntax property) => Comment(document, comment, property.GetName(), property.Type);
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
             const string Result = "result";
@@ -126,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         private SyntaxNode Comment(Document document, XmlElementSyntax comment, string memberName, TypeSyntax returnType) => returnType is GenericNameSyntax genericReturnType
                                                                                                                              ? GenericComment(document, comment, memberName, genericReturnType)

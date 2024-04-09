@@ -14,9 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules
 {
     public abstract class MiKoCodeFixProvider : CodeFixProvider
     {
-        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
-
         public abstract string FixableDiagnosticId { get; }
+
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
 
         protected abstract string Title { get; }
 
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
         public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules
                 }
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         protected static ArgumentListSyntax ArgumentList(params ArgumentSyntax[] arguments) => SyntaxFactory.ArgumentList(arguments.ToSeparatedSyntaxList());
 
@@ -163,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue) => null;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         protected virtual Task<Solution> ApplySolutionCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken) => Task.FromResult(document.Project.Solution);
 
         protected Task<Document> ApplyDocumentCodeFixAsync(Document document, SyntaxNode root, SyntaxNode syntax, Diagnostic diagnostic, CancellationToken cancellationToken)
@@ -267,6 +267,6 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }

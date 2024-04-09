@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -51,7 +51,7 @@ namespace Bla
 ");
 
         [Test]
-        public void Code_gets_fixed()
+        public void Code_gets_fixed_for_DependencyProperty_field_named_([Values("m_field", "m_fieldKey", "Field", "FieldKey")] string fieldName)
         {
             const string Template = @"
 using System.Windows;
@@ -67,7 +67,7 @@ namespace Bla
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", "m_field"), Template.Replace("###", "XyzProperty"));
+            VerifyCSharpFix(Template.Replace("###", fieldName), Template.Replace("###", "XyzProperty"));
         }
 
         protected override string GetDiagnosticId() => MiKo_1055_DependencyPropertyFieldSuffixAnalyzer.Id;

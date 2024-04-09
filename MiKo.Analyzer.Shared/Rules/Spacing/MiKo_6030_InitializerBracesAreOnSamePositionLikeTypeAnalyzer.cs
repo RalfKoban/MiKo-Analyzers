@@ -17,13 +17,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
         }
 
-        internal static LinePosition GetStartPosition(InitializerExpressionSyntax initializer)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Initializers);
+
+        private static LinePosition GetStartPosition(InitializerExpressionSyntax initializer)
         {
             switch (initializer.Parent)
             {
                 case ArrayCreationExpressionSyntax a: return a.Type.GetStartPosition();
                 case ObjectCreationExpressionSyntax o: return o.Type.GetStartPosition();
                 case ImplicitArrayCreationExpressionSyntax ia: return ia.CloseBracketToken.GetStartPosition();
+                case ImplicitObjectCreationExpressionSyntax io: return io.ArgumentList.CloseParenToken.GetStartPosition();
                 case AssignmentExpressionSyntax a: return GetAfterEndPosition(a.OperatorToken);
 
                 // consider reduced array initializers
@@ -41,8 +44,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeNode, Initializers);
-
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is InitializerExpressionSyntax initializer)
@@ -52,12 +53,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var typePosition = GetStartPosition(initializer);
                 var openBracePosition = openBraceToken.GetStartPosition();
 
-                if (typePosition.Line != openBracePosition.Line)
+                if (typePosition.Line != openBracePosition.Line && typePosition.Character != openBracePosition.Character)
                 {
-                    if (typePosition.Character != openBracePosition.Character)
-                    {
-                        ReportDiagnostics(context, Issue(openBraceToken));
-                    }
+                    var issue = Issue(openBraceToken, CreateProposalForLinePosition(typePosition));
+
+                    ReportDiagnostics(context, issue);
                 }
             }
         }

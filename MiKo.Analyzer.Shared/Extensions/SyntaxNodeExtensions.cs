@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Text;
 
 using MiKoSolutions.Analyzers.Linguistics;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
@@ -32,8 +33,6 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
-//// ncrunch: collect values off
-
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
@@ -45,8 +44,6 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).Cast<T>();
 
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().Where(predicate);
-
-//// ncrunch: collect values default
 
         internal static bool EnclosingMethodHasParameter(this SyntaxNode value, string parameterName, SemanticModel semanticModel)
         {
@@ -61,8 +58,6 @@ namespace MiKoSolutions.Analyzers
 
             return parameters.Length > 0 && parameters.Any(_ => _.Name == parameterName);
         }
-
-//// ncrunch: collect values off
 
         internal static SyntaxToken FindToken<T>(this T value, Diagnostic diagnostic) where T : SyntaxNode
         {
@@ -101,8 +96,6 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
-
-//// ncrunch: collect values default
 
         internal static Location GetContentsLocation(this XmlElementSyntax value)
         {
@@ -211,7 +204,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-//// ncrunch: collect values off
+        internal static AccessorDeclarationSyntax GetGetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.GetAccessorDeclaration);
+
+        internal static AccessorDeclarationSyntax GetSetter(this PropertyDeclarationSyntax value) => value?.AccessorList?.FirstChild<AccessorDeclarationSyntax>(SyntaxKind.SetAccessorDeclaration);
 
         internal static XmlTextAttributeSyntax GetNameAttribute(this SyntaxNode value)
         {
@@ -229,7 +224,41 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlElementSyntax GetParameterComment(this DocumentationCommentTriviaSyntax value, string parameterName) => value.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == Constants.XmlTag.Param && _.GetParameterName() == parameterName);
 
-//// ncrunch: collect values default
+        internal static string GetIdentifierNameFromPropertyExpression(this PropertyDeclarationSyntax value)
+        {
+            var expression = value.GetPropertyExpression();
+
+            return expression is IdentifierNameSyntax identifier
+                   ? identifier.GetName()
+                   : null;
+        }
+
+        internal static ExpressionSyntax GetPropertyExpression(this PropertyDeclarationSyntax value)
+        {
+            if (value.ExpressionBody != null)
+            {
+                return value.ExpressionBody.Expression;
+            }
+
+            var accessorList = value.AccessorList;
+
+            if (accessorList != null)
+            {
+                var getter = accessorList.Accessors[0];
+
+                if (getter.ExpressionBody != null)
+                {
+                    return getter.ExpressionBody.Expression;
+                }
+
+                if (getter.Body?.Statements.FirstOrDefault() is ReturnStatementSyntax r)
+                {
+                    return r.Expression;
+                }
+            }
+
+            return null;
+        }
 
         internal static IfStatementSyntax GetRelatedIfStatement(this SyntaxNode value)
         {
@@ -263,6 +292,30 @@ namespace MiKoSolutions.Analyzers
             var condition = value.GetRelatedIfStatement()?.Condition ?? value.GetEnclosing<SwitchStatementSyntax>()?.Expression;
 
             return condition;
+        }
+
+        internal static SyntaxNode GetExceptionSwallowingNode(this ObjectCreationExpressionSyntax value, Func<SemanticModel> semanticModelCallback)
+        {
+            var catchClause = value.FirstAncestorOrSelf<CatchClauseSyntax>();
+
+            if (catchClause != null)
+            {
+                // we found an exception inside a catch block that does not get the caught exception as inner exception
+                return catchClause;
+            }
+
+            // inspect any 'if' or 'switch' or 'else if' to see if there is an exception involved
+            var expression = value.GetRelatedCondition()?.FirstDescendant<ExpressionSyntax>(_ => _.GetTypeSymbol(semanticModelCallback())?.IsException() is true);
+
+            if (expression != null)
+            {
+                return expression;
+            }
+
+            // inspect method arguments
+            var parameter = value.GetEnclosing<MethodDeclarationSyntax>()?.ParameterList.Parameters.FirstOrDefault(_ => _.Type.IsException());
+
+            return parameter;
         }
 
         internal static ParameterSyntax GetUsedParameter(this ObjectCreationExpressionSyntax value)
@@ -314,15 +367,11 @@ namespace MiKoSolutions.Analyzers
             return result;
         }
 
-//// ncrunch: collect values off
-
         internal static IEnumerable<T> GetAttributes<T>(this XmlEmptyElementSyntax value) where T : XmlAttributeSyntax => value?.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
 
         internal static IEnumerable<T> GetAttributes<T>(this XmlElementSyntax value) where T : XmlAttributeSyntax => value?.StartTag.Attributes.OfType<XmlAttributeSyntax, T>() ?? Enumerable.Empty<T>();
 
         internal static T GetEnclosing<T>(this SyntaxNode value) where T : SyntaxNode => value.FirstAncestorOrSelf<T>();
-
-//// ncrunch: collect values default
 
         internal static SyntaxNode GetEnclosing(this SyntaxNode value, ISet<SyntaxKind> syntaxKinds)
         {
@@ -422,7 +471,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-//// ncrunch: collect values off
+        internal static XmlTextAttributeSyntax GetListType(this XmlElementSyntax list) => list.GetAttributes<XmlTextAttributeSyntax>()
+                                                                                              .FirstOrDefault(_ => _.GetName() == Constants.XmlTag.Attribute.Type);
+
+        internal static string GetListType(this XmlTextAttributeSyntax listType) => listType.GetTextWithoutTrivia();
 
         internal static string GetMethodName(this ParameterSyntax value)
         {
@@ -527,8 +579,6 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-//// ncrunch: collect values default
-
         internal static string GetName(this InvocationExpressionSyntax value)
         {
             switch (value?.Expression)
@@ -559,8 +609,6 @@ namespace MiKoSolutions.Analyzers
 
             return string.Empty;
         }
-
-//// ncrunch: collect values off
 
         internal static string GetName(this IdentifierNameSyntax value) => value?.Identifier.ValueText;
 
@@ -647,8 +695,6 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static IEnumerable<string> GetNames(this SeparatedSyntaxList<VariableDeclaratorSyntax> value) => value.Select(_ => _.GetName());
-
-        //// ncrunch: collect values default
 
         internal static string GetXmlTagName(this SyntaxNode value)
         {
@@ -840,8 +886,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
-//// ncrunch: collect values off
-
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
             if (value is null)
@@ -870,8 +914,6 @@ namespace MiKoSolutions.Analyzers
 
             return null;
         }
-
-//// ncrunch: collect values default
 
         internal static ReadOnlySpan<char> GetTextTrimmed(this XmlElementSyntax value)
         {
@@ -999,8 +1041,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Value);
 
-        //// ncrunch: collect values off
-
         /// <summary>
         /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
         /// </summary>
@@ -1089,8 +1129,6 @@ namespace MiKoSolutions.Analyzers
                         .Where(_ => tags.Contains(_.GetName()));
         }
 
-//// ncrunch: collect values default
-
         internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value)
         {
             switch (value)
@@ -1123,6 +1161,23 @@ namespace MiKoSolutions.Analyzers
             }
 
             return null;
+        }
+
+        internal static string GetReferencedName(this SyntaxNode node)
+        {
+            var name = node.GetCref().GetCrefType().GetName();
+
+            if (name.IsNullOrWhiteSpace())
+            {
+                var nameAttribute = node.GetNameAttribute();
+
+                if (nameAttribute != null)
+                {
+                    name = nameAttribute.TextTokens.First().ValueText;
+                }
+            }
+
+            return name;
         }
 
         internal static bool HasComment(this SyntaxNode value) => value.HasLeadingComment() || value.HasTrailingComment();
@@ -1297,6 +1352,29 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
+        }
+
+        internal static bool TryGetMoqTypes(this MemberAccessExpressionSyntax value, out TypeSyntax[] result)
+        {
+            result = null;
+
+            if (value.GetName() == Constants.Moq.Object)
+            {
+                var expression = value.Expression;
+
+                if (expression is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    // let's see if we can fix it in case we remove the surrounding parenthesis
+                    expression = parenthesized.Expression;
+                }
+
+                if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
+                {
+                    result = genericName.TypeArgumentList.Arguments.ToArray();
+                }
+            }
+
+            return result != null;
         }
 
         internal static bool IsWrongBooleanTag(this SyntaxNode value) => value.IsCBool() || value.IsBBool() || value.IsValueBool() || value.IsCodeBool();
@@ -1758,8 +1836,6 @@ namespace MiKoSolutions.Analyzers
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
         }
 
-//// ncrunch: collect values off
-
         internal static bool IsInsideTestClass(this SyntaxNode value) => value.Ancestors<ClassDeclarationSyntax>().Any(_ => _.IsTestClass());
 
         internal static bool IsTestClass(this TypeDeclarationSyntax value) => value is ClassDeclarationSyntax declaration && IsTestClass(declaration);
@@ -1785,8 +1861,6 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsValueNull(this SyntaxNode value) => value.Is(Constants.XmlTag.Value, Nulls);
 
         internal static bool IsVoid(this TypeSyntax value) => value is PredefinedTypeSyntax p && p.Keyword.IsKind(SyntaxKind.VoidKeyword);
-
-//// ncrunch: collect values default
 
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
@@ -3113,6 +3187,28 @@ namespace MiKoSolutions.Analyzers
             }
 
             return false;
+        }
+
+        internal static MemberAccessExpressionSyntax GetFluentAssertionShouldNode(this ExpressionStatementSyntax value)
+        {
+            var nodes = value.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
+
+            foreach (var node in nodes)
+            {
+                var name = node.GetName();
+
+                switch (name)
+                {
+                    // we might have a lambda expression, so the given statement might not be the correct ancestor statement of the 'Should()' node, hence we have to determine whether it's the specific statement that has an issue
+                    case Constants.FluentAssertions.Should when node.FirstAncestor<ExpressionStatementSyntax>() == value:
+                        return node;
+
+                    case Constants.FluentAssertions.ShouldBeEquivalentTo when node.FirstAncestor<ExpressionStatementSyntax>() == value:
+                        return node;
+                }
+            }
+
+            return null;
         }
 
         private static SeparatedSyntaxList<ParameterSyntax> CollectParameters(ObjectCreationExpressionSyntax syntax)

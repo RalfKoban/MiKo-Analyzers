@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -25,6 +25,12 @@ public class TestMe
         [TestCase("__")]
         [TestCase("___")]
         [TestCase("____")]
+        [TestCase("_0")]
+        [TestCase("_1")]
+        [TestCase("_2")]
+        [TestCase("_3")]
+        [TestCase("_4")]
+        [TestCase("_5")]
         public void No_issue_is_reported_correctly_named_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;

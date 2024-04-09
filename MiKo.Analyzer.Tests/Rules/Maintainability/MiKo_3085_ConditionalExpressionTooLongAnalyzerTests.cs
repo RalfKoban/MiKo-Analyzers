@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -138,6 +138,22 @@ public class TestMe
     internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string message, object value) => string.IsNullOrWhiteSpace(message)
                                                                                                                       ? new ArgumentOutOfRangeException(paramName, 0815, string.Empty)
                                                                                                                       : new ArgumentOutOfRangeException(paramName, 0815, message);
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_object_creation_with_local_variable() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    internal static ArgumentOutOfRangeException ArgumentOutOfRange(string paramName, string message, object value)
+    {
+        var someLongerValue = 0815;
+
+        return value is null
+               ? new ArgumentOutOfRangeException(paramName, someLongerValue, string.Empty)
+               : new ArgumentOutOfRangeException(paramName, someLongerValue, message);
 }");
 
         [Test]

@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
 {
     [TestFixture]
-    public sealed class PluralizerTests
+    public static class PluralizerTests
     {
         [TestCase("Access", ExpectedResult = "Accesses")]
         [TestCase("Array", ExpectedResult = "Arrays")]
@@ -33,6 +33,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("namesToConvert", ExpectedResult = "names")]
         [TestCase("itemsToModel", ExpectedResult = "items")]
         [TestCase("itemModels", ExpectedResult = "items")]
-        public string Creates_correct_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
+        public static string Creates_correct_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
     }
 }

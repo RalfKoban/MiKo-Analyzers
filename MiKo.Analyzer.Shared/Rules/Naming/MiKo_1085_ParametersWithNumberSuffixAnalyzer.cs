@@ -15,13 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IParameterSymbol symbol) => symbol.Name.WithoutNumberSuffix();
-
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
             if (HasIssue(symbol))
             {
-                yield return Issue(symbol);
+                yield return Issue(symbol, CreateBetterNameProposal(symbol.Name.WithoutNumberSuffix()));
             }
         }
 

@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2046_CodeFixProvider)), Shared]
     public sealed class MiKo_2046_CodeFixProvider : DocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2046";
 
         protected override string Title => Resources.MiKo_2046_CodeFixTitle;
 
@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax != null)
             {
-                var name = MiKo_2046_InvalidTypeParameterReferenceInXmlAnalyzer.GetReferencedName(syntax);
+                var name = syntax.GetReferencedName();
 
                 return TypeParamRef(name);
             }

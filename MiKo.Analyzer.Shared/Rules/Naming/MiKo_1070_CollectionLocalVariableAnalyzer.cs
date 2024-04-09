@@ -20,8 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => GetPluralName(symbol.Name, out _);
-
         protected override bool ShallAnalyze(ITypeSymbol symbol)
         {
             if (symbol.IsEnumerable())
@@ -74,7 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (pluralName != name)
                 {
-                    yield return Issue(originalName, identifier, pluralName);
+                    yield return Issue(originalName, identifier, pluralName, CreateBetterNameProposal(pluralName));
                 }
             }
         }
@@ -89,9 +87,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (name)
             {
                 case Constants.LambdaIdentifiers.Default:
-                case Constants.LambdaIdentifiers.Fallback:
+                case Constants.LambdaIdentifiers.Fallback0:
+                case Constants.LambdaIdentifiers.Fallback1:
                 case Constants.LambdaIdentifiers.Fallback2:
                 case Constants.LambdaIdentifiers.Fallback3:
+                case Constants.LambdaIdentifiers.Fallback4:
+                case Constants.LambdaIdentifiers.Fallback5:
+                case Constants.LambdaIdentifiers.Fallback2Underscores:
+                case Constants.LambdaIdentifiers.Fallback3Underscores:
+                case Constants.LambdaIdentifiers.Fallback4Underscores:
                 case "map":
                 case "set":
                 case "list":

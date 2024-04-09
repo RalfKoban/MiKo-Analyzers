@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -15,9 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2218_DocumentationShouldNotContainUsedToAnalyzer : OverallDocumentationAnalyzer
     {
         public const string Id = "MiKo_2218";
-
-        private const string TextKey = "TextKey";
-        private const string TextReplacementKey = "TextReplacementKey";
 
         private const string CanReplacement = "allows to";
         private const string CanPluralReplacement = "allow to";
@@ -316,37 +312,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static XmlTextSyntax GetBetterText(XmlTextSyntax node, Diagnostic issue)
-        {
-            var tokens = node.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken);
-
-            var properties = issue.Properties;
-            var textToReplace = properties[TextKey];
-            var textToReplaceWith = properties[TextReplacementKey];
-
-            var tokensToReplace = new Dictionary<SyntaxToken, SyntaxToken>();
-
-            foreach (var token in tokens)
-            {
-                var text = token.Text;
-
-                if (text.Length <= Constants.EnvironmentNewLine.Length && text.IsNullOrWhiteSpace())
-                {
-                    // do not bother with only empty text
-                    continue;
-                }
-
-                tokensToReplace[token] = token.WithText(text.Replace(textToReplace, textToReplaceWith));
-            }
-
-            if (tokensToReplace.Any())
-            {
-                return node.ReplaceTokens(tokensToReplace.Keys, (original, rewritten) => tokensToReplace[original]);
-            }
-
-            return node;
-        }
-
         protected override Diagnostic Issue(Location location, string replacement)
         {
             var text = location.GetText();
@@ -359,8 +324,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var properties = new Dictionary<string, string>
                                  {
-                                     { TextKey, text },
-                                     { TextReplacementKey, replacement },
+                                     { Constants.AnalyzerCodeFixSharedData.TextKey, text },
+                                     { Constants.AnalyzerCodeFixSharedData.TextReplacementKey, replacement },
                                  };
 
             return Issue(location, replacement, properties);

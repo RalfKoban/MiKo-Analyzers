@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3032_CodeFixProvider)), Shared]
     public sealed class MiKo_3032_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3032";
 
         protected override string Title => Resources.MiKo_3032_CodeFixTitle;
 
@@ -23,12 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var expression = NameOf(issue);
 
-            if (issue.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.GetPropertyName))
+            if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.GetPropertyName))
             {
                 return expression;
             }
 
-            if (issue.Properties.ContainsKey(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.CreateArgs))
+            if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.CreateArgs))
             {
                 var argument = Argument(expression);
                 var typeSyntax = SyntaxFactory.ParseTypeName(nameof(PropertyChangedEventArgs));
@@ -41,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static InvocationExpressionSyntax NameOf(Diagnostic diagnostic)
         {
-            diagnostic.Properties.TryGetValue(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.PropertyName, out var propertyName);
+            diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.PropertyName, out var propertyName);
 
-            if (diagnostic.Properties.TryGetValue(MiKo_3032_PropertyChangeEventArgsViaCinchAnalyzer.PropertyTypeName, out var propertyTypeName))
+            if (diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, out var propertyTypeName))
             {
                 return NameOf(propertyTypeName, propertyName);
             }

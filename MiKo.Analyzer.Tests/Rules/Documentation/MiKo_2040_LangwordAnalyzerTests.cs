@@ -6,16 +6,14 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
-    [TestFixture, RequiresCapability("SSD")]
+    [TestFixture]
     public sealed class MiKo_2040_LangwordAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Terms = { "true", "false", "null", };
@@ -377,6 +375,8 @@ public sealed class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2040_CodeFixProvider();
 
+//// ncrunch: no coverage start
+
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateWrongItems(bool withCode, params string[] tokens)
         {
@@ -451,5 +451,7 @@ public sealed class TestMe
                 }
             }
         }
+
+        //// ncrunch: no coverage end
     }
 }

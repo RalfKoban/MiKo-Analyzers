@@ -13,7 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2001_CodeFixProvider)), Shared]
     public sealed class MiKo_2001_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private const string SpecialTerm = "Occurs that ";
+
         private static readonly string[] SpecialTerms = { SpecialTerm };
 
         private static readonly KeyValuePair<string, string>[] SpecialTermReplacementMap = { new KeyValuePair<string, string>(SpecialTerm, "Occurs when ") };
@@ -51,8 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "This event shall be fired ", string.Empty },
                                                                                     { "This event shall be raised ", string.Empty },
                                                                                 };
+//// ncrunch: rdi default
 
-        public override string FixableDiagnosticId => MiKo_2001_EventSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2001";
 
         protected override string Title => Resources.MiKo_2001_CodeFixTitle;
 

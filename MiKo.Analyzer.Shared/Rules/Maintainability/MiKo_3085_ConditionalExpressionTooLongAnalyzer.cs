@@ -54,8 +54,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                          {
                                              case LiteralExpressionSyntax _:
                                              case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
-                                             case IdentifierNameSyntax i when i.Identifier.GetSymbol(semanticModel) is IParameterSymbol:
                                                  return true;
+
+                                             case IdentifierNameSyntax i:
+                                             {
+                                                 var symbol = i.Identifier.GetSymbol(semanticModel);
+
+                                                 return symbol is IParameterSymbol || symbol is ILocalSymbol;
+                                             }
 
                                              default:
                                                  return false;

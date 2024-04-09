@@ -880,6 +880,9 @@ Types that are named so should be better named directly after the interface they
   <data name="MiKo_1059_Title" xml:space="preserve">
     <value>Do not name types 'Impl' or 'Implementation'</value>
   </data>
+  <data name="MiKo_1060_CodeFixTitle" xml:space="preserve">
+    <value>Change to 'NotFound'</value>
+  </data>
   <data name="MiKo_1060_Description" xml:space="preserve">
     <value>Sometimes, developers try to report that an entity was not found.
 
@@ -890,7 +893,7 @@ The name of the exception is then sometimes 'GetXyzFailedException' which is not
 The same applies for 'XyzMissingException'. It is probably not missing (which means it should be actually there but is not); it is just not there and therefore cannot be found. So, 'XyzNotFoundException' would be a better, more precise name as well.</value>
   </data>
   <data name="MiKo_1060_MessageFormat" xml:space="preserve">
-    <value>Consider to name it '{0}'</value>
+    <value>Consider to name it '{1}' instead</value>
   </data>
   <data name="MiKo_1060_Title" xml:space="preserve">
     <value>Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'</value>
@@ -4383,6 +4386,15 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3218_Title" xml:space="preserve">
     <value>Do not define extension methods in unexpected places</value>
   </data>
+  <data name="MiKo_3219_Description" xml:space="preserve">
+    <value>Public members should provide the right set of functionality for direct consumers of a class. In case extensibility is needed, they should call into a protected virtual member of the same name but suffixed with 'Core' which then act as extensibility points and are easy to spot.</value>
+  </data>
+  <data name="MiKo_3219_MessageFormat" xml:space="preserve">
+    <value>Remove 'virtual' and provide a 'protected virtual {0}' member instead</value>
+  </data>
+  <data name="MiKo_3219_Title" xml:space="preserve">
+    <value>Public members should not be 'virtual'</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
@@ -4954,6 +4966,18 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
     <value>Surround 'ThrowIf' with a blank line</value>
   </data>
   <data name="MiKo_6023_Title" xml:space="preserve">
+    <value>ArgumentOutOfRangeException.ThrowIf statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6024_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6024_Description" xml:space="preserve">
+    <value>To separate ThrowIf statements visually from other code, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6024_MessageFormat" xml:space="preserve">
+    <value>Surround 'ThrowIf' with a blank line</value>
+  </data>
+  <data name="MiKo_6024_Title" xml:space="preserve">
     <value>ObjectDisposedException.ThrowIf statements should be surrounded by blank lines</value>
   </data>
   <data name="MiKo_6030_CodeFixTitle" xml:space="preserve">
@@ -5233,5 +5257,17 @@ Hence, the open brace of the expression should be positioned directly below the 
   </data>
   <data name="MiKo_6052_Title" xml:space="preserve">
     <value>Colon of list of base types shall be placed on same line as first base type</value>
+  </data>
+  <data name="MiKo_6053_CodeFixTitle" xml:space="preserve">
+    <value>Place argument on single line</value>
+  </data>
+  <data name="MiKo_6053_Description" xml:space="preserve">
+    <value>The code is easier to read if 'single-line' arguments are placed on a single line instead of splitting them over multiple lines.</value>
+  </data>
+  <data name="MiKo_6053_MessageFormat" xml:space="preserve">
+    <value>Place argument on single line</value>
+  </data>
+  <data name="MiKo_6053_Title" xml:space="preserve">
+    <value>Single-line arguments shall be placed on single line</value>
   </data>
 </root>

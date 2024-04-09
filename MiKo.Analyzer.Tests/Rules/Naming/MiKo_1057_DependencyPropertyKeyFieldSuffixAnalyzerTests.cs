@@ -1,10 +1,11 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -49,8 +50,30 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_([Values("m_field", "m_fieldProperty", "Field", "FieldProperty", "XyzDependencyProperty")] string fieldName)
+        {
+            const string Template = @"
+using System.Windows;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        private int Xyz { get; set; }
+
+        private DependencyPropertyKey ###;
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", fieldName), Template.Replace("###", "XyzKey"));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1057_DependencyPropertyKeyFieldSuffixAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1057_1058_CodeFixProvider();
     }
 }

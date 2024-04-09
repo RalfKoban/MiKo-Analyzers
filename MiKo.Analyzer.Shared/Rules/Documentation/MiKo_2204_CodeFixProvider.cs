@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "* ",
                                                    };
 
-        public override string FixableDiagnosticId => MiKo_2204_DocumentationShallUseListAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2204";
 
         protected override string Title => Resources.MiKo_2204_CodeFixTitle;
 
@@ -35,17 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var result = new List<SyntaxNode>();
 
             var listItemText = new List<SyntaxToken>();
-
             var normalText = new List<SyntaxToken>();
 
-            var textTokens = text.TextTokens;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var textTokensCount = textTokens.Count;
-
-            for (var index = 0; index < textTokensCount; index++)
+            foreach (var token in text.GetXmlTextTokens())
             {
-                var token = textTokens[index];
                 var valueText = token.ValueText.AsSpan().Trim();
 
                 if (valueText.IsNullOrWhiteSpace())
@@ -53,21 +46,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     continue;
                 }
 
+                var adjustedToken = token.WithText(valueText).WithLeadingXmlComment();
+
                 if (valueText.StartsWithAny(Markers))
                 {
                     // we already have some text
                     AddXmlText(result, normalText);
 
-                    normalText.Clear();
+                    listItemText.Add(adjustedToken);
 
-                    listItemText.Add(token.WithText(valueText).WithLeadingXmlComment());
+                    normalText.Clear();
                 }
                 else
                 {
+                    // we found some text
                     AddList(result, listItemText);
 
-                    // we found some text
-                    normalText.Add(token);
+                    normalText.Add(adjustedToken);
 
                     listItemText.Clear();
                 }
@@ -91,10 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (text.Any(_ => _.ValueText.IsNullOrWhiteSpace() is false))
             {
-                if (text.Count > 0)
-                {
-                    result.Add(XmlText(text).WithLeadingEndOfLine());
-                }
+                result.Add(XmlText(text));
             }
         }
 

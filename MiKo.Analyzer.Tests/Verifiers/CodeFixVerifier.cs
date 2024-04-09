@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,7 +11,7 @@ using Microsoft.CodeAnalysis.Formatting;
 
 using NUnit.Framework;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace TestHelper
 {
     /// <summary>
@@ -21,6 +20,24 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
+        private static int s_testLimit = -1;
+
+        protected static int TestLimit
+        {
+            get
+            {
+                if (s_testLimit < 0)
+                {
+                    // see variable in appveyor.yml; used to limit number of tests as otherwise the test run takes too much time
+                    var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
+
+                    s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 1000 : int.MaxValue;
+                }
+
+                return s_testLimit;
+            }
+        }
+
         /// <summary>
         /// Returns the codefix being tested (C#) - to be implemented in non-abstract class.
         /// </summary>
@@ -74,7 +91,7 @@ namespace TestHelper
         /// </param>
         protected void VerifyCSharpFix(string oldSource, string newSource, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
         {
-            VerifyFix(LanguageNames.CSharp, GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
+            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
 
         /// <summary>
@@ -83,9 +100,6 @@ namespace TestHelper
         /// Then gets the string after the codefix is applied and compares it with the expected result.
         /// Note: If any codefix causes new diagnostics to show up, the test fails unless allowNewCompilerDiagnostics is set to true.
         /// </summary>
-        /// <param name="language">
-        /// The language the source code is in.
-        /// </param>
         /// <param name="analyzer">
         /// The analyzer to be applied to the source code.
         /// </param>
@@ -107,12 +121,12 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private void VerifyFix(string language, DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
-            var document = CreateDocument(oldSource, language);
+            var document = CreateDocument(oldSource);
             var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;
@@ -120,7 +134,7 @@ namespace TestHelper
             for (var i = 0; i < attempts; ++i)
             {
                 var actions = new List<CodeAction>();
-                var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, d) => actions.Add(a), CancellationToken.None);
+                var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
                 codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
                 if (actions.Any() is false)
@@ -130,12 +144,12 @@ namespace TestHelper
 
                 if (codeFixIndex != null)
                 {
-                    document = ApplyFix(document, actions.ElementAt((int)codeFixIndex));
+                    document = ApplyFix(document, actions[(int)codeFixIndex]);
 
                     break;
                 }
 
-                document = ApplyFix(document, actions.ElementAt(0));
+                document = ApplyFix(document, actions[0]);
                 analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
 
                 var newCompilerDiagnostics = GetNewDiagnostics(compilerDiagnostics, GetCompilerDiagnostics(document));

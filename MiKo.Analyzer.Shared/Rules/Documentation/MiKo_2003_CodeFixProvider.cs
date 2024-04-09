@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2003_CodeFixProvider)), Shared]
     public sealed class MiKo_2003_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = new[]
                                                                                      {
                                                                                          "Callback that is called by the ",
@@ -52,7 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
                                                                                                                      .ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2003_EventHandlerSummaryAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2003";
 
         protected override string Title => Resources.MiKo_2003_CodeFixTitle;
 

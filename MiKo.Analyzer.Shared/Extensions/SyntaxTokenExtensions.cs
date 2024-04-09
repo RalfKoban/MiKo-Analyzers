@@ -5,9 +5,9 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
@@ -35,40 +35,29 @@ namespace MiKoSolutions.Analyzers
 
         internal static ISymbol GetSymbol(this SyntaxToken value, Compilation compilation)
         {
-            if (value.SyntaxTree is null)
+            var syntaxTree = value.SyntaxTree;
+
+            if (syntaxTree is null)
             {
                 return null;
             }
 
-            var semanticModel = compilation.GetSemanticModel(value.SyntaxTree);
+            var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
             return value.GetSymbol(semanticModel);
         }
 
         internal static ISymbol GetSymbol(this SyntaxToken value, SemanticModel semanticModel)
         {
-            var position = value.GetLocation().SourceSpan.Start;
-            var name = value.ValueText;
             var syntaxNode = value.Parent;
-
-            if (syntaxNode is ParameterSyntax node)
-            {
-                // we might have a ctor here and no method
-                var methodName = node.GetMethodName();
-                var methodSymbols = semanticModel.LookupSymbols(position, name: methodName).OfType<IMethodSymbol>();
-                var parameterSymbol = methodSymbols.SelectMany(_ => _.Parameters).FirstOrDefault(_ => _.Name == name);
-
-                return parameterSymbol;
-
-                // if it's no method parameter, then it is a local one (but Roslyn cannot handle that currently in v3.3)
-                // var symbol = semanticModel.LookupSymbols(position).First(_ => _.Kind == SymbolKind.Local);
-            }
 
             // try to find the node as that may be faster than to look them up
             var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
 
             if (symbol is null)
             {
+                var position = value.GetLocation().SourceSpan.Start;
+                var name = value.ValueText;
                 var symbols = semanticModel.LookupSymbols(position, name: name);
 
                 if (symbols.Length > 0)
@@ -163,15 +152,9 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }
 
-        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia)
-        {
-            return value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
-        }
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
-        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia)
-        {
-            return value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
-        }
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTriviaFrom(this SyntaxToken value, SyntaxNode node)
         {
@@ -282,15 +265,9 @@ namespace MiKoSolutions.Analyzers
             return tokens;
         }
 
-        internal static SyntaxToken WithoutLeadingTrivia(this SyntaxToken value)
-        {
-            return value.WithoutTrivia().WithTrailingTrivia(value.TrailingTrivia);
-        }
+        internal static SyntaxToken WithoutLeadingTrivia(this SyntaxToken value) => value.WithoutTrivia().WithTrailingTrivia(value.TrailingTrivia);
 
-        internal static SyntaxToken WithoutTrailingTrivia(this SyntaxToken value)
-        {
-            return value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
-        }
+        internal static SyntaxToken WithoutTrailingTrivia(this SyntaxToken value) => value.WithoutTrivia().WithLeadingTrivia(value.LeadingTrivia);
 
         internal static SyntaxTokenList WithoutEmptyText(this SyntaxTokenList values, SyntaxToken token)
         {

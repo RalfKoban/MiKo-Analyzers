@@ -18,13 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol)
-        {
-            var method = symbol.GetEnclosingMethod();
-
-            return GetProposedName(method);
-        }
-
         protected override bool ShallAnalyze(ITypeSymbol symbol) => symbol?.IsEventArgs() is true;
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
@@ -42,9 +35,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 // there might be methods that have a parameter named 'e', thus we have to use 'args' instead
                 var method = identifier.Parent.GetEnclosingMethod(semanticModel);
-                var proposedName = GetProposedName(method);
+                var proposal = GetProposedName(method);
 
-                yield return Issue(symbol, proposedName);
+                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
             }
         }
 

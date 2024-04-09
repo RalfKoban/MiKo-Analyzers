@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2032_CodeFixProvider)), Shared]
     public sealed class MiKo_2032_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly string[] NonGenericStartParts = Constants.Comments.BooleanReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] NonGenericEndParts = Constants.Comments.BooleanReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] GenericStartParts = Constants.Comments.BooleanTaskReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
@@ -122,13 +124,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " Otherwise ",
                                                                      " Otherwise",
                                                                  };
+//// ncrunch: rdi default
 
-        public override string FixableDiagnosticId => MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2032";
 
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
-//// ncrunch: collect values off
-        internal static IEnumerable<string> CreateSimpleStartingPhrases()
+//// ncrunch: rdi off
+        public static IEnumerable<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]
@@ -166,7 +169,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return $"Indicates {condition} ";
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => CommentCanBeFixed(comment)
                                                                                                                                                             ? Comment(comment, GenericStartParts, GenericEndParts)

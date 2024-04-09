@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -91,6 +91,16 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_named_non_async_core_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    protected void DoSomethingAsyncCore() { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_named_non_async_local_function() => An_issue_is_reported_for(@"
 using System;
 
@@ -107,6 +117,11 @@ public class TestMe
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(
                                                                 "class TestMe { void DoSomethingAsync() { } }",
                                                                 "class TestMe { void DoSomething() { } }");
+
+        [Test]
+        public void Code_gets_fixed_for_core_method() => VerifyCSharpFix(
+                                                                     "class TestMe { void DoSomethingAsyncCore() { } }",
+                                                                     "class TestMe { void DoSomethingCore() { } }");
 
         [Test]
         public void Code_gets_fixed_for_local_function() => VerifyCSharpFix(

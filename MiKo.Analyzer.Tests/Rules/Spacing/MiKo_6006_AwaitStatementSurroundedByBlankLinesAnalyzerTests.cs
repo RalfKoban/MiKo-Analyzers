@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -164,6 +164,29 @@ namespace Bla
 
             var result1 = await Task.FromResult(true);
             var result2 = await Task.FromResult(false);
+        }
+
+        private void DoSomethingElse()
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_multiple_awaited_calls_preceded_by_blank_line_if_their_results_get_assigned_to_same_local_variable() => No_issue_is_reported_for(@"
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething(int something)
+        {
+            DoSomethingElse();
+
+            var result = await Task.FromResult(true);
+            result |= await Task.FromResult(false);
         }
 
         private void DoSomethingElse()

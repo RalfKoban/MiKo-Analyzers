@@ -35,6 +35,10 @@ skip_commits:
   files:
     - /*.md
 
+# environment variables
+environment:
+  APP_VEYOR: true
+  
 before_build:
 - nuget restore "C:\Projects\MiKo.Analyzers\MiKo.Analyzer.sln"
 

@@ -16,14 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => GetPreferredParameterName(method.Name);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
-        {
-            return symbol.IsTestClass()
-                   ? Enumerable.Empty<Diagnostic>() // ignore tests
-                   : symbol.GetNamedMethods().Select(AnalyzeTryMethod).Where(_ => _ != null);
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.IsTestClass()
+                                                                                                                    ? Enumerable.Empty<Diagnostic>() // ignore tests
+                                                                                                                    : symbol.GetNamedMethods().Select(AnalyzeTryMethod).Where(_ => _ != null);
 
         private static string GetPreferredParameterName(string methodName)
         {
@@ -53,13 +48,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private Diagnostic AnalyzeOutParameter(IMethodSymbol method)
         {
-            var parameterName = FindBetterName(method);
+            var parameterName = GetPreferredParameterName(method.Name);
 
             var outParameter = method.Parameters.FirstOrDefault(_ => _.RefKind == RefKind.Out);
 
             if (outParameter != null && outParameter.Name != parameterName)
             {
-                return Issue(outParameter, parameterName);
+                return Issue(outParameter, parameterName, CreateBetterNameProposal(parameterName));
             }
 
             return null;

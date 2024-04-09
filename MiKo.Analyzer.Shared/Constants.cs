@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers
 {
-    public static class Constants
+    internal static class Constants
     {
         internal const int Indentation = 4;
 
+        internal const string Core = "Core";
         internal const string AsyncSuffix = "Async";
+        internal const string AsyncCoreSuffix = AsyncSuffix + Core;
         internal const string RoutedEventFieldSuffix = "Event";
         internal const string TestsSuffix = "Tests";
 
@@ -74,9 +76,18 @@ namespace MiKoSolutions.Analyzers
             internal const string Fatal = nameof(Fatal);
         }
 
+        internal static class MicrosoftLogging
+        {
+            internal const string NamespaceName = "Microsoft.Extensions.Logging";
+            internal const string TypeName = "ILogger";
+            internal const string FullTypeName = NamespaceName + "." + TypeName;
+        }
+
         internal static class Moq
         {
             internal const string Mock = nameof(Mock);
+            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+            internal const string Object = nameof(Object);
             internal const string Of = nameof(Of);
             internal const string Setup = nameof(Setup);
             internal const string SetupGet = nameof(SetupGet);
@@ -87,7 +98,12 @@ namespace MiKoSolutions.Analyzers
             internal const string VerifyAll = nameof(VerifyAll);
             internal const string Verify = nameof(Verify);
             internal const string Verifiable = nameof(Verifiable);
-            internal const string MockFullQualified = nameof(Moq) + "." + nameof(Mock);
+        }
+
+        internal static class FluentAssertions
+        {
+            internal const string Should = nameof(Should);
+            internal const string ShouldBeEquivalentTo = nameof(ShouldBeEquivalentTo);
         }
 
         internal static class MaxNamingLengths
@@ -141,6 +157,7 @@ namespace MiKoSolutions.Analyzers
             internal const string BooleanReturnTypeStartingPhraseTemplate = "{0} if ";
             internal const string BooleanTaskReturnTypeEndingPhraseTemplate = ", otherwise with a result of {0}.";
             internal const string BooleanTaskReturnTypeStartingPhraseTemplate = "A task that will complete with a result of {0} if ";
+            internal const string CallbackTerm = "callback";
             internal const string CommandPropertyGetterOnlySummaryStartingPhraseTemplate = "Gets the {0} that can ";
             internal const string CommandPropertyGetterSetterSummaryStartingPhraseTemplate = "Gets or sets the {0} that can ";
             internal const string CommandPropertySetterOnlySummaryStartingPhraseTemplate = "Sets the {0} that can ";
@@ -153,6 +170,8 @@ namespace MiKoSolutions.Analyzers
             internal const string DependencyPropertyFieldSummaryPhraseTemplate = "Identifies the {0} dependency property.";
             internal const string DependencyPropertyFieldValuePhraseTemplate = "The identifier for the {0} dependency property.";
             internal const string DeterminesWhetherPhrase = "Determines whether";
+            internal const string DisposeParameterPhrase = "Indicates whether unmanaged resources shall be freed.";
+            internal const string DisposeSummaryPhrase = "Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.";
             internal const string EnumStartingPhrase = "Defines values that specify ";
             internal const string EnumTaskReturnTypeStartingPhraseTemplate = GenericTaskReturnTypeStartingPhraseTemplate + "the enumerated constant that is the ";
             internal const string EventArgsSummaryStartingPhrase = "Provides data for the ";
@@ -160,10 +179,10 @@ namespace MiKoSolutions.Analyzers
             internal const string EventSummaryStartingPhrase = "Occurs ";
             internal const string ExampleDefaultPhrase = "The following example demonstrates ";
             internal const string ExceptionCtorExceptionParamPhraseTemplate = "The exception that is the cause of the current exception.{0}If the {1} parameter is not {2}, the current exception is raised in a {3} block that handles the inner exception.";
-            internal const string ExceptionCtorExceptionParamSummaryContinueingPhrase = " and a reference to the inner exception that is the cause of this exception";
-            internal const string ExceptionCtorMessageParamSummaryContinueingPhrase = " with a specified error message";
+            internal const string ExceptionCtorExceptionParamSummaryContinuingPhrase = " and a reference to the inner exception that is the cause of this exception";
+            internal const string ExceptionCtorMessageParamSummaryContinuingPhrase = " with a specified error message";
             internal const string ExceptionCtorSerializationParamRemarksPhrase = "This constructor is invoked during deserialization to reconstitute the exception object transmitted over a stream.";
-            internal const string ExceptionCtorSerializationParamSummaryContinueingPhrase = " with serialized data";
+            internal const string ExceptionCtorSerializationParamSummaryContinuingPhrase = " with serialized data";
             internal const string ExceptionCtorSummaryStartingPhraseTemplate = "Initializes a new instance of the {0} class";
             internal const string ExceptionPhrase = @"<exception cref=""{0}"">";
             internal const string ExceptionSplittingParaPhrase = "<para>" + SpecialOrPhrase + "</para>";
@@ -177,6 +196,9 @@ namespace MiKoSolutions.Analyzers
             internal const string FromExceptionTaskReturnTypeStartingPhrase = "The faulted task.";
             internal const string FromResultTaskReturnTypeStartingPhrase = "The successfully completed task.";
             internal const string GenericTaskReturnTypeStartingPhraseTemplate = NonGenericTaskReturnTypeStartingPhraseTemplate + " The value of the {1} parameter contains ";
+            internal const string IdTerm = "id";
+            internal const string IdentTerm = "ident";
+            internal const string InfoTerm = "info";
             internal const string NoDefaultPhrase = "This property has no default value.";
             internal const string NonGenericTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the asynchronous operation.";
             internal const string ObjectDisposedExceptionAlternatingEndingPhrase = " has been closed.";
@@ -192,6 +214,8 @@ namespace MiKoSolutions.Analyzers
             internal const string SpecialOrPhrase = "-or-";
             internal const string StringReturnTypeStartingPhraseTemplate = "A {0} {1} ";
             internal const string ValueConverterSummaryStartingPhrase = "Represents a converter that converts ";
+            internal const string ToSeekTerm = "to seek";
+            internal const string TryStartingPhrase = "Attempts to";
             internal const string WasNotSuccessfulPhrase = "was not successful";
             internal const string WhenAllTaskReturnTypeStartingPhrase = "A task that represents the completion of all of the supplied tasks.";
             internal const string WhenAnyTaskReturnTypeStartingPhraseTemplate = "A {0} that represents the completion of one of the supplied tasks. Its {1} is the task that completed first.";
@@ -515,23 +539,23 @@ namespace MiKoSolutions.Analyzers
                                                                                   DefaultStartingPhrase + "<see langword=\"false\" />.",
                                                                               };
 
-            internal static readonly string[] InvalidSummaryCrefXmlTags =
-                                                                          {
-                                                                              XmlTag.Example,
-                                                                              XmlTag.Exception,
-                                                                              XmlTag.Include,
-                                                                              XmlTag.Inheritdoc,
-                                                                              XmlTag.Overloads,
-                                                                              XmlTag.Param,
-                                                                              XmlTag.ParamRef,
-                                                                              XmlTag.Permission,
-                                                                              XmlTag.Remarks,
-                                                                              XmlTag.Returns,
-                                                                              XmlTag.SeeAlso,
-                                                                              XmlTag.Summary,
-                                                                              XmlTag.TypeParam,
-                                                                              XmlTag.Value,
-                                                                          };
+            internal static readonly ISet<string> InvalidSummaryCrefXmlTags = new HashSet<string>
+                                                                                  {
+                                                                                      XmlTag.Example,
+                                                                                      XmlTag.Exception,
+                                                                                      XmlTag.Include,
+                                                                                      XmlTag.Inheritdoc,
+                                                                                      XmlTag.Overloads,
+                                                                                      XmlTag.Param,
+                                                                                      XmlTag.ParamRef,
+                                                                                      XmlTag.Permission,
+                                                                                      XmlTag.Remarks,
+                                                                                      XmlTag.Returns,
+                                                                                      XmlTag.SeeAlso,
+                                                                                      XmlTag.Summary,
+                                                                                      XmlTag.TypeParam,
+                                                                                      XmlTag.Value,
+                                                                                  };
 
             internal static readonly string[] ExceptionCtorSummaryStartingPhrase =
                                                                                    {
@@ -708,6 +732,58 @@ namespace MiKoSolutions.Analyzers
                                                                         "purposely",
                                                                         "purposly", // typo by intent
                                                                     };
+
+            internal static readonly string[] LangwordReferences = { "true", "false", "null" };
+
+            internal static readonly HashSet<string> LangwordWrongAttributes = new HashSet<string>
+                                                                                   {
+                                                                                       XmlTag.Attribute.Langref,
+                                                                                       "langowrd", // find typos
+                                                                                       "langwrod", // find typos
+                                                                                       "langwowd", // find typos
+                                                                                   };
+
+            internal static readonly string[] TryWords = { "Try", "Tries" };
+            internal static readonly string[] ReturnWords = { "Return", "Returns" };
+            internal static readonly string[] ActionTerms = { "action", "Action", "function", "Function", "func", "Func" };
+            internal static readonly string[] IdTerms = IdTerm.WithDelimiters();
+            internal static readonly string[] IdentTerms = IdentTerm.WithDelimiters();
+            internal static readonly string[] InfoTerms = InfoTerm.WithDelimiters();
+            internal static readonly string[] EventArgsTermsWithDelimiters = new[] { "event args", "event arg" }.WithDelimiters();
+            internal static readonly string[] FindTerms = { "to find", "to inspect for", "to look for", "to test for" };
+            internal static readonly string[] FlagTermsWithDelimiters = new[] { "flag", "flags" }.WithDelimiters();
+            internal static readonly string[] Guids = { "guid", "Guid", "GUID" };
+            internal static readonly string[] GuidTermsWithDelimiters = Guids.WithDelimiters();
+
+            internal static readonly string[] InstanceOfPhrases =
+                                                                  {
+                                                                      "An instance of ",
+                                                                      "an instance of ",
+                                                                      "A instance of ",
+                                                                      "a instance of ",
+                                                                      "The instance of ",
+                                                                      "the instance of ",
+                                                                      "An object of ",
+                                                                      "an object of ",
+                                                                      "A object of ",
+                                                                      "a object of ",
+                                                                      "The object of ",
+                                                                      "the object of ",
+                                                                      "An instance if ",
+                                                                      "an instance if ",
+                                                                      "A instance if ",
+                                                                      "a instance if ",
+                                                                      "The instance if ",
+                                                                      "the instance if ",
+                                                                  };
+
+            internal static readonly string[] EnumMemberWrongStartingWords =
+                                                                             {
+                                                                                 "Defines",
+                                                                                 "Indicates",
+                                                                                 "Represents",
+                                                                                 "Specifies",
+                                                                             };
         }
 
         internal static class XmlTag
@@ -788,9 +864,15 @@ namespace MiKoSolutions.Analyzers
         internal static class LambdaIdentifiers
         {
             internal const string Default = "_";
-            internal const string Fallback = "__";
-            internal const string Fallback2 = "___";
-            internal const string Fallback3 = "____";
+            internal const string Fallback2Underscores = "__";
+            internal const string Fallback3Underscores = "___";
+            internal const string Fallback4Underscores = "____";
+            internal const string Fallback0 = "_0";
+            internal const string Fallback1 = "_1";
+            internal const string Fallback2 = "_2";
+            internal const string Fallback3 = "_3";
+            internal const string Fallback4 = "_4";
+            internal const string Fallback5 = "_5";
         }
 
         internal static class Names
@@ -891,15 +973,15 @@ namespace MiKoSolutions.Analyzers
             internal static readonly ISet<string> ImportAttributeNames = new HashSet<string>
                                                                              {
                                                                                  "Import",
-                                                                                 nameof(ImportAttribute),
+                                                                                 "ImportAttribute",
                                                                                  "ImportMany",
-                                                                                 nameof(ImportManyAttribute),
+                                                                                 "ImportManyAttribute",
                                                                              };
 
             internal static readonly ISet<string> ImportingConstructorAttributeNames = new HashSet<string>
                                                                                            {
                                                                                                "ImportingConstructor",
-                                                                                               nameof(ImportingConstructorAttribute),
+                                                                                               "ImportingConstructorAttribute",
                                                                                            };
 
             internal static readonly IEnumerable<string> TypeUnderTestRawFieldNames = new[]
@@ -1163,6 +1245,47 @@ namespace MiKoSolutions.Analyzers
                                                                                       "WritingPrintTicketRequiredEventHandler",
                                                                                       "WritingProgressChangedEventHandler",
                                                                                   };
+        }
+
+        internal static class AnalyzerCodeFixSharedData
+        {
+            internal const string BetterName = nameof(BetterName);
+
+            internal const string AddSpaceAfter = nameof(AddSpaceAfter);
+            internal const string AddSpaceBefore = nameof(AddSpaceBefore);
+
+            internal const string NoLineBefore = nameof(NoLineBefore);
+            internal const string NoLineAfter = nameof(NoLineAfter);
+
+            internal const string LineNumber = nameof(LineNumber);
+            internal const string CharacterPosition = nameof(CharacterPosition);
+            internal const string Spaces = nameof(Spaces);
+            internal const string AdditionalSpaces = nameof(AdditionalSpaces);
+
+            internal const string StartingPhrase = nameof(StartingPhrase);
+            internal const string EndingPhrase = nameof(EndingPhrase);
+            internal const string Phrase = nameof(Phrase);
+
+            internal const string IsBoolean = nameof(IsBoolean);
+
+            internal const string DefaultSeeLangwordValue = nameof(DefaultSeeLangwordValue);
+            internal const string DefaultSeeCrefValue = nameof(DefaultSeeCrefValue);
+            internal const string DefaultCodeValue = nameof(DefaultCodeValue);
+
+            internal const string TextKey = nameof(TextKey);
+            internal const string TextReplacementKey = nameof(TextReplacementKey);
+
+            internal const string GetPropertyName = nameof(GetPropertyName); // Cinch, use nameof()
+            internal const string CreateArgs = nameof(CreateArgs); // Cinch, use new PropertyChanged(nameof())
+            internal const string PropertyTypeName = nameof(PropertyTypeName);
+            internal const string PropertyName = nameof(PropertyName);
+
+            internal const string Position = nameof(Position);
+            internal const string IsFlagged = nameof(IsFlagged);
+
+            internal const string ParameterValue = nameof(ParameterValue);
+
+            internal const string Marker = nameof(Marker);
         }
     }
 }

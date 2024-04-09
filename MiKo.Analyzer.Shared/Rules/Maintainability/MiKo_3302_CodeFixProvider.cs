@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3302_CodeFixProvider)), Shared]
     public sealed class MiKo_3302_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3302";
 
         protected override string Title => Resources.MiKo_3302_CodeFixTitle;
 

@@ -15,17 +15,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol symbol) => symbol.Name.WithoutSuffix(Constants.AsyncSuffix);
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol);
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
+            var symbolName = symbol.Name;
+
+            if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
-                yield return Issue(symbol, FindBetterName(symbol));
+                var betterName = symbolName.WithoutSuffix(Constants.AsyncSuffix);
+
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+            }
+            else if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
+            {
+                var betterName = symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + Constants.Core;
+
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
     }

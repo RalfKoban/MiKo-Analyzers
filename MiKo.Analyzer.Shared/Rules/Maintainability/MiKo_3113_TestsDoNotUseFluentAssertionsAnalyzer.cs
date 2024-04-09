@@ -20,28 +20,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static MemberAccessExpressionSyntax GetIssue(ExpressionStatementSyntax statement)
-        {
-            var nodes = statement.DescendantNodes<MemberAccessExpressionSyntax>(SyntaxKind.SimpleMemberAccessExpression);
-
-            foreach (var node in nodes)
-            {
-                var name = node.GetName();
-
-                switch (name)
-                {
-                    // we might have an lambda expression, so the given statement might not be the correct ancestor statement of the 'Should()' node, hence we have to determine whether it's the specific statement that has an issue
-                    case "Should" when node.FirstAncestor<ExpressionStatementSyntax>() == statement:
-                        return node;
-
-                    case "ShouldBeEquivalentTo" when node.FirstAncestor<ExpressionStatementSyntax>() == statement:
-                        return node;
-                }
-            }
-
-            return null;
-        }
-
         protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName("FluentAssertions.AssertionExtensions") != null;
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionStatementSyntax, SyntaxKind.ExpressionStatement);
@@ -57,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> Analyze(ExpressionStatementSyntax node)
         {
-            var problematicNode = GetIssue(node);
+            var problematicNode = node.GetFluentAssertionShouldNode();
 
             if (problematicNode != null)
             {

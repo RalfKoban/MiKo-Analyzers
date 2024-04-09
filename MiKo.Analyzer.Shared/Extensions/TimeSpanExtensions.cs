@@ -1,7 +1,8 @@
-﻿// ReSharper disable once CheckNamespace
+﻿// ncrunch: rdi off
+// ReSharper disable once CheckNamespace
 namespace System
 {
-    public static class TimeSpanExtensions
+    internal static class TimeSpanExtensions
     {
         public static TimeSpan Milliseconds(this int value) => TimeSpan.FromMilliseconds(value);
     }

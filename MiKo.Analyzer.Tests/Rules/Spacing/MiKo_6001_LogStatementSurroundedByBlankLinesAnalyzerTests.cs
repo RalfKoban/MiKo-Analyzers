@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -441,6 +441,54 @@ namespace Serilog
 ");
 
         [Test]
+        public void No_issue_is_reported_for_MicrosoftLogging_call_followed_by_another_MicrosoftLogging_call() => No_issue_is_reported_for(@"
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void Log();
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething()
+        {
+            _logger.Log();
+            _logger.Log();
+            _logger.Log();
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_MicrosoftLogging_call_followed_by_if_block() => An_issue_is_reported_for(@"
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void Log();
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(bool something)
+        {
+            _logger.Log();
+            if (something)
+            {
+                // some comment
+            }
+        }
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_missing_preceding_line()
         {
             const string OriginalCode = @"
@@ -816,6 +864,61 @@ namespace Serilog
             }
 
             Log.Verbose();
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_missing_preceding_line_before_MicrosoftLogging()
+        {
+            const string OriginalCode = @"
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void Log();
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+            _logger.Log();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void Log();
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(bool something)
+        {
+            if (something)
+            {
+                // some comment
+            }
+
+            _logger.Log();
         }
     }
 }

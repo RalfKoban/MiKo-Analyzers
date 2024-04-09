@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -22,11 +22,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "CalculateLocation",
                                                                                "CancelOperation",
                                                                                "CanRemoveConnection",
-                                                                               "CollectInstallationInformation",
-                                                                               "CollectSystemInformation",
                                                                                "ClearDocumentation",
                                                                                "CloneDocumentation",
                                                                                "CloseConnection",
+                                                                               "CollectInstallationInformation",
+                                                                               "CollectSystemInformation",
                                                                                "Compare",
                                                                                "CompileTimeValidateCollection",
                                                                                "ContinueInstallation",
@@ -49,6 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "Install",
                                                                                "InvertSelection",
                                                                                "ItemBelongsToApplication",
+                                                                               "JumpToPage",
+                                                                               "JumpToSituation",
                                                                                "LoadConfiguration",
                                                                                "LogException",
                                                                                "LogInformation",
@@ -87,6 +89,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                "SetupDocumentation",
                                                                                "ShowConfirmationDialog",
                                                                                "SimulateConnection",
+                                                                               "SomethingWithSituation",
+                                                                               "SomethingWithParenthesis",
+                                                                               "SomethingWithParenthesisPosition",
+                                                                               "SomethingWithPosition",
                                                                                "SortDocumentation",
                                                                                "StartSimulation",
                                                                                "StopSimulation",

@@ -16,13 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
         }
 
-        internal static List<IMethodSymbol> GetMethodsOrderedByParameters(IEnumerable<IMethodSymbol> methods, string methodName) => methods.Where(_ => _.Name == methodName)
-                                                                                                                                           .OrderByDescending(_ => _.DeclaredAccessibility)
-                                                                                                                                           .ThenByDescending(_ => _.IsStatic)
-                                                                                                                                           .ThenBy(_ => _.Parameters.Any(__ => __.IsParams))
-                                                                                                                                           .ThenBy(_ => _.Parameters.Length)
-                                                                                                                                           .ToList();
-
         protected override IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation)
         {
             var ctors = GetMethodsOrderedByLocation(symbol, MethodKind.Constructor);
@@ -41,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             foreach (var methodName in methodNames)
             {
                 // pre-order for accessibility (public first, private last), then ensure that static methods are first and params methods are at the end
-                var methodsOrderedByParameters = GetMethodsOrderedByParameters(methods, methodName);
+                var methodsOrderedByParameters = Orderer.GetMethodsOrderedByParameters(methods, methodName);
 
                 if (methodsOrderedByParameters.Count <= 1)
                 {

@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2080_CodeFixProvider)), Shared]
     public sealed class MiKo_2080_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 
         private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().ToHashSet() // avoid duplicates
                                                                                                            .ToArray(_ => _, AscendingStringComparer.Default);
@@ -56,24 +56,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                                      .Select(_ => new KeyValuePair<string, string>(_, "The unique identifier for the type of "))
                                                                                                                                      .ToArray();
 
-//// ncrunch: collect values default
+//// ncrunch: rdi default
 
         private static readonly IReadOnlyCollection<string> CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
 
         private static readonly IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2080";
 
         protected override string Title => Resources.MiKo_2080_CodeFixTitle;
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
-            var fieldDeclaration = comment.FirstAncestorOrSelf<FieldDeclarationSyntax>();
-            var field = fieldDeclaration?.Declaration.Variables.First();
-
-            var symbol = (IFieldSymbol)GetSymbol(document, field);
-            var phrase = MiKo_2080_FieldSummaryDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
+            var phrase = GetStartingPhraseProposal(issue);
 
             var preparedComment = Comment(comment, TypeGuidReplacementMapKeys, TypeGuidReplacementMap);
             var preparedComment2 = Comment(preparedComment, ReplacementMapKeys, ReplacementMap);
@@ -83,7 +79,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(fixedComment, CleanupMapKeys, CleanupMap);
         }
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
             var keys = Enumerable.Empty<string>()
@@ -141,8 +137,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 starts.Add("Specifies " + lowerText);
             }
 
-            string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating" };
-            string[] continuations = { " if", " whether", " that", string.Empty };
+            string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating", "to control", "that controls", "which controls", "controlling" };
+            string[] continuations = { " if", " whether or not", " whether", " that", string.Empty };
 
             foreach (var start in starts)
             {
@@ -159,15 +155,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var continuation in continuations)
                 {
+                    yield return $"{start} control{continuation} ";
                     yield return $"{start} indicate{continuation} ";
                 }
             }
 
             yield return "Indicating if ";
             yield return "Indicating that ";
+            yield return "Indicating whether or not";
             yield return "Indicating whether ";
+
             yield return "Indicates if ";
             yield return "Indicates that ";
+
+            yield return "Controlling if ";
+            yield return "Controlling that ";
+            yield return "Controlling whether or not";
+            yield return "Controlling whether ";
+
+            yield return "Controls if ";
+            yield return "Controls that ";
+            yield return "Controls whether or not ";
+            yield return "Controls whether ";
         }
 
         private static IEnumerable<string> CreateGuidReplacementMapKeys()
@@ -214,6 +223,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             yield return "Specifies an ";
             yield return "Specifies a ";
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }

@@ -15,17 +15,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(INamedTypeSymbol symbol) => symbol.Name.Without(Constants.Markers.BaseClasses);
-
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var symbolName = symbol.Name.Without("Abstraction");
+            var symbolName = symbol.Name.Without("Abstraction").Replace("BasedOn", "#");
 
             foreach (var marker in Constants.Markers.BaseClasses)
             {
                 if (symbolName.Contains(marker))
                 {
-                    yield return Issue(symbol, marker);
+                    var betterName = symbolName.Without(Constants.Markers.BaseClasses);
+
+                    yield return Issue(symbol, marker, CreateBetterNameProposal(betterName));
                 }
             }
         }

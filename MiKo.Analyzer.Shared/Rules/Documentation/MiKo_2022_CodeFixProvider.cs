@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2022_CodeFixProvider)), Shared]
     public sealed class MiKo_2022_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
                                                                                     { "To return ", string.Empty },
@@ -66,16 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "When this method returns, ", string.Empty },
                                                                                 };
 
-        public override string FixableDiagnosticId => MiKo_2022_OutParamDefaultPhraseAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2022";
 
         protected override string Title => Resources.MiKo_2022_CodeFixTitle;
 
-        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index)
+        protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             var preparedComment = PrepareComment(comment);
-
-            var symbol = (IParameterSymbol)GetSymbol(document, parameter);
-            var phrase = MiKo_2022_OutParamDefaultPhraseAnalyzer.GetStartingPhrase(symbol);
+            var phrase = GetStartingPhraseProposal(issue);
 
             return CommentStartingWith(preparedComment, phrase);
         }

@@ -18,6 +18,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                             nameof(ICommand.Execute),
                                                                             nameof(ICommand.CanExecute) + Constants.AsyncSuffix,
                                                                             nameof(ICommand.Execute) + Constants.AsyncSuffix,
+                                                                            nameof(ICommand.CanExecute) + Constants.AsyncCoreSuffix,
+                                                                            nameof(ICommand.Execute) + Constants.AsyncCoreSuffix,
                                                                             nameof(ICommand.CanExecuteChanged),
                                                                             "On" + nameof(ICommand.CanExecuteChanged),
                                                                             "Raise" + nameof(ICommand.CanExecuteChanged),
@@ -26,8 +28,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public MiKo_1010_CommandMethodsAnalyzer() : base(Id)
         {
         }
-
-        internal static string FindBetterName(IMethodSymbol symbol) => GetProposal(symbol.Name, nameof(ICommand.Execute));
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementationOf<ICommand>() is false && symbol.IsTestMethod() is false;
 
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var proposal = GetProposal(methodName, forbiddenName);
 
-                return Issue(method, proposal);
+                return Issue(method, proposal, CreateBetterNameProposal(proposal));
             }
 
             return null;

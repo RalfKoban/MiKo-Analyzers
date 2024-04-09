@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_5015_CodeFixProvider)), Shared]
     public sealed class MiKo_5015_CodeFixProvider : PerformanceCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_5015_StringLiteralGetsInternedAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_5015";
 
         protected override string Title => Resources.MiKo_5015_CodeFixTitle;
 

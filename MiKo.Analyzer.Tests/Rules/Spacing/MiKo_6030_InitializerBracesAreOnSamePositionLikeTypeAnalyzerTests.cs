@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
@@ -771,6 +771,60 @@ public class TestMe
                          };
 
         return result;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_array_initializer_with_contained_implicit_object_creations()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                            {
+                              new() { Id = -1, Value = 4711 },
+                              new()
+                            {
+                                Id = 1,
+                                Value = 42,
+                            },
+                              new() { Id = 2, Value = 0815 },
+                            };
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                                {
+                                    new() { Id = -1, Value = 4711 },
+                                    new()
+                                        {
+                                            Id = 1,
+                                            Value = 42,
+                                        },
+                                    new() { Id = 2, Value = 0815 },
+                                };
 }
 ";
 

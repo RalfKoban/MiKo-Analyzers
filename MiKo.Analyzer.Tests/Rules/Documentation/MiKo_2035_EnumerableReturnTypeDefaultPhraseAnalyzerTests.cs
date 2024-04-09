@@ -6,13 +6,11 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-using NCrunch.Framework;
-
 using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [TestFixture]
@@ -37,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EnumerableReturnValues = EnumerableOnlyReturnValues.Concat(EnumerableTaskReturnValues).ToArray();
 
-        private static readonly string[] StartingPhrases = CreateStartingPhrases().Distinct().ToArray();
+        private static readonly string[] StartingPhrases = CreateStartingPhrases().Take(TestLimit).Distinct().ToArray();
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
@@ -305,7 +303,7 @@ public class TestMe
             VerifyCSharpFix(originalCode, FixedCode);
         }
 
-        [Test, RequiresCapability("SSD")]
+        [Test]
         public void Code_gets_fixed_for_non_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = @"
@@ -350,7 +348,7 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
-        [Test, RequiresCapability("SSD")]
+        [Test]
         public void Code_gets_fixed_for_generic_collection_([ValueSource(nameof(StartingPhrases))] string originalPhrase)
         {
             const string Template = @"
@@ -536,6 +534,8 @@ public class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2035_CodeFixProvider();
 
+//// ncrunch: no coverage start
+
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartingPhrases()
         {
@@ -550,14 +550,14 @@ public class TestMe
                 {
                     var phrase = string.Concat(collection, " ", preposition);
 
-                    yield return phrase;
+                    yield return phrase.ToLowerCaseAt(0);
                     yield return phrase.ToUpperCaseAt(0);
 
                     foreach (var modification in modifications)
                     {
                         var modificationPhrase = string.Concat(modification, " ", phrase);
 
-                        yield return modificationPhrase;
+                        yield return modificationPhrase.ToLowerCaseAt(0);
                         yield return modificationPhrase.ToUpperCaseAt(0);
 
                         foreach (var startingWord in startingWords)
@@ -566,18 +566,20 @@ public class TestMe
                             var startingPhrase = string.Concat(startingWord, " ", phrase);
                             var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                            yield return shortStartingPhrase;
+                            yield return shortStartingPhrase.ToLowerCaseAt(0);
                             yield return shortStartingPhrase.ToUpperCaseAt(0);
 
-                            yield return startingPhrase;
+                            yield return startingPhrase.ToLowerCaseAt(0);
                             yield return startingPhrase.ToUpperCaseAt(0);
 
-                            yield return modifiedStartingPhrase;
+                            yield return modifiedStartingPhrase.ToLowerCaseAt(0);
                             yield return modifiedStartingPhrase.ToUpperCaseAt(0);
                         }
                     }
                 }
             }
         }
+
+//// ncrunch: no coverage end
     }
 }

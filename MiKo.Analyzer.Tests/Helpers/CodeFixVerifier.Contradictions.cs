@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+//// ncrunch: rdi off
 namespace TestHelper
 {
     public partial class CodeFixVerifier

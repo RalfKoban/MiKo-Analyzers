@@ -1,4 +1,5 @@
-﻿namespace MiKoSolutions.Analyzers.Rules
+﻿//// ncrunch: rdi off
+namespace MiKoSolutions.Analyzers.Rules
 {
     public sealed class TestCaseData
     {

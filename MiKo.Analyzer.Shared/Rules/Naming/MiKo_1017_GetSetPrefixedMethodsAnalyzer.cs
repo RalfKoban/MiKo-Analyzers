@@ -37,15 +37,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(ISymbol symbol) => FindBetterName(symbol.Name);
-
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             if (StrangePrefixes.Exists(_ => HasStrangePrefix(symbol, _)))
             {
-                yield return Issue(symbol, FindBetterName(symbol));
+                var betterName = FindBetterName(symbol.Name);
+
+                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
             }
         }
 

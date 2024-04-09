@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables list all the 435 rules that are currently provided by the analyzer.
+The following tables lists all the 438 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -90,7 +90,7 @@ The following tables list all the 435 rules that are currently provided by the a
 |MiKo_1057|Dependency property keys should be suffixed with 'Key' (as in the .NET Framework)|&#x2713;|&#x2713;|
 |MiKo_1058|Dependency property keys should be prefixed with property names (as in the .NET Framework)|&#x2713;|&#x2713;|
 |MiKo_1059|Do not name types 'Impl' or 'Implementation'|&#x2713;|&#x2713;|
-|MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'|&#x2713;|\-|
+|MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'|&#x2713;|&#x2713;|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be specific|&#x2713;|&#x2713;|
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
 |MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
@@ -396,6 +396,7 @@ The following tables list all the 435 rules that are currently provided by the a
 |MiKo_3216|Static fields with initializers should be read-only|&#x2713;|&#x2713;|
 |MiKo_3217|Do not use generic types that have other generic types as type arguments|&#x2713;|\-|
 |MiKo_3218|Do not define extension methods in unexpected places|&#x2713;|\-|
+|MiKo_3219|Public members should not be 'virtual'|&#x2713;|\-|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -455,7 +456,8 @@ The following tables list all the 435 rules that are currently provided by the a
 |MiKo_6020|throw statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6021|ArgumentNullException.ThrowIfNull statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6022|ArgumentException.ThrowIfNullOrEmpty statements should be surrounded by blank lines|&#x2713;|&#x2713;|
-|MiKo_6023|ObjectDisposedException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6023|ArgumentOutOfRangeException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6024|ObjectDisposedException.ThrowIf statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6030|Open braces of initializers should be placed directly below the corresponding type definition|&#x2713;|&#x2713;|
 |MiKo_6031|Question and colon tokens of ternary operators should be placed directly below the corresponding condition|&#x2713;|&#x2713;|
 |MiKo_6032|Multi-line parameters are positioned outdented at end of method|&#x2713;|&#x2713;|
@@ -479,3 +481,4 @@ The following tables list all the 435 rules that are currently provided by the a
 |MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
 |MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
 |MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|
+|MiKo_6053|Single-line arguments shall be placed on single line|&#x2713;|&#x2713;|

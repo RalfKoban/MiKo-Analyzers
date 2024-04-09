@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2050_CodeFixProvider)), Shared]
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_2050_ExceptionSummaryAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_2050";
 
         protected override string Title => Resources.MiKo_2050_CodeFixTitle;
 
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static DocumentationCommentTriviaSyntax FixMessageParamCtor(TypeSyntax type, ParameterSyntax messageParameter)
         {
-            const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase + ".";
+            const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase + ".";
 
             var parts = Template.FormatWith('|').Split('|');
 
@@ -112,8 +112,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixMessageExceptionParamCtor(TypeSyntax type, ParameterSyntax messageParameter, ParameterSyntax exceptionParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
-                                    + Constants.Comments.ExceptionCtorMessageParamSummaryContinueingPhrase
-                                    + Constants.Comments.ExceptionCtorExceptionParamSummaryContinueingPhrase
+                                    + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase
+                                    + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase
                                     + ".";
 
             var summaryParts = Template.FormatWith('|').Split('|');
@@ -131,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixSerializationParamCtor(TypeSyntax type, ParameterSyntax serializationInfoParameter, ParameterSyntax streamingContextParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
-                                    + Constants.Comments.ExceptionCtorSerializationParamSummaryContinueingPhrase
+                                    + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase
                                     + ".";
 
             var summaryParts = Template.FormatWith('|').Split('|');

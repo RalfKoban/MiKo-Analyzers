@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [TestFixture]
@@ -296,6 +296,7 @@ public class TestMe
         [TestCase("[TestFixture] class TestMe { void Do(int mock) { } }", "[TestFixture] class TestMe { void Do(int mock) { } }")]
         [TestCase("[TestFixture] class TestMe { void Do(int mock1) { } }", "[TestFixture] class TestMe { void Do(int mock1) { } }")]
         [TestCase("[TestFixture] class TestMe { void Do(int mockValue1) { } }", "[TestFixture] class TestMe { void Do(int value1) { } }")]
+        [TestCase("[TestFixture] class TestMe { public TestMe(int childFake) { } }", "[TestFixture] class TestMe { public TestMe(int child) { } }")]
         public void Code_gets_fixed_(string originalCode, string fixedCode) => VerifyCSharpFix(originalCode, fixedCode);
 
         [TestCase("mockValue", "value")]
@@ -308,7 +309,7 @@ public class TestMe
 [TestFixture]
 public class TestMe
 {
-    void DoSinething()
+    void DoSomething()
     {
         int " + originalName + @" = 1;
     }
@@ -319,7 +320,7 @@ public class TestMe
 [TestFixture]
 public class TestMe
 {
-    void DoSinething()
+    void DoSomething()
     {
         int " + fixedName + @" = 1;
     }

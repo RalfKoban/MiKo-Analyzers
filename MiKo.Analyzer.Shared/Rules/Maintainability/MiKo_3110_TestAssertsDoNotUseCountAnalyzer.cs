@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3110_TestAssertsDoNotUseCountAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3110";
-
-        public const string Marker = "Value";
 
         private static readonly HashSet<string> AssertionMethods = new HashSet<string>
                                                                        {
@@ -159,6 +156,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return null;
         }
 
-        private Diagnostic Issue(SyntaxToken token) => Issue(token, token.ValueText, new Dictionary<string, string> { { Marker, token.ValueText } });
+        private Diagnostic Issue(SyntaxToken token) => Issue(token, token.ValueText, new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.Marker, token.ValueText } });
     }
 }

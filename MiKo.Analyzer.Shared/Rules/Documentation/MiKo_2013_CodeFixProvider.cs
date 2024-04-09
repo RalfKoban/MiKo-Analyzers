@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2013_CodeFixProvider)), Shared]
     public sealed class MiKo_2013_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private const string Phrase = Constants.Comments.EnumStartingPhrase;
 
         private static readonly string[] StartingPhrases =
@@ -44,7 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EnumStartingPhrases = CreateEnumStartingPhrases().ToArray();
 
-        public override string FixableDiagnosticId => MiKo_2013_EnumSummaryAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2013";
 
         protected override string Title => Resources.MiKo_2013_CodeFixTitle.FormatWith(Phrase);
 
@@ -127,7 +131,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static SyntaxToken XmlTextToken(string text) => text.AsToken(SyntaxKind.XmlTextLiteralToken).WithLeadingXmlComment();
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
         private static IEnumerable<string> CreateEnumStartingPhrases()
         {
             foreach (var start in new[] { "Declaration", "Enum", "Enumeration", "Flagged enum", "Flagged enumeration", "Flags enum", "Flags enumeration", "State" })
@@ -154,6 +158,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " ";
             }
         }
-//// ncrunch: collect values default
+//// ncrunch: rdi default
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
-    public static class Verbalizer
+    internal static class Verbalizer
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
@@ -39,6 +39,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                              new KeyValuePair<string, string>("isition", "ire"),
                                                                              new KeyValuePair<string, string>("isation", "ise"),
                                                                              new KeyValuePair<string, string>("ization", "ize"),
+                                                                             new KeyValuePair<string, string>("vocation", "voke"),
                                                                              new KeyValuePair<string, string>("ation", "ate"),
                                                                              new KeyValuePair<string, string>("ction", "ct"),
                                                                              new KeyValuePair<string, string>("ption", "pt"),
@@ -75,8 +76,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                    "Has",
                                                                    "Invert",
                                                                    "Is",
+                                                                   "JumpTo",
                                                                    "Load",
                                                                    "Log",
+                                                                   "NavigateTo",
                                                                    "Open",
                                                                    "Parse",
                                                                    "Pause",
@@ -140,6 +143,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                                  "InformsAbout",
                                                                  "InformedAbout",
                                                                  "BelongsTo",
+                                                             }.ToArray(_ => _, AscendingStringComparer.Default);
+
+        private static readonly string[] EndingPhrases = new[]
+                                                             {
+                                                                 "Position",
+                                                                 "Parenthesis",
+                                                                 "Situation",
                                                              }.ToArray(_ => _, AscendingStringComparer.Default);
 
         private static readonly char[] SentenceEndingMarkers = ".?!;:,)".ToCharArray();
@@ -492,6 +502,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
+            if (HasAcceptableEndingPhrase(word))
+            {
+                return false;
+            }
+
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < Endings.Length; index++)
             {
@@ -529,6 +544,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value)
         {
             return value.ContainsAny(MiddlePhrases);
+        }
+
+        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value)
+        {
+            return value.EndsWithAny(EndingPhrases);
         }
     }
 }

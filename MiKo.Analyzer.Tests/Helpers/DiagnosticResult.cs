@@ -2,6 +2,7 @@
 
 using Microsoft.CodeAnalysis;
 
+//// ncrunch: rdi off
 namespace TestHelper
 {
     /// <summary>

@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 using TestHelper;
 
-//// ncrunch: collect values off
+//// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
@@ -139,6 +139,26 @@ public class TestMe
         {
             return -1;
         }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_positive_and_negative_if_statement_that_returns_and_an_else_block_with_code() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public int DoSomething(bool flag1, bool flag2)
+    {
+        if (flag1 || !flag2)
+        {
+            return 42;
+        }
+        else
+        {
+            DoSomething(flag);
+        }
+
+        return 42;
     }
 }
 ");

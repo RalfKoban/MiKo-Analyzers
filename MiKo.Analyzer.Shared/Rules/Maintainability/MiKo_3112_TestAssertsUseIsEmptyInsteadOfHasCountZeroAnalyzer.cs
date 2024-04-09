@@ -18,7 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        internal static bool HasIssue(MemberAccessExpressionSyntax node)
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMemberAccessExpressionSyntaxSyntax, SyntaxKind.SimpleMemberAccessExpression);
+
+        private static bool HasIssue(MemberAccessExpressionSyntax node)
         {
             var code = node.ToString();
 
@@ -33,8 +35,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return false;
             }
         }
-
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeMemberAccessExpressionSyntaxSyntax, SyntaxKind.SimpleMemberAccessExpression);
 
         private void AnalyzeMemberAccessExpressionSyntaxSyntax(SyntaxNodeAnalysisContext context)
         {

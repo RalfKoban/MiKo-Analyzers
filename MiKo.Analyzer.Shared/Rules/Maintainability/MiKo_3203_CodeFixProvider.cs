@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3203_CodeFixProvider)), Shared]
     public sealed class MiKo_3203_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        public override string FixableDiagnosticId => MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.Id;
+        public override string FixableDiagnosticId => "MiKo_3203";
 
         protected override string Title => Resources.MiKo_3203_CodeFixTitle;
 

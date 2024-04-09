@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -13,37 +15,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2004";
 
-        internal const string IsSender = "IsSender";
+        private const string DefaultEnding = " that contains the event data";
 
         public MiKo_2004_EventHandlerParametersAnalyzer() : base(Id, SymbolKind.Method)
         {
         }
 
-        internal static string GetEventArgsStartingPhrase(string name) => name.StartsWithAny("AEIOU") ? "An " : "A ";
-
-        internal static string GetEventArgsEndingPhrase() => " that contains the event data";
-
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
-                                                                                                                                                                                ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                : VerifyParameterComments(symbol, commentXml, comment);
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            if (commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc))
+            {
+                // nothing to report as the documentation is inherited
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return VerifyParameterComments(symbol, commentXml, comment);
+        }
+
+        private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetIndefiniteArticleFor(name);
 
         private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
         {
             var type = method.Parameters[1].Type;
             var typeName = type.Name;
 
-            var defaultStart = GetEventArgsStartingPhrase(typeName);
-            var defaultEnding = GetEventArgsEndingPhrase();
+            var defaultStart = GetDefaultStartingPhrase(typeName);
 
             return new[]
                        {
-                           $"{defaultStart}<see cref=\"{typeName}\" />{defaultEnding}.", // just used for the proposal
-                           $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\" />{defaultEnding}",
-                           $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\"/>{defaultEnding}",
+                           $"{defaultStart}<see cref=\"{typeName}\" />{DefaultEnding}.", // just used for the proposal
+                           $"{defaultStart}<see cref=\"{type}\" />{DefaultEnding}.",
+                           $"{defaultStart}<see cref=\"{type}\" />{DefaultEnding}",
+                           $"{defaultStart}<see cref=\"{type}\"/>{DefaultEnding}.",
+                           $"{defaultStart}<see cref=\"{type}\"/>{DefaultEnding}",
                        };
         }
 
@@ -58,7 +64,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (Constants.Comments.EventSourcePhrase.None(_ => _ == phrase))
                 {
-                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), Constants.Comments.EventSourcePhrase[0], new Dictionary<string, string> { { IsSender, string.Empty } });
+                    var proposal = Constants.Comments.EventSourcePhrase[0];
+
+                    yield return Issue(sender.Name, senderComment.GetContentsLocation(), proposal, CreatePhraseProposal(proposal));
                 }
             }
 
@@ -73,7 +81,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (phrases.None(_ => _ == phrase))
                 {
-                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0], new Dictionary<string, string>());
+                    var start = GetDefaultStartingPhrase(eventArgs.Type.Name);
+
+                    yield return Issue(eventArgs.Name, eventArgsComment.GetContentsLocation(), phrases[0], CreateStartingEndingPhraseProposal(start, DefaultEnding));
                 }
             }
         }

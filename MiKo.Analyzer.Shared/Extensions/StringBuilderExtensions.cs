@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 
-// ncrunch: collect values off
+// for performance reasons we switch of RDI and NCrunch instrumentation
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 namespace System.Text
 {
-    public static class StringBuilderExtensions
+    internal static class StringBuilderExtensions
     {
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
         {

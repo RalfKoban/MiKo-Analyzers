@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
@@ -15,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2038_CodeFixProvider)), Shared]
     public sealed class MiKo_2038_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         internal static readonly string[] CommandStartingPhrases =
                                                                    {
                                                                        "A command ",
@@ -37,7 +38,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                                        .ThenBy(_ => _.Key)
                                                                                                                        .ToDictionary(_ => _.Key, _ => _.Value);
 
-        public override string FixableDiagnosticId => MiKo_2038_CommandTypeSummaryAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2038";
 
         protected override string Title => Resources.MiKo_2038_CodeFixTitle;
 
@@ -49,6 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
+
+//// ncrunch: rdi off
 
         private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
         {
@@ -93,4 +98,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return results;
         }
     }
+
+    //// ncrunch: rdi default
 }

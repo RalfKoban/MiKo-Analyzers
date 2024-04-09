@@ -21,10 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
-                                                                                                     .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
-                                                                                                     .ToString();
-
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -34,7 +30,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // avoid situation that method has no name
                 if (symbol.Name.Without(StartingPhrase).Length != 0)
                 {
-                    yield return Issue(symbol);
+                    var proposal = new StringBuilder(symbol.Name).ReplaceWithCheck(StartingPhrase, CorrectStartingPhrase)
+                                                                 .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
+                                                                 .ToString();
+
+                    yield return Issue(symbol, CreateBetterNameProposal(proposal));
                 }
             }
         }

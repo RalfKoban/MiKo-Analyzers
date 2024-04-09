@@ -11,9 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2072_CodeFixProvider)), Shared]
     public sealed class MiKo_2072_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
 
-        public override string FixableDiagnosticId => MiKo_2072_TrySummaryAnalyzer.Id;
+//// ncrunch: rdi default
+
+        public override string FixableDiagnosticId => "MiKo_2072";
 
         protected override string Title => Resources.MiKo_2072_CodeFixTitle;
 
@@ -24,16 +28,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, ReplacementMap.Keys, ReplacementMap);
         }
 
+//// ncrunch: rdi off
+
         private static Dictionary<string, string> CreateReplacementMap()
         {
-            const string SyncPhrase = MiKo_2072_TrySummaryAnalyzer.StartingPhrase + " ";
+            const string SyncPhrase = Constants.Comments.TryStartingPhrase + " ";
 
             var lowerCasePhrase = SyncPhrase.ToLowerCaseAt(0);
             var asyncPhrase = Constants.Comments.AsynchrounouslyStartingPhrase + lowerCasePhrase;
 
             var result = new Dictionary<string, string>();
 
-            foreach (var startingWord in MiKo_2072_TrySummaryAnalyzer.Words)
+            foreach (var startingWord in Constants.Comments.TryWords)
             {
                 var phrase = startingWord + " ";
                 var alternativePhrase = startingWord + " to ";
@@ -53,5 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return result;
         }
+
+//// ncrunch: rdi off
     }
 }
