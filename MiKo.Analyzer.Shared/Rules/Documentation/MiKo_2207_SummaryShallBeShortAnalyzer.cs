@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2207";
 
-        private const int MaxAllowedWhitespaces = 50;
+        private const int MaxAllowedWhitespaces = 42;
 
         public MiKo_2207_SummaryShallBeShortAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -48,17 +48,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static bool HasIssue(StringBuilder builder)
         {
-            var clearedSummary = builder.ReplaceWithCheck(" - ", " ")
-                                        .ReplaceWithCheck(" />", "/>")
-                                        .ReplaceWithCheck(" </", "</")
-                                        .ReplaceWithCheck("> <", "><")
-                                        .ReplaceWithCheck(" cref=", "cref=")
-                                        .ReplaceWithCheck(" href=", "href=")
-                                        .ReplaceWithCheck(" type=", "type=")
-                                        .ReplaceWithCheck(" langword=", "langword=")
-                                        .ToString()
-                                        .AsSpan()
-                                        .Trim();
+            var summary = builder.ReplaceWithCheck(" - ", " ")
+                                 .ReplaceWithCheck(" />", "/>")
+                                 .ReplaceWithCheck(" </", "</")
+                                 .ReplaceWithCheck("> <", "><")
+                                 .ReplaceWithCheck(" cref=", "cref=")
+                                 .ReplaceWithCheck(" href=", "href=")
+                                 .ReplaceWithCheck(" type=", "type=")
+                                 .ReplaceWithCheck(" langref=", "langref=")
+                                 .ReplaceWithCheck(" langword=", "langword=")
+                                 .ToString();
+
+            var clearedSummary = summary.AsSpan().Trim();
 
             return HasIssue(clearedSummary);
         }
