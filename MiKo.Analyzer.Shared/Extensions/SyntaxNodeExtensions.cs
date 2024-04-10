@@ -975,9 +975,48 @@ namespace MiKoSolutions.Analyzers
             return result.AsSpan().Trim();
         }
 
-        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value) => new StringBuilder(value.Content.ToString()).WithoutXmlCommentExterior();
+        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value) => value?.GetTextWithoutTrivia(new StringBuilder());
 
-        internal static string GetTextWithoutTrivia(this XmlEmptyElementSyntax value) => value.WithoutXmlCommentExterior();
+        internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value, StringBuilder builder)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var content = value.Content;
+
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var index = 0; index < content.Count; index++)
+            {
+                var node = content[index];
+                var tagName = node.GetXmlTagName();
+
+                if (tagName == Constants.XmlTag.C)
+                {
+                    // ignore code
+                    continue;
+                }
+
+                if (node is XmlEmptyElementSyntax empty)
+                {
+                    builder.Append(empty.WithoutTrivia());
+                }
+                else if (node is XmlElementSyntax e)
+                {
+                    GetTextWithoutTrivia(e, builder);
+                }
+                else if (node is XmlTextSyntax text)
+                {
+                    foreach (var valueText in text.GetTextWithoutTriviaLazy())
+                    {
+                        builder.Append(valueText);
+                    }
+                }
+            }
+
+            return builder.WithoutXmlCommentExterior();
+        }
 
         internal static IEnumerable<string> GetTextWithoutTriviaLazy(this XmlTextSyntax value)
         {

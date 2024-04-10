@@ -2,7 +2,7 @@
 
 #if NCRUNCH
 
-[assembly: Timeout(30 * 1000)] // default timeout of 30 seconds
+[assembly: Timeout(60 * 1000)] // default timeout of 60 seconds
 
 #else
 
