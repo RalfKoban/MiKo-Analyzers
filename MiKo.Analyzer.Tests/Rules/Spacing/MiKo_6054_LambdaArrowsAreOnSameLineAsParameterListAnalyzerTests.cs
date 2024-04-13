@@ -766,6 +766,122 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_simple_lambda_expression_body_that_expression_spans_multiple_lines_below_the_arrow()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return DoSomethingCore(value
+                                     =>
+                                        DoSomething(
+                                            1234567890,
+                                            4711,
+                                            value);
+        }
+
+        private int DoSomething(int i, int j, int k) => i + j + k;
+
+        private int DoSomethingCore(Func<int, int> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return DoSomethingCore(value => DoSomething(
+                                                1234567890,
+                                                4711,
+                                                value);
+        }
+
+        private int DoSomething(int i, int j, int k) => i + j + k;
+
+        private int DoSomethingCore(Func<int, int> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_that_expression_spans_multiple_lines_below_the_arrow()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return DoSomethingCore((value)
+                                     =>
+                                        DoSomething(
+                                            1234567890,
+                                            4711,
+                                            value);
+        }
+
+        private int DoSomething(int i, int j, int k) => i + j + k;
+
+        private int DoSomethingCore(Func<int, int> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething()
+        {
+            return DoSomethingCore((value) => DoSomething(
+                                                  1234567890,
+                                                  4711,
+                                                  value);
+        }
+
+        private int DoSomething(int i, int j, int k) => i + j + k;
+
+        private int DoSomethingCore(Func<int, int> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6054_LambdaArrowsAreOnSameLineAsParameterListAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6054_LambdaArrowsAreOnSameLineAsParameterListAnalyzer();

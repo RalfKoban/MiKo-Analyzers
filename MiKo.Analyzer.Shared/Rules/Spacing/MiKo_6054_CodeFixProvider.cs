@@ -42,12 +42,40 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax) => syntax.WithParameterList(syntax.ParameterList.WithoutTrailingTrivia())
-                                                                                                                                 .WithArrowToken(syntax.ArrowToken.WithoutTrivia().WithLeadingSpace())
-                                                                                                                                 .WithExpressionBody(syntax.ExpressionBody?.WithoutLeadingTrivia().WithLeadingSpace());
+        private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax)
+        {
+            var updatedSyntax = syntax.WithParameterList(syntax.ParameterList.WithoutTrailingTrivia())
+                                      .WithArrowToken(syntax.ArrowToken.WithoutTrivia().WithLeadingSpace())
+                                      .WithExpressionBody(syntax.ExpressionBody?.WithoutLeadingTrivia().WithLeadingSpace());
 
-        private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax) => syntax.WithParameter(syntax.Parameter.WithoutTrailingTrivia())
-                                                                                                                   .WithArrowToken(syntax.ArrowToken.WithoutTrivia().WithLeadingSpace())
-                                                                                                                   .WithExpressionBody(syntax.ExpressionBody?.WithoutLeadingTrivia().WithLeadingSpace());
+            return UpdateExpressionBody(syntax, updatedSyntax);
+        }
+
+        private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax)
+        {
+            var updatedSyntax = syntax.WithParameter(syntax.Parameter.WithoutTrailingTrivia())
+                                      .WithArrowToken(syntax.ArrowToken.WithoutTrivia().WithLeadingSpace())
+                                      .WithExpressionBody(syntax.ExpressionBody?.WithoutLeadingTrivia().WithLeadingSpace());
+
+            return UpdateExpressionBody(syntax, updatedSyntax);
+        }
+
+        private static T UpdateExpressionBody<T>(T syntax, T updatedSyntax) where T : AnonymousFunctionExpressionSyntax
+        {
+            var expressionBody = syntax.ExpressionBody;
+
+            if (expressionBody is null)
+            {
+                return updatedSyntax;
+            }
+
+            var initialSpaces = syntax.GetPositionWithinStartLine();
+            var additionalSpaces = updatedSyntax.ExpressionBody.GetPositionWithinStartLine();
+            var spaces = initialSpaces + additionalSpaces;
+
+            var updatedExpression = GetSyntaxWithLeadingSpaces(expressionBody, spaces);
+
+            return (T)updatedSyntax.WithExpressionBody(updatedExpression);
+        }
     }
 }
