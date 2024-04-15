@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Text;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -23,8 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (context.Node is SwitchExpressionSyntax syntax)
             {
-                var position = syntax.SwitchKeyword.GetEndPosition();
-                var switchPosition = new LinePosition(position.Line, position.Character + 1);
+                var switchPosition = syntax.SwitchKeyword.GetPositionAfterEnd();
 
                 var openBraceToken = syntax.OpenBraceToken;
                 var openBracePosition = openBraceToken.GetStartPosition();

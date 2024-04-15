@@ -18,19 +18,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] Terms = { "true", "false", "null", };
 
-        private static readonly IEnumerable<string> CorrectItems = new[]
-                                                                       {
-                                                                           "<see langword=\"true\" />",
-                                                                           "<see langword=\"true\"/>",
-                                                                           "<see langword=\"false\" />",
-                                                                           "<see langword=\"false\"/>",
-                                                                           "<see langword=\"null\" />",
-                                                                           "<see langword=\"null\"/>",
-                                                                           string.Empty,
-                                                                       };
+        private static readonly string[] CorrectItems =
+                                                        {
+                                                            "<see langword=\"true\" />",
+                                                            "<see langword=\"true\"/>",
+                                                            "<see langword=\"false\" />",
+                                                            "<see langword=\"false\"/>",
+                                                            "<see langword=\"null\" />",
+                                                            "<see langword=\"null\"/>",
+                                                            string.Empty,
+                                                        };
 
-        private static readonly IEnumerable<string> WrongItemsWithoutCode = CreateWrongItems(false, Terms);
-        private static readonly IEnumerable<string> WrongItemsWithCode = CreateWrongItems(true, Terms);
+        private static readonly string[] WrongItemsWithoutCode = CreateWrongItems(false, Terms).Take(TestLimit).ToArray();
+        private static readonly string[] WrongItemsWithCode = CreateWrongItems(true, Terms).Take(TestLimit).ToArray();
+
+        private static readonly TestCaseData[] CodeFixData = CreateCodeFixData().Take(TestLimit).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
@@ -428,11 +430,11 @@ public sealed class TestMe
                 results.Add("<seealso langref=\"" + token + "\" ></seealso>");
             }
 
-            return results.OrderBy(_ => _).ToArray();
+            return results.OrderBy(_ => _);
         }
 
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<TestCaseData> CodeFixData()
+        private static IEnumerable<TestCaseData> CreateCodeFixData()
         {
             foreach (var word in Terms)
             {

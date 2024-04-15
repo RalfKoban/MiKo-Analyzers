@@ -880,8 +880,6 @@ namespace MiKoSolutions.Analyzers
             return typeInfo.Type;
         }
 
-        internal static int GetCharacterPositionInStartLine(this SyntaxNode value) => value.GetPositionWithinStartLine();
-
         internal static LinePosition GetStartPosition(this SyntaxNode value) => value.GetLocation().GetStartPosition();
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();

@@ -38,11 +38,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return descendants;
         }
 
-        protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces)
+        protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, int spaces) where TSyntaxNode : SyntaxNode
         {
-            var syntax = statement.WithLeadingSpaces(spaces);
+            var syntax = syntaxNode.WithLeadingSpaces(spaces);
 
-            var additionalSpaces = syntax.GetPositionWithinStartLine() - statement.GetPositionWithinStartLine();
+            var additionalSpaces = syntax.GetPositionWithinStartLine() - syntaxNode.GetPositionWithinStartLine();
 
             // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
             var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
@@ -54,6 +54,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
         }
+
+        protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces) => GetSyntaxWithLeadingSpaces(statement, spaces);
 
         protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)
         {
