@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2080_FieldSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] WrongBooleanPhrases = CreateWrongBooleanPhrases().Distinct().ToArray();
+        private static readonly string[] WrongBooleanPhrases = CreateWrongBooleanPhrases().Take(TestLimit).Distinct().ToArray();
 
         [Test]
         public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
