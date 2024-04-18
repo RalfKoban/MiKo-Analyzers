@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 439 rules that are currently provided by the analyzer.
+The following tables lists all the 440 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -472,7 +472,7 @@ The following tables lists all the 439 rules that are currently provided by the 
 |MiKo_6040|Consecutive invocations spaning multiple lines should be aligned by their dots|&#x2713;|&#x2713;|
 |MiKo_6041|Assignments should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6042|'new' keywords should be placed on same line(s) as the types|&#x2713;|&#x2713;|
-|MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself|&#x2713;|&#x2713;|
+|MiKo_6043|Expression bodies of lambdas should be placed on same line as lambda itself when fitting|&#x2713;|&#x2713;|
 |MiKo_6044|Binary operators such as '&amp;&amp;' or '&#124;&#124;' should be placed on same line(s) as their right operands|&#x2713;|&#x2713;|
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
@@ -483,3 +483,4 @@ The following tables lists all the 439 rules that are currently provided by the 
 |MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
 |MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|
 |MiKo_6053|Single-line arguments shall be placed on single line|&#x2713;|&#x2713;|
+|MiKo_6054|Lambda arrows shall be placed on same line as parameters and expression bodies|&#x2713;|&#x2713;|
