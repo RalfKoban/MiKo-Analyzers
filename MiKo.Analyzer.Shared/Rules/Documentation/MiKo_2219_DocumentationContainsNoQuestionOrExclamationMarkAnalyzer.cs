@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2219";
 
-        internal static readonly string[] Terms = { "?", "!" };
+        private static readonly string[] Terms = { "?", "!" };
 
         private static readonly HashSet<string> AllowedTags = new HashSet<string>
                                                                   {

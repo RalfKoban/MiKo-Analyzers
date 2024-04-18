@@ -12,9 +12,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2039_CodeFixProvider)), Shared]
     public sealed class MiKo_2039_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith('|').Split('|');
 
         private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().Distinct().ToDictionary(_ => _, _ => string.Empty);
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2039";
 
@@ -28,6 +32,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+
+//// ncrunch: rdi off
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
@@ -86,5 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
         }
+
+//// ncrunch: rdi default
     }
 }

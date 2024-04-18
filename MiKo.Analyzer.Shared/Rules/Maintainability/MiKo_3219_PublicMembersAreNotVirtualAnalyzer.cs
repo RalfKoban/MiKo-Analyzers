@@ -54,6 +54,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     var node = member.GetSyntax();
+
+                    if (node is null)
+                    {
+                        // it may happen that we have partial classes where parts are in generated code but not marked as generated, hence we do not find the nodes here
+                        continue;
+                    }
+
                     var token = node.FirstChildToken(SyntaxKind.VirtualKeyword);
 
                     var proposal = member.Name;

@@ -15,10 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static string[] GetStartingPhrase(IParameterSymbol parameter) => parameter.Type.IsBoolean()
-                                                                                  ? Constants.Comments.OutBoolParameterStartingPhrase
-                                                                                  : Constants.Comments.OutParameterStartingPhrase;
-
         protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind == RefKind.Out;
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
@@ -30,11 +26,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override Location GetIssueLocation(XmlElementSyntax parameterComment)
         {
-            var content = parameterComment.Content;
+            var contents = parameterComment.Content;
 
-            return content.Count > 0
-                   ? GetFirstTextIssueLocation(content)
+            return contents.Count > 0
+                   ? GetFirstTextIssueLocation(contents)
                    : base.GetIssueLocation(parameterComment);
         }
+
+        private static string[] GetStartingPhrase(IParameterSymbol parameter) => parameter.Type.IsBoolean()
+                                                                                 ? Constants.Comments.OutBoolParameterStartingPhrase
+                                                                                 : Constants.Comments.OutParameterStartingPhrase;
     }
 }

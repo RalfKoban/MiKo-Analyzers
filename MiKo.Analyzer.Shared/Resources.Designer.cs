@@ -14716,7 +14716,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expression bodies of lambdas should be placed on same line as lambda itself.
+        ///   Looks up a localized string similar to Expression bodies of lambdas should be placed on same line as lambda itself when fitting.
         /// </summary>
         internal static string MiKo_6043_Title {
             get {
@@ -15046,6 +15046,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6052_Title {
             get {
                 return ResourceManager.GetString("MiKo_6052_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on single line.
+        /// </summary>
+        internal static string MiKo_6053_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6053_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if &apos;single-line&apos; arguments are placed on a single line instead of splitting them over multiple lines..
+        /// </summary>
+        internal static string MiKo_6053_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6053_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place argument on single line.
+        /// </summary>
+        internal static string MiKo_6053_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6053_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-line arguments shall be placed on single line.
+        /// </summary>
+        internal static string MiKo_6053_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6053_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place lambda on same line.
+        /// </summary>
+        internal static string MiKo_6054_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6054_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies instead of splitting them all over multiple lines..
+        /// </summary>
+        internal static string MiKo_6054_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6054_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place lambda on same line.
+        /// </summary>
+        internal static string MiKo_6054_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6054_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lambda arrows shall be placed on same line as parameters and expression bodies.
+        /// </summary>
+        internal static string MiKo_6054_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6054_Title", resourceCulture);
             }
         }
     }

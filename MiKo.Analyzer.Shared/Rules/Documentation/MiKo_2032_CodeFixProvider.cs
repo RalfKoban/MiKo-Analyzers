@@ -12,6 +12,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2032_CodeFixProvider)), Shared]
     public sealed class MiKo_2032_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly string[] NonGenericStartParts = Constants.Comments.BooleanReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] NonGenericEndParts = Constants.Comments.BooleanReturnTypeEndingPhraseTemplate.FormatWith("|").Split('|');
         private static readonly string[] GenericStartParts = Constants.Comments.BooleanTaskReturnTypeStartingPhraseTemplate.FormatWith("|").Split('|');
@@ -122,6 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      " Otherwise ",
                                                                      " Otherwise",
                                                                  };
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2032";
 
