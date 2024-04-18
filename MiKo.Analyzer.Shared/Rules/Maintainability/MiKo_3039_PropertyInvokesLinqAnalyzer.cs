@@ -9,15 +9,15 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3039_PropertyGetterInvokesLinqAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3039_PropertyInvokesLinqAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3039";
 
-        public MiKo_3039_PropertyGetterInvokesLinqAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3039_PropertyInvokesLinqAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeGetAccessorDeclaration, SyntaxKind.GetAccessorDeclaration);
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzePropertyDeclaration, SyntaxKind.PropertyDeclaration);
 
         private static SimpleNameSyntax FindNameSyntax(InvocationExpressionSyntax linq)
         {
@@ -29,23 +29,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private void AnalyzeGetAccessorDeclaration(SyntaxNodeAnalysisContext context)
+        private void AnalyzePropertyDeclaration(SyntaxNodeAnalysisContext context)
         {
-            var node = (AccessorDeclarationSyntax)context.Node;
+            if (context.Node is PropertyDeclarationSyntax property)
+            {
+                var issues = AnalyzePropertyDeclaration(property, context.SemanticModel);
 
-            ReportDiagnostics(context, Analyze(node, context.SemanticModel));
+                ReportDiagnostics(context, issues);
+            }
         }
 
-        private IEnumerable<Diagnostic> Analyze(AccessorDeclarationSyntax node, SemanticModel semanticModel)
+        private IEnumerable<Diagnostic> AnalyzePropertyDeclaration(PropertyDeclarationSyntax property, SemanticModel semanticModel)
         {
-            var property = node.GetEnclosing<PropertyDeclarationSyntax>();
+            var propertyName = property.GetName();
 
-            if (property is null)
+            return Enumerable.Empty<Diagnostic>()
+                             .Concat(AnalyzeProperty(property.ExpressionBody, propertyName, semanticModel))
+                             .Concat(AnalyzeProperty(property.GetGetter(), propertyName, semanticModel))
+                             .Concat(AnalyzeProperty(property.GetSetter(), propertyName, semanticModel));
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeProperty(SyntaxNode node, string propertyName, SemanticModel semanticModel)
+        {
+            if (node is null)
             {
                 yield break;
             }
-
-            var propertyName = property.GetName();
 
             foreach (var linq in node.LinqExtensionMethods(semanticModel))
             {

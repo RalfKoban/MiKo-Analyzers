@@ -93,6 +93,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case Constants.LambdaIdentifiers.Fallback3:
                 case Constants.LambdaIdentifiers.Fallback4:
                 case Constants.LambdaIdentifiers.Fallback5:
+                case Constants.LambdaIdentifiers.Fallback2Underscores:
+                case Constants.LambdaIdentifiers.Fallback3Underscores:
+                case Constants.LambdaIdentifiers.Fallback4Underscores:
                 case "map":
                 case "set":
                 case "list":

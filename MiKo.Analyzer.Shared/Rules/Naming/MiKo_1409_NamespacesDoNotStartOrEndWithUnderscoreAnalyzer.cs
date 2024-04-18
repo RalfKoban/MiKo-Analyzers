@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        internal static string FindBetterName(string name) => name.Trim(Constants.Underscores);
-
         protected override IEnumerable<Diagnostic> AnalyzeNamespaceName(IEnumerable<SyntaxToken> names)
         {
             foreach (var namePart in names)
@@ -51,5 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             return name.Last() == character;
         }
+
+        private static string FindBetterName(string name) => name.Trim(Constants.Underscores);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -14,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Distinct().OrderBy(_ => _.Length).ThenBy(_ => _).ToArray();
+        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Take(TestLimit).Distinct().OrderBy(_ => _.Length).ThenBy(_ => _).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
@@ -613,6 +614,9 @@ internal interface IFactory
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
 
+//// ncrunch: no coverage start
+
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateTypeSummaryStartingPhrases()
         {
             var startingPhrases = new[]
@@ -796,5 +800,7 @@ internal interface IFactory
 
             yield return "Implementations create ";
         }
+
+//// ncrunch: no coverage end
     }
 }

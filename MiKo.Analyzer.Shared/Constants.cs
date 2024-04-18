@@ -864,6 +864,9 @@ namespace MiKoSolutions.Analyzers
         internal static class LambdaIdentifiers
         {
             internal const string Default = "_";
+            internal const string Fallback2Underscores = "__";
+            internal const string Fallback3Underscores = "___";
+            internal const string Fallback4Underscores = "____";
             internal const string Fallback0 = "_0";
             internal const string Fallback1 = "_1";
             internal const string Fallback2 = "_2";

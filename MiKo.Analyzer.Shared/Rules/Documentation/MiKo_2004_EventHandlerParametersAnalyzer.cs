@@ -6,6 +6,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -21,11 +23,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsEventHandler() && base.ShallAnalyze(symbol);
 
-        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc)
-                                                                                                                                                                                ? Enumerable.Empty<Diagnostic>()
-                                                                                                                                                                                : VerifyParameterComments(symbol, commentXml, comment);
+        protected override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            if (commentXml.Contains(Constants.Comments.XmlElementStartingTag + Constants.XmlTag.Inheritdoc))
+            {
+                // nothing to report as the documentation is inherited
+                return Enumerable.Empty<Diagnostic>();
+            }
 
-        private static string GetDefaultStartingPhrase(string name) => name.StartsWithAny("AEIOU") ? "An " : "A ";
+            return VerifyParameterComments(symbol, commentXml, comment);
+        }
+
+        private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetIndefiniteArticleFor(name);
 
         private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
         {
