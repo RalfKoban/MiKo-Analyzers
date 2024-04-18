@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2229";
 
-        internal static readonly string[] Phrases = { "</", "/>", "/ >" };
+        private static readonly string[] Phrases = { "</", "/>", "/ >" };
 
         public MiKo_2229_XmlFragmentAnalyzer() : base(Id)
         {

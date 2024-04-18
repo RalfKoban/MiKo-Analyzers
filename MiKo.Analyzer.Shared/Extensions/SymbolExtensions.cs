@@ -14,6 +14,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
@@ -415,7 +416,7 @@ namespace MiKoSolutions.Analyzers
                     return GetSyntax(parameter);
 
                 default:
-                    return value.GetSyntaxNodes().FirstOrDefault();
+                    return value?.GetSyntaxNodes().FirstOrDefault();
             }
         }
 

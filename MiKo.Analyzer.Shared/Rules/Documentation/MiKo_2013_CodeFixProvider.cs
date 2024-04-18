@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2013_CodeFixProvider)), Shared]
     public sealed class MiKo_2013_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private const string Phrase = Constants.Comments.EnumStartingPhrase;
 
         private static readonly string[] StartingPhrases =
@@ -43,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            };
 
         private static readonly string[] EnumStartingPhrases = CreateEnumStartingPhrases().ToArray();
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2013";
 

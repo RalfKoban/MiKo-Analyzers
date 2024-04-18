@@ -10,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2022_CodeFixProvider)), Shared]
     public sealed class MiKo_2022_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+
         private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
                                                                                 {
                                                                                     { "To return ", string.Empty },
@@ -65,6 +67,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                     { "When this method returns, indicates ", string.Empty },
                                                                                     { "When this method returns, ", string.Empty },
                                                                                 };
+
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2022";
 

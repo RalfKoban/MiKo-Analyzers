@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
+// ncrunch: rdi off
 // ReSharper disable once CheckNamespace
 namespace MiKoSolutions.Analyzers
 {
@@ -23,6 +24,13 @@ namespace MiKoSolutions.Analyzers
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
 
         internal static int GetPositionWithinStartLine(this SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
+
+        internal static LinePosition GetPositionAfterEnd(this SyntaxToken value)
+        {
+            var position = value.GetEndPosition();
+
+            return new LinePosition(position.Line, position.Character + 1);
+        }
 
         internal static LinePosition GetStartPosition(this SyntaxToken value) => value.GetLocation().GetStartPosition();
 

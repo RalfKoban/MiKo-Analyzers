@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
-// ncrunch: rdi off
+// for performance reasons we switch of RDI and NCrunch instrumentation
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
 namespace System.Text
 {

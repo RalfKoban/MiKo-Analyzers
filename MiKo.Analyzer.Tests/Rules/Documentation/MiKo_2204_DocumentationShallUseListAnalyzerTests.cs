@@ -43,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   " A.) ",
                                                               };
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]
         public void An_issue_is_reported_for_Enumeration_in_Xml_tag() => Assert.Multiple(() =>
                                                                                               {
@@ -50,9 +51,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                   {
                                                                                                       foreach (var marker in EnumerationMarkers)
                                                                                                       {
-                                                                                                          An_issue_is_reported_for(@"
+                                                                                                          An_issue_is_reported_for(2, @"
 /// <" + xmlTag + @">
 /// " + marker + @" something.
+/// " + marker + @" something else.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
@@ -96,6 +98,14 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void No_issue_is_reported_for_comment_with_double_slash_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The identifier -- if available.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test]
         public void No_issue_is_reported_for_comment_with_slash_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
 /// <" + xmlTag + @">
 /// The identifier - if available - for something.
@@ -112,6 +122,14 @@ public sealed class TestMe { }
 ");
 
         [Test]
+        public void No_issue_is_reported_for_comment_with_double_slash_and_see_langword_Null_in_XML_tag_([ValueSource(nameof(XmlTags))] string xmlTag) => No_issue_is_reported_for(@"
+/// <" + xmlTag + @">
+/// The identifier -- if not <see langword=""null""/>.
+/// </" + xmlTag + @">
+public sealed class TestMe { }
+");
+
+        [Test]
         public void No_issue_is_reported_for_comment_containing_similar_words([Values("heuristic", "et cetera", "superb")] string word) => No_issue_is_reported_for(@"
 /// <summary>
 /// The identifier " + word + @". Seems to be no problem.
@@ -120,7 +138,35 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_with_text_at_beginning_for_([Values("-", "*")] string marker)
+        public void Code_gets_fixed_with_multi_line_text_at_beginning_for_([Values("-", "*")] string marker)
+        {
+            var originalCode = @"
+/// <summary>
+/// Some text here.
+/// The reason:
+/// " + marker + @" It is something.
+/// " + marker + @" It is something else.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// Some text here.
+/// The reason:
+/// <list type=""bullet"">
+/// <item><description>It is something.</description></item>
+/// <item><description>It is something else.</description></item>
+/// </list>
+/// </summary>
+public sealed class TestMe { }
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_single_line_text_at_beginning_for_([Values("-", "*")] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -146,7 +192,35 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_text_at_end_for_([Values("-", "*")] string marker)
+        public void Code_gets_fixed_with_multi_line_text_at_end_for_([Values("-", "*")] string marker)
+        {
+            var originalCode = @"
+/// <summary>
+/// " + marker + @" It is something.
+/// " + marker + @" It is something else.
+/// Those are the options.
+/// Some more text here.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            const string FixedCode = @"
+/// <summary>
+/// <list type=""bullet"">
+/// <item><description>It is something.</description></item>
+/// <item><description>It is something else.</description></item>
+/// </list>
+/// Those are the options.
+/// Some more text here.
+/// </summary>
+public sealed class TestMe { }
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_single_line_text_at_end_for_([Values("-", "*")] string marker)
         {
             var originalCode = @"
 /// <summary>

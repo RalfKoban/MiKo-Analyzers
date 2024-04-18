@@ -534,6 +534,8 @@ public class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2035_CodeFixProvider();
 
+//// ncrunch: no coverage start
+
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartingPhrases()
         {
@@ -548,14 +550,14 @@ public class TestMe
                 {
                     var phrase = string.Concat(collection, " ", preposition);
 
-                    yield return phrase;
+                    yield return phrase.ToLowerCaseAt(0);
                     yield return phrase.ToUpperCaseAt(0);
 
                     foreach (var modification in modifications)
                     {
                         var modificationPhrase = string.Concat(modification, " ", phrase);
 
-                        yield return modificationPhrase;
+                        yield return modificationPhrase.ToLowerCaseAt(0);
                         yield return modificationPhrase.ToUpperCaseAt(0);
 
                         foreach (var startingWord in startingWords)
@@ -564,18 +566,20 @@ public class TestMe
                             var startingPhrase = string.Concat(startingWord, " ", phrase);
                             var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                            yield return shortStartingPhrase;
+                            yield return shortStartingPhrase.ToLowerCaseAt(0);
                             yield return shortStartingPhrase.ToUpperCaseAt(0);
 
-                            yield return startingPhrase;
+                            yield return startingPhrase.ToLowerCaseAt(0);
                             yield return startingPhrase.ToUpperCaseAt(0);
 
-                            yield return modifiedStartingPhrase;
+                            yield return modifiedStartingPhrase.ToLowerCaseAt(0);
                             yield return modifiedStartingPhrase.ToUpperCaseAt(0);
                         }
                     }
                 }
             }
         }
+
+//// ncrunch: no coverage end
     }
 }

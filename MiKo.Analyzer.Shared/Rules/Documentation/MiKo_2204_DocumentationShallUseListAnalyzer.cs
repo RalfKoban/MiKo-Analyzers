@@ -15,6 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2204";
 
+//// ncrunch: rdi off
         private static readonly string[] Delimiters = { ".)", ".", ")", ":" };
 
         private static readonly string[] Triggers = Enumerable.Empty<string>()
@@ -23,12 +24,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               .Concat(new[] { " -- ", " --- ", " * ", " ** ", " *** " })
                                                               .ToHashSet()
                                                               .ToArray(AscendingStringComparer.Default);
+//// ncrunch: rdi default
 
         public MiKo_2204_DocumentationShallUseListAnalyzer() : base(Id)
         {
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            var issues = AnalyzeComment(symbol, comment).ToList();
+
+            // only report if we fund more than 1 issue
+            return issues.Count > 1 ? issues : Enumerable.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, DocumentationCommentTriviaSyntax comment)
         {
             foreach (var token in comment.GetXmlTextTokens())
             {
