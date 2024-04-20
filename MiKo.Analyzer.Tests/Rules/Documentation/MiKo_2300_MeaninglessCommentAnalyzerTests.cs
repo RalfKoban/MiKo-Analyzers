@@ -94,6 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                "nothing to do here",
                                                                "nothing to do",
                                                                "special handling",
+                                                               "ncrunch: some text here",
                                                            };
 
         [Test]
