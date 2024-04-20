@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -10,6 +12,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public MiKo_2033_StringReturnTypeDefaultPhraseAnalyzer() : base(Id)
         {
+        }
+
+        protected override bool ShallAnalyze(IMethodSymbol symbol)
+        {
+            var symbolName = symbol.Name;
+
+            if (symbolName.Length > 2 && symbolName[0] == 'T' && symbolName[1] == 'o' && symbolName[2].IsUpperCase())
+            {
+                // do not report for conversion methods
+                return symbolName == "ToString";
+            }
+
+            return base.ShallAnalyze(symbol);
         }
 
         protected override bool IsAcceptedType(ITypeSymbol returnType) => returnType.IsString();
