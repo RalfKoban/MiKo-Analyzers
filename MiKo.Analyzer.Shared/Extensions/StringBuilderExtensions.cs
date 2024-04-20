@@ -105,7 +105,7 @@ namespace System.Text
                 }
             }
 
-            for (var i = length - 1; i >= 0; i--)
+            for (var i = length - 1; i >= start; i--)
             {
                 if (char.IsWhiteSpace(value[i]))
                 {
