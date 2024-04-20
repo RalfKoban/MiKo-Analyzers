@@ -12,6 +12,18 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase("This is a test     ", ExpectedResult = "This is a test")]
         [TestCase("    This is a test", ExpectedResult = "This is a test")]
         [TestCase("    This is a test     ", ExpectedResult = "This is a test")]
-        public static string ToStringTrimmed_trims_string_(string s) => new StringBuilder(s).ToStringTrimmed();
+        public static string Trim_trims_string_(string s) => new StringBuilder(s).Trim();
+
+        [TestCase("This is a test", ExpectedResult = "This is a test")]
+        [TestCase("This is a test     ", ExpectedResult = "This is a test     ")]
+        [TestCase("    This is a test", ExpectedResult = "This is a test")]
+        [TestCase("    This is a test     ", ExpectedResult = "This is a test     ")]
+        public static string TrimStart_trims_string_at_start_(string s) => new StringBuilder(s).TrimStart();
+
+        [TestCase("This is a test", ExpectedResult = "This is a test")]
+        [TestCase("This is a test     ", ExpectedResult = "This is a test")]
+        [TestCase("    This is a test", ExpectedResult = "    This is a test")]
+        [TestCase("    This is a test     ", ExpectedResult = "    This is a test")]
+        public static string TrimEnd_trims_string_at_end_(string s) => new StringBuilder(s).TrimEnd();
     }
 }
