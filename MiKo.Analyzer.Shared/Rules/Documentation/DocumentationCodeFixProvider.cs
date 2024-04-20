@@ -244,7 +244,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     // in case there is any, get rid of last dot
-                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.') + ending;
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ToString() + ending;
 
                     return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
                 }
@@ -278,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     // in case there is any, get rid of last dot
-                    text = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.') + commentStart;
+                    text = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ToString() + commentStart;
                 }
 
                 return comment.ReplaceNode(t, XmlText(text))

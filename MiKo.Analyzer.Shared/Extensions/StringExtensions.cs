@@ -1275,7 +1275,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).ToString();
+        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).Trim();
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
 
@@ -1349,8 +1349,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
-
-        public static ReadOnlySpan<char> WithoutParaTagsAsSpan(this StringBuilder value) => value.WithoutParaTags().ToString().AsSpan();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
