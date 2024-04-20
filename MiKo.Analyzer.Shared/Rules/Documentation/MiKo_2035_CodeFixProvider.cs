@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2035_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly string[] Phrases = CreatePhrases().ToHashSet(_ => _ + " ").ToArray();
+        private static readonly string[] Phrases = CreatePhrases().ToHashSet(_ => _ + " ").ToArray(); // TODO RKN: Order by 'A', 'An ' and 'The '
 
         private static readonly string[] TaskPhrases =
                                                        {
