@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers
             return GetExceptionCommentElements(commentXml).Select(_ => _.Attribute(Constants.XmlTag.Attribute.Cref)?.Value).Where(_ => _ != null);
         }
 
-        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.Trim());
+        internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.ToStringTrimmed());
 
         internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
@@ -154,8 +154,7 @@ namespace MiKoSolutions.Analyzers
             return builder.WithoutParaTags()
                           .Without(Constants.Markers.SymbolsAndLineBreaks)
                           .ReplaceAllWithCheck(MultiWhitespaceStrings, SingleWhitespaceString)
-                          .ToString()
-                          .Trim();
+                          .ToStringTrimmed();
         }
     }
 }

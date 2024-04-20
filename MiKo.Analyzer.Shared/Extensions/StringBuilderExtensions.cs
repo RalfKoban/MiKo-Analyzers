@@ -81,6 +81,51 @@ namespace System.Text
             return value.Replace(oldValue, newValue);
         }
 
+        public static string ToStringTrimmed(this StringBuilder value)
+        {
+            if (value.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            var start = 0;
+            var end = 0;
+
+            for (var i = 0; i < value.Length; i++)
+            {
+                if (char.IsWhiteSpace(value[i]))
+                {
+                    start++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            for (var i = value.Length - 1; i >= 0; i--)
+            {
+                if (char.IsWhiteSpace(value[i]))
+                {
+                    end++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (start == 0 && end == 0)
+            {
+                // nothing to trim
+                return value.ToString();
+            }
+
+            var length = end - start;
+
+            return value.ToString(start, length);
+        }
+
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
     }
 }

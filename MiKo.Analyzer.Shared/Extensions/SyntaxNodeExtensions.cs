@@ -949,9 +949,9 @@ namespace MiKoSolutions.Analyzers
                 builder.Append(token.WithoutTrivia().ValueText);
             }
 
-            var result = builder.ToString();
+            var result = builder.ToStringTrimmed();
 
-            return result.Trim();
+            return result;
         }
 
         internal static ReadOnlySpan<char> GetTextWithoutTrivia(this XmlTextSyntax value)
@@ -2957,7 +2957,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder().WithoutXmlCommentExterior(value).ToString().Trim();
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder().WithoutXmlCommentExterior(value).ToStringTrimmed();
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value, SyntaxNode node) => value.Append(node).WithoutXmlCommentExterior();
 
