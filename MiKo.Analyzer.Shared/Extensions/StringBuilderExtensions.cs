@@ -83,7 +83,9 @@ namespace System.Text
 
         public static string ToStringTrimmed(this StringBuilder value)
         {
-            if (value.Length == 0)
+            var length = value.Length;
+
+            if (length == 0)
             {
                 return string.Empty;
             }
@@ -91,7 +93,7 @@ namespace System.Text
             var start = 0;
             var end = 0;
 
-            for (var i = 0; i < value.Length; i++)
+            for (var i = 0; i < length; i++)
             {
                 if (char.IsWhiteSpace(value[i]))
                 {
@@ -103,7 +105,7 @@ namespace System.Text
                 }
             }
 
-            for (var i = value.Length - 1; i >= 0; i--)
+            for (var i = length - 1; i >= 0; i--)
             {
                 if (char.IsWhiteSpace(value[i]))
                 {
@@ -115,15 +117,9 @@ namespace System.Text
                 }
             }
 
-            if (start == 0 && end == 0)
-            {
-                // nothing to trim
-                return value.ToString();
-            }
+            var difference = start + end;
 
-            var length = end - start;
-
-            return value.ToString(start, length);
+            return value.ToString(start, length - difference);
         }
 
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
