@@ -312,6 +312,8 @@ namespace System
 
         public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
         {
+//// ncrunch: no coverage start
+
             if (value.HasCharacters())
             {
                 // ReSharper disable once ForCanBeConvertedToForeach
@@ -326,6 +328,8 @@ namespace System
             }
 
             return false;
+
+//// ncrunch: no coverage end
         }
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
@@ -431,6 +435,8 @@ namespace System
 
         public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
         {
+//// ncrunch: no coverage start
+
             if (value.HasCharacters())
             {
                 // ReSharper disable once ForCanBeConvertedToForeach
@@ -445,6 +451,8 @@ namespace System
             }
 
             return false;
+
+//// ncrunch: no coverage end
         }
 
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison)
@@ -914,13 +922,13 @@ namespace System
         public static bool IsLetter(this char value) => char.IsLetter(value);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsLowerCase(this char value) => char.IsLower(value);
+        public static bool IsLowerCase(this char value) => char.IsLower(value); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsLowerCaseLetter(this char value) => value.IsLetter() && value.IsLowerCase();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value);
+        public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value); // ncrunch: no coverage
 
         public static bool IsNullOrWhiteSpace(this ReadOnlySpan<char> value)
         {
@@ -969,17 +977,17 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsUpperCase(this char value) => char.IsUpper(value);
+        public static bool IsUpperCase(this char value) => char.IsUpper(value); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCaseLetter(this char value) => value.IsLetter() && value.IsUpperCase();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value);
+        public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value); // ncrunch: no coverage
 
-        public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
+        public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character; // ncrunch: no coverage
 
-        public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
+        public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character; // ncrunch: no coverage
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
@@ -995,6 +1003,8 @@ namespace System
 
         public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison)
         {
+//// ncrunch: no coverage start
+
             if (value.HasCharacters())
             {
                 // ReSharper disable once ForCanBeConvertedToForeach
@@ -1009,6 +1019,8 @@ namespace System
             }
 
             return false;
+
+//// ncrunch: no coverage end
         }
 
         public static bool StartsWithAny(this string value, IEnumerable<string> prefixes, StringComparison comparison)
@@ -1102,7 +1114,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> where the specified character is lower-case.
+        /// A <see cref="string"/> where the specified character at <paramref name="index"/> is lower-case.
         /// </returns>
         public static string ToLowerCaseAt(this string source, int index)
         {
@@ -1116,7 +1128,9 @@ namespace System
                 return source;
             }
 
-            if (source[index].IsLowerCase())
+            var character = source[index];
+
+            if (character.IsLowerCase())
             {
                 return source;
             }
@@ -1134,7 +1148,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into lower-case.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> where the specified character is lower-case.
+        /// A <see cref="string"/> where the specified character at <paramref name="index"/> is lower-case.
         /// </returns>
         public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
@@ -1143,7 +1157,9 @@ namespace System
                 return source.ToString();
             }
 
-            if (source[index].IsLowerCase())
+            var character = source[index];
+
+            if (character.IsLowerCase())
             {
                 return source.ToString();
             }
@@ -1164,7 +1180,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> where the specified character is upper-case.
+        /// A <see cref="string"/> where the specified character at <paramref name="index"/> is upper-case.
         /// </returns>
         public static string ToUpperCaseAt(this string source, int index)
         {
@@ -1178,7 +1194,9 @@ namespace System
                 return source;
             }
 
-            if (source[index].IsUpperCase())
+            var character = source[index];
+
+            if (character.IsUpperCase())
             {
                 return source;
             }
@@ -1196,7 +1214,7 @@ namespace System
         /// The zero-based index inside <paramref name="source"/> that shall be changed into upper-case.
         /// </param>
         /// <returns>
-        /// A <see cref="string"/> where the specified character is upper-case.
+        /// A <see cref="string"/> where the specified character at <paramref name="index"/> is upper-case.
         /// </returns>
         public static string ToUpperCaseAt(this ReadOnlySpan<char> source, int index)
         {
@@ -1205,7 +1223,9 @@ namespace System
                 return source.ToString();
             }
 
-            if (source[index].IsUpperCase())
+            var character = source[index];
+
+            if (character.IsUpperCase())
             {
                 return source.ToString();
             }
@@ -1411,34 +1431,42 @@ namespace System
 
         private static string MakeUpperCaseAt(string source, int index)
         {
+//// ncrunch: no coverage start
             var characters = source.ToCharArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
+//// ncrunch: no coverage end
         }
 
         private static string MakeUpperCaseAt(ReadOnlySpan<char> source, int index)
         {
+//// ncrunch: no coverage start
             var characters = source.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
+//// ncrunch: no coverage end
         }
 
         private static string MakeLowerCaseAt(string source, int index)
         {
+//// ncrunch: no coverage start
             var characters = source.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
             return new string(characters);
+//// ncrunch: no coverage end
         }
 
         private static string MakeLowerCaseAt(ReadOnlySpan<char> source, int index)
         {
+//// ncrunch: no coverage start
             var characters = source.ToArray();
             characters[index] = source[index].ToLowerCase();
 
             return new string(characters);
+//// ncrunch: no coverage end
         }
     }
 }
