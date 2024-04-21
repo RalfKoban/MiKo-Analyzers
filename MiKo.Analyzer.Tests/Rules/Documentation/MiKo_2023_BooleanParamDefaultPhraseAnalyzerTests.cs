@@ -699,6 +699,11 @@ public class TestMe
         [TestCase("<value>true</value>: Activates some stuff.", @"<see langword=""true""/> to activate some stuff; otherwise, <see langword=""false""/>.")]
         [TestCase(@"Set to <see langword=""true""/> if you want to do something, <see langword=""false""/> otherwise.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
 
+        [TestCase(@"use true if the the value is something, <see langword=""false""/> otherwise", @"<see langword=""true""/> to indicate that the value is something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"use true when the the value is something, <see langword=""false""/> otherwise", @"<see langword=""true""/> to indicate that the value is something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true"" /> if a a value is something, <see langword=""false""/> otherwise", @"<see langword=""true""/> to indicate that a value is something; otherwise, <see langword=""false""/>.")]
+        [TestCase(@"<see langword=""true"" /> if an an value is something, <see langword=""false""/> otherwise", @"<see langword=""true""/> to indicate that an value is something; otherwise, <see langword=""false""/>.")]
+
         [TestCase(@"some data if <see langword=""true""/>, some other data if <see langword=""false""/>. Default value is <see langword=""false""/>.", @"<see langword=""true""/> to some data; otherwise, <see langword=""false""/>. Default value is <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"<see langword=""true""/> if the items shall be selected.<see langword=""false""/> otherwise.", @"<see langword=""true""/> to select the items; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         public void Code_gets_fixed_on_same_line_for_phrase_(string originalPhrase, string fixedPhrase)
@@ -879,16 +884,18 @@ public class TestMe
             foreach (var term in terms)
             {
                 yield return term;
-                yield return $"A {term}";
-                yield return $"The {term}";
+                yield return "A " + term;
+                yield return "The " + term;
 
                 foreach (var boolean in booleans)
                 {
+                    var booleanTerm = boolean + " " + term;
+
                     yield return boolean;
-                    yield return $"A {boolean}";
-                    yield return $"A {boolean} {term}";
-                    yield return $"The {boolean}";
-                    yield return $"The {boolean} {term}";
+                    yield return "A " + boolean;
+                    yield return "A " + booleanTerm;
+                    yield return "The " + boolean;
+                    yield return "The " + booleanTerm;
                 }
             }
         }
@@ -932,8 +939,8 @@ public class TestMe
                                    from start in starts
                                    select start + end)
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                yield return phrase.ToUpperCaseAt(0).Interned();
+                yield return phrase.ToLowerCaseAt(0).Interned();
             }
 
             var startingVerbs = new[]
@@ -960,8 +967,8 @@ public class TestMe
                                    from condition in conditions
                                    select string.Concat(startingVerb, " ", condition))
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                yield return phrase.ToUpperCaseAt(0).Interned();
+                yield return phrase.ToLowerCaseAt(0).Interned();
             }
         }
 
@@ -1013,8 +1020,8 @@ public class TestMe
                                    from start in starts
                                    select (start + end).Replace("   ", " ").Replace("  ", " ").Trim())
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                yield return phrase.ToUpperCaseAt(0).Interned();
+                yield return phrase.ToLowerCaseAt(0).Interned();
             }
         }
 
@@ -1025,10 +1032,13 @@ public class TestMe
             var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true" };
             var separators = new[] { string.Empty, ":", ";", "," };
 
-            foreach (var phrase in from separator in separators from boolean in booleans from start in starts select string.Concat(start, " ", boolean, separator))
+            foreach (var phrase in from separator in separators
+                                   from boolean in booleans
+                                   from start in starts
+                                   select string.Concat(start, " ", boolean, separator))
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                yield return phrase.ToUpperCaseAt(0).Interned();
+                yield return phrase.ToLowerCaseAt(0).Interned();
             }
         }
 
@@ -1038,9 +1048,11 @@ public class TestMe
             var starts = new[] { "The default is", "Default is", "Defaults to" };
             var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true", @"<see langword=""false""/>", @"<see langref=""false""/>", "false" };
 
-            foreach (var phrase in from start in starts from boolean in booleans select string.Concat(start, " ", boolean))
+            foreach (var phrase in from start in starts
+                                   from boolean in booleans
+                                   select string.Concat(start, " ", boolean))
             {
-                yield return phrase;
+                yield return phrase.Interned();
             }
         }
 

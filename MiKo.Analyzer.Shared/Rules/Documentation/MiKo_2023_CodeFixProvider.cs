@@ -95,6 +95,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
                                                new KeyValuePair<string, string>(" to set to ", ReplacementTo),
                                                new KeyValuePair<string, string>(" to given ", ReplacementTo),
+                                               new KeyValuePair<string, string>(" to use  if ", Replacement),
+                                               new KeyValuePair<string, string>(" to use  when ", Replacement),
                                                new KeyValuePair<string, string>(" to . if ", ReplacementTo),
                                                new KeyValuePair<string, string>(" to , if ", ReplacementTo),
                                                new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
@@ -108,6 +110,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                new KeyValuePair<string, string>(" to  to ", ReplacementTo),
                                                new KeyValuePair<string, string>(" to to ", ReplacementTo),
                                                new KeyValuePair<string, string>(" to  ", ReplacementTo),
+                                               new KeyValuePair<string, string>(" to the ", Replacement + "the "),
+                                               new KeyValuePair<string, string>(" to an ", Replacement + "an "),
+                                               new KeyValuePair<string, string>(" to a ", Replacement + "a "),
                                                new KeyValuePair<string, string>(" that to ", " that "),
                                                new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
                                                new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
@@ -117,6 +122,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
                                                new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
                                                new KeyValuePair<string, string>(". ", "; "),
+                                               new KeyValuePair<string, string>(" the the ", " the "),
+                                               new KeyValuePair<string, string>(" an an ", " an "),
+                                               new KeyValuePair<string, string>(" a a ", " a "),
                                            };
 
             var replacementMapKeysCommon = replacementMapCommon.Select(_ => _.Key).ToArray();
@@ -152,7 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return map.Where(_ => hashes.Contains(_.Key)).Concat(others).ToArray();
             }
 
-            string[] ToUpper(IEnumerable<string> strings) => strings.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
+            string[] ToUpper(IEnumerable<string> strings) => strings.Select(_ => _.ToUpperInvariant().Interned()).Distinct().ToArray();
         }
 
 //// ncrunch: no coverage end
@@ -402,7 +410,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comparer = new StringStartComparer(ArticleStartingOrders);
 
-            var texts = CreateStartTerms().ToHashSet()
+            var texts = CreateStartTerms().Select(_ => _.Interned())
+                                          .ToHashSet()
                                           .OrderBy(_ => _, comparer)
                                           .ThenByDescending(_ => _.Length)
                                           .ThenBy(_ => _)

@@ -968,6 +968,8 @@ namespace System
             return -1;
         }
 
+        public static string Interned(this string value) => value is null ? null : string.Intern(value);
+
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsHyperlink(this string value)
