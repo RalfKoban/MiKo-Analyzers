@@ -244,7 +244,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     // in case there is any, get rid of last dot
-                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ToString() + ending;
+                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(ending);
 
                     return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
                 }
@@ -278,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 else
                 {
                     // in case there is any, get rid of last dot
-                    text = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ToString() + commentStart;
+                    text = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(commentStart);
                 }
 
                 return comment.ReplaceNode(t, XmlText(text))
@@ -604,7 +604,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (firstWord != infiniteVerb)
             {
-                return (infiniteVerb + valueText.WithoutFirstWord().ToString()).AsSpan();
+                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord()).AsSpan();
             }
 
             return text;

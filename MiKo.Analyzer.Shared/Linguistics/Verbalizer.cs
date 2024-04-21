@@ -514,7 +514,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith(pair.Key, StringComparison.Ordinal))
                 {
-                    result = word.Slice(0, word.Length - pair.Key.Length).ToString() + pair.Value;
+                    result = word.Slice(0, word.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }

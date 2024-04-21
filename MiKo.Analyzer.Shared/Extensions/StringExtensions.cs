@@ -53,7 +53,7 @@ namespace System
 
             if (HasFlag(FirstWordHandling.KeepLeadingSpace))
             {
-                // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space and we would fix it in a wrong way)
+                // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
                 {
                     return " " + text;
@@ -175,6 +175,75 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
+
+        public static string ConcatenatedWith(this string value, ReadOnlySpan<char> span)
+        {
+            var spanLength = span.Length;
+
+            if (spanLength == 0)
+            {
+                return value;
+            }
+
+            var valueLength = value.Length;
+
+            if (valueLength == 0)
+            {
+                return span.ToString();
+            }
+
+            var chars = new char[valueLength + spanLength];
+
+            span.CopyTo(chars.AsSpan(valueLength, spanLength));
+            value.CopyTo(0, chars, 0, valueLength);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value)
+        {
+            var spanLength = span.Length;
+
+            if (spanLength == 0)
+            {
+                return value;
+            }
+
+            var valueLength = value.Length;
+
+            if (valueLength == 0)
+            {
+                return span.ToString();
+            }
+
+            var chars = new char[spanLength + valueLength];
+
+            span.CopyTo(chars);
+            value.CopyTo(0, chars, spanLength, valueLength);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value1, string value2)
+        {
+            var spanLength = span.Length;
+
+            if (spanLength == 0)
+            {
+                return string.Concat(value1, value2);
+            }
+
+            var value1Length = value1.Length;
+            var value2Length = value2.Length;
+
+            var chars = new char[spanLength + value1Length + value2Length];
+
+            span.CopyTo(chars);
+            value1.CopyTo(0, chars, spanLength, value1Length);
+            value2.CopyTo(0, chars, spanLength + value1Length, value2Length);
+
+            return new string(chars);
+        }
 
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
@@ -991,7 +1060,7 @@ namespace System
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
-        public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.StartsWith(characters.AsSpan(), comparison);
+        public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.StartsWith(characters.AsSpan(), comparison); // ncrunch: no coverage
 
         public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
 
@@ -1118,6 +1187,8 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this string source, int index)
         {
+//// ncrunch: no coverage start
+
             if (source is null)
             {
                 return null;
@@ -1136,6 +1207,8 @@ namespace System
             }
 
             return MakeLowerCaseAt(source, index);
+
+//// ncrunch: no coverage end
         }
 
         /// <summary>
@@ -1152,6 +1225,8 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
+//// ncrunch: no coverage start
+
             if (index >= source.Length)
             {
                 return source.ToString();
@@ -1165,6 +1240,8 @@ namespace System
             }
 
             return MakeLowerCaseAt(source, index);
+
+//// ncrunch: no coverage end
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1184,6 +1261,8 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this string source, int index)
         {
+//// ncrunch: no coverage start
+
             if (source is null)
             {
                 return null;
@@ -1202,6 +1281,8 @@ namespace System
             }
 
             return MakeUpperCaseAt(source, index);
+
+//// ncrunch: no coverage end
         }
 
         /// <summary>
@@ -1279,7 +1360,7 @@ namespace System
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
 
-        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty);
+        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
 
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
@@ -1427,44 +1508,40 @@ namespace System
 
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
 
+//// ncrunch: no coverage start
+
         private static string MakeUpperCaseAt(string source, int index)
         {
-//// ncrunch: no coverage start
             var characters = source.ToCharArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
-//// ncrunch: no coverage end
         }
 
         private static string MakeUpperCaseAt(ReadOnlySpan<char> source, int index)
         {
-//// ncrunch: no coverage start
             var characters = source.ToArray();
             characters[index] = characters[index].ToUpperCase();
 
             return new string(characters);
-//// ncrunch: no coverage end
         }
 
         private static string MakeLowerCaseAt(string source, int index)
         {
-//// ncrunch: no coverage start
             var characters = source.ToCharArray();
             characters[index] = characters[index].ToLowerCase();
 
             return new string(characters);
-//// ncrunch: no coverage end
         }
 
         private static string MakeLowerCaseAt(ReadOnlySpan<char> source, int index)
         {
-//// ncrunch: no coverage start
             var characters = source.ToArray();
             characters[index] = source[index].ToLowerCase();
 
             return new string(characters);
-//// ncrunch: no coverage end
         }
+
+//// ncrunch: no coverage end
     }
 }
