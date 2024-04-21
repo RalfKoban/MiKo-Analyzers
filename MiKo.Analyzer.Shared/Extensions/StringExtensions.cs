@@ -1452,7 +1452,7 @@ namespace System
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
         {
-            if (suffix != null && value.EndsWith(suffix))
+            if (suffix != null && value.EndsWith(suffix, StringComparison.Ordinal))
             {
                 var length = value.Length - suffix.Length;
 

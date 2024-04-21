@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2023_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
+
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
         private const string OrNotPhrase = " or not";
@@ -119,8 +121,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var replacementMapKeysCommon = replacementMapCommon.Select(_ => _.Key).ToArray();
 
-//// ncrunch: no coverage start
-
             var replacementMap = CreateReplacementMap();
             var replacementMapKeys = replacementMap.Select(_ => _.Key).ToArray();
 
@@ -153,11 +153,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             string[] ToUpper(IEnumerable<string> strings) => strings.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
-
-//// ncrunch: no coverage end
         }
 
-        //// ncrunch: rdi default
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2023";
 
@@ -366,15 +365,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text)
-        {
-            if (text.EndsWith(OrNotPhrase, StringComparison.Ordinal))
-            {
-                return text.WithoutSuffix(OrNotPhrase);
-            }
-
-            return text;
-        }
+        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text) => text.WithoutSuffix(OrNotPhrase);
 
         private static MapData FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char> text)
         {
@@ -581,40 +572,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public int Compare(string x, string y)
             {
-                if (x is null && y is null)
+                if (x is null || y is null)
                 {
-                    return 0;
-                }
-
-                if (x is null)
-                {
-                    return -1;
-                }
-
-                if (y is null)
-                {
-                    return 1;
+                    switch (x is null)
+                    {
+                        case false: return 1;
+                        case true when y != null: return -1;
+                        default: return 0;
+                    }
                 }
 
                 var orderX = GetOrder(x);
                 var orderY = GetOrder(y);
 
-                if (orderX == orderY)
-                {
-                    return 0;
-                }
-
-                if (orderX < orderY)
-                {
-                    return -1;
-                }
-
-                if (orderY < orderX)
-                {
-                    return 1;
-                }
-
-                return 0;
+                return orderX - orderY;
             }
 
             private int GetOrder(string text)

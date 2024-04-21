@@ -301,10 +301,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             symbolName = symbolName.Without(AllowedNames);
 
+//// ncrunch: rdi off
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
             var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
             var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
             var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
+//// ncrunch: rdi default
 
             return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance);
         }
