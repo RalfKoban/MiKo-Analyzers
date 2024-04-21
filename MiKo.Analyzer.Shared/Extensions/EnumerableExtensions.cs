@@ -69,9 +69,11 @@ namespace System.Linq
 
         internal static bool All(this ReadOnlySpan<char> source, Func<char, bool> callback)
         {
+            var sourceLength = source.Length;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Length; index++)
+            for (var index = 0; index < sourceLength; index++)
             {
                 if (callback(source[index]) is false)
                 {
@@ -148,9 +150,11 @@ namespace System.Linq
 
         internal static bool Any(this ReadOnlySpan<char> value, Func<char, bool> filter)
         {
+            var valueLength = value.Length;
+
             // ReSharper disable once ForCanBeConvertedToForeach
             // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < value.Length; index++)
+            for (var index = 0; index < valueLength; index++)
             {
                 if (filter(value[index]))
                 {

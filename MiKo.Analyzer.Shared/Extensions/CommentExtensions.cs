@@ -154,7 +154,6 @@ namespace MiKoSolutions.Analyzers
             return builder.WithoutParaTags()
                           .Without(Constants.Markers.SymbolsAndLineBreaks)
                           .ReplaceAllWithCheck(MultiWhitespaceStrings, SingleWhitespaceString)
-                          .ToString()
                           .Trim();
         }
     }

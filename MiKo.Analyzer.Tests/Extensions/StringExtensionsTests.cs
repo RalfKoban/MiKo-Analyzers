@@ -143,6 +143,23 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void WordsAsSpan() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
+        public static void WordsAsSpan_returns_words() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
+
+        [TestCase("", " text ", ExpectedResult = " text ")]
+        [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
+        [TestCase(" Some ", "", ExpectedResult = " Some ")]
+        public static string ConcatenatedWith_with_string_and_span_(string s, string span) => s.ConcatenatedWith(span.AsSpan());
+
+        [TestCase("", " text ", ExpectedResult = " text ")]
+        [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
+        [TestCase(" Some ", "", ExpectedResult = " Some ")]
+        public static string ConcatenatedWith_with_span_and_string_(string span, string s) => span.AsSpan().ConcatenatedWith(s);
+
+        [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
+        [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
+        [TestCase(" Some ", " text ", "", ExpectedResult = " Some  text ")]
+        [TestCase("", " text ", "", ExpectedResult = " text ")]
+        [TestCase("", "", "", ExpectedResult = "")]
+        public static string ConcatenatedWith_with_span_and_string_and_string_(string span, string s1, string s2) => span.AsSpan().ConcatenatedWith(s1, s2);
     }
 }

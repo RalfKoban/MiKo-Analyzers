@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -90,7 +91,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (text.StartsWithAny(ContinueTextParts))
                         {
-                            var newText = text.ToString().Without(ContinueTextParts).Trim();
+                            var newText = text.ToString().Without(ContinueTextParts);
 
                             if (newText.EndsWith('.') is false)
                             {

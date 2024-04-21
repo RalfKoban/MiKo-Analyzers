@@ -150,7 +150,8 @@ namespace MiKoSolutions.Analyzers
         internal static class Comments
         {
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
-            internal const string AsynchrounouslyStartingPhrase = "Asynchronously ";
+            internal const string Asynchrounously = "Asynchronously";
+            internal const string AsynchrounouslyStartingPhrase = Asynchrounously + " ";
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
             internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
