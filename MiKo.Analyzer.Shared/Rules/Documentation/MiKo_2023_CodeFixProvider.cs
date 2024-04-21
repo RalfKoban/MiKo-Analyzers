@@ -459,7 +459,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var parameter in parameters)
                         {
                             var start = optionalBooleanStart + parameter;
-                            var fixedStart = start.Replace("   ", " ").Replace("  ", " ").Trim();
+                            var fixedStart = new StringBuilder(start).ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").Trim();
 
                             if (fixedStart.IsNullOrWhiteSpace() is false)
                             {
@@ -527,7 +527,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     for (var startIndex = 0; startIndex < starts.Count; startIndex++)
                     {
                         var start = starts[startIndex];
-                        var text = (start + middle).TrimStart();
+                        var text = new StringBuilder(start).Append(middle).TrimStart();
 
                         yield return text.ToUpperCaseAt(0);
                         yield return text.ToLowerCaseAt(0);

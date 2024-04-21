@@ -47,7 +47,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var trimmedSummary = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
                                                              .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                                                              .Without(",") // skip over first comma
-                                                             .ToString()
                                                              .TrimStart();
 
             foreach (var wrongPhrase in WrongPhrases)

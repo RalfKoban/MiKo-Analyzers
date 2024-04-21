@@ -154,7 +154,7 @@ namespace MiKoSolutions.Analyzers
 
                     var text = token.Text;
 
-                    var offset = text.Length - text.TrimStart().Length;
+                    var offset = text.Length - text.AsSpan().TrimStart().Length;
 
                     start = token.SpanStart + offset;
                 }
@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers
                     {
                         var text = token.Text;
 
-                        var offset = text.Length - text.TrimEnd().Length;
+                        var offset = text.Length - text.AsSpan().TrimEnd().Length;
 
                         end = token.Span.End - offset;
                     }
@@ -920,7 +920,7 @@ namespace MiKoSolutions.Analyzers
                 return ReadOnlySpan<char>.Empty;
             }
 
-            return value.GetTextWithoutTrivia().Without(Constants.EnvironmentNewLine).WithoutParaTagsAsSpan().Trim();
+            return value.GetTextWithoutTrivia().Without(Constants.EnvironmentNewLine).WithoutParaTags().Trim().AsSpan();
         }
 
         internal static string GetTextWithoutTrivia(this XmlTextAttributeSyntax value)
@@ -949,9 +949,9 @@ namespace MiKoSolutions.Analyzers
                 builder.Append(token.WithoutTrivia().ValueText);
             }
 
-            var result = builder.ToString();
+            var result = builder.Trim();
 
-            return result.Trim();
+            return result;
         }
 
         internal static ReadOnlySpan<char> GetTextWithoutTrivia(this XmlTextSyntax value)
@@ -968,9 +968,9 @@ namespace MiKoSolutions.Analyzers
                 builder.Append(valueText);
             }
 
-            var result = builder.ToString();
+            var result = builder.Trim();
 
-            return result.AsSpan().Trim();
+            return result.AsSpan();
         }
 
         internal static StringBuilder GetTextWithoutTrivia(this XmlElementSyntax value) => value?.GetTextWithoutTrivia(new StringBuilder());
@@ -2957,7 +2957,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value) => value.Without("///");
 
-        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder().WithoutXmlCommentExterior(value).ToString().Trim();
+        internal static string WithoutXmlCommentExterior(this SyntaxNode value) => new StringBuilder().WithoutXmlCommentExterior(value).Trim();
 
         internal static StringBuilder WithoutXmlCommentExterior(this StringBuilder value, SyntaxNode node) => value.Append(node).WithoutXmlCommentExterior();
 

@@ -81,6 +81,97 @@ namespace System.Text
             return value.Replace(oldValue, newValue);
         }
 
+        public static string Trim(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return string.Empty;
+            }
+
+            var start = 0;
+            var end = 0;
+
+            for (var i = 0; i < length; i++)
+            {
+                if (char.IsWhiteSpace(value[i]))
+                {
+                    start++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            for (var i = length - 1; i >= start; i--)
+            {
+                if (char.IsWhiteSpace(value[i]))
+                {
+                    end++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return value.ToString(start, length - (start + end));
+        }
+
+        public static string TrimStart(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return string.Empty;
+            }
+
+            var start = 0;
+
+            for (var i = 0; i < length; i++)
+            {
+                if (char.IsWhiteSpace(value[i]))
+                {
+                    start++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return value.ToString(start, length - start);
+        }
+
+        public static string TrimEnd(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return string.Empty;
+            }
+
+            var end = 0;
+
+            for (var i = length - 1; i >= 0; i--)
+            {
+                if (char.IsWhiteSpace(value[i]))
+                {
+                    end++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return value.ToString(0, length - end);
+        }
+
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
     }
 }

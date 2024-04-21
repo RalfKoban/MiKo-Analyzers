@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             foreach (var token in syntax.TextTokens.OfKind(SyntaxKind.XmlTextLiteralToken))
             {
                 var text = token.ValueText.Without(Constants.Comments.SpecialOrPhrase);
-                var trimmedText = text.TrimStart();
+                var trimmedText = text.AsSpan().TrimStart();
 
                 if (trimmedText.Length > 0)
                 {

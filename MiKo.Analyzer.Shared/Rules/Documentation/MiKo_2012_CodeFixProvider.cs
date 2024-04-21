@@ -185,7 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var index = remainingText.IndexOf(firstWord);
                         var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToString()).ToUpperCaseAt(0);
 
-                        var replacedText = replacementForFirstWord + remainingText.Slice(index + firstWord.Length).ToString();
+                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
 
                         return Comment(comment, replacedText, content.RemoveAt(0));
                     }
@@ -265,6 +265,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+//// ncrunch: rdi off
+
         private static Dictionary<string, string> CreateReplacementMap()
         {
             var entries = CreateReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
@@ -281,8 +283,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return result;
         }
-
-//// ncrunch: rdi off
 
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
         {

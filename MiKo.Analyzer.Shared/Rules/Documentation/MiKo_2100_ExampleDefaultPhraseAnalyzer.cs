@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var tokens = example.GetXmlTextTokens();
 
-                if (tokens.None(_ => _.ValueText.TrimStart().StartsWith(Phrase, StringComparison.Ordinal)))
+                if (tokens.None(_ => _.ValueText.AsSpan().TrimStart().StartsWith(Phrase, StringComparison.Ordinal)))
                 {
                     yield return Issue(symbol.Name, example.StartTag, Phrase);
                 }
