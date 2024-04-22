@@ -939,8 +939,8 @@ public class TestMe
                                    from start in starts
                                    select start + end)
             {
-                yield return phrase.ToUpperCaseAt(0).Interned();
-                yield return phrase.ToLowerCaseAt(0).Interned();
+                yield return phrase.ToUpperCaseAt(0);
+                yield return phrase.ToLowerCaseAt(0);
             }
 
             var startingVerbs = new[]
@@ -967,8 +967,8 @@ public class TestMe
                                    from condition in conditions
                                    select string.Concat(startingVerb, " ", condition))
             {
-                yield return phrase.ToUpperCaseAt(0).Interned();
-                yield return phrase.ToLowerCaseAt(0).Interned();
+                yield return phrase.ToUpperCaseAt(0);
+                yield return phrase.ToLowerCaseAt(0);
             }
         }
 
@@ -1020,8 +1020,8 @@ public class TestMe
                                    from start in starts
                                    select (start + end).Replace("   ", " ").Replace("  ", " ").Trim())
             {
-                yield return phrase.ToUpperCaseAt(0).Interned();
-                yield return phrase.ToLowerCaseAt(0).Interned();
+                yield return phrase.ToUpperCaseAt(0);
+                yield return phrase.ToLowerCaseAt(0);
             }
         }
 
@@ -1037,8 +1037,8 @@ public class TestMe
                                    from start in starts
                                    select string.Concat(start, " ", boolean, separator))
             {
-                yield return phrase.ToUpperCaseAt(0).Interned();
-                yield return phrase.ToLowerCaseAt(0).Interned();
+                yield return phrase.ToUpperCaseAt(0);
+                yield return phrase.ToLowerCaseAt(0);
             }
         }
 
@@ -1052,7 +1052,7 @@ public class TestMe
                                    from boolean in booleans
                                    select string.Concat(start, " ", boolean))
             {
-                yield return phrase.Interned();
+                yield return phrase;
             }
         }
 
