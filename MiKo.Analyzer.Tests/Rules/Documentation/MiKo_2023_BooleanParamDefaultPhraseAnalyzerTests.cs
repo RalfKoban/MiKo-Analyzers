@@ -704,6 +704,9 @@ public class TestMe
         [TestCase(@"<see langword=""true"" /> if a a value is something, <see langword=""false""/> otherwise", @"<see langword=""true""/> to indicate that a value is something; otherwise, <see langword=""false""/>.")]
         [TestCase(@"<see langword=""true"" /> if an an value is something, <see langword=""false""/> otherwise", @"<see langword=""true""/> to indicate that an value is something; otherwise, <see langword=""false""/>.")]
 
+        [TestCase("Adopting some value", @"<see langword=""true""/> to adopt some value; otherwise, <see langword=""false""/>.")]
+        [TestCase("Correcting some value", @"<see langword=""true""/> to correct some value; otherwise, <see langword=""false""/>.")]
+
         [TestCase(@"some data if <see langword=""true""/>, some other data if <see langword=""false""/>. Default value is <see langword=""false""/>.", @"<see langword=""true""/> to some data; otherwise, <see langword=""false""/>. Default value is <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"<see langword=""true""/> if the items shall be selected.<see langword=""false""/> otherwise.", @"<see langword=""true""/> to select the items; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         public void Code_gets_fixed_on_same_line_for_phrase_(string originalPhrase, string fixedPhrase)
