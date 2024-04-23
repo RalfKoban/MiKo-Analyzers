@@ -274,9 +274,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word;
                 }
 
-                var sb = new StringBuilder(word).Append("ing").ReplaceWithCheck("ping", "pping").ReplaceWithCheck("eing", "ing");
+                var gerundVerb = new StringBuilder(word).Append("ing")
+                                                        .ReplaceWithCheck("ping", "pping")
+                                                        .ReplaceWithCheck("eing", "ing")
+                                                        .ReplaceWithCheck("uring", "urring")
+                                                        .ReplaceWithCheck("uting", "utting")
+                                                        .ToString();
 
-                return sb.ToString();
+                return gerundVerb;
             }
         }
 
@@ -314,6 +319,38 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.Equals("are", StringComparison.OrdinalIgnoreCase))
                 {
                     return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                }
+
+                if (word.EndsWith("ing", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (word.EndsWith("pping", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("rring", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("tting", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 4);
+                    }
+
+                    if (word.EndsWith("anging", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("ssing", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("cting", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("pting", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 3);
+                    }
+
+                    if (word.EndsWith("bling", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("kling", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("ging", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("sing", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("ting", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("uing", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("ving", StringComparison.OrdinalIgnoreCase)
+                     || word.EndsWith("zing", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, word.Length - 3) + "e";
+                    }
+
+                    return word.WithoutSuffix("ing");
                 }
 
                 return word;
@@ -541,14 +578,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value)
-        {
-            return value.ContainsAny(MiddlePhrases);
-        }
+        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value) => value.ContainsAny(MiddlePhrases);
 
-        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value)
-        {
-            return value.EndsWithAny(EndingPhrases);
-        }
+        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }
