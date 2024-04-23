@@ -229,11 +229,13 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).Distinct().ToArray();
 
-            internal static readonly string[] ParameterStartingCodefixPhrases = { "A", "An", "The" };
+            internal static readonly string[] AAnThePhraseWithSpaces = { "A ", "An ", "The " };
+            internal static readonly string[] AAnThePhraseWithoutSpaces = { "A", "An", "The" };
+            internal static readonly string[] FieldStartingPhrase = AAnThePhraseWithSpaces;
+            internal static readonly string[] ParameterStartingPhrase = AAnThePhraseWithSpaces;
+            internal static readonly string[] ParameterStartingCodefixPhrase = AAnThePhraseWithoutSpaces;
+            internal static readonly string[] ReturnTypeStartingPhrase = AAnThePhraseWithSpaces;
 
-            internal static readonly string[] FieldStartingPhrase = { "A ", "An ", "The " };
-
-            internal static readonly string[] ParameterStartingPhrase = { "A ", "An ", "The " };
             internal static readonly string[] OutParameterStartingPhrase = { "On successful return, contains " };
             internal static readonly string[] OutBoolParameterStartingPhrase = { "On successful return, indicates " };
             internal static readonly string[] EnumParameterStartingPhrase =
@@ -347,8 +349,6 @@ namespace MiKoSolutions.Analyzers
                                                                   };
 
             internal static readonly string[] MeaninglessFieldStartingPhrase = MeaninglessStartingPhrase.Except(FieldStartingPhrase).OrderBy(_ => _.Length).ToArray();
-
-            internal static readonly string[] ReturnTypeStartingPhrase = { "A ", "An ", "The " };
 
             internal static readonly string[] WhenAnyTaskReturnTypeStartingPhrase =
                                                                                     {
