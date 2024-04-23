@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, Constants.Comments.EnumReturnTypeStartingPhrase, RemoveStartingWord(comment));
         }
 
-        private static SyntaxList<XmlNodeSyntax> RemoveStartingWord(XmlElementSyntax comment) => RemoveStartingWord(comment.WithoutFirstXmlNewLine(), Constants.Comments.ParameterStartingCodefixPhrases);
+        private static SyntaxList<XmlNodeSyntax> RemoveStartingWord(XmlElementSyntax comment) => RemoveStartingWord(comment.WithoutFirstXmlNewLine(), Constants.Comments.ParameterStartingCodefixPhrase);
 
         private static SyntaxList<XmlNodeSyntax> RemoveStartingWord(XmlElementSyntax comment, params string[] words)
         {
