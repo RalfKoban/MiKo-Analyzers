@@ -151,7 +151,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             ReplacementMapKeysInUpperCaseForThe = ToUpper(ReplacementMapKeysForThe);
             ReplacementMapKeysInUpperCaseForOthers = ToUpper(ReplacementMapKeysForOthers);
 
-            // now resort replacement maps here at the end as we want these keys sorted based on string contents whereas the others should be sorted based on longest first (to replace as much as possible at once)
+            // now resort replacement maps here at the end as we want these keys sorted based on string contents
+            // whereas the others should be sorted based on longest first (to replace as much as possible at once)
             Array.Sort(ReplacementMapKeysForA);
             Array.Sort(ReplacementMapKeysForAn);
             Array.Sort(ReplacementMapKeysForThe);
