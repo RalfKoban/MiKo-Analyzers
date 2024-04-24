@@ -158,18 +158,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                if (text.StartsWithAny(Constants.Comments.FieldStartingPhrase, StringComparison.Ordinal))
-                {
-                    var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
-
-                    if (property != null)
-                    {
-                        var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
-
-                        return CommentStartingWith(comment, startingPhrase);
-                    }
-                }
-
                 if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
                 {
                     return Comment(comment, ReplacementMap.Keys, ReplacementMap);
@@ -188,6 +176,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
 
                         return Comment(comment, replacedText, content.RemoveAt(0));
+                    }
+                }
+
+                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
+                {
+                    var member = syntax.FirstAncestorOrSelf<MemberDeclarationSyntax>();
+
+                    if (member is PropertyDeclarationSyntax property)
+                    {
+                        var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
+
+                        return CommentStartingWith(comment, startingPhrase);
+                    }
+
+                    if (member is BaseTypeDeclarationSyntax)
+                    {
+                        return CommentStartingWith(comment, "Represents ");
                     }
                 }
             }
