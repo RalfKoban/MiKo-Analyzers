@@ -151,6 +151,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             ReplacementMapKeysInUpperCaseForThe = ToUpper(ReplacementMapKeysForThe);
             ReplacementMapKeysInUpperCaseForOthers = ToUpper(ReplacementMapKeysForOthers);
 
+            // now resort replacement maps here at the end as we want these keys sorted based on string contents
+            // whereas the others should be sorted based on longest first (to replace as much as possible at once)
+            Array.Sort(ReplacementMapKeysForA);
+            Array.Sort(ReplacementMapKeysForAn);
+            Array.Sort(ReplacementMapKeysForThe);
+
             string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToArray();
 
             KeyValuePair<string, string>[] ToMapArray(IEnumerable<KeyValuePair<string, string>> map, ICollection<string> keys, IEnumerable<KeyValuePair<string, string>> others)
@@ -160,15 +166,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return map.Where(_ => hashes.Contains(_.Key)).Concat(others).ToArray();
             }
 
-            string[] ToUpper(IEnumerable<string> strings) => strings.Select(_ => _.ToUpperInvariant().Interned()).Distinct().ToArray();
+            string[] ToUpper(IEnumerable<string> strings) => strings.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
         }
-
-//// ncrunch: no coverage end
-//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2023";
 
         protected override string Title => Resources.MiKo_2023_CodeFixTitle;
+
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
@@ -320,7 +326,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var continuation = replacement == Replacement
                                ? subText.TrimStart().ToLowerCaseAt(0) // do not try to make the first word a verb as it might not be one
-                               : MakeFirstWordInfiniteVerb(subText).ToString();
+                               : MakeFirstWordInfiniteVerb(subText);
 
             var commentContinuation = new StringBuilder(replacement).Append(continuation)
                                                                     .ReplaceAllWithCheck(data.Map)
@@ -410,8 +416,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comparer = new StringStartComparer(ArticleStartingOrders);
 
-            var texts = CreateStartTerms().Select(_ => _.Interned())
-                                          .ToHashSet()
+            var texts = CreateStartTerms().ToHashSet()
                                           .OrderBy(_ => _, comparer)
                                           .ThenByDescending(_ => _.Length)
                                           .ThenBy(_ => _)
@@ -422,6 +427,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             for (var index = 0; index < texts.Count; index++)
             {
                 var text = texts[index];
+
                 replacements[index] = new KeyValuePair<string, string>(text, Replacement);
             }
 
@@ -459,6 +465,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var parameter in parameters)
                         {
                             var start = optionalBooleanStart + parameter;
+
                             var fixedStart = new StringBuilder(start).ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").Trim();
 
                             if (fixedStart.IsNullOrWhiteSpace() is false)
@@ -469,6 +476,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
             }
+
+            // ignore the 'A', 'An' and 'The'-only texts without further values as this is unlikely to see in production source code
+            starts.Remove("A");
+            starts.Remove("An");
+            starts.Remove("The");
+
+            starts.Sort();
 
             var conditions = new[] { "if to", "if", "whether or not to", "whether or not", "whether to", "whether" };
 

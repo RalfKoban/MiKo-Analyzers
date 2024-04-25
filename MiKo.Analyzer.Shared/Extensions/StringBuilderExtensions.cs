@@ -18,13 +18,15 @@ namespace System.Text
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var pair in replacementPairs)
             {
-                if (pair.Key.Length > value.Length)
+                var oldValue = pair.Key;
+
+                if (QuickCompare(value, oldValue) is false)
                 {
-                    // cannot be part in the replacement as value is too big
+                    // cannot be part in the replacement as value does not fit
                     continue;
                 }
 
-                value.Replace(pair.Key, pair.Value);
+                value.Replace(oldValue, pair.Value);
             }
 
             return value;
@@ -36,12 +38,11 @@ namespace System.Text
             for (var index = 0; index < replacementPairs.Length; index++)
             {
                 var pair = replacementPairs[index];
-
                 var oldValue = pair.Key;
 
-                if (oldValue.Length > value.Length)
+                if (QuickCompare(value, oldValue) is false)
                 {
-                    // cannot be part in the replacement as value is too big
+                    // cannot be part in the replacement as value does not fit
                     continue;
                 }
 
@@ -56,15 +57,15 @@ namespace System.Text
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < texts.Length; index++)
             {
-                var text = texts[index];
+                var oldValue = texts[index];
 
-                if (text.Length > value.Length)
+                if (QuickCompare(value, oldValue) is false)
                 {
-                    // cannot be part in the replacement as value is too big
+                    // cannot be part in the replacement as value does not fit
                     continue;
                 }
 
-                value.Replace(text, replacement);
+                value.Replace(oldValue, replacement);
             }
 
             return value;
@@ -72,9 +73,9 @@ namespace System.Text
 
         public static StringBuilder ReplaceWithCheck(this StringBuilder value, string oldValue, string newValue)
         {
-            if (oldValue.Length > value.Length)
+            if (QuickCompare(value, oldValue) is false)
             {
-                // cannot be part in the replacement as value is too big
+                // cannot be part in the replacement as value does not fit
                 return value;
             }
 
@@ -170,6 +171,45 @@ namespace System.Text
             }
 
             return value.ToString(0, length - end);
+        }
+
+        private static bool QuickCompare(StringBuilder value, string oldValue)
+        {
+            var oldValueLength = oldValue.Length;
+            var valueLength = value.Length;
+
+            if (oldValueLength > valueLength)
+            {
+                // cannot be part in the replacement as value is too big
+                return false;
+            }
+
+            if (oldValueLength == valueLength && oldValueLength > 2)
+            {
+                if (oldValue[0] != value[0])
+                {
+                    // cannot be part in the replacement as characters do not match in current value
+                    return false;
+                }
+
+                var lastIndex = oldValueLength - 1;
+
+                if (oldValue[lastIndex] != value[lastIndex])
+                {
+                    // cannot be part in the replacement as characters do not match in current value
+                    return false;
+                }
+
+                var middleIndex = lastIndex / 2;
+
+                if (oldValue[middleIndex] != value[middleIndex])
+                {
+                    // cannot be part in the replacement as characters do not match in current value
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852

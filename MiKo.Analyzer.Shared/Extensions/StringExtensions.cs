@@ -385,11 +385,20 @@ namespace System
 
             if (value.HasCharacters())
             {
+                var valueSpan = value.AsSpan();
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrases.Length; index++)
                 {
-                    if (value.Contains(phrases[index], comparison))
+                    var phrase = phrases[index];
+
+                    if (QuickCompare(valueSpan, phrase.AsSpan(), comparison) is false)
+                    {
+                        continue;
+                    }
+
+                    if (value.Contains(phrase, comparison))
                     {
                         return true;
                     }
@@ -422,8 +431,15 @@ namespace System
 
             if (value.HasCharacters())
             {
+                var valueSpan = value.AsSpan();
+
                 foreach (var phrase in phrases)
                 {
+                    if (QuickCompare(valueSpan, phrase.AsSpan(), comparison) is false)
+                    {
+                        continue;
+                    }
+
                     if (value.Contains(phrase, comparison))
                     {
                         return true;
@@ -508,11 +524,20 @@ namespace System
 
             if (value.HasCharacters())
             {
+                var valueLength = value.Length;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixes.Length; index++)
                 {
-                    if (value.EndsWith(suffixes[index], comparison))
+                    var suffix = suffixes[index];
+
+                    if (suffix.Length > valueLength)
+                    {
+                        continue;
+                    }
+
+                    if (value.EndsWith(suffix, comparison))
                     {
                         return true;
                     }
@@ -533,8 +558,15 @@ namespace System
 
             if (value.HasCharacters())
             {
+                var valueLength = value.Length;
+
                 foreach (var suffix in suffixes)
                 {
+                    if (suffix.Length > valueLength)
+                    {
+                        continue;
+                    }
+
                     if (value.EndsWith(suffix, comparison))
                     {
                         return true;
@@ -549,11 +581,20 @@ namespace System
         {
             if (value.Length > 0)
             {
+                var valueLength = value.Length;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixes.Length; index++)
                 {
-                    if (value.EndsWith(suffixes[index], comparison))
+                    var suffix = suffixes[index];
+
+                    if (suffix.Length > valueLength)
+                    {
+                        continue;
+                    }
+
+                    if (value.EndsWith(suffix, comparison))
                     {
                         return true;
                     }
@@ -587,7 +628,9 @@ namespace System
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrases.Length; index++)
                 {
-                    if (value.Equals(phrases[index], comparison))
+                    var phrase = phrases[index];
+
+                    if (value.Equals(phrase, comparison))
                     {
                         return true;
                     }
@@ -624,7 +667,9 @@ namespace System
             {
                 for (var index = 0; index < phrases.Length; index++)
                 {
-                    if (value.Equals(phrases[index], comparison))
+                    var phrase = phrases[index];
+
+                    if (value.Equals(phrase, comparison))
                     {
                         return true;
                     }
@@ -968,8 +1013,6 @@ namespace System
             return -1;
         }
 
-        public static string Interned(this string value) => value is null ? null : string.Intern(value);
-
         public static bool IsAcronym(this string value) => value.HasCharacters() && value.None(_ => _.IsLowerCaseLetter());
 
         public static bool IsHyperlink(this string value)
@@ -1062,7 +1105,23 @@ namespace System
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
-        public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison) => characters.HasCharacters() && value.StartsWith(characters.AsSpan(), comparison); // ncrunch: no coverage
+        public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
+        {
+            if (characters.HasCharacters() is false)
+            {
+                return false;
+            }
+
+            var others = characters.AsSpan();
+
+            // perform quick check
+            if (QuickCompare(value, others, comparison))
+            {
+                return value.StartsWith(others, comparison); // ncrunch: no coverage
+            }
+
+            return false;
+        }
 
         public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
 
@@ -1078,13 +1137,20 @@ namespace System
 
             if (value.HasCharacters())
             {
+                var valueSpan = value.AsSpan();
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixes.Length; index++)
                 {
-                    if (value.StartsWith(prefixes[index], comparison))
+                    var prefix = prefixes[index];
+
+                    if (QuickCompare(valueSpan, prefix.AsSpan(), comparison))
                     {
-                        return true;
+                        if (value.StartsWith(prefix, comparison))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -1103,11 +1169,16 @@ namespace System
 
             if (value.HasCharacters())
             {
+                var valueSpan = value.AsSpan();
+
                 foreach (var prefix in prefixes)
                 {
-                    if (value.StartsWith(prefix, comparison))
+                    if (QuickCompare(valueSpan, prefix.AsSpan(), comparison))
                     {
-                        return true;
+                        if (value.StartsWith(prefix, comparison))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -1123,9 +1194,14 @@ namespace System
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixes.Length; index++)
                 {
-                    if (value.StartsWith(prefixes[index], comparison))
+                    var prefix = prefixes[index];
+
+                    if (QuickCompare(value, prefix.AsSpan(), comparison))
                     {
-                        return true;
+                        if (value.StartsWith(prefix, comparison))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -1544,6 +1620,89 @@ namespace System
             return new string(characters);
         }
 
-//// ncrunch: no coverage end
+        private static bool QuickCompare(ReadOnlySpan<char> value, ReadOnlySpan<char> others, StringComparison comparison)
+        {
+            var valueLength = value.Length;
+            var othersLength = others.Length;
+
+            if (othersLength > valueLength)
+            {
+                // cannot match
+                return false;
+            }
+
+            if (valueLength == othersLength && valueLength > 4)
+            {
+                switch (comparison)
+                {
+                    case StringComparison.Ordinal:
+                        return QuickCompareOrdinal(value, others);
+
+                    case StringComparison.OrdinalIgnoreCase:
+                        return QuickCompareOrdinalIgnoreCase(value, others);
+                }
+            }
+
+            // continue to check
+            return true;
+        }
+
+        private static bool QuickCompareOrdinal(ReadOnlySpan<char> value, ReadOnlySpan<char> others)
+        {
+            if (value[0] != others[0])
+            {
+                // they do not fit as characters do not match
+                return false;
+            }
+
+            var lastIndex = value.Length - 1;
+
+            if (value[lastIndex] != others[lastIndex])
+            {
+                // they do not fit as characters do not match
+                return false;
+            }
+
+            var middleIndex = lastIndex / 2;
+
+            if (value[middleIndex] != others[middleIndex])
+            {
+                // they do not fit as characters do not match
+                return false;
+            }
+
+            // continue to check
+            return true;
+        }
+
+        private static bool QuickCompareOrdinalIgnoreCase(ReadOnlySpan<char> value, ReadOnlySpan<char> others)
+        {
+            if (value[0].ToUpperCase() != others[0].ToUpperCase())
+            {
+                // they do not fit as characters do not match
+                return false;
+            }
+
+            var lastIndex = value.Length - 1;
+
+            if (value[lastIndex].ToUpperCase() != others[lastIndex].ToUpperCase())
+            {
+                // they do not fit as characters do not match
+                return false;
+            }
+
+            var middle = lastIndex / 2;
+
+            if (value[middle].ToUpperCase() != others[middle].ToUpperCase())
+            {
+                // they do not fit as characters do not match
+                return false;
+            }
+
+            // continue to check
+            return true;
+        }
+
+        //// ncrunch: no coverage end
     }
 }

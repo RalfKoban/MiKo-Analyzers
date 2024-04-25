@@ -579,14 +579,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return text;
             }
 
-            return MakeFirstWordInfiniteVerb(text.AsSpan()).ToString();
+            return MakeFirstWordInfiniteVerb(text.AsSpan());
         }
 
-        protected static ReadOnlySpan<char> MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text)
+        protected static string MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text)
         {
             if (text.IsNullOrWhiteSpace())
             {
-                return text;
+                return string.Empty;
             }
 
             // it may happen that the text starts with a special character, such as an ':'
@@ -595,7 +595,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (valueText.IsNullOrWhiteSpace())
             {
-                return text;
+                return string.Empty;
             }
 
             // first word
@@ -604,10 +604,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (firstWord != infiniteVerb)
             {
-                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord()).AsSpan();
+                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord());
             }
 
-            return text;
+            return text.ToString();
         }
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
@@ -898,14 +898,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (content1 is XmlTextSyntax text1 && content2 is XmlTextSyntax text2)
                 {
-                    var lastToken = text1.TextTokens.Last();
-                    var firstToken = text2.TextTokens.First();
+                    var text1TextTokens = text1.TextTokens;
+                    var text2TextTokens = text2.TextTokens;
+
+                    var lastToken = text1TextTokens.Last();
+                    var firstToken = text2TextTokens.First();
 
                     var token = lastToken.WithText(lastToken.Text + firstToken.Text)
                                          .WithLeadingTriviaFrom(lastToken)
                                          .WithTrailingTriviaFrom(firstToken);
 
-                    var tokens = text1.TextTokens.Replace(lastToken, token).AddRange(text2.TextTokens.Skip(1));
+                    var tokens = text1TextTokens.Replace(lastToken, token).AddRange(text2TextTokens.Skip(1));
                     var newText = text1.WithTextTokens(tokens);
 
                     contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
