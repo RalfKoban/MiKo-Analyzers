@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -386,10 +387,11 @@ namespace System
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
+                var phrasesLength = phrases.Length;
 
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < phrases.Length; index++)
+                for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
 
@@ -525,10 +527,11 @@ namespace System
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
+                var suffixesLength = suffixes.Length;
 
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < suffixes.Length; index++)
+                for (var index = 0; index < suffixesLength; index++)
                 {
                     var suffix = suffixes[index];
 
@@ -624,9 +627,11 @@ namespace System
         {
             if (value.HasCharacters())
             {
+                var phrasesLength = phrases.Length;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < phrases.Length; index++)
+                for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
 
@@ -861,6 +866,7 @@ namespace System
             return hasMarker;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false;
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
@@ -1105,9 +1111,11 @@ namespace System
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
 
+//// ncrunch: no coverage start
+
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
-            if (characters.HasCharacters() is false)
+            if (string.IsNullOrEmpty(characters))
             {
                 return false;
             }
@@ -1117,11 +1125,13 @@ namespace System
             // perform quick check
             if (QuickCompare(value, others, comparison))
             {
-                return value.StartsWith(others, comparison); // ncrunch: no coverage
+                return value.StartsWith(others, comparison);
             }
 
             return false;
         }
+
+//// ncrunch: no coverage end
 
         public static bool StartsWithAny(this string value, IEnumerable<char> characters) => value.HasCharacters() && characters.Contains(value[0]);
 
@@ -1131,17 +1141,18 @@ namespace System
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes) => value.StartsWithAny(prefixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool StartsWithAny(this string value, string[] prefixes, StringComparison comparison)
-        {
 //// ncrunch: no coverage start
 
+        public static bool StartsWithAny(this string value, IList<string> prefixes, StringComparison comparison)
+        {
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
+                var prefixesCount = prefixes.Count;
 
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < prefixes.Length; index++)
+                for (var index = 0; index < prefixesCount; index++)
                 {
                     var prefix = prefixes[index];
 
@@ -1156,52 +1167,25 @@ namespace System
             }
 
             return false;
+        }
 
 //// ncrunch: no coverage end
-        }
-
-        public static bool StartsWithAny(this string value, IEnumerable<string> prefixes, StringComparison comparison)
-        {
-            if (prefixes is string[] array)
-            {
-                return value.StartsWithAny(array, comparison);
-            }
-
-            if (value.HasCharacters())
-            {
-                var valueSpan = value.AsSpan();
-
-                foreach (var prefix in prefixes)
-                {
-                    if (QuickCompare(valueSpan, prefix.AsSpan(), comparison))
-                    {
-                        if (value.StartsWith(prefix, comparison))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
 
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes, StringComparison comparison)
         {
             if (value.Length > 0)
             {
+                var prefixesLength = prefixes.Length;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < prefixes.Length; index++)
+                for (var index = 0; index < prefixesLength; index++)
                 {
                     var prefix = prefixes[index];
 
-                    if (QuickCompare(value, prefix.AsSpan(), comparison))
+                    if (value.StartsWith(prefix, comparison))
                     {
-                        if (value.StartsWith(prefix, comparison))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -1228,7 +1212,7 @@ namespace System
         public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source);
+        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source); // ncrunch: no coverage
 
         /// <summary>
         /// Gets a <see cref="string"/> where the characters are lower-case.
@@ -1251,6 +1235,8 @@ namespace System
             return new string(characters);
         }
 
+//// ncrunch: no coverage start
+
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is lower-case.
         /// </summary>
@@ -1265,8 +1251,6 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this string source, int index)
         {
-//// ncrunch: no coverage start
-
             if (source is null)
             {
                 return null;
@@ -1285,8 +1269,6 @@ namespace System
             }
 
             return MakeLowerCaseAt(source, index);
-
-//// ncrunch: no coverage end
         }
 
         /// <summary>
@@ -1303,8 +1285,6 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
-//// ncrunch: no coverage start
-
             if (index >= source.Length)
             {
                 return source.ToString();
@@ -1318,8 +1298,6 @@ namespace System
             }
 
             return MakeLowerCaseAt(source, index);
-
-//// ncrunch: no coverage end
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1339,8 +1317,6 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this string source, int index)
         {
-//// ncrunch: no coverage start
-
             if (source is null)
             {
                 return null;
@@ -1359,9 +1335,9 @@ namespace System
             }
 
             return MakeUpperCaseAt(source, index);
+        }
 
 //// ncrunch: no coverage end
-        }
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1530,13 +1506,16 @@ namespace System
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
         {
-            if (suffix != null && value.EndsWith(suffix, StringComparison.Ordinal))
+            if (suffix != null)
             {
                 var length = value.Length - suffix.Length;
 
-                return length > 0
-                       ? value.Slice(0, length)
-                       : ReadOnlySpan<char>.Empty;
+                if (length >= 0 && value.EndsWith(suffix, StringComparison.Ordinal))
+                {
+                    return length > 0
+                           ? value.Slice(0, length)
+                           : ReadOnlySpan<char>.Empty;
+                }
             }
 
             return value;
@@ -1562,8 +1541,10 @@ namespace System
 
             ReadOnlySpan<char> RemoveSuffixes(ReadOnlySpan<char> slice)
             {
+                var suffixesLength = suffixes.Length;
+
                 // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < suffixes.Length; index++)
+                for (var index = 0; index < suffixesLength; index++)
                 {
                     var suffix = suffixes[index];
 
@@ -1625,13 +1606,20 @@ namespace System
             var valueLength = value.Length;
             var othersLength = others.Length;
 
-            if (othersLength > valueLength)
+            if (valueLength > othersLength)
+            {
+                // continue to check
+                return true;
+            }
+
+            if (valueLength < othersLength)
             {
                 // cannot match
                 return false;
             }
 
-            if (valueLength == othersLength && valueLength > 4)
+            // both are same length, so perform a quick compare first
+            if (valueLength >= 4)
             {
                 switch (comparison)
                 {
@@ -1649,23 +1637,22 @@ namespace System
 
         private static bool QuickCompareOrdinal(ReadOnlySpan<char> value, ReadOnlySpan<char> others)
         {
+            var length = value.Length;
+
+            if (length != others.Length && length < 2)
+            {
+                return true;
+            }
+
             if (value[0] != others[0])
             {
                 // they do not fit as characters do not match
                 return false;
             }
 
-            var lastIndex = value.Length - 1;
+            var lastIndex = length - 1;
 
             if (value[lastIndex] != others[lastIndex])
-            {
-                // they do not fit as characters do not match
-                return false;
-            }
-
-            var middleIndex = lastIndex / 2;
-
-            if (value[middleIndex] != others[middleIndex])
             {
                 // they do not fit as characters do not match
                 return false;
@@ -1675,28 +1662,127 @@ namespace System
             return true;
         }
 
-        private static bool QuickCompareOrdinalIgnoreCase(ReadOnlySpan<char> value, ReadOnlySpan<char> others)
+        private static unsafe bool QuickCompareOrdinalIgnoreCase(ReadOnlySpan<char> value, ReadOnlySpan<char> others)
         {
-            if (value[0].ToUpperCase() != others[0].ToUpperCase())
+            var length = value.Length;
+
+            if (length != others.Length && length < 4)
             {
-                // they do not fit as characters do not match
-                return false;
+                return true;
             }
 
-            var lastIndex = value.Length - 1;
-
-            if (value[lastIndex].ToUpperCase() != others[lastIndex].ToUpperCase())
+            // compare in-memory for performance reasons
+            fixed (char* ap = &MemoryMarshal.GetReference(value))
             {
-                // they do not fit as characters do not match
-                return false;
-            }
+                fixed (char* bp = &MemoryMarshal.GetReference(others))
+                {
+                    var a = ap;
+                    var b = bp;
 
-            var middle = lastIndex / 2;
+                    int charA = *a;
+                    int charB = *b;
 
-            if (value[middle].ToUpperCase() != others[middle].ToUpperCase())
-            {
-                // they do not fit as characters do not match
-                return false;
+                    // uppercase both chars - notice that we need just one compare per char
+                    if ((uint)(charA - 'a') <= 'z' - 'a')
+                    {
+                        charA -= 0x20;
+                    }
+
+                    if ((uint)(charB - 'a') <= 'z' - 'a')
+                    {
+                        charB -= 0x20;
+                    }
+
+                    if (charA != charB)
+                    {
+                        // they do not fit as characters do not match
+                        return false;
+                    }
+
+                    var lastIndex = length - 1;
+                    charA = *(a + lastIndex);
+                    charB = *(b + lastIndex);
+
+                    // uppercase both chars - notice that we need just one compare per char
+                    if ((uint)(charA - 'a') <= 'z' - 'a')
+                    {
+                        charA -= 0x20;
+                    }
+
+                    if ((uint)(charB - 'a') <= 'z' - 'a')
+                    {
+                        charB -= 0x20;
+                    }
+
+                    if (charA != charB)
+                    {
+                        // they do not fit as characters do not match
+                        return false;
+                    }
+
+                    var middleIndex = length / 2;
+                    charA = *(a + middleIndex);
+                    charB = *(b + middleIndex);
+
+                    // uppercase both chars - notice that we need just one compare per char
+                    if ((uint)(charA - 'a') <= 'z' - 'a')
+                    {
+                        charA -= 0x20;
+                    }
+
+                    if ((uint)(charB - 'a') <= 'z' - 'a')
+                    {
+                        charB -= 0x20;
+                    }
+
+                    if (charA != charB)
+                    {
+                        // they do not fit as characters do not match
+                        return false;
+                    }
+
+                    var indexPart1 = length / 3;
+                    charA = *(a + indexPart1);
+                    charB = *(b + indexPart1);
+
+                    // uppercase both chars - notice that we need just one compare per char
+                    if ((uint)(charA - 'a') <= 'z' - 'a')
+                    {
+                        charA -= 0x20;
+                    }
+
+                    if ((uint)(charB - 'a') <= 'z' - 'a')
+                    {
+                        charB -= 0x20;
+                    }
+
+                    if (charA != charB)
+                    {
+                        // they do not fit as characters do not match
+                        return false;
+                    }
+
+                    var indexPart2 = 2 * indexPart1;
+                    charA = *(a + indexPart2);
+                    charB = *(b + indexPart2);
+
+                    // uppercase both chars - notice that we need just one compare per char
+                    if ((uint)(charA - 'a') <= 'z' - 'a')
+                    {
+                        charA -= 0x20;
+                    }
+
+                    if ((uint)(charB - 'a') <= 'z' - 'a')
+                    {
+                        charB -= 0x20;
+                    }
+
+                    if (charA != charB)
+                    {
+                        // they do not fit as characters do not match
+                        return false;
+                    }
+                }
             }
 
             // continue to check

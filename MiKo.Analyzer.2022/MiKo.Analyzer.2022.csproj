@@ -16,6 +16,8 @@
     <Copyright>Copyright © 2018-2024 by MiKo Solutions. All rights reserved.</Copyright>
 
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   
   <ItemGroup>

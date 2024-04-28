@@ -26,7 +26,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string StartWithArticleThe = "The ";
 
         private static readonly string[] StartPhraseParts = Constants.Comments.BooleanParameterStartingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string StartPhraseParts0 = StartPhraseParts[0];
+        private static readonly string StartPhraseParts1 = StartPhraseParts[1];
         private static readonly string[] EndPhraseParts = Constants.Comments.BooleanParameterEndingPhraseTemplate.FormatWith('|').Split('|');
+        private static readonly string EndPhraseParts0 = EndPhraseParts[0];
+        private static readonly string EndPhraseParts1 = EndPhraseParts[1];
 
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
@@ -46,128 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] OtherwisePairKey = { OtherwisePair.Key };
         private static readonly KeyValuePair<string, string>[] OtherwisePairArray = { OtherwisePair };
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMapForA;
-        private static readonly KeyValuePair<string, string>[] ReplacementMapForAn;
-        private static readonly KeyValuePair<string, string>[] ReplacementMapForThe;
-        private static readonly KeyValuePair<string, string>[] ReplacementMapForOthers;
-
-        private static readonly string[] ReplacementMapKeysForA;
-        private static readonly string[] ReplacementMapKeysForAn;
-        private static readonly string[] ReplacementMapKeysForThe;
-        private static readonly string[] ReplacementMapKeysForOthers;
-
-        private static readonly string[] ReplacementMapKeysInUpperCaseForA;
-        private static readonly string[] ReplacementMapKeysInUpperCaseForAn;
-        private static readonly string[] ReplacementMapKeysInUpperCaseForThe;
-        private static readonly string[] ReplacementMapKeysInUpperCaseForOthers;
-
-        static MiKo_2023_CodeFixProvider()
-        {
-            var replacementMapCommon = new[]
-                                           {
-                                               new KeyValuePair<string, string>("'true'", string.Empty),
-                                               new KeyValuePair<string, string>("'True'", string.Empty),
-                                               new KeyValuePair<string, string>("'TRUE'", string.Empty),
-                                               new KeyValuePair<string, string>("\"true\"", string.Empty),
-                                               new KeyValuePair<string, string>("\"True\"", string.Empty),
-                                               new KeyValuePair<string, string>("\"TRUE\"", string.Empty),
-                                               new KeyValuePair<string, string>("true", string.Empty),
-                                               new KeyValuePair<string, string>("True", string.Empty),
-                                               new KeyValuePair<string, string>("TRUE", string.Empty),
-                                               new KeyValuePair<string, string>("'false'", string.Empty),
-                                               new KeyValuePair<string, string>("'False'", string.Empty),
-                                               new KeyValuePair<string, string>("'FALSE'", string.Empty),
-                                               new KeyValuePair<string, string>("\"false\"", string.Empty),
-                                               new KeyValuePair<string, string>("\"False\"", string.Empty),
-                                               new KeyValuePair<string, string>("\"FALSE\"", string.Empty),
-                                               new KeyValuePair<string, string>("false", string.Empty),
-                                               new KeyValuePair<string, string>("False", string.Empty),
-                                               new KeyValuePair<string, string>("FALSE", string.Empty),
-                                               new KeyValuePair<string, string>("if you want to", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to in case ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to if given ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to when given ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to if set to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to when set to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to if ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to when ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to set to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to given ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to use  if ", Replacement),
-                                               new KeyValuePair<string, string>(" to use  when ", Replacement),
-                                               new KeyValuePair<string, string>(" to . if ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to , if ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to : if ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to , ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to ; ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to : ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to the to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to an to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to a to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to  to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to to ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to  ", ReplacementTo),
-                                               new KeyValuePair<string, string>(" to the ", Replacement + "the "),
-                                               new KeyValuePair<string, string>(" to an ", Replacement + "an "),
-                                               new KeyValuePair<string, string>(" to a ", Replacement + "a "),
-                                               new KeyValuePair<string, string>(" that to ", " that "),
-                                               new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
-                                               new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
-                                               new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
-                                               new KeyValuePair<string, string>("; Otherwise; ", "; "),
-                                               new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
-                                               new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
-                                               new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
-                                               new KeyValuePair<string, string>(". ", "; "),
-                                               new KeyValuePair<string, string>(" the the ", " the "),
-                                               new KeyValuePair<string, string>(" an an ", " an "),
-                                               new KeyValuePair<string, string>(" a a ", " a "),
-                                           };
-
-            var replacementMapKeysCommon = replacementMapCommon.Select(_ => _.Key).ToArray();
-
-            var replacementMap = CreateReplacementMap();
-            var replacementMapKeys = replacementMap.Select(_ => _.Key).ToArray();
-
-            ReplacementMapKeysForA = ToKeyArray(replacementMapKeys, StartWithArticleA);
-            ReplacementMapKeysForAn = ToKeyArray(replacementMapKeys, StartWithArticleAn);
-            ReplacementMapKeysForThe = ToKeyArray(replacementMapKeys, StartWithArticleThe);
-            ReplacementMapKeysForOthers = replacementMapKeys.Except(ReplacementMapKeysForA)
-                                                            .Except(ReplacementMapKeysForAn)
-                                                            .Except(ReplacementMapKeysForThe)
-                                                            .Concat(replacementMapKeysCommon)
-                                                            .ToArray();
-
-            ReplacementMapForA = ToMapArray(replacementMap, ReplacementMapKeysForA, replacementMapCommon);
-            ReplacementMapForAn = ToMapArray(replacementMap, ReplacementMapKeysForAn, replacementMapCommon);
-            ReplacementMapForThe = ToMapArray(replacementMap, ReplacementMapKeysForThe, replacementMapCommon);
-            ReplacementMapForOthers = ToMapArray(replacementMap, ReplacementMapKeysForOthers, replacementMapCommon);
-
-            ReplacementMapKeysInUpperCaseForA = ToUpper(ReplacementMapKeysForA);
-            ReplacementMapKeysInUpperCaseForAn = ToUpper(ReplacementMapKeysForAn);
-            ReplacementMapKeysInUpperCaseForThe = ToUpper(ReplacementMapKeysForThe);
-            ReplacementMapKeysInUpperCaseForOthers = ToUpper(ReplacementMapKeysForOthers);
-
-            // now resort replacement maps here at the end as we want these keys sorted based on string contents
-            // whereas the others should be sorted based on longest first (to replace as much as possible at once)
-            Array.Sort(ReplacementMapKeysForA);
-            Array.Sort(ReplacementMapKeysForAn);
-            Array.Sort(ReplacementMapKeysForThe);
-
-            string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToArray();
-
-            KeyValuePair<string, string>[] ToMapArray(IEnumerable<KeyValuePair<string, string>> map, ICollection<string> keys, IEnumerable<KeyValuePair<string, string>> others)
-            {
-                var hashes = keys.ToHashSet();
-
-                return map.Where(_ => hashes.Contains(_.Key)).Concat(others).ToArray();
-            }
-
-            string[] ToUpper(IEnumerable<string> strings) => strings.Select(_ => _.ToUpperInvariant()).Distinct().ToArray();
-        }
+        private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
         public override string FixableDiagnosticId => "MiKo_2023";
 
@@ -284,26 +167,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       .TrimStart(Constants.TrailingSentenceMarkers)
                                       .TrimEnd(Constants.TrailingSentenceMarkers);
 
-                    return FixTextOnlyComment(comment, t, subText, replacement, new MapData(ReplacementMapForOthers, ReplacementMapKeysForOthers, ReplacementMapKeysInUpperCaseForOthers));
+                    return FixTextOnlyComment(comment, t, subText, replacement, FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char>.Empty));
                 }
             }
 
+            // now get all data
+            var mappedDataValue = MappedData.Value;
+
             var preparedComment = PrepareComment(comment);
-            var preparedComment2 = Comment(preparedComment, ReplacementMapKeysForOthers, ReplacementMapForOthers);
+            var preparedComment2 = Comment(preparedComment, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapForOthers);
             var preparedComment3 = ModifyElseOtherwisePart(preparedComment2);
 
-            return FixComment(preparedComment3, ReplacementMapKeysForOthers, ReplacementMapForOthers);
+            return FixComment(preparedComment3, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapForOthers);
         }
 
         private static XmlElementSyntax FixEmptyComment(XmlElementSyntax comment)
         {
-            var startFixed = CommentStartingWith(comment, StartPhraseParts[0], SeeLangword_True(), Replacement + "TODO");
-            var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
+            var startFixed = CommentStartingWith(comment, StartPhraseParts0, SeeLangword_True(), Replacement + "TODO");
+            var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
 
             return bothFixed;
         }
 
-        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement, MapData data)
+        private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement, ConcreteMapInfo info)
         {
             subText = ModifyOrNotPart(subText);
 
@@ -329,16 +215,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                : MakeFirstWordInfiniteVerb(subText);
 
             var commentContinuation = new StringBuilder(replacement).Append(continuation)
-                                                                    .ReplaceAllWithCheck(data.Map)
+                                                                    .ReplaceAllWithCheck(info.Map)
                                                                     .ToString();
 
-            return FixComment(prepared, data.Keys, data.Map, commentContinuation);
+            return FixComment(prepared, info.Keys, info.Map, commentContinuation);
         }
 
         private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, KeyValuePair<string, string>[] replacementMap, string commentContinue = null)
         {
-            var startFixed = CommentStartingWith(prepared, StartPhraseParts[0], SeeLangword_True(), commentContinue ?? StartPhraseParts[1]);
-            var bothFixed = CommentEndingWith(startFixed, EndPhraseParts[0], SeeLangword_False(), EndPhraseParts[1]);
+            var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
+            var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
 
             var fixedComment = Comment(bothFixed, replacementMapKeys, replacementMap);
 
@@ -379,28 +265,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return comment;
         }
 
-        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text) => text.WithoutSuffix(OrNotPhrase);
-
-        private static MapData FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char> text)
-        {
-            if (text.StartsWith(StartWithArticleA, StringComparison.OrdinalIgnoreCase))
-            {
-                return new MapData(ReplacementMapForA, ReplacementMapKeysForA, ReplacementMapKeysInUpperCaseForA);
-            }
-
-            if (text.StartsWith(StartWithArticleAn, StringComparison.OrdinalIgnoreCase))
-            {
-                return new MapData(ReplacementMapForAn, ReplacementMapKeysForAn, ReplacementMapKeysInUpperCaseForAn);
-            }
-
-            if (text.StartsWith(StartWithArticleThe, StringComparison.OrdinalIgnoreCase))
-            {
-                return new MapData(ReplacementMapForThe, ReplacementMapKeysForThe, ReplacementMapKeysInUpperCaseForThe);
-            }
-
-            return new MapData(ReplacementMapForOthers, ReplacementMapKeysForOthers, ReplacementMapKeysInUpperCaseForOthers);
-        }
-
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
         {
             // Fix <see langword>, <b> or <c> by replacing them with nothing
@@ -412,168 +276,346 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
-        private static KeyValuePair<string, string>[] CreateReplacementMap()
+
+        private static ReadOnlySpan<char> ModifyOrNotPart(ReadOnlySpan<char> text) => text.WithoutSuffix(OrNotPhrase);
+
+        private static ConcreteMapInfo FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char> text)
         {
-            var comparer = new StringStartComparer(ArticleStartingOrders);
+            // now get all data
+            var mappedDataValue = MappedData.Value;
 
-            var texts = CreateStartTerms().ToHashSet()
-                                          .OrderBy(_ => _, comparer)
-                                          .ThenByDescending(_ => _.Length)
-                                          .ThenBy(_ => _)
-                                          .ToList();
-
-            var replacements = new KeyValuePair<string, string>[texts.Count];
-
-            for (var index = 0; index < texts.Count; index++)
+            if (text.StartsWith(StartWithArticleA, StringComparison.OrdinalIgnoreCase))
             {
-                var text = texts[index];
-
-                replacements[index] = new KeyValuePair<string, string>(text, Replacement);
+                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForA, mappedDataValue.ReplacementMapKeysForA, mappedDataValue.ReplacementMapKeysInUpperCaseForA);
             }
 
-            return replacements;
+            if (text.StartsWith(StartWithArticleAn, StringComparison.OrdinalIgnoreCase))
+            {
+                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForAn, mappedDataValue.ReplacementMapKeysForAn, mappedDataValue.ReplacementMapKeysInUpperCaseForAn);
+            }
+
+            if (text.StartsWith(StartWithArticleThe, StringComparison.OrdinalIgnoreCase))
+            {
+                return new ConcreteMapInfo(mappedDataValue.ReplacementMapForThe, mappedDataValue.ReplacementMapKeysForThe, mappedDataValue.ReplacementMapKeysInUpperCaseForThe);
+            }
+
+            return new ConcreteMapInfo(mappedDataValue.ReplacementMapForOthers, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapKeysInUpperCaseForOthers);
         }
 
-        private static IEnumerable<string> CreateStartTerms()
+        private sealed class MapData
         {
-            var startTerms = new[] { "A", "An", "The", string.Empty };
-            var optionals = new[] { "Optional", "(optional)", "(Optional)", "optional", string.Empty };
-            var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
-            var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
-
-            var starts = new List<string> { string.Empty };
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var startTerm in startTerms)
+            public MapData()
             {
-                // we have lots of loops, so cache data to avoid unnecessary calculations
-                var s = startTerm + " ";
+                var replacementMapCommon = new[]
+                                               {
+                                                   new KeyValuePair<string, string>("'true'", string.Empty),
+                                                   new KeyValuePair<string, string>("'True'", string.Empty),
+                                                   new KeyValuePair<string, string>("'TRUE'", string.Empty),
+                                                   new KeyValuePair<string, string>("\"true\"", string.Empty),
+                                                   new KeyValuePair<string, string>("\"True\"", string.Empty),
+                                                   new KeyValuePair<string, string>("\"TRUE\"", string.Empty),
+                                                   new KeyValuePair<string, string>("true", string.Empty),
+                                                   new KeyValuePair<string, string>("True", string.Empty),
+                                                   new KeyValuePair<string, string>("TRUE", string.Empty),
+                                                   new KeyValuePair<string, string>("'false'", string.Empty),
+                                                   new KeyValuePair<string, string>("'False'", string.Empty),
+                                                   new KeyValuePair<string, string>("'FALSE'", string.Empty),
+                                                   new KeyValuePair<string, string>("\"false\"", string.Empty),
+                                                   new KeyValuePair<string, string>("\"False\"", string.Empty),
+                                                   new KeyValuePair<string, string>("\"FALSE\"", string.Empty),
+                                                   new KeyValuePair<string, string>("false", string.Empty),
+                                                   new KeyValuePair<string, string>("False", string.Empty),
+                                                   new KeyValuePair<string, string>("FALSE", string.Empty),
+                                                   new KeyValuePair<string, string>("if you want to", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to in case ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to if given ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to when given ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to if set to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to when set to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to if ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to when ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to set to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to given ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to use  if ", Replacement),
+                                                   new KeyValuePair<string, string>(" to use  when ", Replacement),
+                                                   new KeyValuePair<string, string>(" to . if ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to , if ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to : if ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to , ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to ; ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to : ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to the to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to an to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to a to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to  to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to to ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to  ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to the ", Replacement + "the "),
+                                                   new KeyValuePair<string, string>(" to an ", Replacement + "an "),
+                                                   new KeyValuePair<string, string>(" to a ", Replacement + "a "),
+                                                   new KeyValuePair<string, string>(" that to ", " that "),
+                                                   new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
+                                                   new KeyValuePair<string, string>("; Otherwise; ", "; "),
+                                                   new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
+                                                   new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
+                                                   new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
+                                                   new KeyValuePair<string, string>(". ", "; "),
+                                                   new KeyValuePair<string, string>(" the the ", " the "),
+                                                   new KeyValuePair<string, string>(" an an ", " an "),
+                                                   new KeyValuePair<string, string>(" a a ", " a "),
+                                               };
 
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                foreach (var optional in optionals)
+                var replacementMapKeysCommon = replacementMapCommon.Select(_ => _.Key).ToArray();
+
+                var replacementMap = CreateReplacementMap();
+                var replacementMapKeys = replacementMap.Select(_ => _.Key).ToArray();
+
+                var replacementMapKeysForA = ToKeyArray(replacementMapKeys, StartWithArticleA);
+                var replacementMapKeysForAn = ToKeyArray(replacementMapKeys, StartWithArticleAn);
+                var replacementMapKeysForThe = ToKeyArray(replacementMapKeys, StartWithArticleThe);
+                var replacementMapKeysForAHashSet = replacementMapKeysForA.ToHashSet();
+                var replacementMapKeysForAnHashSet = replacementMapKeysForAn.ToHashSet();
+                var replacementMapKeysForTheHashSet = replacementMapKeysForThe.ToHashSet();
+
+                var replacementMapKeysForOthers = replacementMapKeys.Except(replacementMapKeysForAHashSet)
+                                                                    .Except(replacementMapKeysForAnHashSet)
+                                                                    .Except(replacementMapKeysForTheHashSet)
+                                                                    .Concat(replacementMapKeysCommon)
+                                                                    .ToArray();
+                var replacementMapKeysForOthersHashSet = replacementMapKeysForOthers.ToHashSet();
+
+                ReplacementMapForA = ToMapArray(replacementMap, replacementMapKeysForAHashSet, replacementMapCommon);
+                ReplacementMapForAn = ToMapArray(replacementMap, replacementMapKeysForAnHashSet, replacementMapCommon);
+                ReplacementMapForThe = ToMapArray(replacementMap, replacementMapKeysForTheHashSet, replacementMapCommon);
+                ReplacementMapForOthers = ToMapArray(replacementMap, replacementMapKeysForOthersHashSet, replacementMapCommon);
+
+                ReplacementMapKeysInUpperCaseForA = ToUpper(replacementMapKeysForA);
+                ReplacementMapKeysInUpperCaseForAn = ToUpper(replacementMapKeysForAn);
+                ReplacementMapKeysInUpperCaseForThe = ToUpper(replacementMapKeysForThe);
+                ReplacementMapKeysInUpperCaseForOthers = ToUpper(replacementMapKeysForOthers);
+
+                // now set keys here at the end as we want these keys sorted based on string contents (and only contain the smallest sub-sequences)
+                ReplacementMapKeysForA = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForA);
+                ReplacementMapKeysForAn = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForAn);
+                ReplacementMapKeysForThe = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForThe);
+                ReplacementMapKeysForOthers = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForOthers);
+
+                string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+                KeyValuePair<string, string>[] ToMapArray(IReadOnlyList<KeyValuePair<string, string>> map, ICollection<string> keys, ICollection<KeyValuePair<string, string>> others)
                 {
-                    // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var optionalStart = s + optional + " ";
+                    var known = new List<KeyValuePair<string, string>>(keys.Count);
 
                     // ReSharper disable once LoopCanBeConvertedToQuery
-                    foreach (var boolean in booleans)
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (var index = 0; index < map.Count; index++)
+                    {
+                        var key = map[index];
+
+                        if (keys.Contains(key.Key))
+                        {
+                            known.Add(key);
+                        }
+                    }
+
+                    var results = new KeyValuePair<string, string>[known.Count + others.Count];
+                    known.CopyTo(results);
+                    others.CopyTo(results, known.Count);
+
+                    return results;
+                }
+
+                string[] ToUpper(IEnumerable<string> strings) => strings.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
+            }
+
+            public KeyValuePair<string, string>[] ReplacementMapForA { get; }
+
+            public KeyValuePair<string, string>[] ReplacementMapForAn { get; }
+
+            public KeyValuePair<string, string>[] ReplacementMapForThe { get; }
+
+            public KeyValuePair<string, string>[] ReplacementMapForOthers { get; }
+
+            public string[] ReplacementMapKeysForA { get; }
+
+            public string[] ReplacementMapKeysForAn { get; }
+
+            public string[] ReplacementMapKeysForThe { get; }
+
+            public string[] ReplacementMapKeysForOthers { get; }
+
+            public string[] ReplacementMapKeysInUpperCaseForA { get; }
+
+            public string[] ReplacementMapKeysInUpperCaseForAn { get; }
+
+            public string[] ReplacementMapKeysInUpperCaseForThe { get; }
+
+            public string[] ReplacementMapKeysInUpperCaseForOthers { get; }
+
+            private static KeyValuePair<string, string>[] CreateReplacementMap()
+            {
+                var comparer = new StringStartComparer(ArticleStartingOrders);
+
+                var texts = CreateStartTerms().ToHashSet()
+                                              .OrderBy(_ => _, comparer)
+                                              .ThenByDescending(_ => _.Length)
+                                              .ThenBy(_ => _)
+                                              .ToList();
+
+                var replacements = new KeyValuePair<string, string>[texts.Count];
+
+                for (var index = 0; index < texts.Count; index++)
+                {
+                    var text = texts[index];
+
+                    replacements[index] = new KeyValuePair<string, string>(text, Replacement);
+                }
+
+                return replacements;
+            }
+
+            private static IEnumerable<string> CreateStartTerms()
+            {
+                var startTerms = new[] { "A", "An", "The", string.Empty };
+                var optionals = new[] { "Optional", "(optional)", "(Optional)", "optional", string.Empty };
+                var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
+                var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
+
+                var starts = new List<string> { string.Empty };
+
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var startTerm in startTerms)
+                {
+                    // we have lots of loops, so cache data to avoid unnecessary calculations
+                    var s = startTerm + " ";
+
+                    // ReSharper disable once LoopCanBeConvertedToQuery
+                    foreach (var optional in optionals)
                     {
                         // we have lots of loops, so cache data to avoid unnecessary calculations
-                        var optionalBooleanStart = optionalStart + boolean + " ";
+                        var optionalStart = s + optional + " ";
 
                         // ReSharper disable once LoopCanBeConvertedToQuery
-                        foreach (var parameter in parameters)
+                        foreach (var boolean in booleans)
                         {
-                            var start = optionalBooleanStart + parameter;
+                            // we have lots of loops, so cache data to avoid unnecessary calculations
+                            var optionalBooleanStart = optionalStart + boolean + " ";
 
-                            var fixedStart = new StringBuilder(start).ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").Trim();
-
-                            if (fixedStart.IsNullOrWhiteSpace() is false)
+                            // ReSharper disable once LoopCanBeConvertedToQuery
+                            foreach (var parameter in parameters)
                             {
-                                starts.Add(fixedStart);
+                                var fixedStart = new StringBuilder(optionalBooleanStart).Append(parameter).ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").Trim();
+
+                                if (fixedStart.IsNullOrWhiteSpace() is false)
+                                {
+                                    starts.Add(fixedStart);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // ignore the 'A', 'An' and 'The'-only texts without further values as this is unlikely to see in production source code
-            starts.Remove("A");
-            starts.Remove("An");
-            starts.Remove("The");
+                // ignore the 'A', 'An' and 'The'-only texts without further values as this is unlikely to see in production source code
+                starts.Remove("A");
+                starts.Remove("An");
+                starts.Remove("The");
 
-            starts.Sort();
+                var conditions = new[] { "if to", "if", "whether or not to", "whether or not", "whether to", "whether" };
 
-            var conditions = new[] { "if to", "if", "whether or not to", "whether or not", "whether to", "whether" };
+                var verbs = new[]
+                                {
+                                    "controling", // be aware of typo
+                                    "controlling",
+                                    "defining",
+                                    "determining",
+                                    "determinating", // be aware of typo
+                                    "indicating",
+                                    "specifying",
 
-            var verbs = new[]
-                            {
-                                "controling", // be aware of typo
-                                "controlling",
-                                "defining",
-                                "determining",
-                                "determinating", // be aware of typo
-                                "indicating",
-                                "specifying",
+                                    "that controls",
+                                    "that defined", // be aware of typo
+                                    "that defines",
+                                    "that determined", // be aware of typo
+                                    "that determines",
+                                    "that indicated", // be aware of typo
+                                    "that indicates",
+                                    "that specified", // be aware of typo
+                                    "that specifies",
 
-                                "that controls",
-                                "that defined", // be aware of typo
-                                "that defines",
-                                "that determined", // be aware of typo
-                                "that determines",
-                                "that indicated", // be aware of typo
-                                "that indicates",
-                                "that specified", // be aware of typo
-                                "that specifies",
+                                    "which controls",
+                                    "which defined", // be aware of typo
+                                    "which defines",
+                                    "which determined", // be aware of typo
+                                    "which determines",
+                                    "which indicated", // be aware of typo
+                                    "which indicates",
+                                    "which specified", // be aware of typo
+                                    "which specifies",
 
-                                "which controls",
-                                "which defined", // be aware of typo
-                                "which defines",
-                                "which determined", // be aware of typo
-                                "which determines",
-                                "which indicated", // be aware of typo
-                                "which indicates",
-                                "which specified", // be aware of typo
-                                "which specifies",
-
-                                "to control",
-                                "to define",
-                                "to determine",
-                                "to indicate",
-                                "to specify",
-                            };
-
-            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-            for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
-            {
-                var condition = conditions[conditionIndex];
-
-                // we have lots of loops, so cache data to avoid unnecessary calculations
-                var end = " " + condition + " ";
+                                    "to control",
+                                    "to define",
+                                    "to determine",
+                                    "to indicate",
+                                    "to specify",
+                                };
 
                 // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                for (var verbIndex = 0; verbIndex < verbs.Length; verbIndex++)
+                for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
                 {
-                    var verb = verbs[verbIndex];
-                    var middle = " " + verb + end;
+                    var condition = conditions[conditionIndex];
+
+                    // we have lots of loops, so cache data to avoid unnecessary calculations
+                    var end = " " + condition + " ";
 
                     // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                    for (var startIndex = 0; startIndex < starts.Count; startIndex++)
+                    for (var verbIndex = 0; verbIndex < verbs.Length; verbIndex++)
                     {
-                        var start = starts[startIndex];
-                        var text = new StringBuilder(start).Append(middle).TrimStart();
+                        var verb = verbs[verbIndex];
+                        var middle = " " + verb + end;
+
+                        // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+                        for (var startIndex = 0; startIndex < starts.Count; startIndex++)
+                        {
+                            var start = starts[startIndex];
+                            var text = new StringBuilder(start).Append(middle).TrimStart();
+
+                            yield return text.ToUpperCaseAt(0);
+                            yield return text.ToLowerCaseAt(0);
+                        }
+                    }
+                }
+
+                var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
+
+                // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+                for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
+                {
+                    var condition = conditions[conditionIndex];
+
+                    // we have lots of loops, so cache data to avoid unnecessary calculations
+                    var end = " " + condition + " ";
+
+                    // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
+                    for (var index = 0; index < startingVerbs.Length; index++)
+                    {
+                        var startingVerb = startingVerbs[index];
+                        var text = startingVerb + end;
 
                         yield return text.ToUpperCaseAt(0);
                         yield return text.ToLowerCaseAt(0);
                     }
                 }
             }
-
-            var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
-
-            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-            for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
-            {
-                var condition = conditions[conditionIndex];
-
-                // we have lots of loops, so cache data to avoid unnecessary calculations
-                var end = " " + condition + " ";
-
-                // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                for (var index = 0; index < startingVerbs.Length; index++)
-                {
-                    var startingVerb = startingVerbs[index];
-                    var text = startingVerb + end;
-
-                    yield return text.ToUpperCaseAt(0);
-                    yield return text.ToLowerCaseAt(0);
-                }
-            }
         }
 
-        private sealed class MapData
+        private sealed class ConcreteMapInfo
         {
-            public MapData(KeyValuePair<string, string>[] map, string[] keys, string[] keysInUpperCase)
+            public ConcreteMapInfo(KeyValuePair<string, string>[] map, string[] keys, string[] keysInUpperCase)
             {
                 Map = map;
                 Keys = keys;
