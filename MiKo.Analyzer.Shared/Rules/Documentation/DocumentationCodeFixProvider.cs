@@ -19,6 +19,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
+
+        protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
+        {
+            var orderedTerms = terms.ToHashSet(_ => _.ToUpperInvariant())
+                                    .OrderBy(_ => _.Length)
+                                    .ThenBy(_ => _);
+
+            var lookupTerms = new List<string>();
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var term in orderedTerms)
+            {
+                if (term.StartsWithAny(lookupTerms, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                lookupTerms.Add(term);
+            }
+
+            return lookupTerms.ToArray();
+        }
+
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
+
         protected static XmlElementSyntax C(string text)
         {
             return SyntaxFactory.XmlElement(Constants.XmlTag.C, new SyntaxList<XmlNodeSyntax>(XmlText(text)));
@@ -113,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        if (originalText.ContainsAny(terms))
+                        if (originalText.ContainsAny(terms, StringComparison.OrdinalIgnoreCase))
                         {
                             var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap)
                                                                               .ToString()
@@ -818,7 +846,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var result = new List<XmlNodeSyntax>(length);
+            var result = new List<XmlNodeSyntax>(1 + length - skip);
             result.Add(textCommentEnd);
             result.AddRange(commendEndNodes.Skip(skip));
 
