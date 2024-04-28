@@ -17,6 +17,8 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
+        private static IEnumerable<string> Placeholders { get; } = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
+
         internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, analyzers);
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace TestHelper
 
                                          Assert.That(message, Does.Not.Contain("tring[]"), "Wrong parameter provided, string array is not converted.");
 
-                                         foreach (var placeholder in Enumerable.Range(0, 10).Select(_ => "{" + _ + "}"))
+                                         foreach (var placeholder in Placeholders)
                                          {
                                              Assert.That(message, Does.Not.Contain(placeholder), $"Placeholder {placeholder} found!");
                                          }

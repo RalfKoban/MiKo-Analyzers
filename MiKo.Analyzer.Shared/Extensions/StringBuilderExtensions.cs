@@ -10,9 +10,9 @@ namespace System.Text
     {
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
         {
-            if (replacementPairs is KeyValuePair<string, string>[] array)
+            if (replacementPairs is IList<KeyValuePair<string, string>> list)
             {
-                return value.ReplaceAllWithCheck(array);
+                return value.ReplaceAllWithCheck(list);
             }
 
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -32,10 +32,12 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, KeyValuePair<string, string>[] replacementPairs)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IList<KeyValuePair<string, string>> replacementPairs)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < replacementPairs.Length; index++)
+            var count = replacementPairs.Count;
+
+            for (var index = 0; index < count; index++)
             {
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
@@ -55,7 +57,9 @@ namespace System.Text
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < texts.Length; index++)
+            var length = texts.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var oldValue = texts[index];
 
@@ -96,7 +100,7 @@ namespace System.Text
 
             for (var i = 0; i < length; i++)
             {
-                if (char.IsWhiteSpace(value[i]))
+                if (value[i].IsWhiteSpace())
                 {
                     start++;
                 }
@@ -108,7 +112,7 @@ namespace System.Text
 
             for (var i = length - 1; i >= start; i--)
             {
-                if (char.IsWhiteSpace(value[i]))
+                if (value[i].IsWhiteSpace())
                 {
                     end++;
                 }
@@ -134,7 +138,7 @@ namespace System.Text
 
             for (var i = 0; i < length; i++)
             {
-                if (char.IsWhiteSpace(value[i]))
+                if (value[i].IsWhiteSpace())
                 {
                     start++;
                 }
@@ -160,7 +164,7 @@ namespace System.Text
 
             for (var i = length - 1; i >= 0; i--)
             {
-                if (char.IsWhiteSpace(value[i]))
+                if (value[i].IsWhiteSpace())
                 {
                     end++;
                 }
@@ -178,13 +182,20 @@ namespace System.Text
             var oldValueLength = oldValue.Length;
             var valueLength = value.Length;
 
+            if (oldValueLength < valueLength)
+            {
+                // can be part in the replacement as value is shorter
+                return true;
+            }
+
             if (oldValueLength > valueLength)
             {
-                // cannot be part in the replacement as value is too big
+                // cannot be part in the replacement as value is too long
                 return false;
             }
 
-            if (oldValueLength == valueLength && oldValueLength > 2)
+            // both values have same length, so do the quick check on whether the characters fit the expected ones
+            if (oldValueLength >= 8)
             {
                 if (oldValue[0] != value[0])
                 {
@@ -195,14 +206,6 @@ namespace System.Text
                 var lastIndex = oldValueLength - 1;
 
                 if (oldValue[lastIndex] != value[lastIndex])
-                {
-                    // cannot be part in the replacement as characters do not match in current value
-                    return false;
-                }
-
-                var middleIndex = lastIndex / 2;
-
-                if (oldValue[middleIndex] != value[middleIndex])
                 {
                     // cannot be part in the replacement as characters do not match in current value
                     return false;

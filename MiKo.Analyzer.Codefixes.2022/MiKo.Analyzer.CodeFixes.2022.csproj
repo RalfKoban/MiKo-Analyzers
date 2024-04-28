@@ -14,6 +14,7 @@
     <Company>MiKo Solutions</Company>
     <Version>0.0.45</Version>
     <Copyright>Copyright © 2018-2024 by MiKo Solutions. All rights reserved.</Copyright>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 
   </PropertyGroup>
   
