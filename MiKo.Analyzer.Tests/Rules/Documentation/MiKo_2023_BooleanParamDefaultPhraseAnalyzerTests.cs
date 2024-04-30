@@ -696,6 +696,7 @@ public class TestMe
         [TestCase("A bool which specifies whether or not the items shall be updated.", @"<see langword=""true""/> to indicate that the items shall be updated; otherwise, <see langword=""false""/>.")]
 
         [TestCase("Whether to do something.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
+        [TestCase("Suppress the whatever.", @"<see langword=""true""/> to suppress the whatever; otherwise, <see langword=""false""/>.")]
         [TestCase("<value>true</value>: Activates some stuff.", @"<see langword=""true""/> to activate some stuff; otherwise, <see langword=""false""/>.")]
         [TestCase("true: something should be done, false: anything should be done", @"<see langword=""true""/> to indicate that something should be done; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"Set to <see langword=""true""/> if you want to do something, <see langword=""false""/> otherwise.", @"<see langword=""true""/> to do something; otherwise, <see langword=""false""/>.")]
@@ -724,6 +725,8 @@ public class TestMe
         [TestCase(@"If set to <see langref=""true""/> all stuff will be performed. ", @"<see langword=""true""/> to perform all stuff; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"Indicates if <paramref name=""someParameter""/> is compatible to the current stuff.", @"<see langword=""true""/> to indicate that <paramref name=""someParameter""/> is compatible to the current stuff; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         [TestCase(@"<see langword=""true""/> if creating a <see cref=""TestMe""/> should succeed, otherwise <see langword=""false""/>.", @"<see langword=""true""/> to indicate that creating a <see cref=""TestMe""/> should succeed; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
+        [TestCase("If all the items are considered.", @"<see langword=""true""/> to consider all the items; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
+        [TestCase("Whether all the items are considered.", @"<see langword=""true""/> to consider all the items; otherwise, <see langword=""false""/>.", Ignore = "Just for now")]
         public void Code_gets_fixed_on_same_line_for_phrase_(string originalPhrase, string fixedPhrase)
         {
             var originalCode = @"

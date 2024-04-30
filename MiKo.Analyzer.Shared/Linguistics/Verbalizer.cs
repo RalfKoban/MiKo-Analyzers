@@ -354,6 +354,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word[0].IsUpperCaseLetter() ? "Have" : "have";
                     }
 
+                    if (word.EndsWith("ss", StringComparison.Ordinal))
+                    {
+                        return word;
+                    }
+
                     if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
                     {
                         return word.WithoutSuffix("es");
