@@ -20,13 +20,11 @@ namespace System.Text
             {
                 var oldValue = pair.Key;
 
-                if (QuickCompare(value, oldValue) is false)
+                if (QuickCompare(value, oldValue))
                 {
-                    // cannot be part in the replacement as value does not fit
-                    continue;
+                    // can be part in the replacement as value seems to fit
+                    value.Replace(oldValue, pair.Value);
                 }
-
-                value.Replace(oldValue, pair.Value);
             }
 
             return value;
@@ -42,13 +40,11 @@ namespace System.Text
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
 
-                if (QuickCompare(value, oldValue) is false)
+                if (QuickCompare(value, oldValue))
                 {
-                    // cannot be part in the replacement as value does not fit
-                    continue;
+                    // can be part in the replacement as value seems to fit
+                    value.Replace(oldValue, pair.Value);
                 }
-
-                value.Replace(oldValue, pair.Value);
             }
 
             return value;
@@ -63,13 +59,11 @@ namespace System.Text
             {
                 var oldValue = texts[index];
 
-                if (QuickCompare(value, oldValue) is false)
+                if (QuickCompare(value, oldValue))
                 {
-                    // cannot be part in the replacement as value does not fit
-                    continue;
+                    // can be part in the replacement as value seems to fit
+                    value.Replace(oldValue, replacement);
                 }
-
-                value.Replace(oldValue, replacement);
             }
 
             return value;
@@ -77,13 +71,13 @@ namespace System.Text
 
         public static StringBuilder ReplaceWithCheck(this StringBuilder value, string oldValue, string newValue)
         {
-            if (QuickCompare(value, oldValue) is false)
+            if (QuickCompare(value, oldValue))
             {
-                // cannot be part in the replacement as value does not fit
-                return value;
+                return value.Replace(oldValue, newValue);
             }
 
-            return value.Replace(oldValue, newValue);
+            // cannot be part in the replacement as value does not fit
+            return value;
         }
 
         public static string Trim(this StringBuilder value)

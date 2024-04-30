@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2023_CodeFixProvider)), Shared]
@@ -19,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private const string Replacement = " to indicate that ";
         private const string ReplacementTo = " to ";
         private const string OrNotPhrase = " or not";
-        private const string OtherwiseReplacement = ";  otherwise";
+        private const string OtherwiseReplacement = "; otherwise, ";
 
         private const string StartWithArticleA = "A ";
         private const string StartWithArticleAn = "An ";
@@ -45,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                      StartWithArticleThe.ToLowerCaseAt(0),
                                                                  };
 
-        private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", OtherwiseReplacement);
+        private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", "; otherwise");
 
         private static readonly string[] OtherwisePairKey = { OtherwisePair.Key };
         private static readonly KeyValuePair<string, string>[] OtherwisePairArray = { OtherwisePair };
@@ -214,17 +216,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
+            var commentContinuation = new StringBuilder();
+
+            // be aware of a gerund verb
+            if (Verbalizer.IsGerundVerb(subText.FirstWord().ToString()) || replacement == ReplacementTo)
+            {
+                commentContinuation.Append(ReplacementTo);
+
+                var continuation = MakeFirstWordInfiniteVerb(subText, FirstWordHandling.MakeLowerCase);
+
+                commentContinuation.Append(continuation);
+            }
+            else
+            {
+                commentContinuation.Append(replacement);
+
+                // do not try to make the first word a verb as it might not be one
+                var continuation = subText.TrimStart().ToLowerCaseAt(0);
+
+                commentContinuation.Append(continuation);
+            }
+
+            commentContinuation.ReplaceAllWithCheck(info.Map);
+
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
-            var continuation = replacement == Replacement
-                               ? subText.TrimStart().ToLowerCaseAt(0) // do not try to make the first word a verb as it might not be one
-                               : MakeFirstWordInfiniteVerb(subText);
-
-            var commentContinuation = new StringBuilder(replacement).Append(continuation)
-                                                                    .ReplaceAllWithCheck(info.Map)
-                                                                    .ToString();
-
-            return FixComment(prepared, info.Keys, info.Map, commentContinuation);
+            return FixComment(prepared, info.Keys, info.Map, commentContinuation.ToString());
         }
 
         private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, KeyValuePair<string, string>[] replacementMap, string commentContinue = null)
@@ -332,7 +349,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    new KeyValuePair<string, string>("false", string.Empty),
                                                    new KeyValuePair<string, string>("False", string.Empty),
                                                    new KeyValuePair<string, string>("FALSE", string.Empty),
+                                                   new KeyValuePair<string, string>("; otherwise ; otherwise, ", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>(", otherwise ; otherwise, ", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>(";  otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>(",  otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>("; otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new KeyValuePair<string, string>(", otherwise; otherwise, ", OtherwiseReplacement),
                                                    new KeyValuePair<string, string>("if you want to", ReplacementTo),
+                                                   new KeyValuePair<string, string>("if this is ", ReplacementTo),
+                                                   new KeyValuePair<string, string>(" to value indicating, whether ", Replacement),
+                                                   new KeyValuePair<string, string>(" to value indicating, that ", Replacement),
+                                                   new KeyValuePair<string, string>(" to value indicating, if ", Replacement),
+                                                   new KeyValuePair<string, string>(" to value indicating whether ", Replacement),
+                                                   new KeyValuePair<string, string>(" to value indicating that ", Replacement),
+                                                   new KeyValuePair<string, string>(" to value indicating if ", Replacement),
                                                    new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
                                                    new KeyValuePair<string, string>(" to in case ", ReplacementTo),
                                                    new KeyValuePair<string, string>(" to if given ", ReplacementTo),
@@ -363,17 +393,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    new KeyValuePair<string, string>(" to an ", Replacement + "an "),
                                                    new KeyValuePair<string, string>(" to a ", Replacement + "a "),
                                                    new KeyValuePair<string, string>(" that to ", " that "),
-                                                   new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>(" otherwise; otherwise, ", "otherwise, "),
-                                                   new KeyValuePair<string, string>("; Otherwise; ", "; "),
+                                                   new KeyValuePair<string, string>(" the the ", " the "),
+                                                   new KeyValuePair<string, string>(" an an ", " an "),
+                                                   new KeyValuePair<string, string>(" a a ", " a "),
+                                                   //// new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
+                                                   //// new KeyValuePair<string, string>(",otherwise", "; otherwise,"),
+                                                   //// new KeyValuePair<string, string>(",  otherwise ", "; otherwise, "),
+                                                   //// new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
+                                                   //// new KeyValuePair<string, string>("; Otherwise; ", "; "),
                                                    new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
                                                    new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
                                                    new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
                                                    new KeyValuePair<string, string>(". ", "; "),
-                                                   new KeyValuePair<string, string>(" the the ", " the "),
-                                                   new KeyValuePair<string, string>(" an an ", " an "),
-                                                   new KeyValuePair<string, string>(" a a ", " a "),
                                                };
 
                 var replacementMapKeysCommon = replacementMapCommon.Select(_ => _.Key).ToArray();

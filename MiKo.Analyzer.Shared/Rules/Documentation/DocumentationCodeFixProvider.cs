@@ -600,17 +600,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return text;
         }
 
-        protected static string MakeFirstWordInfiniteVerb(string text)
+        protected static string MakeFirstWordInfiniteVerb(string text, FirstWordHandling handling = FirstWordHandling.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
                 return text;
             }
 
-            return MakeFirstWordInfiniteVerb(text.AsSpan());
+            return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
         }
 
-        protected static string MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text)
+        protected static string MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text, FirstWordHandling handling = FirstWordHandling.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
@@ -627,7 +627,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             // first word
-            var firstWord = valueText.FirstWord().ToString();
+            var firstWord = GetFirstWord(valueText);
+
             var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
 
             if (firstWord != infiniteVerb)
@@ -636,6 +637,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return text.ToString();
+
+            string GetFirstWord(ReadOnlySpan<char> span)
+            {
+                var word = span.FirstWord();
+
+                switch (handling)
+                {
+                    case FirstWordHandling.MakeLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordHandling.MakeUpperCase: return word.ToUpperCaseAt(0);
+                    default:
+                        return word.ToString();
+                }
+            }
         }
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);

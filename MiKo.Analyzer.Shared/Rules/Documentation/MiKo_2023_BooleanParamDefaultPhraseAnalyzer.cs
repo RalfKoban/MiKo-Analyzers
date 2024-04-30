@@ -12,6 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2023";
 
+        private static readonly string[] StartingPhrases = Constants.Comments.BooleanParameterStartingPhrase;
+        private static readonly string StartingPhrase = StartingPhrases[0];
+
+        private static readonly string[] EndingPhrases = Constants.Comments.BooleanParameterEndingPhrase;
+        private static readonly string EndingPhrase = EndingPhrases[0];
+
         public MiKo_2023_BooleanParamDefaultPhraseAnalyzer() : base(Id)
         {
         }
@@ -22,15 +28,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            var startingPhrase = Constants.Comments.BooleanParameterStartingPhrase;
-            var endingPhrase = Constants.Comments.BooleanParameterEndingPhrase;
+            if (CommentHasIssue(comment))
+            {
+                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), StartingPhrase, EndingPhrase);
+            }
+        }
 
+        private static bool CommentHasIssue(string comment)
+        {
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (comment.StartsWithAny(startingPhrase, Comparison) is false || comment.ContainsAny(endingPhrase, Comparison) is false)
+            if (comment.StartsWithAny(StartingPhrases, Comparison) && comment.ContainsAny(EndingPhrases, Comparison))
             {
-                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), startingPhrase[0], endingPhrase[0]);
+                return comment.Contains("to value indicating", Comparison);
             }
+
+            return true;
         }
     }
 }
