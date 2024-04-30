@@ -20,21 +20,22 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
-        private static int s_testLimit = -1;
+        //// private static int s_testLimit = int.MaxValue;
 
         protected static int TestLimit
         {
             get
             {
-                if (s_testLimit < 0)
-                {
-                    // see variable in appveyor.yml; used to limit number of tests as otherwise the test run takes too much time
-                    var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
-
-                    s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 10000 : int.MaxValue;
-                }
-
-                return s_testLimit;
+                // if (s_testLimit < 0)
+                // {
+                //     // see variable in appveyor.yml; used to limit number of tests as otherwise the test run takes too much time
+                //     var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
+                //
+                //     s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 1000 : int.MaxValue;
+                // }
+                //
+                // return s_testLimit;
+                return int.MaxValue;
             }
         }
 
