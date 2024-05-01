@@ -176,16 +176,16 @@ namespace System.Text
             var oldValueLength = oldValue.Length;
             var valueLength = value.Length;
 
-            if (oldValueLength < valueLength)
-            {
-                // can be part in the replacement as value is shorter
-                return true;
-            }
-
             if (oldValueLength > valueLength)
             {
                 // cannot be part in the replacement as value is too long
                 return false;
+            }
+
+            if (oldValueLength < valueLength)
+            {
+                // can be part in the replacement as value is shorter
+                return true;
             }
 
             // both values have same length, so do the quick check on whether the characters fit the expected ones
