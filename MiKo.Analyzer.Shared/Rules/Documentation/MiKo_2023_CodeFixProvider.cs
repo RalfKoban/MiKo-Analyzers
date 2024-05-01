@@ -669,8 +669,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private sealed class StringStartComparer : IComparer<string>
         {
             private readonly string[] m_specialOrder;
+            private readonly int m_specialOrderLength;
 
-            internal StringStartComparer(string[] specialOrder) => m_specialOrder = specialOrder;
+            internal StringStartComparer(string[] specialOrder)
+            {
+                m_specialOrder = specialOrder;
+                m_specialOrderLength = m_specialOrder.Length;
+            }
 
             public int Compare(string x, string y)
             {
@@ -692,7 +697,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private int GetOrder(string text)
             {
-                for (var i = 0; i < m_specialOrder.Length; i++)
+                for (var i = 0; i < m_specialOrderLength; i++)
                 {
                     var order = m_specialOrder[i];
 
