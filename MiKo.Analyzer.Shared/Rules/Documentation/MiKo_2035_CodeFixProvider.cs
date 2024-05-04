@@ -120,7 +120,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                           "An awaitable task.",
                                           "An awaitable task",
                                       };
-                var phrases = CreatePhrases().ToHashSet(_ => _ + " ").ToArray(); // TODO RKN: Order by 'A', 'An ' and 'The '
+
+                var phrases = CreatePhrases().ToHashSet(_ => _ + " "); // TODO RKN: Order by 'A', 'An ' and 'The '
 
                 ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(taskPhrases)
                                                                            .Concat(phrases)
