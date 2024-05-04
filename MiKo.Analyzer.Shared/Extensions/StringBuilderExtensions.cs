@@ -171,42 +171,74 @@ namespace System.Text
             return value.ToString(0, length - end);
         }
 
-        private static bool QuickCompare(StringBuilder value, string oldValue)
+        private static bool QuickCompare(StringBuilder current, string other)
         {
-            var oldValueLength = oldValue.Length;
-            var valueLength = value.Length;
+            var otherValueLength = other.Length;
+            var currentValueLength = current.Length;
 
-            if (oldValueLength > valueLength)
+            var difference = currentValueLength - otherValueLength;
+
+            if (difference < 0)
             {
-                // cannot be part in the replacement as value is too long
+                // cannot be part in the replacement as other value is too long and cannot fit current value
                 return false;
             }
 
-            if (oldValueLength < valueLength)
+            switch (difference)
             {
-                // can be part in the replacement as value is shorter
-                return true;
-            }
-
-            // both values have same length, so do the quick check on whether the characters fit the expected ones
-            if (oldValueLength >= 8)
-            {
-                if (oldValue[0] != value[0])
+                case 0:
                 {
-                    // cannot be part in the replacement as characters do not match in current value
-                    return false;
+                    // both values have same length, so do the quick check on whether the characters fit the expected ones (do not limit length as there are only 3 values below length of 8)
+                    if (current[0] != other[0])
+                    {
+                        return false;
+                    }
+
+                    var lastIndex = otherValueLength - 1;
+
+                    return current[lastIndex] == other[lastIndex];
                 }
 
-                var lastIndex = oldValueLength - 1;
-
-                if (oldValue[lastIndex] != value[lastIndex])
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
                 {
-                    // cannot be part in the replacement as characters do not match in current value
-                    return false;
+                    var otherFirst = other[0];
+
+                    var lastIndex = otherValueLength - 1;
+                    var otherLast = other[lastIndex];
+
+                    // could be part in the replacement only if characters match
+                    return QuickCompareAtIndices(current, otherFirst, lastIndex, otherLast, difference);
+                }
+
+                default:
+                {
+                    // can be part in the replacement as other value is smaller and could fit current value
+                    return true;
+                }
+            }
+        }
+
+        private static bool QuickCompareAtIndices(StringBuilder current, char first, int lastIndex, char last, int count)
+        {
+            // include count as value
+            for (var i = 0; i <= count; i++)
+            {
+                if (current[i] == first && current[lastIndex + i] == last)
+                {
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
 
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852
