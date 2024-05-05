@@ -184,47 +184,32 @@ namespace System.Text
                 return false;
             }
 
-            switch (difference)
+            if (difference == 0)
             {
-                case 0:
+                // both values have same length, so do the quick check on whether the characters fit the expected ones (do not limit length as there are only 3 values below length of 8)
+                if (current[0] != other[0])
                 {
-                    // both values have same length, so do the quick check on whether the characters fit the expected ones (do not limit length as there are only 3 values below length of 8)
-                    if (current[0] != other[0])
-                    {
-                        return false;
-                    }
-
-                    var lastIndex = otherValueLength - 1;
-
-                    return current[lastIndex] == other[lastIndex];
+                    return false;
                 }
 
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                {
-                    var otherFirst = other[0];
+                var lastIndex = otherValueLength - 1;
 
-                    var lastIndex = otherValueLength - 1;
-                    var otherLast = other[lastIndex];
-
-                    // could be part in the replacement only if characters match
-                    return QuickCompareAtIndices(current, otherFirst, lastIndex, otherLast, difference);
-                }
-
-                default:
-                {
-                    // can be part in the replacement as other value is smaller and could fit current value
-                    return true;
-                }
+                return current[lastIndex] == other[lastIndex];
             }
+
+            if (other.Length >= 4)
+            {
+                var otherFirst = other[0];
+
+                var lastIndex = otherValueLength - 1;
+                var otherLast = other[lastIndex];
+
+                // could be part in the replacement only if characters match
+                return QuickCompareAtIndices(current, otherFirst, lastIndex, otherLast, difference);
+            }
+
+            // can be part in the replacement as other value is smaller and could fit current value
+            return true;
         }
 
         private static bool QuickCompareAtIndices(StringBuilder current, char first, int lastIndex, char last, int count)

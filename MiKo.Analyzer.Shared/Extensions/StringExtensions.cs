@@ -372,22 +372,22 @@ namespace System
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, char[] characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
-        public static bool ContainsAny(this string value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this string value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
+        public static bool ContainsAny(this string value, IList<string> phrases, StringComparison comparison)
         {
 //// ncrunch: no coverage start
 
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
-                var phrasesLength = phrases.Length;
+                var phrasesLength = phrases.Count;
 
                 // ReSharper disable once ForCanBeConvertedToForeach
                 // ReSharper disable once LoopCanBeConvertedToQuery
@@ -412,7 +412,7 @@ namespace System
 //// ncrunch: no coverage end
         }
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
+        public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases, StringComparison comparison)
         {
             if (value.Length > 0)
             {
@@ -426,9 +426,9 @@ namespace System
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
         {
-            if (phrases is string[] array)
+            if (phrases is IList<string> list)
             {
-                return value.ContainsAny(array, comparison);
+                return value.ContainsAny(list, comparison);
             }
 
             if (value.HasCharacters())
