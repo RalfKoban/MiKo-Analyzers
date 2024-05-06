@@ -201,8 +201,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             subText = ModifyOrNotPart(subText);
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < Conditionals.Length; index++)
+            var length = Conditionals.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var conditional = Conditionals[index];
 
