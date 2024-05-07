@@ -62,7 +62,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool HasIssue(ITypeSymbol returnType) => returnType is INamedTypeSymbol type
-                                                             && type.TypeArguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
+        private static bool HasIssue(ITypeSymbol returnType) => returnType is INamedTypeSymbol type && returnType.IsTask()
+                                                                ? type.TypeArguments.Any(HasGenericTypeArgument)
+                                                                : HasGenericTypeArgument(returnType);
+
+        private static bool HasGenericTypeArgument(ITypeSymbol symbol) => symbol is INamedTypeSymbol type
+                                                                       && type.TypeArguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
     }
 }

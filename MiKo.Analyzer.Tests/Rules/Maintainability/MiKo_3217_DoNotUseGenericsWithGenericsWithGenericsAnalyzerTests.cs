@@ -47,6 +47,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_that_returns_generic_task_with_generic() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<IReadOnlyList<int>> DoSomething() => null;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_that_returns_generic_with_generic() => An_issue_is_reported_for(@"
 using System.Collections.Generic;
 
@@ -87,6 +98,17 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_method_that_returns_generic_task_with_generic_with_generic() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<IReadOnlyList<IEnumerable<int>>> DoSomething() => null;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_method_that_receives_non_generic() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -111,6 +133,17 @@ using System.Collections.Generic;
 public class TestMe
 {
     public void DoSomething(IDictionary<int, string> parameter) => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_that_receives_generic_task_with_generic() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Task<IReadOnlyList<int>> parameter) => null;
 }
 ");
 
@@ -155,6 +188,17 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_method_that_receives_generic_task_with_generic_with_generic() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public void DoSomething(Task<IReadOnlyList<IEnumerable<int>>> parameter) => null;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_property_that_returns_non_generic() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -179,6 +223,17 @@ using System.Collections.Generic;
 public class TestMe
 {
     public IDictionary<int, string> DoSomething { get; set; }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_property_that_returns_generic_task_with_generic() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<IReadOnlyList<int>> DoSomething { get; set; }
 }
 ");
 
@@ -219,6 +274,17 @@ using System.Collections.Generic;
 public class TestMe
 {
     public IDictionary<int, IDictionary<string, IEnumerable<int>>> DoSomething { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_property_that_returns_generic_task_with_generic_with_generic() => An_issue_is_reported_for(@"
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    public Task<IReadOnlyList<IEnumerable<int>>> DoSomething { get; set; }
 }
 ");
 
