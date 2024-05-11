@@ -53,6 +53,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_with_CancellationToken_parameter_when_followed_by_a_params_array() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public void DoSomething(CancellationToken token, params int[] i) { }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_with_CancellationToken_parameter_at_wrong_place() => An_issue_is_reported_for(@"
 using System;
 using System.Threading;

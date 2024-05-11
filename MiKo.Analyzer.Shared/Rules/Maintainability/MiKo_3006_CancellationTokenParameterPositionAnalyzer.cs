@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var parameter = methodParameters[i];
 
-                if (parameter.Type.IsCancellationToken() && i != last)
+                if (parameter.Type.IsCancellationToken() && i != last && methodParameters[last].IsParams is false)
                 {
                     return new[] { Issue(parameter) };
                 }
