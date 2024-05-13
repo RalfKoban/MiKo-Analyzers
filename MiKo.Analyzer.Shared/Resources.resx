@@ -515,7 +515,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove base type indicator</value>
   </data>
   <data name="MiKo_1030_Description" xml:space="preserve">
-    <value>Indicating that a type is a base type by putting 'Abstract' or 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base class.</value>
+    <value>Indicating that a type is a base type by putting 'Abstract' or 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base type, so cluttering its name simply creates an unnecessary distraction for it users.</value>
   </data>
   <data name="MiKo_1030_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' from name</value>
