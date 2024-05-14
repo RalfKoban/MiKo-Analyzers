@@ -102,6 +102,11 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_record() => No_issue_is_reported_for(@"
+public record TestMe(string s1, string s2, string s3);
+");
+
+        [Test]
         public void An_issue_is_reported_for_public_virtual_method() => An_issue_is_reported_for(@"
 public class TestMe
 {
