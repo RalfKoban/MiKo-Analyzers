@@ -79,7 +79,7 @@ namespace System
                 return Array.Empty<int>();
             }
 
-            var indices = new List<int>();
+            List<int> indices = null;
 
             for (var index = 0; ; index += findingLength)
             {
@@ -91,7 +91,17 @@ namespace System
                     break;
                 }
 
+                if (indices is null)
+                {
+                    indices = new List<int>(1);
+                }
+
                 indices.Add(index);
+            }
+
+            if (indices is null)
+            {
+                return Array.Empty<int>();
             }
 
             return indices;
@@ -119,9 +129,11 @@ namespace System
 
             IReadOnlyList<int> AllIndicesOrdinal(ReadOnlySpan<char> span, ReadOnlySpan<char> other)
             {
-                var indices = new List<int>();
+                var otherLength = other.Length;
 
-                for (var index = 0; ; index += other.Length)
+                List<int> indices = null;
+
+                for (var index = 0; ; index += otherLength)
                 {
                     var newIndex = span.Slice(index).IndexOf(other, StringComparison.Ordinal);
 
@@ -133,7 +145,17 @@ namespace System
 
                     index += newIndex;
 
+                    if (indices is null)
+                    {
+                        indices = new List<int>(1);
+                    }
+
                     indices.Add(index);
+                }
+
+                if (indices is null)
+                {
+                    return Array.Empty<int>();
                 }
 
                 return indices;

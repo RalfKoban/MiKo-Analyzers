@@ -471,6 +471,20 @@ namespace MiKoSolutions.Analyzers
                 case SpecialType.System_IntPtr:
                 case SpecialType.System_UIntPtr:
                 case SpecialType.System_DateTime:
+                case SpecialType.System_Object:
+                case SpecialType.System_Enum:
+                case SpecialType.System_Delegate:
+                case SpecialType.System_MulticastDelegate:
+                case SpecialType.System_TypedReference:
+                case SpecialType.System_ArgIterator:
+                case SpecialType.System_RuntimeArgumentHandle:
+                case SpecialType.System_RuntimeFieldHandle:
+                case SpecialType.System_RuntimeMethodHandle:
+                case SpecialType.System_RuntimeTypeHandle:
+                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
+                case SpecialType.System_AsyncCallback:
+                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
+                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
                 {
                     return false;
                 }
@@ -481,11 +495,11 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Delegate:
                 case TypeKind.Dynamic:
                 case TypeKind.Enum:
+                case TypeKind.FunctionPointer:
                 case TypeKind.Module:
                 case TypeKind.Pointer:
-                case TypeKind.TypeParameter:
                 case TypeKind.Submission:
-                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
                 {
                     return false;
                 }
@@ -537,6 +551,20 @@ namespace MiKoSolutions.Analyzers
                 case SpecialType.System_IntPtr:
                 case SpecialType.System_UIntPtr:
                 case SpecialType.System_DateTime:
+                case SpecialType.System_Object:
+                case SpecialType.System_Enum:
+                case SpecialType.System_Delegate:
+                case SpecialType.System_MulticastDelegate:
+                case SpecialType.System_TypedReference:
+                case SpecialType.System_ArgIterator:
+                case SpecialType.System_RuntimeArgumentHandle:
+                case SpecialType.System_RuntimeFieldHandle:
+                case SpecialType.System_RuntimeMethodHandle:
+                case SpecialType.System_RuntimeTypeHandle:
+                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
+                case SpecialType.System_AsyncCallback:
+                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
+                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
                 {
                     return false;
                 }
@@ -547,11 +575,11 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Delegate:
                 case TypeKind.Dynamic:
                 case TypeKind.Enum:
+                case TypeKind.FunctionPointer:
                 case TypeKind.Module:
                 case TypeKind.Pointer:
-                case TypeKind.TypeParameter:
                 case TypeKind.Submission:
-                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
                 {
                     return false;
                 }
