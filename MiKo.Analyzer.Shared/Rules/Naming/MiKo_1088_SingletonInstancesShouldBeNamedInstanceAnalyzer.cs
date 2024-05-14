@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -37,12 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (symbol.TypeKind == TypeKind.Class && symbol.IsTestClass() is false)
+            if (symbol.TypeKind != TypeKind.Class || symbol.IsRecord || symbol.IsTestClass())
             {
-                return Analyze(symbol);
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return Analyze(symbol);
         }
 
         private IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol)
