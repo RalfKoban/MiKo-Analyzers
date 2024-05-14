@@ -687,6 +687,12 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
+                    if (value.IsRecord)
+                    {
+                        // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
+                        return false;
+                    }
+
                     return value.AnyBaseType(_ => baseClassName == _.ToString());
                 }
 
@@ -729,12 +735,18 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
-                    return value.AnyBaseType(_ =>
-                                                 {
-                                                     var fullName = _.ToString();
+                    if (value.IsRecord)
+                    {
+                        // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
+                        return false;
+                    }
 
-                                                     return baseClassName == fullName || baseClassFullQualifiedName == fullName;
-                                                 });
+                    return value.AnyBaseType(_ =>
+                                             {
+                                                 var fullName = _.ToString();
+
+                                                 return baseClassName == fullName || baseClassFullQualifiedName == fullName;
+                                             });
                 }
 
                 default:
@@ -1271,7 +1283,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
-        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.TestClassAttributeNames);
+        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.IsRecord is false && value.HasAttribute(Constants.Names.TestClassAttributeNames);
 
         internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 

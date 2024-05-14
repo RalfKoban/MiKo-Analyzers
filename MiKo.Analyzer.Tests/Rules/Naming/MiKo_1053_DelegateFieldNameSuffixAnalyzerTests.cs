@@ -37,12 +37,27 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         [TestCase("string s")]
         [TestCase("int i")]
+        [TestCase("IDisposable disposable")]
         public void No_issue_is_reported_for_non_delegate_field_(string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     private " + name + @";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_record_field() => No_issue_is_reported_for(@"
+using System;
+
+public record DTO
+{
+}
+
+public class TestMe
+{
+    private DTO dto;
 }
 ");
 

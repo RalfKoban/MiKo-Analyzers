@@ -17,7 +17,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Delegate || (symbol.Type.TypeKind == TypeKind.Class && symbol.Type.ToString() == TypeNames.Delegate);
+        protected override bool ShallAnalyze(IParameterSymbol symbol)
+        {
+            var type = symbol.Type;
+
+            switch (type.TypeKind)
+            {
+                case TypeKind.Delegate:
+                    return true;
+
+                case TypeKind.Class when type.IsRecord:
+                    return false;
+
+                case TypeKind.Class:
+                    return type.ToString() == TypeNames.Delegate;
+
+                default:
+                    return false;
+            }
+        }
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {

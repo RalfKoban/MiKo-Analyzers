@@ -70,6 +70,20 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_record_parameter_method_with_prefix_([ValueSource(nameof(InvalidPrefixes))] string prefix) => An_issue_is_reported_for(@"
+public record DTO
+{
+}
+
+public class TestMe
+{
+    public void " + prefix + @"Something(DTO dto)
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_local_function_with_prefix_([ValueSource(nameof(InvalidPrefixes))] string prefix) => An_issue_is_reported_for(@"
 public class TestMe
 {

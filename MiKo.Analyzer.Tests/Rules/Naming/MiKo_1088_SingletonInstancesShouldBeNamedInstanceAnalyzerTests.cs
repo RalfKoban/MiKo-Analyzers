@@ -42,6 +42,15 @@ public enum TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_record() => No_issue_is_reported_for(@"
+
+public record TestMe
+{
+    public static Something = 0;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
 
 public class TestMe
