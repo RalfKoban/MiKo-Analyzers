@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -109,17 +108,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
         {
-            foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
+            foreach (var trivia in node.DescendantTrivia())
             {
-                var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                if (hasIssue)
+                if (ShallAnalyze(trivia))
                 {
-                    var name = node.GetName();
+                    var hasIssue = AnalyzeComment(trivia, semanticModel);
 
-                    foreach (var issue in CollectIssues(name, trivia))
+                    if (hasIssue)
                     {
-                        yield return issue;
+                        var name = node.GetName();
+
+                        foreach (var issue in CollectIssues(name, trivia))
+                        {
+                            yield return issue;
+                        }
                     }
                 }
             }
@@ -127,17 +129,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseFieldDeclarationSyntax node, SemanticModel semanticModel)
         {
-            foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
+            foreach (var trivia in node.DescendantTrivia())
             {
-                var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                if (hasIssue)
+                if (ShallAnalyze(trivia))
                 {
-                    var name = node.GetName();
+                    var hasIssue = AnalyzeComment(trivia, semanticModel);
 
-                    foreach (var issue in CollectIssues(name, trivia))
+                    if (hasIssue)
                     {
-                        yield return issue;
+                        var name = node.GetName();
+
+                        foreach (var issue in CollectIssues(name, trivia))
+                        {
+                            yield return issue;
+                        }
                     }
                 }
             }
@@ -145,17 +150,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
         {
-            foreach (var trivia in node.DescendantTrivia().Where(ShallAnalyze))
+            foreach (var trivia in node.DescendantTrivia())
             {
-                var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                if (hasIssue)
+                if (ShallAnalyze(trivia))
                 {
-                    var name = GetName();
+                    var hasIssue = AnalyzeComment(trivia, semanticModel);
 
-                    foreach (var issue in CollectIssues(name, trivia))
+                    if (hasIssue)
                     {
-                        yield return issue;
+                        var name = GetName();
+
+                        foreach (var issue in CollectIssues(name, trivia))
+                        {
+                            yield return issue;
+                        }
                     }
                 }
             }

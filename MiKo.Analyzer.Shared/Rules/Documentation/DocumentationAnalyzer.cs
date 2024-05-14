@@ -120,6 +120,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
                 var returnTypeWithGenericCount = string.Concat(firstPart, "`", count.ToString());
 
+//// ncrunch: rdi off
                 return Enumerable.Empty<string>()
                                  .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithTs))) // for the phrases to show to the user
                                  .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeWithGenericCount))); // for the real check
@@ -128,6 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Enumerable.Empty<string>()
                              .Concat(startingPhrases.Select(_ => _.FormatWith(returnType)))
                              .Concat(startingPhrases.Select(_ => _.FormatWith(returnTypeFullyQualified)));
+//// ncrunch: rdi default
         }
 
         protected virtual bool ShallAnalyze(INamedTypeSymbol symbol) => symbol.GetDocumentationCommentId() != null;
