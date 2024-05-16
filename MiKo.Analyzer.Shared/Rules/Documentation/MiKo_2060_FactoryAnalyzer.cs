@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var typeIssues = base.AnalyzeType(symbol, compilation);
 
-                return typeIssues.Concat(symbol.GetMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
+                return typeIssues.Concat(symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
             }
 
             return Enumerable.Empty<Diagnostic>();

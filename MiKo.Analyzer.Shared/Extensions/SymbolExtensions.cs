@@ -336,9 +336,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken GetModifier(this IMethodSymbol value, SyntaxKind kind)
         {
-            var syntax = (BaseMethodDeclarationSyntax)value.GetSyntax();
+            switch (value.GetSyntax())
+            {
+                case BaseMethodDeclarationSyntax method: return method.Modifiers.First(kind);
+                case AccessorDeclarationSyntax accessor: return accessor.Modifiers.First(kind);
 
-            return syntax.Modifiers.First(kind);
+                default:
+                    return default;
+            }
         }
 
         internal static SyntaxToken GetModifier(this IParameterSymbol value, SyntaxKind kind)
