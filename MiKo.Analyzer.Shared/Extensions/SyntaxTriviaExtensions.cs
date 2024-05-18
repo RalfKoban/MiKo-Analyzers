@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -23,6 +24,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxTrivia value) => value.GetLocation().GetEndPosition();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsEndOfLine(this SyntaxTrivia value) => value.IsKind(SyntaxKind.EndOfLineTrivia);
 
         internal static bool IsComment(this SyntaxTrivia value)
@@ -38,8 +40,10 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsMultiLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.MultiLineCommentTrivia);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSingleLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
 
         internal static bool IsSpanningMultipleLines(this SyntaxTrivia value)
@@ -67,6 +71,7 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
         internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
