@@ -80,6 +80,13 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_incorrectly_commented_class_without_leading_spaces_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"///<summary>" + phrase + @"</summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_incorrectly_commented_event_([ValueSource(nameof(IncorrectPhrases))] string phrase) => An_issue_is_reported_for(@"
 public class TestMe
 {

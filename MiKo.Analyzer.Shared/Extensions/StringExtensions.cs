@@ -1118,25 +1118,50 @@ namespace System
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsUpperCase(this char value) => char.IsUpper(value); // ncrunch: no coverage
+//// ncrunch: no coverage start
+
+        public static bool IsUpperCase(this char value)
+        {
+            if ((uint)(value - 'A') <= 'Z' - 'A')
+            {
+                return true;
+            }
+
+            if ((uint)(value - 'a') <= 'z' - 'a')
+            {
+                return false;
+            }
+
+            if (value == ' ')
+            {
+                return false;
+            }
+
+            return char.IsUpper(value);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsUpperCaseLetter(this char value) => value.IsLetter() && value.IsUpperCase();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsWhiteSpace(this char value) => char.IsWhiteSpace(value); // ncrunch: no coverage
+        public static bool IsWhiteSpace(this char value)
+        {
+            if (value == ' ')
+            {
+                return true;
+            }
+
+            return char.IsWhiteSpace(value);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character; // ncrunch: no coverage
+        public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character; // ncrunch: no coverage
+        public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
-
-//// ncrunch: no coverage start
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
