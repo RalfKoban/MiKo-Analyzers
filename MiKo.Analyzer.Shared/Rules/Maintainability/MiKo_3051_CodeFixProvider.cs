@@ -18,19 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var node in syntaxNodes)
             {
-                if (node is LiteralExpressionSyntax)
+                switch (node)
                 {
-                    return node;
-                }
-
-                if (node is TypeOfExpressionSyntax)
-                {
-                    return node;
-                }
-
-                if (node is InvocationExpressionSyntax)
-                {
-                    return node;
+                    case LiteralExpressionSyntax _:
+                    case TypeOfExpressionSyntax _:
+                    case InvocationExpressionSyntax _:
+                        return node;
                 }
             }
 
@@ -39,20 +32,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is LiteralExpressionSyntax literal)
+            switch (syntax)
             {
-                return NameOf(literal);
-            }
+                case LiteralExpressionSyntax literal:
+                    return NameOf(literal);
 
-            if (syntax is TypeOfExpressionSyntax)
-            {
-                if (issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.ParameterValue, out var value))
-                {
+                case TypeOfExpressionSyntax _ when issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.ParameterValue, out var value):
                     return TypeOf(value);
-                }
-            }
 
-            return null;
+                default:
+                    return null;
+            }
         }
     }
 }

@@ -692,7 +692,9 @@ namespace System
         {
             if (value.Length > 0)
             {
-                for (var index = 0; index < phrases.Length; index++)
+                var phrasesLength = phrases.Length;
+
+                for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
 

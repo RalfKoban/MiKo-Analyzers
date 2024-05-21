@@ -1013,20 +1013,23 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                if (node is XmlEmptyElementSyntax empty)
+                switch (node)
                 {
-                    builder.Append(empty.WithoutTrivia());
-                }
-                else if (node is XmlElementSyntax e)
-                {
-                    GetTextWithoutTrivia(e, builder);
-                }
-                else if (node is XmlTextSyntax text)
-                {
-                    foreach (var valueText in text.GetTextWithoutTriviaLazy())
-                    {
-                        builder.Append(valueText);
-                    }
+                    case XmlEmptyElementSyntax empty:
+                        builder.Append(empty.WithoutTrivia());
+                        break;
+
+                    case XmlElementSyntax e:
+                        GetTextWithoutTrivia(e, builder);
+                        break;
+
+                    case XmlTextSyntax text:
+                        foreach (var valueText in text.GetTextWithoutTriviaLazy())
+                        {
+                            builder.Append(valueText);
+                        }
+
+                        break;
                 }
             }
 
@@ -2943,19 +2946,20 @@ namespace MiKoSolutions.Analyzers
         internal static XmlElementSyntax WithoutWhitespaceOnlyComment(this XmlElementSyntax value)
         {
             var texts = value.Content.OfType<XmlTextSyntax>();
+            var textsCount = texts.Count;
 
-            if (texts.Count > 0)
+            if (textsCount > 0)
             {
-                var text = texts.Count == 1
+                var text = textsCount == 1
                            ? texts[0]
-                           : texts[texts.Count - 2];
+                           : texts[textsCount - 2];
 
-                return WithoutWhitespaceOnlyComment(text);
+                return WithoutWhitespaceOnlyCommentLocal(text);
             }
 
             return value;
 
-            XmlElementSyntax WithoutWhitespaceOnlyComment(XmlTextSyntax text)
+            XmlElementSyntax WithoutWhitespaceOnlyCommentLocal(XmlTextSyntax text)
             {
                 var newText = text.WithoutLeadingXmlComment();
                 var newTextTokens = newText.TextTokens;

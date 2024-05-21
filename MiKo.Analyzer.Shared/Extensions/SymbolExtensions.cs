@@ -92,9 +92,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
-        internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value is INamedTypeSymbol type
-                                                                                   ? type
-                                                                                   : value?.ContainingType;
+        internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value as INamedTypeSymbol ?? value?.ContainingType;
 
         internal static string FullyQualifiedName(this ISymbol value, bool useAlias = true)
         {

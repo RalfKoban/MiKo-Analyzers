@@ -250,71 +250,83 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var lastNode = comment.Content.LastOrDefault();
 
-            if (lastNode is null)
+            switch (lastNode)
             {
-                // we have an empty comment
-                return comment.AddContent(XmlText(ending));
-            }
-
-            if (lastNode is XmlTextSyntax t)
-            {
-                // we have a text at the end, so we have to find the text
-                var textTokens = t.TextTokens;
-                var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
-
-                if (lastToken.IsDefaultValue())
+                case null:
                 {
-                    // seems like we have a <see cref/> or something with a CRLF at the end
-                    var token = ending.AsToken(SyntaxKind.XmlTextLiteralToken);
-
-                    return comment.InsertTokensBefore(textTokens.First(), new[] { token });
+                    // we have an empty comment
+                    return comment.AddContent(XmlText(ending));
                 }
-                else
-                {
-                    // in case there is any, get rid of last dot
-                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(ending);
 
-                    return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
+                case XmlTextSyntax t:
+                {
+                    // we have a text at the end, so we have to find the text
+                    var textTokens = t.TextTokens;
+                    var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
+
+                    if (lastToken.IsDefaultValue())
+                    {
+                        // seems like we have a <see cref/> or something with a CRLF at the end
+                        var token = ending.AsToken(SyntaxKind.XmlTextLiteralToken);
+
+                        return comment.InsertTokensBefore(textTokens.First(), new[] { token });
+                    }
+                    else
+                    {
+                        // in case there is any, get rid of last dot
+                        var valueText = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(ending);
+
+                        return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
+                    }
+                }
+
+                default:
+                {
+                    // we have a <see cref/> or something at the end
+                    return comment.InsertNodeAfter(lastNode, XmlText(ending));
                 }
             }
-
-            // we have a <see cref/> or something at the end
-            return comment.InsertNodeAfter(lastNode, XmlText(ending));
         }
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
             var lastNode = comment.Content.LastOrDefault();
 
-            if (lastNode is null)
+            switch (lastNode)
             {
-                // we have an empty comment
-                return comment.AddContent(XmlText(commentStart), seeCref, XmlText(commentContinue));
-            }
-
-            if (lastNode is XmlTextSyntax t)
-            {
-                var text = commentStart;
-
-                // we have a text at the end, so we have to find the text
-                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
-
-                if (lastToken.IsDefaultValue())
+                case null:
                 {
-                    // seems like we have a <see cref/> or something with a CRLF at the end
-                }
-                else
-                {
-                    // in case there is any, get rid of last dot
-                    text = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(commentStart);
+                    // we have an empty comment
+                    return comment.AddContent(XmlText(commentStart), seeCref, XmlText(commentContinue));
                 }
 
-                return comment.ReplaceNode(t, XmlText(text))
-                              .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
-            }
+                case XmlTextSyntax t:
+                {
+                    var text = commentStart;
 
-            // we have a <see cref/> or something at the end
-            return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
+                    // we have a text at the end, so we have to find the text
+                    var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
+
+                    if (lastToken.IsDefaultValue())
+                    {
+                        // seems like we have a <see cref/> or something with a CRLF at the end
+                    }
+                    else
+                    {
+                        // in case there is any, get rid of last dot
+                        text = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(commentStart);
+                    }
+
+                    return comment.ReplaceNode(t, XmlText(text))
+                                  .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
+                }
+
+                default:
+                {
+                    // we have a <see cref/> or something at the end
+                    return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
+                }
+            }
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
@@ -577,8 +589,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
         {
             var textTokens = text.TextTokens;
+            var textTokensCount = textTokens.Count;
 
-            for (var index = 0; index < textTokens.Count; index++)
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 

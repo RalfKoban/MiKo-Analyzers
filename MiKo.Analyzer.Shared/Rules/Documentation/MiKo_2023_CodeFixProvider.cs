@@ -129,53 +129,56 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var contents = comment.Content;
             var count = contents.Count;
 
-            if (count == 0)
+            switch (count)
             {
-                return FixEmptyComment(comment.WithContent(XmlText(string.Empty)));
-            }
+                case 0:
+                    return FixEmptyComment(comment.WithContent(XmlText(string.Empty)));
 
-            if (count == 1 && contents.First() is XmlTextSyntax t)
-            {
-                var text = t.GetTextWithoutTrivia();
-
-                if (text.IsEmpty)
+                case 1 when contents.First() is XmlTextSyntax t:
                 {
-                    return FixEmptyComment(comment);
-                }
+                    var text = t.GetTextWithoutTrivia();
 
-                // determine whether we have a comment like:
-                //    true: some condition
-                //    false: some other condition'
-                var replacement = text.Contains(':') ? ReplacementTo : Replacement;
-
-                var data = FindMatchingReplacementMapKeysInUpperCase(text);
-                var keysInUpperCase = data.KeysInUpperCase;
-
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var index = 0; index < keysInUpperCase.Length; index++)
-                {
-                    var key = keysInUpperCase[index];
-
-                    if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
+                    if (text.IsEmpty)
                     {
-                        var subText = text.Slice(key.Length)
+                        return FixEmptyComment(comment);
+                    }
+
+                    // determine whether we have a comment like:
+                    //    true: some condition
+                    //    false: some other condition'
+                    var replacement = text.Contains(':') ? ReplacementTo : Replacement;
+
+                    var data = FindMatchingReplacementMapKeysInUpperCase(text);
+                    var keysInUpperCase = data.KeysInUpperCase;
+
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (var index = 0; index < keysInUpperCase.Length; index++)
+                    {
+                        var key = keysInUpperCase[index];
+
+                        if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var subText = text.Slice(key.Length)
+                                              .TrimStart(Constants.TrailingSentenceMarkers)
+                                              .TrimEnd(Constants.TrailingSentenceMarkers);
+
+                            return FixTextOnlyComment(comment, t, subText, replacement, data);
+                        }
+                    }
+
+                    // seems we could not fix the part
+                    var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
+
+                    if (otherPhraseStart > -1)
+                    {
+                        var subText = text.Slice(0, otherPhraseStart)
                                           .TrimStart(Constants.TrailingSentenceMarkers)
                                           .TrimEnd(Constants.TrailingSentenceMarkers);
 
-                        return FixTextOnlyComment(comment, t, subText, replacement, data);
+                        return FixTextOnlyComment(comment, t, subText, replacement, FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char>.Empty));
                     }
-                }
 
-                // seems we could not fix the part
-                var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
-
-                if (otherPhraseStart > -1)
-                {
-                    var subText = text.Slice(0, otherPhraseStart)
-                                      .TrimStart(Constants.TrailingSentenceMarkers)
-                                      .TrimEnd(Constants.TrailingSentenceMarkers);
-
-                    return FixTextOnlyComment(comment, t, subText, replacement, FindMatchingReplacementMapKeysInUpperCase(ReadOnlySpan<char>.Empty));
+                    break;
                 }
             }
 
