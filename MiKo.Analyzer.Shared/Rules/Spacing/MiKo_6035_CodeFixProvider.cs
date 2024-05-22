@@ -45,7 +45,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     var separators = Enumerable.Repeat(arguments.GetSeparator(0).WithoutTrivia().WithTrailingSpace(), arguments.Count - 1);
 
-                    return genericName.WithTypeArgumentList(types.WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators)));
+                    var updatedTypes = types.WithoutTrivia()
+                                            .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators))
+                                            .WithGreaterThanToken(types.GreaterThanToken.WithoutTrivia())
+                                            .WithLessThanToken(types.LessThanToken.WithoutTrivia());
+
+                    return genericName.WithIdentifier(genericName.Identifier.WithoutTrailingTrivia())
+                                      .WithTypeArgumentList(updatedTypes);
                 }
 
                 default:
