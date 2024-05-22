@@ -55,18 +55,32 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static void GetConditionParts(SyntaxNode condition, ICollection<SyntaxNode> parts)
         {
-            if (condition is BinaryExpressionSyntax binary && binary.IsAnyKind(LogicalExpressions))
+            while (true)
             {
-                GetConditionParts(binary.Left, parts);
-                GetConditionParts(binary.Right, parts);
-            }
-            else if (condition is ParenthesizedExpressionSyntax parenthesized)
-            {
-                GetConditionParts(parenthesized.Expression, parts);
-            }
-            else
-            {
-                parts.Add(condition);
+                switch (condition)
+                {
+                    case BinaryExpressionSyntax binary when binary.IsAnyKind(LogicalExpressions):
+                    {
+                        GetConditionParts(binary.Left, parts);
+
+                        condition = binary.Right;
+                        continue;
+                    }
+
+                    case ParenthesizedExpressionSyntax parenthesized:
+                    {
+                        condition = parenthesized.Expression;
+                        continue;
+                    }
+
+                    default:
+                    {
+                        parts.Add(condition);
+                        break;
+                    }
+                }
+
+                break;
             }
         }
 

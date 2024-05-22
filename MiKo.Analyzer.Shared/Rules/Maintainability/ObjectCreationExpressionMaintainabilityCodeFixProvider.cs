@@ -27,16 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return argument;
                 }
 
-                if (argument.Expression is IdentifierNameSyntax)
+                switch (argument.Expression)
                 {
-                    // const (string) message
-                    return argument;
-                }
-
-                if (argument.Expression is MemberAccessExpressionSyntax)
-                {
-                    // localized (resource) message
-                    return argument;
+                    case IdentifierNameSyntax _: return argument; // const (string) message
+                    case MemberAccessExpressionSyntax _: return argument; // localized (resource) message
                 }
             }
 

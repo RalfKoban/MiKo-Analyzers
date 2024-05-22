@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3202_CodeFixProvider)), Shared]
     public sealed class MiKo_3202_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        private static readonly SyntaxKind[] ReturnPoints = new[] { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
+        private static readonly SyntaxKind[] ReturnPoints = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement };
 
         public override string FixableDiagnosticId => "MiKo_3202";
 

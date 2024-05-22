@@ -440,14 +440,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     var firstChar = word.First();
                     var lastChar = word.Last();
 
-                    if (firstChar == Apostrophe && lastChar == Apostrophe)
+                    switch (firstChar)
                     {
-                        return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
-                    }
+                        case Apostrophe when lastChar == Apostrophe:
+                            return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
 
-                    if (firstChar == DoubleQuote && lastChar == DoubleQuote)
-                    {
-                        return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
+                        case DoubleQuote when lastChar == DoubleQuote:
+                            return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
                     }
                 }
 

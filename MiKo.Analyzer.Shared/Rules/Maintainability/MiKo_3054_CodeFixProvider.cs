@@ -44,25 +44,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static string ExtractFieldNamePrefix(VariableDeclaratorSyntax declarator)
         {
-            if (declarator.Initializer?.Value is InvocationExpressionSyntax ies)
+            if (declarator.Initializer?.Value is InvocationExpressionSyntax invocation)
             {
-                var arguments = ies.ArgumentList.Arguments;
+                var arguments = invocation.ArgumentList.Arguments;
 
                 if (arguments.Count > 1)
                 {
-                    // first argument is nameof or string
-                    if (arguments[0].Expression is InvocationExpressionSyntax nameofExpressionSyntax)
+                    switch (arguments[0].Expression)
                     {
-                        var args = nameofExpressionSyntax.ArgumentList.Arguments;
-
-                        if (args.Count == 1 && args[0].Expression is IdentifierNameSyntax ins)
+                        case InvocationExpressionSyntax nameofExpression: // first argument is nameof or string
                         {
-                            return ins.GetName();
+                            var args = nameofExpression.ArgumentList.Arguments;
+
+                            if (args.Count == 1 && args[0].Expression is IdentifierNameSyntax identifier)
+                            {
+                                return identifier.GetName();
+                            }
+
+                            break;
                         }
-                    }
-                    else if (arguments[0].Expression is LiteralExpressionSyntax literal)
-                    {
-                        return literal.GetName();
+
+                        case LiteralExpressionSyntax literal:
+                            return literal.GetName();
                     }
                 }
             }

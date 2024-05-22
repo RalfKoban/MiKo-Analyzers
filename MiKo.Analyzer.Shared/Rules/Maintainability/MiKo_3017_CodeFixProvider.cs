@@ -41,50 +41,56 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             var errorMessage = GetUpdatedErrorMessage(argumentList);
 
-            // maybe we need to fix the identifier for the catch block
-            if (problematicNode is CatchClauseSyntax catchClause)
+            switch (problematicNode)
             {
-                var newExceptionIdentifier = SyntaxFactory.Identifier(Constants.ExceptionIdentifier);
-                var newArgumentList = ArgumentList(errorMessage, Argument(Constants.ExceptionIdentifier));
-
-                var declaration = catchClause.Declaration;
-
-                if (declaration != null)
+                case CatchClauseSyntax catchClause: // maybe we need to fix the identifier for the catch block
                 {
-                    var identifier = declaration.Identifier.ValueText;
+                    var newExceptionIdentifier = SyntaxFactory.Identifier(Constants.ExceptionIdentifier);
+                    var newArgumentList = ArgumentList(errorMessage, Argument(Constants.ExceptionIdentifier));
 
-                    if (identifier.IsNullOrWhiteSpace())
+                    var declaration = catchClause.Declaration;
+
+                    if (declaration != null)
                     {
-                        // seems like a missing exception identifier, so we have to add the missing ones
-                        result.Add(argumentList, newArgumentList);
-                        result.Add(declaration, declaration.WithIdentifier(newExceptionIdentifier));
+                        var identifier = declaration.Identifier.ValueText;
+
+                        if (identifier.IsNullOrWhiteSpace())
+                        {
+                            // seems like a missing exception identifier, so we have to add the missing ones
+                            result.Add(argumentList, newArgumentList);
+                            result.Add(declaration, declaration.WithIdentifier(newExceptionIdentifier));
+                        }
+                        else
+                        {
+                            // available but unused exception
+                            result.Add(argumentList, ArgumentList(errorMessage, Argument(identifier)));
+                        }
                     }
                     else
                     {
-                        // available but unused exception
-                        result.Add(argumentList, ArgumentList(errorMessage, Argument(identifier)));
+                        // seems like there is no exception inside the catch clause, so we have to add the missing ones
+                        var newCatchDeclaration = SyntaxFactory.CatchDeclaration(SyntaxFactory.ParseTypeName(nameof(Exception)), newExceptionIdentifier);
+                        var newBlock = catchClause.Block.ReplaceNode(argumentList, newArgumentList);
+
+                        result.Add(catchClause, SyntaxFactory.CatchClause(newCatchDeclaration, null, newBlock));
                     }
+
+                    break;
                 }
-                else
+
+                case ParameterSyntax parameter:
                 {
-                    // seems like there is no exception inside the catch clause, so we have to add the missing ones
-                    var newCatchDeclaration = SyntaxFactory.CatchDeclaration(SyntaxFactory.ParseTypeName(nameof(Exception)), newExceptionIdentifier);
-                    var newBlock = catchClause.Block.ReplaceNode(argumentList, newArgumentList);
-
-                    result.Add(catchClause, SyntaxFactory.CatchClause(newCatchDeclaration, null, newBlock));
+                    // seems like we found the exception on the method
+                    result.Add(argumentList, ArgumentList(errorMessage, Argument(parameter)));
+                    break;
                 }
-            }
 
-            if (problematicNode is ParameterSyntax parameter)
-            {
-                // seems like we found the exception on the method
-                result.Add(argumentList, ArgumentList(errorMessage, Argument(parameter)));
-            }
-
-            if (problematicNode is ExpressionSyntax expression)
-            {
-                // seems like we found the exception on the method
-                result.Add(argumentList, ArgumentList(errorMessage, Argument(expression)));
+                case ExpressionSyntax expression:
+                {
+                    // seems like we found the exception on the method
+                    result.Add(argumentList, ArgumentList(errorMessage, Argument(expression)));
+                    break;
+                }
             }
 
             return result;

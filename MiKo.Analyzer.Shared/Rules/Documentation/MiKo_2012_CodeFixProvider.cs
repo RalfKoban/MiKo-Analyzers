@@ -183,16 +183,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var member = syntax.FirstAncestorOrSelf<MemberDeclarationSyntax>();
 
-                    if (member is PropertyDeclarationSyntax property)
+                    switch (member)
                     {
-                        var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
+                        case PropertyDeclarationSyntax property:
+                        {
+                            var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
 
-                        return CommentStartingWith(comment, startingPhrase);
-                    }
+                            return CommentStartingWith(comment, startingPhrase);
+                        }
 
-                    if (member is BaseTypeDeclarationSyntax)
-                    {
-                        return CommentStartingWith(comment, "Represents ");
+                        case BaseTypeDeclarationSyntax _:
+                            return CommentStartingWith(comment, "Represents ");
                     }
                 }
             }

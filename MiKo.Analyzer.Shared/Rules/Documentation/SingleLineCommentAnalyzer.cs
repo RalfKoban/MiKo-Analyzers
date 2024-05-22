@@ -58,19 +58,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(context.GetEnclosingMethod()))
             {
-                var node = context.Node;
+                switch (context.Node)
+                {
+                    case BaseMethodDeclarationSyntax method:
+                        AnalyzeComment(context, method);
+                        break;
 
-                if (node is BaseMethodDeclarationSyntax method)
-                {
-                    AnalyzeComment(context, method);
-                }
-                else if (node is AccessorDeclarationSyntax accessor)
-                {
-                    AnalyzeComment(context, accessor);
-                }
-                else if (node is BaseFieldDeclarationSyntax field)
-                {
-                    AnalyzeComment(context, field);
+                    case AccessorDeclarationSyntax accessor:
+                        AnalyzeComment(context, accessor);
+                        break;
+
+                    case BaseFieldDeclarationSyntax field:
+                        AnalyzeComment(context, field);
+                        break;
                 }
             }
         }

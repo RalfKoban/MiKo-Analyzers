@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 // first node
                 if (childrenCount > 1)
                 {
-                    var nextChild = children[position + 1];
+                    var nextChild = children[1];
 
                     return MoveIntoIfStatement(root, insertedIf, annotation, nextChild, MovePosition.Start);
                 }
