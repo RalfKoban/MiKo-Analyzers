@@ -71,6 +71,38 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
         }
 
+        protected static ExpressionSyntax GetUpdatedExpressionPlacedOnSameLine(ExpressionSyntax expression)
+        {
+            switch (expression)
+            {
+                case MemberAccessExpressionSyntax maes:
+                {
+                    return maes.WithName((SimpleNameSyntax)GetUpdatedExpressionPlacedOnSameLine(maes.Name));
+                }
+
+                case GenericNameSyntax genericName:
+                {
+                    var types = genericName.TypeArgumentList;
+                    var arguments = types.Arguments;
+
+                    var separators = Enumerable.Repeat(arguments.GetSeparator(0).WithoutTrivia().WithTrailingSpace(), arguments.Count - 1);
+
+                    var updatedTypes = types.WithoutTrivia()
+                                            .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators))
+                                            .WithGreaterThanToken(types.GreaterThanToken.WithoutTrivia())
+                                            .WithLessThanToken(types.LessThanToken.WithoutTrivia());
+
+                    return genericName.WithIdentifier(genericName.Identifier.WithoutTrailingTrivia())
+                                      .WithTypeArgumentList(updatedTypes);
+                }
+
+                default:
+                {
+                    return expression;
+                }
+            }
+        }
+
         private static IEnumerable<SyntaxNodeOrToken> GetNodesAndTokensStartingOnSeparateLines(SyntaxNode startingNode)
         {
             var currentLine = startingNode.GetStartingLine();

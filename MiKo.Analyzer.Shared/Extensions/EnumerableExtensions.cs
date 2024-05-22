@@ -959,6 +959,9 @@ namespace System.Linq
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => new[] { value }.ToSeparatedSyntaxList();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

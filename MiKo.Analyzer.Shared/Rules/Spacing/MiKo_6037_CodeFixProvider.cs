@@ -21,7 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is InvocationExpressionSyntax invocation)
             {
-                return invocation.WithArgumentList(GetUpdatedArgumentList(invocation.ArgumentList));
+                return invocation.WithArgumentList(GetUpdatedArgumentList(invocation.ArgumentList))
+                                 .WithExpression(GetUpdatedExpressionPlacedOnSameLine(invocation.Expression).WithoutTrailingTrivia());
             }
 
             return syntax;
@@ -31,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var argumentSyntax = argumentList.Arguments.First();
 
-            return argumentList.WithArguments(new[] { argumentSyntax.WithoutTrivia() }.ToSeparatedSyntaxList())
+            return argumentList.WithArguments(argumentSyntax.WithoutTrivia().ToSeparatedSyntaxList())
                                .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
                                .WithCloseParenToken(argumentList.CloseParenToken.WithoutLeadingTrivia());
         }
