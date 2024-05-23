@@ -15059,7 +15059,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place lambda on same line.
+        ///   Looks up a localized string similar to Place lambda arrow on same line as its parameter(s).
         /// </summary>
         internal static string MiKo_6054_CodeFixTitle {
             get {
@@ -15068,7 +15068,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies instead of splitting them all over multiple lines..
+        ///   Looks up a localized string similar to The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies, instead of splitting them all over multiple lines..
         /// </summary>
         internal static string MiKo_6054_Description {
             get {
@@ -15077,7 +15077,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place lambda on same line.
+        ///   Looks up a localized string similar to Place lambda arrow on same line as its parameter(s).
         /// </summary>
         internal static string MiKo_6054_MessageFormat {
             get {
@@ -15086,7 +15086,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lambda arrows shall be placed on same line as parameters and expression bodies.
+        ///   Looks up a localized string similar to Lambda arrows shall be placed on same line as the parameter(s) of the lambda.
         /// </summary>
         internal static string MiKo_6054_Title {
             get {

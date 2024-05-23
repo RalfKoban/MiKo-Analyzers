@@ -5271,15 +5271,15 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Single-line arguments shall be placed on single line</value>
   </data>
   <data name="MiKo_6054_CodeFixTitle" xml:space="preserve">
-    <value>Place lambda on same line</value>
+    <value>Place lambda arrow on same line as its parameter(s)</value>
   </data>
   <data name="MiKo_6054_Description" xml:space="preserve">
-    <value>The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies instead of splitting them all over multiple lines.</value>
+    <value>The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies, instead of splitting them all over multiple lines.</value>
   </data>
   <data name="MiKo_6054_MessageFormat" xml:space="preserve">
-    <value>Place lambda on same line</value>
+    <value>Place lambda arrow on same line as its parameter(s)</value>
   </data>
   <data name="MiKo_6054_Title" xml:space="preserve">
-    <value>Lambda arrows shall be placed on same line as parameters and expression bodies</value>
+    <value>Lambda arrows shall be placed on same line as the parameter(s) of the lambda</value>
   </data>
 </root>

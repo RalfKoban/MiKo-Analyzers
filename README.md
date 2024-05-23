@@ -482,4 +482,4 @@ The following tables lists all the 439 rules that are currently provided by the 
 |MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
 |MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|
 |MiKo_6053|Single-line arguments shall be placed on single line|&#x2713;|&#x2713;|
-|MiKo_6054|Lambda arrows shall be placed on same line as parameters and expression bodies|&#x2713;|&#x2713;|
+|MiKo_6054|Lambda arrows shall be placed on same line as the parameter(s) of the lambda|&#x2713;|&#x2713;|
