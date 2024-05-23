@@ -46,11 +46,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax) => syntax.WithParameterList(GetUpdatedSyntax(syntax.ParameterList))
                                                                                                                                  .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
-                                                                                                                                 .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody));
+                                                                                                                                 .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody))
+                                                                                                                                 .WithLeadingTriviaFrom(syntax);
 
         private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax) => syntax.WithParameter(GetUpdatedSyntax(syntax.Parameter))
                                                                                                                    .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
-                                                                                                                   .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody));
+                                                                                                                   .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody))
+                                                                                                                   .WithLeadingTriviaFrom(syntax);
 
         private static ExpressionSyntax GetUpdatedSyntax(ExpressionSyntax syntax)
         {

@@ -5138,7 +5138,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>'new' keywords should be placed on same line(s) as the types</value>
   </data>
   <data name="MiKo_6043_CodeFixTitle" xml:space="preserve">
-    <value>Place on single line</value>
+    <value>Place lambda on single line</value>
   </data>
   <data name="MiKo_6043_Description" xml:space="preserve">
     <value>To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines.</value>

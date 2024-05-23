@@ -14662,7 +14662,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place on single line.
+        ///   Looks up a localized string similar to Place lambda on single line.
         /// </summary>
         internal static string MiKo_6043_CodeFixTitle {
             get {
