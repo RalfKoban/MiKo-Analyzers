@@ -15095,7 +15095,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Precede with blank line.
+        ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6055_CodeFixTitle {
             get {
@@ -15104,7 +15104,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To separate assignments visually from invocations, they should be preceded by blank lines. That makes them easier to spot..
+        ///   Looks up a localized string similar to To separate assignments visually from invocations, they should be surrounded by blank lines. That makes them easier to spot..
         /// </summary>
         internal static string MiKo_6055_Description {
             get {
@@ -15113,7 +15113,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Precede assignment with a blank line.
+        ///   Looks up a localized string similar to Surround assignment with a blank line.
         /// </summary>
         internal static string MiKo_6055_MessageFormat {
             get {
@@ -15122,7 +15122,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment statements should be preceded by blank lines.
+        ///   Looks up a localized string similar to Assignment statements should be surrounded by blank lines.
         /// </summary>
         internal static string MiKo_6055_Title {
             get {
