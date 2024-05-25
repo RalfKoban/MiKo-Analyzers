@@ -44,6 +44,67 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
+        private static bool HasNoBlankLinesBefore(SyntaxNode current, int previousIndex, SyntaxList<StatementSyntax> statements)
+        {
+            if (previousIndex >= 0)
+            {
+                var before = statements[previousIndex];
+
+                return IsProblematicStatement(before) && HasNoBlankLinesBefore(current, before);
+            }
+
+            return false;
+        }
+
+        private static bool HasNoBlankLinesAfter(SyntaxNode current, int nextIndex, SyntaxList<StatementSyntax> statements, int statementsCount, AssignmentExpressionSyntax assignment)
+        {
+            if (nextIndex >= statementsCount)
+            {
+                return false;
+            }
+
+            var next = statements[nextIndex];
+
+            if (IsProblematicStatement(next) && HasNoBlankLinesAfter(current, next))
+            {
+                if (next is ExpressionStatementSyntax nextStatement && assignment.Left is IdentifierNameSyntax identifier)
+                {
+                    var expression = FindExpressionSyntax(nextStatement);
+
+                    var assignedIdentifier = identifier.GetName();
+                    var accessedIdentifier = expression.GetName();
+
+                    return assignedIdentifier != accessedIdentifier;
+                }
+
+                return true;
+            }
+
+            return false;
+
+            ExpressionSyntax FindExpressionSyntax(ExpressionStatementSyntax statement)
+            {
+                var expression = statement.Expression;
+
+                var loop = true;
+
+                while (loop)
+                {
+                    switch (expression)
+                    {
+                        case InvocationExpressionSyntax i: expression = i.Expression; break;
+                        case MemberAccessExpressionSyntax m: expression = m.Expression; break;
+                        default:
+                            loop = false;
+
+                            break;
+                    }
+                }
+
+                return expression;
+            }
+        }
+
         private void Analyze(SyntaxNodeAnalysisContext context)
         {
             var issues = AnalyzeNode(context.Node);
@@ -74,27 +135,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var current = statements[index];
 
-                if (current is ExpressionStatementSyntax statement && statement.Expression.IsKind(SyntaxKind.SimpleAssignmentExpression))
+                if (current is ExpressionStatementSyntax statement && statement.Expression is AssignmentExpressionSyntax assignment && assignment.IsKind(SyntaxKind.SimpleAssignmentExpression))
                 {
-                    var hasNoBlankLinesBefore = false;
-                    var hasNoBlankLinesAfter = false;
-
-                    var previousIndex = index - 1;
-                    var nextIndex = index + 1;
-
-                    if (previousIndex >= 0)
-                    {
-                        var before = statements[previousIndex];
-
-                        hasNoBlankLinesBefore = IsProblematicStatement(before) && HasNoBlankLinesBefore(current, before);
-                    }
-
-                    if (nextIndex < statementsCount)
-                    {
-                        var next = statements[nextIndex];
-
-                        hasNoBlankLinesAfter = IsProblematicStatement(next) && HasNoBlankLinesAfter(current, next);
-                    }
+                    var hasNoBlankLinesBefore = HasNoBlankLinesBefore(current, index - 1, statements);
+                    var hasNoBlankLinesAfter = HasNoBlankLinesAfter(current, index + 1, statements, statementsCount, assignment);
 
                     if (hasNoBlankLinesBefore || hasNoBlankLinesAfter)
                     {

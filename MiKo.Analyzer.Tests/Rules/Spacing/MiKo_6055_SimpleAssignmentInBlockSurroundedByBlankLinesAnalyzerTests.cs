@@ -137,6 +137,28 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_assignment_as_first_statement_when_directly_accessed_afterwards() => No_issue_is_reported_for(@"
+namespace Bla
+{
+    public class Field
+    {
+        public void PrepareValue();
+    }
+
+    public class TestMe
+    {
+        private Field m_field;
+
+        public void DoSomething()
+        {
+            m_field = new Field();
+            m_field.PrepareValue();
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_assignment_preceded_by_block() => An_issue_is_reported_for(@"
 namespace Bla
 {
@@ -557,6 +579,31 @@ namespace Bla
             using (this)
             {
             }
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_assignment_as_first_statement_when_another_one_is_directly_accessed_afterwards() => An_issue_is_reported_for(@"
+namespace Bla
+{
+    public class Field
+    {
+        public void PrepareValue();
+    }
+
+    public class TestMe
+    {
+        private Field m_field1;
+        private Field m_field2;
+
+        public void DoSomething()
+        {
+            m_field1 = new Field();
+            m_field2 = new Field();
+            m_field1.PrepareValue();
+            m_field2.PrepareValue();
         }
     }
 }
@@ -1516,6 +1563,61 @@ namespace Bla
             using (this)
             {
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_assignment_as_first_statement_when_another_one_is_directly_accessed_afterwards()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+    public class Field
+    {
+        public void PrepareValue();
+    }
+
+    public class TestMe
+    {
+        private Field m_field1;
+        private Field m_field2;
+
+        public void DoSomething()
+        {
+            m_field1 = new Field();
+            m_field2 = new Field();
+            m_field1.PrepareValue();
+            m_field2.PrepareValue();
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+    public class Field
+    {
+        public void PrepareValue();
+    }
+
+    public class TestMe
+    {
+        private Field m_field1;
+        private Field m_field2;
+
+        public void DoSomething()
+        {
+            m_field1 = new Field();
+            m_field2 = new Field();
+
+            m_field1.PrepareValue();
+            m_field2.PrepareValue();
         }
     }
 }
