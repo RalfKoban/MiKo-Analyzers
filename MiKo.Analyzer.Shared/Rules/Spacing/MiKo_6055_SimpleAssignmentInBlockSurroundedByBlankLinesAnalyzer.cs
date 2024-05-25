@@ -23,19 +23,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static bool IsProblematicStatement(StatementSyntax other)
         {
-            switch (other)
+            switch (other.Kind())
             {
-                case BlockSyntax _:
-                case IfStatementSyntax _:
-                case UsingStatementSyntax _:
-                case LockStatementSyntax _:
-                case SwitchStatementSyntax _:
-                case DoStatementSyntax _:
-                case ForEachStatementSyntax _:
-                case ForStatementSyntax _:
-                case WhileStatementSyntax _:
-                case ExpressionStatementSyntax otherStatement when otherStatement.Expression.IsKind(SyntaxKind.InvocationExpression):
+                case SyntaxKind.Block:
+                case SyntaxKind.IfStatement:
+                case SyntaxKind.UsingStatement:
+                case SyntaxKind.LockStatement:
+                case SyntaxKind.SwitchStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.ForEachStatement:
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.WhileStatement:
                     return true;
+
+                case SyntaxKind.ExpressionStatement:
+                    return ((ExpressionStatementSyntax)other).Expression.IsKind(SyntaxKind.InvocationExpression);
 
                 default:
                     return false;

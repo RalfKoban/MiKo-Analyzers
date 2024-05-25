@@ -956,6 +956,7 @@ namespace System
             chars[length] = '.';
             chars[length + 1] = '.';
             chars[length + 2] = '.';
+
             span.CopyTo(chars);
 
             return new string(chars);
