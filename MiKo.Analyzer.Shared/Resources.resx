@@ -5282,4 +5282,16 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6054_Title" xml:space="preserve">
     <value>Lambda arrows shall be placed on same line as the parameter(s) of the lambda</value>
   </data>
+  <data name="MiKo_6055_CodeFixTitle" xml:space="preserve">
+    <value>Precede with blank line</value>
+  </data>
+  <data name="MiKo_6055_Description" xml:space="preserve">
+    <value>To separate assignments visually from invocations, they should be preceded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6055_MessageFormat" xml:space="preserve">
+    <value>Precede assignment with a blank line</value>
+  </data>
+  <data name="MiKo_6055_Title" xml:space="preserve">
+    <value>Assignment statements should be preceded by blank lines</value>
+  </data>
 </root>

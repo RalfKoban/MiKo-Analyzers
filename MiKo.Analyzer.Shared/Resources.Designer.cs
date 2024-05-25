@@ -15093,5 +15093,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6054_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede with blank line.
+        /// </summary>
+        internal static string MiKo_6055_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6055_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate assignments visually from invocations, they should be preceded by blank lines. That makes them easier to spot..
+        /// </summary>
+        internal static string MiKo_6055_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6055_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Precede assignment with a blank line.
+        /// </summary>
+        internal static string MiKo_6055_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6055_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment statements should be preceded by blank lines.
+        /// </summary>
+        internal static string MiKo_6055_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6055_Title", resourceCulture);
+            }
+        }
     }
 }
