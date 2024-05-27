@@ -327,6 +327,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     case RefKind.Ref: return "ref ";
                     case RefKind.Out: return "out ";
+                    case RefKind.In: return "in ";
                     default: return string.Empty;
                 }
             }
