@@ -72,6 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 switch (ancestor)
                 {
+                    case SimpleLambdaExpressionSyntax _:
                     case ParenthesizedLambdaExpressionSyntax _:
                         return null; // stop lookup if it is a parameter
 
@@ -81,8 +82,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case SwitchSectionSyntax section:
                         return AnalyzeAwaitExpression(section.Statements, node);
 
-                    case MethodDeclarationSyntax _:
-                    case ClassDeclarationSyntax _:
+                    case BaseMethodDeclarationSyntax _:
+                    case BaseTypeDeclarationSyntax _:
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }

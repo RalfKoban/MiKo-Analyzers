@@ -40,8 +40,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     case SwitchSectionSyntax section:
                         return AnalyzeStatement(section, node);
 
-                    case MethodDeclarationSyntax _:
-                    case ClassDeclarationSyntax _:
+                    case BaseMethodDeclarationSyntax _:
+                    case BaseTypeDeclarationSyntax _:
                         return null; // nothing more to look up as there is no valid ancestor anymore
                 }
             }
