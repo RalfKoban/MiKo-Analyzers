@@ -77,12 +77,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                         case IfStatementSyntax _:
                         case ElseClauseSyntax _:
+                        case SimpleLambdaExpressionSyntax _:
                         case ParenthesizedLambdaExpressionSyntax _:
                         case InitializerExpressionSyntax _:
                             return null; // no issue
 
-                        case MethodDeclarationSyntax _:
-                        case ClassDeclarationSyntax _:
+                        case LocalFunctionStatementSyntax _:
+                        case BaseMethodDeclarationSyntax _:
+                        case BaseTypeDeclarationSyntax _:
                             return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }

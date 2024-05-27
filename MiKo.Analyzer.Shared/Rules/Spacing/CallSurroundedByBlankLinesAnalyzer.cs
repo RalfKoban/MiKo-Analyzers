@@ -62,9 +62,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         case CaseSwitchLabelSyntax _:
                         case LambdaExpressionSyntax _:
                         case ArrowExpressionClauseSyntax _:
-                        case BaseMethodDeclarationSyntax _:
+                        case InitializerExpressionSyntax _:
                         case LocalFunctionStatementSyntax _:
-                        case TypeDeclarationSyntax _:
+                        case BaseMethodDeclarationSyntax _:
+                        case BaseTypeDeclarationSyntax _:
                             return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }

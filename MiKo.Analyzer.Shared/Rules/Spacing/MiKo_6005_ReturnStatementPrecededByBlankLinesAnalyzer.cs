@@ -45,8 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         return null; // no issue as the statement is not surrounded by brackets that follow a block
 
                     case LocalFunctionStatementSyntax _:
-                    case MethodDeclarationSyntax _:
-                    case ClassDeclarationSyntax _:
+                    case BaseMethodDeclarationSyntax _:
+                    case BaseTypeDeclarationSyntax _:
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }
