@@ -151,6 +151,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     {
                         // we are behind multiple upper cases in a line, so add an underline
                         characters[index++] = Constants.Underscore;
+
                         characters.Insert(index, c);
                     }
 

@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 439 rules that are currently provided by the analyzer.
+The following tables lists all the 440 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -483,3 +483,4 @@ The following tables lists all the 439 rules that are currently provided by the 
 |MiKo_6052|Colon of list of base types shall be placed on same line as first base type|&#x2713;|&#x2713;|
 |MiKo_6053|Single-line arguments shall be placed on single line|&#x2713;|&#x2713;|
 |MiKo_6054|Lambda arrows shall be placed on same line as the parameter(s) of the lambda|&#x2713;|&#x2713;|
+|MiKo_6055|Assignment statements should be surrounded by blank lines|&#x2713;|&#x2713;|

@@ -163,7 +163,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                                              if (token1.IsKind(SyntaxKind.XmlTextLiteralToken) && token2.IsKind(SyntaxKind.XmlTextLiteralToken))
                                                                                                              {
                                                                                                                  var combinedText = token1.ValueText + token2.ValueText;
+
                                                                                                                  tokens[index] = token1.WithText(combinedText);
+
                                                                                                                  tokens.RemoveAt(index + 1);
                                                                                                                  index--;
                                                                                                              }
