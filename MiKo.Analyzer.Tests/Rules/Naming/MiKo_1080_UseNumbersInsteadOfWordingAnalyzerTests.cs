@@ -90,6 +90,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "firstItem",
                                                           "secondItem",
                                                           "thirdItem",
+                                                          "fourthItem",
+                                                          "fifthItem",
+                                                          "sixthItem",
+                                                          "seventhItem",
+                                                          "eighthItem",
+                                                          "ninthItem",
+                                                          "tenthItem",
                                                       };
 
         [Test]
@@ -223,7 +230,7 @@ public class TestMe
         public void An_issue_is_reported_for_correctly_named_namespace_([ValueSource(nameof(WrongNames))] string name) => An_issue_is_reported_for(@"
 using System;
 
-namespace Bla" + name + @"
+namespace Some" + name + @"
 {
     public class TestMe
     {

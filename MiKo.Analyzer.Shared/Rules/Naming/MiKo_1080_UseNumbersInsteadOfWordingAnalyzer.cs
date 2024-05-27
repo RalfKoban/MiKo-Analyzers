@@ -35,6 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        "first",
                                                        "second",
                                                        "third",
+                                                       "fourth",
+                                                       "fifth",
+                                                       "ninth",
+                                                       "tenth",
                                                    };
 
         private static readonly IEnumerable<string> KnownParts = new[]
