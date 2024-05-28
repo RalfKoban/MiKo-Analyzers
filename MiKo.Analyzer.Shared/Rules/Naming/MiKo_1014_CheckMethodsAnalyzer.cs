@@ -24,11 +24,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsTestMethod() is false;
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => symbol.IsTestMethod() is false; // do not consider local functions inside tests
 
-        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => symbol.IsTestMethod()
-                                                                                                                           ? Enumerable.Empty<Diagnostic>() // do not consider local functions inside tests
-                                                                                                                           : base.AnalyzeLocalFunctions(symbol, compilation);
+        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {

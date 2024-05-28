@@ -31,6 +31,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsInterfaceImplementationOf<ICommand>() is false && symbol.IsTestMethod() is false;
 
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
