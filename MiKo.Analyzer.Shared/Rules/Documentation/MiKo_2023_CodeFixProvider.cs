@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax FixEmptyComment(XmlElementSyntax comment)
         {
-            var startFixed = CommentStartingWith(comment, StartPhraseParts0, SeeLangword_True(), Replacement + "TODO");
+            var startFixed = CommentStartingWith(comment, StartPhraseParts0, SeeLangword_True(), Replacement + Constants.TODO);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
 
             return bothFixed;

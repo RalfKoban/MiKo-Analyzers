@@ -9,7 +9,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class ObjectCreationExpressionMaintainabilityCodeFixProvider : MaintainabilityCodeFixProvider
     {
-        protected static ArgumentSyntax ToDo() => Argument(StringLiteral("TODO"));
+        protected static ArgumentSyntax ToDo() => Argument(StringLiteral(Constants.TODO));
 
         protected static ArgumentSyntax ParamName(ParameterSyntax parameter) => Argument(NameOf(parameter.GetName()));
 
