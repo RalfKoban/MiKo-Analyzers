@@ -25,6 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       && symbol.IsTestSetUpMethod() is false
                                                                       && symbol.IsTestTearDownMethod() is false;
 
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsAsyncTaskBased();
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)

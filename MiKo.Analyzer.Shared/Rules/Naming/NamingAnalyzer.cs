@@ -51,9 +51,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            foreach (var issue in AnalyzeLocalFunctions(symbol, compilation))
+            if (ShallAnalyzeLocalFunctions(symbol))
             {
-                yield return issue;
+                foreach (var issue in AnalyzeLocalFunctions(symbol, compilation))
+                {
+                    yield return issue;
+                }
             }
         }
 
@@ -73,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                                                 ? AnalyzeName(symbol, compilation)
                                                                                                                                 : Enumerable.Empty<Diagnostic>();
 
-        protected virtual IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
+        protected IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
             var localFunctions = symbol.GetLocalFunctions().ToList();
 
@@ -120,6 +123,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
 
         protected virtual bool ShallAnalyze(IParameterSymbol symbol) => symbol.IsOverride is false;
+
+        protected virtual bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false;
 
         protected virtual bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
 
