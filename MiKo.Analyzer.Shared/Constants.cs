@@ -28,6 +28,8 @@ namespace MiKoSolutions.Analyzers
 
         internal const string EnvironmentNewLine = "\r\n";
 
+        internal const string TODO = "TODO";
+
         internal const char Underscore = '_';
 
         internal static readonly char[] SentenceMarkers = ".?!;:".ToCharArray();
