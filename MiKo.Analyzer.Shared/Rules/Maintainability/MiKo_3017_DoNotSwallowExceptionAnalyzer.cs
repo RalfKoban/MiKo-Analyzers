@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -58,6 +59,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case CatchClauseSyntax _:
                     // always report missing exceptions inside catch clauses
                     return true;
+
+                case ObjectCreationExpressionSyntax creation when creation.Parent is ThrowExpressionSyntax tes && tes.Parent?.IsKind(SyntaxKind.CoalesceExpression) is true:
+                    // never report throw statements in coalesce calls as they most probably are used to verify values for null and report problems when those are null
+                    return false;
 
                 default:
                     var typeSymbol = node.GetTypeSymbol(semanticModel);
