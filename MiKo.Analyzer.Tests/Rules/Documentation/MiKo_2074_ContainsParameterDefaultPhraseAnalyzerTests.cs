@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -32,6 +34,26 @@ public class TestMe
     /// Something to find.
     /// </param>
     public bool " + methodName + @"(int i)
+    {
+    }
+}
+");
+
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [Test]
+        public void An_issue_is_reported_for_first_parameter_of_incorrectly_documented_method_([Values("Contains", "ContainsKey")] string methodName) => An_issue_is_reported_for(1, @"
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <param name=""i"">
+    /// Something to find.
+    /// </param>
+    /// <param name=""j"">
+    /// Something to consider.
+    /// </param>
+    public bool " + methodName + @"(int i, int j)
     {
     }
 }
