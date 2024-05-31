@@ -72,14 +72,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var ancestor in node.Ancestors())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case AttributeArgumentSyntax _:
-                    case EnumMemberDeclarationSyntax _:
-                    case PragmaWarningDirectiveTriviaSyntax _:
-                    case LocalDeclarationStatementSyntax variable when variable.IsConst:
-                    case FieldDeclarationSyntax field when field.IsConst():
+                    case SyntaxKind.AttributeArgument:
+                    case SyntaxKind.EnumMemberDeclaration:
+                    case SyntaxKind.PragmaWarningDirectiveTrivia:
                         return true;
+
+                    case SyntaxKind.LocalDeclarationStatement:
+                        return ((LocalDeclarationStatementSyntax)ancestor).IsConst;
+
+                    case SyntaxKind.FieldDeclaration:
+                        return ((FieldDeclarationSyntax)ancestor).IsConst();
                 }
             }
 
