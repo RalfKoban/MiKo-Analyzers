@@ -103,6 +103,38 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
+        protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
+        {
+            if (expressions.Count == 0)
+            {
+                return SyntaxFactory.SeparatedList<TSyntaxNode>();
+            }
+
+            int? currentLine = null;
+
+            var updatedExpressions = new List<TSyntaxNode>();
+
+            foreach (var expression in expressions)
+            {
+                var startingLine = expression.GetStartingLine();
+
+                if (currentLine == startingLine)
+                {
+                    // it is on same line, so do not add any additional space
+                    updatedExpressions.Add(expression);
+                }
+                else
+                {
+                    currentLine = startingLine;
+
+                    // it seems to be on a different line, so add with spaces
+                    updatedExpressions.Add(expression.WithLeadingSpaces(leadingSpaces));
+                }
+            }
+
+            return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
+        }
+
         private static IEnumerable<SyntaxNodeOrToken> GetNodesAndTokensStartingOnSeparateLines(SyntaxNode startingNode)
         {
             var currentLine = startingNode.GetStartingLine();
