@@ -138,6 +138,25 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_field_anonymous_object_initializer_when_placed_on_same_position_as_potential_type() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
+                                                   {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_field_with_reduced_array_initializer_when_placed_on_position_before_position_of_type() => An_issue_is_reported_for(@"
 using System;
 
@@ -256,6 +275,44 @@ using System.Collections.Generic;
 public class TestMe
 {
     private static readonly TestMe _instance = new TestMe
+                                                    {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_anonymous_object_initializer_when_placed_on_position_before_position_of_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
+                                                  {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_field_anonymous_object_initializer_when_placed_on_position_after_position_of_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
                                                     {
                                                        Property1 = 1,
                                                        Property2 = 2,
@@ -660,6 +717,90 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_field_anonymous_object_initializer_when_placed_on_position_before_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
+                                                  {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
+                                                   {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_anonymous_object_initializer_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
+                                                    {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private static readonly TestMe _instance = new
+                                                   {
+                                                       Property1 = 1,
+                                                       Property2 = 2,
+                                                   };
+
+    public int Property1 { get; set; }
+
+    public int Property2 { get; set; }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_complete_field_array_initializer_when_placed_on_position_before_position_of_type()
         {
             const string OriginalCode = @"
@@ -824,6 +965,60 @@ public class TestMe
                                             Value = 42,
                                         },
                                     new() { Id = 2, Value = 0815 },
+                                };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_array_initializer_with_contained_anonymous_object_creations()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                            {
+                              new { Id = -1, Value = 4711 },
+                              new
+                            {
+                                Id = 1,
+                                Value = 42,
+                            },
+                              new { Id = 2, Value = 0815 },
+                            };
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                                {
+                                    new { Id = -1, Value = 4711 },
+                                    new
+                                        {
+                                            Id = 1,
+                                            Value = 42,
+                                        },
+                                    new { Id = 2, Value = 0815 },
                                 };
 }
 ";

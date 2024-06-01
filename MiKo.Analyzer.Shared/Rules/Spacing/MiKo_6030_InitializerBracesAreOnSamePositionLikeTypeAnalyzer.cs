@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6030";
 
-        private static readonly SyntaxKind[] Initializers = { SyntaxKind.ArrayInitializerExpression, SyntaxKind.CollectionInitializerExpression, SyntaxKind.ObjectInitializerExpression };
+        private static readonly SyntaxKind[] Initializers = { SyntaxKind.ArrayInitializerExpression, SyntaxKind.CollectionInitializerExpression, SyntaxKind.ObjectInitializerExpression, SyntaxKind.AnonymousObjectCreationExpression };
 
         public MiKo_6030_InitializerBracesAreOnSamePositionLikeTypeAnalyzer() : base(Id)
         {
@@ -39,19 +39,50 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is InitializerExpressionSyntax initializer)
+            var issue = AnalyzeNode(context.Node);
+
+            if (issue != null)
             {
-                var openBraceToken = initializer.OpenBraceToken;
+                ReportDiagnostics(context, issue);
+            }
+        }
 
-                var typePosition = GetStartPosition(initializer);
-                var openBracePosition = openBraceToken.GetStartPosition();
-
-                if (typePosition.Line != openBracePosition.Line && typePosition.Character != openBracePosition.Character)
+        private Diagnostic AnalyzeNode(SyntaxNode node)
+        {
+            switch (node)
+            {
+                case InitializerExpressionSyntax initializer:
                 {
-                    var issue = Issue(openBraceToken, CreateProposalForLinePosition(typePosition));
+                    var openBraceToken = initializer.OpenBraceToken;
 
-                    ReportDiagnostics(context, issue);
+                    var typePosition = GetStartPosition(initializer);
+                    var openBracePosition = openBraceToken.GetStartPosition();
+
+                    if (typePosition.Line != openBracePosition.Line && typePosition.Character != openBracePosition.Character)
+                    {
+                        return Issue(openBraceToken, CreateProposalForLinePosition(typePosition));
+                    }
+
+                    return null;
                 }
+
+                case AnonymousObjectCreationExpressionSyntax anonymous:
+                {
+                    var openBraceToken = anonymous.OpenBraceToken;
+
+                    var keywordPosition = anonymous.NewKeyword.GetPositionAfterEnd();
+                    var openBracePosition = openBraceToken.GetStartPosition();
+
+                    if (keywordPosition.Line != openBracePosition.Line && openBracePosition.Character != keywordPosition.Character)
+                    {
+                        return Issue(openBraceToken, CreateProposalForLinePosition(keywordPosition));
+                    }
+
+                    return null;
+                }
+
+                default:
+                    return null;
             }
         }
     }
