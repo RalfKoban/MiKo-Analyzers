@@ -21,8 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static LinePosition GetOutdentedStartPosition(ParameterListSyntax parameterList)
         {
-            var startPosition = parameterList.GetStartPosition();
-            var characterPosition = startPosition.Character + parameterList.OpenParenToken.Span.Length;
+            var position = parameterList.GetStartPosition();
+            var characterPosition = position.Character + parameterList.OpenParenToken.Span.Length;
 
             var parameters = parameterList.Parameters;
 
@@ -30,13 +30,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             if (parameters.Count > 0)
             {
                 // hence we have to take the position of that very first parameter
-                if (startPosition.Line != parameters[0].GetStartPosition().Line)
+                if (position.Line != parameters[0].GetStartPosition().Line)
                 {
                     characterPosition -= Constants.Indentation;
                 }
             }
 
-            return new LinePosition(startPosition.Line, characterPosition);
+            return new LinePosition(position.Line, characterPosition);
         }
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
