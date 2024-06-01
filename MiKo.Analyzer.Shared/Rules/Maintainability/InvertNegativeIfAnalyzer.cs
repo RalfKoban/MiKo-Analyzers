@@ -42,7 +42,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context) => Enumerable.Empty<Diagnostic>();
 
-        private static bool IsNegative(SyntaxNode node) => node.IsKind(SyntaxKind.LogicalNotExpression) || (node is IsPatternExpressionSyntax pattern && pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression));
+        private static bool IsNegative(SyntaxNode node)
+        {
+            switch (node.Kind())
+            {
+                case SyntaxKind.LogicalNotExpression:
+                    return true;
+
+                case SyntaxKind.IsPatternExpression:
+                    return ((IsPatternExpressionSyntax)node).Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
+
+                default:
+                    return false;
+            }
+        }
 
         private static List<SyntaxNode> GetConditionParts(SyntaxNode condition)
         {

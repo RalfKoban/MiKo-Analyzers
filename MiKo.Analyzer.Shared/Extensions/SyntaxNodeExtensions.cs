@@ -1828,8 +1828,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStringConcatenation(this ExpressionSyntax value, SemanticModel semanticModel = null)
         {
-            if (value is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
+            if (value.IsKind(SyntaxKind.AddExpression))
             {
+                var b = (BinaryExpressionSyntax)value;
+
                 if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
                 {
                     return true;

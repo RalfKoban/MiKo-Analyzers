@@ -101,30 +101,41 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             foreach (var expression in node.Expressions)
             {
-                if (expression.IsKind(SyntaxKind.SimpleAssignmentExpression))
+                switch (expression.Kind())
                 {
-                    foreach (var issue in AnalyzeExpression(((AssignmentExpressionSyntax)expression).Right, symbolName, expression.GetLocation()))
+                    case SyntaxKind.SimpleAssignmentExpression:
                     {
-                        yield return issue;
-                    }
-                }
-                else if (expression.IsKind(SyntaxKind.InvocationExpression))
-                {
-                    foreach (var issue in AnalyzeExpression(expression, symbolName, expression.GetLocation()))
-                    {
-                        yield return issue;
-                    }
-                }
-                else if (expression.IsKind(SyntaxKind.ObjectCreationExpression))
-                {
-                    var argumentList = ((ObjectCreationExpressionSyntax)expression).ArgumentList;
-
-                    if (argumentList != null)
-                    {
-                        foreach (var issue in AnalyzeArguments(symbolName, argumentList))
+                        foreach (var issue in AnalyzeExpression(((AssignmentExpressionSyntax)expression).Right, symbolName, expression.GetLocation()))
                         {
                             yield return issue;
                         }
+
+                        break;
+                    }
+
+                    case SyntaxKind.InvocationExpression:
+                    {
+                        foreach (var issue in AnalyzeExpression(expression, symbolName, expression.GetLocation()))
+                        {
+                            yield return issue;
+                        }
+
+                        break;
+                    }
+
+                    case SyntaxKind.ObjectCreationExpression:
+                    {
+                        var argumentList = ((ObjectCreationExpressionSyntax)expression).ArgumentList;
+
+                        if (argumentList != null)
+                        {
+                            foreach (var issue in AnalyzeArguments(symbolName, argumentList))
+                            {
+                                yield return issue;
+                            }
+                        }
+
+                        break;
                     }
                 }
             }
