@@ -55,6 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "TypeScript",
                                                                    "JavaScript",
                                                                    "Perl",
+                                                                   "Azure",
+                                                                   "Docker",
                                                                }.OrderBy(_ => _.Length).ToArray();
 
         public MiKo_1400_NamespacesInPluralAnalyzer() : base(Id)
