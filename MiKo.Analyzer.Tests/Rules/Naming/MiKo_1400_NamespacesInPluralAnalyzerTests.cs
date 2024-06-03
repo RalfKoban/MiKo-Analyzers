@@ -71,6 +71,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                                 "MiKoSolutions",
                                                                                                 "NDepend",
                                                                                                 "PostSharp",
+                                                                                                "Azure",
+                                                                                                "Docker",
                                                                                             };
 
         private static readonly IEnumerable<string> Acronyms = new[]
