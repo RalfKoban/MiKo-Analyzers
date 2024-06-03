@@ -12,12 +12,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly HashSet<string> TechnicalNamespaces = new HashSet<string>
                                                                           {
+                                                                              "API", "Api", "APIs", "Apis",
                                                                               "Base", "Class", "Classes",
+                                                                              "Controller", "Controllers",
                                                                               "Dto", "DTO", "DTOs", "Dtos",
                                                                               "Enum", "Enums", "Enumeration", "Enumerations",
                                                                               "Exception", "Exceptions",
+                                                                              "Func", "Funcs", "Function", "Functions",
                                                                               "Imp", "Impl", "Implementation", "Implementations",
-                                                                              "Interface", "Interfaces",
+                                                                              "Interface", "Interfaces", "Itf", "Itfs",
                                                                               "Platform",
                                                                               "Proxies", "Proxy", "ServiceProxies", "ServiceProxy",
                                                                               "Record",
