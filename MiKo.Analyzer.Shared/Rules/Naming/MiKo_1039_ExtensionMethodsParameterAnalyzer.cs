@@ -91,12 +91,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol parameter, params string[] names)
         {
-            if (names.None(_ => _ == parameter.Name))
+            if (names.Any(_ => _ == parameter.Name))
             {
-                var proposal = FindBetterName(parameter);
-
-                yield return Issue(parameter, names.HumanizedConcatenated(), CreateBetterNameProposal(proposal));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var proposal = FindBetterName(parameter);
+
+            return new[] { Issue(parameter, names.HumanizedConcatenated(), CreateBetterNameProposal(proposal)) };
         }
     }
 }

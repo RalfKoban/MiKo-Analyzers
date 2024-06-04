@@ -77,18 +77,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         GetConditionParts(binary.Left, parts);
 
                         condition = binary.Right;
+
                         continue;
                     }
 
                     case ParenthesizedExpressionSyntax parenthesized:
                     {
                         condition = parenthesized.Expression;
+
                         continue;
                     }
 
                     default:
                     {
                         parts.Add(condition);
+
                         break;
                     }
                 }

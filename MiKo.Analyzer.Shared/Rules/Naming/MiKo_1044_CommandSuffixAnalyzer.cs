@@ -72,10 +72,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (suffixes.None(_ => symbolName.EndsWith(_, StringComparison.Ordinal)))
+            if (suffixes.Any(_ => symbolName.EndsWith(_, StringComparison.Ordinal)))
             {
-                yield return Issue(symbol, Suffix, CreateBetterNameProposal(symbolName + Suffix));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            return new[] { Issue(symbol, Suffix, CreateBetterNameProposal(symbolName + Suffix)) };
         }
     }
 }

@@ -479,7 +479,17 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
-        internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
+        internal static bool HasDependencyObjectParameter(this IMethodSymbol value)
+        {
+            var parameters = value.Parameters;
+
+            if (parameters.Length != 0)
+            {
+                return parameters.Any(_ => _.Type.IsDependencyObject());
+            }
+
+            return false;
+        }
 
         internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
 
@@ -806,11 +816,11 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     return value.AnyBaseType(_ =>
-                                             {
-                                                 var fullName = _.ToString();
+                                                 {
+                                                     var fullName = _.ToString();
 
-                                                 return baseClassName == fullName || baseClassFullQualifiedName == fullName;
-                                             });
+                                                     return baseClassName == fullName || baseClassFullQualifiedName == fullName;
+                                                 });
                 }
 
                 default:
@@ -824,14 +834,14 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Interface:
                 {
-                    // its an interface implementation, so we do not need an extra type
+                    // it's an interface implementation, so we do not need an extra type
                     return value.AllInterfaces.Contains(type, SymbolEqualityComparer.Default);
                 }
 
                 case TypeKind.Class:
                 case TypeKind.Struct:
                 {
-                    // its a base type, so we do not need an extra type
+                    // it's a base type, so we do not need an extra type
                     return value.AnyBaseType(_ => _.Equals(type, SymbolEqualityComparer.Default));
                 }
 
@@ -922,7 +932,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
-        internal static bool IsDisposable(this ITypeSymbol value) => value.AllInterfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
+        internal static bool IsDisposable(this ITypeSymbol value)
+        {
+            var interfaces = value.AllInterfaces;
+
+            return interfaces.Length > 0 && interfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
+        }
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
@@ -1187,12 +1202,19 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            var methodName = value.Name;
+            var allInterfaces = typeSymbol.AllInterfaces;
 
-            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-            var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+            if (allInterfaces.Length > 0)
+            {
+                var methodName = value.Name;
 
-            return result;
+                var symbols = allInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
+                var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+
+                return result;
+            }
+
+            return false;
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)

@@ -23,8 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (symbol.IsSealed && summaries.None(_ => _.EndsWith(Constants.Comments.SealedClassPhrase, StringComparison.Ordinal)))
             {
-                yield return Issue(symbol, Constants.Comments.SealedClassPhrase);
+                return new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

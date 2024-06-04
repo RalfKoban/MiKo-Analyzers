@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -266,7 +267,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (symbol is null)
             {
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (symbol is IMethodSymbol method)
@@ -274,13 +275,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (method.Name == nameof(GetHashCode))
                 {
                     // ignore hash calculation
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
                 if (method.IsTestMethod())
                 {
                     // ignore unit tests
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
             }
 
@@ -291,13 +292,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (containingType.IsTestClass())
                 {
                     // ignore unit tests
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
                 if (containingType.ContainingType?.IsTestClass() is true)
                 {
                     // ignore nested types in unit tests
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
             }
 
@@ -305,22 +306,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (IsWellKnownNumber(number))
             {
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (IgnoreBasedOnParent(node) || IgnoreBasedOnAncestor(node))
             {
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            if (node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression))
-            {
-                yield return Issue(symbol.Name, prefix, "-" + number);
-            }
-            else
-            {
-                yield return Issue(symbol.Name, node, number);
-            }
+            var issue = node.Parent is PrefixUnaryExpressionSyntax prefix && prefix.IsKind(SyntaxKind.UnaryMinusExpression)
+                        ? Issue(symbol.Name, prefix, "-" + number)
+                        : Issue(symbol.Name, node, number);
+
+            return new[] { issue };
         }
     }
 }

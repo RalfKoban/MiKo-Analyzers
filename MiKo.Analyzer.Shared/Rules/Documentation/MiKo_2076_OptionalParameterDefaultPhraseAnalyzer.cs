@@ -36,18 +36,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (parameter.HasAttributeApplied("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
             {
                 // nothing to report as that attribute indicates that the value gets automatically set
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             var data = CreatePropertyData(parameter);
 
-            yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } });
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } }) };
         }
 
         private static KeyValuePair<string, string> CreatePropertyData(IParameterSymbol parameter)

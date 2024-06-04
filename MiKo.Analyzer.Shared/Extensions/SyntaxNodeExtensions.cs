@@ -1017,10 +1017,12 @@ namespace MiKoSolutions.Analyzers
                 {
                     case XmlEmptyElementSyntax empty:
                         builder.Append(empty.WithoutTrivia());
+
                         break;
 
                     case XmlElementSyntax e:
                         GetTextWithoutTrivia(e, builder);
+
                         break;
 
                     case XmlTextSyntax text:
@@ -3402,7 +3404,9 @@ namespace MiKoSolutions.Analyzers
                 }
                 else
                 {
-                    return info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+                    var candidates = info.CandidateSymbols;
+
+                    return candidates.Length > 0 && candidates.Any(_ => _.IsLinqExtensionMethod());
                 }
             }
 

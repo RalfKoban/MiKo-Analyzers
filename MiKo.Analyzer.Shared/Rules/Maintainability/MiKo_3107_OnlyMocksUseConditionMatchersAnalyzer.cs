@@ -156,8 +156,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (hasIssue)
             {
-                yield return Issue(methodName, location);
+                return new[] { Issue(methodName, location) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

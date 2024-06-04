@@ -17,15 +17,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
         {
-            if (comment.StartsWithAny(phrases, comparison) is false)
+            if (comment.StartsWithAny(phrases, comparison))
             {
-                var phrase = phrases[0];
-                var preview = phrases.Length > 1 && phrase.Length <= 10
-                              ? phrases.HumanizedConcatenated()
-                              : phrase.SurroundedWithApostrophe();
-
-                yield return Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var phrase = phrases[0];
+            var preview = phrases.Length > 1 && phrase.Length <= 10
+                          ? phrases.HumanizedConcatenated()
+                          : phrase.SurroundedWithApostrophe();
+
+            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase)) };
         }
 
         protected IEnumerable<Diagnostic> AnalyzePlainTextStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)

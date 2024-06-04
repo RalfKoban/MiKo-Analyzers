@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -32,12 +33,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (symbol.IsEventArgs() is false)
+            if (symbol.IsEventArgs())
             {
-                var betterName = FindBetterName(symbol);
-
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var betterName = FindBetterName(symbol);
+
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
 
         private static string FindBetterName(INamedTypeSymbol symbol)

@@ -24,14 +24,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (symbolName.EndsWith(Suffix, StringComparison.Ordinal) is false)
+            if (symbolName.EndsWith(Suffix, StringComparison.Ordinal))
             {
-                var propertyNames = NamesFinder.FindPropertyNames(symbol, Suffix, Constants.DependencyProperty.Register);
-                var name = propertyNames.Any() ? propertyNames.First() : symbolName;
-                var betterName = name + Suffix;
-
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var propertyNames = NamesFinder.FindPropertyNames(symbol, Suffix, Constants.DependencyProperty.Register);
+            var name = propertyNames.Any() ? propertyNames.First() : symbolName;
+            var betterName = name + Suffix;
+
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
     }
 }

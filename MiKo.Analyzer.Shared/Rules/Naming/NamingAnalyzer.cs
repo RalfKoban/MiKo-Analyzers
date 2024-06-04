@@ -148,8 +148,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterNameForEntityMarker(symbol);
 
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         protected Diagnostic AnalyzeCollectionSuffix(ISymbol symbol) => Constants.Markers.Collections.Select(_ => AnalyzeCollectionSuffix(symbol, _)).FirstOrDefault(_ => _ != null);

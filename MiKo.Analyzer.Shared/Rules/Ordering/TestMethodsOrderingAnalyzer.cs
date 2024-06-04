@@ -34,10 +34,9 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
             var otherMethod = methods[index];
 
-            if (ReferenceEquals(method, otherMethod) is false)
-            {
-                yield return Issue(method);
-            }
+            return ReferenceEquals(method, otherMethod)
+                   ? Enumerable.Empty<Diagnostic>()
+                   : new[] { Issue(method) };
         }
     }
 }
