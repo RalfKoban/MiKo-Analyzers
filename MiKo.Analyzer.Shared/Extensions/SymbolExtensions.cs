@@ -127,7 +127,14 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
+        internal static IEnumerable<string> GetAttributeNames(this ISymbol value)
+        {
+            var attributes = value.GetAttributes();
+
+            return attributes.Length != 0
+                   ? attributes.Select(_ => _.AttributeClass?.Name)
+                   : Enumerable.Empty<string>();
+        }
 
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
@@ -135,12 +142,17 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var createdObject in method.DescendantNodes<ObjectCreationExpressionSyntax>())
             {
-                switch (createdObject.Parent)
+                var parent = createdObject.Parent;
+
+                switch (parent?.Kind())
                 {
-                    case ArrowExpressionClauseSyntax arrow when arrow.Parent == method:
-                    case ReturnStatementSyntax rs when rs.Parent == method:
+                    case SyntaxKind.ArrowExpressionClause:
+                    case SyntaxKind.ReturnStatement:
                     {
-                        yield return createdObject;
+                        if (parent.Parent == method)
+                        {
+                            yield return createdObject;
+                        }
 
                         break;
                     }
@@ -443,9 +455,29 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
-        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
+        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
+        {
+            var attributes = value.GetAttributes();
 
-        internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+            if (attributes.Length != 0)
+            {
+                return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
+            }
+
+            return false;
+        }
+
+        internal static bool HasAttributeApplied(this ISymbol value, string attributeName)
+        {
+            var attributes = value.GetAttributes();
+
+            if (attributes.Length != 0)
+            {
+                return attributes.Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+            }
+
+            return false;
+        }
 
         internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
 
