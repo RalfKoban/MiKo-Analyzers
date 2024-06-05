@@ -24,11 +24,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (syntax is IfStatementSyntax ifStatement && syntax.Parent is BlockSyntax block)
             {
-                var statements = block.Statements.ToList();
+                var statements = block.Statements.ToArray();
 
                 var index = statements.IndexOf(ifStatement);
 
-                if (index < statements.Count)
+                if (index < statements.Length)
                 {
                     var others = statements.Skip(index + 1).Select(_ => _.WithAdditionalLeadingSpaces(Constants.Indentation)).ToList(); // adjust spacing
 

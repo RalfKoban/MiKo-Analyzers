@@ -23,8 +23,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out
-                                                                                  && parameter.Type.IsBoolean()
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.Type.IsBoolean()
+                                                                                  && parameter.RefKind != RefKind.Out
                                                                                   && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)

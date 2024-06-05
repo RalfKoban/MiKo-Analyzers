@@ -33,17 +33,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var parameterCommentSyntax = (XmlElementSyntax)syntax;
-            var parameterName = GetParameterName(parameterCommentSyntax);
-
             var parameters = parameterCommentSyntax.GetParameters();
+            var parametersLength = parameters.Length;
 
-            for (var index = 0; index < parameters.Length; index++)
+            if (parametersLength > 0)
             {
-                var parameter = parameters[index];
+                var parameterName = GetParameterName(parameterCommentSyntax);
 
-                if (parameter.GetName() == parameterName)
+                for (var index = 0; index < parametersLength; index++)
                 {
-                    return Comment(document, parameterCommentSyntax, parameter, index, issue);
+                    var parameter = parameters[index];
+
+                    if (parameter.GetName() == parameterName)
+                    {
+                        return Comment(document, parameterCommentSyntax, parameter, index, issue);
+                    }
                 }
             }
 

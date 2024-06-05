@@ -175,7 +175,6 @@ namespace MiKoSolutions.Analyzers
                 switch (symbol)
                 {
                     case null: return null;
-                    case ITypeSymbol _: return null;
                     case IMethodSymbol method: return method;
                     case IPropertySymbol property:
                     {
@@ -186,6 +185,10 @@ namespace MiKoSolutions.Analyzers
 
                         return property.SetMethod;
                     }
+
+                    case INamespaceOrTypeSymbol _: return null;
+                    case IEventSymbol _: return null;
+                    case IFieldSymbol _: return null;
 
                     default:
                         symbol = symbol.ContainingSymbol;
@@ -1506,7 +1509,7 @@ namespace MiKoSolutions.Analyzers
         {
             var typeName = value.Name.AsSpan();
 
-            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I'))
+            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName[0] == 'I')
             {
                 return typeName.Slice(1);
             }
