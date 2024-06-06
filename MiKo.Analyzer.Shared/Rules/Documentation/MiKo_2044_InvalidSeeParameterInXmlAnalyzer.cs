@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -31,10 +32,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var node in comment.DescendantNodes(_ => true, true))
                 {
-                    switch (node)
+                    switch (node.Kind())
                     {
-                        case XmlElementSyntax _:
-                        case XmlEmptyElementSyntax _:
+                        case SyntaxKind.XmlElement:
+                        case SyntaxKind.XmlEmptyElement:
                         {
                             var tag = node.GetXmlTagName();
 

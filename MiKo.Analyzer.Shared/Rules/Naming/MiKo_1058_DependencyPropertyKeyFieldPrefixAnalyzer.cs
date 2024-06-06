@@ -23,13 +23,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyPropertyKey.FieldSuffix, Constants.DependencyProperty.RegisterReadOnly);
 
-            if (propertyNames.Any())
+            if (propertyNames.None())
             {
-                var betterNames = propertyNames.Select(_ => _ + Constants.DependencyPropertyKey.FieldSuffix).ToList();
-                var betterName = betterNames[0];
-
-                yield return Issue(symbol, betterNames.HumanizedConcatenated(), CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var betterNames = propertyNames.Select(_ => _ + Constants.DependencyPropertyKey.FieldSuffix).ToList();
+            var betterName = betterNames[0];
+
+            return new[] { Issue(symbol, betterNames.HumanizedConcatenated(), CreateBetterNameProposal(betterName)) };
         }
     }
 }

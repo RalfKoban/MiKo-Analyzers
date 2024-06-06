@@ -25,10 +25,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal) is false)
+            if (parameterComment.GetTextTrimmed().EndsWithAny(Phrases, StringComparison.Ordinal))
             {
-                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrases[0], CreatePhraseProposal(Phrases[0]));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrases[0], CreatePhraseProposal(Phrases[0])) };
         }
     }
 }

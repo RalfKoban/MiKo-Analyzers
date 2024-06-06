@@ -604,13 +604,12 @@ namespace System
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes, StringComparison comparison)
         {
-            if (value.Length > 0)
-            {
-                var valueLength = value.Length;
+            var valueLength = value.Length;
+            var suffixesLength = suffixes.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < suffixes.Length; index++)
+            if (valueLength > 0 && suffixesLength > 0)
+            {
+                for (var index = 0; index < suffixesLength; index++)
                 {
                     var suffix = suffixes[index];
 
@@ -1149,12 +1148,15 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsWhiteSpace(this char value)
         {
-            if (value == ' ')
+            switch (value)
             {
-                return true;
-            }
+                case ' ':
+                case '\t':
+                    return true;
 
-            return char.IsWhiteSpace(value);
+                default:
+                    return char.IsWhiteSpace(value);
+            }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

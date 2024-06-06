@@ -22,14 +22,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            if (symbolName.EndsWith(Constants.DependencyPropertyKey.FieldSuffix, StringComparison.Ordinal) is false)
+            if (symbolName.EndsWith(Constants.DependencyPropertyKey.FieldSuffix, StringComparison.Ordinal))
             {
-                var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyPropertyKey.FieldSuffix, Constants.DependencyProperty.RegisterReadOnly);
-                var name = propertyNames.Any() ? propertyNames.First() : symbolName;
-                var betterName = name + Constants.DependencyPropertyKey.FieldSuffix;
-
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyPropertyKey.FieldSuffix, Constants.DependencyProperty.RegisterReadOnly);
+            var name = propertyNames.Any() ? propertyNames.First() : symbolName;
+            var betterName = name + Constants.DependencyPropertyKey.FieldSuffix;
+
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
     }
 }

@@ -77,14 +77,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case "Expression":
                     case "Predicate":
                     case nameof(Task):
-                        return type.TypeArguments.Any(HasGenericTypeArgument);
+                    {
+                        var arguments = type.TypeArguments;
+
+                        return arguments.Length > 0 && arguments.Any(HasGenericTypeArgument);
+                    }
                 }
             }
 
             return HasGenericTypeArgument(symbol);
         }
 
-        private static bool HasGenericTypeArgument(ITypeSymbol symbol) => symbol is INamedTypeSymbol type
-                                                                       && type.TypeArguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
+        private static bool HasGenericTypeArgument(ITypeSymbol symbol)
+        {
+            if (symbol is INamedTypeSymbol type)
+            {
+                var arguments = type.TypeArguments;
+
+                return arguments.Length > 0 && arguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
+            }
+
+            return false;
+        }
     }
 }

@@ -32,10 +32,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var switchSection = node.GetEnclosing<SwitchSectionSyntax>();
 
             // we are in the 'default:' clause if there is a 'default' switch label in the specific switch section
-            if (switchSection?.DescendantNodes<DefaultSwitchLabelSyntax>().Any() is true)
+            if (switchSection != null && switchSection.DescendantNodes<DefaultSwitchLabelSyntax>().Any())
             {
-                yield return Issue(node.Type);
+                return new[] { Issue(node.Type) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

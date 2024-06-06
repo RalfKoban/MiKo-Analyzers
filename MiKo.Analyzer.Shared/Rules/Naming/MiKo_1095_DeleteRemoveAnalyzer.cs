@@ -65,8 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (texts.Any(_ => _.Contains(forbiddenWord, StringComparison.OrdinalIgnoreCase)))
             {
-                yield return Issue(symbol);
+                return new[] { Issue(symbol) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

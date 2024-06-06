@@ -19,13 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType().IsEnum();
 
-        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation)
-        {
-            if (HasIssue(symbol))
-            {
-                yield return Issue(symbol);
-            }
-        }
+        protected override IEnumerable<Diagnostic> Analyze(IPropertySymbol symbol, Compilation compilation) => HasIssue(symbol)
+                                                                                                               ? new[] { Issue(symbol) }
+                                                                                                               : Enumerable.Empty<Diagnostic>();
 
         private static bool HasIssue(IPropertySymbol property)
         {

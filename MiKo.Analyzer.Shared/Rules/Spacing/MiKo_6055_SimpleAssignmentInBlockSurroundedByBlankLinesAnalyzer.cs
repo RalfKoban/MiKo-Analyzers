@@ -93,7 +93,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     switch (expression)
                     {
                         case InvocationExpressionSyntax i: expression = i.Expression; break;
+
                         case MemberAccessExpressionSyntax m: expression = m.Expression; break;
+
                         default:
                             loop = false;
 

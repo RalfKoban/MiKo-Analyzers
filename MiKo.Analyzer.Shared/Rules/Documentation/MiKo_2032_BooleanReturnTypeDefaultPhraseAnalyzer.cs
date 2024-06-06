@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -26,19 +27,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (commentXml.StartsWithAny(startingPhrases, Comparison) && commentXml.ContainsAny(endingPhrases, Comparison))
             {
                 // nothing to do here
+                return Enumerable.Empty<Diagnostic>();
             }
-            else
+
+            var syntaxNode = comment.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
+
+            if (syntaxNode is null)
             {
-                var syntaxNode = comment.FirstChild<XmlElementSyntax>(_ => _.GetName() == xmlTag);
-
-                if (syntaxNode is null)
-                {
-                    // seems like returns is inside the summary tag
-                    syntaxNode = comment.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == xmlTag);
-                }
-
-                yield return Issue(owningSymbol.Name, syntaxNode.GetContentsLocation(), xmlTag, startingPhrases[0], endingPhrases[0]);
+                // seems like returns is inside the summary tag
+                syntaxNode = comment.FirstDescendant<XmlElementSyntax>(_ => _.GetName() == xmlTag);
             }
+
+            return new[] { Issue(owningSymbol.Name, syntaxNode.GetContentsLocation(), xmlTag, startingPhrases[0], endingPhrases[0]) };
         }
 
         // ReSharper disable once RedundantNameQualifier

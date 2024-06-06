@@ -457,13 +457,16 @@ namespace MiKoSolutions.Analyzers
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var listCount = list.Count;
 
-                for (var index = 0; index < listCount; index++)
+                if (listCount > 0)
                 {
-                    var trivia = list[index];
-
-                    if (trivia.IsComment())
+                    for (var index = 0; index < listCount; index++)
                     {
-                        return trivia;
+                        var trivia = list[index];
+
+                        if (trivia.IsComment())
+                        {
+                            return trivia;
+                        }
                     }
                 }
 
@@ -737,10 +740,28 @@ namespace MiKoSolutions.Analyzers
                 switch (ancestor)
                 {
                     case BaseMethodDeclarationSyntax method:
-                        return method.ParameterList.Parameters.ToArray();
+                    {
+                        var parameters = method.ParameterList.Parameters;
+
+                        if (parameters.Count == 0)
+                        {
+                            return Array.Empty<ParameterSyntax>();
+                        }
+
+                        return parameters.ToArray();
+                    }
 
                     case IndexerDeclarationSyntax indexer:
-                        return indexer.ParameterList.Parameters.ToArray();
+                    {
+                        var parameters = indexer.ParameterList.Parameters;
+
+                        if (parameters.Count == 0)
+                        {
+                            return Array.Empty<ParameterSyntax>();
+                        }
+
+                        return parameters.ToArray();
+                    }
                 }
             }
 
@@ -754,10 +775,28 @@ namespace MiKoSolutions.Analyzers
                 switch (ancestor)
                 {
                     case BaseMethodDeclarationSyntax method:
-                        return method.ParameterList.Parameters.Select(_ => _.GetName()).ToArray();
+                    {
+                        var parameters = method.ParameterList.Parameters;
+
+                        if (parameters.Count == 0)
+                        {
+                            return Array.Empty<string>();
+                        }
+
+                        return parameters.Select(_ => _.GetName()).ToArray();
+                    }
 
                     case IndexerDeclarationSyntax indexer:
-                        return indexer.ParameterList.Parameters.Select(_ => _.GetName()).ToArray();
+                    {
+                        var parameters = indexer.ParameterList.Parameters;
+
+                        if (parameters.Count == 0)
+                        {
+                            return Array.Empty<string>();
+                        }
+
+                        return parameters.Select(_ => _.GetName()).ToArray();
+                    }
 
                     case BasePropertyDeclarationSyntax property:
                         return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
@@ -947,12 +986,17 @@ namespace MiKoSolutions.Analyzers
                 return null;
             }
 
-            var builder = new StringBuilder();
-
             var textTokens = value.TextTokens;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return string.Empty;
+            }
+
+            var builder = new StringBuilder();
 
             for (var index = 0; index < textTokensCount; index++)
             {
@@ -1001,35 +1045,42 @@ namespace MiKoSolutions.Analyzers
 
             var content = value.Content;
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < content.Count; index++)
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var contentCount = content.Count;
+
+            if (content.Count > 0)
             {
-                var node = content[index];
-                var tagName = node.GetXmlTagName();
-
-                if (tagName == Constants.XmlTag.C)
+                for (var index = 0; index < contentCount; index++)
                 {
-                    // ignore code
-                    continue;
-                }
+                    var node = content[index];
+                    var tagName = node.GetXmlTagName();
 
-                switch (node)
-                {
-                    case XmlEmptyElementSyntax empty:
-                        builder.Append(empty.WithoutTrivia());
-                        break;
+                    if (tagName == Constants.XmlTag.C)
+                    {
+                        // ignore code
+                        continue;
+                    }
 
-                    case XmlElementSyntax e:
-                        GetTextWithoutTrivia(e, builder);
-                        break;
+                    switch (node)
+                    {
+                        case XmlEmptyElementSyntax empty:
+                            builder.Append(empty.WithoutTrivia());
 
-                    case XmlTextSyntax text:
-                        foreach (var valueText in text.GetTextWithoutTriviaLazy())
-                        {
-                            builder.Append(valueText);
-                        }
+                            break;
 
-                        break;
+                        case XmlElementSyntax e:
+                            GetTextWithoutTrivia(e, builder);
+
+                            break;
+
+                        case XmlTextSyntax text:
+                            foreach (var valueText in text.GetTextWithoutTriviaLazy())
+                            {
+                                builder.Append(valueText);
+                            }
+
+                            break;
+                    }
                 }
             }
 
@@ -1048,16 +1099,19 @@ namespace MiKoSolutions.Analyzers
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
 
-            for (var index = 0; index < textTokensCount; index++)
+            if (textTokensCount > 0)
             {
-                var token = textTokens[index];
-
-                if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                for (var index = 0; index < textTokensCount; index++)
                 {
-                    continue;
-                }
+                    var token = textTokens[index];
 
-                yield return token.WithoutTrivia().ValueText;
+                    if (token.IsKind(SyntaxKind.XmlTextLiteralNewLineToken))
+                    {
+                        continue;
+                    }
+
+                    yield return token.WithoutTrivia().ValueText;
+                }
             }
         }
 
@@ -1266,15 +1320,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsAnyKind(this SyntaxNode value, params SyntaxKind[] kinds)
         {
-            var valueKind = value.Kind();
-
             var kindsLength = kinds.Length;
 
-            for (var index = 0; index < kindsLength; index++)
+            if (kindsLength > 0)
             {
-                if (kinds[index] == valueKind)
+                var valueKind = value.Kind();
+
+                for (var index = 0; index < kindsLength; index++)
                 {
-                    return true;
+                    if (kinds[index] == valueKind)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -1339,6 +1396,7 @@ namespace MiKoSolutions.Analyzers
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.StructDeclaration:
                     case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
                         return false;
                 }
             }
@@ -1828,8 +1886,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsStringConcatenation(this ExpressionSyntax value, SemanticModel semanticModel = null)
         {
-            if (value is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
+            if (value.IsKind(SyntaxKind.AddExpression))
             {
+                var b = (BinaryExpressionSyntax)value;
+
                 if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
                 {
                     return true;
@@ -2079,10 +2139,16 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> ReplaceText(this SyntaxList<XmlNodeSyntax> source, string[] phrases, string replacement)
         {
-            var result = source.ToList();
-            var resultCount = result.Count;
+            var resultLength = source.Count;
 
-            for (var index = 0; index < resultCount; index++)
+            if (resultLength == 0)
+            {
+                return source;
+            }
+
+            var result = source.ToArray();
+
+            for (var index = 0; index < resultLength; index++)
             {
                 var value = result[index];
 
@@ -2097,12 +2163,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string phrase, string replacement)
         {
-            var map = new Dictionary<SyntaxToken, SyntaxToken>();
-
             var textTokens = value.TextTokens;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return value;
+            }
+
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
             for (var index = 0; index < textTokensCount; index++)
             {
@@ -2137,12 +2208,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax ReplaceText(this XmlTextSyntax value, string[] phrases, string replacement)
         {
-            var map = new Dictionary<SyntaxToken, SyntaxToken>();
-
             var textTokens = value.TextTokens;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return value;
+            }
+
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
             for (var index = 0; index < textTokensCount; index++)
             {
@@ -2177,12 +2253,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static XmlTextSyntax ReplaceFirstText(this XmlTextSyntax value, string phrase, string replacement)
         {
-            var map = new Dictionary<SyntaxToken, SyntaxToken>();
-
             var textTokens = value.TextTokens;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var textTokensCount = textTokens.Count;
+
+            if (textTokensCount == 0)
+            {
+                return value;
+            }
+
+            var map = new Dictionary<SyntaxToken, SyntaxToken>();
 
             for (var i = 0; i < textTokensCount; i++)
             {
@@ -2747,10 +2828,15 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, string text)
         {
-            var contents = values.ToList();
-
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valuesCount = values.Count;
+
+            if (valuesCount == 0)
+            {
+                return values;
+            }
+
+            var contents = values.ToList();
 
             for (var index = 0; index < valuesCount; index++)
             {
@@ -3400,7 +3486,9 @@ namespace MiKoSolutions.Analyzers
                 }
                 else
                 {
-                    return info.CandidateSymbols.Any(_ => _.IsLinqExtensionMethod());
+                    var candidates = info.CandidateSymbols;
+
+                    return candidates.Length > 0 && candidates.Any(_ => _.IsLinqExtensionMethod());
                 }
             }
 
