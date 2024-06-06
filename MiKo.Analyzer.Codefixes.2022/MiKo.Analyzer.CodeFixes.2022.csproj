@@ -15,7 +15,7 @@
     <Version>0.0.45</Version>
     <Copyright>Copyright © 2018-2024 by MiKo Solutions. All rights reserved.</Copyright>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-
+    <DefineConstants>$(DefineConstants);VS2022</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
   </ItemGroup>
 
