@@ -179,7 +179,7 @@ public class TestMe
     /// <param name=""value"">
     /// Some value.
     /// The default is <see langword=""" + value + @"""/>.
-/// </param>
+    /// </param>
     public bool DoSomething(bool value = " + value + @")
     {
     }
@@ -216,7 +216,7 @@ public class TestMe
     /// <param name=""value"">
     /// Some value.
     /// The default is <see langword=""null""/>.
-/// </param>
+    /// </param>
     public bool DoSomething(object value = null)
     {
     }
@@ -258,7 +258,7 @@ public namespace Bla
         /// <param name=""value"">
         /// Some value.
         /// The default is <see langword=""null""/>.
-/// </param>
+        /// </param>
         public bool DoSomething(object value = null)
         {
         }
@@ -301,7 +301,7 @@ public namespace Bla
         /// <param name=""value"">
         /// Some value.
         /// The default is <c>-1</c>.
-/// </param>
+        /// </param>
         public bool DoSomething(int value = -1)
         {
         }
@@ -348,7 +348,7 @@ public namespace Bla
         /// <param name=""value"">
         /// Some value.
         /// The default is <see cref=""StringComparison.OrdinalIgnoreCase""/>.
-/// </param>
+        /// </param>
         public bool DoSomething(StringComparison value = StringComparison.OrdinalIgnoreCase)
         {
         }
