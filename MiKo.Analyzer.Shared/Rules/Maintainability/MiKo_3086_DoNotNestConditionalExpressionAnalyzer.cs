@@ -27,13 +27,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return;
                 }
 
-                if (descendant.IsKind(SyntaxKind.ConditionalExpression))
+                switch (descendant.Kind())
                 {
-                    ReportIssue(context, descendant);
-                }
-                else if (descendant.IsKind(SyntaxKind.CoalesceExpression))
-                {
-                    ReportIssue(context, descendant);
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.CoalesceExpression:
+                    {
+                        ReportIssue(context, descendant);
+
+                        break;
+                    }
                 }
             }
         }
@@ -41,6 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private void ReportIssue(SyntaxNodeAnalysisContext context, SyntaxNode node)
         {
             var issue = Issue(string.Empty, node);
+
             ReportDiagnostics(context, issue);
         }
     }

@@ -35,18 +35,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeIssue(MemberAccessExpressionSyntax node, ISymbol method)
         {
-            if (Names.Contains(node.GetName()))
+            if (node.Parent is InvocationExpressionSyntax i && Names.Contains(node.GetName()))
             {
-                if (node.Parent is InvocationExpressionSyntax i)
-                {
-                    var argument = i.ArgumentList?.Arguments.FirstOrDefault(_ => _.Expression.IsKind(SyntaxKind.NumericLiteralExpression));
+                var argument = i.ArgumentList?.Arguments.FirstOrDefault(_ => _.Expression.IsKind(SyntaxKind.NumericLiteralExpression));
 
-                    if (argument != null)
-                    {
-                        yield return Issue(method.Name, argument);
-                    }
+                if (argument != null)
+                {
+                    return new[] { Issue(method.Name, argument) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)

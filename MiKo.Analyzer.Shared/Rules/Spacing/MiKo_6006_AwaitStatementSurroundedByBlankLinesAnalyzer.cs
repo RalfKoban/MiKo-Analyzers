@@ -70,20 +70,32 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             foreach (var ancestor in node.Ancestors())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case SimpleLambdaExpressionSyntax _:
-                    case ParenthesizedLambdaExpressionSyntax _:
+                    case SyntaxKind.Block:
+                        return AnalyzeAwaitExpression(((BlockSyntax)ancestor).Statements, node);
+
+                    case SyntaxKind.SwitchSection:
+                        return AnalyzeAwaitExpression(((SwitchSectionSyntax)ancestor).Statements, node);
+
+                    // lambdas
+                    case SyntaxKind.SimpleLambdaExpression:
+                    case SyntaxKind.ParenthesizedLambdaExpression:
                         return null; // stop lookup if it is a parameter
 
-                    case BlockSyntax block:
-                        return AnalyzeAwaitExpression(block.Statements, node);
+                    // base methods
+                    case SyntaxKind.ConversionOperatorDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.DestructorDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.OperatorDeclaration:
+                        return null; // stop lookup as there is no valid ancestor anymore
 
-                    case SwitchSectionSyntax section:
-                        return AnalyzeAwaitExpression(section.Statements, node);
-
-                    case BaseMethodDeclarationSyntax _:
-                    case BaseTypeDeclarationSyntax _:
+                    // base types
+                    case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.StructDeclaration:
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }

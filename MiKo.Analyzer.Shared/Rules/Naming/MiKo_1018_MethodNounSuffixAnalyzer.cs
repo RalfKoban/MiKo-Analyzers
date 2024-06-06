@@ -27,8 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (Verbalizer.TryMakeVerb(symbol.Name, out var betterName))
             {
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

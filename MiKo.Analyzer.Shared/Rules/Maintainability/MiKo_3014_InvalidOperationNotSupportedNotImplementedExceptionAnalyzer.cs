@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -32,10 +33,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var argumentList = node.ArgumentList;
 
-            if (argumentList?.Arguments.Count == 0)
+            if (argumentList != null && argumentList.Arguments.Count == 0)
             {
-                yield return Issue(node.Type.ToString(), argumentList);
+                return new[] { Issue(node.Type.ToString(), argumentList) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

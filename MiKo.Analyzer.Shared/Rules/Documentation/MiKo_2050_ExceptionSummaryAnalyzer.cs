@@ -149,14 +149,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, string constant, IEnumerable<string> comments, params string[] phrases)
         {
-            if (comments.Any(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
+            if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
-                // fitting comment
+                return new[] { Issue(symbol, constant, phrases[0]) };
             }
-            else
-            {
-                yield return Issue(symbol, constant, phrases[0]);
-            }
+
+            // fitting comment
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeSummaryPhrase(ISymbol symbol, IEnumerable<string> summaries, params string[] phrases) => AnalyzeStartingPhrase(symbol, Constants.XmlTag.Summary, summaries, phrases);
@@ -174,14 +173,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = symbol.GetComment(commentXml);
 
-            if (phrase.Any(_ => _ == comment))
+            if (phrase.None(_ => _ == comment))
             {
-                // fitting comment
+                return new[] { Issue(symbol, Constants.XmlTag.Param, phrase[0]) };
             }
-            else
-            {
-                yield return Issue(symbol, Constants.XmlTag.Param, phrase[0]);
-            }
+
+            // fitting comment
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

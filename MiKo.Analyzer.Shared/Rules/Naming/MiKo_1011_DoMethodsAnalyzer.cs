@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -30,10 +31,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var proposal = FindBetterName(symbol);
 
-            if (proposal != null)
+            if (proposal == null)
             {
-                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
         }
 
         private static string FindBetterName(IMethodSymbol symbol)

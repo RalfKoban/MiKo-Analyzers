@@ -167,18 +167,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (tokenMap is null)
                     {
                         // nothing found, so nothing to replace
+                        continue;
                     }
-                    else
+
+                    if (map is null)
                     {
-                        var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
-
-                        if (map is null)
-                        {
-                            map = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
-                        }
-
-                        map.Add(text, newText);
+                        map = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
                     }
+
+                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+
+                    map.Add(text, newText);
                 }
 
                 return map;
@@ -942,33 +941,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
             var modified = false;
+
             var contents = comment.Content;
+            var contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned so perform a careful review of te code
 
-            for (var index = 0; index <= contents.Count - 2; index++)
+            for (var index = 0; index <= contentsCount; index++)
             {
-                var nextIndex = index + 1;
-
-                var content1 = contents[index];
-                var content2 = contents[nextIndex];
-
-                if (content1 is XmlTextSyntax text1 && content2 is XmlTextSyntax text2)
+                if (contents[index] is XmlTextSyntax text1)
                 {
-                    var text1TextTokens = text1.TextTokens;
-                    var text2TextTokens = text2.TextTokens;
+                    var nextIndex = index + 1;
 
-                    var lastToken = text1TextTokens.Last();
-                    var firstToken = text2TextTokens.First();
+                    if (contents[nextIndex] is XmlTextSyntax text2)
+                    {
+                        var text1TextTokens = text1.TextTokens;
+                        var text2TextTokens = text2.TextTokens;
 
-                    var token = lastToken.WithText(lastToken.Text + firstToken.Text)
-                                         .WithLeadingTriviaFrom(lastToken)
-                                         .WithTrailingTriviaFrom(firstToken);
+                        var lastToken = text1TextTokens.Last();
+                        var firstToken = text2TextTokens.First();
 
-                    var tokens = text1TextTokens.Replace(lastToken, token).AddRange(text2TextTokens.Skip(1));
-                    var newText = text1.WithTextTokens(tokens);
+                        var token = lastToken.WithText(lastToken.Text + firstToken.Text)
+                                             .WithLeadingTriviaFrom(lastToken)
+                                             .WithTrailingTriviaFrom(firstToken);
 
-                    contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
+                        var tokens = text1TextTokens.Replace(lastToken, token).AddRange(text2TextTokens.Skip(1));
+                        var newText = text1.WithTextTokens(tokens);
 
-                    modified = true;
+                        contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
+                        contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned
+
+                        modified = true;
+                    }
                 }
             }
 

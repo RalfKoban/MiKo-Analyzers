@@ -122,9 +122,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (names.Any() && symbol.Name.EndsWithAny(names, StringComparison.Ordinal) is false)
                 {
-                    yield return Issue(symbol, names.HumanizedConcatenated());
+                    return new[] { Issue(symbol, names.HumanizedConcatenated()) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

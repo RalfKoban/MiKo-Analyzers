@@ -31,31 +31,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case SpecialType.System_Collections_IEnumerable:
                     case SpecialType.System_Collections_Generic_IEnumerable_T:
                     {
-                        return ReportIssue(symbol);
+                        return new[] { ReportIssue(symbol) };
                     }
                 }
 
                 if (typeArgument.TypeKind == TypeKind.Interface && typeArgument.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IEnumerable_T)
                 {
-                    return ReportIssue(symbol);
+                    return new[] { ReportIssue(symbol) };
                 }
             }
 
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private IEnumerable<Diagnostic> ReportIssue(IMethodSymbol method)
+        private Diagnostic ReportIssue(IMethodSymbol method)
         {
             var returnTypeName = method.ReturnType.MinimalTypeName();
 
-            if (method.GetSyntax() is MethodDeclarationSyntax m)
-            {
-                yield return Issue(m.GetName(), m.ReturnType, returnTypeName);
-            }
-            else
-            {
-                yield return Issue(method, returnTypeName);
-            }
+            return method.GetSyntax() is MethodDeclarationSyntax m
+                   ? Issue(m.GetName(), m.ReturnType, returnTypeName)
+                   : Issue(method, returnTypeName);
         }
     }
 }

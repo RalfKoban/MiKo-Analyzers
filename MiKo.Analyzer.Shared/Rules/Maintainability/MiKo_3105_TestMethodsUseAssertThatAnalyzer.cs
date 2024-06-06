@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -46,19 +47,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 if (AllowedAssertionMethods.Contains(node.GetName()))
                 {
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
                 if (Constants.Names.AssertionTypes.Contains(invokedClass.GetName()) is false)
                 {
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
                 var testFrameworkNamespace = invokedClass.GetTypeSymbol(context.SemanticModel)?.ContainingNamespace.FullyQualifiedName();
 
                 if (Constants.Names.AssertionNamespaces.Contains(testFrameworkNamespace) is false)
                 {
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
                 var method = context.GetEnclosingMethod();
@@ -66,11 +67,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (method is null)
                 {
                     // nameof() is also a SimpleMemberAccessExpression, so assignments of lists etc. may cause an NRE to be thrown
-                    yield break;
+                    return Enumerable.Empty<Diagnostic>();
                 }
 
-                yield return Issue(method.Name, node);
+                return new[] { Issue(method.Name, node) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

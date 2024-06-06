@@ -20,10 +20,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         }
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased()
-                                                                      && base.ShallAnalyze(symbol)
-                                                                      && symbol.IsTestMethod() is false
-                                                                      && symbol.IsTestSetUpMethod() is false
-                                                                      && symbol.IsTestTearDownMethod() is false;
+                                                                   && base.ShallAnalyze(symbol)
+                                                                   && symbol.IsTestMethod() is false
+                                                                   && symbol.IsTestSetUpMethod() is false
+                                                                   && symbol.IsTestTearDownMethod() is false;
 
         protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
 
@@ -38,13 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
              || TaskFactoryMethods.Contains(methodName))
             {
                 // nothing to report here
+                return Enumerable.Empty<Diagnostic>();
             }
-            else
-            {
-                var betterName = symbol.Name + Constants.AsyncSuffix;
 
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
-            }
+            var betterName = symbol.Name + Constants.AsyncSuffix;
+
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
         }
     }
 }

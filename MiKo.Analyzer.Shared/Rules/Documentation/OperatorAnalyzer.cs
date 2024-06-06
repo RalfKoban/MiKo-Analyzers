@@ -46,12 +46,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var phrases = GetSummaryPhrases(symbol);
 
-            if (summaries.Any(_ => _.AsSpan().Trim().EqualsAny(phrases)))
+            if (summaries.None(_ => _.AsSpan().Trim().EqualsAny(phrases)))
             {
-                yield break;
+                return new[] { Issue(symbol, Constants.XmlTag.Summary, phrases[0]) };
             }
 
-            yield return Issue(symbol, Constants.XmlTag.Summary, phrases[0]);
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeReturns(ISymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
@@ -59,12 +59,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var phrases = GetReturnsPhrases(symbol);
             var comments = CommentExtensions.GetReturns(commentXml);
 
-            if (comments.Any(_ => _.AsSpan().Trim().EqualsAny(phrases)))
+            if (comments.None(_ => _.AsSpan().Trim().EqualsAny(phrases)))
             {
-                yield break;
+                return new[] { Issue(symbol, Constants.XmlTag.Returns, phrases[0]) };
             }
 
-            yield return Issue(symbol, Constants.XmlTag.Returns, phrases[0]);
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeParameters(ImmutableArray<IParameterSymbol> parameters, string commentXml, DocumentationCommentTriviaSyntax comment)

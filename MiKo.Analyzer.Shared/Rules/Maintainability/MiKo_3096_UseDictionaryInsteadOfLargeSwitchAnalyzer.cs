@@ -22,8 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (syntax)
             {
-                case ReturnStatementSyntax statement when IsAcceptable(context, statement.Expression):
-                    return true;
+                case ReturnStatementSyntax statement:
+                    return IsAcceptable(context, statement.Expression);
 
                 case ThrowStatementSyntax _:
                     return true;
@@ -44,14 +44,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             switch (syntax)
             {
-                case MemberAccessExpressionSyntax member when IsAcceptable(context, member):
-                    return true;
+                case MemberAccessExpressionSyntax member:
+                    return IsAcceptable(context, member);
 
                 case LiteralExpressionSyntax _:
                     return true;
 
-                case PrefixUnaryExpressionSyntax prefixed when prefixed.Operand is LiteralExpressionSyntax:
-                    return true;
+                case PrefixUnaryExpressionSyntax prefixed:
+                    return prefixed.Operand is LiteralExpressionSyntax;
 
                 case ThrowExpressionSyntax _:
                     return true;

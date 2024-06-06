@@ -37,12 +37,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.StartsWith(Prefix, StringComparison.Ordinal) is false)
+            if (symbol.Name.StartsWith(Prefix, StringComparison.Ordinal))
             {
-                var betterName = FindBetterName(symbol);
-
-                yield return Issue(symbol, CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var betterName = FindBetterName(symbol);
+
+            return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
         }
 
         private static string FindBetterName(IMethodSymbol symbol)

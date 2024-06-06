@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -12,13 +10,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1300";
 
+        private static readonly SyntaxKind[] Lambdas = { SyntaxKind.SimpleLambdaExpression, SyntaxKind.ParenthesizedLambdaExpression };
+
         public MiKo_1300_SimpleLambdaExpressionIdentifierAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
-            context.RegisterSyntaxNodeAction(AnalyzeSimpleLambdaExpression, SyntaxKind.SimpleLambdaExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeLambdaExpression, Lambdas);
         }
 
         private static int CountArgumentSyntaxes(ParameterSyntax parameter)
@@ -27,23 +27,47 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             foreach (var ancestor in parameter.Ancestors())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case ArgumentSyntax a:
+                    case SyntaxKind.Argument:
                     {
-                        if (a.ChildNodes<SimpleLambdaExpressionSyntax>().Any())
+                        foreach (var lambda in ((ArgumentSyntax)ancestor).ChildNodes<LambdaExpressionSyntax>())
                         {
-                            count++;
+                            if (lambda is SimpleLambdaExpressionSyntax)
+                            {
+                                count++;
+
+                                break;
+                            }
+
+                            if (lambda is ParenthesizedLambdaExpressionSyntax parenthesized && parenthesized.ParameterList.Parameters.Count == 1)
+                            {
+                                count++;
+
+                                break;
+                            }
                         }
 
                         break;
                     }
 
-                    case ExpressionStatementSyntax _:
-                    case MethodDeclarationSyntax _:
+                    case SyntaxKind.ExpressionStatement:
+
+                    // base methods
+                    case SyntaxKind.ConversionOperatorDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.DestructorDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.OperatorDeclaration:
+
+                    // base types
+                    case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.StructDeclaration:
                     {
                         // we do not need to look up further, so we can speed up search when done project- or solution-wide
-                        break;
+                        return count;
                     }
                 }
             }
@@ -82,18 +106,43 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private void AnalyzeSimpleLambdaExpression(SyntaxNodeAnalysisContext context)
+        private void AnalyzeLambdaExpression(SyntaxNodeAnalysisContext context)
         {
-            var node = (SimpleLambdaExpressionSyntax)context.Node;
-            var issue = AnalyzeSimpleLambdaExpression(node);
+            var issue = AnalyzeLambdaExpression(context.Node);
 
-            ReportDiagnostics(context, issue);
+            if (issue != null)
+            {
+                ReportDiagnostics(context, issue);
+            }
         }
 
-        private Diagnostic AnalyzeSimpleLambdaExpression(SimpleLambdaExpressionSyntax node)
+        private Diagnostic AnalyzeLambdaExpression(SyntaxNode node)
         {
-            var parameter = node.Parameter;
+            switch (node)
+            {
+                case SimpleLambdaExpressionSyntax simple:
+                {
+                    return AnalyzeParameter(simple.Parameter);
+                }
 
+                case ParenthesizedLambdaExpressionSyntax parenthesized:
+                {
+                    var parameters = parenthesized.ParameterList.Parameters;
+
+                    if (parameters.Count == 1)
+                    {
+                        return AnalyzeParameter(parameters[0]);
+                    }
+
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
+        private Diagnostic AnalyzeParameter(ParameterSyntax parameter)
+        {
             if (parameter is null)
             {
                 return null;
