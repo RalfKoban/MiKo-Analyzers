@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia)
         {
-            yield return Issue(name, GetLastLocation(trivia, ".", StringComparison.OrdinalIgnoreCase));
+            return new[] { Issue(name, GetLastLocation(trivia, ".", StringComparison.OrdinalIgnoreCase)) };
         }
     }
 }

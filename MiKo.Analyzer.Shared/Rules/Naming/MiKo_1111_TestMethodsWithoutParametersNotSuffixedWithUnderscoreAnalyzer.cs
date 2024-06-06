@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -27,8 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.EndsWith(Constants.Underscore))
             {
-                yield return Issue(symbol, CreateBetterNameProposal(symbolName.TrimEnd(Constants.Underscore)));
+                return new[] { Issue(symbol, CreateBetterNameProposal(symbolName.TrimEnd(Constants.Underscore))) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

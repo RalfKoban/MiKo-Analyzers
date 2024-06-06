@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -37,12 +38,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
-        {
-            if (symbol.Name.EndsWithAny(WrongNames))
-            {
-                yield return Issue(symbol, CreateBetterNameProposal("callback"));
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => symbol.Name.EndsWithAny(WrongNames)
+                                                                                                                    ? new[] { Issue(symbol, CreateBetterNameProposal("callback")) }
+                                                                                                                    : Enumerable.Empty<Diagnostic>();
     }
 }

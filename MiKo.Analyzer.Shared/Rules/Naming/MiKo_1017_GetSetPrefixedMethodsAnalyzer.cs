@@ -47,8 +47,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbol.Name);
 
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(string name)

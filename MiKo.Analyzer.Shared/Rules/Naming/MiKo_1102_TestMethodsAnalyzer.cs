@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -34,8 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbolName);
 
-                yield return Issue(symbol, GetTestMarker(symbolName), CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, GetTestMarker(symbolName), CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static string GetTestMarker(string symbolName)

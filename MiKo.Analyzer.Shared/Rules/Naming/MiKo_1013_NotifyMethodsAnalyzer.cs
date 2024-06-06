@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -36,9 +37,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                  .ReplaceWithCheck(CorrectStartingPhrase + CorrectStartingPhrase, CorrectStartingPhrase) // may happen for "OnNotifyXyz"
                                                                  .ToString();
 
-                    yield return Issue(symbol, CreateBetterNameProposal(proposal));
+                    return new[] { Issue(symbol, CreateBetterNameProposal(proposal)) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

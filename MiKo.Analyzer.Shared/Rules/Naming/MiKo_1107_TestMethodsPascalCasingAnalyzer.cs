@@ -28,8 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = NamesFinder.FindBetterTestName(symbol.Name);
 
-                yield return Issue(symbol, CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(string symbolName)

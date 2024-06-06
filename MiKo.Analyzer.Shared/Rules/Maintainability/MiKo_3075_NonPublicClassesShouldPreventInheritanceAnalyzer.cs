@@ -35,13 +35,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.IsStatic || symbol.IsSealed || symbol.IsAbstract)
             {
                 // nothing to report
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (symbol.Name == "<Program>$") // TODO RKN: What about "$Program" ?
             {
                 // nothing to report as we cannot use it anyway (such as the 'Program' class in the new C# global statement style)
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (symbol.DeclaredAccessibility == Accessibility.Private)
@@ -55,12 +55,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
                     {
                         // we found a private base class, so nothing to report
-                        yield break;
+                        return Enumerable.Empty<Diagnostic>();
                     }
                 }
             }
 
-            yield return Issue(symbol);
+            return new[] { Issue(symbol) };
         }
     }
 }

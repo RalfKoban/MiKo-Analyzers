@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             // seems we have no else, so it must be the next statement inside the block
             if (syntax.Parent is BlockSyntax block)
             {
-                var statements = block.Statements.ToList();
+                var statements = block.Statements.ToArray();
 
                 var index = statements.IndexOf(syntax);
                 var other = statements.Skip(index + 1).FirstOrDefault();

@@ -9,10 +9,10 @@
 
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
     <AssemblyName>MiKoSolutions.Analyzers.CodeFixes.2022</AssemblyName>
-    <AssemblyVersion>0.0.45.0</AssemblyVersion>
-    <FileVersion>0.0.45.0</FileVersion>
+    <AssemblyVersion>0.0.46.0</AssemblyVersion>
+    <FileVersion>0.0.46.0</FileVersion>
     <Company>MiKo Solutions</Company>
-    <Version>0.0.45</Version>
+    <Version>0.0.46</Version>
     <Copyright>Copyright © 2018-2024 by MiKo Solutions. All rights reserved.</Copyright>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants);VS2022</DefineConstants>

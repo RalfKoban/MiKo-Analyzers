@@ -127,19 +127,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (argument.Expression is LiteralExpressionSyntax literal)
                     {
-                        if (literal.IsKind(SyntaxKind.NullLiteralExpression))
+                        switch (literal.Kind())
                         {
-                            return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
-                        }
+                            case SyntaxKind.NullLiteralExpression:
+                                return AssertThat(expression, Is("Null"), arguments, removeNameColon: true);
 
-                        if (literal.IsKind(SyntaxKind.TrueLiteralExpression))
-                        {
-                            return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
-                        }
+                            case SyntaxKind.TrueLiteralExpression:
+                                return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
 
-                        if (literal.IsKind(SyntaxKind.FalseLiteralExpression))
-                        {
-                            return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
+                            case SyntaxKind.FalseLiteralExpression:
+                                return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
                         }
                     }
 
@@ -152,19 +149,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (argument.Expression is LiteralExpressionSyntax literal)
                     {
-                        if (literal.IsKind(SyntaxKind.NullLiteralExpression))
+                        switch (literal.Kind())
                         {
-                            return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
-                        }
+                            case SyntaxKind.NullLiteralExpression:
+                                return AssertThat(expression, Is("Not", "Null"), arguments, removeNameColon: true);
 
-                        if (literal.IsKind(SyntaxKind.TrueLiteralExpression))
-                        {
-                            return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
-                        }
+                            case SyntaxKind.TrueLiteralExpression:
+                                return AssertThat(expression, Is("False"), arguments, removeNameColon: true);
 
-                        if (literal.IsKind(SyntaxKind.FalseLiteralExpression))
-                        {
-                            return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
+                            case SyntaxKind.FalseLiteralExpression:
+                                return AssertThat(expression, Is("True"), arguments, removeNameColon: true);
                         }
                     }
 

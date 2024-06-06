@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -63,8 +64,10 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
             if (loc > MaxLinesOfCode)
             {
-                yield return Issue(declaration.Identifier.GetLocation(), loc, MaxLinesOfCode);
+                return new[] { Issue(declaration.Identifier.GetLocation(), loc, MaxLinesOfCode) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

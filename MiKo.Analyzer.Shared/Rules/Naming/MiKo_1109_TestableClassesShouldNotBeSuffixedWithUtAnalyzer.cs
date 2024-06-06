@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -28,8 +29,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var betterName = FindBetterName(symbolName);
 
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
