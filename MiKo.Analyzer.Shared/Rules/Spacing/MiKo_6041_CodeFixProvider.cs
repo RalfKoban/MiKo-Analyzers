@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var clause = GetEqualsValueClause(syntax);
 
             var updatedClause = clause.WithEqualsToken(clause.EqualsToken.WithoutTrivia())
-                                      .WithValue(clause.Value.WithLeadingSpace());
+                                      .WithValue(GetUpdatedEqualsValueClauseValue(clause));
 
             var updatedSyntax = syntax.ReplaceNode(clause, updatedClause);
 
@@ -70,5 +70,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         }
 
         private static EqualsValueClauseSyntax GetEqualsValueClause(SyntaxNode syntax) => syntax.FirstDescendant<EqualsValueClauseSyntax>();
+
+        private static ExpressionSyntax GetUpdatedEqualsValueClauseValue(EqualsValueClauseSyntax clause)
+        {
+            var expression = clause.Value;
+
+#if VS2022
+            // TODO RKN: Update for SyntaxKind.CollectionExpression after switching to Roslyn 4.7.0
+            if (expression is CollectionExpressionSyntax collectionExpression)
+            {
+                return collectionExpression.WithOpenBracketToken(collectionExpression.OpenBracketToken.WithoutLeadingTrivia().WithLeadingSpace());
+            }
+#endif
+
+            return expression.WithLeadingSpace();
+        }
     }
 }
