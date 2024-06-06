@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 //// ncrunch: rdi off
 namespace TestHelper
@@ -82,6 +81,6 @@ namespace TestHelper
                                                                                         { "Wouldnt", "Would not" },
                                                                                     };
 
-        protected static readonly string[] WrongContradictionPhrases = ContradictionMap.Keys.ToArray();
+        protected static readonly string[] WrongContradictionPhrases = [.. ContradictionMap.Keys];
     }
 }
