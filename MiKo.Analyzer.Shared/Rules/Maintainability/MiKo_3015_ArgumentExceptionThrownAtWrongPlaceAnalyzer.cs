@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -40,8 +41,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (method != null && method.Parameters.Length == 0)
             {
-                yield return Issue(node.Type);
+                return new[] { Issue(node.Type) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

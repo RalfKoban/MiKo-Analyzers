@@ -82,6 +82,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     // seems like we found the exception on the method
                     result.Add(argumentList, ArgumentList(errorMessage, Argument(parameter)));
+
                     break;
                 }
 
@@ -89,6 +90,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     // seems like we found the exception on the method
                     result.Add(argumentList, ArgumentList(errorMessage, Argument(expression)));
+
                     break;
                 }
             }

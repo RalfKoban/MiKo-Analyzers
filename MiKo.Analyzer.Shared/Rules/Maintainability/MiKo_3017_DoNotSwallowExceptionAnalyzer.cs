@@ -35,7 +35,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     // seems like this is an exception with no inner exception, so see if the exception type supports creation via exceptions
-                    return typeSymbol.GetMethods(MethodKind.Constructor).Any(_ => _.Parameters.Any(__ => __.Type.IsException()));
+                    return typeSymbol.GetMethods(MethodKind.Constructor).Any(_ =>
+                                                                                 {
+                                                                                     var parameters = _.Parameters;
+
+                                                                                     return parameters.Length > 0 && parameters.Any(__ => __.Type.IsException());
+                                                                                 });
                 }
             }
 

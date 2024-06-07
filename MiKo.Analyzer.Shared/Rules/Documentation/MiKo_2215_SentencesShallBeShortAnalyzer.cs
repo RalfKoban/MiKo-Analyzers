@@ -43,8 +43,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (HasIssue(comment))
             {
-                yield return Issue(symbol);
+                return new[] { Issue(symbol) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(DocumentationCommentTriviaSyntax comment)

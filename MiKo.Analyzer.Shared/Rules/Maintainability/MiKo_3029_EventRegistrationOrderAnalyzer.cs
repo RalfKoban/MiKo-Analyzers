@@ -77,7 +77,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         var subtractAssignment = subtractAssignments[0];
 
                         // TODO RKN: Check for event handler delegate type, to avoid += and -= operations on numbers
-                        if (addAssignment.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression) && addAssignment.Right is IdentifierNameSyntax addedHandler && subtractAssignment.Right is IdentifierNameSyntax removedHandler && addedHandler.GetName() != removedHandler.GetName())
+                        if (addAssignment.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                         && addAssignment.Right is IdentifierNameSyntax addedHandler
+                         && subtractAssignment.Right is IdentifierNameSyntax removedHandler
+                         && addedHandler.GetName() != removedHandler.GetName())
                         {
                             yield return Issue(addAssignment);
                         }

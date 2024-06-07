@@ -32,17 +32,28 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             foreach (var ancestor in node.Ancestors())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case BlockSyntax block:
-                        return AnalyzeStatement(block, node);
+                    case SyntaxKind.Block:
+                        return AnalyzeStatement((BlockSyntax)ancestor, node);
 
-                    case SwitchSectionSyntax section:
-                        return AnalyzeStatement(section, node);
+                    case SyntaxKind.SwitchSection:
+                        return AnalyzeStatement((SwitchSectionSyntax)ancestor, node);
 
-                    case BaseMethodDeclarationSyntax _:
-                    case BaseTypeDeclarationSyntax _:
-                        return null; // nothing more to look up as there is no valid ancestor anymore
+                    // base methods
+                    case SyntaxKind.ConversionOperatorDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.DestructorDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.OperatorDeclaration:
+                        return null; // stop lookup as there is no valid ancestor anymore
+
+                    // base types
+                    case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.StructDeclaration:
+                        return null; // stop lookup as there is no valid ancestor anymore
                 }
             }
 

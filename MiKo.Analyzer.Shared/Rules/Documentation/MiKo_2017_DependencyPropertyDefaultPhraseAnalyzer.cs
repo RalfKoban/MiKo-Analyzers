@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var containingType = symbol.ContainingType;
 
-                if (containingType.GetMembersIncludingInherited<IPropertySymbol>().Any(_ => _.Name == propertyName))
+                if (containingType.GetMembersIncludingInherited<IPropertySymbol>(propertyName).Any())
                 {
                     var containingTypeFullName = containingType.ToString();
 

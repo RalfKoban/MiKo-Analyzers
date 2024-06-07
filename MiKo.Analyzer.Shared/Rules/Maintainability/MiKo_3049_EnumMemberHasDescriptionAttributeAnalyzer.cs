@@ -33,18 +33,29 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var field in symbol.GetFields())
             {
-                var descriptionAttributes = field.GetAttributes().Where(_ => _.AttributeClass.InheritsFrom(DescriptionAttributeName)).ToList();
+                var attributes = field.GetAttributes();
 
-                if (descriptionAttributes.Count == 0)
+                if (attributes.Length == 0)
                 {
                     yield return Issue(field);
                 }
-
-                foreach (var attribute in descriptionAttributes)
+                else
                 {
-                    if (attribute.ConstructorArguments.Length == 0)
+                    var descriptionAttributes = attributes.Where(_ => _.AttributeClass.InheritsFrom(DescriptionAttributeName)).ToList();
+
+                    if (descriptionAttributes.Count == 0)
                     {
                         yield return Issue(field);
+                    }
+                    else
+                    {
+                        foreach (var attribute in descriptionAttributes)
+                        {
+                            if (attribute.ConstructorArguments.Length == 0)
+                            {
+                                yield return Issue(field);
+                            }
+                        }
                     }
                 }
             }

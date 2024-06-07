@@ -44,7 +44,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 switch (ancestor)
                 {
-                    case MethodDeclarationSyntax _:
+                    case BaseMethodDeclarationSyntax _:
+                    case BaseTypeDeclarationSyntax _:
                     {
                         return false;
                     }
@@ -106,10 +107,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             if (symbolInfo.CandidateReason == CandidateReason.OverloadResolutionFailure)
             {
                 var arguments = invocation.ArgumentList.Arguments;
+                var argumentsCount = arguments.Count;
 
                 // we might have multiple symbols, so we have to choose the right one (compare parameter types)
                 foreach (var candidate in symbolInfo.CandidateSymbols.OfType<IMethodSymbol>()
-                                                    .Where(_ => _.Parameters.Length == arguments.Count)
+                                                    .Where(_ => _.Parameters.Length == argumentsCount)
                                                     .Where(_ => ParametersHaveSameTypes(_.Parameters, arguments, semanticModel)))
                 {
                     return candidate;
@@ -121,7 +123,9 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static bool ParametersHaveSameTypes(ImmutableArray<IParameterSymbol> candidateParameters, SeparatedSyntaxList<ArgumentSyntax> arguments, SemanticModel semanticModel)
         {
-            for (var index = 0; index < candidateParameters.Length; index++)
+            var candidateParametersLength = candidateParameters.Length;
+
+            for (var index = 0; index < candidateParametersLength; index++)
             {
                 var c = candidateParameters[index];
 

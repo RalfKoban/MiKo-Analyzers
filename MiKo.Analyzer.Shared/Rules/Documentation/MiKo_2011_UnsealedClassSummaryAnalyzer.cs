@@ -22,8 +22,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (symbol.IsSealed is false && summaries.Any(_ => _.Contains(Constants.Comments.SealedClassPhrase)))
             {
-                yield return Issue(symbol, Constants.Comments.SealedClassPhrase);
+                return new[] { Issue(symbol, Constants.Comments.SealedClassPhrase) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

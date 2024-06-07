@@ -94,9 +94,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (betterName != null && name != betterName)
                 {
-                    yield return Issue(name, namePart, betterName);
+                    return new[] { Issue(name, namePart, betterName) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

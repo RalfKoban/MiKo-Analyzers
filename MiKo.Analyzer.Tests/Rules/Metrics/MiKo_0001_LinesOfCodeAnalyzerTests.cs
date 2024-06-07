@@ -111,7 +111,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
                 var x = 0;
                 var y = 1;
                 var z = x + y;
-            }
+            } finally { }
         }
     }
 ");
@@ -123,6 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
     {
         public void Method()
         {
+            try { }
             catch (Exception ex)
             {
                 var x = 0;
@@ -140,6 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
     {
         public void Method()
         {
+            try { }
             catch (Exception ex) when (ex != null)
             {
                 var x = 0;
@@ -157,6 +159,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
     {
         public void Method()
         {
+            try { }
             finally
             {
                 var x = 0;

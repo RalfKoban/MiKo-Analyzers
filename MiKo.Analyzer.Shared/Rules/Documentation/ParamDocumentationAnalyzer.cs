@@ -17,15 +17,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
         {
-            if (comment.StartsWithAny(phrases, comparison) is false)
+            if (comment.StartsWithAny(phrases, comparison))
             {
-                var phrase = phrases[0];
-                var preview = phrases.Length > 1 && phrase.Length <= 10
-                              ? phrases.HumanizedConcatenated()
-                              : phrase.SurroundedWithApostrophe();
-
-                yield return Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var phrase = phrases[0];
+            var preview = GetPreview(phrase, phrases);
+
+            return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase)) };
         }
 
         protected IEnumerable<Diagnostic> AnalyzePlainTextStartingPhrase(IParameterSymbol parameter, XmlElementSyntax parameterComment, string[] phrases, StringComparison comparison = StringComparison.Ordinal)
@@ -38,9 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var phrase = phrases[0];
-            var preview = phrases.Length > 1 && phrase.Length <= 10
-                          ? phrases.HumanizedConcatenated()
-                          : phrase.SurroundedWithApostrophe();
+            var preview = GetPreview(phrase, phrases);
 
             return new[] { Issue(parameter.Name, GetIssueLocation(parameterComment), preview, CreateStartingPhraseProposal(phrase)) };
         }
@@ -53,27 +51,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected IEnumerable<Diagnostic> AnalyzeParameters(IMethodSymbol symbol, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var parameter in symbol.Parameters.Where(ShallAnalyzeParameter))
+            var parameters = symbol.Parameters;
+
+            if (parameters.Length > 0)
             {
-                var parameterComment = comment.GetParameterComment(parameter.Name);
-
-                if (parameterComment is null)
+                foreach (var parameter in parameters)
                 {
-                    continue;
-                }
+                    if (ShallAnalyzeParameter(parameter))
+                    {
+                        var parameterComment = comment.GetParameterComment(parameter.Name);
 
-                var parameterCommentXml = parameter.GetComment(commentXml);
+                        if (parameterComment is null)
+                        {
+                            continue;
+                        }
 
-                if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase))
-                {
-                    continue;
-                }
+                        var parameterCommentXml = parameter.GetComment(commentXml);
 
-                foreach (var issue in AnalyzeParameter(parameter, parameterComment, parameterCommentXml))
-                {
-                    yield return issue;
+                        if (parameterCommentXml.EqualsAny(Constants.Comments.UnusedPhrase))
+                        {
+                            continue;
+                        }
+
+                        foreach (var issue in AnalyzeParameter(parameter, parameterComment, parameterCommentXml))
+                        {
+                            yield return issue;
+                        }
+                    }
                 }
             }
         }
+
+        private static string GetPreview(string phrase, string[] phrases) => phrases.Length > 1 && phrase.Length <= 10
+                                                                             ? phrases.HumanizedConcatenated()
+                                                                             : phrase.SurroundedWithApostrophe();
     }
 }

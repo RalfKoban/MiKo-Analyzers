@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public static class NamesFinder
     {
-        internal static IEnumerable<string> FindPropertyNames(IFieldSymbol symbol, string unwantedSuffix, string invocation)
+        internal static IReadOnlyCollection<string> FindPropertyNames(IFieldSymbol symbol, string unwantedSuffix, string invocation)
         {
             // find properties
             var propertyNames = symbol.ContainingType.GetProperties().ToHashSet(_ => _.Name);
@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             // there might be none available; in such case do not report anything
             if (propertyNames.None())
             {
-                return Enumerable.Empty<string>();
+                return Array.Empty<string>();
             }
 
             var symbolName = symbol.Name.WithoutSuffix(unwantedSuffix);
@@ -30,14 +30,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 if (propertyNames.Contains(symbolName))
                 {
-                    return Enumerable.Empty<string>();
+                    return Array.Empty<string>();
                 }
             }
             else
             {
                 if (registeredName == symbolName)
                 {
-                    return Enumerable.Empty<string>();
+                    return Array.Empty<string>();
                 }
 
                 propertyNames.Clear();

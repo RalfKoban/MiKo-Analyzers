@@ -62,14 +62,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     case BaseMethodDeclarationSyntax method:
                         AnalyzeComment(context, method);
+
                         break;
 
                     case AccessorDeclarationSyntax accessor:
                         AnalyzeComment(context, accessor);
+
                         break;
 
                     case BaseFieldDeclarationSyntax field:
                         AnalyzeComment(context, field);
+
                         break;
                 }
             }

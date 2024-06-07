@@ -36,18 +36,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (parameter.HasAttributeApplied("System.Runtime.CompilerServices.CallerMemberNameAttribute"))
             {
                 // nothing to report as that attribute indicates that the value gets automatically set
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             var data = CreatePropertyData(parameter);
 
-            yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } });
+            return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), Phrase, new Dictionary<string, string> { { data.Key, data.Value } }) };
         }
 
         private static KeyValuePair<string, string> CreatePropertyData(IParameterSymbol parameter)
@@ -56,38 +56,41 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var parameterType = parameter.Type;
 
-            switch (defaultValue)
+            switch (defaultValue?.Kind())
             {
-                case IdentifierNameSyntax _:
+                case SyntaxKind.IdentifierName:
                     return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString()); // seems like some field or property, so simply use that one
 
-                case PrefixUnaryExpressionSyntax _:
+                case SyntaxKind.UnaryPlusExpression:
+                case SyntaxKind.UnaryMinusExpression:
+                case SyntaxKind.BitwiseNotExpression:
+                case SyntaxKind.LogicalNotExpression:
+                case SyntaxKind.PreIncrementExpression:
+                case SyntaxKind.PreDecrementExpression:
+                case SyntaxKind.AddressOfExpression:
+                case SyntaxKind.PointerIndirectionExpression:
+                case SyntaxKind.IndexExpression:
                     return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString()); // seems like some hardcoded value negative value
 
-                case DefaultExpressionSyntax _:
+                case SyntaxKind.DefaultExpression:
                     return CreatePropertyDataForDefault(parameterType); // seems like we have some 'default(Xyz)' value
 
-                case LiteralExpressionSyntax literal:
-                {
-                    // seems like some hardcoded value
-                    switch (literal.Kind())
-                    {
-                        case SyntaxKind.TrueLiteralExpression:
-                        case SyntaxKind.FalseLiteralExpression:
-                        case SyntaxKind.NullLiteralExpression:
-                            return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, defaultValue.ToString());
+                // seems like some hardcoded value
+                case SyntaxKind.TrueLiteralExpression:
+                case SyntaxKind.FalseLiteralExpression:
+                case SyntaxKind.NullLiteralExpression:
+                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeLangwordValue, defaultValue.ToString());
 
-                        case SyntaxKind.NumericLiteralExpression:
-                        case SyntaxKind.StringLiteralExpression:
-                            return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString());
+                case SyntaxKind.NumericLiteralExpression:
+                case SyntaxKind.StringLiteralExpression:
+                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultCodeValue, defaultValue.ToString());
 
-                        case SyntaxKind.DefaultLiteralExpression:
-                            return CreatePropertyDataForDefault(parameterType);
+                case SyntaxKind.DefaultLiteralExpression:
+                    return CreatePropertyDataForDefault(parameterType);
 
-                        default:
-                            return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString());
-                    }
-                }
+                case SyntaxKind.ArgListExpression:
+                case SyntaxKind.CharacterLiteralExpression:
+                    return new KeyValuePair<string, string>(Constants.AnalyzerCodeFixSharedData.DefaultSeeCrefValue, defaultValue.ToString());
             }
 
             if (parameterType.IsEnum())
