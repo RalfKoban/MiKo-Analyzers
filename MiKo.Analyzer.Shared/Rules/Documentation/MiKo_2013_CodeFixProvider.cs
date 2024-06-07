@@ -65,9 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 contents.AddRange(originalContent.Skip(1));
 
                 // fix last item's CRLF
-                if (contents[contents.Count - 1] is XmlTextSyntax last)
+                var lastIndex = contents.Count - 1;
+                if (contents[lastIndex] is XmlTextSyntax last)
                 {
-                    contents[contents.Count - 1] = WithoutEmptyTextAtEnd(last, last.TextTokens.ToList());
+                    contents[lastIndex] = WithoutEmptyTextAtEnd(last, last.TextTokens.ToList());
                 }
 
                 return SyntaxFactory.XmlElement(

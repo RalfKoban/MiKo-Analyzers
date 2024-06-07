@@ -5,7 +5,7 @@ namespace TestHelper
 {
     public partial class CodeFixVerifier
     {
-        protected static readonly Dictionary<string, string> ContradictionMap = new Dictionary<string, string>
+        protected static readonly Dictionary<string, string> ContradictionMap = new()
                                                                                     {
                                                                                         { "aren't", "are not" },
                                                                                         { "can't", "cannot" },
