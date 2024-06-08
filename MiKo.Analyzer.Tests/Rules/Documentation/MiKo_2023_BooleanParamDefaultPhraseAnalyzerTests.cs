@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] DefaultCases = CreateDefaultCases().Take(TestLimit).Distinct().ToArray();
 
         private static readonly string[] TruePhrases =
-                                                       {
+                                                       [
                                                            @"<see langword=""true""/> if some condition. Otherwise <see langword=""false""/>.",
                                                            @"<see langword=""true""/> if some condition.<see langword=""false""/> otherwise.",
                                                            @"<see langword=""true""/> if some condition. <see langword=""false""/> otherwise.",
@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                            "'true': if some condition. Otherwise 'false'.",
                                                            "'True': if some condition. Otherwise 'False'.",
                                                            "'TRUE': if some condition. Otherwise 'FALSE'.",
-                                                       };
+                                                       ];
 
 //// ncrunch: no coverage end
 

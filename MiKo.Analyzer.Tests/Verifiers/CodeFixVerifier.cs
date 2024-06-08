@@ -121,7 +121,7 @@ namespace TestHelper
                 var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
                 codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
-                if (actions.Any() is false)
+                if (actions.Count == 0)
                 {
                     break;
                 }
@@ -154,7 +154,7 @@ New document:
                 }
 
                 // check if there are analyzer diagnostics left after the code fix
-                if (analyzerDiagnostics.Any() is false)
+                if (analyzerDiagnostics.Length == 0)
                 {
                     break;
                 }

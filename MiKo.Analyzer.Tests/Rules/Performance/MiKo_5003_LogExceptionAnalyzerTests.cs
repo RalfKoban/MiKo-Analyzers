@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     [TestFixture]
     public sealed class MiKo_5003_LogExceptionAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Methods = { "Debug", "Info", "Error", "Warn", "Fatal", "DebugFormat", "InfoFormat", "ErrorFormat", "WarnFormat", "FatalFormat" };
+        private static readonly string[] Methods = ["Debug", "Info", "Error", "Warn", "Fatal", "DebugFormat", "InfoFormat", "ErrorFormat", "WarnFormat", "FatalFormat"];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

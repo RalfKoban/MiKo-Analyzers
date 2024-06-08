@@ -11,10 +11,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2005_EventArgsInDocumentationAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] IncorrectPhrases =
-                                                            {
+                                                            [
                                                                 "This is an event arg comment.",
                                                                 "This is an event args comment.",
-                                                            };
+                                                            ];
 
         [Test]
         public void No_issue_is_reported_for_non_commented_class() => No_issue_is_reported_for(@"

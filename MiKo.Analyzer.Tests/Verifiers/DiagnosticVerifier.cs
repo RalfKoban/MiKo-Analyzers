@@ -17,7 +17,7 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        private static IEnumerable<string> Placeholders { get; } = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
+        private static readonly string[] Placeholders = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
 
         internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, analyzers);
 
@@ -106,7 +106,7 @@ namespace TestHelper
             {
                 var results = GetDiagnostics(File.ReadAllText(file));
 
-                if (results.Any())
+                if (results.Length != 0)
                 {
                     yield return file;
                 }

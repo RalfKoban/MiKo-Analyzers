@@ -14,25 +14,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2032_BooleanReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BooleanOnlyReturnValues =
-                                                                   {
+                                                                   [
                                                                        "bool",
                                                                        "Boolean",
                                                                        "System.Boolean",
-                                                                   };
+                                                                   ];
 
         private static readonly string[] BooleanTaskReturnValues =
-                                                                   {
+                                                                   [
                                                                        "Task<bool>",
                                                                        "Task<Boolean>",
                                                                        "Task<System.Boolean>",
                                                                        "System.Threading.Tasks.Task<bool>",
                                                                        "System.Threading.Tasks.Task<Boolean>",
                                                                        "System.Threading.Tasks.Task<System.Boolean>",
-                                                                   };
+                                                                   ];
 
         private static readonly string[] SimpleStartingPhrases = MiKo_2032_CodeFixProvider.CreateSimpleStartingPhrases().ToArray();
 
-        private static readonly string[] BooleanReturnValues = BooleanOnlyReturnValues.Concat(BooleanTaskReturnValues).ToArray();
+        private static readonly string[] BooleanReturnValues = [.. BooleanOnlyReturnValues, .. BooleanTaskReturnValues];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(BooleanReturnValues))] string returnType) => No_issue_is_reported_for(@"

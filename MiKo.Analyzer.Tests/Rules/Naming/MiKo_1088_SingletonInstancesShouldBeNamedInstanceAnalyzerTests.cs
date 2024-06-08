@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1088_SingletonInstancesShouldBeNamedInstanceAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] FieldPrefixes = { "m_", "s_", "t_", "_", string.Empty, };
+        private static readonly string[] FieldPrefixes = ["m_", "s_", "t_", "_", string.Empty,];
 
         [Test]
         public void No_issue_is_reported_for_test_class() => No_issue_is_reported_for(@"

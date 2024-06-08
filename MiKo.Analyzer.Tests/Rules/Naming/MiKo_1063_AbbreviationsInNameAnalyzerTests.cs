@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed partial class MiKo_1063_AbbreviationsInNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BadPrefixes =
-                                                       {
+                                                       [
                                                            "app",
                                                            "apps",
                                                            "assoc",
@@ -87,10 +87,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "tmp",
                                                            "txt",
                                                            "vol",
-                                                       };
+                                                       ];
 
         private static readonly string[] BadMidTerms =
-                                                       {
+                                                       [
                                                            "App",
                                                            "Apps",
                                                            "Assoc",
@@ -163,32 +163,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Tmp",
                                                            "Txt",
                                                            "Vol",
-                                                       };
+                                                       ];
 
         private static readonly string[] BadPostfixes = BadMidTerms
-                                                        .Concat(new[]
-                                                                    {
-                                                                        "Bl",
-                                                                        "BL",
-                                                                        "CLI",
-                                                                        "Itf",
-                                                                        "Meth",
-                                                                        "Param",
-                                                                        "Params",
-                                                                        "Pos",
-                                                                        "Proc",
-                                                                        "Prop",
-                                                                        "PropName",
-                                                                        "PropNames",
-                                                                        "Props",
-                                                                        "Vm",
-                                                                        "VM",
-                                                                    })
+                                                        .Concat([
+                                                                    "Bl",
+                                                                    "BL",
+                                                                    "CLI",
+                                                                    "Itf",
+                                                                    "Meth",
+                                                                    "Param",
+                                                                    "Params",
+                                                                    "Pos",
+                                                                    "Proc",
+                                                                    "Prop",
+                                                                    "PropName",
+                                                                    "PropNames",
+                                                                    "Props",
+                                                                    "Vm",
+                                                                    "VM",
+                                                                ])
                                                         .Distinct()
                                                         .ToArray();
 
         private static readonly string[] AllowedTerms =
-                                                        {
+                                                        [
                                                             "accept",
                                                             "acceptName",
                                                             "accepts",
@@ -246,7 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "signCertificate",
                                                             "text",
                                                             "tires",
-                                                        };
+                                                        ];
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"

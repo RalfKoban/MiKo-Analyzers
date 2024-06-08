@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1080_UseNumbersInsteadOfWordingAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-                                                        {
+                                                        [
                                                             "_first_",
                                                             "_one_",
                                                             "_second_",
@@ -71,10 +71,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "exponential",
                                                             "GetDissimilarityForType",
                                                             "GetDissimilaritiesForType",
-                                                        };
+                                                        ];
 
         private static readonly string[] WrongNames =
-                                                      {
+                                                      [
                                                           "componentOne",
                                                           "componentTwo",
                                                           "issueThree",
@@ -97,7 +97,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                           "eighthItem",
                                                           "ninthItem",
                                                           "tenthItem",
-                                                      };
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_namespace_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"

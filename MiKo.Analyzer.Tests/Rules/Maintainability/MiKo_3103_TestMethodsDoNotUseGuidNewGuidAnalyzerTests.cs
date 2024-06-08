@@ -188,7 +188,7 @@ public class TestMe
 
         private sealed class Testable_MiKo_3103_CodeFixProvider : MiKo_3103_CodeFixProvider
         {
-            protected override Guid CreateGuid() => new Guid("111e32b2-0b54-44e2-958b-06ff2bc2b353");
+            protected override Guid CreateGuid() => new("111e32b2-0b54-44e2-958b-06ff2bc2b353");
         }
     }
 }
