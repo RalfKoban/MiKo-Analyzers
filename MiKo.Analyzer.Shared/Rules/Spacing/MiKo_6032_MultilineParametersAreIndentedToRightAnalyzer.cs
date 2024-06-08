@@ -63,7 +63,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     // this is a new-found line, so inspect start position
                     if (parameterPosition.Character != characterPosition)
                     {
-                        yield return Issue(parameter.GetName(), parameter, CreateProposalForLinePosition(startPosition));
+                        yield return Issue(parameter.GetName(), parameter, CreateProposalForSpaces(startPosition.Character));
                     }
                 }
                 else

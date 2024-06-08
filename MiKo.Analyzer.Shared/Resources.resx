@@ -5294,4 +5294,17 @@ Hence, the open brace of the expression should be positioned directly below the 
   <data name="MiKo_6055_Title" xml:space="preserve">
     <value>Assignment statements should be surrounded by blank lines</value>
   </data>
+  <data name="MiKo_6056_CodeFixTitle" xml:space="preserve">
+    <value>Align collection expression brackets</value>
+  </data>
+  <data name="MiKo_6056_Description" xml:space="preserve">
+    <value>Collection expressions are very similar to collection initializers from the code reading point of view.
+Hence, their open brackets should be positioned at the same position where the collection initializer braces would be positioned.</value>
+  </data>
+  <data name="MiKo_6056_MessageFormat" xml:space="preserve">
+    <value>Align collection expression brackets</value>
+  </data>
+  <data name="MiKo_6056_Title" xml:space="preserve">
+    <value>Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned</value>
+  </data>
 </root>
