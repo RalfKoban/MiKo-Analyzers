@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     if (typePosition.Line != openBracePosition.Line && typePosition.Character != openBracePosition.Character)
                     {
-                        return Issue(openBraceToken, CreateProposalForLinePosition(typePosition));
+                        return Issue(openBraceToken, CreateProposalForSpaces(typePosition.Character));
                     }
 
                     return null;
@@ -75,7 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     if (keywordPosition.Line != openBracePosition.Line && openBracePosition.Character != keywordPosition.Character)
                     {
-                        return Issue(openBraceToken, CreateProposalForLinePosition(keywordPosition));
+                        return Issue(openBraceToken, CreateProposalForSpaces(keywordPosition.Character));
                     }
 
                     return null;

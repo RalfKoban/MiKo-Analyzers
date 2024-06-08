@@ -146,7 +146,19 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken WithEndOfLine(this SyntaxToken value) => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
-        internal static SyntaxToken WithLeadingEmptyLine(this SyntaxToken value) => value.WithLeadingTrivia(value.LeadingTrivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed));
+        internal static SyntaxToken WithLeadingEmptyLine(this SyntaxToken value) => value.WithLeadingEmptyLines(1);
+
+        internal static SyntaxToken WithLeadingEmptyLines(this SyntaxToken value, int lines)
+        {
+            var trivia = value.LeadingTrivia;
+
+            for (var i = 0; i < lines; i++)
+            {
+                trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed);
+            }
+
+            return value.WithLeadingTrivia(trivia);
+        }
 
         internal static SyntaxToken WithLeadingEndOfLine(this SyntaxToken value) => value.WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 

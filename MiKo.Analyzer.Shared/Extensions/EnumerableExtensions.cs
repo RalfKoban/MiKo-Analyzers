@@ -551,6 +551,10 @@ namespace System.Linq
 
         internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Any() is false;
 
+        internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+
+        internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+
         internal static bool None(this SyntaxTokenList source) => source.Any() is false;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
