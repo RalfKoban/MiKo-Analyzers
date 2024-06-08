@@ -19,8 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var position = GetProposedLinePosition(issue);
-            var spaces = position.Character;
+            var spaces = GetProposedSpaces(issue);
 
             switch (syntax)
             {

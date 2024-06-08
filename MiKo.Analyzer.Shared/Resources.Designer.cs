@@ -15129,5 +15129,42 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6055_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align collection expression brackets.
+        /// </summary>
+        internal static string MiKo_6056_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6056_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection expressions are very similar to collection initializers from the code reading point of view.
+        ///Hence, their open brackets should be positioned at the same position where the collection initializer braces would be positioned..
+        /// </summary>
+        internal static string MiKo_6056_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6056_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align collection expression brackets.
+        /// </summary>
+        internal static string MiKo_6056_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6056_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned.
+        /// </summary>
+        internal static string MiKo_6056_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6056_Title", resourceCulture);
+            }
+        }
     }
 }

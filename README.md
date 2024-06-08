@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 440 rules that are currently provided by the analyzer.
+The following tables lists all the 441 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -484,3 +484,4 @@ The following tables lists all the 440 rules that are currently provided by the 
 |MiKo_6053|Single-line arguments shall be placed on single line|&#x2713;|&#x2713;|
 |MiKo_6054|Lambda arrows shall be placed on same line as the parameter(s) of the lambda|&#x2713;|&#x2713;|
 |MiKo_6055|Assignment statements should be surrounded by blank lines|&#x2713;|&#x2713;|
+|MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
