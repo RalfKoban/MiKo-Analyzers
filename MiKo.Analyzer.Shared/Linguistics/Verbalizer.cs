@@ -12,6 +12,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors" };
 
+        private static readonly string[] PastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "sed", "ved" };
+
+        private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
+
+        private static readonly string[] ThreeCharacterGerundEndings = { "anging", "inging", "ssing", "cting", "pting" };
+
+        private static readonly string[] ThreeCharacterGerundEndingsWithE = { "bling", "kling", "ging", "sing", "ting", "uing", "ving", "zing" };
+
         private static readonly ConcurrentDictionary<string, string> GerundVerbs = new ConcurrentDictionary<string, string>();
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
@@ -243,6 +251,31 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
+        public static bool IsGerundVerb(string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            if (value.Length <= 4)
+            {
+                return false;
+            }
+
+            if (value.EndsWith("ing", StringComparison.Ordinal))
+            {
+                if (value.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         public static string MakeGerundVerb(string value)
         {
             if (value.IsNullOrWhiteSpace())
@@ -271,12 +304,30 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith("ing", StringComparison.Ordinal))
                 {
-                    return word;
+                    if (word.Length > 4)
+                    {
+                        return word;
+                    }
+
+                    // here we have only 4 character words
+                    if (word.Equals("bing", StringComparison.OrdinalIgnoreCase)
+                     || word.Equals("king", StringComparison.OrdinalIgnoreCase)
+                     || word.Equals("ming", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word;
+                    }
+
+                    return word + "ing";
                 }
 
-                var sb = new StringBuilder(word).Append("ing").ReplaceWithCheck("ping", "pping").ReplaceWithCheck("eing", "ing");
+                var gerundVerb = new StringBuilder(word).Append("ing")
+                                                        .ReplaceWithCheck("ping", "pping")
+                                                        .ReplaceWithCheck("eing", "ing")
+                                                        .ReplaceWithCheck("uring", "urring")
+                                                        .ReplaceWithCheck("uting", "utting")
+                                                        .ToString();
 
-                return sb.ToString();
+                return gerundVerb;
             }
         }
 
@@ -303,6 +354,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word[0].IsUpperCaseLetter() ? "Have" : "have";
                     }
 
+                    if (word.EndsWith("ss", StringComparison.Ordinal))
+                    {
+                        return word;
+                    }
+
                     if (word.EndsWith("oes", StringComparison.Ordinal) || word.EndsWith("shes", StringComparison.Ordinal))
                     {
                         return word.WithoutSuffix("es");
@@ -314,6 +370,39 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (word.Equals("are", StringComparison.OrdinalIgnoreCase))
                 {
                     return word[0].IsUpperCaseLetter() ? "Be" : "be";
+                }
+
+                if (word.EndsWith("ing", StringComparison.OrdinalIgnoreCase))
+                {
+                    var wordLength = word.Length;
+
+                    if (wordLength == 4)
+                    {
+                        // ignore short word such as "ping" or "thing"
+                        return word;
+                    }
+
+                    if (word.EndsWith("thing", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return word;
+                    }
+
+                    if (word.EndsWithAny(FourCharacterGerundEndings, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, wordLength - 4);
+                    }
+
+                    if (word.EndsWithAny(ThreeCharacterGerundEndings, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, wordLength - 3);
+                    }
+
+                    if (word.EndsWithAny(ThreeCharacterGerundEndingsWithE, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return word.Substring(0, wordLength - 3) + "e";
+                    }
+
+                    return word.Substring(0, wordLength - 3);
                 }
 
                 return word;
@@ -351,14 +440,13 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     var firstChar = word.First();
                     var lastChar = word.Last();
 
-                    if (firstChar == Apostrophe && lastChar == Apostrophe)
+                    switch (firstChar)
                     {
-                        return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
-                    }
+                        case Apostrophe when lastChar == Apostrophe:
+                            return CreateThirdPersonSingularVerb(word.Trim(Apostrophe)).SurroundedWithApostrophe();
 
-                    if (firstChar == DoubleQuote && lastChar == DoubleQuote)
-                    {
-                        return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
+                        case DoubleQuote when lastChar == DoubleQuote:
+                            return CreateThirdPersonSingularVerb(word.Trim(DoubleQuote)).SurroundedWithDoubleQuote();
                     }
                 }
 
@@ -392,62 +480,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith("ed", StringComparison.Ordinal))
                 {
-                    if (word.EndsWith("ated", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
+                    return CreateFromPast(word);
+                }
 
-                    if (word.EndsWith("dded", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 2) + 's';
-                    }
-
-                    if (word.EndsWith("dled", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    if (word.EndsWith("tted", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 3) + 's';
-                    }
-
-                    if (word.EndsWith("ced", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    if (word.EndsWith("eed", StringComparison.Ordinal))
-                    {
-                        return word + 's';
-                    }
-
-                    if (word.EndsWith("ged", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    if (word.EndsWith("ied", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    if (word.EndsWith("red", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    if (word.EndsWith("sed", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    if (word.EndsWith("ved", StringComparison.Ordinal))
-                    {
-                        return word.Substring(0, word.Length - 1) + 's';
-                    }
-
-                    return word.Substring(0, word.Length - 2) + 's';
+                if (word.EndsWith("ing", StringComparison.Ordinal))
+                {
+                    return CreateFromGerund(word);
                 }
 
                 if (word.Equals("be", StringComparison.OrdinalIgnoreCase) || word.Equals("are", StringComparison.OrdinalIgnoreCase))
@@ -470,6 +508,49 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word[0].IsUpperCaseLetter() ? "Shuts down" : "shuts down";
                 }
 
+                return AppendEndingS(word);
+            }
+
+            string CreateFromPast(string word)
+            {
+                if (word.EndsWith("dded", StringComparison.Ordinal))
+                {
+                    return word.Substring(0, word.Length - 2) + 's';
+                }
+
+                if (word.EndsWith("tted", StringComparison.Ordinal))
+                {
+                    return word.Substring(0, word.Length - 3) + 's';
+                }
+
+                if (word.EndsWith("eed", StringComparison.Ordinal))
+                {
+                    return word + 's';
+                }
+
+                if (word.EndsWithAny(PastEndings, StringComparison.Ordinal))
+                {
+                    return word.Substring(0, word.Length - 1) + 's';
+                }
+
+                return word.Substring(0, word.Length - 2) + 's';
+            }
+
+            string CreateFromGerund(string word)
+            {
+                var infiniteVerb = MakeInfiniteVerb(word);
+
+                if (infiniteVerb == word)
+                {
+                    // did not work, so just use this to avoid infinite recursion
+                    return AppendEndingS(word);
+                }
+
+                return CreateThirdPersonSingularVerb(infiniteVerb);
+            }
+
+            string AppendEndingS(string word)
+            {
                 var result = word + 's';
 
                 if (IsTwoCharacterEndingsWithS(result))
@@ -514,7 +595,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith(pair.Key, StringComparison.Ordinal))
                 {
-                    result = word.Slice(0, word.Length - pair.Key.Length).ToString() + pair.Value;
+                    result = word.Slice(0, word.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }
@@ -541,14 +622,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value)
-        {
-            return value.ContainsAny(MiddlePhrases);
-        }
+        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value) => value.ContainsAny(MiddlePhrases);
 
-        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value)
-        {
-            return value.EndsWithAny(EndingPhrases);
-        }
+        private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }
 }

@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return C(defaultCodeValue);
             }
 
-            return XmlText("TODO");
+            return XmlText(Constants.TODO);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Contains(CorrectName))
             {
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (symbolName.ContainsAny(WrongNames))
@@ -38,8 +38,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 var betterName = symbolName.WithoutSuffix(wrongName);
 
-                yield return Issue(symbol, wrongName, CreateBetterNameProposal(betterName));
+                return new[] { Issue(symbol, wrongName, CreateBetterNameProposal(betterName)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

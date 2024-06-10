@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -21,6 +22,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.IsEventHandler();
 
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => ShallAnalyze(symbol);
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
@@ -33,12 +36,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         && methodName.EndsWith(suffix, StringComparison.Ordinal)
                         && methodName.Contains(Constants.Underscore) is false;
 
-            if (nameFits is false)
+            if (nameFits)
             {
-                var proposal = Prefix + suffix;
-
-                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var proposal = Prefix + suffix;
+
+            return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
         }
 
         private static string FindProperNameSuffix(IMethodSymbol method)

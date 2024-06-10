@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return GetParameterName(ee);
 
                 default:
-                    return "TODO";
+                    return Constants.TODO;
             }
         }
     }

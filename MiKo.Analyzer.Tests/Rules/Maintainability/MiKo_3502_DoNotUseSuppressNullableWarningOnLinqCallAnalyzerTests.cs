@@ -14,13 +14,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3502_DoNotUseSuppressNullableWarningOnLinqCallAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] LinqCalls =
-                                                     {
+                                                     [
                                                          nameof(Enumerable.DefaultIfEmpty),
                                                          nameof(Enumerable.ElementAtOrDefault),
                                                          nameof(Enumerable.FirstOrDefault),
                                                          nameof(Enumerable.LastOrDefault),
                                                          nameof(Enumerable.SingleOrDefault),
-                                                     };
+                                                     ];
 
         [Test]
         public void No_issue_is_reported_for_Nullable_suppression() => No_issue_is_reported_for(@"

@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3046_OnPropertyChangedMethodUsesNameofAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MethodNames =
-                                                       {
+                                                       [
                                                            "NotifyPropertyChanged",
                                                            "NotifyPropertyChanging",
                                                            "OnNotifyPropertyChanged",
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                            "RaisePropertyChanging",
                                                            "TriggerPropertyChanged",
                                                            "TriggerPropertyChanging",
-                                                       };
+                                                       ];
 
         [Test]
         public void No_issue_is_reported_for_method_with_nameof_applied_([ValueSource(nameof(MethodNames))] string methodName) => No_issue_is_reported_for(@"

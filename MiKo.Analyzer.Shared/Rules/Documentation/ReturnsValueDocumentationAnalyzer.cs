@@ -18,36 +18,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.ReturnsVoid is false && base.ShallAnalyze(symbol);
+
+        protected override bool ShallAnalyze(IPropertySymbol symbol) => symbol.GetReturnType() != null && base.ShallAnalyze(symbol);
+
+        protected sealed override IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
+        {
+            return AnalyzeReturnType(symbol, symbol.ReturnType, comment, commentXml);
+        }
+
         protected sealed override IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            return AnalyzeComment(symbol, comment, commentXml);
+            return AnalyzeReturnType(symbol, symbol.GetReturnType(), comment, commentXml);
         }
 
         protected virtual bool ShallAnalyzeReturnType(ITypeSymbol returnType) => true;
-
-        protected IEnumerable<Diagnostic> AnalyzeComment(IPropertySymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml)
-        {
-            var returnType = symbol.GetReturnType();
-
-            if (returnType != null)
-            {
-                return AnalyzeReturnType(symbol, returnType, comment, commentXml);
-            }
-
-            return Enumerable.Empty<Diagnostic>();
-        }
-
-        protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
-        {
-            var method = (IMethodSymbol)symbol;
-
-            if (method.ReturnsVoid)
-            {
-                return Enumerable.Empty<Diagnostic>();
-            }
-
-            return AnalyzeReturnType(method, method.ReturnType, comment, commentXml);
-        }
 
         protected IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, DocumentationCommentTriviaSyntax comment, string commentXml, string xmlTag, string[] phrase)
         {

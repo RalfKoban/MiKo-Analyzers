@@ -38,6 +38,13 @@ public class TestMe : EventArgs
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_record() => No_issue_is_reported_for(@"
+public record TestMe
+{
+}
+");
+
         [TestCase("using System; class TestMe : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
         [TestCase("using System; class TestMeArg : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]
         [TestCase("using System; class TestMeArgs : EventArgs { }", "using System; class TestMeEventArgs : EventArgs { }")]

@@ -21,9 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ConditionalExpressionSyntax expression)
             {
-                var position = GetProposedLinePosition(issue);
-
-                var spaces = position.Character;
+                var spaces = GetProposedSpaces(issue);
 
                 return expression.WithQuestionToken(expression.QuestionToken.WithLeadingSpaces(spaces))
                                  .WithColonToken(expression.ColonToken.WithLeadingSpaces(spaces));

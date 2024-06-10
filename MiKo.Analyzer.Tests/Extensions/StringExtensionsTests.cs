@@ -8,6 +8,9 @@ namespace MiKoSolutions.Analyzers.Extensions
     [TestFixture]
     public static class StringExtensionsTests
     {
+        private static readonly string LowerCaseCharacters = " abcdefghijklmnopqrstuvwxyz1234567890";
+        private static readonly string UpperCaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
         [TestCase(null, ExpectedResult = null)]
         [TestCase("", ExpectedResult = "")]
         [TestCase("a", ExpectedResult = "a")]
@@ -40,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void SplitBy_splits_by_single_item_that_is_contained_multiple_times()
         {
-            var result = "do split if something is split here.".SplitBy(new[] { "split" });
+            var result = "do split if something is split here.".SplitBy(["split"]);
 
             Assert.That(result, Is.EquivalentTo(new[]
                                                     {
@@ -55,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void SplitBy_splits_by_multiple_items_that_are_contained_a_single_time()
         {
-            var result = "do split_1 if something is split_2 here.".SplitBy(new[] { "split_1", "split_2" });
+            var result = "do split_1 if something is split_2 here.".SplitBy(["split_1", "split_2"]);
 
             Assert.That(result, Is.EquivalentTo(new[]
                                                     {
@@ -70,7 +73,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void SplitBy_splits_by_multiple_items_that_are_contained_multiple_times()
         {
-            var result = "do split_1 if something is split_2 here. Also split_1 here because split_2 is contained multiple times.".SplitBy(new[] { "split_1", "split_2" });
+            var result = "do split_1 if something is split_2 here. Also split_1 here because split_2 is contained multiple times.".SplitBy(["split_1", "split_2"]);
 
             Assert.That(result, Is.EquivalentTo(new[]
                                                     {
@@ -143,6 +146,29 @@ namespace MiKoSolutions.Analyzers.Extensions
         }
 
         [Test]
-        public static void WordsAsSpan() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
+        public static void WordsAsSpan_returns_words() => Assert.That("GetHashCode".AsSpan().WordsAsSpan().Select(_ => _.ToString()), Is.EquivalentTo(new[] { "Get", "Hash", "Code" }));
+
+        [TestCase("", " text ", ExpectedResult = " text ")]
+        [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
+        [TestCase(" Some ", "", ExpectedResult = " Some ")]
+        public static string ConcatenatedWith_with_string_and_span_(string s, string span) => s.ConcatenatedWith(span.AsSpan());
+
+        [TestCase("", " text ", ExpectedResult = " text ")]
+        [TestCase(" Some ", " text ", ExpectedResult = " Some  text ")]
+        [TestCase(" Some ", "", ExpectedResult = " Some ")]
+        public static string ConcatenatedWith_with_span_and_string_(string span, string s) => span.AsSpan().ConcatenatedWith(s);
+
+        [TestCase(" Some ", "", " with more ", ExpectedResult = " Some  with more ")]
+        [TestCase(" Some ", " text ", " with more ", ExpectedResult = " Some  text  with more ")]
+        [TestCase(" Some ", " text ", "", ExpectedResult = " Some  text ")]
+        [TestCase("", " text ", "", ExpectedResult = " text ")]
+        [TestCase("", "", "", ExpectedResult = "")]
+        public static string ConcatenatedWith_with_span_and_string_and_string_(string span, string s1, string s2) => span.AsSpan().ConcatenatedWith(s1, s2);
+
+        [TestCaseSource(nameof(LowerCaseCharacters))]
+        public static void IsUpperCase_is_false_for_(char c) => Assert.That(c.IsUpperCase(), Is.False);
+
+        [TestCaseSource(nameof(UpperCaseCharacters))]
+        public static void IsUpperCase_is_true_for_(char c) => Assert.That(c.IsUpperCase(), Is.True);
     }
 }

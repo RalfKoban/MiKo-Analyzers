@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var eventName = symbolName.WithoutSuffix(Constants.RoutedEventFieldSuffix);
                 var containingType = symbol.ContainingType;
 
-                if (containingType.GetMembersIncludingInherited<IEventSymbol>().Any(_ => _.Name == eventName))
+                if (containingType.GetMembersIncludingInherited<IEventSymbol>(eventName).Any())
                 {
                     var containingTypeFullName = containingType.ToString();
 

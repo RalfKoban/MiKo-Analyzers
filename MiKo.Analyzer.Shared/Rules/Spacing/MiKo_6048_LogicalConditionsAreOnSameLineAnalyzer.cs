@@ -23,40 +23,40 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static bool IsOnSingleLine(SyntaxNode syntax)
         {
-            if (syntax is BinaryExpressionSyntax binary)
+            switch (syntax)
             {
-                if (IsOnSingleLineLocal(binary))
+                case ParenthesizedExpressionSyntax parenthesized:
+                    return IsOnSingleLine(parenthesized.Expression); // we have a parenthesized one, so let's check
+
+                case BinaryExpressionSyntax binary:
                 {
-                    return true;
-                }
-
-                var leftCondition = binary.Left;
-                var rightCondition = binary.Right;
-
-                var leftSpan = leftCondition.GetLocation().GetLineSpan();
-                var rightSpan = rightCondition.GetLocation().GetLineSpan();
-
-                // let's see if both conditions are on same line
-                if (leftSpan.EndLinePosition.Line == rightSpan.StartLinePosition.Line)
-                {
-                    if (leftSpan.StartLinePosition.Line == rightSpan.EndLinePosition.Line)
+                    if (IsOnSingleLineLocal(binary))
                     {
-                        // both are on same line
                         return true;
                     }
 
-                    // at least one condition spans multiple lines
-                    return false;
+                    var leftCondition = binary.Left;
+                    var rightCondition = binary.Right;
+
+                    var leftSpan = leftCondition.GetLocation().GetLineSpan();
+                    var rightSpan = rightCondition.GetLocation().GetLineSpan();
+
+                    // let's see if both conditions are on same line
+                    if (leftSpan.EndLinePosition.Line == rightSpan.StartLinePosition.Line)
+                    {
+                        if (leftSpan.StartLinePosition.Line == rightSpan.EndLinePosition.Line)
+                        {
+                            // both are on same line
+                            return true;
+                        }
+
+                        // at least one condition spans multiple lines
+                        return false;
+                    }
+
+                    // they span different lines
+                    return IsOnSingleLine(leftCondition) && IsOnSingleLine(rightCondition);
                 }
-
-                // they span different lines
-                return IsOnSingleLine(leftCondition) && IsOnSingleLine(rightCondition);
-            }
-
-            if (syntax is ParenthesizedExpressionSyntax parenthesized)
-            {
-                // we have a parenthesized one, so let's check
-                return IsOnSingleLine(parenthesized.Expression);
             }
 
             return IsOnSingleLineLocal(syntax);

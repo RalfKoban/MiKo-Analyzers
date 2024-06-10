@@ -202,6 +202,88 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_an_anonymous_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            return DoSomethingCore(i => new
+                                        {
+                                            SomeProperty = i,
+                                        });
+        }
+
+        private TestMe DoSomethingCore(Func<int, TestMe> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_nested_lambda_with_an_anonymous_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            return DoSomethingCore(i => DoSomethingCore(j => new
+                                                             {
+                                                                   SomeProperty = j,
+                                                             }));
+        }
+
+        private TestMe DoSomethingCore(Func<int, TestMe> callback)
+        {
+            return callback(42);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_simple_lambda_expression_body_that_contains_a_deeply_nested_lambda_with_an_anonymous_Initializer_expression_and_spans_multiple_line() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int SomeProperty { get; set; }
+
+        public TestMe DoSomething()
+        {
+            var items = new List<int>();
+
+            return DoSomethingCore(i => items.Select(x => new
+                                                          {
+                                                              SomeProperty = i + x,
+                                                          })
+                                             .ToList());
+        }
+
+        private TestMe DoSomethingCore(Func<int, IEnumerable<TestMe>> callback)
+        {
+            return callback(42).FirstOrDefault();
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parenthesized_lambda_expression_body_that_spans_single_line() => No_issue_is_reported_for(@"
 using System;
 
@@ -872,6 +954,319 @@ namespace Bla
         private static int DoSomethingCore(Func<int, int, int> callback)
         {
             return callback(1, 2);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_single_invocation_whose_parameters_span_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore(
+                            (x, y) => TestMe.DoSomething(
+                                        x,
+                                        y),
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int, int> callback, bool flag)
+        {
+            return callback(1, 2);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore(
+                            (x, y) => TestMe.DoSomething(x, y),
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int, int> callback, bool flag)
+        {
+            return callback(1, 2);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_simple_lambda_expression_body_with_single_invocation_whose_parameters_span_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore(
+                            x => TestMe.DoSomething(
+                                        x,
+                                        08,
+                                        15),
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething(int a, int b, int c)
+        {
+            return DoSomethingCore(
+                            x => TestMe.DoSomething(x, 08, 15),
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_simple_lambda_expression_body_with_single_object_creation_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            x => new TestMe
+                                     {
+                                     },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            x => new TestMe { },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_single_object_creation_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            (x) => new TestMe
+                                       {
+                                       },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            (x) => new TestMe { },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_simple_lambda_expression_body_with_single_anonymous_object_creation_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            x => new
+                                 {
+                                 },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            x => new { },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_single_anonymous_object_creation_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            (x) => new
+                                   {
+                                   },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int DoSomething()
+        {
+            return DoSomethingCore(
+                            (x) => new { },
+                            true);
+        }
+
+        private static int DoSomethingCore(Func<int, int> callback, bool flag)
+        {
+            return callback(42);
         }
     }
 }

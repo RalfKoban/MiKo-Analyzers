@@ -30,7 +30,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case MethodKind.Constructor:
                 case MethodKind.Ordinary:
-                    return symbol.Parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate).Select(_ => Issue(_.Type)).ToList();
+                {
+                    var parameters = symbol.Parameters;
+
+                    if (parameters.Length == 0)
+                    {
+                        return Enumerable.Empty<Diagnostic>();
+                    }
+
+                    return parameters.Where(_ => _.Type.TypeKind == TypeKind.Delegate)
+                                     .Select(_ => Issue(_.Type))
+                                     .ToList();
+                }
 
                 default:
                     return Enumerable.Empty<Diagnostic>();
@@ -41,10 +52,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var returnType = symbol.GetReturnType();
 
-            if (returnType?.TypeKind == TypeKind.Delegate)
-            {
-                yield return Issue(returnType);
-            }
+            return returnType?.TypeKind == TypeKind.Delegate
+                   ? new[] { Issue(returnType) }
+                   : Enumerable.Empty<Diagnostic>();
         }
     }
 }

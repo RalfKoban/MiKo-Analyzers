@@ -57,11 +57,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  .ReplaceWithCheck(" type=", "type=")
                                  .ReplaceWithCheck(" langref=", "langref=")
                                  .ReplaceWithCheck(" langword=", "langword=")
-                                 .ToString();
+                                 .Trim();
 
-            var clearedSummary = summary.AsSpan().Trim();
-
-            return HasIssue(clearedSummary);
+            return HasIssue(summary.AsSpan());
         }
 
         private static bool HasIssue(ReadOnlySpan<char> summary)

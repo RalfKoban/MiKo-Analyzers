@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -41,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                                 if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
                                 {
-                                    yield return Issue(method.Name, argument);
+                                    return new[] { Issue(method.Name, argument) };
                                 }
                             }
                         }
@@ -50,6 +51,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     break;
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)

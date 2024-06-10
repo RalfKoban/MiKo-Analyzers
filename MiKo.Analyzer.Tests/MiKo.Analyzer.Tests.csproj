@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>MiKoSolutions.Analyzers.Tests</AssemblyName>
     <RootNamespace>MiKoSolutions.Analyzers</RootNamespace>
     
@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageReference Include="NUnit" Version="4.1.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
@@ -49,8 +49,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiKo.Analyzer.2019\MiKo.Analyzer.2019.csproj" />
-    <ProjectReference Include="..\MiKo.Analyzer.CodeFixes.2019\MiKo.Analyzer.CodeFixes.2019.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.2022\MiKo.Analyzer.2022.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2022\MiKo.Analyzer.CodeFixes.2022.csproj" />
   </ItemGroup>
 
   <ItemGroup>

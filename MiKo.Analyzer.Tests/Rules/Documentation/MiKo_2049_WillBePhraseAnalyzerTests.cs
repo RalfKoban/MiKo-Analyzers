@@ -13,10 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2049_WillBePhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
+        private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
 
         private static readonly string[] Phrases =
-                                                   {
+                                                   [
                                                        "It will be.",
                                                        "It will also be.",
                                                        "It will as well be.",
@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "It will not contain.",
                                                        "It will never be something.",
                                                        "It will never return.",
-                                                   };
+                                                   ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"

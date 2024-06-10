@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2042_BrParaAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] CorrectItems = { "<para />", "<para/>" };
+        private static readonly string[] CorrectItems = ["<para />", "<para/>"];
 
         private static readonly string[] WrongItems = CreateWrongItems();
 

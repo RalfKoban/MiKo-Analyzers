@@ -16,17 +16,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1054_HelperClassNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongSuffixes =
-                                                         {
+                                                         [
                                                              "Helper",
                                                              "Helpers",
                                                              "Util",
                                                              "Utils",
                                                              "Utility",
                                                              "Utilities",
-                                                         };
+                                                         ];
 
         private static readonly string[] WrongNames = CreateWrongNames(WrongSuffixes);
-        private static readonly string[] CorrectNames = { "TestMe", "OnlineHelp", "SoftwareUtilization" };
+        private static readonly string[] CorrectNames = ["TestMe", "OnlineHelp", "SoftwareUtilization"];
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_class_([ValueSource(nameof(CorrectNames))] string name) => No_issue_is_reported_for(@"
@@ -85,7 +85,7 @@ public class TestMe
                 }
             }
 
-            return allNames.OrderBy(_ => _).ToArray();
+            return [.. allNames.OrderBy(_ => _)];
         }
     }
 }

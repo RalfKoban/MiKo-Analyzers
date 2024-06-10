@@ -102,24 +102,28 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return prefixed.Operand;
                 }
 
-                case BinaryExpressionSyntax binary when binary.Right.IsKind(SyntaxKind.NullLiteralExpression) && binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken):
+                case BinaryExpressionSyntax binary:
                 {
-                    return IsNullPattern(binary.Left);
-                }
+                    if (binary.Right.IsKind(SyntaxKind.NullLiteralExpression) && binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
+                    {
+                        return IsNullPattern(binary.Left);
+                    }
 
-                case BinaryExpressionSyntax binary when OperatorInverseMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement):
-                {
-                    return binary.WithOperatorToken(replacement.AsToken());
-                }
+                    if (OperatorInverseMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement))
+                    {
+                        return binary.WithOperatorToken(replacement.AsToken());
+                    }
 
-                case BinaryExpressionSyntax binary when binary.IsKind(SyntaxKind.LogicalAndExpression):
-                {
-                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
-                }
+                    switch (binary.Kind())
+                    {
+                        case SyntaxKind.LogicalAndExpression:
+                            return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
 
-                case BinaryExpressionSyntax binary when binary.IsKind(SyntaxKind.LogicalOrExpression):
-                {
-                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
+                        case SyntaxKind.LogicalOrExpression:
+                            return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
+                    }
+
+                    break;
                 }
 
                 case IsPatternExpressionSyntax pattern:

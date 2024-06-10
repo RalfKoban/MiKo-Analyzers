@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2301_TestArrangeActAssertCommentAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Comments =
-                                                    {
+                                                    [
                                                         "act",
                                                         "arrange",
                                                         "assert",
@@ -45,7 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         "Verify.",
                                                         "Verification.",
                                                         "Verifications.",
-                                                    };
+                                                    ];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_non_test_field() => No_issue_is_reported_for(@"

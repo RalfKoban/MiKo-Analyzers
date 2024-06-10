@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -12,6 +10,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2071_EnumMethodSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] BooleanPhrases =
+                                                          [
+                                                              "indicate if",
+                                                              "indicate whether",
+                                                              "indicates if",
+                                                              "indicates whether",
+                                                              "indicating if",
+                                                              "indicating whether",
+                                                          ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"
 public class TestMe
@@ -85,15 +93,5 @@ public class TestMe
         protected override string GetDiagnosticId() => MiKo_2071_EnumMethodSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2071_EnumMethodSummaryAnalyzer();
-
-        private static IEnumerable<string> BooleanPhrases() => new[]
-                                                                   {
-                                                                       "indicate if",
-                                                                       "indicate whether",
-                                                                       "indicates if",
-                                                                       "indicates whether",
-                                                                       "indicating if",
-                                                                       "indicating whether",
-                                                                   };
     }
 }

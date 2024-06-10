@@ -1238,7 +1238,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is a base type by putting &apos;Abstract&apos; or &apos;Base&apos; in its name does not make sense. Every interface or class that is not sealed can act as a base class..
+        ///   Looks up a localized string similar to Indicating that a type is a base type by putting &apos;Abstract&apos; or &apos;Base&apos; in its name does not make sense. Every interface or class that is not sealed can act as a base type, so cluttering its name simply creates an unnecessary distraction for it users..
         /// </summary>
         internal static string MiKo_1030_Description {
             get {
@@ -14662,7 +14662,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place on single line.
+        ///   Looks up a localized string similar to Place lambda on single line.
         /// </summary>
         internal static string MiKo_6043_CodeFixTitle {
             get {
@@ -15059,7 +15059,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place lambda on same line.
+        ///   Looks up a localized string similar to Place lambda arrow on same line as its parameter(s).
         /// </summary>
         internal static string MiKo_6054_CodeFixTitle {
             get {
@@ -15068,7 +15068,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies instead of splitting them all over multiple lines..
+        ///   Looks up a localized string similar to The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies, instead of splitting them all over multiple lines..
         /// </summary>
         internal static string MiKo_6054_Description {
             get {
@@ -15077,7 +15077,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place lambda on same line.
+        ///   Looks up a localized string similar to Place lambda arrow on same line as its parameter(s).
         /// </summary>
         internal static string MiKo_6054_MessageFormat {
             get {
@@ -15086,11 +15086,84 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lambda arrows shall be placed on same line as parameters and expression bodies.
+        ///   Looks up a localized string similar to Lambda arrows shall be placed on same line as the parameter(s) of the lambda.
         /// </summary>
         internal static string MiKo_6054_Title {
             get {
                 return ResourceManager.GetString("MiKo_6054_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround with blank lines.
+        /// </summary>
+        internal static string MiKo_6055_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6055_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To separate assignments visually from invocations, they should be surrounded by blank lines. That makes them easier to spot..
+        /// </summary>
+        internal static string MiKo_6055_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6055_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surround assignment with a blank line.
+        /// </summary>
+        internal static string MiKo_6055_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6055_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignment statements should be surrounded by blank lines.
+        /// </summary>
+        internal static string MiKo_6055_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6055_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align collection expression brackets.
+        /// </summary>
+        internal static string MiKo_6056_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6056_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection expressions are very similar to collection initializers from the code reading point of view.
+        ///Hence, their open brackets should be positioned at the same position where the collection initializer braces would be positioned..
+        /// </summary>
+        internal static string MiKo_6056_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6056_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align collection expression brackets.
+        /// </summary>
+        internal static string MiKo_6056_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6056_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned.
+        /// </summary>
+        internal static string MiKo_6056_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6056_Title", resourceCulture);
             }
         }
     }

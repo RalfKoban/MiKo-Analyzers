@@ -55,6 +55,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "TypeScript",
                                                                    "JavaScript",
                                                                    "Perl",
+                                                                   "Azure",
+                                                                   "Docker",
                                                                }.OrderBy(_ => _.Length).ToArray();
 
         public MiKo_1400_NamespacesInPluralAnalyzer() : base(Id)
@@ -92,9 +94,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 if (betterName != null && name != betterName)
                 {
-                    yield return Issue(name, namePart, betterName);
+                    return new[] { Issue(name, namePart, betterName) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

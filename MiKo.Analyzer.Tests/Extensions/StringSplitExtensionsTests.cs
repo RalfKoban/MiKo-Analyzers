@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         private const string Line1 = "This is a test to see if everything is working";
         private const string Line2 = "Another line. Some more text.";
 
-        private static readonly string Text = $"{Line1}\r\n{Line2}";
+        private const string Text = $"{Line1}\r\n{Line2}";
 
         [Test]
         public static void SplitBy_splits_text_by_lines_and_removes_empty_lines()

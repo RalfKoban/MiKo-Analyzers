@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [TestFixture]
     public class MiKo_6046_CalculationOperationsAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] CalculationOperators = { "+", "-", "%", "*", "/", "<<", ">>" };
+        private static readonly string[] CalculationOperators = ["+", "-", "%", "*", "/", "<<", ">>"];
 
         [Test]
         public void No_issue_is_reported_if_complete_operation_is_on_same_line_([ValueSource(nameof(CalculationOperators))] string calculationOperator) => No_issue_is_reported_for(@"
