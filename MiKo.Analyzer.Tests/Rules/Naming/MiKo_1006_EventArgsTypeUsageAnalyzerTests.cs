@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1006_EventArgsTypeUsageAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WindowsPredefinedEventHandlers =
-                                                                          {
+                                                                          [
                                                                               "System.Windows.Annotations.AnnotationAuthorChangedEventHandler",
                                                                               "System.Windows.Annotations.AnnotationResourceChangedEventHandler",
                                                                               "System.Windows.Annotations.Storage.StoreContentChangedEventHandler",
@@ -182,7 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                               "System.Windows.SessionEndingCancelEventHandler",
                                                                               "System.Windows.SizeChangedEventHandler",
                                                                               "System.Windows.StartupEventHandler",
-                                                                          };
+                                                                          ];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

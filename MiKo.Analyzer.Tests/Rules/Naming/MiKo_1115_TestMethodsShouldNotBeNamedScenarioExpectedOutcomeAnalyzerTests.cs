@@ -12,11 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongMethodNames =
-                                                            {
+                                                            [
                                                                 "MethodName_Scenario_ExpectedOutcome",
                                                                 "DoSomething_WithUnnecessaryData_ReturnsTrue",
                                                                 "DoSomething_WithUnnecessaryDataForSomething_ThrowsException",
-                                                            };
+                                                            ];
 
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"

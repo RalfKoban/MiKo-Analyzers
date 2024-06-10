@@ -11,11 +11,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1039_ExtensionMethodsParameterAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] CorrectParameterNames = { "value", "source", "values" };
-        private static readonly string[] WrongParameterNames = { "o", "something", "v" };
-        private static readonly string[] CorrectConversionParameterNames = { "source" };
-        private static readonly string[] WrongConversionParameterNames = { "o", "something", "v", "value", "values" };
-        private static readonly string[] ConversionMethodPrefixes = { "To", "From" };
+        private static readonly string[] CorrectParameterNames = ["value", "source", "values"];
+        private static readonly string[] WrongParameterNames = ["o", "something", "v"];
+        private static readonly string[] CorrectConversionParameterNames = ["source"];
+        private static readonly string[] WrongConversionParameterNames = ["o", "something", "v", "value", "values"];
+        private static readonly string[] ConversionMethodPrefixes = ["To", "From"];
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

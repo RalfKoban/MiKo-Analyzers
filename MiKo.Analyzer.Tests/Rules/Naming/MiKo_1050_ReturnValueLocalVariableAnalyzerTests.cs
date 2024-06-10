@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -16,13 +12,40 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1050_ReturnValueLocalVariableAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Fitting =
-                                                   {
+                                                   [
                                                        "myVariable",
                                                        "result",
                                                        "results",
-                                                   };
+                                                   ];
 
-        private static readonly string[] NonFitting = CreateNonFitting();
+        private static readonly string[] NonFitting =
+                                                      [
+                                                          "res1",
+                                                          "res2",
+                                                          "resultingList",
+                                                          "resultList",
+                                                          "ret",
+                                                          "ret1",
+                                                          "ret2",
+                                                          "retGuid",
+                                                          "retList",
+                                                          "retMock",
+                                                          "retMockVm",
+                                                          "returnCommunicationChannel",
+                                                          "returned",
+                                                          "returningList",
+                                                          "returnVal",
+                                                          "returnVals",
+                                                          "returnValue",
+                                                          "returnValue4",
+                                                          "returnValues",
+                                                          "retval",
+                                                          "retVal",
+                                                          "retVal_5",
+                                                          "retVal3",
+                                                          "retValid",
+                                                          "retVals",
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_variable_with_fitting_name_([ValueSource(nameof(Fitting))] string name) => No_issue_is_reported_for(@"
@@ -100,35 +123,5 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1050_ReturnValueLocalVariableAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1050_CodeFixProvider();
-
-        [ExcludeFromCodeCoverage]
-        private static string[] CreateNonFitting() => new HashSet<string>(new[]
-                                                                              {
-                                                                                  "resultList",
-                                                                                  "resultingList",
-                                                                                  "ret",
-                                                                                  "retval",
-                                                                                  "retVal",
-                                                                                  "retVals",
-                                                                                  "returnVal",
-                                                                                  "returnVals",
-                                                                                  "returnValue",
-                                                                                  "returnValues",
-                                                                                  "res1",
-                                                                                  "res2",
-                                                                                  "ret1",
-                                                                                  "ret2",
-                                                                                  "retVal3",
-                                                                                  "returnValue4",
-                                                                                  "retVal_5",
-                                                                                  "retList",
-                                                                                  "returningList",
-                                                                                  "retValid",
-                                                                                  "retGuid",
-                                                                                  "returnCommunicationChannel",
-                                                                                  "retMock",
-                                                                                  "retMockVm",
-                                                                                  "returned",
-                                                                              }).OrderBy(_ => _).ToArray();
     }
 }

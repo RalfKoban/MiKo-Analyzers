@@ -11,9 +11,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1017_GetSetPrefixedMethodsAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] ValidPrefixes = { string.Empty, "Get", "Set", "GetCanceled", "SetCanceled", "HasCanceled", "GetHashCode", "SetHash", "HasExited" };
+        private static readonly string[] ValidPrefixes = [string.Empty, "Get", "Set", "GetCanceled", "SetCanceled", "HasCanceled", "GetHashCode", "SetHash", "HasExited"];
 
-        private static readonly string[] InvalidPrefixes = { "GetIs", "SetIs", "GetCan", "SetCan", "GetHas", "SetHas", "CanHas", "CanIs", "HasIs", "HasCan", "IsCan", "IsHas", "GetExists", "CanExists", "HasExists", "IsExists" };
+        private static readonly string[] InvalidPrefixes = ["GetIs", "SetIs", "GetCan", "SetCan", "GetHas", "SetHas", "CanHas", "CanIs", "HasIs", "HasCan", "IsCan", "IsHas", "GetExists", "CanExists", "HasExists", "IsExists"];
 
         [Test]
         public void No_issue_is_reported_for_method_with_prefix_([ValueSource(nameof(ValidPrefixes))] string prefix) => No_issue_is_reported_for(@"

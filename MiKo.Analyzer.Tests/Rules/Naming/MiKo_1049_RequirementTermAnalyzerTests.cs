@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1049_RequirementTermAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Marker = { "Must", "Need", "Shall", "Should", "Will", "Would" };
+        private static readonly string[] Marker = ["Must", "Need", "Shall", "Should", "Will", "Would"];
 
         [Test]
         public void No_issue_is_reported_for_correctly_named_symbols() => No_issue_is_reported_for(@"

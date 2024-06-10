@@ -12,14 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1038_ExtensionMethodsClassSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongNames =
-                                                      {
+                                                      [
                                                           "Extension",
                                                           "ExtensionClass",
                                                           "ExtensionsClass",
                                                           "SomeExtensionMethods",
                                                           "SomeExtensionMethod",
                                                           "Something",
-                                                      };
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_struct() => No_issue_is_reported_for(@"

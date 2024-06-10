@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 //// ncrunch: rdi off
 namespace TestHelper
 {
     public partial class CodeFixVerifier
     {
-        protected static readonly Dictionary<string, string> ContradictionMap = new Dictionary<string, string>
+        protected static readonly Dictionary<string, string> ContradictionMap = new()
                                                                                     {
                                                                                         { "aren't", "are not" },
                                                                                         { "can't", "cannot" },
@@ -82,6 +81,6 @@ namespace TestHelper
                                                                                         { "Wouldnt", "Would not" },
                                                                                     };
 
-        protected static readonly string[] WrongContradictionPhrases = ContradictionMap.Keys.ToArray();
+        protected static readonly string[] WrongContradictionPhrases = [.. ContradictionMap.Keys];
     }
 }

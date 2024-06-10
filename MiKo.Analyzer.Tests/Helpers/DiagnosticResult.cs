@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 
 //// ncrunch: rdi off
 namespace TestHelper
@@ -14,7 +12,7 @@ namespace TestHelper
 
         public DiagnosticResultLocation[] Locations
         {
-            get => locations ??= Array.Empty<DiagnosticResultLocation>();
+            get => locations ??= [];
             set => locations = value;
         }
 

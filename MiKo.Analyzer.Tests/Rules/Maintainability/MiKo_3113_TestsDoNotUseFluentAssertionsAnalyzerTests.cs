@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3113_TestsDoNotUseFluentAssertionsAnalyzerTests : CodeFixVerifier
     {
         private static readonly object[] ReplacementsForFluentAssertions =
-                                                                           {
+                                                                           [
                                                                                new object[] { "element1.Equals(element2).Should().BeTrue()", "Assert.That(element1.Equals(element2), Is.True)" },
                                                                                new object[] { @"element1.Equals(element2).Should().BeTrue(""some message"")", @"Assert.That(element1.Equals(element2), Is.True, ""some message"")" },
                                                                                new object[] { "element1.Equals(element2).Should().Be(true)", "Assert.That(element1.Equals(element2), Is.True)" },
@@ -190,16 +190,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                new object[] { "element1.Should().NotBeInDescendingOrder()", "Assert.That(element1, Is.Not.Ordered.Descending)" },
                                                                                new object[] { @"element1.Should().NotBeInDescendingOrder(""some message"")", @"Assert.That(element1, Is.Not.Ordered.Descending, ""some message"")" },
                                                                                new object[] { @"element1.ShouldBeEquivalentTo(""some message"")", @"Assert.That(element1, Is.EquivalentTo(""some message""))" },
-                                                                           };
+                                                                           ];
 
         // for yet unknown reasons those elements cannot be fixed when available multiple times
         private static readonly object[] ReplacementsForStringFluentAssertions =
-                                                                                 {
+                                                                                 [
                                                                                      new object[] { "element1[0].Should().BeBlank()", "Assert.That(String.IsNullOrWhiteSpace(element1[0]), Is.True)" },
                                                                                      new object[] { "element1[0].Should().BeNullOrWhiteSpace()", "Assert.That(String.IsNullOrWhiteSpace(element1[0]), Is.True)" },
                                                                                      new object[] { "element1[0].Should().NotBeBlank()", "Assert.That(String.IsNullOrWhiteSpace(element1[0]), Is.False)" },
                                                                                      new object[] { "element1[0].Should().NotBeNullOrWhiteSpace()", "Assert.That(String.IsNullOrWhiteSpace(element1[0]), Is.False)" },
-                                                                                 };
+                                                                                 ];
 
         [Test]
         public void No_issue_is_reported_for_Assert_That() => No_issue_is_reported_for(@"

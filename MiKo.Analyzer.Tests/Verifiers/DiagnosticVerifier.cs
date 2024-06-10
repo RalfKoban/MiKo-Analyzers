@@ -17,7 +17,7 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        private static IEnumerable<string> Placeholders { get; } = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
+        private static readonly string[] Placeholders = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
 
         internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, analyzers);
 
@@ -106,7 +106,7 @@ namespace TestHelper
             {
                 var results = GetDiagnostics(File.ReadAllText(file));
 
-                if (results.Any())
+                if (results.Length != 0)
                 {
                     yield return file;
                 }
@@ -168,7 +168,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected Diagnostic[] GetDiagnostics(string source) => GetDiagnostics(new[] { source });
+        protected Diagnostic[] GetDiagnostics(string source) => GetDiagnostics([source]);
 
         /// <summary>
         /// General method that gets a collection of actual diagnostics found in the source after the analyzer is run,

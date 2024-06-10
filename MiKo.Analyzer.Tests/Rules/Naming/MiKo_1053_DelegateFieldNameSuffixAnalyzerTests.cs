@@ -16,22 +16,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1053_DelegateFieldNameSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] DelegateTypes =
-                                                         {
+                                                         [
                                                              "Action",
                                                              "Action<int>",
                                                              "Action<int, string>",
                                                              "Func<bool>",
                                                              "Func<bool, bool>",
                                                              "Delegate",
-                                                         };
+                                                         ];
 
         private static readonly string[] CorrectDelegateNames =
-                                                                {
+                                                                [
                                                                     "callback",
                                                                     "map",
                                                                     "filter",
                                                                     "predicate",
-                                                                };
+                                                                ];
 
         private static readonly string[] WrongDelegateNames = CreateWrongDelegateNames();
 
@@ -111,7 +111,7 @@ public class TestMe
                 allNames.Add(name.ToUpperInvariant());
             }
 
-            return allNames.OrderBy(_ => _).ToArray();
+            return [.. allNames.OrderBy(_ => _)];
         }
     }
 }

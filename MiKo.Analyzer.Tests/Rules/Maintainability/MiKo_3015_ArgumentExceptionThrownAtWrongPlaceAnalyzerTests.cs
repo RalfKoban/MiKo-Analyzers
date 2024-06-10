@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed partial class MiKo_3015_ArgumentExceptionThrownAtWrongPlaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ExceptionNames =
-                                                          {
+                                                          [
                                                               nameof(ArgumentException),
                                                               nameof(ArgumentNullException),
                                                               nameof(ArgumentOutOfRangeException),
@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                               typeof(ArgumentNullException).FullName,
                                                               typeof(ArgumentOutOfRangeException).FullName,
                                                               "System.ComponentModel.InvalidEnumArgumentException", // don't use typeof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
-                                                          };
+                                                          ];
 
         [Test]
         public void No_issue_is_reported_for_pattern_based_correctly_thrown_([ValueSource(nameof(ExceptionNames))] string exceptionName) => No_issue_is_reported_for(@"

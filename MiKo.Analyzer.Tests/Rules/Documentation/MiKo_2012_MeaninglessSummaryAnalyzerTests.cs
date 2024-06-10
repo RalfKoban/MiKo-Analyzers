@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MeaninglessTextPhrases =
-                                                                  {
+                                                                  [
                                                                       "does implement",
                                                                       "implements",
                                                                       "that is called ",
@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "which is called ",
                                                                       "which is used for ",
                                                                       "which is used to ",
-                                                                  };
+                                                                  ];
 
         private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases();
 

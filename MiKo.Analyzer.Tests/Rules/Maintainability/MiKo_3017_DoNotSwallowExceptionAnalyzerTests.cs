@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3017_DoNotSwallowExceptionAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Exceptions = { nameof(ArgumentException), nameof(ArgumentNullException), nameof(ArgumentOutOfRangeException), nameof(InvalidOperationException) };
+        private static readonly string[] Exceptions = [nameof(ArgumentException), nameof(ArgumentNullException), nameof(ArgumentOutOfRangeException), nameof(InvalidOperationException)];
 
         [Test]
         public void No_issue_is_reported_for_normal_created_object() => No_issue_is_reported_for(@"
