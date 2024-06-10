@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2201_DocumentationUsesCapitalizedSentencesAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-                                                   {
+                                                   [
                                                        "example",
                                                        "exception",
                                                        "note",
@@ -24,10 +24,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "summary",
                                                        "typeparam",
                                                        "value",
-                                                   };
+                                                   ];
 
         private static readonly string[] WellknownFileExtensions =
-                                                                   {
+                                                                   [
                                                                        ".bmp",
                                                                        ".gif",
                                                                        ".png",
@@ -43,7 +43,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        ".eds",
                                                                        ".config",
                                                                        ".txt",
-                                                                   };
+                                                                   ];
 
         private static readonly char[] LowerCaseLetters = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
 

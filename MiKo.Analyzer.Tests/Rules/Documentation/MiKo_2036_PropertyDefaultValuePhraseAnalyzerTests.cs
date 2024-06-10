@@ -12,11 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2036_PropertyDefaultValuePhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BooleanReturnValues =
-                                                               {
+                                                               [
                                                                    "bool",
                                                                    "Boolean",
                                                                    "System.Boolean",
-                                                               };
+                                                               ];
 
         private CodeFixProvider CurrentCodeFixProvider { get; set; }
 

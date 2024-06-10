@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2204_DocumentationShallUseListAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-                                                   {
+                                                   [
                                                        "example",
                                                        "exception",
                                                        "note",
@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "summary",
                                                        "typeparam",
                                                        "value",
-                                                   };
+                                                   ];
 
         private static readonly string[] EnumerationMarkers =
-                                                              {
+                                                              [
                                                                   " 1. ",
                                                                   " 1: ",
                                                                   " a. ",
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   " 1.) ",
                                                                   " a.) ",
                                                                   " A.) ",
-                                                              };
+                                                              ];
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
         [Test]

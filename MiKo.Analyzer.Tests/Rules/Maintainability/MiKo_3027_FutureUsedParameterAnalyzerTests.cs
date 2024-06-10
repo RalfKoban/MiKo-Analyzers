@@ -11,13 +11,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3027_FutureUsedParameterAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ReservedForFuturePhrases =
-                                                                    {
+                                                                    [
                                                                         "Reserved.",
                                                                         "For future use.",
                                                                         "Reserved for future.",
                                                                         "will be used in future",
                                                                         "it's reserved",
-                                                                    };
+                                                                    ];
 
         [Test]
         public void No_issue_is_reported_for_method_that_has_no_parameter() => No_issue_is_reported_for(@"

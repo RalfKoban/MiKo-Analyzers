@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -14,20 +12,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2034_EnumReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] EnumOnlyReturnValues =
-                                                                {
+                                                                [
                                                                     "StringComparison",
                                                                     "System.StringComparison",
-                                                                };
+                                                                ];
 
         private static readonly string[] EnumTaskReturnValues =
-                                                                {
+                                                                [
                                                                     "Task<StringComparison>",
                                                                     "Task<System.StringComparison>",
                                                                     "System.Threading.Tasks.Task<StringComparison>",
                                                                     "System.Threading.Tasks.Task<System.StringComparison>",
-                                                                };
+                                                                ];
 
-        private static readonly string[] EnumReturnValues = EnumOnlyReturnValues.Concat(EnumTaskReturnValues).ToArray();
+        private static readonly string[] EnumReturnValues = [.. EnumOnlyReturnValues, .. EnumTaskReturnValues];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumReturnValues))] string returnType) => No_issue_is_reported_for(@"

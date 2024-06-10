@@ -43,6 +43,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_implicit_field_collection_initializer_when_placed_on_same_line() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new() { 1, 2, 3 };
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_field_object_initializer_when_placed_on_same_line() => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -110,6 +121,22 @@ using System.Collections.Generic;
 public class TestMe
 {
     private new HashSet<int> MyField = new HashSet<int>
+                                           {
+                                               1,
+                                               2,
+                                               3,
+                                           };
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_implicit_field_collection_initializer_when_placed_on_same_position_as_type() => No_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
                                            {
                                                1,
                                                2,
@@ -240,6 +267,38 @@ using System.Collections.Generic;
 public class TestMe
 {
     private new HashSet<int> MyField = new HashSet<int>
+                                            {
+                                               1,
+                                               2,
+                                               3,
+                                           };
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_implicit_field_collection_initializer_when_placed_on_position_before_position_of_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
+                                          {
+                                               1,
+                                               2,
+                                               3,
+                                           };
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_implicit_field_collection_initializer_when_placed_on_position_after_position_of_type() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
                                             {
                                                1,
                                                2,
@@ -1020,6 +1079,77 @@ public class TestMe
                                         },
                                     new { Id = 2, Value = 0815 },
                                 };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_implicit_field_collection_initializer_when_placed_on_position_before_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
+                                          {
+                                               1,
+                                               2,
+                                               3,
+                                           };
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
+                                           {
+                                               1,
+                                               2,
+                                               3,
+                                           };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_implicit_field_collection_initializer_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
+                                            {
+                                               1,
+                                               2,
+                                               3,
+                                           };
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    private new HashSet<int> MyField = new()
+                                           {
+                                               1,
+                                               2,
+                                               3,
+                                           };
 }
 ";
 

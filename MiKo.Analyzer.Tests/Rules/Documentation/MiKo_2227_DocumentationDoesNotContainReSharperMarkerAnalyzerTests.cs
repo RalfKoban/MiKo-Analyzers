@@ -11,14 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2227_DocumentationDoesNotContainReSharperMarkerAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ReSharperMarkers =
-                                                            {
+                                                            [
                                                                 "ReSharper disable",
                                                                 "ReSharper disable once",
                                                                 "ReSharper restore",
                                                                 "ReSharper disable Whatever",
                                                                 "ReSharper disable once Whatever",
                                                                 "ReSharper restore Whatever",
-                                                            };
+                                                            ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

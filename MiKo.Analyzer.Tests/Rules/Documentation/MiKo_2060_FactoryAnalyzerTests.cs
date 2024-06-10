@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TypeSummaryStartingPhrases = CreateTypeSummaryStartingPhrases().Take(TestLimit).Distinct().OrderBy(_ => _.Length).ThenBy(_ => _).ToArray();
+        private static readonly string[] TypeSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).Distinct().OrderBy(_ => _.Length).ThenBy(_ => _)];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"

@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2018_ChecksSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] AmbiguousSynchronousPhrases = { "Check if ", "Checks if ", "Test if ", "Tests if ", "Check that ", "Checks that ", "Test that ", "Tests that " };
+        private static readonly string[] AmbiguousSynchronousPhrases = ["Check if ", "Checks if ", "Test if ", "Tests if ", "Check that ", "Checks that ", "Test that ", "Tests that "];
 
         private static readonly string[] AmbiguousPhrases = CreateAmbiguousPhrases(AmbiguousSynchronousPhrases);
 

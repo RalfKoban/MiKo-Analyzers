@@ -12,12 +12,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6023_ArgumentOutOfRangeExceptionThrowIfStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MethodNames =
-                                                       {
+                                                       [
                                                            "ThrowIfZero",
                                                            "ThrowIfNegative",
                                                            "ThrowIfNegativeOrZero",
                                                            "ThrowIfGreaterThan",
-                                                       };
+                                                       ];
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

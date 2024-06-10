@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules
     [TestFixture, Category("Always impacted")]
     public static class AnalyzerTests
     {
-        private static readonly ResourceManager ResourceManager = new ResourceManager(typeof(Resources));
+        private static readonly ResourceManager ResourceManager = new(typeof(Resources));
         private static readonly Analyzer[] AllAnalyzers = CreateAllAnalyzers();
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
