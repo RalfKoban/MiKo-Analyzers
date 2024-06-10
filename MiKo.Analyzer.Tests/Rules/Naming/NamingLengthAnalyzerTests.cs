@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public abstract class NamingLengthAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] All =
-                                               {
+                                               [
                                                    "A",
                                                    "Ab",
                                                    "Abc",
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                    "Abcdefghijklmnopqrstuvwxyz",
                                                    "Abcdefghijklmnopqrstuvwxyz01234567890äöü",
                                                    "Abcdefghijklmnopqrstuvwxyz01234567890äöüß",
-                                               };
+                                               ];
 
         protected static string[] GetAllWithMaxLengthOf(int length) => All.Where(_ => _.Length <= length).ToArray();
 

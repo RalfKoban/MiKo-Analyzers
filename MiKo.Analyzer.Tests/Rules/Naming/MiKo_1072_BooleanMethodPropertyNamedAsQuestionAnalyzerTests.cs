@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1072_BooleanMethodPropertyNamedAsQuestionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-                                                        {
+                                                        [
                                                             "AreConnected",
                                                             "CanBeConnected",
                                                             "Connected",
@@ -49,13 +49,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "IsZipFile",
                                                             nameof(string.IsNullOrEmpty),
                                                             nameof(string.IsNullOrWhiteSpace),
-                                                        };
+                                                        ];
 
         private static readonly string[] WrongNames =
-                                                      {
+                                                      [
                                                           "IsConnectionPossible",
                                                           "AreDevicesConnected",
-                                                      };
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

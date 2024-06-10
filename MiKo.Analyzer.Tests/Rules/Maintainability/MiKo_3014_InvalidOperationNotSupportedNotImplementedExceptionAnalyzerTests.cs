@@ -15,24 +15,24 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3014_InvalidOperationNotSupportedNotImplementedExceptionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MatchingExceptions =
-                                                              {
+                                                              [
                                                                   nameof(InvalidOperationException),
                                                                   nameof(NotSupportedException),
                                                                   nameof(NotImplementedException),
                                                                   typeof(InvalidOperationException).FullName,
                                                                   typeof(NotSupportedException).FullName,
                                                                   typeof(NotImplementedException).FullName,
-                                                              };
+                                                              ];
 
         private static readonly string[] NonMatchingExceptions =
-                                                                 {
+                                                                 [
                                                                      nameof(Exception),
                                                                      nameof(ArgumentException),
                                                                      nameof(ArgumentNullException),
                                                                      typeof(Exception).FullName,
                                                                      typeof(ArgumentException).FullName,
                                                                      typeof(ArgumentNullException).FullName,
-                                                                 };
+                                                                 ];
 
         private static readonly string[] Exceptions = MatchingExceptions.Concat(NonMatchingExceptions).Distinct().ToArray();
 

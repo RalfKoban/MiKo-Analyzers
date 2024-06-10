@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            var cref = comment.Content.LastOrDefault(IsSeeCref) ?? SeeCref("TODO");
+            var cref = comment.Content.LastOrDefault(IsSeeCref) ?? SeeCref(Constants.TODO);
 
             return Comment(comment, Constants.Comments.EventArgsSummaryStartingPhrase, cref, " event.");
         }

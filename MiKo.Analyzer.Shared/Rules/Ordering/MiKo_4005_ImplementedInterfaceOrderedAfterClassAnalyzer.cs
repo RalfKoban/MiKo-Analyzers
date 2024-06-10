@@ -27,15 +27,28 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 if (interfaces.Any(_ => _.Name == defaultInterfaceName && IsAtFirstPosition(symbol, defaultInterfaceName) is false))
                 {
                     var type = symbol.GetSyntax() as BaseTypeDeclarationSyntax;
-                    var syntax = type.BaseList.Types.First(_ => _.Type.GetNameOnlyPartWithoutGeneric() == defaultInterfaceName);
+                    var syntax = type?.BaseList?.Types.First(_ => _.Type.GetNameOnlyPartWithoutGeneric() == defaultInterfaceName);
 
-                    yield return Issue(symbol.Name, syntax, defaultInterfaceName);
+                    if (syntax != null)
+                    {
+                        return new[] { Issue(symbol.Name, syntax, defaultInterfaceName) };
+                    }
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool IsAtFirstPosition(INamedTypeSymbol symbol, string defaultInterfaceName)
         {
+            // we might have a base type, so check for it
+            var baseTypeName = symbol.BaseType?.Name;
+
+            if (baseTypeName is null)
+            {
+                return false;
+            }
+
             var bases = GetBaseListSyntax(symbol);
 
             if (bases is null)
@@ -53,14 +66,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                 return true;
             }
 
-            // we might have a base type, so check for it
-            if (symbol.BaseType is null)
-            {
-                return false;
-            }
-
-            var baseTypeName = symbol.BaseType.Name;
-
             // interface should be first after base type
             return types.Contains(baseTypeName) && index == 1;
         }
@@ -70,6 +75,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             switch (symbol.GetSyntax())
             {
                 case ClassDeclarationSyntax c: return c.BaseList;
+                case InterfaceDeclarationSyntax i: return i.BaseList;
                 case RecordDeclarationSyntax r: return r.BaseList;
                 case StructDeclarationSyntax s: return s.BaseList;
                 default: return null;

@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     return syntax;
             }
 
-            string GetFixedText(SyntaxToken token) => GetCleanedText(token.ValueText.AsSpan().TrimEnd()).ToString() + ending;
+            string GetFixedText(SyntaxToken token) => GetCleanedText(token.ValueText.AsSpan().TrimEnd()).ConcatenatedWith(ending);
 
             ReadOnlySpan<char> GetCleanedText(ReadOnlySpan<char> text)
             {

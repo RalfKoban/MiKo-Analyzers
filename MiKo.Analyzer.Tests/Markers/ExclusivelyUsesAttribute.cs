@@ -27,12 +27,8 @@ namespace NCrunch.Framework
     /// </remarks>
     /// <seealso cref="InclusivelyUsesAttribute"/>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ExclusivelyUsesAttribute : ResourceUsageAttribute
+    public class ExclusivelyUsesAttribute(params string[] resourceNames) : ResourceUsageAttribute(resourceNames)
     {
-        public ExclusivelyUsesAttribute(params string[] resourceNames)
-            : base(resourceNames)
-        {
-        }
     }
 }
 

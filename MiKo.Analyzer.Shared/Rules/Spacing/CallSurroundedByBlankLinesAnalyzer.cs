@@ -46,25 +46,58 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 foreach (var ancestor in call.Ancestors())
                 {
-                    switch (ancestor)
+                    switch (ancestor.Kind())
                     {
-                        case BlockSyntax block:
-                            return AnalyzeSimpleMemberAccessExpression(block.Statements, call, semanticModel);
+                        case SyntaxKind.Block:
+                            return AnalyzeSimpleMemberAccessExpression(((BlockSyntax)ancestor).Statements, call, semanticModel);
 
-                        case SwitchSectionSyntax section:
-                            return AnalyzeSimpleMemberAccessExpression(section.Statements, call, semanticModel);
+                        case SyntaxKind.SwitchSection:
+                            return AnalyzeSimpleMemberAccessExpression(((SwitchSectionSyntax)ancestor).Statements, call, semanticModel);
 
-                        case IfStatementSyntax statement when statement == call.Parent:
-                            continue; // let's look into the surrounding block because the call is the condition of the 'if' statement
+                        case SyntaxKind.IfStatement:
+                        {
+                            var statement = (IfStatementSyntax)ancestor;
 
-                        case IfStatementSyntax _:
-                        case ElseClauseSyntax _:
-                        case CaseSwitchLabelSyntax _:
-                        case LambdaExpressionSyntax _:
-                        case ArrowExpressionClauseSyntax _:
-                        case BaseMethodDeclarationSyntax _:
-                        case LocalFunctionStatementSyntax _:
-                        case TypeDeclarationSyntax _:
+                            if (statement == call.Parent)
+                            {
+                                continue; // let's look into the surrounding block because the call is the condition of the 'if' statement
+                            }
+
+                            return null;
+                        }
+
+                        case SyntaxKind.ElseClause:
+                        case SyntaxKind.CaseSwitchLabel:
+                        case SyntaxKind.ArrowExpressionClause:
+                        case SyntaxKind.LocalFunctionStatement:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // base methods
+                        case SyntaxKind.ConversionOperatorDeclaration:
+                        case SyntaxKind.ConstructorDeclaration:
+                        case SyntaxKind.DestructorDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.OperatorDeclaration:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // base types
+                        case SyntaxKind.RecordDeclaration:
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.StructDeclaration:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // initializers
+                        case SyntaxKind.ObjectInitializerExpression:
+                        case SyntaxKind.CollectionInitializerExpression:
+                        case SyntaxKind.ArrayInitializerExpression:
+                        case SyntaxKind.ComplexElementInitializerExpression:
+                        case SyntaxKind.WithInitializerExpression:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // lambdas
+                        case SyntaxKind.SimpleLambdaExpression:
+                        case SyntaxKind.ParenthesizedLambdaExpression:
                             return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }

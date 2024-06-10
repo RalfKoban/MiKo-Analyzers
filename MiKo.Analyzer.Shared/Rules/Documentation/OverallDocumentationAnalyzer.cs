@@ -53,7 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacement = replacementCallback(nextWord.ToString());
 
                 var finalReplacement = adjective.Length > 0
-                                       ? adjective.ToString() + " " + replacement.ToLowerCaseAt(0)
+                                       ? adjective.ConcatenatedWith(" ", replacement.ToLowerCaseAt(0))
                                        : replacement;
 
                 var finalLocation = CreateLocation(token, start, end);

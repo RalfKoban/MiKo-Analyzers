@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2221_DocumentationIsNotEmptyAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Tags =
-                                                {
+                                                [
                                                     Constants.XmlTag.Code,
                                                     Constants.XmlTag.Example,
                                                     Constants.XmlTag.Exception,
@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     Constants.XmlTag.Returns,
                                                     Constants.XmlTag.Summary,
                                                     Constants.XmlTag.Value,
-                                                };
+                                                ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

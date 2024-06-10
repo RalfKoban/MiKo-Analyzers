@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,8 +21,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (HasIssue(symbol))
             {
-                yield return Issue(symbol, Constants.ExceptionIdentifier, "exception", CreateBetterNameProposal(Constants.ExceptionIdentifier));
+                return new[] { Issue(symbol, Constants.ExceptionIdentifier, "exception", CreateBetterNameProposal(Constants.ExceptionIdentifier)) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool HasIssue(IParameterSymbol symbol)

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2302_CommentedOutCodeAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Comments =
-                                                    {
+                                                    [
                                                         "{",
                                                         "}",
                                                         "m_variable = new Variable",
@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         "bool b = false;",
                                                         "lock(new object())",
                                                         "lock (new object())",
-                                                    };
+                                                    ];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"

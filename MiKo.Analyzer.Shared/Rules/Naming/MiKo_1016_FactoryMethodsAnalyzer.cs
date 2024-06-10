@@ -31,20 +31,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return symbol.IsPubliclyVisible() && base.ShallAnalyze(symbol);
         }
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
-
-        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // do not consider local functions at all
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false; // do not consider local functions at all
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation) => symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation));
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.StartsWith(Prefix, StringComparison.Ordinal) is false)
+            if (symbol.Name.StartsWith(Prefix, StringComparison.Ordinal))
             {
-                var betterName = FindBetterName(symbol);
-
-                yield return Issue(symbol, CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var betterName = FindBetterName(symbol);
+
+            return new[] { Issue(symbol, CreateBetterNameProposal(betterName)) };
         }
 
         private static string FindBetterName(IMethodSymbol symbol)

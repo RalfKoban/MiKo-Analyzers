@@ -12,22 +12,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2037_CommandPropertySummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidPhrasesForReadWrite =
-                                                                    {
+                                                                    [
                                                                         "Gets or sets the <see cref=\"ICommand\" /> that can ",
                                                                         "Gets or sets the <see cref=\"ICommand\"/> that can ",
-                                                                    };
+                                                                    ];
 
         private static readonly string[] ValidPhrasesForReadOnly =
-                                                                   {
+                                                                   [
                                                                        "Gets the <see cref=\"ICommand\" /> that can ",
                                                                        "Gets the <see cref=\"ICommand\"/> that can ",
-                                                                   };
+                                                                   ];
 
         private static readonly string[] ValidPhrasesForWriteOnly =
-                                                                    {
+                                                                    [
                                                                         "Sets the <see cref=\"ICommand\" /> that can ",
                                                                         "Sets the <see cref=\"ICommand\"/> that can ",
-                                                                    };
+                                                                    ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_property() => No_issue_is_reported_for(@"

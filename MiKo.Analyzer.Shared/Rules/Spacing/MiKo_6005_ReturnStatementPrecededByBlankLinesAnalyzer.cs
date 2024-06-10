@@ -32,21 +32,34 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             foreach (var ancestor in statement.Ancestors())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case BlockSyntax block:
-                        return AnalyzeStatements(block.Statements, statement);
+                    case SyntaxKind.Block:
+                        return AnalyzeStatements(((BlockSyntax)ancestor).Statements, statement);
 
-                    case SwitchSectionSyntax section:
-                        return AnalyzeStatements(section.Statements, statement);
+                    case SyntaxKind.SwitchSection:
+                        return AnalyzeStatements(((SwitchSectionSyntax)ancestor).Statements, statement);
 
-                    case IfStatementSyntax _:
-                    case ElseClauseSyntax _:
+                    case SyntaxKind.IfStatement:
+                    case SyntaxKind.ElseClause:
                         return null; // no issue as the statement is not surrounded by brackets that follow a block
 
-                    case LocalFunctionStatementSyntax _:
-                    case MethodDeclarationSyntax _:
-                    case ClassDeclarationSyntax _:
+                    case SyntaxKind.LocalFunctionStatement:
+                        return null; // stop lookup as there is no valid ancestor anymore
+
+                    // base methods
+                    case SyntaxKind.ConversionOperatorDeclaration:
+                    case SyntaxKind.ConstructorDeclaration:
+                    case SyntaxKind.DestructorDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.OperatorDeclaration:
+                        return null; // stop lookup as there is no valid ancestor anymore
+
+                    // base types
+                    case SyntaxKind.RecordDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.StructDeclaration:
                         return null; // stop lookup as there is no valid ancestor anymore
                 }
             }

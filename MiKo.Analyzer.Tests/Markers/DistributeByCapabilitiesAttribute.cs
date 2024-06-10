@@ -19,13 +19,11 @@ namespace NCrunch.Framework
     /// The test clones are effectively treated as separate tests by the entirety of the NCrunch engine.
     /// Throughout the UI, they are distinctively marked with a suffix describing their required capability.
     /// </remarks>
-    public class DistributeByCapabilitiesAttribute : Attribute
+    public class DistributeByCapabilitiesAttribute(params string[] capabilities) : Attribute
     {
-        public DistributeByCapabilitiesAttribute(params string[] capabilities) => Capabilities = capabilities;
-
         //// ReSharper disable once MemberCanBePrivate.Global
         //// ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public string[] Capabilities { get; }
+        public string[] Capabilities { get; } = capabilities;
     }
 }
 

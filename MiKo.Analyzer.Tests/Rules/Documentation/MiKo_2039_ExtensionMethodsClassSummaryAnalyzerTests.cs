@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -13,6 +11,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2039_ExtensionMethodsClassSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] ValidPhrases =
+                                                        [
+                                                            @"Provides a set of <see langword=""static""/> methods for ",
+                                                            @"Provides a set of <see langword=""static"" /> methods for ",
+                                                        ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_non_static_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -125,11 +129,5 @@ public static class TestMeExtensions
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2039_ExtensionMethodsClassSummaryAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2039_CodeFixProvider();
-
-        private static IEnumerable<string> ValidPhrases() => new[]
-                                                                 {
-                                                                     @"Provides a set of <see langword=""static""/> methods for ",
-                                                                     @"Provides a set of <see langword=""static"" /> methods for ",
-                                                                 };
     }
 }

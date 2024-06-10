@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
-            foreach (var method in symbol.GetMethods())
+            foreach (var method in symbol.GetNamedMethods())
             {
                 var name = method.Name;
                 var indicator = ScopeIndicators.Find(_ => name.StartsWith(_, StringComparison.OrdinalIgnoreCase));

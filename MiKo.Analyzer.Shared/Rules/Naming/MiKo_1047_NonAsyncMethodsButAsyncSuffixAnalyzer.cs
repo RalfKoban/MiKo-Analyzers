@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,24 +18,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false && base.ShallAnalyze(symbol);
 
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => true;
+
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => symbol.IsAsyncTaskBased() is false;
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
             var symbolName = symbol.Name;
 
+            var betterName = FindBetterName(symbolName);
+
+            if (betterName.IsNullOrWhiteSpace())
+            {
+                return Enumerable.Empty<Diagnostic>();
+            }
+
+            return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
+        }
+
+        private static string FindBetterName(string symbolName)
+        {
             if (symbolName.EndsWith(Constants.AsyncSuffix, StringComparison.Ordinal))
             {
-                var betterName = symbolName.WithoutSuffix(Constants.AsyncSuffix);
-
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return symbolName.WithoutSuffix(Constants.AsyncSuffix);
             }
-            else if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
+
+            if (symbolName.EndsWith(Constants.AsyncCoreSuffix, StringComparison.Ordinal))
             {
-                var betterName = symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + Constants.Core;
-
-                yield return Issue(symbol, betterName, CreateBetterNameProposal(betterName));
+                return symbolName.WithoutSuffix(Constants.AsyncCoreSuffix) + Constants.Core;
             }
+
+            return null;
         }
     }
 }

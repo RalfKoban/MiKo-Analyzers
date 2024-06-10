@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -14,14 +13,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3018_ObjectDisposedExceptionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ProblematicVisibilities =
-                                                                   {
+                                                                   [
                                                                        "public",
                                                                        "internal",
                                                                        "protected",
                                                                        "protected internal",
-                                                                   };
+                                                                   ];
 
-        private static readonly string[] Visibilities = ProblematicVisibilities.Concat(new[] { "private " }).ToArray();
+        private static readonly string[] Visibilities = [.. ProblematicVisibilities, "private "];
 
         [Test]
         public void No_issue_is_reported_for_interface() => No_issue_is_reported_for(@"

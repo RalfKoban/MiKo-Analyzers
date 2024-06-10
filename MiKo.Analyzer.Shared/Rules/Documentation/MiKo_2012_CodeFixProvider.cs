@@ -158,18 +158,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                if (text.StartsWithAny(Constants.Comments.FieldStartingPhrase, StringComparison.Ordinal))
-                {
-                    var property = syntax.FirstAncestorOrSelf<PropertyDeclarationSyntax>();
-
-                    if (property != null)
-                    {
-                        var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
-
-                        return CommentStartingWith(comment, startingPhrase);
-                    }
-                }
-
                 if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
                 {
                     return Comment(comment, ReplacementMap.Keys, ReplacementMap);
@@ -185,9 +173,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var index = remainingText.IndexOf(firstWord);
                         var replacementForFirstWord = Verbalizer.MakeThirdPersonSingularVerb(firstWord.ToString()).ToUpperCaseAt(0);
 
-                        var replacedText = replacementForFirstWord + remainingText.Slice(index + firstWord.Length).ToString();
+                        var replacedText = replacementForFirstWord.ConcatenatedWith(remainingText.Slice(index + firstWord.Length));
 
                         return Comment(comment, replacedText, content.RemoveAt(0));
+                    }
+                }
+
+                if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
+                {
+                    var member = syntax.FirstAncestorOrSelf<MemberDeclarationSyntax>();
+
+                    switch (member)
+                    {
+                        case PropertyDeclarationSyntax property:
+                        {
+                            var startingPhrase = GetPropertyStartingPhrase(property.AccessorList);
+
+                            return CommentStartingWith(comment, startingPhrase);
+                        }
+
+                        case BaseTypeDeclarationSyntax _:
+                            return CommentStartingWith(comment, "Represents ");
                     }
                 }
             }
@@ -265,6 +271,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+//// ncrunch: rdi off
+
         private static Dictionary<string, string> CreateReplacementMap()
         {
             var entries = CreateReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
@@ -281,8 +289,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return result;
         }
-
-//// ncrunch: rdi off
 
         private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
         {

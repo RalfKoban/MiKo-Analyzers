@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -25,8 +26,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (comment.StartsWithAny(Constants.Comments.ExceptionForbiddenStartingPhrase, StringComparison.OrdinalIgnoreCase))
             {
-                yield return Issue(symbol.Name, exceptionComment.GetContentsLocation());
+                return new[] { Issue(symbol.Name, exceptionComment.GetContentsLocation()) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

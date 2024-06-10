@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -21,13 +22,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (arguments.Count == 4)
             {
-                var argument = arguments[0];
+                var expression = arguments[0].Expression;
 
-                if (argument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
+                if (expression.IsKind(SyntaxKind.StringLiteralExpression))
                 {
-                    yield return Issue(symbol.Name, argument.Expression);
+                    return new[] { Issue(symbol.Name, expression) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

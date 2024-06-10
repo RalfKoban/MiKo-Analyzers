@@ -20,9 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(IMethodSymbol symbol) => base.ShallAnalyze(symbol) && symbol.Parameters.Length == 0 && symbol.IsTestMethod();
 
-        protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => false;
-
-        protected override IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation) => Enumerable.Empty<Diagnostic>(); // do not consider local functions at all
+        protected override bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false; // do not consider local functions at all
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IMethodSymbol symbol, Compilation compilation)
         {
@@ -30,8 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.EndsWith(Constants.Underscore))
             {
-                yield return Issue(symbol, CreateBetterNameProposal(symbolName.TrimEnd(Constants.Underscore)));
+                return new[] { Issue(symbol, CreateBetterNameProposal(symbolName.TrimEnd(Constants.Underscore))) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

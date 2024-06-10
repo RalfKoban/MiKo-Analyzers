@@ -19,6 +19,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string GetPhraseProposal(Diagnostic issue) => issue.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.Phrase, out var s) ? s : string.Empty;
 
+//// ncrunch: rdi off
+//// ncrunch: no coverage start
+
+        protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
+        {
+            var orderedTerms = terms.ToHashSet(_ => _.ToUpperInvariant())
+                                    .OrderBy(_ => _.Length)
+                                    .ThenBy(_ => _);
+
+            var lookupTerms = new List<string>();
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var term in orderedTerms)
+            {
+                if (term.StartsWithAny(lookupTerms, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                lookupTerms.Add(term);
+            }
+
+            return lookupTerms.ToArray();
+        }
+
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
+
         protected static XmlElementSyntax C(string text)
         {
             return SyntaxFactory.XmlElement(Constants.XmlTag.C, new SyntaxList<XmlNodeSyntax>(XmlText(text)));
@@ -113,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                             continue;
                         }
 
-                        if (originalText.ContainsAny(terms))
+                        if (originalText.ContainsAny(terms, StringComparison.OrdinalIgnoreCase))
                         {
                             var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap)
                                                                               .ToString()
@@ -139,18 +167,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (tokenMap is null)
                     {
                         // nothing found, so nothing to replace
+                        continue;
                     }
-                    else
+
+                    if (map is null)
                     {
-                        var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
-
-                        if (map is null)
-                        {
-                            map = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
-                        }
-
-                        map.Add(text, newText);
+                        map = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
                     }
+
+                    var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);
+
+                    map.Add(text, newText);
                 }
 
                 return map;
@@ -222,71 +249,83 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var lastNode = comment.Content.LastOrDefault();
 
-            if (lastNode is null)
+            switch (lastNode)
             {
-                // we have an empty comment
-                return comment.AddContent(XmlText(ending));
-            }
-
-            if (lastNode is XmlTextSyntax t)
-            {
-                // we have a text at the end, so we have to find the text
-                var textTokens = t.TextTokens;
-                var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
-
-                if (lastToken.IsDefaultValue())
+                case null:
                 {
-                    // seems like we have a <see cref/> or something with a CRLF at the end
-                    var token = ending.AsToken(SyntaxKind.XmlTextLiteralToken);
-
-                    return comment.InsertTokensBefore(textTokens.First(), new[] { token });
+                    // we have an empty comment
+                    return comment.AddContent(XmlText(ending));
                 }
-                else
-                {
-                    // in case there is any, get rid of last dot
-                    var valueText = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.') + ending;
 
-                    return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
+                case XmlTextSyntax t:
+                {
+                    // we have a text at the end, so we have to find the text
+                    var textTokens = t.TextTokens;
+                    var lastToken = textTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
+
+                    if (lastToken.IsDefaultValue())
+                    {
+                        // seems like we have a <see cref/> or something with a CRLF at the end
+                        var token = ending.AsToken(SyntaxKind.XmlTextLiteralToken);
+
+                        return comment.InsertTokensBefore(textTokens.First(), new[] { token });
+                    }
+                    else
+                    {
+                        // in case there is any, get rid of last dot
+                        var valueText = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(ending);
+
+                        return comment.ReplaceToken(lastToken, lastToken.WithText(valueText));
+                    }
+                }
+
+                default:
+                {
+                    // we have a <see cref/> or something at the end
+                    return comment.InsertNodeAfter(lastNode, XmlText(ending));
                 }
             }
-
-            // we have a <see cref/> or something at the end
-            return comment.InsertNodeAfter(lastNode, XmlText(ending));
         }
 
         protected static XmlElementSyntax CommentEndingWith(XmlElementSyntax comment, string commentStart, XmlEmptyElementSyntax seeCref, string commentContinue)
         {
             var lastNode = comment.Content.LastOrDefault();
 
-            if (lastNode is null)
+            switch (lastNode)
             {
-                // we have an empty comment
-                return comment.AddContent(XmlText(commentStart), seeCref, XmlText(commentContinue));
-            }
-
-            if (lastNode is XmlTextSyntax t)
-            {
-                var text = commentStart;
-
-                // we have a text at the end, so we have to find the text
-                var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
-
-                if (lastToken.IsDefaultValue())
+                case null:
                 {
-                    // seems like we have a <see cref/> or something with a CRLF at the end
-                }
-                else
-                {
-                    // in case there is any, get rid of last dot
-                    text = lastToken.ValueText.AsSpan().TrimEnd().WithoutSuffix('.') + commentStart;
+                    // we have an empty comment
+                    return comment.AddContent(XmlText(commentStart), seeCref, XmlText(commentContinue));
                 }
 
-                return comment.ReplaceNode(t, XmlText(text))
-                              .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
-            }
+                case XmlTextSyntax t:
+                {
+                    var text = commentStart;
 
-            // we have a <see cref/> or something at the end
-            return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
+                    // we have a text at the end, so we have to find the text
+                    var lastToken = t.TextTokens.Reverse().FirstOrDefault(_ => _.IsKind(SyntaxKind.XmlTextLiteralToken) && _.ValueText.IsNullOrWhiteSpace() is false);
+
+                    if (lastToken.IsDefaultValue())
+                    {
+                        // seems like we have a <see cref/> or something with a CRLF at the end
+                    }
+                    else
+                    {
+                        // in case there is any, get rid of last dot
+                        text = lastToken.ValueText.AsSpan().TrimEnd().TrimEnd('.').ConcatenatedWith(commentStart);
+                    }
+
+                    return comment.ReplaceNode(t, XmlText(text))
+                                  .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
+                }
+
+                default:
+                {
+                    // we have a <see cref/> or something at the end
+                    return comment.InsertNodeAfter(lastNode, XmlText(commentContinue));
+                }
+            }
         }
 
         protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
@@ -549,8 +588,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected static XmlTextSyntax MakeFirstWordInfiniteVerb(XmlTextSyntax text)
         {
             var textTokens = text.TextTokens;
+            var textTokensCount = textTokens.Count;
 
-            for (var index = 0; index < textTokens.Count; index++)
+            for (var index = 0; index < textTokensCount; index++)
             {
                 var token = textTokens[index];
 
@@ -572,21 +612,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return text;
         }
 
-        protected static string MakeFirstWordInfiniteVerb(string text)
+        protected static string MakeFirstWordInfiniteVerb(string text, FirstWordHandling handling = FirstWordHandling.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
                 return text;
             }
 
-            return MakeFirstWordInfiniteVerb(text.AsSpan()).ToString();
+            return MakeFirstWordInfiniteVerb(text.AsSpan(), handling);
         }
 
-        protected static ReadOnlySpan<char> MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text)
+        protected static string MakeFirstWordInfiniteVerb(ReadOnlySpan<char> text, FirstWordHandling handling = FirstWordHandling.None)
         {
             if (text.IsNullOrWhiteSpace())
             {
-                return text;
+                return string.Empty;
             }
 
             // it may happen that the text starts with a special character, such as an ':'
@@ -595,19 +635,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (valueText.IsNullOrWhiteSpace())
             {
-                return text;
+                return string.Empty;
             }
 
             // first word
-            var firstWord = valueText.FirstWord().ToString();
+            var firstWord = GetFirstWord(valueText);
+
             var infiniteVerb = Verbalizer.MakeInfiniteVerb(firstWord);
 
             if (firstWord != infiniteVerb)
             {
-                return (infiniteVerb + valueText.WithoutFirstWord().ToString()).AsSpan();
+                return infiniteVerb.ConcatenatedWith(valueText.WithoutFirstWord());
             }
 
-            return text;
+            return text.ToString();
+
+            string GetFirstWord(ReadOnlySpan<char> span)
+            {
+                var word = span.FirstWord();
+
+                switch (handling)
+                {
+                    case FirstWordHandling.MakeLowerCase: return word.ToLowerCaseAt(0);
+                    case FirstWordHandling.MakeUpperCase: return word.ToUpperCaseAt(0);
+                    default:
+                        return word.ToString();
+                }
+            }
         }
 
         protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
@@ -818,7 +872,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var result = new List<XmlNodeSyntax>(length);
+            var result = new List<XmlNodeSyntax>(1 + length - skip);
             result.Add(textCommentEnd);
             result.AddRange(commendEndNodes.Skip(skip));
 
@@ -887,30 +941,36 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax CombineTexts(XmlElementSyntax comment)
         {
             var modified = false;
+
             var contents = comment.Content;
+            var contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned so perform a careful review of te code
 
-            for (var index = 0; index <= contents.Count - 2; index++)
+            for (var index = 0; index <= contentsCount; index++)
             {
-                var nextIndex = index + 1;
-
-                var content1 = contents[index];
-                var content2 = contents[nextIndex];
-
-                if (content1 is XmlTextSyntax text1 && content2 is XmlTextSyntax text2)
+                if (contents[index] is XmlTextSyntax text1)
                 {
-                    var lastToken = text1.TextTokens.Last();
-                    var firstToken = text2.TextTokens.First();
+                    var nextIndex = index + 1;
 
-                    var token = lastToken.WithText(lastToken.Text + firstToken.Text)
-                                         .WithLeadingTriviaFrom(lastToken)
-                                         .WithTrailingTriviaFrom(firstToken);
+                    if (contents[nextIndex] is XmlTextSyntax text2)
+                    {
+                        var text1TextTokens = text1.TextTokens;
+                        var text2TextTokens = text2.TextTokens;
 
-                    var tokens = text1.TextTokens.Replace(lastToken, token).AddRange(text2.TextTokens.Skip(1));
-                    var newText = text1.WithTextTokens(tokens);
+                        var lastToken = text1TextTokens.Last();
+                        var firstToken = text2TextTokens.First();
 
-                    contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
+                        var token = lastToken.WithText(lastToken.Text + firstToken.Text)
+                                             .WithLeadingTriviaFrom(lastToken)
+                                             .WithTrailingTriviaFrom(firstToken);
 
-                    modified = true;
+                        var tokens = text1TextTokens.Replace(lastToken, token).AddRange(text2TextTokens.Skip(1));
+                        var newText = text1.WithTextTokens(tokens);
+
+                        contents = contents.Replace(text1, newText).RemoveAt(nextIndex);
+                        contentsCount = contents.Count - 2; // risky operation, fails when 'contents' gets re-assigned
+
+                        modified = true;
+                    }
                 }
             }
 

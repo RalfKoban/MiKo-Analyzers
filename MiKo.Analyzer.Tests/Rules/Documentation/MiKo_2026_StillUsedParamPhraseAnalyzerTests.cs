@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2026_StillUsedParamPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] UnusedPhrases =
-                                                         {
+                                                         [
                                                              "Unused",
                                                              "Unused.",
                                                              "Not used",
@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                              "the parameter is ignored",
                                                              "parameter is not used",
                                                              "parameter is ignored",
-                                                         };
+                                                         ];
 
         [Test]
         public void No_issue_is_reported_for_method_that_has_no_parameter() => No_issue_is_reported_for(@"

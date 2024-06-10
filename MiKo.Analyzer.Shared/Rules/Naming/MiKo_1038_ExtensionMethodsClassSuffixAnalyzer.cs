@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -30,12 +31,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            if (symbol.Name.EndsWith(Suffix, StringComparison.Ordinal) is false)
+            if (symbol.Name.EndsWith(Suffix, StringComparison.Ordinal))
             {
-                var betterName = FindBetterName(symbol);
-
-                yield return Issue(symbol, Suffix, CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var betterName = FindBetterName(symbol);
+
+            return new[] { Issue(symbol, Suffix, CreateBetterNameProposal(betterName)) };
         }
 
         private static string FindBetterName(ITypeSymbol symbol)

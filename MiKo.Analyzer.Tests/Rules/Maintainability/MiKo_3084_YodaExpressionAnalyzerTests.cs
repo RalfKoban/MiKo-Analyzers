@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -14,20 +12,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3084_YodaExpressionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] EqualityOperators =
-                                                             {
+                                                             [
                                                                  "==",
                                                                  "!=",
-                                                             };
+                                                             ];
 
         private static readonly string[] ComparingOperators =
-                                                              {
+                                                              [
                                                                   "<=",
                                                                   ">=",
                                                                   "<",
                                                                   ">",
-                                                              };
+                                                              ];
 
-        private static readonly string[] Operators = EqualityOperators.Concat(ComparingOperators).ToArray();
+        private static readonly string[] Operators = [.. EqualityOperators, .. ComparingOperators];
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_comparisons_of_2_variables_of_type_(

@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers
 
         public override void Visit(SyntaxNode node)
         {
-            // duplicate negative, we accept all except the one to ignore
+            // double negative, we accept all except the one to ignore
             var acceptNode = node.IsKind(m_syntaxKindToIgnore) is false;
 
             if (acceptNode)

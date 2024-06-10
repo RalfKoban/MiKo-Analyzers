@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override IEnumerable<Diagnostic> Analyze(INamedTypeSymbol symbol, Compilation compilation)
         {
-            foreach (var group in symbol.GetMethods().GroupBy(_ => _.Name))
+            foreach (var group in symbol.GetNamedMethods().GroupBy(_ => _.Name))
             {
                 var methods = group.ToList();
 

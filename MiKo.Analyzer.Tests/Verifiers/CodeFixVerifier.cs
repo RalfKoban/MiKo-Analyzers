@@ -20,23 +20,7 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
-        private static int s_testLimit = -1;
-
-        protected static int TestLimit
-        {
-            get
-            {
-                if (s_testLimit < 0)
-                {
-                    // see variable in appveyor.yml; used to limit number of tests as otherwise the test run takes too much time
-                    var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
-
-                    s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 1000 : int.MaxValue;
-                }
-
-                return s_testLimit;
-            }
-        }
+        protected static int TestLimit { get; } = int.MaxValue;
 
         /// <summary>
         /// Returns the codefix being tested (C#) - to be implemented in non-abstract class.
@@ -137,7 +121,7 @@ namespace TestHelper
                 var context = new CodeFixContext(document, analyzerDiagnostics[0], (a, _) => actions.Add(a), CancellationToken.None);
                 codeFixProvider.RegisterCodeFixesAsync(context).Wait();
 
-                if (actions.Any() is false)
+                if (actions.Count == 0)
                 {
                     break;
                 }
@@ -170,7 +154,7 @@ New document:
                 }
 
                 // check if there are analyzer diagnostics left after the code fix
-                if (analyzerDiagnostics.Any() is false)
+                if (analyzerDiagnostics.Length == 0)
                 {
                     break;
                 }
