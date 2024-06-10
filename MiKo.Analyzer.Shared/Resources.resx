@@ -515,7 +515,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove base type indicator</value>
   </data>
   <data name="MiKo_1030_Description" xml:space="preserve">
-    <value>Indicating that a type is a base type by putting 'Abstract' or 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base class.</value>
+    <value>Indicating that a type is a base type by putting 'Abstract' or 'Base' in its name does not make sense. Every interface or class that is not sealed can act as a base type, so cluttering its name simply creates an unnecessary distraction for it users.</value>
   </data>
   <data name="MiKo_1030_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' from name</value>
@@ -5138,7 +5138,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>'new' keywords should be placed on same line(s) as the types</value>
   </data>
   <data name="MiKo_6043_CodeFixTitle" xml:space="preserve">
-    <value>Place on single line</value>
+    <value>Place lambda on single line</value>
   </data>
   <data name="MiKo_6043_Description" xml:space="preserve">
     <value>To ease maintenance and code reading, lambdas with expression bodies should be placed on a single line. The code is harder to read when placed on different lines.</value>
@@ -5271,15 +5271,40 @@ Hence, the open brace of the expression should be positioned directly below the 
     <value>Single-line arguments shall be placed on single line</value>
   </data>
   <data name="MiKo_6054_CodeFixTitle" xml:space="preserve">
-    <value>Place lambda on same line</value>
+    <value>Place lambda arrow on same line as its parameter(s)</value>
   </data>
   <data name="MiKo_6054_Description" xml:space="preserve">
-    <value>The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies instead of splitting them all over multiple lines.</value>
+    <value>The code is easier to read if the arrow of lambdas are placed on a the same line as the parameters or their expression bodies, instead of splitting them all over multiple lines.</value>
   </data>
   <data name="MiKo_6054_MessageFormat" xml:space="preserve">
-    <value>Place lambda on same line</value>
+    <value>Place lambda arrow on same line as its parameter(s)</value>
   </data>
   <data name="MiKo_6054_Title" xml:space="preserve">
-    <value>Lambda arrows shall be placed on same line as parameters and expression bodies</value>
+    <value>Lambda arrows shall be placed on same line as the parameter(s) of the lambda</value>
+  </data>
+  <data name="MiKo_6055_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6055_Description" xml:space="preserve">
+    <value>To separate assignments visually from invocations, they should be surrounded by blank lines. That makes them easier to spot.</value>
+  </data>
+  <data name="MiKo_6055_MessageFormat" xml:space="preserve">
+    <value>Surround assignment with a blank line</value>
+  </data>
+  <data name="MiKo_6055_Title" xml:space="preserve">
+    <value>Assignment statements should be surrounded by blank lines</value>
+  </data>
+  <data name="MiKo_6056_CodeFixTitle" xml:space="preserve">
+    <value>Align collection expression brackets</value>
+  </data>
+  <data name="MiKo_6056_Description" xml:space="preserve">
+    <value>Collection expressions are very similar to collection initializers from the code reading point of view.
+Hence, their open brackets should be positioned at the same position where the collection initializer braces would be positioned.</value>
+  </data>
+  <data name="MiKo_6056_MessageFormat" xml:space="preserve">
+    <value>Align collection expression brackets</value>
+  </data>
+  <data name="MiKo_6056_Title" xml:space="preserve">
+    <value>Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned</value>
   </data>
 </root>

@@ -37,18 +37,31 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 foreach (var ancestor in declaration.Ancestors())
                 {
-                    switch (ancestor)
+                    switch (ancestor.Kind())
                     {
-                        case BlockSyntax block:
-                            return AnalyzeLocalDeclarationStatement(block.Statements, declaration);
+                        case SyntaxKind.Block:
+                            return AnalyzeLocalDeclarationStatement(((BlockSyntax)ancestor).Statements, declaration);
 
-                        case SwitchSectionSyntax section:
-                            return AnalyzeLocalDeclarationStatement(section.Statements, declaration);
+                        case SyntaxKind.SwitchSection:
+                            return AnalyzeLocalDeclarationStatement(((SwitchSectionSyntax)ancestor).Statements, declaration);
 
-                        case IfStatementSyntax _:
-                        case ElseClauseSyntax _:
-                        case MethodDeclarationSyntax _:
-                        case ClassDeclarationSyntax _:
+                        case SyntaxKind.IfStatement:
+                        case SyntaxKind.ElseClause:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // base methods
+                        case SyntaxKind.ConversionOperatorDeclaration:
+                        case SyntaxKind.ConstructorDeclaration:
+                        case SyntaxKind.DestructorDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.OperatorDeclaration:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // base types
+                        case SyntaxKind.RecordDeclaration:
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.StructDeclaration:
                             return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }

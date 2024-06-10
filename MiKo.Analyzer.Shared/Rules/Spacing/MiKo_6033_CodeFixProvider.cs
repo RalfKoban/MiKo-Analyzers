@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is BlockSyntax block && block.Parent is SwitchSectionSyntax)
             {
-                var position = GetProposedLinePosition(issue);
+                var spaces = GetProposedSpaces(issue);
 
-                return GetUpdatedBlock(block, position.Character);
+                return GetUpdatedBlock(block, spaces);
             }
 
             return syntax;

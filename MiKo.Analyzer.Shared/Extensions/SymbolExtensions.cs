@@ -92,9 +92,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static INamedTypeSymbol FindContainingType(this SyntaxNodeAnalysisContext value) => FindContainingType(value.ContainingSymbol);
 
-        internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value is INamedTypeSymbol type
-                                                                                   ? type
-                                                                                   : value?.ContainingType;
+        internal static INamedTypeSymbol FindContainingType(this ISymbol value) => value as INamedTypeSymbol ?? value?.ContainingType;
 
         internal static string FullyQualifiedName(this ISymbol value, bool useAlias = true)
         {
@@ -129,7 +127,14 @@ namespace MiKoSolutions.Analyzers
             return field.DescendantNodes<MemberAccessExpressionSyntax>(_ => _.ToCleanedUpString() == invocation);
         }
 
-        internal static IEnumerable<string> GetAttributeNames(this ISymbol value) => value.GetAttributes().Select(_ => _.AttributeClass.Name);
+        internal static IEnumerable<string> GetAttributeNames(this ISymbol value)
+        {
+            var attributes = value.GetAttributes();
+
+            return attributes.Length != 0
+                   ? attributes.Select(_ => _.AttributeClass?.Name)
+                   : Enumerable.Empty<string>();
+        }
 
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethod(this IMethodSymbol value)
         {
@@ -137,12 +142,17 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var createdObject in method.DescendantNodes<ObjectCreationExpressionSyntax>())
             {
-                switch (createdObject.Parent)
+                var parent = createdObject.Parent;
+
+                switch (parent?.Kind())
                 {
-                    case ArrowExpressionClauseSyntax arrow when arrow.Parent == method:
-                    case ReturnStatementSyntax rs when rs.Parent == method:
+                    case SyntaxKind.ArrowExpressionClause:
+                    case SyntaxKind.ReturnStatement:
                     {
-                        yield return createdObject;
+                        if (parent.Parent == method)
+                        {
+                            yield return createdObject;
+                        }
 
                         break;
                     }
@@ -165,7 +175,6 @@ namespace MiKoSolutions.Analyzers
                 switch (symbol)
                 {
                     case null: return null;
-                    case ITypeSymbol _: return null;
                     case IMethodSymbol method: return method;
                     case IPropertySymbol property:
                     {
@@ -176,6 +185,10 @@ namespace MiKoSolutions.Analyzers
 
                         return property.SetMethod;
                     }
+
+                    case INamespaceOrTypeSymbol _: return null;
+                    case IEventSymbol _: return null;
+                    case IFieldSymbol _: return null;
 
                     default:
                         symbol = symbol.ContainingSymbol;
@@ -329,6 +342,7 @@ namespace MiKoSolutions.Analyzers
                 {
                     case RefKind.Ref: return "ref ";
                     case RefKind.Out: return "out ";
+                    case RefKind.In: return "in ";
                     default: return string.Empty;
                 }
             }
@@ -336,9 +350,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken GetModifier(this IMethodSymbol value, SyntaxKind kind)
         {
-            var syntax = (BaseMethodDeclarationSyntax)value.GetSyntax();
+            switch (value.GetSyntax())
+            {
+                case BaseMethodDeclarationSyntax method: return method.Modifiers.First(kind);
+                case AccessorDeclarationSyntax accessor: return accessor.Modifiers.First(kind);
 
-            return syntax.Modifiers.First(kind);
+                default:
+                    return default;
+            }
         }
 
         internal static SyntaxToken GetModifier(this IParameterSymbol value, SyntaxKind kind)
@@ -439,11 +458,41 @@ namespace MiKoSolutions.Analyzers
             return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
-        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames) => value.GetAttributes().Any(_ => attributeNames.Contains(_.AttributeClass.Name));
+        internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
+        {
+            var attributes = value.GetAttributes();
 
-        internal static bool HasAttributeApplied(this ISymbol value, string attributeName) => value.GetAttributes().Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+            if (attributes.Length != 0)
+            {
+                return attributes.Any(_ => attributeNames.Contains(_.AttributeClass?.Name));
+            }
 
-        internal static bool HasDependencyObjectParameter(this IMethodSymbol value) => value.Parameters.Any(_ => _.Type.IsDependencyObject());
+            return false;
+        }
+
+        internal static bool HasAttributeApplied(this ISymbol value, string attributeName)
+        {
+            var attributes = value.GetAttributes();
+
+            if (attributes.Length != 0)
+            {
+                return attributes.Any(_ => _.AttributeClass.InheritsFrom(attributeName));
+            }
+
+            return false;
+        }
+
+        internal static bool HasDependencyObjectParameter(this IMethodSymbol value)
+        {
+            var parameters = value.Parameters;
+
+            if (parameters.Length != 0)
+            {
+                return parameters.Any(_ => _.Type.IsDependencyObject());
+            }
+
+            return false;
+        }
 
         internal static bool HasModifier(this IMethodSymbol value, SyntaxKind kind) => ((BaseMethodDeclarationSyntax)value.GetSyntax()).Modifiers.Any(kind);
 
@@ -471,6 +520,20 @@ namespace MiKoSolutions.Analyzers
                 case SpecialType.System_IntPtr:
                 case SpecialType.System_UIntPtr:
                 case SpecialType.System_DateTime:
+                case SpecialType.System_Object:
+                case SpecialType.System_Enum:
+                case SpecialType.System_Delegate:
+                case SpecialType.System_MulticastDelegate:
+                case SpecialType.System_TypedReference:
+                case SpecialType.System_ArgIterator:
+                case SpecialType.System_RuntimeArgumentHandle:
+                case SpecialType.System_RuntimeFieldHandle:
+                case SpecialType.System_RuntimeMethodHandle:
+                case SpecialType.System_RuntimeTypeHandle:
+                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
+                case SpecialType.System_AsyncCallback:
+                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
+                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
                 {
                     return false;
                 }
@@ -481,11 +544,11 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Delegate:
                 case TypeKind.Dynamic:
                 case TypeKind.Enum:
+                case TypeKind.FunctionPointer:
                 case TypeKind.Module:
                 case TypeKind.Pointer:
-                case TypeKind.TypeParameter:
                 case TypeKind.Submission:
-                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
                 {
                     return false;
                 }
@@ -537,6 +600,20 @@ namespace MiKoSolutions.Analyzers
                 case SpecialType.System_IntPtr:
                 case SpecialType.System_UIntPtr:
                 case SpecialType.System_DateTime:
+                case SpecialType.System_Object:
+                case SpecialType.System_Enum:
+                case SpecialType.System_Delegate:
+                case SpecialType.System_MulticastDelegate:
+                case SpecialType.System_TypedReference:
+                case SpecialType.System_ArgIterator:
+                case SpecialType.System_RuntimeArgumentHandle:
+                case SpecialType.System_RuntimeFieldHandle:
+                case SpecialType.System_RuntimeMethodHandle:
+                case SpecialType.System_RuntimeTypeHandle:
+                case SpecialType.System_Runtime_CompilerServices_IsVolatile:
+                case SpecialType.System_AsyncCallback:
+                case SpecialType.System_Runtime_CompilerServices_RuntimeFeature:
+                case SpecialType.System_Runtime_CompilerServices_PreserveBaseOverridesAttribute:
                 {
                     return false;
                 }
@@ -547,11 +624,11 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Delegate:
                 case TypeKind.Dynamic:
                 case TypeKind.Enum:
+                case TypeKind.FunctionPointer:
                 case TypeKind.Module:
                 case TypeKind.Pointer:
-                case TypeKind.TypeParameter:
                 case TypeKind.Submission:
-                case TypeKind.FunctionPointer:
+                case TypeKind.TypeParameter:
                 {
                     return false;
                 }
@@ -687,6 +764,12 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
+                    if (value.IsRecord)
+                    {
+                        // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
+                        return false;
+                    }
+
                     return value.AnyBaseType(_ => baseClassName == _.ToString());
                 }
 
@@ -729,6 +812,12 @@ namespace MiKoSolutions.Analyzers
                 case TypeKind.Class:
                 case TypeKind.Error: // needed for attribute types
                 {
+                    if (value.IsRecord)
+                    {
+                        // ignore records here as they can only inherit from other records due to their special nature (such as copy constructors)
+                        return false;
+                    }
+
                     return value.AnyBaseType(_ =>
                                                  {
                                                      var fullName = _.ToString();
@@ -748,14 +837,14 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Interface:
                 {
-                    // its an interface implementation, so we do not need an extra type
+                    // it's an interface implementation, so we do not need an extra type
                     return value.AllInterfaces.Contains(type, SymbolEqualityComparer.Default);
                 }
 
                 case TypeKind.Class:
                 case TypeKind.Struct:
                 {
-                    // its a base type, so we do not need an extra type
+                    // it's a base type, so we do not need an extra type
                     return value.AnyBaseType(_ => _.Equals(type, SymbolEqualityComparer.Default));
                 }
 
@@ -846,7 +935,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsDependencyPropertyKey(this ITypeSymbol value) => value.Name == Constants.DependencyPropertyKey.TypeName || value.Name == Constants.DependencyPropertyKey.FullyQualifiedTypeName;
 
-        internal static bool IsDisposable(this ITypeSymbol value) => value.AllInterfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
+        internal static bool IsDisposable(this ITypeSymbol value)
+        {
+            var interfaces = value.AllInterfaces;
+
+            return interfaces.Length > 0 && interfaces.Any(_ => _.SpecialType == SpecialType.System_IDisposable);
+        }
 
         internal static bool IsEnhancedByPostSharpAdvice(this ISymbol value) => value.HasAttributeApplied("PostSharp.Aspects.Advices.Advice");
 
@@ -1111,12 +1205,19 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
-            var methodName = value.Name;
+            var allInterfaces = typeSymbol.AllInterfaces;
 
-            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-            var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+            if (allInterfaces.Length > 0)
+            {
+                var methodName = value.Name;
 
-            return result;
+                var symbols = allInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
+                var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+
+                return result;
+            }
+
+            return false;
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)
@@ -1271,7 +1372,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsTask(this ITypeSymbol value) => value?.Name == nameof(Task);
 
-        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.HasAttribute(Constants.Names.TestClassAttributeNames);
+        internal static bool IsTestClass(this ITypeSymbol value) => value?.TypeKind == TypeKind.Class && value.IsRecord is false && value.HasAttribute(Constants.Names.TestClassAttributeNames);
 
         internal static bool IsTestMethod(this IMethodSymbol value) => value.IsTestSpecificMethod(Constants.Names.TestMethodAttributeNames);
 
@@ -1408,7 +1509,7 @@ namespace MiKoSolutions.Analyzers
         {
             var typeName = value.Name.AsSpan();
 
-            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName.StartsWith('I'))
+            if (value.TypeKind == TypeKind.Interface && typeName.Length > 1 && typeName[0] == 'I')
             {
                 return typeName.Slice(1);
             }

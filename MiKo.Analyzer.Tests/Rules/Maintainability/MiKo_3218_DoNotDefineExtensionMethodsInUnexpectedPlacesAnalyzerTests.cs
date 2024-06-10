@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3218_DoNotDefineExtensionMethodsInUnexpectedPlacesAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Visibilities = { "private", "protected", "internal", "public" };
+        private static readonly string[] Visibilities = ["private", "protected", "internal", "public"];
 
         [Test]
         public void No_issue_is_reported_for_empty_type() => No_issue_is_reported_for(@"

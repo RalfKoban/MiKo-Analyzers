@@ -35,6 +35,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        "first",
                                                        "second",
                                                        "third",
+                                                       "fourth",
+                                                       "fifth",
+                                                       "ninth",
+                                                       "tenth",
                                                    };
 
         private static readonly IEnumerable<string> KnownParts = new[]
@@ -166,12 +170,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return finalName.ToString();
         }
 
-        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
-        {
-            if (HasIssue(symbol.Name))
-            {
-                yield return Issue(symbol);
-            }
-        }
+        private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol) => HasIssue(symbol.Name)
+                                                                       ? new[] { Issue(symbol) }
+                                                                       : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             switch (symbolType.TypeKind)
             {
                 case TypeKind.Delegate:
-                case TypeKind.Class when symbolType.ToString() == TypeNames.Delegate:
+                case TypeKind.Class when symbolType.IsRecord is false && symbolType.ToString() == TypeNames.Delegate:
                 {
                     if (symbol.Name.EndsWithAny(WrongNames))
                     {

@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2075_ActionFunctionParameterPhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] ProblematicWords = { "action", "func", "function", "Action", "Func", "Function" };
+        private static readonly string[] ProblematicWords = ["action", "func", "function", "Action", "Func", "Function"];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_class() => No_issue_is_reported_for(@"

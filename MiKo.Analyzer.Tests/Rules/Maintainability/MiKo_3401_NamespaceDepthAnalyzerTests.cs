@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3401_NamespaceDepthAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AllowedNamespaceNames =
-                                                                 {
+                                                                 [
                                                                      "A",
                                                                      "A.B",
                                                                      "A.B.C",
@@ -21,17 +21,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                      "A.B.C.D.E",
                                                                      "A.B.C.D.E.F",
                                                                      "A.B.C.D.E.F.G",
-                                                                 };
+                                                                 ];
 
         private static readonly string[] TooDeepNamespaceNames =
-                                                                 {
+                                                                 [
                                                                      "A.B.C.D.E.F.G.H",
                                                                      "A.B.C.D.E.F.G.H.I",
                                                                      "A.B.C.D.E.F.G.H.I.J",
                                                                      "A.B.C.D.E.F.G.H.I.J.K",
                                                                      "A.B.C.D.E.F.G.H.I.J.K.L",
                                                                      "A.B.C.D.E.F.G.H.I.J.K.L.M",
-                                                                 };
+                                                                 ];
 
         [Test]
         public void No_issue_is_reported_for_namespace_within_depth_([ValueSource(nameof(AllowedNamespaceNames))]string ns) => No_issue_is_reported_for(@"

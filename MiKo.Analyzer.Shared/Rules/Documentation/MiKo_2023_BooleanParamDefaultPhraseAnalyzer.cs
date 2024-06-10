@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,25 +13,40 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2023";
 
+        private static readonly string[] StartingPhrases = Constants.Comments.BooleanParameterStartingPhrase;
+        private static readonly string StartingPhrase = StartingPhrases[0];
+
+        private static readonly string[] EndingPhrases = Constants.Comments.BooleanParameterEndingPhrase;
+        private static readonly string EndingPhrase = EndingPhrases[0];
+
         public MiKo_2023_BooleanParamDefaultPhraseAnalyzer() : base(Id)
         {
         }
 
-        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.RefKind != RefKind.Out
-                                                                                  && parameter.Type.IsBoolean()
+        protected override bool ShallAnalyzeParameter(IParameterSymbol parameter) => parameter.Type.IsBoolean()
+                                                                                  && parameter.RefKind != RefKind.Out
                                                                                   && parameter.GetEnclosingMethod().Name != nameof(IDisposable.Dispose);
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            var startingPhrase = Constants.Comments.BooleanParameterStartingPhrase;
-            var endingPhrase = Constants.Comments.BooleanParameterEndingPhrase;
+            if (CommentHasIssue(comment))
+            {
+                return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), StartingPhrase, EndingPhrase) };
+            }
 
+            return Enumerable.Empty<Diagnostic>();
+        }
+
+        private static bool CommentHasIssue(string comment)
+        {
             const StringComparison Comparison = StringComparison.Ordinal;
 
-            if (comment.StartsWithAny(startingPhrase, Comparison) is false || comment.ContainsAny(endingPhrase, Comparison) is false)
+            if (comment.StartsWithAny(StartingPhrases, Comparison) && comment.ContainsAny(EndingPhrases, Comparison))
             {
-                yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), startingPhrase[0], endingPhrase[0]);
+                return comment.Contains("to value indicating", Comparison);
             }
+
+            return true;
         }
     }
 }

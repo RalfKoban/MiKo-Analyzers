@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     [TestFixture]
     public sealed class MiKo_6041_AssignmentsAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] AssignmentOperators = { "=", "+=", "-=", "*=", "/=", "%=", ">>=", "<<=", "??=" };
+        private static readonly string[] AssignmentOperators = ["=", "+=", "-=", "*=", "/=", "%=", ">>=", "<<=", "??="];
 
         [Test]
         public void No_issue_is_reported_if_assignment_is_on_same_line() => No_issue_is_reported_for(@"
@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_assignment_to_array_is_on_other_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_if_multi_line_assignment_to_array_is_on_other_line() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -40,6 +40,24 @@ public class TestMe
                     2,
                     3,
                   };
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_if_multi_line_collection_expression_assignment_to_array_is_on_other_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x =
+                  [
+                    1,
+                    2,
+                    3,
+                  ];
     }
 }
 ");
@@ -115,6 +133,34 @@ public class TestMe
 
         i
           " + assignmentOperator + @" 1;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_assignment_to_array_is_on_other_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x =
+                  { 1, 2, 3 };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_if_collection_expression_assignment_to_array_is_on_different_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x =
+                  [1, 2, 3];
     }
 }
 ");
@@ -373,6 +419,68 @@ using System;
 public class TestMe
 {
     private int m_field = 0; // some comment
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_collection_expression_assignment_to_array_spans_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x =
+                  [1, 2, 3];
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x = [1, 2, 3];
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_assignment_to_array_spans_different_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x =
+                  { 1, 2, 3 };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething()
+    {
+        int[] x = { 1, 2, 3 };
+    }
 }
 ";
 

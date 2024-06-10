@@ -8,10 +8,10 @@ namespace BenchmarkConsole
     {
         public BenchmarkConfig()
         {
-            AddJob(Job.Default.With(CsProjCoreToolchain.NetCoreApp20));
-            AddJob(Job.Default.With(CsProjCoreToolchain.NetCoreApp21));
-            AddJob(Job.Default.With(CsProjClassicNetToolchain.Net462));
-            AddJob(Job.Default.With(CsProjClassicNetToolchain.Net48));
+            AddJob(Job.Default.WithToolchain(CsProjCoreToolchain.NetCoreApp20));
+            AddJob(Job.Default.WithToolchain(CsProjCoreToolchain.NetCoreApp21));
+            AddJob(Job.Default.WithToolchain(CsProjClassicNetToolchain.Net462));
+            AddJob(Job.Default.WithToolchain(CsProjClassicNetToolchain.Net48));
         }
     }
 }

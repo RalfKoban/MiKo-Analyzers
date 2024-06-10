@@ -53,10 +53,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var syntax = symbol.GetSyntax();
 
-            if (ThrowsObjectDisposedException(syntax, symbol) is false && AlwaysThrows<NotImplementedException, NotSupportedException>(syntax) is false)
+            if (ThrowsObjectDisposedException(syntax, symbol) || AlwaysThrows<NotImplementedException, NotSupportedException>(syntax))
             {
-                yield return Issue(symbol.Name, GetLocation(syntax));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            return new[] { Issue(symbol.Name, GetLocation(syntax)) };
         }
 
         private static Location GetLocation(SyntaxNode syntax)
@@ -110,8 +112,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
 
         private static bool AlwaysThrows<T1, T2>(SyntaxNode syntax)
-            where T1 : Exception
-            where T2 : Exception
+                                                                where T1 : Exception
+                                                                where T2 : Exception
         {
             foreach (var node in syntax.ChildNodes())
             {

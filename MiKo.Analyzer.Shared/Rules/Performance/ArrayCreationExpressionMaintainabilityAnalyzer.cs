@@ -27,26 +27,34 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private void AnalyzeArrayCreation(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is ArrayCreationExpressionSyntax creation)
+            switch (context.Node)
             {
-                var semanticModel = context.SemanticModel;
-
-                if (ShallAnalyzeArrayCreation(creation, semanticModel))
+                case ArrayCreationExpressionSyntax creation:
                 {
-                    var issues = AnalyzeArrayCreation(creation, semanticModel);
+                    var semanticModel = context.SemanticModel;
 
-                    ReportDiagnostics(context, issues);
+                    if (ShallAnalyzeArrayCreation(creation, semanticModel))
+                    {
+                        var issues = AnalyzeArrayCreation(creation, semanticModel);
+
+                        ReportDiagnostics(context, issues);
+                    }
+
+                    break;
                 }
-            }
-            else if (context.Node is InitializerExpressionSyntax initializer && initializer.Parent is EqualsValueClauseSyntax)
-            {
-                var semanticModel = context.SemanticModel;
 
-                if (ShallAnalyzeArrayInitializer(initializer, semanticModel))
+                case InitializerExpressionSyntax initializer when initializer.Parent is EqualsValueClauseSyntax:
                 {
-                    var issues = AnalyzeArrayInitializer(initializer, semanticModel);
+                    var semanticModel = context.SemanticModel;
 
-                    ReportDiagnostics(context, issues);
+                    if (ShallAnalyzeArrayInitializer(initializer, semanticModel))
+                    {
+                        var issues = AnalyzeArrayInitializer(initializer, semanticModel);
+
+                        ReportDiagnostics(context, issues);
+                    }
+
+                    break;
                 }
             }
         }

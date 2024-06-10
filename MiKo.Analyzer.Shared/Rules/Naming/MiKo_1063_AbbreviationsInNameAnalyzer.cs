@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "app", "application" },
                                                                                        { "apps", "applications" },
                                                                                        { "assoc", "association" },
+                                                                                       { "auth", "authorization" },
                                                                                        { "btn", "button" },
                                                                                        { "cb", "checkBox" },
                                                                                        { "cert", "certificate" },
@@ -35,6 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "ddl", "dropDownList" },
                                                                                        { "decl", "declaration" },
                                                                                        { "desc", "description" },
+                                                                                       { "dest", "destination" },
+                                                                                       { "diag", "diagnostic" },
+                                                                                       { "diags", "diagnostics" },
                                                                                        { "dict", "dictionary" },
                                                                                        { "diff", "difference" },
                                                                                        { "diffs", "differences" },
@@ -42,6 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "dlg", "dialog" },
                                                                                        { "doc", "document" },
                                                                                        { "env", "environment" },
+                                                                                       { "environ", "environment" },
+                                                                                       { "err", "error" },
                                                                                        { "ext", "extension" },
                                                                                        { "frm", "form" },
                                                                                        { "ident", "identification" },
@@ -72,9 +78,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "req", "request" },
                                                                                        { "res", "result" },
                                                                                        { "resp", "response" },
+                                                                                       { "src", "source" },
                                                                                        { "std", "standard" },
                                                                                        { "str", "string" },
                                                                                        { "sync", "synchronization" },
+                                                                                       { "tm", "time" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
                                                                                        { "vol", "volume" },
@@ -85,6 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "App", "Application" },
                                                                                        { "Apps", "Applications" },
                                                                                        { "Assoc", "Association" },
+                                                                                       { "Auth", "Authorization" },
                                                                                        { "Btn", "Button" },
                                                                                        { "Cb", "CheckBox" },
                                                                                        { "Cert", "Certificate" },
@@ -105,6 +114,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Ddl", "DropDownList" },
                                                                                        { "Decl", "Declaration" },
                                                                                        { "Desc", "Description" },
+                                                                                       { "Dest", "Destination" },
+                                                                                       { "Diag", "Diagnostic" },
+                                                                                       { "Diags", "Diagnostics" },
                                                                                        { "Dict", "Dictionary" },
                                                                                        { "Diff", "Difference" },
                                                                                        { "Diffs", "Differences" },
@@ -112,6 +124,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Dlg", "Dialog" },
                                                                                        { "Doc", "Document" },
                                                                                        { "Env", "Environment" },
+                                                                                       { "Environ", "Environment" },
+                                                                                       { "Err", "Error" },
                                                                                        { "Ext", "Extension" },
                                                                                        { "Frm", "Form" },
                                                                                        { "Ident", "Identification" },
@@ -144,9 +158,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Req", "Request" },
                                                                                        { "Res", "Result" },
                                                                                        { "Resp", "Response" },
+                                                                                       { "Src", "Source" },
                                                                                        { "Std", "Standard" },
                                                                                        { "Str", "String" },
                                                                                        { "Sync", "Synchronization" },
+                                                                                       { "Tm", "Time" },
                                                                                        { "Tmp", "Temp" },
                                                                                        { "Txt", "Text" },
                                                                                        { "Vol", "Volume" },
@@ -154,11 +170,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly IReadOnlyDictionary<string, string> Postfixes = new Dictionary<string, string>((IDictionary<string, string>)MidTerms)
                                                                                     {
-                                                                                        { "VM", "ViewModel" },
-                                                                                        { "Vm", "ViewModel" },
                                                                                         { "BL", "BusinessLogic" },
                                                                                         { "Bl", "BusinessLogic" },
-                                                                                        { "Err", "Error" },
+                                                                                        { "VM", "ViewModel" },
+                                                                                        { "Vm", "ViewModel" },
                                                                                     };
 
         private static readonly string[] AllowedPostFixTerms =
@@ -196,6 +211,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "Identities",
                                                             "next",
                                                             "Next",
+                                                            "oAuth",
+                                                            "OAuth",
                                                             "text",
                                                             "Text",
                                                         };
@@ -301,10 +318,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             symbolName = symbolName.Without(AllowedNames);
 
+//// ncrunch: rdi off
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
             var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
             var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
             var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
+//// ncrunch: rdi default
 
             return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance);
         }

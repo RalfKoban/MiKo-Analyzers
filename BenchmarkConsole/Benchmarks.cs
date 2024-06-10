@@ -67,7 +67,7 @@ namespace BenchmarkConsole
         {
             for (var i = 0; i < Times; i++)
             {
-                Text.ContainsAny(MiKo_2060_CodeFixProvider.TypeReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
+                Text.ContainsAny(MiKo_2060_CodeFixProvider.MappedData.Value.TypeReplacementMapKeys, StringComparison.OrdinalIgnoreCase);
             }
         }
 

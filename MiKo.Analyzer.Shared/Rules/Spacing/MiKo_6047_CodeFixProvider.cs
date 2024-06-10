@@ -22,9 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is SwitchExpressionSyntax expression)
             {
-                var position = GetProposedLinePosition(issue);
-
-                var spaces = position.Character;
+                var spaces = GetProposedSpaces(issue);
                 var armSpaces = spaces + Constants.Indentation;
 
                 return expression.WithOpenBraceToken(expression.OpenBraceToken.WithLeadingSpaces(spaces))

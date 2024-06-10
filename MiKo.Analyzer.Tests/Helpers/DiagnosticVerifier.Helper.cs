@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Composition;
 using System.Linq;
 using System.Linq.Expressions;
@@ -75,7 +74,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments(new[] { analyzer }, new[] { document });
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments([analyzer], [document]);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
@@ -104,7 +103,7 @@ namespace TestHelper
             foreach (var project in projects)
             {
                 var compilation = project.GetCompilationAsync().Result;
-                var compilationWithAnalyzers = compilation.WithAnalyzers(ImmutableArray.Create(analyzers));
+                var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
 
                 foreach (var diag in diags)
@@ -146,7 +145,7 @@ namespace TestHelper
         /// </returns>
         protected static Document CreateDocument(string source)
         {
-            return CreateProject(new[] { source }).Documents.First();
+            return CreateProject([source]).Documents.First();
         }
 
         /// <summary>
@@ -177,7 +176,7 @@ namespace TestHelper
         /// </returns>
         private static Diagnostic[] SortDiagnostics(IEnumerable<Diagnostic> diagnostics)
         {
-            return diagnostics.OrderBy(_ => _.Location.SourceSpan.Start).ToArray();
+            return [.. diagnostics.OrderBy(_ => _.Location.SourceSpan.Start)];
         }
 
         /// <summary>

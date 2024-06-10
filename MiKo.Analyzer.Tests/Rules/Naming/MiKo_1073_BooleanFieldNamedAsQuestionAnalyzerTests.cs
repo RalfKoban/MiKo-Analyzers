@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1073_BooleanFieldNamedAsQuestionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-                                                        {
+                                                        [
                                                             "AreConnected",
                                                             "IsConnected",
                                                             "Connected",
@@ -22,21 +22,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "IsInDesign",
                                                             "IsInDesignMode",
                                                             "IsInDesignerMode",
-                                                        };
+                                                        ];
 
         private static readonly string[] WrongNames =
-                                                      {
+                                                      [
                                                           "IsConnectionPossible",
                                                           "AreDevicesConnected",
-                                                      };
+                                                      ];
 
         private static readonly string[] Prefixes =
-                                                    {
+                                                    [
                                                         "m_",
                                                         "s_",
                                                         "t_",
                                                         "_",
-                                                    };
+                                                    ];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

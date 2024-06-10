@@ -93,6 +93,18 @@ public enum TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_documented_enum_type_without_description_but_other_attribute() => An_issue_is_reported_for(@"
+using System;
+using System.ComponentModel;
+
+public enum TestMe
+{
+    [Designer]
+    None = 0,
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_partly_documented_enum_type() => An_issue_is_reported_for(@"
 using System;
 using System.ComponentModel;

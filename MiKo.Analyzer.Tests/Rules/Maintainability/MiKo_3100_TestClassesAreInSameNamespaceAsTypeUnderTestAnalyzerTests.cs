@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] PropertyNames =
-                                                         {
+                                                         [
                                                              "ObjectUnderTest",
                                                              "SubjectUnderTest",
                                                              "UnitUnderTest",
@@ -23,10 +23,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                              "Uut",
                                                              "TestCandidate",
                                                              "TestObject",
-                                                         };
+                                                         ];
 
         private static readonly string[] FieldNames =
-                                                      {
+                                                      [
                                                           "ObjectUnderTest",
                                                           "_ObjectUnderTest",
                                                           "m_ObjectUnderTest",
@@ -77,10 +77,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                           "_testObject",
                                                           "m_testObject",
                                                           "s_testObject",
-                                                      };
+                                                      ];
 
         private static readonly string[] VariableNames =
-                                                         {
+                                                         [
                                                              "objectUnderTest",
                                                              "subjectUnderTest",
                                                              "unitUnderTest",
@@ -88,13 +88,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                              "testObject",
                                                              "sut",
                                                              "uut",
-                                                         };
+                                                         ];
 
         private static readonly string[] MethodPrefixes =
-                                                          {
+                                                          [
                                                               "Get",
                                                               "Create",
-                                                          };
+                                                          ];
 
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"

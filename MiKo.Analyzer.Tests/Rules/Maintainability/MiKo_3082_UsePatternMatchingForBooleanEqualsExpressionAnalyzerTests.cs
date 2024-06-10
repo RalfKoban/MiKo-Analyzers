@@ -12,16 +12,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Operators =
-                                                     {
+                                                     [
                                                          "==",
                                                          "!=",
-                                                     };
+                                                     ];
 
         private static readonly string[] BooleanValues =
-                                                         {
+                                                         [
                                                              "true",
                                                              "false",
-                                                         };
+                                                         ];
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_comparisons_of_an_(

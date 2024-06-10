@@ -21,17 +21,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var parameter in symbol.Parameters)
             {
-                if (parameter.RefKind == RefKind.Ref)
+                switch (parameter.RefKind)
                 {
-                    var keyword = parameter.GetModifier(SyntaxKind.RefKeyword);
+                    case RefKind.Ref:
+                    {
+                        yield return Issue(parameter.GetModifier(SyntaxKind.RefKeyword));
 
-                    yield return Issue(keyword);
-                }
-                else if (parameter.RefKind == RefKind.Out)
-                {
-                    var keyword = parameter.GetModifier(SyntaxKind.OutKeyword);
+                        break;
+                    }
 
-                    yield return Issue(keyword);
+                    case RefKind.Out:
+                    {
+                        yield return Issue(parameter.GetModifier(SyntaxKind.OutKeyword));
+
+                        break;
+                    }
                 }
             }
         }

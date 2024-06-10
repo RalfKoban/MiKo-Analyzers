@@ -37,6 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 switch (body)
                 {
+                    case AnonymousObjectCreationExpressionSyntax a: return CanAnalyzeAnonymousObjectCreationExpressionSyntax(a);
                     case ObjectCreationExpressionSyntax o: return CanAnalyzeObjectCreationExpressionSyntax(o);
                     case InvocationExpressionSyntax i: return CanAnalyzeInvocationExpressionSyntax(i);
                     case BinaryExpressionSyntax b: return CanAnalyzeBinaryExpressionSyntax(b);
@@ -45,11 +46,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 }
             }
 
-            bool CanAnalyzeBinaryExpressionSyntax(BinaryExpressionSyntax syntax)
+            bool CanAnalyzeAnonymousObjectCreationExpressionSyntax(AnonymousObjectCreationExpressionSyntax syntax)
             {
-                if (syntax.IsAnyKind(LogicalExpressions) && syntax.DescendantNodes<BinaryExpressionSyntax>().Any(_ => _.IsAnyKind(LogicalExpressions)))
+                if (syntax.Initializers.Count > 0)
                 {
-                    // multiple binary expressions such as && or || are allowed to span multiple lines, so nothing to analyze here
+                    // initializers are allowed to span multiple lines, so nothing to analyze here
                     return false;
                 }
 
@@ -111,6 +112,17 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     default:
                         return true; // TODO RKN: return false; // a lot of arguments are allowed to span multiple lines, so nothing to analyze here
                 }
+            }
+
+            bool CanAnalyzeBinaryExpressionSyntax(BinaryExpressionSyntax syntax)
+            {
+                if (syntax.IsAnyKind(LogicalExpressions) && syntax.DescendantNodes<BinaryExpressionSyntax>().Any(_ => _.IsAnyKind(LogicalExpressions)))
+                {
+                    // multiple binary expressions such as && or || are allowed to span multiple lines, so nothing to analyze here
+                    return false;
+                }
+
+                return true;
             }
         }
 

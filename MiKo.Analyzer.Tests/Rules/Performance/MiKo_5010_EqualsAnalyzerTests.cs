@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     public sealed class MiKo_5010_EqualsAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValueTypes =
-                                                      {
+                                                      [
                                                           "bool",
                                                           "char",
                                                           "short",
@@ -38,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                                                           nameof(SByte),
                                                           nameof(Guid),
                                                           nameof(AttributeTargets),
-                                                      };
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_non_object_Equals_method() => No_issue_is_reported_for(@"

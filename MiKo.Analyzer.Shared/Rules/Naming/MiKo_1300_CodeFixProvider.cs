@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -15,6 +14,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override string Title => Resources.MiKo_1300_CodeFixTitle;
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SimpleLambdaExpressionSyntax>().FirstOrDefault()?.Parameter;
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
+        {
+            foreach (var syntaxNode in syntaxNodes)
+            {
+                switch (syntaxNode)
+                {
+                    case SimpleLambdaExpressionSyntax simple:
+                        return simple.Parameter;
+
+                    case ParenthesizedLambdaExpressionSyntax parenthesized:
+                        return parenthesized.ParameterList.Parameters[0];
+                }
+            }
+
+            return null;
+        }
     }
 }

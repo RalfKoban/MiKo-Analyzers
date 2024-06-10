@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -40,9 +41,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var location = CreateLocation(node, maes.Name.Span.Start, argumentList.Span.End);
 
-                    yield return Issue(location);
+                    return new[] { Issue(location) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

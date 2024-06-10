@@ -42,7 +42,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context) => Enumerable.Empty<Diagnostic>();
 
-        private static bool IsNegative(SyntaxNode node) => node.IsKind(SyntaxKind.LogicalNotExpression) || (node is IsPatternExpressionSyntax pattern && pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression));
+        private static bool IsNegative(SyntaxNode node)
+        {
+            switch (node.Kind())
+            {
+                case SyntaxKind.LogicalNotExpression:
+                    return true;
+
+                case SyntaxKind.IsPatternExpression:
+                    return ((IsPatternExpressionSyntax)node).Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
+
+                default:
+                    return false;
+            }
+        }
 
         private static List<SyntaxNode> GetConditionParts(SyntaxNode condition)
         {
@@ -55,18 +68,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static void GetConditionParts(SyntaxNode condition, ICollection<SyntaxNode> parts)
         {
-            if (condition is BinaryExpressionSyntax binary && binary.IsAnyKind(LogicalExpressions))
+            while (true)
             {
-                GetConditionParts(binary.Left, parts);
-                GetConditionParts(binary.Right, parts);
-            }
-            else if (condition is ParenthesizedExpressionSyntax parenthesized)
-            {
-                GetConditionParts(parenthesized.Expression, parts);
-            }
-            else
-            {
-                parts.Add(condition);
+                switch (condition)
+                {
+                    case BinaryExpressionSyntax binary when binary.IsAnyKind(LogicalExpressions):
+                    {
+                        GetConditionParts(binary.Left, parts);
+
+                        condition = binary.Right;
+
+                        continue;
+                    }
+
+                    case ParenthesizedExpressionSyntax parenthesized:
+                    {
+                        condition = parenthesized.Expression;
+
+                        continue;
+                    }
+
+                    default:
+                    {
+                        parts.Add(condition);
+
+                        break;
+                    }
+                }
+
+                break;
             }
         }
 

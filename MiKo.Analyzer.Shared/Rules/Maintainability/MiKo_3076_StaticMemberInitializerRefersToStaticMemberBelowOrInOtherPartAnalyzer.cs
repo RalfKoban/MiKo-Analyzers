@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var problematicFields = GetStaticFieldsFromBelowOrFromOtherPart(symbol, fieldLocation);
                 var problematicFieldNames = problematicFields.SelectMany(_ => _.Declaration.Variables).ToHashSet(_ => _.GetName());
 
-                var wrongReferences = new List<string>();
+                List<string> wrongReferences = null;
 
                 foreach (var identifier in identifierNames)
                 {
@@ -40,15 +40,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     if (problematicFieldNames.Contains(name) && identifier.GetSymbol(compilation) is IFieldSymbol f && f.ContainingType.Equals(symbol.ContainingType, SymbolEqualityComparer.Default))
                     {
+                        if (wrongReferences == null)
+                        {
+                            wrongReferences = new List<string>();
+                        }
+
                         wrongReferences.Add(name);
                     }
                 }
 
-                if (wrongReferences.Any())
+                if (wrongReferences != null)
                 {
-                    yield return Issue(symbol, wrongReferences.HumanizedConcatenated("and"));
+                    return new[] { Issue(symbol, wrongReferences.HumanizedConcatenated("and")) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
 
         private static bool IsStaticField(IFieldSymbol symbol) => symbol.IsStatic && symbol.IsConst is false;

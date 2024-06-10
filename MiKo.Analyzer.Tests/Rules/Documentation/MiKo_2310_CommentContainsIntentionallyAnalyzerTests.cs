@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2310_CommentContainsIntentionallyAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] IntentionalPhrases =
-                                                              {
+                                                              [
                                                                   "left empty by intent",
                                                                   "left empty by intention",
                                                                   "left empty intentionally",
@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "on purpose left empty",
                                                                   "purposely left empty",
                                                                   "purposly left empty", // check for typo
-                                                              };
+                                                              ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

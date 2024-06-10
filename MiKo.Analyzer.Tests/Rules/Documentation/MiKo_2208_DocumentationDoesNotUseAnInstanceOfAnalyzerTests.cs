@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2208_DocumentationDoesNotUseAnInstanceOfAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Phrases =
-                                                   {
+                                                   [
                                                        "An instance of ",
                                                        "A instance of ",
                                                        "The instance of ",
@@ -33,9 +33,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "an instance if ", // 'semi'-typo by intent
                                                        "a instance if ", // 'semi'-typo by intent
                                                        "the instance if ", // 'semi'-typo by intent
-                                                   };
+                                                   ];
 
-        private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
+        private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"

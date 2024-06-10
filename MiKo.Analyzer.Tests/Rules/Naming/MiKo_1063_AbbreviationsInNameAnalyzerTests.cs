@@ -14,10 +14,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed partial class MiKo_1063_AbbreviationsInNameAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] BadPrefixes =
-                                                       {
+                                                       [
                                                            "app",
                                                            "apps",
                                                            "assoc",
+                                                           "auth",
                                                            "btn",
                                                            "cb",
                                                            "cert",
@@ -36,6 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "ddl",
                                                            "decl",
                                                            "desc",
+                                                           "dest",
+                                                           "diag",
+                                                           "diags",
                                                            "dict",
                                                            "diff",
                                                            "diffs",
@@ -43,6 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "dlg",
                                                            "doc",
                                                            "env",
+                                                           "environ",
+                                                           "err",
                                                            "ext",
                                                            "frm",
                                                            "ident",
@@ -73,19 +79,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "req",
                                                            "res",
                                                            "resp",
+                                                           "src",
                                                            "std",
                                                            "str",
                                                            "sync",
+                                                           "tm",
                                                            "tmp",
                                                            "txt",
                                                            "vol",
-                                                       };
+                                                       ];
 
         private static readonly string[] BadMidTerms =
-                                                       {
+                                                       [
                                                            "App",
                                                            "Apps",
                                                            "Assoc",
+                                                           "Auth",
                                                            "Btn",
                                                            "Cb",
                                                            "Cert",
@@ -105,6 +114,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Ddl",
                                                            "Decl",
                                                            "Desc",
+                                                           "Dest",
+                                                           "Diag",
+                                                           "Diags",
                                                            "Dict",
                                                            "Diff",
                                                            "Diffs",
@@ -112,6 +124,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Dlg",
                                                            "Doc",
                                                            "Env",
+                                                           "Environ",
+                                                           "Err",
                                                            "Ext",
                                                            "Frm",
                                                            "Ident",
@@ -142,38 +156,38 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Req",
                                                            "Res",
                                                            "Resp",
+                                                           "Src",
                                                            "Std",
                                                            "Sync",
+                                                           "Tm",
                                                            "Tmp",
                                                            "Txt",
                                                            "Vol",
-                                                       };
+                                                       ];
 
         private static readonly string[] BadPostfixes = BadMidTerms
-                                                        .Concat(new[]
-                                                                    {
-                                                                        "Bl",
-                                                                        "BL",
-                                                                        "CLI",
-                                                                        "Err",
-                                                                        "Itf",
-                                                                        "Meth",
-                                                                        "Param",
-                                                                        "Params",
-                                                                        "Pos",
-                                                                        "Proc",
-                                                                        "Prop",
-                                                                        "PropName",
-                                                                        "PropNames",
-                                                                        "Props",
-                                                                        "Vm",
-                                                                        "VM",
-                                                                    })
+                                                        .Concat([
+                                                                    "Bl",
+                                                                    "BL",
+                                                                    "CLI",
+                                                                    "Itf",
+                                                                    "Meth",
+                                                                    "Param",
+                                                                    "Params",
+                                                                    "Pos",
+                                                                    "Proc",
+                                                                    "Prop",
+                                                                    "PropName",
+                                                                    "PropNames",
+                                                                    "Props",
+                                                                    "Vm",
+                                                                    "VM",
+                                                                ])
                                                         .Distinct()
                                                         .ToArray();
 
         private static readonly string[] AllowedTerms =
-                                                        {
+                                                        [
                                                             "accept",
                                                             "acceptName",
                                                             "accepts",
@@ -186,6 +200,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "asyncGoOnline",
                                                             "attempt",
                                                             "attempts",
+                                                            "authenticate",
+                                                            "authenticates",
+                                                            "authorize",
+                                                            "authorizes",
                                                             "corrupt",
                                                             "corruptNumber",
                                                             "corrupts",
@@ -197,6 +215,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "encrypt",
                                                             "enum",
                                                             "enumeration",
+                                                            "environment",
                                                             "except",
                                                             "firmwares",
                                                             "firstNumber",
@@ -215,6 +234,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "next",
                                                             "number",
                                                             "onClick",
+                                                            "OAuth",
+                                                            "OAuth1",
+                                                            "OAuth2",
                                                             "prompt",
                                                             "requestTime",
                                                             "responseTime",
@@ -223,7 +245,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "signCertificate",
                                                             "text",
                                                             "tires",
-                                                        };
+                                                        ];
 
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"

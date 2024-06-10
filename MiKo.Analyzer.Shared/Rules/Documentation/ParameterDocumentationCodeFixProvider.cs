@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Documentation
@@ -11,15 +12,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var node in syntaxNodes)
             {
-                switch (node)
+                switch (node.Kind())
                 {
-                    case XmlElementStartTagSyntax start:
-                        return start.Parent;
+                    case SyntaxKind.XmlElementStartTag:
+                        return ((XmlElementStartTagSyntax)node).Parent;
 
-                    case XmlElementSyntax element when element.GetName() == Constants.XmlTag.Param:
-                        return element;
+                    case SyntaxKind.XmlElement:
+                        return node;
 
-                    case XmlTextSyntax _:
+                    case SyntaxKind.XmlText:
                         continue; // we are part of an XML element, so we have to loop over it
 
                     default:
@@ -32,22 +33,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            var parameterCommentSyntax = (XmlElementSyntax)syntax;
-            var parameterName = GetParameterName(parameterCommentSyntax);
-
-            var parameters = parameterCommentSyntax.GetParameters();
-
-            for (var index = 0; index < parameters.Length; index++)
+            if (syntax is XmlElementSyntax parameterCommentSyntax)
             {
-                var parameter = parameters[index];
+                var parameters = parameterCommentSyntax.GetParameters();
+                var parametersLength = parameters.Length;
 
-                if (parameter.GetName() == parameterName)
+                if (parametersLength > 0)
                 {
-                    return Comment(document, parameterCommentSyntax, parameter, index, issue);
+                    var parameterName = GetParameterName(parameterCommentSyntax);
+
+                    for (var index = 0; index < parametersLength; index++)
+                    {
+                        var parameter = parameters[index];
+
+                        if (parameter.GetName() == parameterName)
+                        {
+                            return Comment(document, parameterCommentSyntax, parameter, index, issue);
+                        }
+                    }
                 }
             }
 
-            return parameterCommentSyntax;
+            return syntax;
         }
 
         protected abstract XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue);

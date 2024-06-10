@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -17,14 +18,28 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override bool ShallAnalyze(IParameterSymbol symbol) => symbol.Type.TypeKind == TypeKind.Delegate || (symbol.Type.TypeKind == TypeKind.Class && symbol.Type.ToString() == TypeNames.Delegate);
-
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
+        protected override bool ShallAnalyze(IParameterSymbol symbol)
         {
-            if (symbol.Name.EndsWithAny(WrongNames))
+            var type = symbol.Type;
+
+            switch (type.TypeKind)
             {
-                yield return Issue(symbol, CreateBetterNameProposal("callback"));
+                case TypeKind.Delegate:
+                    return true;
+
+                case TypeKind.Class when type.IsRecord:
+                    return false;
+
+                case TypeKind.Class:
+                    return type.ToString() == TypeNames.Delegate;
+
+                default:
+                    return false;
             }
         }
+
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => symbol.Name.EndsWithAny(WrongNames)
+                                                                                                                    ? new[] { Issue(symbol, CreateBetterNameProposal("callback")) }
+                                                                                                                    : Enumerable.Empty<Diagnostic>();
     }
 }
