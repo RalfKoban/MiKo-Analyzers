@@ -82,6 +82,19 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_field_with_collection_expression_open_bracket_placed_on_same_line_as_equals_sign_but_closed_bracket_placed_on_different_line() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = [
+                                1,
+                                2,
+                                3];
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_parameter_with_collection_expression_placed_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
@@ -419,6 +432,37 @@ public class TestMe
                     ],
                     float.MaxValue);
     }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_field_with_collection_expression_open_bracket_placed_on_same_line_as_equals_sign_but_closed_bracket_placed_on_different_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = [
+                                1,
+                                2,
+                                3];
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    private int[] MyField = [
+                                1,
+                                2,
+                                3
+                            ];
 }
 ";
 
