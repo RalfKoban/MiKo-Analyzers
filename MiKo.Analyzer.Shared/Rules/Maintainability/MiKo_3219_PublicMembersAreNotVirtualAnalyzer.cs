@@ -23,6 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return false;
             }
 
+            if (symbol.IsRecord)
+            {
+                // ignore records
+                return false;
+            }
+
             if (symbol.IsGenerated())
             {
                 return false;

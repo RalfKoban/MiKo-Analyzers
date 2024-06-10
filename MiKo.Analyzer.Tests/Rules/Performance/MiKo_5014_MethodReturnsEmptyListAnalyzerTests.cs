@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     [TestFixture]
     public sealed class MiKo_5014_MethodReturnsEmptyListAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] ProblematicReturnTypes = { "IReadOnlyList", "IReadOnlyCollection" };
+        private static readonly string[] ProblematicReturnTypes = ["IReadOnlyList", "IReadOnlyCollection"];
 
         [Test]
         public void No_issue_is_reported_for_void_method() => No_issue_is_reported_for(@"

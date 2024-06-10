@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2015_FireMethodsAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] XmlTags = { "summary", "remarks", "returns", "example", "value", "exception" };
+        private static readonly string[] XmlTags = ["summary", "remarks", "returns", "example", "value", "exception"];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_items() => No_issue_is_reported_for(@"

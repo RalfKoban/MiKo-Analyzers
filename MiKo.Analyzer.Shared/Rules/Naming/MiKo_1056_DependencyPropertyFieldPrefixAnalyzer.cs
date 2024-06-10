@@ -49,13 +49,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var propertyNames = NamesFinder.FindPropertyNames(symbol, Constants.DependencyProperty.FieldSuffix, Constants.DependencyProperty.Register);
 
-            if (propertyNames.Any())
+            if (propertyNames.None())
             {
-                var betterNames = propertyNames.Select(_ => _ + Constants.DependencyProperty.FieldSuffix).ToList();
-                var betterName = betterNames[0];
-
-                yield return Issue(symbol, betterNames.HumanizedConcatenated(), CreateBetterNameProposal(betterName));
+                return Enumerable.Empty<Diagnostic>();
             }
+
+            var betterNames = propertyNames.Select(_ => _ + Constants.DependencyProperty.FieldSuffix).ToList();
+            var betterName = betterNames[0];
+
+            return new[] { Issue(symbol, betterNames.HumanizedConcatenated(), CreateBetterNameProposal(betterName)) };
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -14,23 +12,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2033_StringReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] StringOnlyReturnValues =
-                                                                  {
+                                                                  [
                                                                       "string",
                                                                       "String",
                                                                       "System.String",
-                                                                  };
+                                                                  ];
 
         private static readonly string[] StringTaskReturnValues =
-                                                                  {
+                                                                  [
                                                                       "Task<string>",
                                                                       "Task<String>",
                                                                       "Task<System.String>",
                                                                       "System.Threading.Tasks.Task<string>",
                                                                       "System.Threading.Tasks.Task<String>",
                                                                       "System.Threading.Tasks.Task<System.String>",
-                                                                  };
+                                                                  ];
 
-        private static readonly string[] StringReturnValues = StringOnlyReturnValues.Concat(StringTaskReturnValues).ToArray();
+        private static readonly string[] StringReturnValues = [.. StringOnlyReturnValues, .. StringTaskReturnValues];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(StringReturnValues))] string returnType) => No_issue_is_reported_for(@"

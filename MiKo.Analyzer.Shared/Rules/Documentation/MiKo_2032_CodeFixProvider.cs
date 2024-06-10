@@ -255,7 +255,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             if (comment.Content.Count == 0)
             {
                 // we have no comment, hence we add a "TODO" into the resulting comment
-                return new[] { XmlText(startingPhrase + "TODO" + endingPhrase) };
+                return new[] { XmlText(startingPhrase + Constants.TODO + endingPhrase) };
             }
 
             const string OrIfPhrase = " or if ";

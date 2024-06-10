@@ -42,7 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var proposal = symbolName.WithoutSuffix(Constants.Entity);
 
-                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+                return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
             }
 
             if (symbolName.EndsWith("Element", Comparison))
@@ -51,16 +51,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                ? "element"
                                : symbolName.WithoutSuffix("Element");
 
-                yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+                return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
             }
 
-            foreach (var pair in WrongSuffixes)
-            {
-                if (symbolName.EndsWith(pair.Key, Comparison) && symbolName.StartsWithAny(Prefixes) is false)
-                {
-                    var proposal = pair.Value;
+            return AnalyzeSuffixes();
 
-                    yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+            IEnumerable<Diagnostic> AnalyzeSuffixes()
+            {
+                foreach (var pair in WrongSuffixes)
+                {
+                    if (symbolName.EndsWith(pair.Key, Comparison) && symbolName.StartsWithAny(Prefixes) is false)
+                    {
+                        var proposal = pair.Value;
+
+                        yield return Issue(symbol, proposal, CreateBetterNameProposal(proposal));
+                    }
                 }
             }
         }

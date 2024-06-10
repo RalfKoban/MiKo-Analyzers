@@ -17,23 +17,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2035_EnumerableReturnTypeDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] EnumerableOnlyReturnValues =
-                                                                      {
+                                                                      [
                                                                           "IEnumerable",
                                                                           "IEnumerable<int>",
                                                                           "IList<int>",
                                                                           "ICollection<int>",
                                                                           "List<int>",
                                                                           "Dictionary<int, int>",
-                                                                      };
+                                                                      ];
 
         private static readonly string[] EnumerableTaskReturnValues =
-                                                                      {
+                                                                      [
                                                                           "Task<int[]>",
                                                                           "Task<IEnumerable>",
                                                                           "Task<List<int>>",
-                                                                      };
+                                                                      ];
 
-        private static readonly string[] EnumerableReturnValues = EnumerableOnlyReturnValues.Concat(EnumerableTaskReturnValues).ToArray();
+        private static readonly string[] EnumerableReturnValues = [.. EnumerableOnlyReturnValues, .. EnumerableTaskReturnValues];
 
         private static readonly string[] StartingPhrases = CreateStartingPhrases().Take(TestLimit).Distinct().ToArray();
 

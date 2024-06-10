@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1070_CollectionLocalVariableAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-                                                        {
+                                                        [
                                                             "map",
                                                             "mapping",
                                                             "array",
@@ -34,35 +34,35 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "someTrivia",
                                                             "textTokens",
                                                             "trivia",
-                                                        };
+                                                        ];
 
         private static readonly string[] WrongNames =
-                                                      {
+                                                      [
                                                           "item",
                                                           "enumerable",
                                                           "target",
                                                           "myDictionary",
                                                           "myList42",
-                                                      };
+                                                      ];
 
         private static readonly string[] CorrectNamesWithSuffixes =
-                                                                    {
+                                                                    [
                                                                         "resultsOfSomething",
                                                                         "resultsToShow",
                                                                         "resultsWithData",
                                                                         "resultsInSomething",
                                                                         "resultsFromSomething",
                                                                         "fieldInitializers",
-                                                                    };
+                                                                    ];
 
         private static readonly string[] WrongNamesWithSuffixes =
-                                                                  {
+                                                                  [
                                                                       "resultOfSomething",
                                                                       "resultToShow",
                                                                       "resultWithData",
                                                                       "resultInSomething",
                                                                       "resultFromSomething",
-                                                                  };
+                                                                  ];
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

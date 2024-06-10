@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2220_DocumentationShouldUseToSeekAnalyzerTests : CodeFixVerifier
     {
-        private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> Map = new()
                                                                      {
                                                                          { "to find", "to seek" },
                                                                          { "to inspect for", "to seek" },
@@ -28,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          { "to test for.", "to seek." },
                                                                      };
 
-        private static readonly string[] WrongPhrases = Map.Keys.ToArray();
+        private static readonly string[] WrongPhrases = [.. Map.Keys];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

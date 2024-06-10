@@ -11,14 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3038_DoNotUseMagicNumbersAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CollectionTypes =
-                                                           {
+                                                           [
                                                                "ArrayList",
                                                                "HashSet<string>",
                                                                "List<string>",
                                                                "Dictionary<string, string>",
                                                                "Queue<string>",
                                                                "Stack<string>",
-                                                           };
+                                                           ];
 
         [Test]
         public void No_issue_is_reported_for_const_field_([Values(-42, -1, 0, 1, 42)] int value) => No_issue_is_reported_for(@"

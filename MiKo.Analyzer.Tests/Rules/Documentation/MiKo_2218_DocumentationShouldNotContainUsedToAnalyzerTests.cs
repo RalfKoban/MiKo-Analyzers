@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2218_DocumentationShouldNotContainUsedToAnalyzerTests : CodeFixVerifier
     {
-        private static readonly Dictionary<string, string> Map = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> Map = new()
                                                                      {
                                                                          { "can be used in order to", "allows to" },
                                                                          { "can be used to", "allows to" },
@@ -254,7 +253,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          // - instead
                                                                      };
 
-        private static readonly string[] WrongPhrases = Map.Keys.ToArray();
+        private static readonly string[] WrongPhrases = [.. Map.Keys];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"

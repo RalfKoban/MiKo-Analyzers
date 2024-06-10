@@ -58,9 +58,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         private static void CountLinesOfCode(IReadOnlyList<SyntaxNode> nodes, ISet<int> lines)
         {
-            for (var index = 0; index < nodes.Count; index++)
+            var count = nodes.Count;
+
+            if (count > 0)
             {
-                CountLinesOfCode(nodes[index], lines);
+                for (var index = 0; index < count; index++)
+                {
+                    CountLinesOfCode(nodes[index], lines);
+                }
             }
         }
 

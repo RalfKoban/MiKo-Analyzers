@@ -11,17 +11,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1096_NotSuccessfulAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidNames =
-                                                      {
+                                                      [
                                                           "DoSomething",
                                                           "RunSuccessfully",
-                                                      };
+                                                      ];
 
         private static readonly string[] InvalidNames =
-                                                        {
+                                                        [
                                                             "RunNotSuccesfully",
                                                             "Run_not_successfully",
                                                             "IsNotSuccesful",
-                                                        };
+                                                        ];
 
         [Test]
         public void No_issue_is_reported_for_class_([ValueSource(nameof(ValidNames))] string name) => No_issue_is_reported_for(@"

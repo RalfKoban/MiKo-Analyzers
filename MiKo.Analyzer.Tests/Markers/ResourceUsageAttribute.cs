@@ -11,13 +11,11 @@ namespace NCrunch.Framework
     /// <remarks>
     /// The primary reason for this is to prevent concurrent execution of tests that do not support it.
     /// </remarks>
-    public abstract class ResourceUsageAttribute : Attribute
+    public abstract class ResourceUsageAttribute(params string[] resourceNames) : Attribute
     {
-        protected ResourceUsageAttribute(params string[] resourceNames) => ResourceNames = resourceNames;
-
         //// ReSharper disable once MemberCanBePrivate.Global
         //// ReSharper disable once UnusedAutoPropertyAccessor.Global
-        public string[] ResourceNames { get; }
+        public string[] ResourceNames { get; } = resourceNames;
     }
 }
 

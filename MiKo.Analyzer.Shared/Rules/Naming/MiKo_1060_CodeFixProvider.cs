@@ -18,14 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var node in syntaxNodes)
             {
-                if (node is EnumMemberDeclarationSyntax)
+                switch (node)
                 {
-                    return node;
-                }
-
-                if (node is BaseTypeDeclarationSyntax)
-                {
-                    return node;
+                    case EnumMemberDeclarationSyntax _:
+                    case BaseTypeDeclarationSyntax _:
+                        return node;
                 }
             }
 

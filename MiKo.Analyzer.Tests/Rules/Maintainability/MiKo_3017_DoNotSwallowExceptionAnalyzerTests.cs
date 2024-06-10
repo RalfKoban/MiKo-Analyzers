@@ -13,6 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3017_DoNotSwallowExceptionAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Exceptions = [nameof(ArgumentException), nameof(ArgumentNullException), nameof(ArgumentOutOfRangeException), nameof(InvalidOperationException)];
+
         [Test]
         public void No_issue_is_reported_for_normal_created_object() => No_issue_is_reported_for(@"
 using System;
@@ -23,6 +25,44 @@ public class TestMe
     {
         var x = new object();
     }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_created_exception_after_null_check_([ValueSource(nameof(Exceptions))] string exception) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        var result = o?.ToString() ?? throw new " + exception + @"(""something went wrong here"");
+
+        return result;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_created_exception_after_null_check_2_([ValueSource(nameof(Exceptions))] string exception) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o)
+    {
+        return o?.ToString() ?? throw new " + exception + @"(""something went wrong here"");
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_created_exception_after_null_check_3([ValueSource(nameof(Exceptions))] string exception) => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public string DoSomething(object o) => o?.ToString() ?? throw new " + exception + @"(""something went wrong here"");
 }
 ");
 

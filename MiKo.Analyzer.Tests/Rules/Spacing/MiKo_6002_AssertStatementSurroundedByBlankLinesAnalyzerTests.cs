@@ -12,14 +12,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6002_AssertStatementSurroundedByBlankLinesAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Assertions =
-                                                      {
+                                                      [
                                                           nameof(Assert),
                                                           nameof(Assume),
                                                           "CollectionAssert",
                                                           "DirectoryAssert",
                                                           "FileAssert",
                                                           "StringAssert",
-                                                      };
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_Attribute_([ValueSource(nameof(Assertions))] string assertion) => No_issue_is_reported_for(@"

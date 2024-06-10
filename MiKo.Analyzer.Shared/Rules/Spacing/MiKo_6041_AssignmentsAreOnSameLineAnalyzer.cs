@@ -89,13 +89,20 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void ReportIssue(SyntaxNodeAnalysisContext context, EqualsValueClauseSyntax node)
         {
-            if (node.Value is InitializerExpressionSyntax initializer && initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine())
+            switch (node.Value)
             {
                 // arrays and collections spanning multiple lines are allowed
-            }
-            else
-            {
-                ReportIssue(context, node.EqualsToken);
+                case InitializerExpressionSyntax initializer when initializer.OpenBraceToken.GetStartingLine() != initializer.CloseBraceToken.GetStartingLine():
+                    break;
+#if  VS2022
+                case CollectionExpressionSyntax expression when expression.OpenBracketToken.GetStartingLine() != expression.CloseBracketToken.GetStartingLine():
+                    break;
+#endif
+
+                default:
+                    ReportIssue(context, node.EqualsToken);
+
+                    break;
             }
         }
 

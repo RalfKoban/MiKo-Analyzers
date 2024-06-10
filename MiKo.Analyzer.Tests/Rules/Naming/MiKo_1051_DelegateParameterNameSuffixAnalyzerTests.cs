@@ -16,33 +16,50 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1051_DelegateParameterNameSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] DelegateTypes =
-                                                         {
+                                                         [
                                                              "Action",
                                                              "Action<int>",
                                                              "Action<int, string>",
                                                              "Func<bool>",
                                                              "Func<bool, bool>",
                                                              "Delegate",
-                                                         };
+                                                         ];
 
         private static readonly string[] CorrectDelegateNames =
-                                                                {
+                                                                [
                                                                     "callback",
                                                                     "map",
                                                                     "filter",
                                                                     "predicate",
-                                                                };
+                                                                ];
 
         private static readonly string[] WrongDelegateNames = CreateWrongDelegateNames();
 
         [TestCase("string s")]
         [TestCase("int i")]
+        [TestCase("IDisposable disposable")]
         public void No_issue_is_reported_for_non_delegate_parameter_(string parameter) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     public void DoSomething(" + parameter + @")
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_non_delegate_record_parameter() => No_issue_is_reported_for(@"
+using System;
+
+public record DTO
+{
+}
+
+public class TestMe
+{
+    public void DoSomething(DTO dto)
     {
     }
 }
@@ -102,7 +119,7 @@ public class TestMe
                 allNames.Add(name.ToUpperInvariant());
             }
 
-            return allNames.OrderBy(_ => _).ToArray();
+            return [.. allNames.OrderBy(_ => _)];
         }
     }
 }

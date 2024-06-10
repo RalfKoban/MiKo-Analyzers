@@ -56,7 +56,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (lockIdentifiers.Any() && context.ContainingSymbol is ITypeSymbol type)
             {
-                var fields = type.GetFields().ToDictionary(_ => _.Name);
+                var fields = new Dictionary<string, IFieldSymbol>();
+
+                // it seems that some fields are duplicated, so avoid AD0001 due to thrown exception
+                foreach (var field in type.GetFields())
+                {
+                    fields[field.Name] = field;
+                }
 
                 foreach (var identifier in lockIdentifiers)
                 {

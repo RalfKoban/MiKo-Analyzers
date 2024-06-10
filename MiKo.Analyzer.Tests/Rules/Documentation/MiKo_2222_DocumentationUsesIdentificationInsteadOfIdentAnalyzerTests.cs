@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2222_DocumentationUsesIdentificationInsteadOfIdentAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-                                                   {
+                                                   [
                                                        "example",
                                                        "exception",
                                                        "note",
@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "summary",
                                                        "typeparam",
                                                        "value",
-                                                   };
+                                                   ];
 
         private static readonly string[] WrongIds =
-                                                    {
+                                                    [
                                                         " ident ",
                                                         " ident,",
                                                         " ident;",
@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         " IDENT;",
                                                         " IDENT.",
                                                         " IDENT:",
-                                                    };
+                                                    ];
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Ident_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongIds))] string id) => An_issue_is_reported_for(@"

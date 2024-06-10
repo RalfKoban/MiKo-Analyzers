@@ -16,10 +16,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2040_LangwordAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Terms = { "true", "false", "null", };
+        private static readonly string[] Terms = ["true", "false", "null",];
 
         private static readonly string[] CorrectItems =
-                                                        {
+                                                        [
                                                             "<see langword=\"true\" />",
                                                             "<see langword=\"true\"/>",
                                                             "<see langword=\"false\" />",
@@ -27,7 +27,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             "<see langword=\"null\" />",
                                                             "<see langword=\"null\"/>",
                                                             string.Empty,
-                                                        };
+                                                        ];
 
         private static readonly string[] WrongItemsWithoutCode = CreateWrongItems(false, Terms).Take(TestLimit).ToArray();
         private static readonly string[] WrongItemsWithCode = CreateWrongItems(true, Terms).Take(TestLimit).ToArray();

@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2217_XmlListElementAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] EnumeratedListTypes = { "bullet", "number" };
+        private static readonly string[] EnumeratedListTypes = ["bullet", "number"];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_method() => No_issue_is_reported_for(@"

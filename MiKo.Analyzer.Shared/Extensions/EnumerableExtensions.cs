@@ -13,6 +13,13 @@ namespace System.Linq
     {
         internal static void AddRange<T>(this ISet<T> set, IEnumerable<T> values)
         {
+            switch (values)
+            {
+                case IReadOnlyCollection<T> rc when rc.Count == 0:
+                case ICollection<T> c when c.Count == 0:
+                    return;
+            }
+
             foreach (var value in values)
             {
                 set.Add(value);
@@ -24,11 +31,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (filter(value[index]) is false)
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return false;
+                    if (filter(value[index]) is false)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -40,11 +50,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (predicate(value[index]) is false)
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return false;
+                    if (predicate(value[index]) is false)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -56,26 +69,32 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (predicate(value[index]) is false)
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return false;
+                    if (predicate(value[index]) is false)
+                    {
+                        return false;
+                    }
                 }
             }
 
             return true;
         }
 
-        internal static bool All(this ReadOnlySpan<char> source, Func<char, bool> callback)
+        internal static bool All(this ReadOnlySpan<char> value, Func<char, bool> callback)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < source.Length; index++)
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
             {
-                if (callback(source[index]) is false)
+                for (var index = 0; index < valueLength; index++)
                 {
-                    return false;
+                    if (callback(value[index]) is false)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -87,11 +106,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (predicate(value[index]) is false)
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return false;
+                    if (predicate(value[index]) is false)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -103,11 +125,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (filter(value[index]))
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return true;
+                    if (filter(value[index]))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -119,11 +144,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (predicate(value[index]))
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return true;
+                    if (predicate(value[index]))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -135,11 +163,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (predicate(value[index]))
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return true;
+                    if (predicate(value[index]))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -148,13 +179,16 @@ namespace System.Linq
 
         internal static bool Any(this ReadOnlySpan<char> value, Func<char, bool> filter)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            for (var index = 0; index < value.Length; index++)
+            var valueLength = value.Length;
+
+            if (valueLength > 0)
             {
-                if (filter(value[index]))
+                for (var index = 0; index < valueLength; index++)
                 {
-                    return true;
+                    if (filter(value[index]))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -166,11 +200,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var valueCount = value.Count;
 
-            for (var index = 0; index < valueCount; index++)
+            if (valueCount > 0)
             {
-                if (predicate(value[index]))
+                for (var index = 0; index < valueCount; index++)
                 {
-                    return true;
+                    if (predicate(value[index]))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -179,27 +216,39 @@ namespace System.Linq
 
         internal static IEnumerable<TSource> Concat<TSource>(this ImmutableArray<TSource> first, ImmutableArray<TSource> second)
         {
-            foreach (var item in first)
+            if (first.Length > 0)
             {
-                yield return item;
+                foreach (var item in first)
+                {
+                    yield return item;
+                }
             }
 
-            foreach (var item in second)
+            if (second.Length > 0)
             {
-                yield return item;
+                foreach (var item in second)
+                {
+                    yield return item;
+                }
             }
         }
 
         internal static IEnumerable<SyntaxToken> Concat(this SyntaxTokenList first, SyntaxTokenList second)
         {
-            foreach (var item in first)
+            if (first.Count > 0)
             {
-                yield return item;
+                foreach (var item in first)
+                {
+                    yield return item;
+                }
             }
 
-            foreach (var item in second)
+            if (second.Count > 0)
             {
-                yield return item;
+                foreach (var item in second)
+                {
+                    yield return item;
+                }
             }
         }
 
@@ -209,11 +258,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceLength = source.Length;
 
-            for (var index = 0; index < sourceLength; index++)
+            if (sourceLength > 0)
             {
-                if (comparer.Equals(source[index], value))
+                for (var index = 0; index < sourceLength; index++)
                 {
-                    return true;
+                    if (comparer.Equals(source[index], value))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -226,28 +278,34 @@ namespace System.Linq
             var sourceLength = source.Length;
             var count = 0;
 
-            for (var index = 0; index < sourceLength; index++)
+            if (sourceLength > 0)
             {
-                if (filter(source[index]))
+                for (var index = 0; index < sourceLength; index++)
                 {
-                    count++;
+                    if (filter(source[index]))
+                    {
+                        count++;
+                    }
                 }
             }
 
             return count;
         }
 
-        internal static int Count<T>(this SeparatedSyntaxList<T> source, Func<T, bool> filter) where T : SyntaxNode
+        internal static int Count<T>(this SeparatedSyntaxList<T> value, Func<T, bool> filter) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var sourceCount = source.Count;
+            var valueCount = value.Count;
             var count = 0;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (valueCount > 0)
             {
-                if (filter(source[index]))
+                for (var index = 0; index < valueCount; index++)
                 {
-                    count++;
+                    if (filter(value[index]))
+                    {
+                        count++;
+                    }
                 }
             }
 
@@ -273,16 +331,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var item = source[index];
-
-                if (ReferenceEquals(item, value) || Equals(item, value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    continue;
-                }
+                    var item = source[index];
 
-                yield return item;
+                    if (ReferenceEquals(item, value) || Equals(item, value))
+                    {
+                        continue;
+                    }
+
+                    yield return item;
+                }
             }
         }
 
@@ -291,16 +352,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var item = source[index];
-
-                if (ReferenceEquals(item, value) || Equals(item, value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    continue;
-                }
+                    var item = source[index];
 
-                yield return item;
+                    if (ReferenceEquals(item, value) || Equals(item, value))
+                    {
+                        continue;
+                    }
+
+                    yield return item;
+                }
             }
         }
 
@@ -309,24 +373,27 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var firstCount = first.Count;
 
-            for (var index = 0; index < firstCount; index++)
+            if (firstCount > 0)
             {
-                var item = first[index];
-
-                if (second.Contains(item))
+                for (var index = 0; index < firstCount; index++)
                 {
-                    continue;
-                }
+                    var item = first[index];
 
-                yield return item;
+                    if (second.Contains(item))
+                    {
+                        continue;
+                    }
+
+                    yield return item;
+                }
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool Exists<T>(this T[] value, Predicate<T> match) => Array.Exists(value, match);
+        internal static bool Exists<T>(this T[] value, Predicate<T> match) => value.Length > 0 && Array.Exists(value, match);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static T Find<T>(this T[] value, Predicate<T> match) => Array.Find(value, match);
+        internal static T Find<T>(this T[] value, Predicate<T> match) => value.Length > 0 ? Array.Find(value, match) : default;
 
         internal static SyntaxToken First(this SyntaxTokenList source, Func<SyntaxToken, bool> predicate)
         {
@@ -387,13 +454,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        return value;
+                    }
                 }
             }
 
@@ -419,13 +489,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        return value;
+                    }
                 }
             }
 
@@ -437,20 +510,23 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        return value;
+                    }
                 }
             }
 
             return default;
         }
 
-        internal static int IndexOf<T>(this T[] source, T value) => Array.IndexOf(source, value);
+        internal static int IndexOf<T>(this T[] source, T value) => source.Length != 0 ? Array.IndexOf(source, value) : -1;
 
         internal static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
@@ -474,6 +550,10 @@ namespace System.Linq
         internal static bool None<T>(this SyntaxList<T> source) where T : SyntaxNode => source.Any() is false;
 
         internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Any() is false;
+
+        internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+
+        internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         internal static bool None(this SyntaxTokenList source) => source.Any() is false;
 
@@ -612,11 +692,14 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    var value = source[index];
 
-                yield return predicate(value);
+                    yield return predicate(value);
+                }
             }
         }
 
@@ -626,9 +709,12 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                yield return selector(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    yield return selector(source[index]);
+                }
             }
         }
 
@@ -638,9 +724,12 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                yield return selector(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    yield return selector(source[index]);
+                }
             }
         }
 
@@ -649,9 +738,12 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                yield return selector(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    yield return selector(source[index]);
+                }
             }
         }
 
@@ -660,9 +752,12 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                yield return selector(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    yield return selector(source[index]);
+                }
             }
         }
 
@@ -671,9 +766,12 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                yield return selector(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    yield return selector(source[index]);
+                }
             }
         }
 
@@ -687,9 +785,12 @@ namespace System.Linq
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var listCount = list.Count;
 
-                for (var index = 0; index < listCount; index++)
+                if (listCount > 0)
                 {
-                    yield return list[index];
+                    for (var index = 0; index < listCount; index++)
+                    {
+                        yield return list[index];
+                    }
                 }
             }
         }
@@ -705,9 +806,12 @@ namespace System.Linq
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var listCount = list.Count;
 
-                for (var index = 0; index < listCount; index++)
+                if (listCount > 0)
                 {
-                    yield return list[index];
+                    for (var index = 0; index < listCount; index++)
+                    {
+                        yield return list[index];
+                    }
                 }
             }
         }
@@ -718,13 +822,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceLength = source.Length;
 
-            for (var index = 0; index < sourceLength; index++)
+            if (sourceLength > 0)
             {
-                var value = source[index];
-
-                foreach (var item in selector(value))
+                for (var index = 0; index < sourceLength; index++)
                 {
-                    yield return item;
+                    var value = source[index];
+
+                    foreach (var item in selector(value))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }
@@ -735,13 +842,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                foreach (var item in selector(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    yield return item;
+                    var value = source[index];
+
+                    foreach (var item in selector(value))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }
@@ -752,13 +862,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                foreach (var item in selector(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    yield return item;
+                    var value = source[index];
+
+                    foreach (var item in selector(value))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }
@@ -774,9 +887,12 @@ namespace System.Linq
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var arrayLength = array.Length;
 
-                for (var index = 0; index < arrayLength; index++)
+                if (arrayLength > 0)
                 {
-                    yield return array[index];
+                    for (var index = 0; index < arrayLength; index++)
+                    {
+                        yield return array[index];
+                    }
                 }
             }
         }
@@ -852,14 +968,17 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            var target = new SyntaxToken[sourceCount];
-
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                target[index] = source[index];
+                var target = new SyntaxToken[sourceCount];
+
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    target[index] = source[index];
+                }
             }
 
-            return target;
+            return Array.Empty<SyntaxToken>();
         }
 
         internal static T[] ToArray<T>(this SyntaxList<T> source) where T : SyntaxNode
@@ -867,14 +986,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            var target = new T[sourceCount];
-
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                target[index] = source[index];
+                var target = new T[sourceCount];
+
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    target[index] = source[index];
+                }
+
+                return target;
             }
 
-            return target;
+            return Array.Empty<T>();
         }
 
         internal static T[] ToArray<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode
@@ -882,14 +1006,19 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            var target = new T[sourceCount];
-
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                target[index] = source[index];
+                var target = new T[sourceCount];
+
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    target[index] = source[index];
+                }
+
+                return target;
             }
 
-            return target;
+            return Array.Empty<T>();
         }
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
@@ -913,9 +1042,12 @@ namespace System.Linq
 
             var target = new List<SyntaxToken>(sourceCount);
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                target.Add(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    target.Add(source[index]);
+                }
             }
 
             return target;
@@ -928,9 +1060,12 @@ namespace System.Linq
 
             var target = new List<T>(sourceCount);
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                target.Add(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    target.Add(source[index]);
+                }
             }
 
             return target;
@@ -943,9 +1078,12 @@ namespace System.Linq
 
             var target = new List<T>(sourceCount);
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                target.Add(source[index]);
+                for (var index = 0; index < sourceCount; index++)
+                {
+                    target.Add(source[index]);
+                }
             }
 
             return target;
@@ -953,6 +1091,9 @@ namespace System.Linq
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => new[] { value }.ToSeparatedSyntaxList();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);
@@ -968,13 +1109,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    yield return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        yield return value;
+                    }
                 }
             }
         }
@@ -1006,13 +1150,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    yield return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        yield return value;
+                    }
                 }
             }
         }
@@ -1022,13 +1169,16 @@ namespace System.Linq
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
 
-            for (var index = 0; index < sourceCount; index++)
+            if (sourceCount > 0)
             {
-                var value = source[index];
-
-                if (predicate(value))
+                for (var index = 0; index < sourceCount; index++)
                 {
-                    yield return value;
+                    var value = source[index];
+
+                    if (predicate(value))
+                    {
+                        yield return value;
+                    }
                 }
             }
         }

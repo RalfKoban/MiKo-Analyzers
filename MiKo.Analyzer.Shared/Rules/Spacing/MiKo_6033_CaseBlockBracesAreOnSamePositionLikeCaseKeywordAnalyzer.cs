@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (casePosition.Line != openBracePosition.Line && casePosition.Character != openBracePosition.Character)
                 {
-                    var issue = Issue(openBraceToken, CreateProposalForLinePosition(casePosition));
+                    var issue = Issue(openBraceToken, CreateProposalForSpaces(casePosition.Character));
 
                     ReportDiagnostics(context, issue);
                 }

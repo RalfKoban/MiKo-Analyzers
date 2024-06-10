@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -37,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (condition is null)
             {
                 // nothing there
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             var parameter = node.GetUsedParameter();
@@ -51,12 +52,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     case InvocationExpressionSyntax invocation when invocation.GetName().EqualsAny(EqualsMethods):
                     {
                         // seems like a correct usage
-                        yield break;
+                        return Enumerable.Empty<Diagnostic>();
                     }
                 }
             }
 
-            yield return Issue(node.Type);
+            return new[] { Issue(node.Type) };
         }
     }
 }

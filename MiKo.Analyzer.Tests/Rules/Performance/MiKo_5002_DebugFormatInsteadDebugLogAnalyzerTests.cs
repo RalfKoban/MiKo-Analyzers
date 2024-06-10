@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     [TestFixture]
     public sealed class MiKo_5002_DebugFormatInsteadDebugLogAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Methods = { "Debug", "Info", "Error", "Warn", "Fatal" };
+        private static readonly string[] Methods = ["Debug", "Info", "Error", "Warn", "Fatal"];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"

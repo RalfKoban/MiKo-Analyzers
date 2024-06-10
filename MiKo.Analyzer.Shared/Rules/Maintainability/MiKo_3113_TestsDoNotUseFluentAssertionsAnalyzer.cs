@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -24,6 +25,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeExpressionStatementSyntax, SyntaxKind.ExpressionStatement);
 
+        private static SyntaxNode FindProblematicNode(ExpressionStatementSyntax node)
+        {
+            var problematicNode = node.GetFluentAssertionShouldNode();
+            var root = problematicNode?.FirstAncestor<SyntaxNode>(_ => _.IsAnyKind(Ancestors));
+
+            switch (root)
+            {
+                case ExpressionStatementSyntax statement: return statement.Expression;
+                case LambdaExpressionSyntax lambda: return lambda.ExpressionBody;
+                default: return null;
+            }
+        }
+
         private void AnalyzeExpressionStatementSyntax(SyntaxNodeAnalysisContext context)
         {
             var node = (ExpressionStatementSyntax)context.Node;
@@ -35,21 +49,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> Analyze(ExpressionStatementSyntax node)
         {
-            var problematicNode = node.GetFluentAssertionShouldNode();
+            var problematicNode = FindProblematicNode(node);
 
-            if (problematicNode != null)
-            {
-                var root = problematicNode.FirstAncestor<SyntaxNode>(_ => _.IsAnyKind(Ancestors));
-
-                if (root is ExpressionStatementSyntax statement)
-                {
-                    yield return Issue(statement.Expression);
-                }
-                else if (root is LambdaExpressionSyntax lambda)
-                {
-                    yield return Issue(lambda.ExpressionBody);
-                }
-            }
+            return problematicNode != null
+                   ? new[] { Issue(problematicNode) }
+                   : Enumerable.Empty<Diagnostic>();
         }
     }
 }

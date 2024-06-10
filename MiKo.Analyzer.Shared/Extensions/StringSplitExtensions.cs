@@ -32,8 +32,12 @@ namespace System
 
                 tuples.Capacity += indices.Count;
 
-                foreach (var index in indices)
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                // ReSharper disable once ForCanBeConvertedToForeach
+                for (var i = 0; i < indices.Count; i++)
                 {
+                    var index = indices[i];
+
                     tuples.Add((index, finding));
                 }
             }

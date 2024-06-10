@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -15,13 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
-        {
-            if (HasIssue(symbol))
-            {
-                yield return Issue(symbol, CreateBetterNameProposal(symbol.Name.WithoutNumberSuffix()));
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation) => HasIssue(symbol)
+                                                                                                                    ? new[] { Issue(symbol, CreateBetterNameProposal(symbol.Name.WithoutNumberSuffix())) }
+                                                                                                                    : Enumerable.Empty<Diagnostic>();
 
         private static bool HasIssue(IParameterSymbol symbol)
         {

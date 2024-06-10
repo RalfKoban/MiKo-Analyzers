@@ -14,73 +14,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2035_CodeFixProvider)), Shared]
     public sealed class MiKo_2035_CodeFixProvider : ReturnTypeDocumentationCodeFixProvider
     {
-//// ncrunch: rdi off
-        private static readonly string[] Phrases = CreatePhrases().ToHashSet(_ => _ + " ").ToArray();
-
-        private static readonly string[] TaskPhrases =
-                                                       {
-                                                           "A task that can be used to await.",
-                                                           "A task that can be used to await",
-                                                           "A task to await.",
-                                                           "A task to await",
-                                                           "An awaitable task.",
-                                                           "An awaitable task",
-                                                       };
-
-        private static readonly string[] ReplacementMapKeys = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(TaskPhrases).Concat(Phrases).ToArray();
-
-        private static readonly Dictionary<string, string> ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                              .ThenBy(_ => _)
-                                                                                              .ToDictionary(_ => _, _ => string.Empty);
-
-        private static readonly string[] ByteArrayReplacementMapKeys = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
-                                                                                                                             {
-                                                                                                                                 "A array of byte containing ",
-                                                                                                                                 "A array of byte that contains ",
-                                                                                                                                 "A array of byte which contains ",
-                                                                                                                                 "A array of bytes containing ",
-                                                                                                                                 "A array of bytes that contains ",
-                                                                                                                                 "A array of bytes which contains ",
-                                                                                                                                 "A array of ",
-                                                                                                                                 "A array with ",
-                                                                                                                                 "An array of byte containing ",
-                                                                                                                                 "An array of byte that contains ",
-                                                                                                                                 "An array of byte which contains ",
-                                                                                                                                 "An array of bytes containing ",
-                                                                                                                                 "An array of bytes that contains ",
-                                                                                                                                 "An array of bytes which contains ",
-                                                                                                                                 "An array of ",
-                                                                                                                                 "An array with ",
-                                                                                                                                 "Array of ",
-                                                                                                                                 "Array with ",
-                                                                                                                                 "The array of byte containing ",
-                                                                                                                                 "The array of byte that contains ",
-                                                                                                                                 "The array of byte which contains ",
-                                                                                                                                 "The array of bytes containing ",
-                                                                                                                                 "The array of bytes that contains ",
-                                                                                                                                 "The array of bytes which contains ",
-                                                                                                                                 "The array of ",
-                                                                                                                                 "The array with ",
-                                                                                                                             })
-                                                                                                                 .ToArray();
-
-        private static readonly Dictionary<string, string> ByteArrayReplacementMap = ByteArrayReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                                .ThenBy(_ => _)
-                                                                                                                .ToDictionary(_ => _, _ => string.Empty);
-
-        private static readonly string[] ByteArrayContinueTexts =
-                                                                  {
-                                                                      "s containing ",
-                                                                      "s that contains ",
-                                                                      "s which contains ",
-                                                                      " containing ",
-                                                                      " that contains ",
-                                                                      " which contains ",
-                                                                  };
+        private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
         private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
-
-//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2035";
 
@@ -137,12 +73,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var adjustedComment = comment.WithContent(comment.Content.WithoutTrailingXmlComment())
                                          .WithEndTag(comment.EndTag.WithLeadingXmlComment());
 
-            return Comment(adjustedComment, ReplacementMapKeys, ReplacementMap);
+            return Comment(adjustedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
         }
 
         private static XmlElementSyntax PrepareByteArrayComment(XmlElementSyntax comment)
         {
-            var preparedComment = Comment(comment, ByteArrayReplacementMapKeys, ByteArrayReplacementMap);
+            var preparedComment = Comment(comment, MappedData.Value.ByteArrayReplacementMapKeys, MappedData.Value.ByteArrayReplacementMap);
 
             var contents = preparedComment.Content;
 
@@ -154,9 +90,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var token = continueText.TextTokens.First();
                     var text = token.ValueText;
 
-                    if (text.StartsWithAny(ByteArrayContinueTexts))
+                    if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts))
                     {
-                        var newContinueText = continueText.ReplaceToken(token, token.WithText(new StringBuilder(text).Without(ByteArrayContinueTexts)));
+                        var newContinueText = continueText.ReplaceToken(token, token.WithText(new StringBuilder(text).Without(MappedData.Value.ByteArrayContinueTexts)));
 
                         preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
                     }
@@ -170,48 +106,133 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
-        private static IEnumerable<string> CreatePhrases()
+
+        private sealed class MapData
         {
-            var startingWords = new[] { "a", "an", "the" };
-            var modifications = new[] { "readonly", "read-only", "read only" };
-            var collections = new[] { "array", "list", "dictionary", "enumerable", "hash set", "hash table", "hashed set", "hashed table", "hashing set", "hashing table", "hashset", "hashSet", "hashtable", "hashTable", "map", "queue", "stack" };
-            var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
-
-            foreach (var collection in collections)
+            public MapData()
             {
-                foreach (var preposition in prepositions)
+                var taskPhrases = new[]
+                                      {
+                                          "A task that can be used to await.",
+                                          "A task that can be used to await",
+                                          "A task to await.",
+                                          "A task to await",
+                                          "An awaitable task.",
+                                          "An awaitable task",
+                                      };
+
+                var phrases = CreatePhrases().ToHashSet(_ => _ + " "); // TODO RKN: Order by 'A', 'An ' and 'The '
+
+                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(taskPhrases)
+                                                                           .Concat(phrases)
+                                                                           .OrderByDescending(_ => _.Length)
+                                                                           .ThenBy(_ => _)
+                                                                           .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                           .ToArray();
+
+                ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.Select(_ => _.Key));
+
+                ByteArrayReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                                {
+                                                                                                    "A array of byte containing ",
+                                                                                                    "A array of byte that contains ",
+                                                                                                    "A array of byte which contains ",
+                                                                                                    "A array of bytes containing ",
+                                                                                                    "A array of bytes that contains ",
+                                                                                                    "A array of bytes which contains ",
+                                                                                                    "A array of ",
+                                                                                                    "A array with ",
+                                                                                                    "An array of byte containing ",
+                                                                                                    "An array of byte that contains ",
+                                                                                                    "An array of byte which contains ",
+                                                                                                    "An array of bytes containing ",
+                                                                                                    "An array of bytes that contains ",
+                                                                                                    "An array of bytes which contains ",
+                                                                                                    "An array of ",
+                                                                                                    "An array with ",
+                                                                                                    "Array of ",
+                                                                                                    "Array with ",
+                                                                                                    "The array of byte containing ",
+                                                                                                    "The array of byte that contains ",
+                                                                                                    "The array of byte which contains ",
+                                                                                                    "The array of bytes containing ",
+                                                                                                    "The array of bytes that contains ",
+                                                                                                    "The array of bytes which contains ",
+                                                                                                    "The array of ",
+                                                                                                    "The array with ",
+                                                                                                })
+                                                                                    .OrderByDescending(_ => _.Length)
+                                                                                    .ThenBy(_ => _)
+                                                                                    .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                    .ToArray();
+
+                ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap.Select(_ => _.Key));
+
+                ByteArrayContinueTexts = new[]
+                                             {
+                                                 "s containing ",
+                                                 "s that contains ",
+                                                 "s which contains ",
+                                                 " containing ",
+                                                 " that contains ",
+                                                 " which contains ",
+                                             };
+            }
+
+            public KeyValuePair<string, string>[] ReplacementMap { get; }
+
+            public string[] ReplacementMapKeys { get; }
+
+            public KeyValuePair<string, string>[] ByteArrayReplacementMap { get; }
+
+            public string[] ByteArrayReplacementMapKeys { get; }
+
+            public string[] ByteArrayContinueTexts { get; }
+
+            private static IEnumerable<string> CreatePhrases()
+            {
+                var startingWords = new[] { "a", "an", "the" };
+                var modifications = new[] { "readonly", "read-only", "read only" };
+                var collections = new[] { "array", "list", "dictionary", "enumerable", "hash set", "hash table", "hashed set", "hashed table", "hashing set", "hashing table", "hashset", "hashSet", "hashtable", "hashTable", "map", "queue", "stack" };
+                var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
+
+                foreach (var collection in collections)
                 {
-                    var phrase = string.Concat(collection, " ", preposition);
-
-                    yield return phrase.ToUpperCaseAt(0);
-                    yield return phrase.ToLowerCaseAt(0);
-
-                    foreach (var modification in modifications)
+                    foreach (var preposition in prepositions)
                     {
-                        var modificationPhrase = string.Concat(modification, " ", phrase);
+                        var phrase = string.Concat(collection, " ", preposition);
 
-                        yield return modificationPhrase.ToUpperCaseAt(0);
-                        yield return modificationPhrase.ToLowerCaseAt(0);
+                        yield return phrase.ToUpperCaseAt(0);
+                        yield return phrase.ToLowerCaseAt(0);
 
-                        foreach (var startingWord in startingWords)
+                        foreach (var modification in modifications)
                         {
-                            var shortStartingPhrase = string.Concat(startingWord, " ", collection);
-                            var startingPhrase = string.Concat(startingWord, " ", phrase);
-                            var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
+                            var modificationPhrase = string.Concat(modification, " ", phrase);
 
-                            yield return shortStartingPhrase.ToUpperCaseAt(0);
-                            yield return shortStartingPhrase.ToLowerCaseAt(0);
+                            yield return modificationPhrase.ToUpperCaseAt(0);
+                            yield return modificationPhrase.ToLowerCaseAt(0);
 
-                            yield return startingPhrase.ToUpperCaseAt(0);
-                            yield return startingPhrase.ToLowerCaseAt(0);
+                            foreach (var startingWord in startingWords)
+                            {
+                                var shortStartingPhrase = string.Concat(startingWord, " ", collection);
+                                var startingPhrase = string.Concat(startingWord, " ", phrase);
+                                var modifiedStartingPhrase = string.Concat(startingWord, " ", modificationPhrase);
 
-                            yield return modifiedStartingPhrase.ToUpperCaseAt(0);
-                            yield return modifiedStartingPhrase.ToLowerCaseAt(0);
+                                yield return shortStartingPhrase.ToUpperCaseAt(0);
+                                yield return shortStartingPhrase.ToLowerCaseAt(0);
+
+                                yield return startingPhrase.ToUpperCaseAt(0);
+                                yield return startingPhrase.ToLowerCaseAt(0);
+
+                                yield return modifiedStartingPhrase.ToUpperCaseAt(0);
+                                yield return modifiedStartingPhrase.ToLowerCaseAt(0);
+                            }
                         }
                     }
                 }
             }
         }
-//// ncrunch: rdi default
     }
+
+    //// ncrunch: rdi default
 }

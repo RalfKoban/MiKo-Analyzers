@@ -157,9 +157,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var characters = trimmed.EndsWith("'s", StringComparison.Ordinal) ? 2 : 1;
 
-                var part = trimmed.Slice(0, trimmed.Length - characters).ToString();
+                var part = trimmed.Slice(0, trimmed.Length - characters);
 
-                if (part.All(char.IsUpper) || WellKnownWords.Contains(part))
+                if (part.All(char.IsUpper) || WellKnownWords.Contains(part.ToString()))
                 {
                     // seems like an abbreviation (such as UIs) or a genitive tense of an abbreviation (such as UI's), so do not report
                     return false;
@@ -169,7 +169,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var characters = trimmed.EndsWith("ed", StringComparison.Ordinal) ? 2 : 1;
 
-                var part = trimmed.Slice(0, trimmed.Length - characters).ToString();
+                var part = trimmed.Slice(0, trimmed.Length - characters);
 
                 if (part.All(char.IsUpper))
                 {
