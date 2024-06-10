@@ -38,6 +38,18 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_record_type() => No_issue_is_reported_for(@"
+using System.Windows;
+
+namespace Bla
+{
+    public record SomeDtoForViewModel
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_name_([Values("ViewModelFactory", "TestMe")] string name) => No_issue_is_reported_for(@"
 using System.Windows;
 

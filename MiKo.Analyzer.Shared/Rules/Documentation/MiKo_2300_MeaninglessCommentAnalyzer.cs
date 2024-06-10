@@ -93,6 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                               "special handling",
                                                               "initializer",
                                                               "typo by intent",
+                                                              "ncrunch:",
                                                           };
 
         public MiKo_2300_MeaninglessCommentAnalyzer() : base(Id)

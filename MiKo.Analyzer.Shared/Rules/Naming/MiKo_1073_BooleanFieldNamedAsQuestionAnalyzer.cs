@@ -40,13 +40,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             if (name.Length <= 5)
             {
                 // skip all short names (such as isIP)
-                yield break;
+                return Enumerable.Empty<Diagnostic>();
             }
 
             if (name.StartsWithAny(Prefixes, StringComparison.Ordinal) && name.HasUpperCaseLettersAbove(2) && name.StartsWithAny(AllowedPrefixes, StringComparison.Ordinal) is false)
             {
-                yield return Issue(symbol);
+                return new[] { Issue(symbol) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

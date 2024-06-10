@@ -46,11 +46,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private static ParenthesizedLambdaExpressionSyntax GetUpdatedSyntax(ParenthesizedLambdaExpressionSyntax syntax) => syntax.WithParameterList(GetUpdatedSyntax(syntax.ParameterList))
                                                                                                                                  .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
-                                                                                                                                 .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody));
+                                                                                                                                 .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody))
+                                                                                                                                 .WithLeadingTriviaFrom(syntax);
 
         private static SimpleLambdaExpressionSyntax GetUpdatedSyntax(SimpleLambdaExpressionSyntax syntax) => syntax.WithParameter(GetUpdatedSyntax(syntax.Parameter))
                                                                                                                    .WithArrowToken(GetUpdatedSyntax(syntax.ArrowToken))
-                                                                                                                   .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody));
+                                                                                                                   .WithExpressionBody(GetUpdatedSyntax(syntax.ExpressionBody))
+                                                                                                                   .WithLeadingTriviaFrom(syntax);
 
         private static ExpressionSyntax GetUpdatedSyntax(ExpressionSyntax syntax)
         {
@@ -80,7 +82,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return oces.WithoutTrivia()
                                .WithNewKeyword(oces.NewKeyword.WithoutTrivia().WithTrailingSpace())
                                .WithType(GetUpdatedSyntax(oces.Type))
-                               .WithArgumentList(GetUpdatedSyntax(oces.ArgumentList));
+                               .WithInitializer(GetUpdatedSyntax(oces.Initializer));
+
+                case AnonymousObjectCreationExpressionSyntax aoces:
+                    return aoces.WithoutTrivia()
+                                .WithNewKeyword(aoces.NewKeyword.WithoutTrivia().WithTrailingSpace())
+                                .WithOpenBraceToken(aoces.OpenBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the opening bracket
+                                .WithCloseBraceToken(aoces.CloseBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the closing bracket
+                                .WithInitializers(GetUpdatedSyntax(aoces.Initializers, Constants.Indentation));
 
                 case ParenthesizedLambdaExpressionSyntax p: return GetUpdatedSyntax(p);
                 case SimpleLambdaExpressionSyntax s: return GetUpdatedSyntax(s);
@@ -117,7 +126,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return syntax.WithoutTrivia()
                          .WithLessThanToken(syntax.LessThanToken.WithoutTrivia()) // remove the spaces or line breaks around the opening bracket
                          .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(GetUpdatedSyntax), arguments.GetSeparators().Select(_ => _.WithoutTrivia().WithTrailingSpace()))) // fix separators
-                         .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia());  // remove the spaces or line breaks around the closing bracket
+                         .WithGreaterThanToken(syntax.GreaterThanToken.WithoutTrivia()); // remove the spaces or line breaks around the closing bracket
+        }
+
+        private static InitializerExpressionSyntax GetUpdatedSyntax(InitializerExpressionSyntax syntax)
+        {
+            return syntax.WithoutTrivia()
+                         .WithOpenBraceToken(syntax.OpenBraceToken.WithoutTrivia().WithLeadingSpace()) // remove the spaces or line breaks around the opening bracket
+                         .WithCloseBraceToken(syntax.CloseBraceToken.WithoutTrivia().WithLeadingSpace()); // remove the spaces or line breaks around the closing bracket
         }
 
         private static ArgumentSyntax GetUpdatedSyntax(ArgumentSyntax syntax) => syntax.WithoutTrivia()

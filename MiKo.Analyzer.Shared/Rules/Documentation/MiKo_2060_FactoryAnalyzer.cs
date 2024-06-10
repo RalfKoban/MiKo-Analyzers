@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var typeIssues = base.AnalyzeType(symbol, compilation);
 
-                return typeIssues.Concat(symbol.GetMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
+                return typeIssues.Concat(symbol.GetNamedMethods().SelectMany(_ => AnalyzeMethod(_, compilation)));
             }
 
             return Enumerable.Empty<Diagnostic>();
@@ -69,16 +69,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeStartingPhrase(ISymbol symbol, IEnumerable<string> comments, DocumentationCommentTriviaSyntax comment, params string[] phrases)
         {
-            if (comments.Any(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
-            {
-                // fitting comment
-            }
-            else
+            if (comments.None(_ => phrases.Exists(__ => _.StartsWith(__, StringComparison.Ordinal))))
             {
                 var summary = comment.GetSummaryXmls().First();
 
-                yield return Issue(symbol.Name, summary.GetContentsLocation(), phrases[0]);
+                return new[] { Issue(symbol.Name, summary.GetContentsLocation(), phrases[0]) };
             }
+
+            // fitting comment
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

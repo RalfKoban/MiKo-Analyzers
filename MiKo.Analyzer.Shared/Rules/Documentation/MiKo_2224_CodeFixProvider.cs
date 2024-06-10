@@ -31,22 +31,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is XmlElementSyntax element)
+            switch (syntax)
             {
-                if (issue.Location == element.StartTag.GetLocation())
-                {
-                    return GetUpdatedSyntax(element.StartTag);
-                }
+                case XmlEmptyElementSyntax _:
+                    return syntax;
 
-                if (issue.Location == element.EndTag.GetLocation())
+                case XmlElementSyntax element:
                 {
-                    return GetUpdatedSyntax(element.EndTag);
-                }
-            }
+                    var startTag = element.StartTag;
 
-            if (syntax is XmlEmptyElementSyntax)
-            {
-                return syntax;
+                    if (issue.Location == startTag.GetLocation())
+                    {
+                        return GetUpdatedSyntax(startTag);
+                    }
+
+                    var endTag = element.EndTag;
+
+                    if (issue.Location == endTag.GetLocation())
+                    {
+                        return GetUpdatedSyntax(endTag);
+                    }
+
+                    break;
+                }
             }
 
             return base.GetUpdatedSyntax(document, syntax, issue);
@@ -56,14 +63,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (syntax is XmlEmptyElementSyntax element)
             {
+                var properties = issue.Properties;
+
                 var nodes = new List<SyntaxNode> { syntax };
 
-                if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore))
+                if (properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceBefore))
                 {
                     nodes.Insert(0, NewLineXmlText());
                 }
 
-                if (issue.Properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter))
+                if (properties.ContainsKey(Constants.AnalyzerCodeFixSharedData.AddSpaceAfter))
                 {
                     nodes.Add(NewLineXmlText());
                 }

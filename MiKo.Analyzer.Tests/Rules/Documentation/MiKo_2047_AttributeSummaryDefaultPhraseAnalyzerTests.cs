@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2047_AttributeSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ValidPhrases =
-                                                        {
+                                                        [
                                                             "Specifies ",
                                                             "Indicates ",
                                                             "Defines ",
@@ -19,9 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                             "Represents ",
                                                             "Allows ",
                                                             "Marks",
-                                                        };
+                                                        ];
 
-        private static readonly string[] InvalidPhrases = { "The ", "Attribute ", };
+        private static readonly string[] InvalidPhrases = ["The ", "Attribute ",];
 
         [Test]
         public void No_issue_is_reported_for_non_attribute_class() => No_issue_is_reported_for(@"

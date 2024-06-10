@@ -40,16 +40,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             if (pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression))
             {
-                if (pattern.Expression is ParenthesizedExpressionSyntax)
+                switch (pattern.Expression)
                 {
-                    // we have an ((xyz) is false) pattern
-                    return true;
-                }
-
-                if (pattern.Expression is IsPatternExpressionSyntax)
-                {
-                    // we have an (abc is Xyz xyz is false) pattern
-                    return true;
+                    case ParenthesizedExpressionSyntax _: return true; // we have an (abc is Xyz xyz is false) pattern
+                    case IsPatternExpressionSyntax _: return true; // we have an ((xyz) is false) pattern
                 }
             }
 
@@ -64,36 +58,42 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasIssueInLogicalNot(PrefixUnaryExpressionSyntax unary)
         {
-            if (unary.Operand is ParenthesizedExpressionSyntax parenthesizedExpression)
+            switch (unary.Operand)
             {
-                if (parenthesizedExpression.Expression is IdentifierNameSyntax)
+                case ParenthesizedExpressionSyntax parenthesizedExpression:
                 {
-                    // we have a (!(xyz)) condition
+                    if (parenthesizedExpression.Expression is IdentifierNameSyntax)
+                    {
+                        // we have a (!(xyz)) condition
+                        return false;
+                    }
+
+                    // we have a more complex condition, starting with an !
+                    return true;
+                }
+
+                case InvocationExpressionSyntax invocation:
+                {
+                    var arguments = invocation.ArgumentList.Arguments;
+
+                    // keep in local variable to avoid multiple requests (see Roslyn implementation)
+                    var argumentsCount = arguments.Count;
+
+                    for (var index = 0; index < argumentsCount; index++)
+                    {
+                        if (arguments[index].Expression is InvocationExpressionSyntax)
+                        {
+                            // we have a more complex condition with multiple invocations, starting with an !
+                            return true;
+                        }
+                    }
+
                     return false;
                 }
 
-                // we have a more complex condition, starting with an !
-                return true;
+                default:
+                    return false;
             }
-
-            if (unary.Operand is InvocationExpressionSyntax invocation)
-            {
-                var arguments = invocation.ArgumentList.Arguments;
-
-                // keep in local variable to avoid multiple requests (see Roslyn implementation)
-                var argumentsCount = arguments.Count;
-
-                for (var index = 0; index < argumentsCount; index++)
-                {
-                    if (arguments[index].Expression is InvocationExpressionSyntax)
-                    {
-                        // we have a more complex condition with multiple invocations, starting with an !
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)

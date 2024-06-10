@@ -8,7 +8,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1020_TypeNameLengthAnalyzerTests : NamingLengthAnalyzerTests
     {
-        private static readonly string[] FittingTypes = { "interface", "class", "enum" };
+        private static readonly string[] FittingTypes = ["interface", "class", "enum"];
         private static readonly string[] Fitting = GetAllWithMaxLengthOf(Constants.MaxNamingLengths.Types);
         private static readonly string[] NonFitting = GetAllAboveLengthOf(Constants.MaxNamingLengths.Types);
 

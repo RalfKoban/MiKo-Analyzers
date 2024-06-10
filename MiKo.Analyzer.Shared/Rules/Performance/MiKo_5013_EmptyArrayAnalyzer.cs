@@ -16,21 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
         }
 
-        protected override IEnumerable<Diagnostic> AnalyzeArrayCreation(ArrayCreationExpressionSyntax node, SemanticModel semanticModel)
-        {
-            if (HasIssue(node))
-            {
-                yield return Issue(node);
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeArrayCreation(ArrayCreationExpressionSyntax node, SemanticModel semanticModel) => HasIssue(node)
+                                                                                                                                            ? new[] { Issue(node) }
+                                                                                                                                            : Enumerable.Empty<Diagnostic>();
 
-        protected override IEnumerable<Diagnostic> AnalyzeArrayInitializer(InitializerExpressionSyntax node, SemanticModel semanticModel)
-        {
-            if (HasIssue(node))
-            {
-                yield return Issue(node);
-            }
-        }
+        protected override IEnumerable<Diagnostic> AnalyzeArrayInitializer(InitializerExpressionSyntax node, SemanticModel semanticModel) => HasIssue(node)
+                                                                                                                                             ? new[] { Issue(node) }
+                                                                                                                                             : Enumerable.Empty<Diagnostic>();
 
         private static bool HasIssue(ArrayCreationExpressionSyntax node)
         {

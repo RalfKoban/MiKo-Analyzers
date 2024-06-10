@@ -22,17 +22,17 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             foreach (var syntax in syntaxNodes)
             {
-                if (syntax is InvocationExpressionSyntax invocation)
+                switch (syntax)
                 {
-                    return IsToStringCall(invocation.Parent)
-                           ? invocation.Parent?.Parent
-                           : invocation;
-                }
+                    case InvocationExpressionSyntax invocation:
+                    {
+                        return IsToStringCall(invocation.Parent)
+                               ? invocation.Parent?.Parent
+                               : invocation;
+                    }
 
-                if (syntax is ArgumentSyntax argument)
-                {
-                    // we have a method group, so we have to identify the argument
-                    return argument.Expression;
+                    case ArgumentSyntax argument:
+                        return argument.Expression; // we have a method group, so we have to identify the argument
                 }
             }
 
@@ -41,28 +41,30 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is InvocationExpressionSyntax i)
+            switch (syntax)
             {
-                if (IsToStringCall(i.Expression))
+                case InvocationExpressionSyntax i:
                 {
-                    var arguments = i.ArgumentList.Arguments;
-                    var format = arguments.Count == 1
-                                 ? arguments[0].Expression.ToString().WithoutQuotes()
-                                 : DefaultFormat;
+                    if (IsToStringCall(i.Expression))
+                    {
+                        var arguments = i.ArgumentList.Arguments;
+                        var format = arguments.Count == 1
+                                     ? arguments[0].Expression.ToString().WithoutQuotes()
+                                     : DefaultFormat;
 
-                    // we only want to have a GUID
-                    return Guid(format);
+                        // we only want to have a GUID
+                        return Guid(format);
+                    }
+
+                    return GuidParse(Guid());
                 }
 
-                return GuidParse(Guid());
-            }
+                case MemberAccessExpressionSyntax _:
+                    return SyntaxFactory.ParenthesizedLambdaExpression(SyntaxFactory.ParameterList(), GuidParse(Guid()));
 
-            if (syntax is MemberAccessExpressionSyntax)
-            {
-                return SyntaxFactory.ParenthesizedLambdaExpression(SyntaxFactory.ParameterList(), GuidParse(Guid()));
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         protected virtual Guid CreateGuid() => System.Guid.NewGuid();

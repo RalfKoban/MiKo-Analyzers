@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -38,9 +39,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (startingLine != operatorLine || operatorLine != nameLine)
                 {
-                    yield return Issue(argument);
+                    return new[] { Issue(argument) };
                 }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

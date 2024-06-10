@@ -100,7 +100,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
                     var x = 0;
                     var y = 1;
                     var z = x + y;
-                }
+                } finally { }
             }
         }
     }
@@ -115,6 +115,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             void LocalFunction()
             {
+                try { }
                 catch (Exception ex)
                 {
                     var x = 0;
@@ -135,6 +136,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             void LocalFunction()
             {
+                try { }
                 catch (Exception ex) when (ex != null)
                 {
                     var x = 0;
@@ -155,6 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
         {
             void LocalFunction()
             {
+                try { }
                 finally
                 {
                     var x = 0;
@@ -235,7 +238,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics.LoCValidTestFiles
 ");
 
         [Test]
-        public void LocalFunction_with_exaclty_matching_ObjectInitializer_statement_is_not_reported() => No_issue_is_reported_for(@"
+        public void LocalFunction_with_exactly_matching_ObjectInitializer_statement_is_not_reported() => No_issue_is_reported_for(@"
 
     public class TypeWithMethod
     {

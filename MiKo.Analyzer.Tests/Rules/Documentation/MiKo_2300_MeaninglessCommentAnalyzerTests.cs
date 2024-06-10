@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2300_MeaninglessCommentAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Comments =
-                                                    {
+                                                    [
                                                         "add ",
                                                         "adds ",
                                                         "build ",
@@ -71,10 +71,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                         "stop ",
                                                         "stops ",
                                                         "use", // no space at the end to allow combinations of the word
-                                                    };
+                                                    ];
 
         private static readonly string[] AllowedComments =
-                                                           {
+                                                           [
                                                                "blank by intent",
                                                                "checked by",
                                                                "do nothing here",
@@ -94,7 +94,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                "nothing to do here",
                                                                "nothing to do",
                                                                "special handling",
-                                                           };
+                                                               "ncrunch: some text here",
+                                                           ];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method() => No_issue_is_reported_for(@"

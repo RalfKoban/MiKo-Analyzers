@@ -21,8 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is ArgumentSyntax argument)
             {
-                var position = GetProposedLinePosition(issue);
-                var additionalSpaces = position.Character - argument.GetPositionWithinStartLine();
+                var spaces = GetProposedSpaces(issue);
+
+                var additionalSpaces = spaces - argument.GetPositionWithinStartLine();
 
                 var descendants = SelfAndDescendantsOnSeparateLines(argument);
 

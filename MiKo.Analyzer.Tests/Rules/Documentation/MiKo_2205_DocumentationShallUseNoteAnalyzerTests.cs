@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2205_DocumentationShallUseNoteAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-                                                   {
+                                                   [
                                                        "example",
                                                        "exception",
                                                        "note",
@@ -24,10 +24,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "summary",
                                                        "typeparam",
                                                        "value",
-                                                   };
+                                                   ];
 
         private static readonly string[] Markers =
-                                                   {
+                                                   [
                                                        "Attention:",
                                                        " ATTENTION: ",
                                                        " !!! ATTENTION !!! ",
@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        " Note: ",
                                                        " Please note: ",
                                                        " Important: ",
-                                                   };
+                                                   ];
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_information_marker_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(Markers))] string marker) => An_issue_is_reported_for(@"

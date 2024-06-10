@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var map = new Dictionary<string, string>();
 
-            if (firstWord == AsyncStartingPhrase.TrimEnd())
+            if (firstWord == Constants.Comments.Asynchrounously)
             {
                 firstWord = startText.SecondWord();
 

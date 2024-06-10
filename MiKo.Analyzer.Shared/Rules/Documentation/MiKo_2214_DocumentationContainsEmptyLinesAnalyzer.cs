@@ -22,7 +22,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             foreach (var tokens in comment.DescendantNodes<XmlTextSyntax>().Select(_ => _.TextTokens))
             {
-                for (var i = 0; i < tokens.Count - 1; i++)
+                var count = tokens.Count - 1;
+
+                for (var i = 0; i < count; i++)
                 {
                     var currentToken = tokens[i];
 

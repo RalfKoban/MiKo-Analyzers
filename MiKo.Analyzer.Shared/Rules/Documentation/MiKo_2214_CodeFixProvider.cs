@@ -75,12 +75,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     else if (i == 1)
                     {
                         // skip second line as that shall not be replaced with a <para/> tag
-                        // (this is the next line eg. after a <summary> tag)
+                        // (this is the next line e.g. after a <summary> tag)
                     }
                     else if (i == tokensCount - 3)
                     {
                         // skip second last empty line as that shall not be replaced with a <para/> tag
-                        // (this is the line immediately before eg. a </summary> tag)
+                        // (this is the line immediately before e.g. a </summary> tag)
                         replacements.Add(XmlTextWithoutLastNewLine(tokensForTexts));
                     }
                     else if (i == tokensCount - 2 && noXmlTagOnCommentStart)

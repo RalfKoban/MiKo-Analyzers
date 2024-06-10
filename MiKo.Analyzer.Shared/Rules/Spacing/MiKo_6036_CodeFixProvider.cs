@@ -21,9 +21,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is LambdaExpressionSyntax lambda)
             {
-                var position = GetProposedLinePosition(issue);
+                var spaces = GetProposedSpaces(issue);
 
-                var block = GetUpdatedBlock(lambda.Block, position.Character);
+                var block = GetUpdatedBlock(lambda.Block, spaces);
 
                 return lambda.WithBlock(block);
             }

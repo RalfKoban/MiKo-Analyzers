@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,25 +25,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (parameter.IsSerializationInfoParameter())
             {
-                var phrases = Constants.Comments.CtorSerializationInfoParamPhrase;
-
-                if (comment.EqualsAny(phrases) is false)
-                {
-                    var phrase = phrases[0];
-
-                    yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), phrase, CreatePhraseProposal(phrase));
-                }
+                return AnalyzeParameterComment(Constants.Comments.CtorSerializationInfoParamPhrase);
             }
-            else if (parameter.IsStreamingContextParameter())
-            {
-                var phrases = Constants.Comments.CtorStreamingContextParamPhrase;
 
+            if (parameter.IsStreamingContextParameter())
+            {
+                return AnalyzeParameterComment(Constants.Comments.CtorStreamingContextParamPhrase);
+            }
+
+            return Enumerable.Empty<Diagnostic>();
+
+            IEnumerable<Diagnostic> AnalyzeParameterComment(string[] phrases)
+            {
                 if (comment.EqualsAny(phrases) is false)
                 {
                     var phrase = phrases[0];
 
-                    yield return Issue(parameter.Name, parameterComment.GetContentsLocation(), phrase, CreatePhraseProposal(phrase));
+                    return new[] { Issue(parameter.Name, parameterComment.GetContentsLocation(), phrase, CreatePhraseProposal(phrase)) };
                 }
+
+                return Enumerable.Empty<Diagnostic>();
             }
         }
     }

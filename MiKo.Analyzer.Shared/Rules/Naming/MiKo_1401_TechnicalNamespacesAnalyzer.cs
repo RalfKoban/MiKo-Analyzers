@@ -12,13 +12,31 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly HashSet<string> TechnicalNamespaces = new HashSet<string>
                                                                           {
+                                                                              "Action", "Actions",
+                                                                              "API", "Api", "APIs", "Apis",
+                                                                              "Attributes",
                                                                               "Base", "Class", "Classes",
+                                                                              "Compare", "Comparer", "Comparers",
+                                                                              "Controller", "Controllers",
+                                                                              "Dto", "DTO", "DTOs", "Dtos",
                                                                               "Enum", "Enums", "Enumeration", "Enumerations",
+                                                                              "Error", "Errors",
+                                                                              "Events", "EventArgument", "EventArguments",
                                                                               "Exception", "Exceptions",
-                                                                              "Imp", "Impl", "Implementation", "Implementations",
-                                                                              "Interface", "Interfaces",
+                                                                              "Execution", "Executions",
+                                                                              "Func", "Funcs", "Function", "Functions",
+                                                                              "Imp", "Impl", "Impls", "Implementation", "Implementations",
+                                                                              "Indexer", "Indexers",
+                                                                              "Interface", "Interfaces", "Itf", "Itfs",
+                                                                              "Module", "Modules",
+                                                                              "Observer", "Observers",
+                                                                              "Platform",
+                                                                              "Provider", "Providers",
                                                                               "Proxies", "Proxy", "ServiceProxies", "ServiceProxy",
-                                                                              "Struct", "Structs", "Action", "Actions",
+                                                                              "Record",
+                                                                              "State", "States",
+                                                                              "Struct", "Structs",
+                                                                              "Type", "Types",
                                                                           };
 
         public MiKo_1401_TechnicalNamespacesAnalyzer() : base(Id)

@@ -6,11 +6,9 @@ using System;
 namespace NCrunch.Framework
 {
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
-    public class CollectValuesAttribute : Attribute
+    public class CollectValuesAttribute(bool collectValues) : Attribute
     {
-        public CollectValuesAttribute(bool collectValues) => Value = collectValues;
-
-        public bool Value { get; private set; }
+        public bool Value { get; private set; } = collectValues;
     }
 }
 

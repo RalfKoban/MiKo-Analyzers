@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = Comparison;
 
-            var comment = valueText.TrimStart();
+            var comment = valueText.AsSpan().TrimStart();
 
             var fieldSymbol = (IFieldSymbol)symbol;
             var phrase = GetStartingPhrase(fieldSymbol);
@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false;
             }
 
-            problematicText = comment.FirstWord();
+            problematicText = comment.FirstWord().ToString();
 
             return true;
         }

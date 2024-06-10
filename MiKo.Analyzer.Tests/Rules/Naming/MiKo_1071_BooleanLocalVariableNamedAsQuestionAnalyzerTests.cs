@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1071_BooleanLocalVariableNamedAsQuestionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CorrectNames =
-                                                        {
+                                                        [
                                                             "areConnected",
                                                             "isConnected",
                                                             "connected",
@@ -20,13 +20,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "isInDesign",
                                                             "isInDesignMode",
                                                             "isInDesignerMode",
-                                                        };
+                                                        ];
 
         private static readonly string[] WrongNames =
-                                                      {
+                                                      [
                                                           "isConnectionPossible",
                                                           "areDevicesConnected",
-                                                      };
+                                                      ];
 
         [Test]
         public void No_issue_is_reported_for_empty_method() => No_issue_is_reported_for(@"

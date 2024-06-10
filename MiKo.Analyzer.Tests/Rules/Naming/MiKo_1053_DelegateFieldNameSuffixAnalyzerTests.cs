@@ -16,33 +16,48 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1053_DelegateFieldNameSuffixAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] DelegateTypes =
-                                                         {
+                                                         [
                                                              "Action",
                                                              "Action<int>",
                                                              "Action<int, string>",
                                                              "Func<bool>",
                                                              "Func<bool, bool>",
                                                              "Delegate",
-                                                         };
+                                                         ];
 
         private static readonly string[] CorrectDelegateNames =
-                                                                {
+                                                                [
                                                                     "callback",
                                                                     "map",
                                                                     "filter",
                                                                     "predicate",
-                                                                };
+                                                                ];
 
         private static readonly string[] WrongDelegateNames = CreateWrongDelegateNames();
 
         [TestCase("string s")]
         [TestCase("int i")]
+        [TestCase("IDisposable disposable")]
         public void No_issue_is_reported_for_non_delegate_field_(string name) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
     private " + name + @";
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_record_field() => No_issue_is_reported_for(@"
+using System;
+
+public record DTO
+{
+}
+
+public class TestMe
+{
+    private DTO dto;
 }
 ");
 
@@ -96,7 +111,7 @@ public class TestMe
                 allNames.Add(name.ToUpperInvariant());
             }
 
-            return allNames.OrderBy(_ => _).ToArray();
+            return [.. allNames.OrderBy(_ => _)];
         }
     }
 }

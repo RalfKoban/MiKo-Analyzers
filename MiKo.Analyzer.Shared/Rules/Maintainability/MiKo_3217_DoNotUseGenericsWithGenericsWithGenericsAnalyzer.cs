@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -62,7 +63,41 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private static bool HasIssue(ITypeSymbol returnType) => returnType is INamedTypeSymbol type
-                                                             && type.TypeArguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
+        private static bool HasIssue(ITypeSymbol symbol)
+        {
+            if (symbol is INamedTypeSymbol type)
+            {
+                switch (symbol.Name)
+                {
+                    case Constants.Moq.Mock:
+                        return false; // ignore mocks completely
+
+                    case "Action":
+                    case "Func":
+                    case "Expression":
+                    case "Predicate":
+                    case nameof(Task):
+                    {
+                        var arguments = type.TypeArguments;
+
+                        return arguments.Length > 0 && arguments.Any(HasGenericTypeArgument);
+                    }
+                }
+            }
+
+            return HasGenericTypeArgument(symbol);
+        }
+
+        private static bool HasGenericTypeArgument(ITypeSymbol symbol)
+        {
+            if (symbol is INamedTypeSymbol type)
+            {
+                var arguments = type.TypeArguments;
+
+                return arguments.Length > 0 && arguments.OfType<INamedTypeSymbol>().Any(_ => _.IsGeneric());
+            }
+
+            return false;
+        }
     }
 }

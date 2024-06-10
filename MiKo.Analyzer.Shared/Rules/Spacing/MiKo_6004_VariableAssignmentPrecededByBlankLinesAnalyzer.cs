@@ -63,26 +63,51 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 foreach (var ancestor in assignment.Ancestors())
                 {
-                    switch (ancestor)
+                    switch (ancestor.Kind())
                     {
-                        case BlockSyntax block:
+                        case SyntaxKind.Block:
                             return IsLocalSymbol(i, semanticModel)
-                                   ? Analyze(assignment, block.Statements)
+                                   ? Analyze(assignment, ((BlockSyntax)ancestor).Statements)
                                    : null;
 
-                        case SwitchSectionSyntax section:
+                        case SyntaxKind.SwitchSection:
                             return IsLocalSymbol(i, semanticModel)
-                                   ? Analyze(assignment, section.Statements)
+                                   ? Analyze(assignment, ((SwitchSectionSyntax)ancestor).Statements)
                                    : null;
 
-                        case IfStatementSyntax _:
-                        case ElseClauseSyntax _:
-                        case ParenthesizedLambdaExpressionSyntax _:
-                        case InitializerExpressionSyntax _:
+                        case SyntaxKind.IfStatement:
+                        case SyntaxKind.ElseClause:
                             return null; // no issue
 
-                        case MethodDeclarationSyntax _:
-                        case ClassDeclarationSyntax _:
+                        // initializers
+                        case SyntaxKind.ObjectInitializerExpression:
+                        case SyntaxKind.CollectionInitializerExpression:
+                        case SyntaxKind.ArrayInitializerExpression:
+                        case SyntaxKind.ComplexElementInitializerExpression:
+                        case SyntaxKind.WithInitializerExpression:
+                            return null; // no issue
+
+                        // lambdas
+                        case SyntaxKind.SimpleLambdaExpression:
+                        case SyntaxKind.ParenthesizedLambdaExpression:
+                            return null; // no issue
+
+                        case SyntaxKind.LocalFunctionStatement:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // base methods
+                        case SyntaxKind.ConversionOperatorDeclaration:
+                        case SyntaxKind.ConstructorDeclaration:
+                        case SyntaxKind.DestructorDeclaration:
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.OperatorDeclaration:
+                            return null; // stop lookup as there is no valid ancestor anymore
+
+                        // base types
+                        case SyntaxKind.RecordDeclaration:
+                        case SyntaxKind.ClassDeclaration:
+                        case SyntaxKind.InterfaceDeclaration:
+                        case SyntaxKind.StructDeclaration:
                             return null; // stop lookup as there is no valid ancestor anymore
                     }
                 }

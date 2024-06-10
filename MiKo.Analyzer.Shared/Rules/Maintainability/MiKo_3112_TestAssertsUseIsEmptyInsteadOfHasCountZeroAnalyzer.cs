@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -45,12 +46,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> Analyze(MemberAccessExpressionSyntax node)
-        {
-            if (HasIssue(node))
-            {
-                yield return Issue(node);
-            }
-        }
+        private IEnumerable<Diagnostic> Analyze(MemberAccessExpressionSyntax node) => HasIssue(node)
+                                                                                      ? new[] { Issue(node) }
+                                                                                      : Enumerable.Empty<Diagnostic>();
     }
 }

@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2012_MeaninglessSummaryAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] MeaninglessTextPhrases =
-                                                                  {
+                                                                  [
                                                                       "does implement",
                                                                       "implements",
                                                                       "that is called ",
@@ -28,11 +28,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "which is called ",
                                                                       "which is used for ",
                                                                       "which is used to ",
-                                                                  };
+                                                                  ];
 
         private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases();
 
-        private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(new[] { "A ", "An ", "The " }).ToArray();
+        private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
@@ -760,6 +760,7 @@ public class TestMe
         [TestCase("The class that is used to render something", "Renders something")]
         [TestCase("This class is used to render something", "Renders something")]
         [TestCase("Used to render something", "Renders something")]
+        [TestCase("A workflow that updates something.", "Represents a workflow that updates something.")]
         public void Code_gets_fixed_for_class_(string originalComment, string fixedComment)
         {
             const string Template = @"
@@ -786,6 +787,7 @@ public class TestMe
         [TestCase("The interface that is used to render something", "Renders something")]
         [TestCase("This interface is used to render something", "Renders something")]
         [TestCase("Used to render something", "Renders something")]
+        [TestCase("A workflow that updates something.", "Represents a workflow that updates something.")]
         public void Code_gets_fixed_for_interface_(string originalComment, string fixedComment)
         {
             const string Template = @"

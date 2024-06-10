@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2200_DocumentationStartsCapitalizedAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-                                                   {
+                                                   [
                                                        "example",
                                                        "exception",
                                                        "note",
@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "summary",
                                                        "typeparam",
                                                        "value",
-                                                   };
+                                                   ];
 
         private static readonly char[] ValidStartingCharacter = "abcdefghijklmnopqrstuvwxyz".ToUpperInvariant().ToCharArray();
 

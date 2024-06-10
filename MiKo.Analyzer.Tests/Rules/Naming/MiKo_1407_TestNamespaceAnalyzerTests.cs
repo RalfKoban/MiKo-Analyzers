@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1407_TestNamespaceAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] WrongNamespaceNames =
-                                                               {
+                                                               [
                                                                    "Test",
                                                                    "Tests",
                                                                    "UnitTest",
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "Abc.UnitTests",
                                                                    "Abc.IntegrationTest",
                                                                    "Abc.IntegrationTests",
-                                                               };
+                                                               ];
 
         [Test]
         public void No_issue_is_reported_for_non_test_class() => No_issue_is_reported_for(@"

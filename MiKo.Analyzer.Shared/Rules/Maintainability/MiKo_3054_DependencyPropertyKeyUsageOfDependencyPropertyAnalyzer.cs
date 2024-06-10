@@ -30,8 +30,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (noneAssigned)
             {
-                yield return Issue(symbol);
+                return new[] { Issue(symbol) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

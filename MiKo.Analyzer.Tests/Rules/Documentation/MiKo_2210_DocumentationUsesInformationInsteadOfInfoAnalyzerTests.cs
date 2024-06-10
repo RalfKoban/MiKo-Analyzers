@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2210_DocumentationUsesInformationInsteadOfInfoAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] XmlTags =
-                                                   {
+                                                   [
                                                        "example",
                                                        "exception",
                                                        "note",
@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                        "summary",
                                                        "typeparam",
                                                        "value",
-                                                   };
+                                                   ];
 
         private static readonly string[] WrongTerms =
-                                                      {
+                                                      [
                                                           " info ",
                                                           " info,",
                                                           " info;",
@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                           " Info;",
                                                           " Info.",
                                                           " Info:",
-                                                      };
+                                                      ];
 
         [Test, Combinatorial]
         public void An_issue_is_reported_for_Info_in_Xml_tag_([ValueSource(nameof(XmlTags))] string xmlTag, [ValueSource(nameof(WrongTerms))] string term) => An_issue_is_reported_for(@"

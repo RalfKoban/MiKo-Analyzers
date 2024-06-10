@@ -42,7 +42,7 @@ namespace Bla
 }");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix, [Values("", "_", "m_", "s_", "t_")] string fieldMarker) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_prefix_([Values("", "_", "m_", "s_", "t_")] string fieldMarker, [ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla

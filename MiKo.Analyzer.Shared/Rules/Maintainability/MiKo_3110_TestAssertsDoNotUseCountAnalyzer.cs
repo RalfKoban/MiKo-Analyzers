@@ -133,16 +133,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             var expression = arguments[1].Expression;
 
-                            if (expression is InvocationExpressionSyntax ai && IsFixableAssertionForLinqCall(ai))
+                            switch (expression)
                             {
-                                // we can only fix "Assert.That(xyz.Count(), Is.EqualTo(42)"
-                                return Issue(token);
-                            }
+                                case InvocationExpressionSyntax ai when IsFixableAssertionForLinqCall(ai):
+                                    // we can only fix "Assert.That(xyz.Count(), Is.EqualTo(42)"
+                                    return Issue(token);
 
-                            if (expression is MemberAccessExpressionSyntax am && am.GetName() == "Zero")
-                            {
-                                // we can only fix "Assert.That(xyz.Count(), Is.Zero"
-                                return Issue(token);
+                                case MemberAccessExpressionSyntax am when am.GetName() == "Zero":
+                                    // we can only fix "Assert.That(xyz.Count(), Is.Zero"
+                                    return Issue(token);
                             }
 
                             break;

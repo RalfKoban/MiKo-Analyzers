@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                         return betterName.ToString();
                     }
 
-                    return "Can" + betterName.ToString();
+                    return "Can".ConcatenatedWith(betterName);
                 }
 
                 // remove 'Can' at the beginning as the name already fits

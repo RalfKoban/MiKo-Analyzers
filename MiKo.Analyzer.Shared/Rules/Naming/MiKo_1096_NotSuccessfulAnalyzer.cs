@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -45,8 +46,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.ContainsAny(WrongPhrases, StringComparison.OrdinalIgnoreCase))
             {
-                yield return Issue(symbol);
+                return new[] { Issue(symbol) };
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

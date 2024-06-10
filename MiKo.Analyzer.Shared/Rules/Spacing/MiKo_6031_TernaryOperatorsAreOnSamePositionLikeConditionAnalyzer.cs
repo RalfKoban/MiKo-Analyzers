@@ -40,12 +40,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (conditionPosition.Character != operatorPosition.Character)
                 {
-                    yield return Issue(operatorToken, CreateProposalForLinePosition(conditionPosition));
+                    yield return Issue(operatorToken, CreateProposalForSpaces(conditionPosition.Character));
                 }
 
                 if (conditionPosition.Character != colonPosition.Character)
                 {
-                    yield return Issue(colonToken, CreateProposalForLinePosition(conditionPosition));
+                    yield return Issue(colonToken, CreateProposalForSpaces(conditionPosition.Character));
                 }
             }
         }

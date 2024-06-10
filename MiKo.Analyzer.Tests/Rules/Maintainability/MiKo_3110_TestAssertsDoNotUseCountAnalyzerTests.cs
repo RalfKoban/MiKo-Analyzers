@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3110_TestAssertsDoNotUseCountAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] AssertionMethods =
-                                                            {
+                                                            [
                                                                 "AreEqual",
                                                                 "AreNotEqual",
                                                                 "AreSame",
@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                 "LessOrEqual",
                                                                 "Greater",
                                                                 "GreaterOrEqual",
-                                                            };
+                                                            ];
 
         [Test]
         public void No_issue_is_reported_for_empty_class() => No_issue_is_reported_for(@"
@@ -280,7 +280,6 @@ namespace Bla
         public void Code_gets_fixed_for_Linq_call_(string originalCode, string fixedCode)
         {
             const string OriginalTemplate = @"
-using System;
 using System.Linq;
 
 using NUnit.Framework;
@@ -305,7 +304,6 @@ namespace Bla
 }";
 
             const string FixedTemplate = @"
-using System;
 using System.Linq;
 
 using NUnit.Framework;
@@ -336,8 +334,6 @@ namespace Bla
         public void Code_gets_fixed_for_List_on_ObjectUnderTest()
         {
             const string OriginalCode = @"
-using System;
-
 using NUnit.Framework;
 
 namespace Bla
@@ -360,8 +356,6 @@ namespace Bla
 }";
 
             const string FixedCode = @"
-using System;
-
 using NUnit.Framework;
 
 namespace Bla
