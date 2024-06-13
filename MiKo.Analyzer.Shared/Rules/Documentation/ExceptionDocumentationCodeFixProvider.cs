@@ -9,53 +9,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     public abstract class ExceptionDocumentationCodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
-        private static readonly string[] Phrases =
-                                                   {
-                                                       "gets thrown when the ",
-                                                       "Gets thrown when the ",
-                                                       "gets thrown when ",
-                                                       "Gets thrown when ",
-                                                       "is thrown when the ",
-                                                       "Is thrown when the ",
-                                                       "is thrown when ",
-                                                       "Is thrown when ",
-                                                       "thrown if the ",
-                                                       "Thrown if the ",
-                                                       "thrown in case that ",
-                                                       "Thrown in case that ",
-                                                       "thrown in case the ",
-                                                       "Thrown in case the ",
-                                                       "thrown in case ",
-                                                       "Thrown in case ",
-                                                       "thrown when the ",
-                                                       "Thrown when the ",
-                                                       "throws if the ",
-                                                       "Throws if the ",
-                                                       "throws in case that ",
-                                                       "Throws in case that ",
-                                                       "throws in case the ",
-                                                       "Throws in case the ",
-                                                       "throws in case ",
-                                                       "Throws in case ",
-                                                       "throws when the ",
-                                                       "Throws when the ",
-                                                       "thrown if ",
-                                                       "Thrown if ",
-                                                       "thrown when ",
-                                                       "Thrown when ",
-                                                       "throws if ",
-                                                       "Throws if ",
-                                                       "throws when ",
-                                                       "Throws when ",
-                                                       "in case the ",
-                                                       "In case the ",
-                                                       "in case ",
-                                                       "In case ",
-                                                       "if the ",
-                                                       "If the ",
-                                                       "If ",
-                                                   };
+//// ncrunch: rdi off
+        private static readonly string[] Phrases = CreatePhrases().Distinct().ToArray();
+//// ncrunch: rdi default
 
         protected static XmlElementSyntax GetFixedExceptionCommentForArgumentNullException(XmlElementSyntax exceptionComment)
         {
@@ -214,7 +170,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         if (i > 0)
                         {
-                            // that's text before the parameter, so add the missing character afterwards
+                            // that's text before the parameter, so add the missing character afterward
                             parts[i - 1] = parts[i - 1] + part.First();
                         }
 
@@ -229,5 +185,99 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return parts;
         }
+
+//// ncrunch: rdi off
+
+        // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
+        private static IEnumerable<string> CreatePhrases()
+        {
+            var starts = new[] { "This exception", "The exception", "An exception", "A exception", "Exception" };
+            var verbs = new[] { "gets thrown", "is thrown", "will be thrown", "should be thrown" };
+            var rawConditions = new[] { "if", "in case", "when" };
+            var conditions = new[] { "in case that", "in case which" }.Concat(rawConditions);
+            var parts = new[] { "that", "which" };
+            var specialParts = new[] { "thrown", "throws", "throw" };
+
+            foreach (var s in starts)
+            {
+                foreach (var v in verbs)
+                {
+                    foreach (var c in conditions)
+                    {
+                        var phrase0 = $"{s} {v} {c} ";
+
+                        foreach (var p in parts)
+                        {
+                            var phrase1 = $"{s} {p} {v} {c} ";
+                            var phrase2 = phrase1 + p + " ";
+                            var phrase3 = phrase0 + p + " ";
+
+                            yield return phrase3 + "the ";
+                            yield return phrase3;
+                            yield return phrase2 + "the ";
+                            yield return phrase2;
+                            yield return phrase1 + "the ";
+                            yield return phrase1;
+                        }
+
+                        yield return phrase0 + "the ";
+                        yield return phrase0;
+                    }
+                }
+            }
+
+            foreach (var v in verbs)
+            {
+                foreach (var c in conditions)
+                {
+                    var phrase = $"{v} {c} ";
+
+                    yield return phrase + "the ";
+                    yield return phrase;
+
+                    var upperCasePhrase = phrase.ToUpperCaseAt(0);
+                    yield return upperCasePhrase + "the ";
+                    yield return upperCasePhrase;
+                }
+            }
+
+            foreach (var sp in specialParts)
+            {
+                yield return sp + " in case that ";
+                yield return sp + " in case which ";
+
+                var up = sp.ToUpperCaseAt(0);
+
+                yield return up + " in case that ";
+                yield return up + " in case which ";
+
+                foreach (var c in rawConditions)
+                {
+                    var phrase = $"{sp} {c} ";
+                    var upperCasePhrase = $"{up} {c} ";
+
+                    yield return phrase + "the ";
+                    yield return phrase;
+
+                    yield return upperCasePhrase + "the ";
+                    yield return upperCasePhrase;
+                }
+            }
+
+            foreach (var c in conditions)
+            {
+                var phrase = c + " ";
+
+                yield return phrase + "the ";
+                yield return phrase;
+
+                var upperCasePhrase = phrase.ToUpperCaseAt(0);
+
+                yield return upperCasePhrase + "the ";
+                yield return upperCasePhrase;
+            }
+        }
+
+        //// ncrunch: rdi default
     }
 }
