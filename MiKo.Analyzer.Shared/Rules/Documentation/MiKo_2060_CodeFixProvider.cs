@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var ancestor in summary.AncestorsAndSelf())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case ClassDeclarationSyntax _:
-                    case InterfaceDeclarationSyntax _:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
                     {
                         var preparedComment = PrepareTypeComment(summary);
 
@@ -42,12 +42,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
                     }
 
-                    case MethodDeclarationSyntax m:
+                    case SyntaxKind.MethodDeclaration:
                     {
                         var preparedComment = PrepareMethodComment(summary);
 
                         var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
-                        var returnType = m.ReturnType;
+                        var returnType = ((MethodDeclarationSyntax)ancestor).ReturnType;
 
                         if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count == 1)
                         {
