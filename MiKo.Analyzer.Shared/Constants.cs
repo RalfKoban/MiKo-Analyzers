@@ -623,10 +623,9 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionForbiddenStartingPhrase =
                                                                                  {
-                                                                                     "Can be thrown ",
-                                                                                     "Should be thrown ",
                                                                                      "A exception ",
                                                                                      "An exception ",
+                                                                                     "Can be thrown ",
                                                                                      "Exception ",
                                                                                      "Fired ",
                                                                                      "Gets thrown ",
@@ -634,6 +633,7 @@ namespace MiKoSolutions.Analyzers
                                                                                      "In case ",
                                                                                      "Is fired ",
                                                                                      "Is thrown ",
+                                                                                     "Should be thrown ",
                                                                                      "The exception ",
                                                                                      "This exception ",
                                                                                      "Throw ",
