@@ -45,6 +45,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "dir", "directory" },
                                                                                        { "dlg", "dialog" },
                                                                                        { "doc", "document" },
+                                                                                       { "dto", string.Empty },
+                                                                                       { "ef", "entityFramework" },
                                                                                        { "env", "environment" },
                                                                                        { "environ", "environment" },
                                                                                        { "err", "error" },
@@ -78,6 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "req", "request" },
                                                                                        { "res", "result" },
                                                                                        { "resp", "response" },
+                                                                                       { "spec", "specification" },
                                                                                        { "src", "source" },
                                                                                        { "std", "standard" },
                                                                                        { "str", "string" },
@@ -123,6 +126,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Dir", "Directory" },
                                                                                        { "Dlg", "Dialog" },
                                                                                        { "Doc", "Document" },
+                                                                                       { "Dto", string.Empty },
+                                                                                       { "DTO", string.Empty },
+                                                                                       { "Ef", "EntityFramework" },
+                                                                                       { "EF", "EntityFramework" },
                                                                                        { "Env", "Environment" },
                                                                                        { "Environ", "Environment" },
                                                                                        { "Err", "Error" },
@@ -158,6 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Req", "Request" },
                                                                                        { "Res", "Result" },
                                                                                        { "Resp", "Response" },
+                                                                                       { "Spec", "Specification" },
                                                                                        { "Src", "Source" },
                                                                                        { "Std", "Standard" },
                                                                                        { "Str", "String" },
@@ -325,19 +333,30 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
 //// ncrunch: rdi default
 
-            return prefixesWithIssues.Concat(postFixesWithIssues).Concat(midTermsWithIssues).Concat(completeTermsWithIssues).Distinct(KeyComparer.Instance);
+            return Enumerable.Empty<KeyValuePair<string, string>>()
+                             .Concat(prefixesWithIssues)
+                             .Concat(postFixesWithIssues)
+                             .Concat(midTermsWithIssues)
+                             .Concat(completeTermsWithIssues)
+                             .Distinct(KeyComparer.Instance);
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            return AnalyzeName(symbol.Name).Select(_ => Issue(symbol, _.Key, _.Value));
+            foreach (var pair in AnalyzeName(symbol.Name))
+            {
+                yield return Issue(symbol, pair.Key, pair.Value);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(IFieldSymbol symbol)
         {
             var symbolName = GetFieldNameWithoutPrefix(symbol.Name);
 
-            return AnalyzeName(symbolName).Select(_ => Issue(symbol, _.Key, _.Value));
+            foreach (var pair in AnalyzeName(symbolName))
+            {
+                yield return Issue(symbol, pair.Key, pair.Value);
+            }
 
             string GetFieldNameWithoutPrefix(string fieldName)
             {
