@@ -45,6 +45,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "dir", "directory" },
                                                                                        { "dlg", "dialog" },
                                                                                        { "doc", "document" },
+                                                                                       { "dst", "destination" },
                                                                                        { "dto", string.Empty },
                                                                                        { "ef", "entityFramework" },
                                                                                        { "env", "environment" },
@@ -126,6 +127,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Dir", "Directory" },
                                                                                        { "Dlg", "Dialog" },
                                                                                        { "Doc", "Document" },
+                                                                                       { "Dst", "Destination" },
                                                                                        { "Dto", string.Empty },
                                                                                        { "DTO", string.Empty },
                                                                                        { "Ef", "EntityFramework" },
@@ -193,6 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "dopts", // adopts
                                                                    "enum",
                                                                    "ires",
+                                                                   "idst", // midst
                                                                    "ixtures",
                                                                    "kept",
                                                                    "Kept",
