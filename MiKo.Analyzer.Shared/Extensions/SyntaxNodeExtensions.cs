@@ -2067,14 +2067,24 @@ namespace MiKoSolutions.Analyzers
                 return Array.Empty<TResult>();
             }
 
-            var results = new List<TResult>();
+            List<TResult> results = null;
 
             for (var index = 0; index < sourceCount; index++)
             {
                 if (source[index] is TResult result)
                 {
+                    if (results is null)
+                    {
+                        results = new List<TResult>(1);
+                    }
+
                     results.Add(result);
                 }
+            }
+
+            if (results is null)
+            {
+                return Array.Empty<TResult>();
             }
 
             return results;

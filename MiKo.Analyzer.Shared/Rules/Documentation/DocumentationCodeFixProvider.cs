@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (tokenMap is null)
                             {
-                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
+                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>(1);
                             }
 
                             tokenMap.Add(token, newToken);

@@ -759,7 +759,7 @@ using System;
 public class TestMe
 {
     /// <summary>Does something.</summary>
-    /// <returns>" + comment + @" something.</returns>
+    /// <returns>" + comment + @"something.</returns>
     public bool DoSomething(object o) => throw new NotSupportedException();
 }
 ";
@@ -790,7 +790,7 @@ public class TestMe
 {
     /// <summary>
     /// <returns>
-    /// " + comment + @" something.
+    /// " + comment + @"something.
     /// </returns>
     /// </summary>
     public bool DoSomething(object o) => throw new NotSupportedException();

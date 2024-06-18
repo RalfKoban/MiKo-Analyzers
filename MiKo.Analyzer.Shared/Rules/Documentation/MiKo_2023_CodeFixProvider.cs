@@ -150,9 +150,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var data = FindMatchingReplacementMapKeysInUpperCase(text);
                     var keysInUpperCase = data.KeysInUpperCase;
+                    var length = keysInUpperCase.Length;
 
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < keysInUpperCase.Length; index++)
+                    for (var index = 0; index < length; index++)
                     {
                         var key = keysInUpperCase[index];
 
@@ -241,7 +241,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentContinuation.Append(continuation);
             }
 
-            commentContinuation.ReplaceAllWithCheck(info.Map);
+            commentContinuation.ReplaceAllWithCheck(info.Map.AsSpan());
 
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
