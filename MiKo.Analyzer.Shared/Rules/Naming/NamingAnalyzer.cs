@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
-            var localFunctions = symbol.GetLocalFunctions().ToList();
+            var localFunctions = symbol.GetLocalFunctions();
 
             if (localFunctions.Count == 0)
             {

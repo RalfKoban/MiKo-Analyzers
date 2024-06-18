@@ -96,9 +96,9 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).Result;
+        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
 
-        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).Result;
+        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).GetAwaiter().GetResult();
 
         protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
         {

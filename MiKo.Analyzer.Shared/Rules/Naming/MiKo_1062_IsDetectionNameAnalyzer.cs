@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var symbolName = symbol.Name;
 
-            foreach (var prefix in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0).Where(_ => symbolName.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
+            foreach (var prefix in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0 && symbolName.StartsWith(_, StringComparison.OrdinalIgnoreCase)))
             {
                 symbolName = symbolName.Substring(prefix.Length);
 

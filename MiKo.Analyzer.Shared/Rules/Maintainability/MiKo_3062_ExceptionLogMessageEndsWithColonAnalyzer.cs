@@ -42,6 +42,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var methodName = methodCall.GetName();
 
+                var argument0 = arguments[0];
+
                 switch (methodName)
                 {
                     case Constants.ILog.Debug:
@@ -52,9 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (arguments.Any(_ => _.IsException(semanticModel)))
                         {
-                            if (arguments[0].IsStringLiteral())
+                            if (argument0.IsStringLiteral())
                             {
-                                return AnalyzeCall(methodCall, arguments[0], semanticModel);
+                                return AnalyzeCall(methodCall, argument0, semanticModel);
                             }
                         }
 
@@ -69,15 +71,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (arguments.Any(_ => _.IsException(semanticModel)))
                         {
-                            if (arguments[0].IsStringLiteral())
+                            if (argument0.IsStringLiteral())
                             {
-                                return AnalyzeCall(methodCall, arguments[0], semanticModel);
+                                return AnalyzeCall(methodCall, argument0, semanticModel);
                             }
 
                             // TODO: Find correct argument, especially for those with 3 or 4 parameters
-                            if (arguments.Count > 1 && arguments[1].IsStringLiteral())
+                            if (arguments.Count > 1)
                             {
-                                return AnalyzeCall(methodCall, arguments[1], semanticModel);
+                                var argument1 = arguments[1];
+
+                                if (argument1.IsStringLiteral())
+                                {
+                                    return AnalyzeCall(methodCall, argument1, semanticModel);
+                                }
                             }
                         }
 
