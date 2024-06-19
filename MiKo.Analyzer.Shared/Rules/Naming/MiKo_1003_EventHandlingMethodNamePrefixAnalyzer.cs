@@ -15,6 +15,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1003";
 
         private const string Prefix = "On";
+        private const string OnCanExecuteSuffix = "OnCanExecute";
+        private const string OnExecutedSuffix = "OnExecuted";
 
         public MiKo_1003_EventHandlingMethodNamePrefixAnalyzer() : base(Id)
         {
@@ -55,6 +57,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 name = method.Name.StartsWith(Prefix, StringComparison.Ordinal)
                        ? method.Name.Substring(Prefix.Length)
                        : method.Name;
+
+                if (name.EndsWith(OnCanExecuteSuffix, StringComparison.Ordinal))
+                {
+                    name = "CanExecute" + name.Substring(0, name.Length - OnCanExecuteSuffix.Length);
+                }
+                else if (name.EndsWith(OnExecutedSuffix, StringComparison.Ordinal))
+                {
+                    name = "Executed" + name.Substring(0, name.Length - OnExecutedSuffix.Length);
+                }
             }
 
             return name.Without(Constants.Underscore).ToUpperCaseAt(0);
@@ -62,8 +73,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindProperNameInClass(IMethodSymbol method)
         {
-            var methodName = method.Name;
-
             var owningClass = method.GetSyntax().GetEnclosing<ClassDeclarationSyntax>();
 
             if (owningClass is null)
@@ -71,6 +80,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 // may happen in case the class is currently in uncompilable state (such as it contains an additional bracket)
                 return null;
             }
+
+            var methodName = method.Name;
 
             foreach (var assignment in owningClass.DescendantNodes<AssignmentExpressionSyntax>(SyntaxKind.AddAssignmentExpression))
             {
