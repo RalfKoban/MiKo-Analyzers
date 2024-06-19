@@ -25,7 +25,7 @@ namespace MiKoSolutions.Analyzers
                 return GetComment(p, p.ContainingSymbol?.GetDocumentationCommentXml());
             }
 
-            return Cleaned(GetCommentElement(value)).ConcatenatedWith();
+            return Cleaned(GetCommentElement(value));
         }
 
         internal static string GetComment(this IParameterSymbol value, string commentXml)
@@ -113,34 +113,27 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyCollection<string> Cleaned(IEnumerable<string> comments) => comments.Where(_ => _ != null).WithoutParaTags().ToHashSet(_ => _.Trim());
 
-        internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
-
-        private static string FlattenComment(IEnumerable<XElement> comments)
+        internal static string Cleaned(XElement element)
         {
-            if (comments.Any())
+            if (element is null)
             {
-                var comment = Cleaned(comments.Nodes().ConcatenatedWith());
-
-                return comment;
+                return null;
             }
 
-            return null;
+            // remove all code elements
+            var codeElements = element.Descendants(Constants.XmlTag.Code).ToList();
+            codeElements.ForEach(_ => _.Remove());
+
+            return Cleaned(element.Nodes().ConcatenatedWith());
         }
+
+        internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
 
         private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
         {
             foreach (var e in elements)
             {
-                if (e is null)
-                {
-                    continue;
-                }
-
-                // remove all code elements
-                var codeElements = e.Descendants(Constants.XmlTag.Code).ToList();
-                codeElements.ForEach(_ => _.Remove());
-
-                yield return Cleaned(e.Nodes().ConcatenatedWith());
+                yield return Cleaned(e);
             }
         }
 
@@ -155,6 +148,18 @@ namespace MiKoSolutions.Analyzers
                           .Without(Constants.Markers.SymbolsAndLineBreaks)
                           .ReplaceAllWithCheck(MultiWhitespaceStrings, SingleWhitespaceString)
                           .Trim();
+        }
+
+        private static string FlattenComment(IEnumerable<XElement> comments)
+        {
+            if (comments.Any())
+            {
+                var comment = Cleaned(comments.Nodes().ConcatenatedWith());
+
+                return comment;
+            }
+
+            return null;
         }
     }
 }
