@@ -173,6 +173,8 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }
 
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTrivia trivia) => value.WithLeadingTrivia(value.LeadingTrivia.Add(trivia));
+
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, params SyntaxTrivia[] trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));

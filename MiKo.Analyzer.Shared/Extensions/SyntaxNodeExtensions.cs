@@ -2467,6 +2467,11 @@ namespace MiKoSolutions.Analyzers
             return value.WithAdditionalLeadingTrivia(trivia.ToArray());
         }
 
+        internal static T WithAdditionalLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
+        {
+            return value.WithLeadingTrivia(value.GetLeadingTrivia().Add(trivia));
+        }
+
         internal static T WithAdditionalLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
         {
             return value.WithLeadingTrivia(value.GetLeadingTrivia().AddRange(trivia));
@@ -2475,6 +2480,11 @@ namespace MiKoSolutions.Analyzers
         internal static T WithAdditionalTrailingTrivia<T>(this T value, SyntaxTriviaList trivia) where T : SyntaxNode
         {
             return value.WithAdditionalTrailingTrivia(trivia.ToArray());
+        }
+
+        internal static T WithAdditionalTrailingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
+        {
+            return value.WithTrailingTrivia(value.GetTrailingTrivia().Add(trivia));
         }
 
         internal static T WithAdditionalTrailingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
@@ -2515,6 +2525,25 @@ namespace MiKoSolutions.Analyzers
         internal static XmlElementSyntax WithContent(this XmlElementSyntax value, params XmlNodeSyntax[] contents) => value.WithContent(contents.ToSyntaxList());
 
         internal static T WithEndOfLine<T>(this T value) where T : SyntaxNode => value.WithTrailingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
+
+        internal static T WithFirstLeadingTrivia<T>(this T value, SyntaxTrivia trivia) where T : SyntaxNode
+        {
+            // Attention: leading trivia contains XML comments, so we have to keep them!
+            var leadingTrivia = value.GetLeadingTrivia();
+
+            if (leadingTrivia.Count > 0)
+            {
+                // remove leading end-of-line as otherwise we would have multiple empty lines left over
+                if (leadingTrivia[0].IsEndOfLine())
+                {
+                    leadingTrivia = leadingTrivia.RemoveAt(0);
+                }
+
+                return value.WithLeadingTrivia(leadingTrivia.Insert(0, trivia));
+            }
+
+            return value.WithLeadingTrivia(trivia);
+        }
 
         internal static T WithFirstLeadingTrivia<T>(this T value, params SyntaxTrivia[] trivia) where T : SyntaxNode
         {

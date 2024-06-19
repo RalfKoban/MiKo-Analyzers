@@ -198,16 +198,21 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind);
 
+        protected void InitializeCore(CompilationStartAnalysisContext context, SymbolKind symbolKind)
+        {
+            var action = GetAnalyzeMethod(symbolKind);
+
+            if (action != null)
+            {
+                context.RegisterSymbolAction(action, symbolKind);
+            }
+        }
+
         protected void InitializeCore(CompilationStartAnalysisContext context, params SymbolKind[] symbolKinds)
         {
             foreach (var symbolKind in symbolKinds)
             {
-                var action = GetAnalyzeMethod(symbolKind);
-
-                if (action != null)
-                {
-                    context.RegisterSymbolAction(action, symbolKind);
-                }
+                InitializeCore(context, symbolKind);
             }
         }
 
