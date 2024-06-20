@@ -27,6 +27,26 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_static_async_Main_method() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static async Task Main() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_non_static_async_Main_method() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public async Task Main() { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_named_async_void_method() => No_issue_is_reported_for(@"
 using System;
 
