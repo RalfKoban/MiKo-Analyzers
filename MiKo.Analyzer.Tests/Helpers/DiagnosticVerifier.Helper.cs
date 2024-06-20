@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using System.Xml;
@@ -49,6 +50,7 @@ namespace TestHelper
         private static readonly MetadataReference SystemLinqReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
         private static readonly MetadataReference SystemRuntimeReference = MetadataReference.CreateFromFile(typeof(DataContractAttribute).Assembly.Location); // needed also for other attributes
         private static readonly MetadataReference SystemTextReference = MetadataReference.CreateFromFile(typeof(Regex).Assembly.Location);
+        private static readonly MetadataReference SystemTextJsonReference = MetadataReference.CreateFromFile(typeof(JsonConstructorAttribute).Assembly.Location);
         private static readonly MetadataReference SystemWindowsInputReference = MetadataReference.CreateFromFile(typeof(ICommand).Assembly.Location);
         private static readonly MetadataReference SystemXmlReference = MetadataReference.CreateFromFile(typeof(XmlNode).Assembly.Location);
 
@@ -235,6 +237,7 @@ namespace TestHelper
                                                .AddMetadataReference(projectId, SystemRuntimeNetStandardReference)
                                                .AddMetadataReference(projectId, SystemLinqReference)
                                                .AddMetadataReference(projectId, SystemTextReference)
+                                               .AddMetadataReference(projectId, SystemTextJsonReference)
                                                .AddMetadataReference(projectId, SystemXmlReference);
 
             var count = 0;
