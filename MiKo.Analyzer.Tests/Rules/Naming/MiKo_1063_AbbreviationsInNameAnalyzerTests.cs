@@ -287,6 +287,39 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+using System.Text.Json.Serialization;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [JsonConstructor]
+        public TestMe(int " + name + @")
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Newtonsoft_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Newtonsoft.Json.JsonConstructorAttribute]
+        public TestMe(int " + name + @")
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
 using System;
 
