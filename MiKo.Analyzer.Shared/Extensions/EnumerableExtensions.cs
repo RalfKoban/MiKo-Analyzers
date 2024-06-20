@@ -1090,6 +1090,9 @@ namespace System.Linq
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => new SyntaxList<T>(source);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
