@@ -41,6 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return Enumerable.Empty<Diagnostic>();
             }
 
+            if (symbol.IsStatic && methodName == "Main")
+            {
+                // nothing to report here for the main method as that is the entry point of an application and as to be named 'Main'
+                return Enumerable.Empty<Diagnostic>();
+            }
+
             var betterName = symbol.Name + Constants.AsyncSuffix;
 
             return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
