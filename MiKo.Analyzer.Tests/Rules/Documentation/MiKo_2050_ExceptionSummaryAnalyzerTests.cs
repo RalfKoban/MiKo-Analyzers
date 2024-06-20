@@ -630,7 +630,7 @@ public sealed class BlaBlaException : Exception
         }
 
         [Test]
-        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines()
+        public void Code_gets_fixed_for_exception_type_with_empty_summary_on_different_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -656,30 +656,126 @@ public sealed class BlaBlaException : Exception
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [Test]
-        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line()
+        [TestCase("Something is done.", "something is done.")]
+        [TestCase("A exception that is thrown if something is done.", "something is done.")]
+        [TestCase("A exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("A exception thrown if something is done.", "something is done.")]
+        [TestCase("A exception thrown in case something is done.", "something is done.")]
+        [TestCase("A exception thrown when something is done.", "something is done.")]
+        [TestCase("A exception to throw if something is done.", "something is done.")]
+        [TestCase("A exception to throw in case something is done.", "something is done.")]
+        [TestCase("A exception to throw when something is done.", "something is done.")]
+        [TestCase("An exception that is thrown if something is done.", "something is done.")]
+        [TestCase("An exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("An exception thrown if something is done.", "something is done.")]
+        [TestCase("An exception thrown in case something is done.", "something is done.")]
+        [TestCase("An exception thrown when something is done.", "something is done.")]
+        [TestCase("An exception to throw if something is done.", "something is done.")]
+        [TestCase("An exception to throw in case something is done.", "something is done.")]
+        [TestCase("An exception to throw when something is done.", "something is done.")]
+        [TestCase("Exception that is thrown if something is done.", "something is done.")]
+        [TestCase("Exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("Exception that is thrown when something is done.", "something is done.")]
+        [TestCase("Exception thrown if something is done.", "something is done.")]
+        [TestCase("Exception thrown in case something is done.", "something is done.")]
+        [TestCase("Exception thrown when something is done.", "something is done.")]
+        [TestCase("Exception to throw if something is done.", "something is done.")]
+        [TestCase("Exception to throw in case something is done.", "something is done.")]
+        [TestCase("Exception to throw when something is done.", "something is done.")]
+        [TestCase("The exception that is thrown if something is done.", "something is done.")]
+        [TestCase("The exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("The exception thrown if something is done.", "something is done.")]
+        [TestCase("The exception thrown in case something is done.", "something is done.")]
+        [TestCase("The exception thrown when something is done.", "something is done.")]
+        [TestCase("The exception to throw if something is done.", "something is done.")]
+        [TestCase("The exception to throw in case something is done.", "something is done.")]
+        [TestCase("The exception to throw when something is done.", "something is done.")]
+        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines_(string message, string fixedLastMessagePart)
         {
-            const string OriginalCode = @"
+            var originalCode = @"
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>Bla.</summary>
+/// <summary>
+/// " + message + @"
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
-            const string FixedCode = @"
+            var fixedCode = @"
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when bla.</summary>
+/// <summary>
+/// The exception that is thrown when " + fixedLastMessagePart + @"
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("Something is done.", "something is done.")]
+        [TestCase("A exception that is thrown if something is done.", "something is done.")]
+        [TestCase("A exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("A exception thrown if something is done.", "something is done.")]
+        [TestCase("A exception thrown in case something is done.", "something is done.")]
+        [TestCase("A exception thrown when something is done.", "something is done.")]
+        [TestCase("A exception to throw if something is done.", "something is done.")]
+        [TestCase("A exception to throw in case something is done.", "something is done.")]
+        [TestCase("A exception to throw when something is done.", "something is done.")]
+        [TestCase("An exception that is thrown if something is done.", "something is done.")]
+        [TestCase("An exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("An exception thrown if something is done.", "something is done.")]
+        [TestCase("An exception thrown in case something is done.", "something is done.")]
+        [TestCase("An exception thrown when something is done.", "something is done.")]
+        [TestCase("An exception to throw if something is done.", "something is done.")]
+        [TestCase("An exception to throw in case something is done.", "something is done.")]
+        [TestCase("An exception to throw when something is done.", "something is done.")]
+        [TestCase("Exception that is thrown if something is done.", "something is done.")]
+        [TestCase("Exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("Exception that is thrown when something is done.", "something is done.")]
+        [TestCase("Exception thrown if something is done.", "something is done.")]
+        [TestCase("Exception thrown in case something is done.", "something is done.")]
+        [TestCase("Exception thrown when something is done.", "something is done.")]
+        [TestCase("Exception to throw if something is done.", "something is done.")]
+        [TestCase("Exception to throw in case something is done.", "something is done.")]
+        [TestCase("Exception to throw when something is done.", "something is done.")]
+        [TestCase("The exception that is thrown if something is done.", "something is done.")]
+        [TestCase("The exception that is thrown in case something is done.", "something is done.")]
+        [TestCase("The exception thrown if something is done.", "something is done.")]
+        [TestCase("The exception thrown in case something is done.", "something is done.")]
+        [TestCase("The exception thrown when something is done.", "something is done.")]
+        [TestCase("The exception to throw if something is done.", "something is done.")]
+        [TestCase("The exception to throw in case something is done.", "something is done.")]
+        [TestCase("The exception to throw when something is done.", "something is done.")]
+        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line_(string message, string fixedLastMessagePart)
+        {
+            var originalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>" + message + @"</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            var fixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when " + fixedLastMessagePart + @"</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         [Test]
