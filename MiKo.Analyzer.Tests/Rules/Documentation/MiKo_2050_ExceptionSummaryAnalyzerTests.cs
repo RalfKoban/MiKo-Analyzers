@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -11,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2050_ExceptionSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] StartingPhrases = CreatePhrases().Distinct().Except([Constants.Comments.ExceptionTypeSummaryStartingPhrase]).ToArray();
+
         [Test]
         public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
 using System;
@@ -656,126 +661,116 @@ public sealed class BlaBlaException : Exception
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("Something is done.", "something is done.")]
-        [TestCase("A exception that is thrown if something is done.", "something is done.")]
-        [TestCase("A exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("A exception thrown if something is done.", "something is done.")]
-        [TestCase("A exception thrown in case something is done.", "something is done.")]
-        [TestCase("A exception thrown when something is done.", "something is done.")]
-        [TestCase("A exception to throw if something is done.", "something is done.")]
-        [TestCase("A exception to throw in case something is done.", "something is done.")]
-        [TestCase("A exception to throw when something is done.", "something is done.")]
-        [TestCase("An exception that is thrown if something is done.", "something is done.")]
-        [TestCase("An exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("An exception thrown if something is done.", "something is done.")]
-        [TestCase("An exception thrown in case something is done.", "something is done.")]
-        [TestCase("An exception thrown when something is done.", "something is done.")]
-        [TestCase("An exception to throw if something is done.", "something is done.")]
-        [TestCase("An exception to throw in case something is done.", "something is done.")]
-        [TestCase("An exception to throw when something is done.", "something is done.")]
-        [TestCase("Exception that is thrown if something is done.", "something is done.")]
-        [TestCase("Exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("Exception that is thrown when something is done.", "something is done.")]
-        [TestCase("Exception thrown if something is done.", "something is done.")]
-        [TestCase("Exception thrown in case something is done.", "something is done.")]
-        [TestCase("Exception thrown when something is done.", "something is done.")]
-        [TestCase("Exception to throw if something is done.", "something is done.")]
-        [TestCase("Exception to throw in case something is done.", "something is done.")]
-        [TestCase("Exception to throw when something is done.", "something is done.")]
-        [TestCase("The exception that is thrown if something is done.", "something is done.")]
-        [TestCase("The exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("The exception thrown if something is done.", "something is done.")]
-        [TestCase("The exception thrown in case something is done.", "something is done.")]
-        [TestCase("The exception thrown when something is done.", "something is done.")]
-        [TestCase("The exception to throw if something is done.", "something is done.")]
-        [TestCase("The exception to throw in case something is done.", "something is done.")]
-        [TestCase("The exception to throw when something is done.", "something is done.")]
-        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines_(string message, string fixedLastMessagePart)
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines()
         {
-            var originalCode = @"
+            const string OriginalCode = @"
 using System;
 using System.Runtime.Serialization;
 
 /// <summary>
-/// " + message + @"
+/// Something is done.
 /// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
-            var fixedCode = @"
+            const string FixedCode = @"
 using System;
 using System.Runtime.Serialization;
 
 /// <summary>
-/// The exception that is thrown when " + fixedLastMessagePart + @"
+/// The exception that is thrown when something is done.
 /// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        [TestCase("Something is done.", "something is done.")]
-        [TestCase("A exception that is thrown if something is done.", "something is done.")]
-        [TestCase("A exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("A exception thrown if something is done.", "something is done.")]
-        [TestCase("A exception thrown in case something is done.", "something is done.")]
-        [TestCase("A exception thrown when something is done.", "something is done.")]
-        [TestCase("A exception to throw if something is done.", "something is done.")]
-        [TestCase("A exception to throw in case something is done.", "something is done.")]
-        [TestCase("A exception to throw when something is done.", "something is done.")]
-        [TestCase("An exception that is thrown if something is done.", "something is done.")]
-        [TestCase("An exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("An exception thrown if something is done.", "something is done.")]
-        [TestCase("An exception thrown in case something is done.", "something is done.")]
-        [TestCase("An exception thrown when something is done.", "something is done.")]
-        [TestCase("An exception to throw if something is done.", "something is done.")]
-        [TestCase("An exception to throw in case something is done.", "something is done.")]
-        [TestCase("An exception to throw when something is done.", "something is done.")]
-        [TestCase("Exception that is thrown if something is done.", "something is done.")]
-        [TestCase("Exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("Exception that is thrown when something is done.", "something is done.")]
-        [TestCase("Exception thrown if something is done.", "something is done.")]
-        [TestCase("Exception thrown in case something is done.", "something is done.")]
-        [TestCase("Exception thrown when something is done.", "something is done.")]
-        [TestCase("Exception to throw if something is done.", "something is done.")]
-        [TestCase("Exception to throw in case something is done.", "something is done.")]
-        [TestCase("Exception to throw when something is done.", "something is done.")]
-        [TestCase("The exception that is thrown if something is done.", "something is done.")]
-        [TestCase("The exception that is thrown in case something is done.", "something is done.")]
-        [TestCase("The exception thrown if something is done.", "something is done.")]
-        [TestCase("The exception thrown in case something is done.", "something is done.")]
-        [TestCase("The exception thrown when something is done.", "something is done.")]
-        [TestCase("The exception to throw if something is done.", "something is done.")]
-        [TestCase("The exception to throw in case something is done.", "something is done.")]
-        [TestCase("The exception to throw when something is done.", "something is done.")]
-        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line_(string message, string fixedLastMessagePart)
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines_([ValueSource(nameof(StartingPhrases))] string message)
         {
             var originalCode = @"
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>" + message + @"</summary>
+/// <summary>
+/// " + message + @" something is done.
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
-            var fixedCode = @"
+            const string FixedCode = @"
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when " + fixedLastMessagePart + @"</summary>
+/// <summary>
+/// The exception that is thrown when something is done.
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
-            VerifyCSharpFix(originalCode, fixedCode);
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>Something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line_([ValueSource(nameof(StartingPhrases))] string message)
+        {
+            var originalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>" + message + @" something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
@@ -978,5 +973,34 @@ public sealed class BlaBlaException : Exception
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2050_ExceptionSummaryAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2050_CodeFixProvider();
+
+        private static IEnumerable<string> CreatePhrases()
+        {
+            string[] starts = ["A exception", "An exception", "The exception", "Exception"];
+            string[] verbs = ["that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
+            string[] conditions = ["if", "when", "in case"];
+
+            foreach (var start in starts)
+            {
+                foreach (var verb in verbs)
+                {
+                    foreach (var condition in conditions)
+                    {
+                        yield return start + " " + verb + " " + condition;
+                    }
+                }
+            }
+
+            foreach (var condition in conditions)
+            {
+                yield return "Throw " + condition;
+                yield return "Thrown " + condition;
+
+                yield return "Fire " + condition;
+                yield return "Fired " + condition;
+
+                yield return "Occurs " + condition;
+            }
+        }
     }
 }
