@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -7,11 +8,50 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2050_CodeFixProvider)), Shared]
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
+        private static readonly Dictionary<string, string> TypeReplacementMap = new Dictionary<string, string>
+                                                                                    {
+                                                                                        { "A exception that is thrown if ", string.Empty },
+                                                                                        { "A exception that is thrown in case ", string.Empty },
+                                                                                        { "A exception thrown if ", string.Empty },
+                                                                                        { "A exception thrown in case ", string.Empty },
+                                                                                        { "A exception thrown when ", string.Empty },
+                                                                                        { "A exception to throw if ", string.Empty },
+                                                                                        { "A exception to throw in case ", string.Empty },
+                                                                                        { "A exception to throw when ", string.Empty },
+                                                                                        { "An exception that is thrown if ", string.Empty },
+                                                                                        { "An exception that is thrown in case ", string.Empty },
+                                                                                        { "An exception thrown if ", string.Empty },
+                                                                                        { "An exception thrown in case ", string.Empty },
+                                                                                        { "An exception thrown when ", string.Empty },
+                                                                                        { "An exception to throw if ", string.Empty },
+                                                                                        { "An exception to throw in case ", string.Empty },
+                                                                                        { "An exception to throw when ", string.Empty },
+                                                                                        { "Exception that is thrown if ", string.Empty },
+                                                                                        { "Exception that is thrown in case ", string.Empty },
+                                                                                        { "Exception that is thrown when ", string.Empty },
+                                                                                        { "Exception thrown if ", string.Empty },
+                                                                                        { "Exception thrown in case ", string.Empty },
+                                                                                        { "Exception thrown when ", string.Empty },
+                                                                                        { "Exception to throw if ", string.Empty },
+                                                                                        { "Exception to throw in case ", string.Empty },
+                                                                                        { "Exception to throw when ", string.Empty },
+                                                                                        { "The exception that is thrown if ", string.Empty },
+                                                                                        { "The exception that is thrown in case ", string.Empty },
+                                                                                        { "The exception thrown if ", string.Empty },
+                                                                                        { "The exception thrown in case ", string.Empty },
+                                                                                        { "The exception thrown when ", string.Empty },
+                                                                                        { "The exception to throw if ", string.Empty },
+                                                                                        { "The exception to throw in case ", string.Empty },
+                                                                                        { "The exception to throw when ", string.Empty },
+                                                                                    };
+
         public override string FixableDiagnosticId => "MiKo_2050";
 
         protected override string Title => Resources.MiKo_2050_CodeFixTitle;
@@ -43,7 +83,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var newSummary = CommentStartingWith(summary, Phrase);
+                var preparedSummary = Comment(summary, TypeReplacementMap.Keys, TypeReplacementMap, FirstWordHandling.MakeLowerCase);
+                var newSummary = CommentStartingWith(preparedSummary, Phrase);
 
                 return comment.ReplaceNode(summary, newSummary);
             }
@@ -112,9 +153,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixMessageExceptionParamCtor(TypeSyntax type, ParameterSyntax messageParameter, ParameterSyntax exceptionParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
-                                    + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase
-                                    + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase
-                                    + ".";
+                                  + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase
+                                  + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase
+                                  + ".";
 
             var summaryParts = Template.FormatWith('|').Split('|');
 
@@ -131,8 +172,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixSerializationParamCtor(TypeSyntax type, ParameterSyntax serializationInfoParameter, ParameterSyntax streamingContextParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
-                                    + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase
-                                    + ".";
+                                  + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase
+                                  + ".";
 
             var summaryParts = Template.FormatWith('|').Split('|');
 
@@ -172,9 +213,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        XmlText(parts[4]));
         }
 
-        private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter)
-        {
-            return ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
-        }
+        private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter) => ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
     }
 }
