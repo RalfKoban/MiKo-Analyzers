@@ -15,42 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2050_CodeFixProvider)), Shared]
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        private static readonly Dictionary<string, string> TypeReplacementMap = new Dictionary<string, string>
-                                                                                    {
-                                                                                        { "A exception that is thrown if ", string.Empty },
-                                                                                        { "A exception that is thrown in case ", string.Empty },
-                                                                                        { "A exception thrown if ", string.Empty },
-                                                                                        { "A exception thrown in case ", string.Empty },
-                                                                                        { "A exception thrown when ", string.Empty },
-                                                                                        { "A exception to throw if ", string.Empty },
-                                                                                        { "A exception to throw in case ", string.Empty },
-                                                                                        { "A exception to throw when ", string.Empty },
-                                                                                        { "An exception that is thrown if ", string.Empty },
-                                                                                        { "An exception that is thrown in case ", string.Empty },
-                                                                                        { "An exception thrown if ", string.Empty },
-                                                                                        { "An exception thrown in case ", string.Empty },
-                                                                                        { "An exception thrown when ", string.Empty },
-                                                                                        { "An exception to throw if ", string.Empty },
-                                                                                        { "An exception to throw in case ", string.Empty },
-                                                                                        { "An exception to throw when ", string.Empty },
-                                                                                        { "Exception that is thrown if ", string.Empty },
-                                                                                        { "Exception that is thrown in case ", string.Empty },
-                                                                                        { "Exception that is thrown when ", string.Empty },
-                                                                                        { "Exception thrown if ", string.Empty },
-                                                                                        { "Exception thrown in case ", string.Empty },
-                                                                                        { "Exception thrown when ", string.Empty },
-                                                                                        { "Exception to throw if ", string.Empty },
-                                                                                        { "Exception to throw in case ", string.Empty },
-                                                                                        { "Exception to throw when ", string.Empty },
-                                                                                        { "The exception that is thrown if ", string.Empty },
-                                                                                        { "The exception that is thrown in case ", string.Empty },
-                                                                                        { "The exception thrown if ", string.Empty },
-                                                                                        { "The exception thrown in case ", string.Empty },
-                                                                                        { "The exception thrown when ", string.Empty },
-                                                                                        { "The exception to throw if ", string.Empty },
-                                                                                        { "The exception to throw in case ", string.Empty },
-                                                                                        { "The exception to throw when ", string.Empty },
-                                                                                    };
+//// ncrunch: rdi off
+        private static readonly Dictionary<string, string> TypeReplacementMap = CreateTypePhrases().Except(new[] { Constants.Comments.ExceptionTypeSummaryStartingPhrase }).ToDictionary(_ => _, _ => string.Empty);
+//// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2050";
 
@@ -214,5 +181,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
         private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter) => ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
+
+//// ncrunch: rdi off
+        private static IEnumerable<string> CreateTypePhrases()
+        {
+            var starts = new[] { "A exception", "An exception", "The exception", "Exception" };
+            var verbs = new[] { "that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
+            var conditions = new[] { "if", "when", "in case" };
+
+            foreach (var condition in conditions)
+            {
+                yield return "Fire " + condition;
+                yield return "Fired " + condition;
+
+                yield return "Occurs " + condition;
+
+                yield return "Throw " + condition;
+                yield return "Thrown " + condition;
+            }
+
+            foreach (var start in starts)
+            {
+                foreach (var verb in verbs)
+                {
+                    var begin = string.Concat(start, " ", verb, " ");
+
+                    foreach (var condition in conditions)
+                    {
+                        yield return string.Concat(begin, condition);
+                    }
+                }
+            }
+        }
+//// ncrunch: rdi default
     }
 }
