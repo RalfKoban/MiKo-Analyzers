@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1046_AsyncMethodsSuffixAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TaskFactoryMethods = typeof(TaskFactory).GetMethods().Concat(typeof(TaskFactory<int>).GetMethods()).Select(_ => _.Name).Distinct().ToArray();
+        private static readonly string[] TaskFactoryMethods = typeof(TaskFactory).GetMethods().Concat(typeof(TaskFactory<int>).GetMethods()).ToHashSet(_ => _.Name).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_non_async_method() => No_issue_is_reported_for(@"

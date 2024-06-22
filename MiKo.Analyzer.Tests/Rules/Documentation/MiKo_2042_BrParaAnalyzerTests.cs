@@ -335,17 +335,19 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongItems()
         {
-            var tokens = new List<string>();
+            IEnumerable<string> tokens = ["<br/>", "<br />", "<p>Whatever.</p>"];
 
-            foreach (var token in new[] { "<br/>", "<br />", "<p>Whatever.</p>" })
+            var results = new List<string>();
+
+            foreach (var token in tokens)
             {
-                tokens.Add(token);
-                tokens.Add(token.ToUpperInvariant());
+                results.Add(token);
+                results.Add(token.ToUpperInvariant());
             }
 
-            tokens.Sort();
+            results.Sort();
 
-            return tokens.Distinct().ToArray();
+            return results.Distinct().ToArray();
         }
     }
 }

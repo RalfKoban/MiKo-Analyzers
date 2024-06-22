@@ -186,7 +186,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return parts;
         }
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
         private static IEnumerable<string> CreatePhrases()
@@ -194,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var starts = new[] { "This exception", "The exception", "An exception", "A exception", "Exception" };
             var verbs = new[] { "gets thrown", "is thrown", "will be thrown", "should be thrown" };
             var rawConditions = new[] { "if", "in case", "when" };
-            var conditions = new[] { "in case that", "in case which" }.Concat(rawConditions);
+            var conditions = new[] { "in case that", "in case which" }.Concat(rawConditions).ToArray();
             var parts = new[] { "that", "which" };
             var specialParts = new[] { "thrown", "throws", "throw" };
 
@@ -230,7 +230,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var c in conditions)
                 {
-                    var phrase = $"{v} {c} ";
+                    var phrase = string.Concat(v, " ", c, " ");
 
                     yield return phrase + "the ";
                     yield return phrase;
@@ -253,8 +253,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var c in rawConditions)
                 {
-                    var phrase = $"{sp} {c} ";
-                    var upperCasePhrase = $"{up} {c} ";
+                    var phrase = string.Concat(sp, " ", c, " ");
+                    var upperCasePhrase = string.Concat(up, " ", c, " ");
 
                     yield return phrase + "the ";
                     yield return phrase;

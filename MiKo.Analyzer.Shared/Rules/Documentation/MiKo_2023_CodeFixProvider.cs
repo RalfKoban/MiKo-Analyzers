@@ -452,9 +452,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var known = new List<KeyValuePair<string, string>>(keys.Count);
 
-                    // ReSharper disable once LoopCanBeConvertedToQuery
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < map.Count; index++)
+                    var count = map.Count;
+
+                    for (var index = 0; index < count; index++)
                     {
                         var key = map[index];
 
@@ -507,9 +507,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var texts = new List<string>(startTerms.Count);
                 texts.AddRange(startTerms.OrderBy(_ => _, comparer).ThenByDescending(_ => _.Length).ThenBy(_ => _));
 
-                var replacements = new KeyValuePair<string, string>[texts.Count];
+                var textsCount = texts.Count;
 
-                for (var index = 0; index < texts.Count; index++)
+                var replacements = new KeyValuePair<string, string>[textsCount];
+
+                for (var index = 0; index < textsCount; index++)
                 {
                     var text = texts[index];
 
@@ -519,14 +521,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return replacements;
             }
 
-            private static ISet<string> CreateStartTerms()
+            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+            private static HashSet<string> CreateStartTerms()
             {
                 var startTerms = new[] { "A", "An", "The", string.Empty };
                 var optionals = new[] { "Optional", "(optional)", "(Optional)", "optional", string.Empty };
                 var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
                 var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
 
-                var starts = new List<string>(startTerms.Length * optionals.Length * booleans.Length * parameters.Length) { string.Empty };
+                var starts = new List<string>((startTerms.Length * optionals.Length * booleans.Length * parameters.Length) + 1) { string.Empty };
 
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var startTerm in startTerms)
@@ -544,12 +547,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var boolean in booleans)
                         {
                             // we have lots of loops, so cache data to avoid unnecessary calculations
-                            var optionalBooleanStart = optionalStart + boolean + " ";
+                            var optionalBooleanStart = new StringBuilder(optionalStart).Append(boolean).Append(' ').ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").TrimStart();
 
                             // ReSharper disable once LoopCanBeConvertedToQuery
                             foreach (var parameter in parameters)
                             {
-                                var fixedStart = new StringBuilder(optionalBooleanStart).Append(parameter).ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").Trim();
+                                var fixedStart = new StringBuilder(optionalBooleanStart).Append(parameter).TrimEnd();
 
                                 if (fixedStart.IsNullOrWhiteSpace() is false)
                                 {
