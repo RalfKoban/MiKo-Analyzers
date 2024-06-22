@@ -229,7 +229,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
             internal static readonly string[] FuturePhrase = { "Reserved for future usage.", "Reserved for future usage", "Reserved.", "Reserved", "future", };
 
-            internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).Distinct().ToArray();
+            internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).ToArray();
 
             internal static readonly string[] AAnThePhraseWithSpaces = { "A ", "An ", "The " };
             internal static readonly string[] AAnThePhraseWithoutSpaces = { "A", "An", "The" };
@@ -405,7 +405,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  BooleanParameterEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                                                                              };
 
-            internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Concat(BooleanParameterStartingPhrase).Distinct().ToArray();
+            internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Union(BooleanParameterStartingPhrase).ToArray();
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                                                                                     {
@@ -1057,7 +1057,6 @@ namespace MiKoSolutions.Analyzers
                                                                                    .Concat(TypeUnderTestFieldNames)
                                                                                    .Concat(TypeUnderTestVariableNames)
                                                                                    .Concat(TypeUnderTestPropertyNames)
-                                                                                   .OrderBy(_ => _)
                                                                                    .ToHashSet();
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>

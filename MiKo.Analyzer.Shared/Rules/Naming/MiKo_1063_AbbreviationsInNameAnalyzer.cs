@@ -337,11 +337,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 //// ncrunch: rdi default
 
             return Enumerable.Empty<KeyValuePair<string, string>>()
-                             .Concat(prefixesWithIssues)
-                             .Concat(postFixesWithIssues)
-                             .Concat(midTermsWithIssues)
-                             .Concat(completeTermsWithIssues)
-                             .Distinct(KeyComparer.Instance);
+                             .Union(prefixesWithIssues, KeyComparer.Instance)
+                             .Union(postFixesWithIssues, KeyComparer.Instance)
+                             .Union(midTermsWithIssues, KeyComparer.Instance)
+                             .Union(completeTermsWithIssues, KeyComparer.Instance);
         }
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
