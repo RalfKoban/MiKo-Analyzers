@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.OrdinalIgnoreCase;
 
-            var withoutAsync = valueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase); // skip over async starting phrase
+            var withoutAsync = valueText.Without(Constants.Comments.AsynchronouslyStartingPhrase); // skip over async starting phrase
 
             var firstWord = withoutAsync.FirstWord();
 

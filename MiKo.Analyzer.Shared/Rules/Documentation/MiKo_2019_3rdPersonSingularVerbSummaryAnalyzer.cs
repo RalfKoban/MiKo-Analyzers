@@ -39,7 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.Ordinal;
 
-            problematicText = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+            problematicText = new StringBuilder(valueText).Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                                           .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                                                           .Without(",") // skip over first comma
                                                           .ToString()

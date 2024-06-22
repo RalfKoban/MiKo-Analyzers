@@ -152,8 +152,8 @@ namespace MiKoSolutions.Analyzers
         internal static class Comments
         {
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
-            internal const string Asynchrounously = "Asynchronously";
-            internal const string AsynchrounouslyStartingPhrase = Asynchrounously + " ";
+            internal const string Asynchronously = "Asynchronously";
+            internal const string AsynchronouslyStartingPhrase = Asynchronously + " ";
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
             internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
@@ -897,15 +897,8 @@ namespace MiKoSolutions.Analyzers
                                                                             };
 
             internal static readonly ISet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
-                                                                                      .Select(_ => _.Name)
-                                                                                      .Except(new[]
-                                                                                                  {
-                                                                                                      nameof(Equals),
-                                                                                                      nameof(ToString),
-                                                                                                      nameof(GetHashCode),
-                                                                                                      nameof(GetType),
-                                                                                                  })
-                                                                                      .ToHashSet();
+                                                                                      .ToHashSet(_ => _.Name)
+                                                                                      .Except(nameof(Equals), nameof(ToString), nameof(GetHashCode), nameof(GetType));
 
             internal static readonly ISet<string> GeneratedAttributeNames = new HashSet<string>
                                                                                 {
