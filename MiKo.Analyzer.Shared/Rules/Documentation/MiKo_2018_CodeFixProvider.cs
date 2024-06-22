@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2018_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
         private const string StartingPhrase = Constants.Comments.DeterminesWhetherPhrase;
-        private const string AsyncStartingPhrase = Constants.Comments.AsynchrounouslyStartingPhrase;
+        private const string AsyncStartingPhrase = Constants.Comments.AsynchronouslyStartingPhrase;
 
         private static readonly string FixedAsyncStartingPhrase = AsyncStartingPhrase + StartingPhrase.ToLowerCaseAt(0);
 
@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var map = new Dictionary<string, string>();
 
-            if (firstWord == Constants.Comments.Asynchrounously)
+            if (firstWord == Constants.Comments.Asynchronously)
             {
                 firstWord = startText.SecondWord();
 

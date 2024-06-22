@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2016";
 
-        private const string Phrase = Constants.Comments.AsynchrounouslyStartingPhrase;
+        private const string Phrase = Constants.Comments.AsynchronouslyStartingPhrase;
 
         public MiKo_2016_AsyncMethodDefaultPhraseAnalyzer() : base(Id, SymbolKind.Method)
         {

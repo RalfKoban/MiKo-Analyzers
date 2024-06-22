@@ -309,6 +309,20 @@ namespace System.Linq
             return count;
         }
 
+        internal static HashSet<T> Except<T>(this HashSet<T> source, params T[] values) where T : class
+        {
+            source.ExceptWith(values);
+
+            return source;
+        }
+
+        internal static HashSet<T> Except<T>(this HashSet<T> source, IEnumerable<T> values) where T : class
+        {
+            source.ExceptWith(values);
+
+            return source;
+        }
+
         internal static IEnumerable<T> Except<T>(this IEnumerable<T> source, T value) where T : class
         {
             // ReSharper disable once LoopCanBeConvertedToQuery

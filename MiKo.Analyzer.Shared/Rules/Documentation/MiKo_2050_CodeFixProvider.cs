@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly Dictionary<string, string> TypeReplacementMap = CreateTypePhrases().Except(new[] { Constants.Comments.ExceptionTypeSummaryStartingPhrase }).ToDictionary(_ => _, _ => string.Empty);
+        private static readonly Dictionary<string, string> TypeReplacementMap = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).ToDictionary(_ => _, _ => string.Empty);
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2050";
