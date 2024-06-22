@@ -185,7 +185,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static IEnumerable<string> CreateTypePhrases()
         {
-            var starts = new[] { "A exception", "An exception", "The exception", "Exception" };
+            var starts = new[]
+                         {
+                             "A exception", "An exception", "The exception", "This exception", "Exception",
+                             "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
+                             "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
+                         };
             var verbs = new[] { "that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
             var conditions = new[] { "if", "when", "in case" };
 
@@ -193,6 +198,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 yield return "Fire " + condition;
                 yield return "Fired " + condition;
+
+                yield return "Indicates that " + condition;
 
                 yield return "Occurs " + condition;
 
@@ -202,6 +209,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var start in starts)
             {
+                yield return start + " is used by ";
+                yield return start + " that is used by ";
+                yield return start + " which is used by ";
+                yield return start + " used by ";
+                yield return start + " indicates that ";
+                yield return start + " that indicates that ";
+                yield return start + " which indicates that ";
+                yield return start + " indicating that ";
+
                 foreach (var verb in verbs)
                 {
                     var begin = string.Concat(start, " ", verb, " ");
