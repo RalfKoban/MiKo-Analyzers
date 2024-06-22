@@ -794,7 +794,7 @@ public class TestMe
                                    "Will be thrown "
                                 ];
 
-            return [.. phrases.Concat(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).Distinct().OrderBy(_ => _)];
+            return [.. phrases.Union(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).OrderBy(_ => _)];
         }
     }
 }

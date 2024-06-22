@@ -177,7 +177,7 @@ The following tables lists all the 441 rules that are currently provided by the 
 |MiKo_2018|Documentation should not use the ambiguous terms 'Check' or 'Test'|&#x2713;|&#x2713;|
 |MiKo_2019|&lt;summary&gt; documentation should start with a third person singular verb (for example "Provides ")|&#x2713;|\-|
 |MiKo_2020|Inherited documentation should be used with &lt;inheritdoc /&gt; marker|&#x2713;|&#x2713;|
-|MiKo_2021|Documentation of parameter should have a default starting phrase|&#x2713;|\-|
+|MiKo_2021|Documentation of parameter should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2022|Documentation of [out] parameters should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2023|Documentation of Boolean parameters should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2024|Documentation of Enum parameters should have a default starting phrase|&#x2713;|&#x2713;|

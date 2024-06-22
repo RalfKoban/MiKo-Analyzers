@@ -173,7 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        ];
 
         private static readonly string[] BadPostfixes = BadMidTerms
-                                                        .Concat([
+                                                        .Union([
                                                                     "Bl",
                                                                     "BL",
                                                                     "CLI",
@@ -192,7 +192,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     "Vm",
                                                                     "VM",
                                                                 ])
-                                                        .Distinct()
                                                         .ToArray();
 
         private static readonly string[] AllowedTerms =

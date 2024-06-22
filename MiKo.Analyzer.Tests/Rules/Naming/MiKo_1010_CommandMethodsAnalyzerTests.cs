@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                   "CommandBindingOnExecuted",
                                                                   "OnCanExecuteCommandBinding",
                                                                   "OnCommandBindingCanExecute",
-                                                                  "OnCommandBindingCanExecute",
-                                                                  "OnCommandBindingExecuted",
                                                                   "OnCommandBindingExecuted",
                                                                   "OnCommandExecuted",
                                                                   "OnCommandExecuting",

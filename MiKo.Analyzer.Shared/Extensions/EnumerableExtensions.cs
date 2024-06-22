@@ -11,7 +11,7 @@ namespace System.Linq
 {
     internal static class EnumerableExtensions
     {
-        internal static void AddRange<T>(this ISet<T> set, IEnumerable<T> values)
+        internal static void AddRange<T>(this HashSet<T> set, IEnumerable<T> values)
         {
             switch (values)
             {
@@ -20,10 +20,7 @@ namespace System.Linq
                     return;
             }
 
-            foreach (var value in values)
-            {
-                set.Add(value);
-            }
+            set.UnionWith(values);
         }
 
         internal static bool All(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
@@ -1088,6 +1085,9 @@ namespace System.Linq
 
             return target;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => new SyntaxList<T>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);

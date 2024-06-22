@@ -3180,7 +3180,7 @@ namespace MiKoSolutions.Analyzers
                        : values.Insert(0, XmlText(startText));
             }
 
-            return new SyntaxList<XmlNodeSyntax>(XmlText(startText));
+            return XmlText(startText).ToSyntaxList<XmlNodeSyntax>();
         }
 
         internal static XmlTextSyntax WithStartText(this XmlTextSyntax value, string startText, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
