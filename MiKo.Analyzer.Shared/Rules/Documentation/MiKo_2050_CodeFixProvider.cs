@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -7,11 +8,17 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2050_CodeFixProvider)), Shared]
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
+//// ncrunch: rdi off
+        private static readonly Dictionary<string, string> TypeReplacementMap = CreateTypePhrases().Except(new[] { Constants.Comments.ExceptionTypeSummaryStartingPhrase }).ToDictionary(_ => _, _ => string.Empty);
+//// ncrunch: rdi default
+
         public override string FixableDiagnosticId => "MiKo_2050";
 
         protected override string Title => Resources.MiKo_2050_CodeFixTitle;
@@ -43,7 +50,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var newSummary = CommentStartingWith(summary, Phrase);
+                var preparedSummary = Comment(summary, TypeReplacementMap.Keys, TypeReplacementMap, FirstWordHandling.MakeLowerCase);
+                var newSummary = CommentStartingWith(preparedSummary, Phrase);
 
                 return comment.ReplaceNode(summary, newSummary);
             }
@@ -112,9 +120,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixMessageExceptionParamCtor(TypeSyntax type, ParameterSyntax messageParameter, ParameterSyntax exceptionParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
-                                    + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase
-                                    + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase
-                                    + ".";
+                                  + Constants.Comments.ExceptionCtorMessageParamSummaryContinuingPhrase
+                                  + Constants.Comments.ExceptionCtorExceptionParamSummaryContinuingPhrase
+                                  + ".";
 
             var summaryParts = Template.FormatWith('|').Split('|');
 
@@ -131,8 +139,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static DocumentationCommentTriviaSyntax FixSerializationParamCtor(TypeSyntax type, ParameterSyntax serializationInfoParameter, ParameterSyntax streamingContextParameter)
         {
             const string Template = Constants.Comments.ExceptionCtorSummaryStartingPhraseTemplate
-                                    + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase
-                                    + ".";
+                                  + Constants.Comments.ExceptionCtorSerializationParamSummaryContinuingPhrase
+                                  + ".";
 
             var summaryParts = Template.FormatWith('|').Split('|');
 
@@ -172,9 +180,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                        XmlText(parts[4]));
         }
 
-        private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter)
+        private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter) => ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
+
+//// ncrunch: rdi off
+        private static IEnumerable<string> CreateTypePhrases()
         {
-            return ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
+            var starts = new[] { "A exception", "An exception", "The exception", "Exception" };
+            var verbs = new[] { "that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
+            var conditions = new[] { "if", "when", "in case" };
+
+            foreach (var condition in conditions)
+            {
+                yield return "Fire " + condition;
+                yield return "Fired " + condition;
+
+                yield return "Occurs " + condition;
+
+                yield return "Throw " + condition;
+                yield return "Thrown " + condition;
+            }
+
+            foreach (var start in starts)
+            {
+                foreach (var verb in verbs)
+                {
+                    var begin = string.Concat(start, " ", verb, " ");
+
+                    foreach (var condition in conditions)
+                    {
+                        yield return string.Concat(begin, condition);
+                    }
+                }
+            }
         }
+//// ncrunch: rdi default
     }
 }

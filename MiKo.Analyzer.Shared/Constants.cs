@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
             internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "Stack", "list", "dictionary", "observableCollection", "collection", "array", "hashSet", "stack" };
             internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "E:", "!:" };
-            internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { EnvironmentNewLine }).ToArray();
+            internal static readonly string[] SymbolsAndLineBreaks = Symbols.Append(EnvironmentNewLine).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
             internal static readonly string[] FieldPrefixes =
                                                               {
