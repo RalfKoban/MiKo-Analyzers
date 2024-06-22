@@ -976,7 +976,9 @@ public sealed class BlaBlaException : Exception
 
         private static IEnumerable<string> CreatePhrases()
         {
-            string[] starts = ["A exception", "An exception", "The exception", "Exception"];
+            string[] starts = ["A exception", "An exception", "The exception", "This exception", "Exception",
+                               "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
+                               "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception"];
             string[] verbs = ["that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
             string[] conditions = ["if", "when", "in case"];
 
@@ -989,6 +991,15 @@ public sealed class BlaBlaException : Exception
                         yield return start + " " + verb + " " + condition;
                     }
                 }
+
+                yield return start + " used by ";
+                yield return start + " is used by ";
+                yield return start + " that is used by ";
+                yield return start + " which is used by ";
+                yield return start + " indicates that ";
+                yield return start + " that indicates that ";
+                yield return start + " which indicates that ";
+                yield return start + " indicating that ";
             }
 
             foreach (var condition in conditions)
@@ -1000,6 +1011,8 @@ public sealed class BlaBlaException : Exception
                 yield return "Fired " + condition;
 
                 yield return "Occurs " + condition;
+
+                yield return "Indicates that " + condition;
             }
         }
     }
