@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     "Props",
                                                                     "Vm",
                                                                     "VM",
-                                                                ])
+                                                               ])
                                                         .ToArray();
 
         private static readonly string[] AllowedTerms =

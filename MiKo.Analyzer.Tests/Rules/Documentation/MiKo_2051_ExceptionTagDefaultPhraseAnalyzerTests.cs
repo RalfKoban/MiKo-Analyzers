@@ -791,8 +791,8 @@ public class TestMe
                                    "Thrown ",
                                    "Throws ",
                                    "When ",
-                                   "Will be thrown "
-                                ];
+                                   "Will be thrown ",
+                               ];
 
             return [.. phrases.Union(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).OrderBy(_ => _)];
         }

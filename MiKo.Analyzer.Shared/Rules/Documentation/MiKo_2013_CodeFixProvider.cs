@@ -66,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 // fix last item's CRLF
                 var lastIndex = contents.Count - 1;
+
                 if (contents[lastIndex] is XmlTextSyntax last)
                 {
                     contents[lastIndex] = WithoutEmptyTextAtEnd(last, last.TextTokens.ToList());
