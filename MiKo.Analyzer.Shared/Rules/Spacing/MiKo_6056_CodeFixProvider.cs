@@ -40,10 +40,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 if (closeBracketToken.IsLocatedAt(issueLocation))
                 {
-                    var last = elements.Last();
+                    CollectionExpressionSyntax updatedExpression;
 
-                    return expression.WithElements(elements.Replace(last, last.WithTrailingNewLine()))
-                                     .WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
+                    if (elements.SeparatorCount == elements.Count)
+                    {
+                        // we have a separator at the last element
+                        var last = elements.GetSeparators().Last();
+
+                        updatedExpression = expression.WithElements(elements.ReplaceSeparator(last, last.WithTrailingNewLine()));
+                    }
+                    else
+                    {
+                        var last = elements.Last();
+
+                        updatedExpression = expression.WithElements(elements.Replace(last, last.WithTrailingNewLine()));
+                    }
+
+                    return updatedExpression.WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
                 }
             }
 

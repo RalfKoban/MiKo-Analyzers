@@ -469,6 +469,80 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_parameter_with_collection_expression_close_bracket_placed_on_different_line_outdented_to_the_left_by_1_and_last_item_with_separator()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int[] values)
+    {
+        DoSomething([
+                        1,
+                        2,
+                        3,
+                   ]);
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int[] values)
+    {
+        DoSomething([
+                        1,
+                        2,
+                        3,
+                    ]);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_parameter_with_collection_expression_close_bracket_placed_on_different_line_outdented_to_the_left_by_1_and_last_item_without_separator()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int[] values)
+    {
+        DoSomething([
+                        1,
+                        2,
+                        3
+                   ]);
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(int[] values)
+    {
+        DoSomething([
+                        1,
+                        2,
+                        3
+                    ]);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer();

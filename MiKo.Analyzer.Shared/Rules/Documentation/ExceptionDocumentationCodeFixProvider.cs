@@ -236,6 +236,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     yield return phrase;
 
                     var upperCasePhrase = phrase.ToUpperCaseAt(0);
+
                     yield return upperCasePhrase + "the ";
                     yield return upperCasePhrase;
                 }
