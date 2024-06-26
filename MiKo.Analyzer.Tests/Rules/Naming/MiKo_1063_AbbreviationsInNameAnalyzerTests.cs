@@ -72,6 +72,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "num",
                                                            "param",
                                                            "params",
+                                                           "perc",
+                                                           "perf",
                                                            "pos",
                                                            "proc",
                                                            "procs",
@@ -152,6 +154,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Num",
                                                            "Op",
                                                            "Params",
+                                                           "Perc",
+                                                           "Perf",
                                                            "Pos",
                                                            "Proc",
                                                            "Procs",
@@ -191,7 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     "Props",
                                                                     "Vm",
                                                                     "VM",
-                                                                ])
+                                                               ])
                                                         .ToArray();
 
         private static readonly string[] AllowedTerms =

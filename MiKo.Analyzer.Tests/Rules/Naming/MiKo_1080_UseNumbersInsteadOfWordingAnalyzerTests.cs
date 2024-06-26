@@ -30,6 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "everyone",
                                                             "Everyone",
                                                             "exceptionEnding",
+                                                            "firstName",
                                                             "firstWord",
                                                             "gone",
                                                             "Gone",

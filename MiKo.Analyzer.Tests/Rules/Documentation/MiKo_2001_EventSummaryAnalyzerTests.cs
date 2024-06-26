@@ -132,14 +132,16 @@ public class TestMe
         private static HashSet<string> CreatePhrases()
         {
             string[] starts = ["Event", "This event", "The event", "An event", "A event"];
-            string[] adverbs = [string.Empty,
+            string[] adverbs = [
+                                string.Empty,
                                 "is ", "that is ", "which is ",
                                 "can be ", "that can be ", "which can be ",
                                 "could be ", "that could be ", "which could be ",
                                 "shall be ", "that shall be ", "which shall be ",
                                 "should be ", "that should be ", "which should be ",
                                 "will be ", "that will be ", "which will be ",
-                                "would be ", "that would be ", "which would be "];
+                                "would be ", "that would be ", "which would be ",
+                               ];
             string[] verbs = ["fired", "raised", "caused", "triggered", "occurred", "occured"];
 
             var results = new HashSet<string>();
@@ -161,13 +163,15 @@ public class TestMe
                 }
             }
 
-            string[] midTerms = ["to",
+            string[] midTerms = [
+                                 "to",
                                  "can", "that can", "which can",
                                  "could", "that could", "which could",
                                  "shall", "that shall", "which shall",
                                  "should",  "that should", "which should",
                                  "will", "that will", "which will",
-                                 "would", "that would", "which would"];
+                                 "would", "that would", "which would"
+                                ];
             string[] verbsInfinite = ["fire", "raise", "cause", "trigger", "occur"];
 
             foreach (var start in starts)

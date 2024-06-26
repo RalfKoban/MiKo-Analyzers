@@ -976,9 +976,11 @@ public sealed class BlaBlaException : Exception
 
         private static IEnumerable<string> CreatePhrases()
         {
-            string[] starts = ["A exception", "An exception", "The exception", "This exception", "Exception",
+            string[] starts = [
+                               "A exception", "An exception", "The exception", "This exception", "Exception",
                                "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
-                               "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception"];
+                               "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
+                              ];
             string[] verbs = ["that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
             string[] conditions = ["if", "when", "in case"];
 

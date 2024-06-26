@@ -62,16 +62,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var starts = new[] { "Event", "This event", "The event", "An event", "A event" };
             var adverbs = new[]
-                          {
-                              string.Empty,
-                              "is ", "that is ", "which is ",
-                              "can be ", "that can be ", "which can be ",
-                              "could be ", "that could be ", "which could be ",
-                              "shall be ", "that shall be ", "which shall be ",
-                              "should be ", "that should be ", "which should be ",
-                              "will be ", "that will be ", "which will be ",
-                              "would be ", "that would be ", "which would be ",
-                          };
+                              {
+                                  string.Empty,
+                                  "is ", "that is ", "which is ",
+                                  "can be ", "that can be ", "which can be ",
+                                  "could be ", "that could be ", "which could be ",
+                                  "shall be ", "that shall be ", "which shall be ",
+                                  "should be ", "that should be ", "which should be ",
+                                  "will be ", "that will be ", "which will be ",
+                                  "would be ", "that would be ", "which would be ",
+                              };
             var verbs = new[] { "fired", "raised", "caused", "triggered", "occurred", "occured" };
 
             var results = new HashSet<string>();
@@ -94,15 +94,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             var midTerms = new[]
-                           {
-                               "to",
-                               "can", "that can", "which can",
-                               "could", "that could", "which could",
-                               "shall", "that shall", "which shall",
-                               "should", "that should", "which should",
-                               "will", "that will", "which will",
-                               "would", "that would", "which would",
-                           };
+                               {
+                                   "to",
+                                   "can", "that can", "which can",
+                                   "could", "that could", "which could",
+                                   "shall", "that shall", "which shall",
+                                   "should", "that should", "which should",
+                                   "will", "that will", "which will",
+                                   "would", "that would", "which would",
+                               };
             var verbsInfinite = new[] { "fire", "raise", "cause", "trigger", "occur" };
 
             foreach (var start in starts)
