@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] EnumerableReturnValues = [.. EnumerableOnlyReturnValues, .. EnumerableTaskReturnValues];
 
-        private static readonly string[] StartingPhrases = CreateStartingPhrases().Take(TestLimit).Distinct().ToArray();
+        private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreateStartingPhrases().Take(TestLimit))];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
@@ -539,10 +539,10 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartingPhrases()
         {
-            var startingWords = new[] { "a", "an", "the" };
-            var modifications = new[] { "readonly", "read-only", "read only" };
-            var collections = new[] { "array", "list", "dictionary", "enumerable", "queue", "stack", "map", "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table" };
-            var prepositions = new[] { "of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding" };
+            string[] startingWords = ["a", "an", "the"];
+            string[] modifications = ["readonly", "read-only", "read only"];
+            string[] collections = ["array", "list", "dictionary", "enumerable", "queue", "stack", "map", "hashset", "hashSet", "hashtable", "hashTable", "hash set", "hashed set", "hash table", "hashed table", "hashing set", "hashing table"];
+            string[] prepositions = ["of", "with", "that contains", "which contains", "that holds", "which holds", "containing", "holding"];
 
             foreach (var collection in collections)
             {

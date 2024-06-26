@@ -186,30 +186,29 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateAmbiguousPhrases()
         {
-            var phrases = new[]
-                              {
-                                  "<example />",
-                                  "<exception />",
-                                  "<include />",
-                                  "<inheritdoc />",
-                                  "<overloads />",
-                                  "<param />",
-                                  "<paramref />",
-                                  "<permission />",
-                                  "<remarks />",
-                                  "<returns />",
-                                  "<seealso />",
-                                  "<summary />",
-                                  "<typeparam />",
-                                  "<value />",
-                                  "<seealso>Bla</seealso>",
-                              };
+            string[] phrases =
+                               [
+                                   "<example />",
+                                   "<exception />",
+                                   "<include />",
+                                   "<inheritdoc />",
+                                   "<overloads />",
+                                   "<param />",
+                                   "<paramref />",
+                                   "<permission />",
+                                   "<remarks />",
+                                   "<returns />",
+                                   "<seealso />",
+                                   "<summary />",
+                                   "<typeparam />",
+                                   "<value />",
+                                   "<seealso>Bla</seealso>",
+                               ];
 
-            var results = new List<string>(phrases);
+            var results = new HashSet<string>(phrases);
             results.AddRange(phrases.Select(_ => _.Replace(" ", string.Empty)));
-            results.Sort();
 
-            return results.Distinct().ToArray();
+            return [.. results];
         }
     }
 }

@@ -241,13 +241,12 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateAmbiguousPhrases(string[] phrases)
         {
-            var results = new List<string>(phrases);
+            var results = new HashSet<string>(phrases);
             results.AddRange(phrases.Select(_ => _.ToUpper(CultureInfo.CurrentCulture)));
             results.AddRange(phrases.Select(_ => "Asynchronously " + _.ToLowerCaseAt(0)));
             results.AddRange(phrases.Select(_ => "Asynchronously " + _.ToUpperCaseAt(0)));
-            results.Sort();
 
-            return results.Distinct().ToArray();
+            return [.. results];
         }
     }
 }
