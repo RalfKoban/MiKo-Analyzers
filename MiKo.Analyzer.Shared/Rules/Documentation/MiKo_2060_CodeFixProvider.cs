@@ -27,10 +27,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var ancestor in summary.AncestorsAndSelf())
             {
-                switch (ancestor)
+                switch (ancestor.Kind())
                 {
-                    case ClassDeclarationSyntax _:
-                    case InterfaceDeclarationSyntax _:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
                     {
                         var preparedComment = PrepareTypeComment(summary);
 
@@ -42,12 +42,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
                     }
 
-                    case MethodDeclarationSyntax m:
+                    case SyntaxKind.MethodDeclaration:
                     {
                         var preparedComment = PrepareMethodComment(summary);
 
                         var template = Constants.Comments.FactoryCreateMethodSummaryStartingPhraseTemplate;
-                        var returnType = m.ReturnType;
+                        var returnType = ((MethodDeclarationSyntax)ancestor).ReturnType;
 
                         if (returnType is GenericNameSyntax g && g.TypeArgumentList.Arguments.Count == 1)
                         {
@@ -100,23 +100,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             public MapData()
             {
-                TypeReplacementMap = CreateTypeReplacementMapKeys().ToHashSet() // avoid duplicates
-                                                                   .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                   .ToArray(_ => _.Key, AscendingStringComparer.Default);
+                var typeKeys = CreateTypeReplacementMapKeys();
+                TypeReplacementMap = typeKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray(_ => _.Key, AscendingStringComparer.Default);
+                TypeReplacementMapKeys = GetTermsForQuickLookup(typeKeys);
 
-                TypeReplacementMapKeys = GetTermsForQuickLookup(TypeReplacementMap.Select(_ => _.Key));
+                var keys = CreateMethodReplacementMapKeys();
+                MethodReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray(_ => _.Key, AscendingStringComparer.Default);
+                MethodReplacementMapKeys = GetTermsForQuickLookup(keys);
 
-                MethodReplacementMap = CreateMethodReplacementMapKeys().ToHashSet() // avoid duplicates
-                                                                       .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                       .ToArray(_ => _.Key, AscendingStringComparer.Default);
-
-                MethodReplacementMapKeys = GetTermsForQuickLookup(MethodReplacementMap.Select(_ => _.Key));
-
-                InstancesReplacementMap = MethodReplacementMap.Select(_ => _.Key)
-                                                              .Select(_ => new KeyValuePair<string, string>(_, "instances of the "))
-                                                              .ToArray(_ => _.Key, AscendingStringComparer.Default);
-
-                InstancesReplacementMapKeys = GetTermsForQuickLookup(InstancesReplacementMap.Select(_ => _.Key));
+                InstancesReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, "instances of the ")).ToArray(_ => _.Key, AscendingStringComparer.Default);
+                InstancesReplacementMapKeys = GetTermsForQuickLookup(keys);
 
                 CleanupReplacementMap = new Dictionary<string, string>
                                             {
@@ -143,8 +136,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public Dictionary<string, string> CleanupReplacementMap { get; }
 
-            private static IEnumerable<string> CreateTypeReplacementMapKeys()
+            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+            private static HashSet<string> CreateTypeReplacementMapKeys()
             {
+                var results = new HashSet<string> // avoid duplicates
+                                  {
+                                      "Implementations create ",
+                                  };
+
                 var phrases = new[]
                                   {
                                       "A factory",
@@ -239,43 +238,61 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var continuation in continuations)
                     {
-                        yield return phrase + " that can create " + continuation;
-                        yield return phrase + " that create " + continuation;
-                        yield return phrase + " that creates " + continuation;
-                        yield return phrase + " that provides " + continuation;
-                        yield return phrase + " that " + continuation;
+                        results.Add(phrase + " that can create " + continuation);
+                        results.Add(phrase + " that create " + continuation);
+                        results.Add(phrase + " that creates " + continuation);
+                        results.Add(phrase + " that provides " + continuation);
+                        results.Add(phrase + " that " + continuation);
 
-                        yield return phrase + " which can create " + continuation;
-                        yield return phrase + " which create " + continuation;
-                        yield return phrase + " which creates " + continuation;
-                        yield return phrase + " which provides " + continuation;
-                        yield return phrase + " which " + continuation;
+                        results.Add(phrase + " which can create " + continuation);
+                        results.Add(phrase + " which create " + continuation);
+                        results.Add(phrase + " which creates " + continuation);
+                        results.Add(phrase + " which provides " + continuation);
+                        results.Add(phrase + " which " + continuation);
 
-                        yield return phrase + " for creating " + continuation;
-                        yield return phrase + " for creation of " + continuation;
-                        yield return phrase + " for the creation of " + continuation;
-                        yield return phrase + " for providing " + continuation;
-                        yield return phrase + " for " + continuation;
+                        results.Add(phrase + " for creating " + continuation);
+                        results.Add(phrase + " for creation of " + continuation);
+                        results.Add(phrase + " for the creation of " + continuation);
+                        results.Add(phrase + " for providing " + continuation);
+                        results.Add(phrase + " for " + continuation);
 
-                        yield return phrase + " creating " + continuation;
-                        yield return phrase + " creates " + continuation;
+                        results.Add(phrase + " creating " + continuation);
+                        results.Add(phrase + " creates " + continuation);
 
-                        yield return phrase + " that is able to create " + continuation;
-                        yield return phrase + " which is able to create " + continuation;
-                        yield return phrase + " that is capable to create " + continuation;
-                        yield return phrase + " which is capable to create " + continuation;
-                        yield return phrase + " to create " + continuation;
-                        yield return phrase + " to " + continuation;
+                        results.Add(phrase + " that is able to create " + continuation);
+                        results.Add(phrase + " which is able to create " + continuation);
+                        results.Add(phrase + " that is capable to create " + continuation);
+                        results.Add(phrase + " which is capable to create " + continuation);
+                        results.Add(phrase + " to create " + continuation);
+                        results.Add(phrase + " to " + continuation);
 
-                        yield return phrase + " " + continuation;
+                        results.Add(phrase + " " + continuation);
                     }
                 }
 
-                yield return "Implementations create ";
+                return results;
             }
 
-            private static IEnumerable<string> CreateMethodReplacementMapKeys()
+            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+            private static HashSet<string> CreateMethodReplacementMapKeys()
             {
+                var results = new HashSet<string> // avoid duplicates
+                                  {
+                                      "Used to create ",
+                                      "Used for creating ",
+                                      "Factory method for creating ",
+                                      "Factory method that creates ",
+                                      "Factory method which creates ",
+                                      "A factory method for creating ",
+                                      "A factory method that creates ",
+                                      "A factory method which creates ",
+                                      "The factory method for creating ",
+                                      "The factory method that creates ",
+                                      "The factory method which creates ",
+                                      "This factory method creates ",
+                                      "This method creates ",
+                                  };
+
                 var startingWords = new[]
                                         {
                                             "Create",
@@ -305,66 +322,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var start = word + continuation;
 
-                        yield return start + " an new instances of the ";
-                        yield return start + " an new instances of an ";
-                        yield return start + " an new instances of a ";
-                        yield return start + " an new instances of ";
-                        yield return start + " an new instance of the ";
-                        yield return start + " an new instance of an ";
-                        yield return start + " an new instance of a ";
-                        yield return start + " an new instance of ";
-                        yield return start + " an instances of the ";
-                        yield return start + " an instances of an ";
-                        yield return start + " an instances of a ";
-                        yield return start + " an instances of ";
-                        yield return start + " an instance of the ";
-                        yield return start + " an instance of an ";
-                        yield return start + " an instance of a ";
-                        yield return start + " an instance of ";
-                        yield return start + " an ";
-                        yield return start + " a factory ";
-                        yield return start + " a new instances of the ";
-                        yield return start + " a new instances of an ";
-                        yield return start + " a new instances of a ";
-                        yield return start + " a new instances of ";
-                        yield return start + " a new instance of the ";
-                        yield return start + " a new instance of an ";
-                        yield return start + " a new instance of a ";
-                        yield return start + " a new instance of ";
-                        yield return start + " a instances of the ";
-                        yield return start + " a instances of an ";
-                        yield return start + " a instances of a ";
-                        yield return start + " a instances of ";
-                        yield return start + " a instance of the ";
-                        yield return start + " a instance of an ";
-                        yield return start + " a instance of a ";
-                        yield return start + " a instance of ";
-                        yield return start + " a new ";
-                        yield return start + " a ";
-                        yield return start + " instances of the ";
-                        yield return start + " instances of an ";
-                        yield return start + " instances of a ";
-                        yield return start + " instances of ";
-                        yield return start + " new instances of the ";
-                        yield return start + " new instances of an ";
-                        yield return start + " new instances of a ";
-                        yield return start + " new instances of ";
+                        results.Add(start + " an new instances of the ");
+                        results.Add(start + " an new instances of an ");
+                        results.Add(start + " an new instances of a ");
+                        results.Add(start + " an new instances of ");
+                        results.Add(start + " an new instance of the ");
+                        results.Add(start + " an new instance of an ");
+                        results.Add(start + " an new instance of a ");
+                        results.Add(start + " an new instance of ");
+                        results.Add(start + " an instances of the ");
+                        results.Add(start + " an instances of an ");
+                        results.Add(start + " an instances of a ");
+                        results.Add(start + " an instances of ");
+                        results.Add(start + " an instance of the ");
+                        results.Add(start + " an instance of an ");
+                        results.Add(start + " an instance of a ");
+                        results.Add(start + " an instance of ");
+                        results.Add(start + " an ");
+                        results.Add(start + " a factory ");
+                        results.Add(start + " a new instances of the ");
+                        results.Add(start + " a new instances of an ");
+                        results.Add(start + " a new instances of a ");
+                        results.Add(start + " a new instances of ");
+                        results.Add(start + " a new instance of the ");
+                        results.Add(start + " a new instance of an ");
+                        results.Add(start + " a new instance of a ");
+                        results.Add(start + " a new instance of ");
+                        results.Add(start + " a instances of the ");
+                        results.Add(start + " a instances of an ");
+                        results.Add(start + " a instances of a ");
+                        results.Add(start + " a instances of ");
+                        results.Add(start + " a instance of the ");
+                        results.Add(start + " a instance of an ");
+                        results.Add(start + " a instance of a ");
+                        results.Add(start + " a instance of ");
+                        results.Add(start + " a new ");
+                        results.Add(start + " a ");
+                        results.Add(start + " instances of the ");
+                        results.Add(start + " instances of an ");
+                        results.Add(start + " instances of a ");
+                        results.Add(start + " instances of ");
+                        results.Add(start + " new instances of the ");
+                        results.Add(start + " new instances of an ");
+                        results.Add(start + " new instances of a ");
+                        results.Add(start + " new instances of ");
                     }
                 }
 
-                yield return "Used to create ";
-                yield return "Used for creating ";
-                yield return "Factory method for creating ";
-                yield return "Factory method that creates ";
-                yield return "Factory method which creates ";
-                yield return "A factory method for creating ";
-                yield return "A factory method that creates ";
-                yield return "A factory method which creates ";
-                yield return "The factory method for creating ";
-                yield return "The factory method that creates ";
-                yield return "The factory method which creates ";
-                yield return "This factory method creates ";
-                yield return "This method creates ";
+                return results;
             }
         }
 //// ncrunch: no coverage end

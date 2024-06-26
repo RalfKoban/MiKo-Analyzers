@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.Ordinal;
 
-            var firstWord = new StringBuilder(valueText).Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+            var firstWord = new StringBuilder(valueText).Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                                         .ToString()
                                                         .FirstWord();
 

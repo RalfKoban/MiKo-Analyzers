@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -38,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     break;
                 }
 
-                case LocalDeclarationStatementSyntax declaration when declaration.DescendantNodes<InitializerExpressionSyntax>().Any():
+                case LocalDeclarationStatementSyntax declaration when HasIssue(declaration):
                 {
                     // remove trivia from declaration and add new item
                     var newDeclaration = declaration.RemoveTrivia(trivia)
@@ -49,6 +48,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return root.RemoveTrivia(trivia);
+        }
+
+        private static bool HasIssue(LocalDeclarationStatementSyntax declaration)
+        {
+            foreach (var node in declaration.DescendantNodes())
+            {
+                switch (node)
+                {
+                    case InitializerExpressionSyntax _:
+#if VS2022
+                    case CollectionExpressionSyntax _:
+#endif
+                        return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -59,6 +59,14 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     return Issue(openBracketToken, CreateProposalForSpaces(startPosition.Character));
                 }
+
+                var closeBracketToken = syntax.CloseBracketToken;
+                var closeBracketPosition = closeBracketToken.GetStartPosition();
+
+                if (openBracketPosition.Line != closeBracketPosition.Line && openBracketPosition.Character != closeBracketPosition.Character)
+                {
+                    return Issue(closeBracketToken, CreateProposalForSpaces(openBracketPosition.Character));
+                }
             }
 
             return null;

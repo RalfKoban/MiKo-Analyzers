@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2080_FieldSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] WrongBooleanPhrases = CreateWrongBooleanPhrases().Take(TestLimit).Distinct().ToArray();
+        private static readonly string[] WrongBooleanPhrases = [.. Enumerable.ToHashSet(CreateWrongBooleanPhrases().Take(TestLimit))];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
@@ -409,17 +409,17 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateWrongBooleanPhrases()
         {
-            var starts = new[]
-                             {
-                                 "Flag", "A flag", "The flag", "Value", "A value", "The value",
-                                 "Boolean", "A Boolean", "A boolean", "The Boolean", "The boolean", "Boolean value", "A Boolean value", "A boolean value", "The Boolean value", "The boolean value",
-                                 "Bool", "Bool value", "A bool", "A bool value", "The bool", "The bool value",
-                                 "Contains a value", "Contains a flag", "Contains the value", "Contains the flag",
-                                 "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
-                                 "Contains a bool", "Contains a bool value", "Contains the bool value",
-                             };
-            var middles = new[] { "indicating", "that indicates", "to indicate", "which indicates", "controlling", "that controls", "to control", "which controls" };
-            var ends = new[] { "if", "that", "whether", "whether or not" };
+            string[] starts =
+                              [
+                                  "Flag", "A flag", "The flag", "Value", "A value", "The value",
+                                  "Boolean", "A Boolean", "A boolean", "The Boolean", "The boolean", "Boolean value", "A Boolean value", "A boolean value", "The Boolean value", "The boolean value",
+                                  "Bool", "Bool value", "A bool", "A bool value", "The bool", "The bool value",
+                                  "Contains a value", "Contains a flag", "Contains the value", "Contains the flag",
+                                  "Contains a boolean", "Contains a Boolean", "Contains a boolean value", "Contains the boolean value",
+                                  "Contains a bool", "Contains a bool value", "Contains the bool value",
+                              ];
+            string[] middles = ["indicating", "that indicates", "to indicate", "which indicates", "controlling", "that controls", "to control", "which controls"];
+            string[] ends = ["if", "that", "whether", "whether or not"];
 
             foreach (var start in starts)
             {

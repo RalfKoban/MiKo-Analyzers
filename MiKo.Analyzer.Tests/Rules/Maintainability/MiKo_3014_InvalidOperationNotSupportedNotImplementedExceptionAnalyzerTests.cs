@@ -34,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                      typeof(ArgumentNullException).FullName,
                                                                  ];
 
-        private static readonly string[] Exceptions = MatchingExceptions.Concat(NonMatchingExceptions).Distinct().ToArray();
+        private static readonly string[] Exceptions = MatchingExceptions.Union(NonMatchingExceptions).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_thrown_([ValueSource(nameof(Exceptions))] string exceptionName) => No_issue_is_reported_for(@"

@@ -130,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
         {
             var result = Enumerable.Empty<SyntaxTrivia>()
                                    .Concat(trivia.PreviousSiblings(2))
-                                   .Concat(new[] { trivia })
+                                   .Append(trivia)
                                    .ToArray();
 
             return result;

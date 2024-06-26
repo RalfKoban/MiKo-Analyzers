@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly string[] ReplacementMapKeys = CreatePhrases().Distinct().ToArray();
+        private static readonly string[] ReplacementMapKeys = CreatePhrases().ToHashSet().ToArray();
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                   .ToArray();

@@ -26,7 +26,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var attribute = SyntaxFactory.Attribute(name);
             var attributeList = SyntaxFactory.AttributeList(attribute.ToSeparatedSyntaxList());
 
-            return parameter.WithAttributeLists(new SyntaxList<AttributeListSyntax>(attributeList))
+            return parameter.WithAttributeLists(attributeList.ToSyntaxList())
                             .WithDefault(SyntaxFactory.EqualsValueClause(NullLiteral()));
         }
 

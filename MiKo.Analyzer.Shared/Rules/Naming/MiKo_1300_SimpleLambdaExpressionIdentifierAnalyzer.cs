@@ -164,6 +164,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case Constants.LambdaIdentifiers.Fallback3: // correct identifier (3rd fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback4: // correct identifier (4th fallback as there is already another identifier in the parent lambda expression)
                 case Constants.LambdaIdentifiers.Fallback5: // correct identifier (5th fallback as there is already another identifier in the parent lambda expression)
+                case "failed": // result in ASP .NET core to indicate a failure
                     return null;
 
                 default:

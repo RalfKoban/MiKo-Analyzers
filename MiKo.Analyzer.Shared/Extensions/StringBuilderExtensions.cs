@@ -10,9 +10,9 @@ namespace System.Text
     {
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
         {
-            if (replacementPairs is IList<KeyValuePair<string, string>> list)
+            if (replacementPairs is KeyValuePair<string, string>[] array)
             {
-                return value.ReplaceAllWithCheck(list);
+                return value.ReplaceAllWithCheck(array.AsSpan());
             }
 
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -30,10 +30,10 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IList<KeyValuePair<string, string>> replacementPairs)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<KeyValuePair<string, string>> replacementPairs)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
-            var count = replacementPairs.Count;
+            var count = replacementPairs.Length;
 
             for (var index = 0; index < count; index++)
             {
@@ -197,7 +197,7 @@ namespace System.Text
                 return current[lastIndex] == other[lastIndex];
             }
 
-            if (other.Length >= 4)
+            if (other.Length > 4)
             {
                 var otherFirst = other[0];
 

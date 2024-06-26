@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -28,7 +27,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 // comment is on same line as the semicolon, so it's no issue (except for initializers)
                 if (current.Parent is LocalDeclarationStatementSyntax d)
                 {
-                    return d.DescendantNodes<InitializerExpressionSyntax>().Any();
+                    foreach (var node in d.DescendantNodes())
+                    {
+                        switch (node)
+                        {
+                            case InitializerExpressionSyntax _:
+#if VS2022
+                            case CollectionExpressionSyntax _:
+#endif
+                                return true;
+                        }
+                    }
                 }
 
                 return false;

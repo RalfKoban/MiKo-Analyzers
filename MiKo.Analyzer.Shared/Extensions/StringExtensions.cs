@@ -30,38 +30,41 @@ namespace System
                 return value;
             }
 
-            var word = value.FirstWord();
+            var valueSpan = value.AsSpan();
+
+            string word;
 
             if (HasFlag(FirstWordHandling.MakeLowerCase))
             {
-                word = word.ToLowerCaseAt(0);
+                word = valueSpan.FirstWord().ToLowerCaseAt(0);
             }
-
-            if (HasFlag(FirstWordHandling.MakeUpperCase))
+            else if (HasFlag(FirstWordHandling.MakeUpperCase))
             {
-                word = word.ToUpperCaseAt(0);
+                word = valueSpan.FirstWord().ToUpperCaseAt(0);
+            }
+            else
+            {
+                word = valueSpan.FirstWord().ToString();
             }
 
             // build continuation here because the word length may change based on the infinite term
-            var continuation = value.AsSpan().TrimStart().Slice(word.Length).ToString();
+            var continuation = valueSpan.TrimStart().Slice(word.Length);
 
             if (HasFlag(FirstWordHandling.MakeInfinite))
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
 
-            var text = word + continuation;
-
             if (HasFlag(FirstWordHandling.KeepLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
                 {
-                    return " " + text;
+                    return " " + word + continuation.ToString();
                 }
             }
 
-            return text;
+            return word + continuation.ToString();
         }
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
@@ -1118,9 +1121,11 @@ namespace System
 
         public static bool IsNullOrWhiteSpace(this ReadOnlySpan<char> value)
         {
-            if (value.Length > 0)
+            var length = value.Length;
+
+            if (length > 0)
             {
-                for (var index = 0; index < value.Length; index++)
+                for (var index = 0; index < length; index++)
                 {
                     if (value[index].IsWhiteSpace() is false)
                     {
@@ -1730,7 +1735,7 @@ namespace System
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength >= 4)
+            if (valueLength > 4)
             {
                 switch (comparison)
                 {

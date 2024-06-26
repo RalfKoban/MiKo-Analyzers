@@ -12,10 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_3109_CodeFixProvider)), Shared]
     public sealed class MiKo_3109_CodeFixProvider : MaintainabilityCodeFixProvider
     {
-        private static readonly HashSet<string> EnumerableMethods = typeof(Enumerable).GetMethods().Select(_ => _.Name)
+        private static readonly HashSet<string> EnumerableMethods = typeof(Enumerable).GetMethods().ToHashSet(_ => _.Name)
                                                                                       .Except(typeof(object).GetMethods().Select(_ => _.Name)) // get rid of GetHashCode() or Equals()
-                                                                                      .Except("Contains") // special handling
-                                                                                      .ToHashSet();
+                                                                                      .Except("Contains"); // special handling
 
         public override string FixableDiagnosticId => "MiKo_3109";
 

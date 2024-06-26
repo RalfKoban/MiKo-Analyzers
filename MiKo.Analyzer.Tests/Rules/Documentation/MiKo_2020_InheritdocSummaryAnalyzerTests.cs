@@ -367,15 +367,15 @@ class TestMe : ITestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreatePhrases(string marker)
         {
-            var phrases = new[]
-                              {
-                                  "<see cref='" + marker + "'/>",
-                                  "<see cref='" + marker + "' />",
-                                  "<seealso cref='" + marker + "'/>",
-                                  "<seealso cref='" + marker + "' />",
-                              };
+            string[] phrases =
+                               [
+                                   "<see cref='" + marker + "'/>",
+                                   "<see cref='" + marker + "' />",
+                                   "<seealso cref='" + marker + "'/>",
+                                   "<seealso cref='" + marker + "' />",
+                               ];
 
-            var results = new List<string>(phrases);
+            var results = new HashSet<string>(phrases);
             results.AddRange(phrases.Select(_ => _ + "."));
             results.AddRange(phrases.Select(_ => "see " + _ + "."));
             results.AddRange(phrases.Select(_ => "See " + _ + "."));
@@ -386,9 +386,7 @@ class TestMe : ITestMe
             results.AddRange(phrases.Select(_ => "seealso " + _));
             results.AddRange(phrases.Select(_ => "SeeAlso " + _));
 
-            results.Sort();
-
-            return results.Distinct().ToArray();
+            return [.. results];
         }
     }
 }
