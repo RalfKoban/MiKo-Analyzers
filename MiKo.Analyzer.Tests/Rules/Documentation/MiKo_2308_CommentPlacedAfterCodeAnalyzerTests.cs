@@ -73,6 +73,34 @@ public class TestMe
 }");
 
         [Test]
+        public void No_issue_is_reported_for_comment_as_last_statement_in_collection_expression_with_colon() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        string[] array =
+                        [
+                            ""something"",
+                            ""something else"", // some comment
+                        ];
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_comment_as_last_statement_in_collection_expression_without_colon() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        string[] array =
+                        [
+                            ""something"",
+                            ""something else"" // some comment
+                        ];
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_comment_as_last_statement_in_array_initializer_with_colon() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -297,6 +325,39 @@ public class TestMe
                             ""something"",
                             ""something else"",
                         };
+    }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_comment_after_collection_expression()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        string[] array =
+                        [
+                            ""something"",
+                            ""something else"",
+                        ]; // some comment
+    }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        // some comment
+        string[] array =
+                        [
+                            ""something"",
+                            ""something else"",
+                        ];
     }
 }";
 

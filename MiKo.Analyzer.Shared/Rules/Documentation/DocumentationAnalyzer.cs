@@ -374,7 +374,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (alreadyReportedLocations is null)
                 {
-                    alreadyReportedLocations = new List<Location>();
+                    alreadyReportedLocations = new List<Location>(1);
                 }
                 else
                 {
@@ -420,7 +420,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (alreadyReportedLocations is null)
                     {
-                        alreadyReportedLocations = new List<Location>();
+                        alreadyReportedLocations = new List<Location>(1);
                     }
                     else
                     {
@@ -477,7 +477,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (alreadyReportedLocations is null)
                 {
-                    alreadyReportedLocations = new List<Location>();
+                    alreadyReportedLocations = new List<Location>(1);
                 }
                 else
                 {

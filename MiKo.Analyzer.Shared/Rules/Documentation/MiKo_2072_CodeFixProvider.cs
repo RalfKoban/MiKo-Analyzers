@@ -35,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             const string SyncPhrase = Constants.Comments.TryStartingPhrase + " ";
 
             var lowerCasePhrase = SyncPhrase.ToLowerCaseAt(0);
-            var asyncPhrase = Constants.Comments.AsynchrounouslyStartingPhrase + lowerCasePhrase;
+            var asyncPhrase = Constants.Comments.AsynchronouslyStartingPhrase + lowerCasePhrase;
 
             var result = new Dictionary<string, string>();
 
@@ -47,8 +47,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 result.Add(phrase, SyncPhrase);
                 result.Add(alternativePhrase, SyncPhrase);
 
-                result.Add(Constants.Comments.AsynchrounouslyStartingPhrase + phrase, asyncPhrase);
-                result.Add(Constants.Comments.AsynchrounouslyStartingPhrase + alternativePhrase, asyncPhrase);
+                result.Add(Constants.Comments.AsynchronouslyStartingPhrase + phrase, asyncPhrase);
+                result.Add(Constants.Comments.AsynchronouslyStartingPhrase + alternativePhrase, asyncPhrase);
 
                 result.Add(phrase.ToLowerCaseAt(0), lowerCasePhrase);
                 result.Add(alternativePhrase.ToLowerCaseAt(0), lowerCasePhrase);

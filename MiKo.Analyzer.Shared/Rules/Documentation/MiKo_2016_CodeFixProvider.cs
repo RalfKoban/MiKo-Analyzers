@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2016_CodeFixProvider)), Shared]
     public sealed class MiKo_2016_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        private const string Phrase = Constants.Comments.AsynchrounouslyStartingPhrase;
+        private const string Phrase = Constants.Comments.AsynchronouslyStartingPhrase;
 
         public override string FixableDiagnosticId => "MiKo_2016";
 

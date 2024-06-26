@@ -123,50 +123,48 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var phrases = CreatePhrases().ToHashSet(_ => _ + " "); // TODO RKN: Order by 'A', 'An ' and 'The '
 
-                ReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(taskPhrases)
-                                                                           .Concat(phrases)
-                                                                           .OrderByDescending(_ => _.Length)
-                                                                           .ThenBy(_ => _)
-                                                                           .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                           .ToArray();
+                var keyInput = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(taskPhrases)
+                                                                         .Concat(phrases)
+                                                                         .OrderByDescending(_ => _.Length)
+                                                                         .ThenBy(_ => _)
+                                                                         .ToArray();
+                ReplacementMap = keyInput.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ReplacementMapKeys = GetTermsForQuickLookup(keyInput);
 
-                ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.Select(_ => _.Key));
-
-                ByteArrayReplacementMap = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
-                                                                                                {
-                                                                                                    "A array of byte containing ",
-                                                                                                    "A array of byte that contains ",
-                                                                                                    "A array of byte which contains ",
-                                                                                                    "A array of bytes containing ",
-                                                                                                    "A array of bytes that contains ",
-                                                                                                    "A array of bytes which contains ",
-                                                                                                    "A array of ",
-                                                                                                    "A array with ",
-                                                                                                    "An array of byte containing ",
-                                                                                                    "An array of byte that contains ",
-                                                                                                    "An array of byte which contains ",
-                                                                                                    "An array of bytes containing ",
-                                                                                                    "An array of bytes that contains ",
-                                                                                                    "An array of bytes which contains ",
-                                                                                                    "An array of ",
-                                                                                                    "An array with ",
-                                                                                                    "Array of ",
-                                                                                                    "Array with ",
-                                                                                                    "The array of byte containing ",
-                                                                                                    "The array of byte that contains ",
-                                                                                                    "The array of byte which contains ",
-                                                                                                    "The array of bytes containing ",
-                                                                                                    "The array of bytes that contains ",
-                                                                                                    "The array of bytes which contains ",
-                                                                                                    "The array of ",
-                                                                                                    "The array with ",
-                                                                                                })
-                                                                                    .OrderByDescending(_ => _.Length)
-                                                                                    .ThenBy(_ => _)
-                                                                                    .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                    .ToArray();
-
-                ByteArrayReplacementMapKeys = GetTermsForQuickLookup(ByteArrayReplacementMap.Select(_ => _.Key));
+                var byteKeyInput = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
+                                                                                         {
+                                                                                             "A array of byte containing ",
+                                                                                             "A array of byte that contains ",
+                                                                                             "A array of byte which contains ",
+                                                                                             "A array of bytes containing ",
+                                                                                             "A array of bytes that contains ",
+                                                                                             "A array of bytes which contains ",
+                                                                                             "A array of ",
+                                                                                             "A array with ",
+                                                                                             "An array of byte containing ",
+                                                                                             "An array of byte that contains ",
+                                                                                             "An array of byte which contains ",
+                                                                                             "An array of bytes containing ",
+                                                                                             "An array of bytes that contains ",
+                                                                                             "An array of bytes which contains ",
+                                                                                             "An array of ",
+                                                                                             "An array with ",
+                                                                                             "Array of ",
+                                                                                             "Array with ",
+                                                                                             "The array of byte containing ",
+                                                                                             "The array of byte that contains ",
+                                                                                             "The array of byte which contains ",
+                                                                                             "The array of bytes containing ",
+                                                                                             "The array of bytes that contains ",
+                                                                                             "The array of bytes which contains ",
+                                                                                             "The array of ",
+                                                                                             "The array with ",
+                                                                                         })
+                                                                             .OrderByDescending(_ => _.Length)
+                                                                             .ThenBy(_ => _)
+                                                                             .ToArray();
+                ByteArrayReplacementMap = byteKeyInput.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ByteArrayReplacementMapKeys = GetTermsForQuickLookup(byteKeyInput);
 
                 ByteArrayContinueTexts = new[]
                                              {

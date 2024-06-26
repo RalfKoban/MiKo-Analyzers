@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
+﻿using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
 
@@ -10,74 +12,107 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1401_TechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] ForbiddenNamespaceNames =
-                                                                   [
-                                                                       "API",
-                                                                       "APIs",
-                                                                       "Action",
-                                                                       "Actions",
-                                                                       "Api",
-                                                                       "Apis",
-                                                                       "Attributes",
-                                                                       "Base",
-                                                                       "Class",
-                                                                       "Classes",
-                                                                       "Compare",
-                                                                       "Comparer",
-                                                                       "Comparers",
-                                                                       "Controller",
-                                                                       "Controllers",
-                                                                       "DTO",
-                                                                       "DTOs",
-                                                                       "Dto",
-                                                                       "Dtos",
-                                                                       "Enum",
-                                                                       "Enumeration",
-                                                                       "Enumerations",
-                                                                       "Enums",
-                                                                       "Error",
-                                                                       "Errors",
-                                                                       "EventArgument",
-                                                                       "EventArguments",
-                                                                       "Events",
-                                                                       "Exception",
-                                                                       "Exceptions",
-                                                                       "Execution",
-                                                                       "Executions",
-                                                                       "Func",
-                                                                       "Funcs",
-                                                                       "Function",
-                                                                       "Functions",
-                                                                       "Imp",
-                                                                       "Impl",
-                                                                       "Impls",
-                                                                       "Implementation",
-                                                                       "Implementations",
-                                                                       "Indexer",
-                                                                       "Indexers",
-                                                                       "Interface",
-                                                                       "Interfaces",
-                                                                       "Itf",
-                                                                       "Itfs",
-                                                                       "Module",
-                                                                       "Modules",
-                                                                       "Observer",
-                                                                       "Observers",
-                                                                       "Platform",
-                                                                       "Provider",
-                                                                       "Providers",
-                                                                       "Proxies",
-                                                                       "Proxy",
-                                                                       "Record",
-                                                                       "ServiceProxies",
-                                                                       "ServiceProxy",
-                                                                       "State",
-                                                                       "States",
-                                                                       "Struct",
-                                                                       "Structs",
-                                                                       "Type",
-                                                                       "Types"
-                                                                   ];
+        private static readonly string[] ForbiddenNamespaceNames = CreateNames(
+                                                                           "API",
+                                                                           "APIs",
+                                                                           "Action",
+                                                                           "Actions",
+                                                                           "Api",
+                                                                           "Apis",
+                                                                           "Applications",
+                                                                           "ApplicationService",
+                                                                           "ApplicationServices",
+                                                                           "Attributes",
+                                                                           "Base",
+                                                                           "Class",
+                                                                           "Classes",
+                                                                           "Compare",
+                                                                           "Comparer",
+                                                                           "Comparers",
+                                                                           "Constants",
+                                                                           "Controller",
+                                                                           "Controllers",
+                                                                           "DTO",
+                                                                           "DTOs",
+                                                                           "Data",
+                                                                           "Database",
+                                                                           "Databases",
+                                                                           "Dependencies",
+                                                                           "Dependency",
+                                                                           "DependencyInjection",
+                                                                           "Domain",
+                                                                           "Domains",
+                                                                           "Dto",
+                                                                           "Dtos",
+                                                                           "Entities",
+                                                                           "Enum",
+                                                                           "Enumeration",
+                                                                           "Enumerations",
+                                                                           "Enums",
+                                                                           "Error",
+                                                                           "Errors",
+                                                                           "EventArgument",
+                                                                           "EventArguments",
+                                                                           "Events",
+                                                                           "Exception",
+                                                                           "Exceptions",
+                                                                           "Execution",
+                                                                           "Executions",
+                                                                           "Filters",
+                                                                           "Func",
+                                                                           "Funcs",
+                                                                           "Function",
+                                                                           "Functions",
+                                                                           "Handler",
+                                                                           "Handlers",
+                                                                           "Imp",
+                                                                           "Impl",
+                                                                           "Implementation",
+                                                                           "Implementations",
+                                                                           "Impls",
+                                                                           "Indexer",
+                                                                           "Indexers",
+                                                                           "Interactions",
+                                                                           "Interceptors",
+                                                                           "Interface",
+                                                                           "Interfaces",
+                                                                           "Itf",
+                                                                           "Itfs",
+                                                                           "MVC",
+                                                                           "MVVM",
+                                                                           "Microservice",
+                                                                           "MicroService",
+                                                                           "Microservices",
+                                                                           "MicroServices",
+                                                                           "Middleware",
+                                                                           "Mocks",
+                                                                           "Module",
+                                                                           "Modules",
+                                                                           "Observer",
+                                                                           "Observers",
+                                                                           "Queries",
+                                                                           "Pipelines",
+                                                                           "Platform",
+                                                                           "Provider",
+                                                                           "Providers",
+                                                                           "Proxies",
+                                                                           "Proxy",
+                                                                           "Record",
+                                                                           "Repositories",
+                                                                           "Resources",
+                                                                           "ServiceProxies",
+                                                                           "ServiceProxy",
+                                                                           "Service",
+                                                                           "Services",
+                                                                           "State",
+                                                                           "States",
+                                                                           "Statements",
+                                                                           "Struct",
+                                                                           "Structs",
+                                                                           "Type",
+                                                                           "Types",
+                                                                           "Transaction",
+                                                                           "Transactions");
 
         [TestCase("MiKoSolutions")]
         [TestCase("MiKoSolutions.Infrastructure")]
@@ -118,5 +153,23 @@ namespace ABCD.EFG." + ns + @".HIJK
         protected override string GetDiagnosticId() => MiKo_1401_TechnicalNamespacesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1401_TechnicalNamespacesAnalyzer();
+
+        private static string[] CreateNames(params string[] names)
+        {
+            var results = new HashSet<string>((3 * names.Length) + 2)
+                              {
+                                  "Core",
+                                  "Shared",
+                              };
+
+            foreach (var name in names)
+            {
+                results.Add(name);
+                results.Add("Core" + name);
+                results.Add("Shared" + name);
+            }
+
+            return [.. results];
+        }
     }
 }

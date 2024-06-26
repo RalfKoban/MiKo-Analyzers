@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+using System.Collections.Generic;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -11,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2001_EventSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly IEnumerable<string> StartingPhrases = CreatePhrases();
+
         [Test]
         public void No_issue_is_reported_for_non_commented_event_on_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -85,47 +90,8 @@ public class TestMe
 }
 ");
 
-        [TestCase("Event fired after", "Occurs after")]
-        [TestCase("Event raised after", "Occurs after")]
-        [TestCase("Event is fired after", "Occurs after")]
-        [TestCase("Event is fired before", "Occurs before")]
-        [TestCase("Event is fired when", "Occurs when")]
-        [TestCase("Event is raised when", "Occurs when")]
-        [TestCase("Event occurs when", "Occurs when")]
-        [TestCase("Event shall be fired when", "Occurs when")]
-        [TestCase("Event shall be raised when", "Occurs when")]
-        [TestCase("Event that is fired when", "Occurs when")]
-        [TestCase("Event that is raised when", "Occurs when")]
-        [TestCase("Event that shall be fired when", "Occurs when")]
-        [TestCase("Event that shall be raised when", "Occurs when")]
-        [TestCase("Event to fire when", "Occurs when")]
-        [TestCase("Event to raise when", "Occurs when")]
-        [TestCase("Event which is fired when", "Occurs when")]
-        [TestCase("Event which is raised when", "Occurs when")]
-        [TestCase("Fired after", "Occurs after")]
-        [TestCase("Fired before", "Occurs before")]
-        [TestCase("Fired when", "Occurs when")]
-        [TestCase("Indicates that", "Occurs when")]
-        [TestCase("Is fired after", "Occurs after")]
-        [TestCase("Is fired before", "Occurs before")]
-        [TestCase("Is fired when", "Occurs when")]
-        [TestCase("Is raised when", "Occurs when")]
-        [TestCase("Raised after", "Occurs after")]
-        [TestCase("Raised before", "Occurs before")]
-        [TestCase("Raised if", "Occurs if")]
-        [TestCase("Raised when", "Occurs when")]
-        [TestCase("Shall be fired when", "Occurs when")]
-        [TestCase("Shall be raised when", "Occurs when")]
-        [TestCase("The event to fire when", "Occurs when")]
-        [TestCase("The event to raise when", "Occurs when")]
-        [TestCase("This event is fired for", "Occurs for")]
-        [TestCase("This event is raised for", "Occurs for")]
-        [TestCase("This event occurs when", "Occurs when")]
-        [TestCase("This event shall be fired when", "Occurs when")]
-        [TestCase("This event shall be raised when", "Occurs when")]
-        [TestCase("When", "Occurs when")]
-        [TestCase("Invoked if", "Occurs when")]
-        public void Code_gets_fixed_(string originalComment, string fixedComment)
+        [Test]
+        public void Code_gets_fixed_for_event_phrase_([ValueSource(nameof(StartingPhrases))] string originalComment, [Values("after", "before", "when", "for")] string condition)
         {
             const string Template = @"
 public class TestMe
@@ -137,7 +103,23 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(Template.Replace("###", originalComment), Template.Replace("###", fixedComment));
+            VerifyCSharpFix(Template.Replace("###", originalComment + " " + condition), Template.Replace("###", "Occurs " + condition));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_([Values("When", "Indicates that", "Invoked if", "Invoked when")] string original)
+        {
+            const string Template = @"
+public class TestMe
+{
+    /// <summary>
+    /// ### something.
+    /// </summary>
+    public event EventHandler MyEvent;
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", original), Template.Replace("###", "Occurs when"));
         }
 
         protected override string GetDiagnosticId() => MiKo_2001_EventSummaryAnalyzer.Id;
@@ -145,5 +127,77 @@ public class TestMe
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2001_EventSummaryAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2001_CodeFixProvider();
+
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+        private static HashSet<string> CreatePhrases()
+        {
+            string[] starts = ["Event", "This event", "The event", "An event", "A event"];
+            string[] adverbs = [
+                                string.Empty,
+                                "is ", "that is ", "which is ",
+                                "can be ", "that can be ", "which can be ",
+                                "could be ", "that could be ", "which could be ",
+                                "shall be ", "that shall be ", "which shall be ",
+                                "should be ", "that should be ", "which should be ",
+                                "will be ", "that will be ", "which will be ",
+                                "would be ", "that would be ", "which would be ",
+                               ];
+            string[] verbs = ["fired", "raised", "caused", "triggered", "occurred", "occured"];
+
+            var results = new HashSet<string>();
+
+            foreach (var verb in verbs)
+            {
+                results.Add(verb.ToUpperCaseAt(0));
+
+                foreach (var adverb in adverbs)
+                {
+                    var end = string.Concat(adverb, verb);
+
+                    results.Add(end.ToUpperCaseAt(0));
+
+                    foreach (var start in starts)
+                    {
+                        results.Add(string.Concat(start, " ", end));
+                    }
+                }
+            }
+
+            string[] midTerms = [
+                                 "to",
+                                 "can", "that can", "which can",
+                                 "could", "that could", "which could",
+                                 "shall", "that shall", "which shall",
+                                 "should",  "that should", "which should",
+                                 "will", "that will", "which will",
+                                 "would", "that would", "which would"
+                                ];
+            string[] verbsInfinite = ["fire", "raise", "cause", "trigger", "occur"];
+
+            foreach (var start in starts)
+            {
+                foreach (var midTerm in midTerms)
+                {
+                    var begin = string.Concat(start, " ", midTerm, " ");
+
+                    foreach (var verb in verbsInfinite)
+                    {
+                        results.Add(string.Concat(begin, verb));
+                    }
+                }
+            }
+
+            string[] verbsPresent = ["fires", "raises", "causes", "triggers", "occurs"];
+
+            foreach (var start in starts)
+            {
+                foreach (var verb in verbsPresent)
+                {
+                    results.Add(string.Concat(start, " ", verb));
+                }
+            }
+
+            return results;
+        }
     }
 }

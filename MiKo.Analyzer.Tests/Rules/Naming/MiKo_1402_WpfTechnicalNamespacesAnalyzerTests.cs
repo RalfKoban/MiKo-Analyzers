@@ -19,7 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                        "ViewModel",
                                                                        "ViewModels",
                                                                        "View",
-                                                                       "Views"
+                                                                       "Views",
+                                                                       "MVVM",
                                                                    ];
 
         [TestCase("MiKoSolutions")]

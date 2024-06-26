@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System;
+using System.Composition;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
@@ -15,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            return GetUpdatedSyntaxWithFixedText(syntax, _ => new StringBuilder(_).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap).ToString());
+            return GetUpdatedSyntaxWithFixedText(syntax, _ => new StringBuilder(_).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan()).ToString());
         }
     }
 }

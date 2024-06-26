@@ -150,9 +150,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     var data = FindMatchingReplacementMapKeysInUpperCase(text);
                     var keysInUpperCase = data.KeysInUpperCase;
+                    var length = keysInUpperCase.Length;
 
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < keysInUpperCase.Length; index++)
+                    for (var index = 0; index < length; index++)
                     {
                         var key = keysInUpperCase[index];
 
@@ -241,7 +241,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentContinuation.Append(continuation);
             }
 
-            commentContinuation.ReplaceAllWithCheck(info.Map);
+            commentContinuation.ReplaceAllWithCheck(info.Map.AsSpan());
 
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
@@ -452,9 +452,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     var known = new List<KeyValuePair<string, string>>(keys.Count);
 
-                    // ReSharper disable once LoopCanBeConvertedToQuery
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var index = 0; index < map.Count; index++)
+                    var count = map.Count;
+
+                    for (var index = 0; index < count; index++)
                     {
                         var key = map[index];
 
@@ -502,15 +502,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var comparer = new StringStartComparer(ArticleStartingOrders);
 
-                var texts = CreateStartTerms().ToHashSet()
-                                              .OrderBy(_ => _, comparer)
-                                              .ThenByDescending(_ => _.Length)
-                                              .ThenBy(_ => _)
-                                              .ToList();
+                var startTerms = CreateStartTerms();
 
-                var replacements = new KeyValuePair<string, string>[texts.Count];
+                var texts = new List<string>(startTerms.Count);
+                texts.AddRange(startTerms.OrderBy(_ => _, comparer).ThenByDescending(_ => _.Length).ThenBy(_ => _));
 
-                for (var index = 0; index < texts.Count; index++)
+                var textsCount = texts.Count;
+
+                var replacements = new KeyValuePair<string, string>[textsCount];
+
+                for (var index = 0; index < textsCount; index++)
                 {
                     var text = texts[index];
 
@@ -520,14 +521,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return replacements;
             }
 
-            private static IEnumerable<string> CreateStartTerms()
+            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+            private static HashSet<string> CreateStartTerms()
             {
                 var startTerms = new[] { "A", "An", "The", string.Empty };
                 var optionals = new[] { "Optional", "(optional)", "(Optional)", "optional", string.Empty };
                 var booleans = new[] { "bool", "Bool", "boolean", "Boolean", string.Empty };
                 var parameters = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter", "paramter", "Paramter", string.Empty };
 
-                var starts = new List<string> { string.Empty };
+                var starts = new List<string>((startTerms.Length * optionals.Length * booleans.Length * parameters.Length) + 1) { string.Empty };
 
                 // ReSharper disable once LoopCanBeConvertedToQuery
                 foreach (var startTerm in startTerms)
@@ -545,12 +547,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var boolean in booleans)
                         {
                             // we have lots of loops, so cache data to avoid unnecessary calculations
-                            var optionalBooleanStart = optionalStart + boolean + " ";
+                            var optionalBooleanStart = new StringBuilder(optionalStart).Append(boolean).Append(' ').ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").TrimStart();
 
                             // ReSharper disable once LoopCanBeConvertedToQuery
                             foreach (var parameter in parameters)
                             {
-                                var fixedStart = new StringBuilder(optionalBooleanStart).Append(parameter).ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").Trim();
+                                var fixedStart = new StringBuilder(optionalBooleanStart).Append(parameter).TrimEnd();
 
                                 if (fixedStart.IsNullOrWhiteSpace() is false)
                                 {
@@ -605,52 +607,52 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     "to specify",
                                 };
 
-                // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
+                var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
+
+                var verbsLength = verbs.Length;
+                var startsCount = starts.Count;
+                var startingVerbsLength = startingVerbs.Length;
+                var conditionsLength = conditions.Length;
+
+                var results = new HashSet<string>();
+
+                // for performance reasons we use for loops here
+                for (var conditionIndex = 0; conditionIndex < conditionsLength; conditionIndex++)
                 {
                     var condition = conditions[conditionIndex];
 
                     // we have lots of loops, so cache data to avoid unnecessary calculations
                     var end = " " + condition + " ";
 
-                    // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                    for (var verbIndex = 0; verbIndex < verbs.Length; verbIndex++)
+                    // for performance reasons we use for loops here
+                    for (var verbIndex = 0; verbIndex < verbsLength; verbIndex++)
                     {
                         var verb = verbs[verbIndex];
                         var middle = " " + verb + end;
 
-                        // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                        for (var startIndex = 0; startIndex < starts.Count; startIndex++)
+                        // for performance reasons we use for loops here
+                        for (var startIndex = 0; startIndex < startsCount; startIndex++)
                         {
                             var start = starts[startIndex];
                             var text = new StringBuilder(start).Append(middle).TrimStart();
 
-                            yield return text.ToUpperCaseAt(0);
-                            yield return text.ToLowerCaseAt(0);
+                            results.Add(text.ToUpperCaseAt(0));
+                            results.Add(text.ToLowerCaseAt(0));
                         }
                     }
-                }
 
-                var startingVerbs = new[] { "Controls", "Defines", "Defined", "Determines", "Determined", "Indicates", "Indicated", "Specifies", "Specified", "Controling", "Controlling", "Defining", "Determining", "Determinating", "Determing", "Indicating", "Specifying" };
-
-                // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                for (var conditionIndex = 0; conditionIndex < conditions.Length; conditionIndex++)
-                {
-                    var condition = conditions[conditionIndex];
-
-                    // we have lots of loops, so cache data to avoid unnecessary calculations
-                    var end = " " + condition + " ";
-
-                    // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use for loops here
-                    for (var index = 0; index < startingVerbs.Length; index++)
+                    // for performance reasons we use for loops here
+                    for (var index = 0; index < startingVerbsLength; index++)
                     {
                         var startingVerb = startingVerbs[index];
                         var text = startingVerb + end;
 
-                        yield return text.ToUpperCaseAt(0);
-                        yield return text.ToLowerCaseAt(0);
+                        results.Add(text.ToUpperCaseAt(0));
+                        results.Add(text.ToLowerCaseAt(0));
                     }
                 }
+
+                return results;
             }
         }
 
@@ -673,26 +675,34 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private sealed class StringStartComparer : IComparer<string>
         {
             private readonly string[] m_specialOrder;
-            private readonly int m_specialOrderLength;
 
-            internal StringStartComparer(string[] specialOrder)
-            {
-                m_specialOrder = specialOrder;
-                m_specialOrderLength = m_specialOrder.Length;
-            }
+            internal StringStartComparer(string[] specialOrder) => m_specialOrder = specialOrder;
 
             public int Compare(string x, string y)
             {
-                if (x is null || y is null)
+                var notNullX = x != null;
+                var notNullY = y != null;
+
+                if (notNullX && notNullY)
                 {
-                    switch (x is null)
-                    {
-                        case false: return 1;
-                        case true when y != null: return -1;
-                        default: return 0;
-                    }
+                    return CompareOrder(x, y);
                 }
 
+                if (notNullX)
+                {
+                    return 1;
+                }
+
+                if (notNullY)
+                {
+                    return -1;
+                }
+
+                return 0;
+            }
+
+            private int CompareOrder(string x, string y)
+            {
                 var orderX = GetOrder(x);
                 var orderY = GetOrder(y);
 
@@ -701,7 +711,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private int GetOrder(string text)
             {
-                for (var i = 0; i < m_specialOrderLength; i++)
+                for (var i = 0; i < m_specialOrder.Length; i++)
                 {
                     var order = m_specialOrder[i];
 

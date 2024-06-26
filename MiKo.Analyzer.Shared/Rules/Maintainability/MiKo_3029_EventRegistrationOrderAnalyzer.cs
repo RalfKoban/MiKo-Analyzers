@@ -87,7 +87,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
                     else
                     {
-                        // we have multiple or even differents amounts of += and -= assignments, so check the used events and order of += or -= calls
+                        // we have multiple or even different amounts of += and -= assignments, so check the used events and order of += or -= calls
                         var addAssignmentsForInvestigation = addAssignments.ToList();
                         var subtractAssignmentsForInvestigation = subtractAssignments.ToList();
 
@@ -120,6 +120,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
         }
 
-        private Diagnostic Issue(AssignmentExpressionSyntax assignment) => Issue(assignment.OperatorToken.GetLocation());
+        private Diagnostic Issue(AssignmentExpressionSyntax assignment) => Issue(assignment.OperatorToken);
     }
 }
