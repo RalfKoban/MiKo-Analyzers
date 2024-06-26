@@ -206,7 +206,7 @@ public sealed class TestMe { }
         [Test]
         public void No_issue_is_reported_for_well_known_file_extension_in_code_block_in_XML_documentation() => Assert.Multiple(() =>
                                                                                                                                     {
-                                                                                                                                        var codeBlocks = new[] { "c", "code" };
+                                                                                                                                        string[] codeBlocks = ["c", "code"];
 
                                                                                                                                         foreach (var xmlTag in XmlTags)
                                                                                                                                         {

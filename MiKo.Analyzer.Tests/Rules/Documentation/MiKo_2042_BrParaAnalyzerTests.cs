@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -335,9 +334,9 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongItems()
         {
-            IEnumerable<string> tokens = ["<br/>", "<br />", "<p>Whatever.</p>"];
+            string[] tokens = ["<br/>", "<br />", "<p>Whatever.</p>"];
 
-            var results = new List<string>();
+            var results = new HashSet<string>(2 * tokens.Length);
 
             foreach (var token in tokens)
             {
@@ -345,9 +344,7 @@ public class TestMe
                 results.Add(token.ToUpperInvariant());
             }
 
-            results.Sort();
-
-            return results.Distinct().ToArray();
+            return [.. results];
         }
     }
 }

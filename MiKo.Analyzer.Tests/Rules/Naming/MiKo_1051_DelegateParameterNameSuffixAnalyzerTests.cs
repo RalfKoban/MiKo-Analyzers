@@ -109,7 +109,7 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static string[] CreateWrongDelegateNames()
         {
-            var names = new[] { "@delegate", "action", "func" };
+            string[] names = ["@delegate", "action", "func"];
 
             var allNames = new HashSet<string>(names);
 
