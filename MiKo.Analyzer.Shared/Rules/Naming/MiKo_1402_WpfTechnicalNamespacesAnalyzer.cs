@@ -10,7 +10,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1402";
 
-        private static readonly HashSet<string> TechnicalWPFNamespaces = new HashSet<string> { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", };
+        private static readonly HashSet<string> TechnicalWPFNamespaces = new HashSet<string> { "Command", "Commands", "Model", "Models", "View", "Views", "ViewModel", "ViewModels", "MVVM", };
         private static readonly HashSet<string> ModelNamespaces = new HashSet<string> { "ComponentModel", "ServiceModel" };
 
         public MiKo_1402_WpfTechnicalNamespacesAnalyzer() : base(Id)
