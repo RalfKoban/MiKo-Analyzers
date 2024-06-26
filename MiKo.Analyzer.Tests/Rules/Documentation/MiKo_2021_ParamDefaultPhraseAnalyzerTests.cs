@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -102,8 +103,64 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void Code_gets_fixed_for_parameter()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// Stuff with some data.
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// The stuff with some data.
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("Reference to the")]
+        [TestCase("Reference to a")]
+        [TestCase("Reference to an")]
+        public void Code_gets_fixed_for_parameter_with_(string start)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// " + start + @" stuff.
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary />
+    /// <param name='o'>
+    /// The stuff.
+    /// </param>
+    public void DoSomething(object o) { }
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2021_ParamDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2021_ParamDefaultPhraseAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2021_CodeFixProvider();
     }
 }

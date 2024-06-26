@@ -12,6 +12,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1010";
 
+        private static readonly string[] SpecialOnParts = { "OnExecuted", "OnCanExecute" };
+        private static readonly string[] SpecialParts = { "Executed", "CanExecute" };
+
         private static readonly ICollection<string> ExcludedNames = new HashSet<string>
                                                                         {
                                                                             nameof(ICommand.CanExecute),
@@ -69,7 +72,20 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return null;
             }
 
-            if (methodName.StartsWith("On", StringComparison.OrdinalIgnoreCase) && methodName.EndsWith("CommandExecuted", StringComparison.OrdinalIgnoreCase))
+            if (methodName.StartsWith("On", StringComparison.OrdinalIgnoreCase))
+            {
+                if (methodName.StartsWithAny(SpecialOnParts, StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
+                if (methodName.EndsWithAny(SpecialParts, StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+            }
+
+            if (methodName.EndsWithAny(SpecialOnParts, StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }

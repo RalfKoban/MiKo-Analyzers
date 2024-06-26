@@ -11,6 +11,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1010_CommandMethodsAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] AcceptableCommands = [
+                                                                  "CommandBindingOnCanExecute",
+                                                                  "CommandBindingOnExecuted",
+                                                                  "OnCanExecuteCommandBinding",
+                                                                  "OnCommandBindingCanExecute",
+                                                                  "OnCommandBindingExecuted",
+                                                                  "OnCommandExecuted",
+                                                                  "OnCommandExecuting",
+                                                                  "OnExecutedCommandBinding",
+                                                                  "OnMyOwnCommandExecuted",
+                                                              ];
+
         [Test]
         public void No_issue_is_reported_for_method_with_completely_different_name() => No_issue_is_reported_for(@"
 public class TestMe
@@ -122,7 +134,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_method_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_method_([ValueSource(nameof(AcceptableCommands))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private int " + methodName + @"() => 42;
@@ -130,7 +142,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_local_function_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_local_function_([ValueSource(nameof(AcceptableCommands))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private void Something()
@@ -141,7 +153,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_event_handling_local_function_in_ctor_([Values("OnCommandExecuting", "OnCommandExecuted", "OnMyOwnCommandExecuted")] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_event_handling_local_function_in_ctor_([ValueSource(nameof(AcceptableCommands))] string methodName) => No_issue_is_reported_for(@"
 public class TestMe
 {
     private TestMe()

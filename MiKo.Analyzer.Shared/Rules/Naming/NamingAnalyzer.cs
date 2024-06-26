@@ -78,7 +78,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> AnalyzeLocalFunctions(IMethodSymbol symbol, Compilation compilation)
         {
-            var localFunctions = symbol.GetLocalFunctions().ToList();
+            var localFunctions = symbol.GetLocalFunctions();
 
             if (localFunctions.Count == 0)
             {
@@ -122,7 +122,25 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected virtual bool ShallAnalyze(IFieldSymbol symbol) => symbol.IsOverride is false;
 
-        protected virtual bool ShallAnalyze(IParameterSymbol symbol) => symbol.IsOverride is false;
+        protected virtual bool ShallAnalyze(IParameterSymbol symbol)
+        {
+            if (symbol.IsOverride)
+            {
+                return false;
+            }
+
+            if (symbol.ContainingSymbol is IMethodSymbol method && method.IsConstructor())
+            {
+                if (method.HasAttributeApplied("System.Text.Json.Serialization.JsonConstructorAttribute")
+                 || method.HasAttributeApplied("Newtonsoft.Json.JsonConstructorAttribute"))
+                {
+                    // ignore Json constructors
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         protected virtual bool ShallAnalyzeLocalFunctions(IMethodSymbol symbol) => false;
 

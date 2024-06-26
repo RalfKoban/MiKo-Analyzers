@@ -18,10 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: no coverage start
 
-        private static readonly string[] IndicatePhrases = CreateIndicatePhrases().Take(TestLimit).Distinct().ToArray();
-        private static readonly string[] OptionalPhrases = CreateOptionalPhrases().Take(TestLimit).Distinct().ToArray();
-        private static readonly string[] ConditionalPhrases = CreateConditionalStartPhrases().Take(TestLimit).Distinct().ToArray();
-        private static readonly string[] DefaultCases = CreateDefaultCases().Take(TestLimit).Distinct().ToArray();
+        private static readonly string[] IndicatePhrases = [.. Enumerable.ToHashSet(CreateIndicatePhrases().Take(TestLimit))];
+        private static readonly string[] OptionalPhrases = [.. Enumerable.ToHashSet(CreateOptionalPhrases().Take(TestLimit))];
+        private static readonly string[] ConditionalPhrases = [.. Enumerable.ToHashSet(CreateConditionalStartPhrases().Take(TestLimit))];
+        private static readonly string[] DefaultCases = [.. Enumerable.ToHashSet(CreateDefaultCases().Take(TestLimit))];
 
         private static readonly string[] TruePhrases =
                                                        [
@@ -899,8 +899,8 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateStartTerms()
         {
-            var terms = new[] { "flag", "Flag", "value", "Value", "parameter", "Parameter" };
-            var booleans = new[] { "bool", "boolean" };
+            string[] terms = ["flag", "Flag", "value", "Value", "parameter", "Parameter"];
+            string[] booleans = ["bool", "boolean"];
 
             foreach (var term in terms)
             {
@@ -926,32 +926,32 @@ public class TestMe
         {
             var starts = CreateStartTerms();
 
-            var conditions = new[] { "if", "whether", "whether or not", "if to", "whether to", "whether or not to" };
+            string[] conditions = ["if", "whether", "whether or not", "if to", "whether to", "whether or not to"];
 
-            var verbs = new[]
-                            {
-                                "controling", // be aware of typo
-                                "controlling",
-                                "defining",
-                                "determining",
-                                "determinating", // be aware of typo
-                                "indicating",
-                                "specifying",
-                                "that controls",
-                                "that defined", // be aware of typo
-                                "that defines",
-                                "that determined", // be aware of typo
-                                "that determines",
-                                "that indicated", // be aware of typo
-                                "that indicates",
-                                "that specifies",
-                                "which controls",
-                                "which defines",
-                                "which determines",
-                                "which indicates",
-                                "which specified", // be aware of typo
-                                "which specifies",
-                            };
+            string[] verbs =
+                             [
+                                 "controling", // be aware of typo
+                                 "controlling",
+                                 "defining",
+                                 "determining",
+                                 "determinating", // be aware of typo
+                                 "indicating",
+                                 "specifying",
+                                 "that controls",
+                                 "that defined", // be aware of typo
+                                 "that defines",
+                                 "that determined", // be aware of typo
+                                 "that determines",
+                                 "that indicated", // be aware of typo
+                                 "that indicates",
+                                 "that specifies",
+                                 "which controls",
+                                 "which defines",
+                                 "which determines",
+                                 "which indicates",
+                                 "which specified", // be aware of typo
+                                 "which specifies",
+                             ];
 
             foreach (var phrase in from verb in verbs
                                    select " " + verb + " " into middle // we have lots of loops, so cache data to avoid unnecessary calculations
@@ -964,25 +964,25 @@ public class TestMe
                 yield return phrase.ToLowerCaseAt(0);
             }
 
-            var startingVerbs = new[]
-                                    {
-                                        "Controls",
-                                        "Controling", // be aware of typo
-                                        "Controlling",
-                                        "Defines",
-                                        "Defined",
-                                        "Defining",
-                                        "Determines",
-                                        "Determined",
-                                        "Determining",
-                                        "Determinating", // be aware of typo
-                                        "Indicates",
-                                        "Indicated",
-                                        "Indicating",
-                                        "Specifies",
-                                        "Specified",
-                                        "Specifying",
-                                    };
+            string[] startingVerbs =
+                                     [
+                                         "Controls",
+                                         "Controling", // be aware of typo
+                                         "Controlling",
+                                         "Defines",
+                                         "Defined",
+                                         "Defining",
+                                         "Determines",
+                                         "Determined",
+                                         "Determining",
+                                         "Determinating", // be aware of typo
+                                         "Indicates",
+                                         "Indicated",
+                                         "Indicating",
+                                         "Specifies",
+                                         "Specified",
+                                         "Specifying",
+                                     ];
 
             foreach (var phrase in from startingVerb in startingVerbs
                                    from condition in conditions
@@ -996,39 +996,34 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateOptionalPhrases()
         {
-            var starts = new[] { "A optional", "An optional", "The optional", "An (optional)", "The (optional)", "Optional", "(Optional)" };
-            var conditions = new[] { "if", "whether", "whether or not", "if to", "whether to", "whether or not to" };
-            var booleans = new[] { "bool ", "Boolean ", string.Empty };
-            var values = new[]
-                             {
-                                 "parameter",
-                                 "flag",
-                                 "value",
-                             };
+            string[] starts = ["A optional", "An optional", "The optional", "An (optional)", "The (optional)", "Optional", "(Optional)"];
+            string[] conditions = ["if", "whether", "whether or not", "if to", "whether to", "whether or not to"];
+            string[] booleans = ["bool ", "Boolean ", string.Empty];
+            string[] values = ["parameter", "flag", "value"];
 
-            var verbs = new[]
-                            {
-                                "controling", // be aware of typo
-                                "controlling",
-                                "defining",
-                                "determining",
-                                "indicating",
-                                "specifying",
-                                "that controls",
-                                "that defined", // be aware of typo
-                                "that defines",
-                                "that determined",
-                                "that determines",
-                                "that indicated", // be aware of typo
-                                "that indicates",
-                                "that specifies",
-                                "which controls",
-                                "which defines",
-                                "which determines",
-                                "which indicates",
-                                "which specified", // be aware of typo
-                                "which specifies",
-                            };
+            string[] verbs =
+                             [
+                                 "controling", // be aware of typo
+                                 "controlling",
+                                 "defining",
+                                 "determining",
+                                 "indicating",
+                                 "specifying",
+                                 "that controls",
+                                 "that defined", // be aware of typo
+                                 "that defines",
+                                 "that determined",
+                                 "that determines",
+                                 "that indicated", // be aware of typo
+                                 "that indicates",
+                                 "that specifies",
+                                 "which controls",
+                                 "which defines",
+                                 "which determines",
+                                 "which indicates",
+                                 "which specified", // be aware of typo
+                                 "which specifies",
+                             ];
 
             foreach (var phrase in from verb in verbs
                                    select " " + verb + " " into v // we have lots of loops, so cache data to avoid unnecessary calculations
@@ -1049,9 +1044,9 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateConditionalStartPhrases()
         {
-            var starts = new[] { "If set to", "If given", "If", "When set to", "When given", "When", "In case set to", "In case" };
-            var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true" };
-            var separators = new[] { string.Empty, ":", ";", "," };
+            string[] starts = ["If set to", "If given", "If", "When set to", "When given", "When", "In case set to", "In case"];
+            string[] booleans = [@"<see langword=""true""/>", @"<see langref=""true""/>", "true"];
+            string[] separators = [string.Empty, ":", ";", ","];
 
             foreach (var phrase in from separator in separators
                                    from boolean in booleans
@@ -1066,14 +1061,15 @@ public class TestMe
         [ExcludeFromCodeCoverage]
         private static IEnumerable<string> CreateDefaultCases()
         {
-            var starts = new[] { "The default is", "Default is", "Defaults to" };
-            var booleans = new[] { @"<see langword=""true""/>", @"<see langref=""true""/>", "true", @"<see langword=""false""/>", @"<see langref=""false""/>", "false" };
+            string[] starts = ["The default is", "Default is", "Defaults to"];
+            string[] booleans = [@"<see langword=""true""/>", @"<see langref=""true""/>", "true", @"<see langword=""false""/>", @"<see langref=""false""/>", "false"];
 
-            foreach (var phrase in from start in starts
-                                   from boolean in booleans
-                                   select string.Concat(start, " ", boolean))
+            foreach (var start in starts)
             {
-                yield return phrase;
+                foreach (var boolean in booleans)
+                {
+                    yield return string.Concat(start, " ", boolean);
+                }
             }
         }
 

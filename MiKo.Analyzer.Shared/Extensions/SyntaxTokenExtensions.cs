@@ -105,6 +105,8 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsLocatedAt(this SyntaxToken value, Location location) => value.GetLocation().Equals(location);
+
         internal static IReadOnlyList<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
@@ -154,7 +156,7 @@ namespace MiKoSolutions.Analyzers
 
             for (var i = 0; i < lines; i++)
             {
-                trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed);
+                trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
             }
 
             return value.WithLeadingTrivia(trivia);
@@ -170,6 +172,8 @@ namespace MiKoSolutions.Analyzers
 
             return value.WithLeadingSpaces(currentSpaces + additionalSpaces);
         }
+
+        internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTrivia trivia) => value.WithLeadingTrivia(value.LeadingTrivia.Add(trivia));
 
         internal static SyntaxToken WithAdditionalLeadingTrivia(this SyntaxToken value, SyntaxTriviaList trivia) => value.WithLeadingTrivia(value.LeadingTrivia.AddRange(trivia));
 

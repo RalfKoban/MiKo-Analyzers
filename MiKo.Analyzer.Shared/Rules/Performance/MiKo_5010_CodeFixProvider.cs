@@ -70,8 +70,10 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 case 1 when invocation.Expression is MemberAccessExpressionSyntax maes:
                 {
+                    var argument0 = arguments[0];
+
                     var left = maes.Expression;
-                    var right = arguments[0].Expression;
+                    var right = argument0.Expression;
 
                     if (right is CastExpressionSyntax cast)
                     {
@@ -83,15 +85,18 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                 case 2:
                 {
-                    var left = arguments[0].Expression;
-                    var right = arguments[1].Expression;
+                    var argument0 = arguments[0];
+                    var argument1 = arguments[1];
+
+                    var left = argument0.Expression;
+                    var right = argument1.Expression;
 
                     if (issue.Properties.IsEmpty)
                     {
                         return SyntaxFactory.BinaryExpression(kind, left, right).WithTriviaFrom(syntax);
                     }
 
-                    var operand = Invocation(SimpleMemberAccess(left, nameof(Equals)), arguments[1]);
+                    var operand = Invocation(SimpleMemberAccess(left, nameof(Equals)), argument1);
 
                     if (kind == SyntaxKind.NotEqualsExpression)
                     {

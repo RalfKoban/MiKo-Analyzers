@@ -133,7 +133,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] SpecialModels = { "Modeless", "modeless", "ModeLess", "modeLess", "semanticModel", "SemanticModel" };
             internal static readonly string[] Collections = { "List", "Dictionary", "ObservableCollection", "Collection", "Array", "HashSet", "Stack", "list", "dictionary", "observableCollection", "collection", "array", "hashSet", "stack" };
             internal static readonly string[] Symbols = { "T:", "P:", "M:", "F:", "E:", "!:" };
-            internal static readonly string[] SymbolsAndLineBreaks = Symbols.Concat(new[] { EnvironmentNewLine }).ToArray();
+            internal static readonly string[] SymbolsAndLineBreaks = Symbols.Append(EnvironmentNewLine).ToArray();
             internal static readonly string[] Requirements = { "Must", "Need", "Shall", "Should", "Will", "Would" };
             internal static readonly string[] FieldPrefixes =
                                                               {
@@ -152,8 +152,8 @@ namespace MiKoSolutions.Analyzers
         internal static class Comments
         {
             internal const string AlternativeStringReturnTypeStartingPhraseTemplate = "An interned copy of the {0} {1} ";
-            internal const string Asynchrounously = "Asynchronously";
-            internal const string AsynchrounouslyStartingPhrase = Asynchrounously + " ";
+            internal const string Asynchronously = "Asynchronously";
+            internal const string AsynchronouslyStartingPhrase = Asynchronously + " ";
             internal const string BooleanParameterEndingPhraseTemplate = "; otherwise, {0}.";
             internal const string BooleanParameterStartingPhraseTemplate = "{0} to ";
             internal const string BooleanReturnTypeEndingPhraseTemplate = "; otherwise, {0}.";
@@ -229,7 +229,7 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] UnusedPhrase = { "Unused.", "Unused", "This parameter is not used.", "This parameter is not used" };
             internal static readonly string[] FuturePhrase = { "Reserved for future usage.", "Reserved for future usage", "Reserved.", "Reserved", "future", };
 
-            internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).Distinct().ToArray();
+            internal static readonly string[] EventSourcePhrase = new[] { "The source of the event.", "The source of the event" }.Concat(UnusedPhrase).ToArray();
 
             internal static readonly string[] AAnThePhraseWithSpaces = { "A ", "An ", "The " };
             internal static readonly string[] AAnThePhraseWithoutSpaces = { "A", "An", "The" };
@@ -405,7 +405,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  BooleanParameterEndingPhraseTemplate.FormatWith("<see langword=\"false\" />"),
                                                                              };
 
-            internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Concat(BooleanParameterStartingPhrase).Distinct().ToArray();
+            internal static readonly string[] BooleanPropertySetterStartingPhrase = BooleanReturnTypeStartingPhrase.Union(BooleanParameterStartingPhrase).ToArray();
 
             internal static readonly string[] BooleanTaskReturnTypeStartingPhrase =
                                                                                     {
@@ -623,10 +623,9 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] ExceptionForbiddenStartingPhrase =
                                                                                  {
-                                                                                     "Can be thrown ",
-                                                                                     "Should be thrown ",
                                                                                      "A exception ",
                                                                                      "An exception ",
+                                                                                     "Can be thrown ",
                                                                                      "Exception ",
                                                                                      "Fired ",
                                                                                      "Gets thrown ",
@@ -634,6 +633,7 @@ namespace MiKoSolutions.Analyzers
                                                                                      "In case ",
                                                                                      "Is fired ",
                                                                                      "Is thrown ",
+                                                                                     "Should be thrown ",
                                                                                      "The exception ",
                                                                                      "This exception ",
                                                                                      "Throw ",
@@ -897,15 +897,8 @@ namespace MiKoSolutions.Analyzers
                                                                             };
 
             internal static readonly ISet<string> LinqMethodNames = typeof(Enumerable).GetMethods()
-                                                                                      .Select(_ => _.Name)
-                                                                                      .Except(new[]
-                                                                                                  {
-                                                                                                      nameof(Equals),
-                                                                                                      nameof(ToString),
-                                                                                                      nameof(GetHashCode),
-                                                                                                      nameof(GetType),
-                                                                                                  })
-                                                                                      .ToHashSet();
+                                                                                      .ToHashSet(_ => _.Name)
+                                                                                      .Except(nameof(Equals), nameof(ToString), nameof(GetHashCode), nameof(GetType));
 
             internal static readonly ISet<string> GeneratedAttributeNames = new HashSet<string>
                                                                                 {
@@ -1057,7 +1050,6 @@ namespace MiKoSolutions.Analyzers
                                                                                    .Concat(TypeUnderTestFieldNames)
                                                                                    .Concat(TypeUnderTestVariableNames)
                                                                                    .Concat(TypeUnderTestPropertyNames)
-                                                                                   .OrderBy(_ => _)
                                                                                    .ToHashSet();
 
             internal static readonly ISet<string> AssertionTypes = new HashSet<string>

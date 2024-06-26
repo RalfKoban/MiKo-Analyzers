@@ -25,9 +25,39 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             {
                 var spaces = GetProposedSpaces(issue);
 
-                return expression.WithOpenBracketToken(expression.OpenBracketToken.WithLeadingSpaces(spaces))
-                                 .WithElements(GetUpdatedSyntax(expression.Elements, spaces + Constants.Indentation))
-                                 .WithCloseBracketToken(expression.CloseBracketToken.WithLeadingSpaces(spaces));
+                var issueLocation = issue.Location;
+
+                var openBracketToken = expression.OpenBracketToken;
+                var closeBracketToken = expression.CloseBracketToken;
+                var elements = expression.Elements;
+
+                if (openBracketToken.IsLocatedAt(issueLocation))
+                {
+                    return expression.WithOpenBracketToken(openBracketToken.WithLeadingSpaces(spaces))
+                                     .WithElements(GetUpdatedSyntax(elements, spaces + Constants.Indentation))
+                                     .WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
+                }
+
+                if (closeBracketToken.IsLocatedAt(issueLocation))
+                {
+                    CollectionExpressionSyntax updatedExpression;
+
+                    if (elements.SeparatorCount == elements.Count)
+                    {
+                        // we have a separator at the last element
+                        var last = elements.GetSeparators().Last();
+
+                        updatedExpression = expression.WithElements(elements.ReplaceSeparator(last, last.WithTrailingNewLine()));
+                    }
+                    else
+                    {
+                        var last = elements.Last();
+
+                        updatedExpression = expression.WithElements(elements.Replace(last, last.WithTrailingNewLine()));
+                    }
+
+                    return updatedExpression.WithCloseBracketToken(closeBracketToken.WithLeadingSpaces(spaces));
+                }
             }
 
             return syntax;

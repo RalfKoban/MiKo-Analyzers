@@ -30,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                       "which is used to ",
                                                                   ];
 
-        private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases();
+        private static readonly string[] MeaninglessPhrases = CreateMeaninglessPhrases(MeaninglessTextPhrases);
 
         private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase).ToArray();
 
@@ -940,43 +940,41 @@ public class TestMe
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2012_CodeFixProvider();
 
         [ExcludeFromCodeCoverage]
-        private static string[] CreateMeaninglessPhrases()
+        private static string[] CreateMeaninglessPhrases(string[] phrases)
         {
-            var types = new[]
-                            {
-                                "Attribute",
-                                "Base",
-                                "Class",
-                                "Interface",
-                                "Method",
-                                "Field",
-                                "Property",
-                                "Event",
-                                "EventHandler",
-                                "Handler",
-                                "Component",
-                                "Constructor",
-                                "Ctor",
-                                "Delegate",
-                                "Creator",
-                                "Entity",
-                                "Model",
-                                "View",
-                                "ViewModel",
-                                "Command",
-                                "Action",
-                                "Func",
-                                "Converter",
-                                "Adapter ",
-                                "Builder",
-                                "Factory",
-                                "Proxy ",
-                                "Wrapper ",
-                            };
+            string[] types =
+                             [
+                                 "Attribute",
+                                 "Base",
+                                 "Class",
+                                 "Interface",
+                                 "Method",
+                                 "Field",
+                                 "Property",
+                                 "Event",
+                                 "EventHandler",
+                                 "Handler",
+                                 "Component",
+                                 "Constructor",
+                                 "Ctor",
+                                 "Delegate",
+                                 "Creator",
+                                 "Entity",
+                                 "Model",
+                                 "View",
+                                 "ViewModel",
+                                 "Command",
+                                 "Action",
+                                 "Func",
+                                 "Converter",
+                                 "Adapter ",
+                                 "Builder",
+                                 "Factory",
+                                 "Proxy ",
+                                 "Wrapper ",
+                             ];
 
-            var phrases = MeaninglessTextPhrases;
-
-            var results = new List<string>
+            var results = new HashSet<string>
                               {
                                   "TestMe",
                                   "ITestMe",
@@ -1036,7 +1034,7 @@ public class TestMe
             results.Add("<see cref=\"ITestMe\"/>");
             results.Add("<see cref=\"ITestMe\" />");
 
-            return results.Distinct().ToArray();
+            return [.. results];
         }
     }
 }
