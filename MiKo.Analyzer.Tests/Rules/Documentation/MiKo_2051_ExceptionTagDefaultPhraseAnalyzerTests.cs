@@ -129,7 +129,104 @@ public class TestMe
         [TestCase(nameof(Exception), @"throws if <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"throws if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
         [TestCase(nameof(Exception), @"throws when <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
-        [TestCase(nameof(Exception), @"throws when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception that will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception which will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"The exception will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"This exception will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that is thrown in case that the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that is thrown in case which the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception that will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"A exception which will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception that will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"An exception which will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that gets thrown in case that the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that gets thrown in case which the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception that will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which gets thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which gets thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which gets thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which is thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which is thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which is thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which will be thrown if the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which will be thrown in case the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which will be thrown in case that the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which will be thrown in case which the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(Exception), @"Exception which will be thrown when the <paramref name=""o""/> ", @"<paramref name=""o""/> ")]
+        [TestCase(nameof(InvalidOperationException), "Throw in case that the file cannot be converted to the ", "The file cannot be converted to the ")]
+        [TestCase(nameof(InvalidOperationException), "Throw in case that a module cannot be loaded into ", "A module cannot be loaded into ")]
         [TestCase(nameof(InvalidOperationException), "Thrown in case that the file cannot be converted to the ", "The file cannot be converted to the ")]
         [TestCase(nameof(InvalidOperationException), "Thrown in case that a module cannot be loaded into ", "A module cannot be loaded into ")]
         public void Code_gets_fixed_for_(string exceptionType, string startingPhrase, string fixedPhrase)
@@ -638,27 +735,66 @@ public class TestMe
         {
             string[] phrases =
                                [
+                                   "A exception that gets thrown ",
+                                   "A exception that is thrown ",
+                                   "A exception that should be be thrown ",
+                                   "A exception that will be thrown ",
+                                   "A exception thrown ",
+                                   "A exception which gets thrown ",
+                                   "A exception which is thrown ",
+                                   "A exception which should be be thrown ",
+                                   "A exception which will be thrown ",
+                                   "An exception that gets thrown ",
+                                   "An exception that is thrown ",
+                                   "An exception that should be be thrown ",
+                                   "An exception that will be thrown ",
+                                   "An exception thrown ",
+                                   "An exception which gets thrown ",
+                                   "An exception which is thrown ",
+                                   "An exception which should be be thrown ",
+                                   "An exception which will be thrown ",
+                                   "Can be thrown ",
+                                   "Exception in case ",
+                                   "Exception that gets thrown ",
+                                   "Exception that is thrown ",
+                                   "Exception that should be be thrown ",
+                                   "Exception that will be thrown ",
+                                   "Exception which gets thrown ",
+                                   "Exception which is thrown ",
+                                   "Exception which should be be thrown ",
+                                   "Exception which will be thrown ",
+                                   "Fired ",
+                                   "Gets thrown ",
                                    "If ",
                                    "In case ",
-                                   "When ",
-                                   "Throw ",
-                                   "Throws ",
-                                   "Thrown ",
+                                   "Is fired ",
                                    "Is thrown ",
-                                   "Gets thrown ",
-                                   "Will be thrown ",
-                                   "Can be thrown ",
                                    "Should be thrown ",
+                                   "The exception gets thrown ",
                                    "The exception in case ",
+                                   "The exception is thrown ",
+                                   "The exception should be be thrown ",
+                                   "The exception that gets thrown ",
+                                   "The exception that is thrown ",
+                                   "The exception that should be be thrown ",
+                                   "The exception that will be thrown ",
+                                   "The exception which gets thrown ",
+                                   "The exception which is thrown ",
+                                   "The exception which should be be thrown ",
+                                   "The exception which will be thrown ",
+                                   "The exception will be thrown ",
+                                   "This exception gets thrown ",
+                                   "This exception is thrown ",
                                    "This exception should be thrown ",
-                                   "Exception in case ",
-                                   "A exception thrown ",
-                                   "An exception thrown ",
-                                   "Fired ",
-                                   "Is fired "
-                                ];
+                                   "This exception will be thrown ",
+                                   "Throw ",
+                                   "Thrown ",
+                                   "Throws ",
+                                   "When ",
+                                   "Will be thrown ",
+                               ];
 
-            return [.. phrases.Concat(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).Distinct().OrderBy(_ => _)];
+            return [.. phrases.Union(phrases.Select(_ => _.ToLower(CultureInfo.CurrentCulture))).OrderBy(_ => _)];
         }
     }
 }

@@ -49,7 +49,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<IMethodSymbol> GetExtensionMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.IsExtensionMethod);
 
-        internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
+        internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value) => value.GetMembers<IMethodSymbol>();
 
         internal static IEnumerable<IMethodSymbol> GetMethods(this ITypeSymbol value, MethodKind kind)
         {
@@ -81,11 +81,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
 
-        internal static IEnumerable<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
+        internal static IReadOnlyCollection<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
             return value.GetSyntaxNodes()
                         .SelectMany(_ => _.DescendantNodes(__ => __.IsAnyKind(LocalFunctionContainerSyntaxKinds)))
-                        .OfType<LocalFunctionStatementSyntax>();
+                        .OfType<LocalFunctionStatementSyntax>()
+                        .ToList();
         }
 
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
@@ -222,13 +223,17 @@ namespace MiKoSolutions.Analyzers
 
         internal static SeparatedSyntaxList<ArgumentSyntax> GetInvocationArgumentsFrom(this IFieldSymbol value, string invocation) => value.GetAssignmentsVia(invocation)
                                                                                                                                            .Select(_ => _.GetEnclosing<InvocationExpressionSyntax>())
-                                                                                                                                           .Select(_ => _.ArgumentList)
-                                                                                                                                           .Select(_ => _.Arguments)
+                                                                                                                                           .Select(_ => _.ArgumentList.Arguments)
                                                                                                                                            .FirstOrDefault(_ => _.Count > 0);
 
-        internal static IEnumerable<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers().Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>();
+        internal static IReadOnlyList<TSymbol> GetMembers<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.GetMembers()
+                                                                                                                           .OfType<TSymbol>()
+                                                                                                                           .Where(_ => _.IsImplicitlyDeclared is false)
+                                                                                                                           .ToList();
 
-        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes().SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes()
+                                                                                                                                           .SelectMany(_ => _.GetMembers<TSymbol>())
+                                                                                                                                           .Where(_ => _.CanBeReferencedByName);
 
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value, string name) where TSymbol : ISymbol
         {
@@ -238,7 +243,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (members.Length > 0)
                 {
-                    foreach (var member in members.Where(_ => _.IsImplicitlyDeclared is false).OfType<TSymbol>())
+                    foreach (var member in members.OfType<TSymbol>().Where(_ => _.IsImplicitlyDeclared is false))
                     {
                         yield return member;
                     }

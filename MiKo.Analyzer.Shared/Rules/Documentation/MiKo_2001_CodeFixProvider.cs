@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -21,39 +22,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly KeyValuePair<string, string>[] SpecialTermReplacementMap = { new KeyValuePair<string, string>(SpecialTerm, "Occurs when ") };
 
-        private static readonly Dictionary<string, string> ReplacementMap = new Dictionary<string, string>
-                                                                                {
-                                                                                    { "Event fired ", string.Empty },
-                                                                                    { "Event raised ", string.Empty },
-                                                                                    { "Event is fired ", string.Empty },
-                                                                                    { "Event is raised ", string.Empty },
-                                                                                    { "Event occurs ", string.Empty },
-                                                                                    { "Event shall be fired ", string.Empty },
-                                                                                    { "Event shall be raised ", string.Empty },
-                                                                                    { "Event that is fired ", string.Empty },
-                                                                                    { "Event that is raised ", string.Empty },
-                                                                                    { "Event that shall be fired ", string.Empty },
-                                                                                    { "Event that shall be raised ", string.Empty },
-                                                                                    { "Event to fire ", string.Empty },
-                                                                                    { "Event to raise ", string.Empty },
-                                                                                    { "Event which is fired ", string.Empty },
-                                                                                    { "Event which is raised ", string.Empty },
-                                                                                    { "Fired ", string.Empty },
-                                                                                    { "Indicates ", string.Empty },
-                                                                                    { "Invoked if ", "when " },
-                                                                                    { "Is fired ", string.Empty },
-                                                                                    { "Is raised ", string.Empty },
-                                                                                    { "Raised ", string.Empty },
-                                                                                    { "Shall be fired ", string.Empty },
-                                                                                    { "Shall be raised ", string.Empty },
-                                                                                    { "The event to fire ", string.Empty },
-                                                                                    { "The event to raise ", string.Empty },
-                                                                                    { "This event is fired ", string.Empty },
-                                                                                    { "This event is raised ", string.Empty },
-                                                                                    { "This event occurs ", string.Empty },
-                                                                                    { "This event shall be fired ", string.Empty },
-                                                                                    { "This event shall be raised ", string.Empty },
-                                                                                };
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreatePhrases().Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                               .Append(new KeyValuePair<string, string>("Invoked if ", "when "))
+                                                                                               .Append(new KeyValuePair<string, string>("Invoked when ", "when "))
+                                                                                               .OrderByDescending(_ => _.Key.Length)
+                                                                                               .ThenBy(_ => _.Key)
+                                                                                               .ToArray();
+
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2001";
@@ -76,6 +53,85 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return fixedComment;
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap, FirstWordHandling.MakeLowerCase);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
+
+//// ncrunch: rdi off
+
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+        private static HashSet<string> CreatePhrases()
+        {
+            var starts = new[] { "Event", "This event", "The event", "An event", "A event" };
+            var adverbs = new[]
+                              {
+                                  string.Empty,
+                                  "is ", "that is ", "which is ",
+                                  "can be ", "that can be ", "which can be ",
+                                  "could be ", "that could be ", "which could be ",
+                                  "shall be ", "that shall be ", "which shall be ",
+                                  "should be ", "that should be ", "which should be ",
+                                  "will be ", "that will be ", "which will be ",
+                                  "would be ", "that would be ", "which would be ",
+                              };
+            var verbs = new[] { "fired", "raised", "caused", "triggered", "occurred", "occured" };
+
+            var results = new HashSet<string>();
+
+            foreach (var verb in verbs)
+            {
+                results.Add(string.Concat(verb.ToUpperCaseAt(0), " "));
+
+                foreach (var adverb in adverbs)
+                {
+                    var end = string.Concat(adverb, verb);
+
+                    results.Add(end.ToUpperCaseAt(0));
+
+                    foreach (var start in starts)
+                    {
+                        results.Add(string.Concat(start, " ", end, " "));
+                    }
+                }
+            }
+
+            var midTerms = new[]
+                               {
+                                   "to",
+                                   "can", "that can", "which can",
+                                   "could", "that could", "which could",
+                                   "shall", "that shall", "which shall",
+                                   "should", "that should", "which should",
+                                   "will", "that will", "which will",
+                                   "would", "that would", "which would",
+                               };
+            var verbsInfinite = new[] { "fire", "raise", "cause", "trigger", "occur" };
+
+            foreach (var start in starts)
+            {
+                foreach (var midTerm in midTerms)
+                {
+                    var begin = string.Concat(start, " ", midTerm, " ");
+
+                    foreach (var verb in verbsInfinite)
+                    {
+                        results.Add(string.Concat(begin, verb, " "));
+                    }
+                }
+            }
+
+            var verbsPresent = new[] { "fires", "raises", "causes", "triggers", "occurs" };
+
+            foreach (var start in starts)
+            {
+                foreach (var verb in verbsPresent)
+                {
+                    results.Add(string.Concat(start, " ", verb, " "));
+                }
+            }
+
+            results.Add("Indicates");
+
+            return results;
+        }
+//// ncrunch: rdi default
     }
 }

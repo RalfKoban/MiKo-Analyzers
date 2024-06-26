@@ -31,6 +31,7 @@ public class TestMe
         [TestCase("_3")]
         [TestCase("_4")]
         [TestCase("_5")]
+        [TestCase("failed")] // result to indicate an error in ASP .NET Core
         public void No_issue_is_reported_for_correctly_named_simple_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,7 @@ public class TestMe
         [TestCase("_3")]
         [TestCase("_4")]
         [TestCase("_5")]
+        [TestCase("failed")] // result to indicate an error in ASP .NET Core
         public void No_issue_is_reported_for_correctly_named_parenthesized_lambda_identifier_(string identifier) => No_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;

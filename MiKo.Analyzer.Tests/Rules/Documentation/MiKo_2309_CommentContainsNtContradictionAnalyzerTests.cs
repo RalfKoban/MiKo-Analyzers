@@ -11,6 +11,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2309_CommentContainsNtContradictionAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] Delimiters = [string.Empty, " ", ".", ",", ";", ":", "!", "?"];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -42,7 +44,7 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_wrong_single_line_comment() => Assert.Multiple(() =>
                                                                                                  {
-                                                                                                     foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
+                                                                                                     foreach (var delimiter in Delimiters)
                                                                                                      {
                                                                                                          foreach (var wrongPhrase in WrongContradictionPhrases)
                                                                                                          {
@@ -61,7 +63,7 @@ public class TestMe
         [Test]
         public void An_issue_is_reported_for_wrong_multi_line_comment() => Assert.Multiple(() =>
                                                                                                 {
-                                                                                                    foreach (var delimiter in new[] { string.Empty, " ", ".", ",", ";", ":", "!", "?" })
+                                                                                                    foreach (var delimiter in Delimiters)
                                                                                                     {
                                                                                                         foreach (var wrongPhrase in WrongContradictionPhrases)
                                                                                                         {

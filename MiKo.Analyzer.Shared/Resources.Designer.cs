@@ -5158,6 +5158,15 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start documentation with &apos;The &apos;.
+        /// </summary>
+        internal static string MiKo_2021_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2021_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The documentation of parameters should describe what they represent..
         /// </summary>
         internal static string MiKo_2021_Description {
