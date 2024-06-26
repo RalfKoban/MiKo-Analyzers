@@ -119,12 +119,14 @@ namespace Bla
 
         [Test]
         public void No_issue_is_reported_for_test_class_of_generic_type_and_typed_where_clause_constraint_with_correct_prefix() => Assert.Multiple(() =>
-                                                                                                                                                        {
-                                                                                                                                                            foreach (var constraint in new[] { "class", "struct" })
-                                                                                                                                                            {
-                                                                                                                                                                foreach (var testFixture in TestFixtures)
-                                                                                                                                                                {
-                                                                                                                                                                    No_issue_is_reported_for(@"
+                                                                                                                                                   {
+                                                                                                                                                       string[] types = ["class", "struct"];
+
+                                                                                                                                                       foreach (var constraint in types)
+                                                                                                                                                       {
+                                                                                                                                                           foreach (var testFixture in TestFixtures)
+                                                                                                                                                           {
+                                                                                                                                                               No_issue_is_reported_for(@"
 namespace Bla
 {
     public class ATestMe
@@ -140,9 +142,9 @@ namespace Bla
     }
 }
 ");
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                        });
+                                                                                                                                                           }
+                                                                                                                                                       }
+                                                                                                                                                   });
 
         [Test]
         public void An_issue_is_reported_for_test_class_of_generic_type_with_wrong_prefix_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"

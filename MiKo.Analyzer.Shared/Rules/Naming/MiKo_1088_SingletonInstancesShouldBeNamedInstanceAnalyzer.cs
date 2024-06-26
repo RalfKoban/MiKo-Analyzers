@@ -19,14 +19,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string AllowedName3 = "Zero";
 
         private static readonly HashSet<string> AllowedFieldNames = Enumerable.Empty<string>()
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName.ToLowerCaseAt(0)))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName1.ToLowerCaseAt(0)))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName1))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName2.ToLowerCaseAt(0)))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName2))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName3.ToLowerCaseAt(0)))
-                                                                              .Concat(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName3))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName.ToLowerCaseAt(0)))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + InstanceName))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName1.ToLowerCaseAt(0)))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName1))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName2.ToLowerCaseAt(0)))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName2))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName3.ToLowerCaseAt(0)))
+                                                                              .Union(Constants.Markers.FieldPrefixes.Select(_ => _ + AllowedName3))
                                                                               .ToHashSet();
 
         private static readonly HashSet<string> AllowedPropertyNames = new HashSet<string> { InstanceName, AllowedName1, AllowedName2, AllowedName3 };

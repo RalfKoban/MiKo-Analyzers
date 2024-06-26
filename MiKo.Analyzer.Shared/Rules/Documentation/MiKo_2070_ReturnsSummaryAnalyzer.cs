@@ -51,7 +51,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             comparison = StringComparison.OrdinalIgnoreCase;
 
-            var firstWord = valueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase) // skip over async starting phrase
+            var firstWord = valueText.Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                      .FirstWord();
 
             problematicText = valueText.FirstWord();
@@ -69,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (m.IsAsync)
                 {
-                    return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);
+                    return Constants.Comments.AsynchronouslyStartingPhrase + startText.ToLowerCaseAt(0);
                 }
 
                 return startText;

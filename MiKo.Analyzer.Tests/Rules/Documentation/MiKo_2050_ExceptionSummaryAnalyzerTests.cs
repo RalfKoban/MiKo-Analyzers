@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -11,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2050_ExceptionSummaryAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreatePhrases()).Except([Constants.Comments.ExceptionTypeSummaryStartingPhrase])];
+
         [Test]
         public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
 using System;
@@ -630,7 +635,7 @@ public sealed class BlaBlaException : Exception
         }
 
         [Test]
-        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines()
+        public void Code_gets_fixed_for_exception_type_with_empty_summary_on_different_lines()
         {
             const string OriginalCode = @"
 using System;
@@ -657,13 +662,15 @@ public sealed class BlaBlaException : Exception
         }
 
         [Test]
-        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line()
+        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines()
         {
             const string OriginalCode = @"
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>Bla.</summary>
+/// <summary>
+/// Something is done.
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
@@ -673,13 +680,97 @@ public sealed class BlaBlaException : Exception
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when bla.</summary>
+/// <summary>
+/// The exception that is thrown when something is done.
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
 }";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_summary_on_different_lines_([ValueSource(nameof(StartingPhrases))] string message)
+        {
+            var originalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// " + message + @" something is done.
+/// </summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>
+/// The exception that is thrown when something is done.
+/// </summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>Something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_exception_type_with_a_filled_summary_on_same_line_([ValueSource(nameof(StartingPhrases))] string message)
+        {
+            var originalCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>" + message + @" something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            const string FixedCode = @"
+using System;
+using System.Runtime.Serialization;
+
+/// <summary>The exception that is thrown when something is done.</summary>
+[Serializable]
+public sealed class BlaBlaException : Exception
+{
+}";
+
+            VerifyCSharpFix(originalCode, FixedCode);
         }
 
         [Test]
@@ -882,5 +973,49 @@ public sealed class BlaBlaException : Exception
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2050_ExceptionSummaryAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2050_CodeFixProvider();
+
+        private static IEnumerable<string> CreatePhrases()
+        {
+            string[] starts = [
+                               "A exception", "An exception", "The exception", "This exception", "Exception",
+                               "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
+                               "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
+                              ];
+            string[] verbs = ["that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
+            string[] conditions = ["if", "when", "in case"];
+
+            foreach (var start in starts)
+            {
+                foreach (var verb in verbs)
+                {
+                    foreach (var condition in conditions)
+                    {
+                        yield return start + " " + verb + " " + condition;
+                    }
+                }
+
+                yield return start + " used by ";
+                yield return start + " is used by ";
+                yield return start + " that is used by ";
+                yield return start + " which is used by ";
+                yield return start + " indicates that ";
+                yield return start + " that indicates that ";
+                yield return start + " which indicates that ";
+                yield return start + " indicating that ";
+            }
+
+            foreach (var condition in conditions)
+            {
+                yield return "Throw " + condition;
+                yield return "Thrown " + condition;
+
+                yield return "Fire " + condition;
+                yield return "Fired " + condition;
+
+                yield return "Occurs " + condition;
+
+                yield return "Indicates that " + condition;
+            }
+        }
     }
 }

@@ -39,8 +39,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             public MapData()
             {
-                ReplacementMap = CreateReplacementMapKeys().ToHashSet() // avoid duplicates
-                                                           .OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
+                ReplacementMap = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
                                                            .ThenBy(_ => _)
                                                            .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                            .ToArray();
@@ -49,30 +48,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 TypeGuidReplacementMapKeys = new[]
                                                  {
-                                                     "A Type Guid for ",
                                                      "A Type GUID for ",
-                                                     "A Type Guid of ",
                                                      "A Type GUID of ",
+                                                     "A Type Guid for ",
+                                                     "A Type Guid of ",
                                                      "A TypeGuid for ",
                                                      "A TypeGuid of ",
-                                                     "The Type Guid for ",
                                                      "The Type GUID for ",
-                                                     "The Type Guid of ",
                                                      "The Type GUID of ",
+                                                     "The Type Guid for ",
+                                                     "The Type Guid of ",
                                                      "The TypeGuid for ",
                                                      "The TypeGuid of ",
-                                                     "Type Guid for ",
-                                                     "Type Guid for ",
                                                      "Type GUID for ",
-                                                     "Type GUID for ",
-                                                     "Type Guid of ",
                                                      "Type GUID of ",
+                                                     "Type Guid for ",
+                                                     "Type Guid of ",
                                                      "TypeGuid for ",
                                                      "TypeGuid of ",
                                                      "TypeGuids for ", // typo
                                                      "TypeGuids of ", // typo
-                                                 }.ToHashSet() // avoid duplicates
-                                                  .ToArray(AscendingStringComparer.Default);
+                                                 }.ToArray(AscendingStringComparer.Default);
 
                 TypeGuidReplacementMap = TypeGuidReplacementMapKeys.OrderByDescending(_ => _.Length)
                                                                    .ThenBy(_ => _)
@@ -96,7 +92,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap { get; }
 
-            private static IEnumerable<string> CreateReplacementMapKeys()
+            // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
+            private static HashSet<string> CreateReplacementMapKeys()
             {
                 var keys = Enumerable.Empty<string>()
                                      .Concat(CreateBooleanReplacementMapKeys())
@@ -105,11 +102,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      .Concat(CreateGetReplacementMapKeys())
                                      .Concat(CreateOtherReplacementMapKeys());
 
+                var results = new HashSet<string>(); // avoid duplicates
+
                 foreach (var key in keys)
                 {
-                    yield return key;
-                    yield return key.ToLowerCaseAt(0);
+                    results.Add(key);
+                    results.Add(key.ToLowerCaseAt(0));
                 }
+
+                return results;
             }
 
             private static IEnumerable<string> CreateBooleanReplacementMapKeys()
@@ -201,44 +202,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 string[] types = { "GUID", "Guid", "guid", "TypeGuid", "Guids" };
                 string[] continuations = { "of", "for" };
 
+                var results = new List<string>(3 + (starts.Length * types.Length * continuations.Length));
+
                 foreach (var start in starts)
                 {
                     foreach (var type in types)
                     {
                         foreach (var continuation in continuations)
                         {
-                            yield return $"{start}{type} {continuation} ";
+                            results.Add($"{start}{type} {continuation} ");
                         }
                     }
                 }
 
-                yield return "A unique identifier for "; // needed to avoid duplicate text in type guid comments
-                yield return "An unique identifier for "; // needed to avoid duplicate text in type guid comments
-                yield return "The unique identifier for "; // needed to avoid duplicate text in type guid comments
+                results.Add("A unique identifier for "); // needed to avoid duplicate text in type guid comments
+                results.Add("An unique identifier for "); // needed to avoid duplicate text in type guid comments
+                results.Add("The unique identifier for "); // needed to avoid duplicate text in type guid comments
+
+                return results;
             }
 
-            private static IEnumerable<string> CreateCollectionReplacementMapKeys()
-            {
-                yield return "A list of ";
-                yield return "List of ";
-                yield return "A cache for ";
-                yield return "A Cache for ";
-                yield return "Cache for ";
-                yield return "Stores ";
-            }
+            private static IEnumerable<string> CreateCollectionReplacementMapKeys() => new[] { "A list of ", "List of ", "A cache for ", "A Cache for ", "Cache for ", "Stores " };
 
-            private static IEnumerable<string> CreateGetReplacementMapKeys()
-            {
-                yield return "Gets ";
-                yield return "Get ";
-            }
+            private static IEnumerable<string> CreateGetReplacementMapKeys() => new[] { "Gets ", "Get " };
 
-            private static IEnumerable<string> CreateOtherReplacementMapKeys()
-            {
-                yield return "Specifies the ";
-                yield return "Specifies an ";
-                yield return "Specifies a ";
-            }
+            private static IEnumerable<string> CreateOtherReplacementMapKeys() => new[] { "Specifies the ", "Specifies an ", "Specifies a " };
         }
 
         //// ncrunch: rdi default

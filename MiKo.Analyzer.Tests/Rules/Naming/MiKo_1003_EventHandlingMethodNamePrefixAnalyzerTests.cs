@@ -176,7 +176,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_for_method([Values("TME_MyEvent", "myEvent")] string method)
+        public void Code_gets_fixed_for_method_([Values("TME_MyEvent", "myEvent")] string method)
         {
             const string Template = @"
 using System;
@@ -226,6 +226,21 @@ public class TestMe
 }";
 
             VerifyCSharpFix(Template.Replace("#", "TME_MyEvent"), Template.Replace("#", "OnMyEvent"));
+        }
+
+        [TestCase("CommandBinding_OnCanExecute", "OnCanExecuteCommandBinding")]
+        [TestCase("CommandBinding_OnExecuted", "OnExecutedCommandBinding")]
+        public void Code_gets_fixed_for_method_(string originalMethod, string fixedMethod)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public void #(object sender, EventArgs e) { }
+}";
+
+            VerifyCSharpFix(Template.Replace("#", originalMethod), Template.Replace("#", fixedMethod));
         }
 
         protected override string GetDiagnosticId() => MiKo_1003_EventHandlingMethodNamePrefixAnalyzer.Id;

@@ -24,24 +24,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
         {
-            var orderedTerms = terms.ToHashSet(_ => _.ToUpperInvariant())
-                                    .OrderBy(_ => _.Length)
-                                    .ThenBy(_ => _);
+            var hashedTerms = terms.ToHashSet(_ => _.ToUpperInvariant());
+            var orderedTerms = hashedTerms.OrderBy(_ => _.Length).ThenBy(_ => _);
 
-            var lookupTerms = new List<string>();
+            var result = new List<string>(hashedTerms.Count);
 
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var term in orderedTerms)
             {
-                if (term.StartsWithAny(lookupTerms, StringComparison.OrdinalIgnoreCase))
+                if (term.StartsWithAny(result, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                lookupTerms.Add(term);
+                result.Add(term);
             }
 
-            return lookupTerms.ToArray();
+            return result.ToArray();
         }
 
 //// ncrunch: no coverage end
@@ -49,7 +48,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax C(string text)
         {
-            return SyntaxFactory.XmlElement(Constants.XmlTag.C, new SyntaxList<XmlNodeSyntax>(XmlText(text)));
+            return SyntaxFactory.XmlElement(Constants.XmlTag.C, XmlText(text).ToSyntaxList<XmlNodeSyntax>());
         }
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
@@ -157,7 +156,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (tokenMap is null)
                             {
-                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>();
+                                tokenMap = new Dictionary<SyntaxToken, SyntaxToken>(1);
                             }
 
                             tokenMap.Add(token, newToken);
@@ -449,7 +448,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
-        protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(new SyntaxList<XmlAttributeSyntax>(cref));
+        protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
 
         protected static bool IsSeeCref(SyntaxNode value)
         {
@@ -842,7 +841,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
 
-        protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, new SyntaxList<XmlNodeSyntax>(content));
+        protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, content.ToSyntaxList());
 
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
 
@@ -885,7 +884,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacement = replacementText.AsToken();
                 textTokens.Insert(0, replacement);
 
-                textCommentEnd = XmlText(new SyntaxTokenList(textTokens).WithoutLastXmlNewLine());
+                textCommentEnd = XmlText(textTokens.ToTokenList().WithoutLastXmlNewLine());
             }
             else
             {
@@ -897,9 +896,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             // if there are more than 1 item contained, also remove the new line and /// from the last item
             if (length > 1)
             {
-                if (commendEndNodes[length - 1] is XmlTextSyntax additionalText)
+                var last = length - 1;
+
+                if (commendEndNodes[last] is XmlTextSyntax additionalText)
                 {
-                    commendEndNodes[length - 1] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
+                    commendEndNodes[last] = XmlText(additionalText.TextTokens.WithoutLastXmlNewLine());
                 }
             }
 

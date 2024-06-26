@@ -53,13 +53,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case 1: // it's only the message
                 {
-                    if (arguments[0].ToString() == parameter.GetName().SurroundedWithDoubleQuote())
+                    var argument = arguments[0];
+
+                    if (argument.ToString() == parameter.GetName().SurroundedWithDoubleQuote())
                     {
                         // seems like the 'message' parameter has been misused for the parameter name
                         return ArgumentList(ToDo(), ParamName(parameter));
                     }
 
-                    return ArgumentList(arguments[0], ParamName(parameter));
+                    return ArgumentList(argument, ParamName(parameter));
                 }
 
                 case 2: // switched message and parameter

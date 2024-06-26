@@ -46,6 +46,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "dir",
                                                            "dlg",
                                                            "doc",
+                                                           "dst",
+                                                           "dto",
+                                                           "ef",
                                                            "env",
                                                            "environ",
                                                            "err",
@@ -69,6 +72,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "num",
                                                            "param",
                                                            "params",
+                                                           "perc",
+                                                           "perf",
                                                            "pos",
                                                            "proc",
                                                            "procs",
@@ -79,6 +84,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "req",
                                                            "res",
                                                            "resp",
+                                                           "spec",
                                                            "src",
                                                            "std",
                                                            "str",
@@ -123,6 +129,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Dir",
                                                            "Dlg",
                                                            "Doc",
+                                                           "Dst",
+                                                           "Ef",
                                                            "Env",
                                                            "Environ",
                                                            "Err",
@@ -146,6 +154,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Num",
                                                            "Op",
                                                            "Params",
+                                                           "Perc",
+                                                           "Perf",
                                                            "Pos",
                                                            "Proc",
                                                            "Procs",
@@ -156,6 +166,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Req",
                                                            "Res",
                                                            "Resp",
+                                                           "Spec",
                                                            "Src",
                                                            "Std",
                                                            "Sync",
@@ -166,10 +177,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                        ];
 
         private static readonly string[] BadPostfixes = BadMidTerms
-                                                        .Concat([
+                                                        .Union([
                                                                     "Bl",
                                                                     "BL",
                                                                     "CLI",
+                                                                    "Dto",
+                                                                    "DTO",
                                                                     "Itf",
                                                                     "Meth",
                                                                     "Param",
@@ -182,8 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                     "Props",
                                                                     "Vm",
                                                                     "VM",
-                                                                ])
-                                                        .Distinct()
+                                                               ])
                                                         .ToArray();
 
         private static readonly string[] AllowedTerms =
@@ -212,6 +224,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "decrypt",
                                                             "doctor",
                                                             "document",
+                                                            "effort",
                                                             "encrypt",
                                                             "enum",
                                                             "enumeration",
@@ -230,6 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "isKept",
                                                             "kept",
                                                             "measures",
+                                                            "inTheMidstOfTheNight",
                                                             "mixtures",
                                                             "next",
                                                             "number",
@@ -270,6 +284,39 @@ namespace Bla
         {
             var x = 42;
             return x;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+using System.Text.Json.Serialization;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [JsonConstructor]
+        public TestMe(int " + name + @")
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Newtonsoft_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Newtonsoft.Json.JsonConstructorAttribute]
+        public TestMe(int " + name + @")
+        {
         }
     }
 }

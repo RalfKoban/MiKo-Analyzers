@@ -219,11 +219,13 @@ namespace MiKoSolutions.Analyzers.Rules
         [Test]
         public static void Analyzer_are_marked_with_DiagnosticAnalyzer_attribute()
         {
+            string[] languages = [LanguageNames.CSharp];
+
             Assert.Multiple(() =>
                                  {
                                      foreach (var analyzer in AllAnalyzers)
                                      {
-                                         Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(new[] { LanguageNames.CSharp }));
+                                         Assert.That(analyzer.GetType(), Has.Attribute<DiagnosticAnalyzerAttribute>().With.Property(nameof(DiagnosticAnalyzerAttribute.Languages)).EquivalentTo(languages));
                                      }
                                  });
         }

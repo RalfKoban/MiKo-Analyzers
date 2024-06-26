@@ -1863,6 +1863,9 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
   <data name="MiKo_2020_Title" xml:space="preserve">
     <value>Inherited documentation should be used with &lt;inheritdoc /&gt; marker</value>
   </data>
+  <data name="MiKo_2021_CodeFixTitle" xml:space="preserve">
+    <value>Start documentation with 'The '</value>
+  </data>
   <data name="MiKo_2021_Description" xml:space="preserve">
     <value>The documentation of parameters should describe what they represent.</value>
   </data>

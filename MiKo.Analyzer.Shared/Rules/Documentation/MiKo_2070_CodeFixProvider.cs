@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 for (var index = 0; index < textTokensCount; index++)
                 {
                     var token = textTokens[index];
-                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchrounouslyStartingPhrase).AsSpan().Trim();
+                    var valueText = token.WithoutTrivia().ValueText.Without(Constants.Comments.AsynchronouslyStartingPhrase).AsSpan().Trim();
 
                     if (valueText.StartsWithAny(Constants.Comments.ReturnWords))
                     {
@@ -257,7 +257,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (isAsync)
             {
-                return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);
+                return Constants.Comments.AsynchronouslyStartingPhrase + startText.ToLowerCaseAt(0);
             }
 
             return startText;
@@ -278,7 +278,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (isAsync)
             {
-                return Constants.Comments.AsynchrounouslyStartingPhrase + startText.ToLowerCaseAt(0);
+                return Constants.Comments.AsynchronouslyStartingPhrase + startText.ToLowerCaseAt(0);
             }
 
             return startText;

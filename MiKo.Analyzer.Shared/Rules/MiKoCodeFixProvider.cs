@@ -96,9 +96,9 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).Result;
+        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
 
-        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).Result;
+        protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).GetAwaiter().GetResult();
 
         protected static async Task<ISymbol> GetSymbolAsync(Document document, SyntaxNode syntax, CancellationToken cancellationToken)
         {
@@ -247,7 +247,7 @@ namespace MiKoSolutions.Analyzers.Rules
             {
                 var trivia = root.FindTrivia(startPosition);
 
-                return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, trivia, issue, token), GetType().Name);
+                return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, trivia, issue, cancellationToken), GetType().Name);
             }
 
             // TODO RKN
@@ -265,10 +265,10 @@ namespace MiKoSolutions.Analyzers.Rules
 
             if (IsSolutionWide)
             {
-                return CodeAction.Create(Title, token => ApplySolutionCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
+                return CodeAction.Create(Title, cancellationToken => ApplySolutionCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name);
             }
 
-            return CodeAction.Create(Title, token => ApplyDocumentCodeFixAsync(document, root, syntax, issue, token), GetType().Name);
+            return CodeAction.Create(Title, cancellationToken => ApplyDocumentCodeFixAsync(document, root, syntax, issue, cancellationToken), GetType().Name);
         }
 
 //// ncrunch: rdi default
