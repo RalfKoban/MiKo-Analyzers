@@ -96,7 +96,15 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
+        protected static SemanticModel GetSemanticModel(Document document)
+        {
+            if (document.TryGetSemanticModel(out var result))
+            {
+                return result;
+            }
+
+            return document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
+        }
 
         protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).GetAwaiter().GetResult();
 
@@ -107,7 +115,10 @@ namespace MiKoSolutions.Analyzers.Rules
                 return null;
             }
 
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            if (document.TryGetSemanticModel(out var semanticModel) is false)
+            {
+                semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            }
 
             if (syntax is TypeSyntax typeSyntax)
             {
@@ -116,6 +127,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
+
+        protected static bool HasMinimumCSharpVersion(Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.IsSupported(wantedVersion);
 
         protected static bool IsConst(Document document, ArgumentSyntax syntax)
         {
