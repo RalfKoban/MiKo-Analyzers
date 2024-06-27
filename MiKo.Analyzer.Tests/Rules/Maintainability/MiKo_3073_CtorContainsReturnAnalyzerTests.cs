@@ -21,9 +21,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_without_return() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_expression_body_ctor_without_return() => No_issue_is_reported_for(@"
 using System;
-using System.Collections.Generic;
 
 public class TestMe
 {
@@ -34,28 +33,43 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_ctor_with_return() => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_body_ctor_without_return() => No_issue_is_reported_for(@"
 using System;
-using System.Collections.Generic;
 
 public class TestMe
 {
     private int field;
 
-    public TestMe(int value)
+    public TestMe()
     {
-        if (value == 42)
-            return;
-
-        field = value;
+        field = 42;
     }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_with_return_inside_parameterized_lambda_callback() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_body_ctor_with_return_inside_local_function() => No_issue_is_reported_for(@"
 using System;
-using System.Collections.Generic;
+
+public class TestMe
+{
+    private int field;
+
+    public TestMe()
+    {
+        field = Calculate();
+
+        int Calculate()
+        {
+            return 42;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_body_ctor_with_return_inside_parameterized_lambda_callback() => No_issue_is_reported_for(@"
+using System;
 
 public class TestMe
 {
@@ -74,9 +88,8 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_ctor_with_return_inside_non_parameterized_lambda_callback() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_body_ctor_with_return_inside_non_parameterized_lambda_callback() => No_issue_is_reported_for(@"
 using System;
-using System.Collections.Generic;
 
 public class TestMe
 {
@@ -90,6 +103,24 @@ public class TestMe
 
                         return result;
                     };
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_method_body_ctor_with_return() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private int field;
+
+    public TestMe(int value)
+    {
+        if (value == 42)
+            return;
+
+        field = value;
     }
 }
 ");
