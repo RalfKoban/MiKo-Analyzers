@@ -1581,6 +1581,47 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_with_comment_on_follow_up_code()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values == null || !values.Any())
+            return;
+        // some comment
+        DoSomething(values.Select(i =>
+            i * 5));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values != null && values.Any())
+        {
+            // some comment
+            DoSomething(values.Select(i =>
+                i * 5));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer();

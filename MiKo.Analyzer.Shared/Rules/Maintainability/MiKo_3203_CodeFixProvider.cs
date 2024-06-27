@@ -31,17 +31,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (index < statements.Length)
                 {
-                    var others = statements.Skip(index + 1).Select(_ => _.WithAdditionalLeadingSpaces(Constants.Indentation)).ToList(); // adjust spacing
+                    var others = statements.Skip(index + 1).ToList();
+                    others[0] = others[0].WithoutLeadingEndOfLine();
 
-                    if (others.Count > 0)
-                    {
-                        others[0] = others[0].WithoutLeadingEndOfLine();
-                    }
+                    var spaces = others[0].GetPositionWithinStartLine();
 
                     var condition = ifStatement.Condition;
+
                     var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition))
                                            .WithCloseParenToken(ifStatement.CloseParenToken.WithoutTrailingTrivia())
-                                           .WithStatement(SyntaxFactory.Block(others));
+                                           .WithStatement(GetUpdatedBlock(SyntaxFactory.Block(others), spaces)); // adjust spacing
 
                     var comment = GetComment(ifStatement);
 

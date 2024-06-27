@@ -208,9 +208,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var expression = syntax.Expression;
 
-                if (expression.IsKind(SyntaxKind.IsPatternExpression))
+                switch (expression.Kind())
                 {
-                    return expression;
+                    case SyntaxKind.IsExpression:
+                    case SyntaxKind.IsPatternExpression:
+                        return expression;
                 }
             }
 

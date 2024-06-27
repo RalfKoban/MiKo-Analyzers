@@ -30,16 +30,18 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (index < statements.Length)
                 {
-                    var others = statements.Skip(index + 1).Select(_ => _.WithAdditionalLeadingSpaces(Constants.Indentation)).ToList(); // adjust spacing
+                    var condition = ifStatement.Condition;
+                    var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition));
+
+                    var others = statements.Skip(index + 1).ToList();
 
                     if (others.Count > 0)
                     {
                         others[0] = others[0].WithoutLeadingEndOfLine();
-                    }
+                        var spaces = others[0].GetPositionWithinStartLine();
 
-                    var condition = ifStatement.Condition;
-                    var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition))
-                                           .WithStatement(SyntaxFactory.Block(others));
+                        newIf = newIf.WithStatement(GetUpdatedBlock(SyntaxFactory.Block(others), spaces)); // adjust spacing
+                    }
 
                     return root.ReplaceNodes(statements.Skip(index), (original, rewritten) => original == ifStatement ? newIf : null);
                 }

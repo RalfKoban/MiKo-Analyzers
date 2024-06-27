@@ -842,6 +842,47 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_with_comment_on_follow_up_code_2()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values == null || !values.Any())
+            continue;
+        // some comment
+        DoSomething(values.Select(i =>
+            i * 5));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values != null && values.Any())
+        {
+            // some comment
+            DoSomething(values.Select(i =>
+                i * 5));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_with_negative_condition_and_preceding_line()
         {
             const string OriginalCode = @"
@@ -1265,6 +1306,46 @@ public class TestMe
         while(true)
         {
             if (o is bool flag && flag is false)
+            {
+                DoSomething(o);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_negative_type_check_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (!(o is bool))
+            {
+                continue;
+            }
+
+            DoSomething(o);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is bool)
             {
                 DoSomething(o);
             }
