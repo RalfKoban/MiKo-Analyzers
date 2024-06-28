@@ -183,7 +183,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter) => ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
 
 //// ncrunch: rdi off
-        private static IEnumerable<string> CreateTypePhrases()
+        private static HashSet<string> CreateTypePhrases()
         {
             var starts = new[]
                              {
@@ -194,29 +194,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var verbs = new[] { "that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
             var conditions = new[] { "if", "when", "in case" };
 
+            var results = new HashSet<string>();
+
             foreach (var condition in conditions)
             {
-                yield return "Fire " + condition;
-                yield return "Fired " + condition;
-
-                yield return "Indicates that " + condition;
-
-                yield return "Occurs " + condition;
-
-                yield return "Throw " + condition;
-                yield return "Thrown " + condition;
+                results.Add("Fire " + condition);
+                results.Add("Fired " + condition);
+                results.Add("Indicates that " + condition);
+                results.Add("Occurs " + condition);
+                results.Add("Throw " + condition);
+                results.Add("Thrown " + condition);
             }
 
             foreach (var start in starts)
             {
-                yield return start + " is used by ";
-                yield return start + " that is used by ";
-                yield return start + " which is used by ";
-                yield return start + " used by ";
-                yield return start + " indicates that ";
-                yield return start + " that indicates that ";
-                yield return start + " which indicates that ";
-                yield return start + " indicating that ";
+                results.Add(start + " is used by ");
+                results.Add(start + " that is used by ");
+                results.Add(start + " which is used by ");
+                results.Add(start + " used by ");
+                results.Add(start + " indicates that ");
+                results.Add(start + " that indicates that ");
+                results.Add(start + " which indicates that ");
+                results.Add(start + " indicating that ");
 
                 foreach (var verb in verbs)
                 {
@@ -224,10 +223,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     foreach (var condition in conditions)
                     {
-                        yield return string.Concat(begin, condition);
+                        results.Add(string.Concat(begin, condition));
                     }
                 }
             }
+
+            return results;
         }
 //// ncrunch: rdi default
     }

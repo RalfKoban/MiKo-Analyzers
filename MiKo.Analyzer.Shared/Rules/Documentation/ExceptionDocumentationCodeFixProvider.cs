@@ -198,19 +198,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var parts = new[] { "that", "which" };
             var specialParts = new[] { "thrown", "throws", "throw" };
 
-            foreach (var s in starts)
+            foreach (var v in verbs)
             {
-                foreach (var v in verbs)
+                foreach (var c in conditions)
                 {
-                    foreach (var c in conditions)
+                    var phrase = string.Concat(v, " ", c, " ");
+
+                    foreach (var s in starts)
                     {
-                        var phrase0 = $"{s} {v} {c} ";
+                        var phrase0 = string.Concat(s, " ", phrase);
 
                         foreach (var p in parts)
                         {
-                            var phrase1 = $"{s} {p} {v} {c} ";
-                            var phrase2 = phrase1 + p + " ";
-                            var phrase3 = phrase0 + p + " ";
+                            var part = p + " ";
+
+                            var phrase1 = string.Concat(s, " ", part, phrase);
+                            var phrase2 = phrase1 + part;
+                            var phrase3 = phrase0 + part;
 
                             yield return phrase3 + "the ";
                             yield return phrase3;
@@ -223,14 +227,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         yield return phrase0 + "the ";
                         yield return phrase0;
                     }
-                }
-            }
-
-            foreach (var v in verbs)
-            {
-                foreach (var c in conditions)
-                {
-                    var phrase = string.Concat(v, " ", c, " ");
 
                     yield return phrase + "the ";
                     yield return phrase;
