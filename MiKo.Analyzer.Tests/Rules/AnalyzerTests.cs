@@ -9,6 +9,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -33,7 +34,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var files = GetDocuments(path).ToList();
             var sources = files.Select(File.ReadAllText).ToArray();
 
-            var results = DiagnosticVerifier.GetDiagnostics(sources, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray());
+            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray());
 
             Assert.That(results.Count, Is.Zero);
 

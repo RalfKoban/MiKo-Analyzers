@@ -6,6 +6,7 @@ using System.Threading;
 
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Formatting;
 
@@ -30,7 +31,7 @@ namespace TestHelper
         /// </returns>
         protected virtual CodeFixProvider GetCSharpCodeFixProvider() => null;
 
-        protected void Codefix_causes_no_exception_in_folder_(string path)
+        protected void Codefix_causes_no_exception_in_folder_(string path, LanguageVersion languageVersion = LanguageVersion.Default)
         {
             Assert.Multiple(() =>
                                  {
@@ -38,9 +39,9 @@ namespace TestHelper
                                      {
                                          var oldSource = File.ReadAllText(file);
 
-                                         var issues = GetDiagnostics(oldSource);
+                                         var issues = GetDiagnostics(oldSource, languageVersion);
 
-                                         if (issues.Any())
+                                         if (issues.Length > 0)
                                          {
                                              try
                                              {
@@ -64,6 +65,9 @@ namespace TestHelper
         /// <param name="newSource">
         /// A class in the form of a string after the CodeFix was applied to it.
         /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
         /// <param name="codeFixIndex">
         /// Index determining which codefix to apply if there are multiple.
         /// </param>
@@ -73,9 +77,9 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        protected void VerifyCSharpFix(string oldSource, string newSource, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
+        protected void VerifyCSharpFix(string oldSource, string newSource, LanguageVersion languageVersion = LanguageVersion.Default, int? codeFixIndex = null, bool allowNewCompilerDiagnostics = false, bool assertResult = true)
         {
-            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
+            VerifyFix(GetObjectUnderTest(), GetCSharpCodeFixProvider(), oldSource, newSource, languageVersion, codeFixIndex, allowNewCompilerDiagnostics, assertResult);
         }
 
         /// <summary>
@@ -96,6 +100,9 @@ namespace TestHelper
         /// <param name="newSource">
         /// A class in the form of a string after the CodeFix was applied to it.
         /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
         /// <param name="codeFixIndex">
         /// Index determining which codefix to apply if there are multiple.
         /// </param>
@@ -105,12 +112,12 @@ namespace TestHelper
         /// <param name="assertResult">
         /// A bool controlling whether or not the test will assert the result of the CodeFix after being applied.
         /// </param>
-        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
+        private static void VerifyFix(DiagnosticAnalyzer analyzer, CodeFixProvider codeFixProvider, string oldSource, string newSource, LanguageVersion languageVersion, int? codeFixIndex, bool allowNewCompilerDiagnostics, bool assertResult)
         {
             Assert.That(analyzer, Is.Not.Null, "Missing Analyzer");
             Assert.That(codeFixProvider, Is.Not.Null, "Missing CodeFixProvider");
 
-            var document = CreateDocument(oldSource);
+            var document = CreateDocument(oldSource, languageVersion);
             var analyzerDiagnostics = GetSortedDiagnosticsFromDocument(analyzer, document);
             var compilerDiagnostics = GetCompilerDiagnostics(document);
             var attempts = analyzerDiagnostics.Length;

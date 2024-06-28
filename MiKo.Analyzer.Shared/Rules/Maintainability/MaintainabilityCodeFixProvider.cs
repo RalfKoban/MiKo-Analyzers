@@ -10,15 +10,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MaintainabilityCodeFixProvider : MiKoCodeFixProvider
     {
-        private static readonly Dictionary<SyntaxKind, SyntaxKind> OperatorInverseMapping = new Dictionary<SyntaxKind, SyntaxKind>
-                                                                                                {
-                                                                                                    { SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken },
-                                                                                                    { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken },
-                                                                                                    { SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken },
-                                                                                                    { SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken },
-                                                                                                    { SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken },
-                                                                                                    { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
-                                                                                                };
+        private static readonly Dictionary<SyntaxKind, SyntaxKind> OperatorToInverseMap = new Dictionary<SyntaxKind, SyntaxKind>
+                                                                                              {
+                                                                                                  { SyntaxKind.ExclamationEqualsToken, SyntaxKind.EqualsEqualsToken },
+                                                                                                  { SyntaxKind.EqualsEqualsToken, SyntaxKind.ExclamationEqualsToken },
+                                                                                                  { SyntaxKind.GreaterThanEqualsToken, SyntaxKind.LessThanToken },
+                                                                                                  { SyntaxKind.GreaterThanToken, SyntaxKind.LessThanEqualsToken },
+                                                                                                  { SyntaxKind.LessThanEqualsToken, SyntaxKind.GreaterThanToken },
+                                                                                                  { SyntaxKind.LessThanToken, SyntaxKind.GreaterThanEqualsToken },
+                                                                                              };
 
         protected static ArgumentSyntax Argument(string identifier) => Argument(SyntaxFactory.IdentifierName(identifier));
 
@@ -98,65 +98,26 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             switch (condition)
             {
                 case PrefixUnaryExpressionSyntax prefixed:
-                {
-                    return prefixed.Operand;
-                }
+                    return InvertCondition(prefixed);
 
                 case BinaryExpressionSyntax binary:
-                {
-                    if (binary.Right.IsKind(SyntaxKind.NullLiteralExpression) && binary.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
-                    {
-                        return IsNullPattern(binary.Left);
-                    }
+                    return InvertCondition(document, binary);
 
-                    if (OperatorInverseMapping.TryGetValue(binary.OperatorToken.Kind(), out var replacement))
-                    {
-                        return binary.WithOperatorToken(replacement.AsToken());
-                    }
+                case IsPatternExpressionSyntax patternExpression:
+                    return InvertCondition(document, patternExpression);
 
-                    switch (binary.Kind())
-                    {
-                        case SyntaxKind.LogicalAndExpression:
-                            return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
-
-                        case SyntaxKind.LogicalOrExpression:
-                            return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, InvertCondition(document, binary.Left), InvertCondition(document, binary.Right));
-                    }
-
-                    break;
-                }
-
-                case IsPatternExpressionSyntax pattern:
-                {
-                    if (pattern.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax literal)
-                    {
-                        switch (literal.Kind())
-                        {
-                            case SyntaxKind.NullLiteralExpression:
-                                return SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, pattern.Expression, literal);
-
-                            case SyntaxKind.FalseLiteralExpression:
-                                return IsNullable(document, pattern)
-                                       ? LogicalNot(pattern)
-                                       : pattern.Expression.WithoutTrivia();
-
-                            case SyntaxKind.TrueLiteralExpression:
-                                return IsNullable(document, pattern)
-                                       ? LogicalNot(pattern)
-                                       : pattern.Expression.WithoutTrivia();
-                        }
-                    }
-
-                    break;
-                }
+                default:
+                    return IsFalsePattern(condition);
             }
-
-            return IsFalsePattern(condition);
         }
 
         protected static bool IsNullable(Document document, IsPatternExpressionSyntax pattern) => GetSymbol(document, pattern.Expression) is ITypeSymbol typeSymbol && typeSymbol.IsNullable();
 
         protected static ExpressionSyntax LogicalNot(ExpressionSyntax expression) => SyntaxFactory.PrefixUnaryExpression(SyntaxKind.LogicalNotExpression, SyntaxFactory.ParenthesizedExpression(expression));
+
+        protected static IsPatternExpressionSyntax UnaryNot(IsPatternExpressionSyntax expression) => expression.WithPattern(UnaryNot(expression.Pattern));
+
+        protected static UnaryPatternSyntax UnaryNot(PatternSyntax pattern) => SyntaxFactory.UnaryPattern(SyntaxKind.NotKeyword.AsToken().WithTrailingSpace(), pattern);
 
         protected static LiteralExpressionSyntax Literal(char value) => Literal(SyntaxFactory.Literal(value));
 
@@ -236,6 +197,124 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var nameofSyntax = SyntaxFactory.IdentifierName(SyntaxFactory.Identifier(SyntaxFactory.TriviaList(), SyntaxKind.NameOfKeyword, "nameof", "nameof", SyntaxFactory.TriviaList()));
 
             return SyntaxFactory.InvocationExpression(nameofSyntax, ArgumentList(SyntaxFactory.Argument(syntax)));
+        }
+
+        private static ExpressionSyntax InvertCondition(PrefixUnaryExpressionSyntax prefixed)
+        {
+            var operand = prefixed.Operand;
+
+            // remove parenthesis when possible
+            if (operand is ParenthesizedExpressionSyntax syntax)
+            {
+                var expression = syntax.Expression;
+
+                switch (expression.Kind())
+                {
+                    case SyntaxKind.IsExpression:
+                    case SyntaxKind.IsPatternExpression:
+                        return expression;
+                }
+            }
+
+            return operand;
+        }
+
+        private static ExpressionSyntax InvertCondition(Document document, BinaryExpressionSyntax condition)
+        {
+            if (condition.Right.IsKind(SyntaxKind.NullLiteralExpression) && condition.OperatorToken.IsKind(SyntaxKind.ExclamationEqualsToken))
+            {
+                return IsNullPattern(condition.Left);
+            }
+
+            if (OperatorToInverseMap.TryGetValue(condition.OperatorToken.Kind(), out var replacement))
+            {
+                return condition.WithOperatorToken(replacement.AsToken());
+            }
+
+            switch (condition.Kind())
+            {
+                case SyntaxKind.LogicalAndExpression:
+                {
+                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalOrExpression, InvertCondition(document, condition.Left), InvertCondition(document, condition.Right));
+                }
+
+                case SyntaxKind.LogicalOrExpression:
+                {
+                    return SyntaxFactory.BinaryExpression(SyntaxKind.LogicalAndExpression, InvertCondition(document, condition.Left), InvertCondition(document, condition.Right));
+                }
+
+                default:
+                {
+                    return IsFalsePattern(condition);
+                }
+            }
+        }
+
+        private static ExpressionSyntax InvertCondition(Document document, IsPatternExpressionSyntax condition)
+        {
+            switch (condition.Pattern)
+            {
+                case ConstantPatternSyntax constant when constant.Expression is LiteralExpressionSyntax literal:
+                {
+                    switch (literal.Kind())
+                    {
+                        case SyntaxKind.NullLiteralExpression:
+                        {
+                            if (HasMinimumCSharpVersion(document, LanguageVersion.CSharp9))
+                            {
+                                return UnaryNot(condition);
+                            }
+
+                            return SyntaxFactory.BinaryExpression(SyntaxKind.NotEqualsExpression, condition.Expression, literal);
+                        }
+
+                        case SyntaxKind.FalseLiteralExpression:
+                        case SyntaxKind.TrueLiteralExpression:
+                        {
+                            if (IsNullable(document, condition))
+                            {
+                                return HasMinimumCSharpVersion(document, LanguageVersion.CSharp9)
+                                       ? UnaryNot(condition)
+                                       : LogicalNot(condition);
+                            }
+
+                            return condition.Expression.WithoutTrivia();
+                        }
+                    }
+
+                    return IsFalsePattern(condition);
+                }
+
+                case UnaryPatternSyntax pattern:
+                {
+                    if (pattern.IsKind(SyntaxKind.NotPattern))
+                    {
+                        if (pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.TrueLiteralExpression))
+                        {
+                            var expression = condition.Expression;
+
+                            var semanticModel = GetSemanticModel(document);
+                            var type = expression.GetTypeSymbol(semanticModel);
+
+                            if (type.IsNullable() is false)
+                            {
+                                return expression.WithoutTrivia();
+                            }
+                        }
+
+                        return condition.WithPattern(pattern.Pattern);
+                    }
+
+                    return HasMinimumCSharpVersion(document, LanguageVersion.CSharp9)
+                           ? UnaryNot(condition)
+                           : LogicalNot(condition);
+                }
+
+                default:
+                {
+                    return IsFalsePattern(condition);
+                }
+            }
         }
     }
 }
