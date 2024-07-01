@@ -11138,6 +11138,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is not null&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3088_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3088_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Null checks using the &apos;is not&apos; pattern matching is more natural and therefore easier to read and understand than using the &apos;!=&apos; operator..
+        /// </summary>
+        internal static string MiKo_3088_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3088_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is not&apos; instead of &apos;!=&apos;.
+        /// </summary>
+        internal static string MiKo_3088_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3088_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching for not-null checks.
+        /// </summary>
+        internal static string MiKo_3088_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3088_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
         ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
         /// </summary>
