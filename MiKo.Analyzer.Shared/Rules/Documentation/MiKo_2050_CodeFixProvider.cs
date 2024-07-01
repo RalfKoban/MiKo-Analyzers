@@ -219,11 +219,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var verb in verbs)
                 {
-                    var begin = string.Concat(start, " ", verb, " ");
+                    var middle = string.Concat(" ", verb, " ");
+
+                    var begin = string.Concat(start, middle);
+                    var beginLowerCase = begin.ToLowerCaseAt(0);
 
                     foreach (var condition in conditions)
                     {
                         results.Add(string.Concat(begin, condition));
+                        results.Add(string.Concat("Represent ", beginLowerCase, condition));
+                        results.Add(string.Concat("Represents ", beginLowerCase, condition));
                     }
                 }
             }

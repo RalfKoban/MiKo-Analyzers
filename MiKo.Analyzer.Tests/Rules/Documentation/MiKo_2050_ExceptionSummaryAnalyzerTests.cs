@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -974,6 +976,7 @@ public sealed class BlaBlaException : Exception
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2050_CodeFixProvider();
 
+        [ExcludeFromCodeCoverage]
         private static HashSet<string> CreatePhrases()
         {
             string[] starts = [
@@ -988,11 +991,19 @@ public sealed class BlaBlaException : Exception
 
             foreach (var start in starts)
             {
+                var lowerStart = start.ToLowerCaseAt(0);
+
                 foreach (var verb in verbs)
                 {
+                    var middle = " " + verb + " ";
+
                     foreach (var condition in conditions)
                     {
-                        results.Add(start + " " + verb + " " + condition);
+                        var continuation = middle + condition;
+
+                        results.Add(start + continuation);
+                        results.Add("Represent " + lowerStart + continuation);
+                        results.Add("Represents " + lowerStart + continuation);
                     }
                 }
 
