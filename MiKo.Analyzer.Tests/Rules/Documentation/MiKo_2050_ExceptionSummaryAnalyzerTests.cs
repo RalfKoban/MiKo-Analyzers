@@ -984,7 +984,7 @@ public sealed class BlaBlaException : Exception
                                "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
                                "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
                               ];
-            string[] verbs = ["that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
+            string[] verbs = ["that is thrown", "which is thrown", "is thrown", "thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
             string[] conditions = ["if", "when", "in case"];
 
             var results = new HashSet<string>();

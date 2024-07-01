@@ -191,7 +191,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
                                  "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
                              };
-            var verbs = new[] { "that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
+            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
             var conditions = new[] { "if", "when", "in case" };
 
             var results = new HashSet<string>();
