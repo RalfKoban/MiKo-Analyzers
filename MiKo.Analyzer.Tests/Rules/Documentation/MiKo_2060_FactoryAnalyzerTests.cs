@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TypeSummaryStartingPhrases = [.. Enumerable.ToHashSet(CreateTypeSummaryStartingPhrases().Take(TestLimit)).OrderBy(_ => _.Length).ThenBy(_ => _)];
+        private static readonly string[] TypeSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
@@ -614,10 +614,11 @@ internal interface IFactory
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
 
-//// ncrunch: no coverage start
+        //// ncrunch: no coverage start
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateTypeSummaryStartingPhrases()
+        private static HashSet<string> CreateTypeSummaryStartingPhrases()
         {
             string[] startingPhrases =
                                        [
@@ -764,6 +765,8 @@ internal interface IFactory
             string[] articles = [string.Empty, " a", " an", " the"];
             string[] middles = [string.Empty, " instance of", " instances of", " new instance of", " new instances of"];
 
+            var results = new HashSet<string>();
+
             foreach (var startingPhrase in startingPhrases)
             {
                 foreach (var article in articles)
@@ -774,17 +777,19 @@ internal interface IFactory
 
                         if (string.IsNullOrWhiteSpace(middle))
                         {
-                            yield return start;
+                            results.Add(start);
                         }
                         else
                         {
-                            yield return string.Concat(start, middle, article);
+                            results.Add(string.Concat(start, middle, article));
                         }
                     }
                 }
             }
 
-            yield return "Implementations create ";
+            results.Add("Implementations create ");
+
+            return results;
         }
 
 //// ncrunch: no coverage end

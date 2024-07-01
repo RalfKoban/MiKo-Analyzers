@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith('|').Split('|');
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().Distinct().ToDictionary(_ => _, _ => string.Empty);
+        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
 
 //// ncrunch: rdi default
 
@@ -76,6 +76,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                "used in",
                            };
 
+            var results = new HashSet<string>();
+
             foreach (var start in starts)
             {
                 foreach (var preMiddle in preMiddles)
@@ -84,13 +86,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         foreach (var end in ends)
                         {
-                            yield return start.IsNullOrWhiteSpace()
-                                         ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
-                                         : string.Concat(start, preMiddle, " ", middle, " ", end);
+                            results.Add(start.IsNullOrWhiteSpace()
+                                        ? string.Concat(middle.ToUpperCaseAt(0), " ", end)
+                                        : string.Concat(start, preMiddle, " ", middle, " ", end));
                         }
                     }
                 }
             }
+
+            return results;
         }
 
 //// ncrunch: rdi default

@@ -131,7 +131,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override string Title => Resources.MiKo_2032_CodeFixTitle;
 
 //// ncrunch: rdi off
-        public static IEnumerable<string> CreateSimpleStartingPhrases()
+
+        public static ISet<string> CreateSimpleStartingPhrases()
         {
             var starts = new[] { "A ", "An ", string.Empty };
             var booleans = new[]
@@ -150,15 +151,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var verbs = new[] { "indicating", "that indicates", "which indicates", "indicates", "indicate" };
             var conditions = new[] { "if", "whether", "when" };
 
+            var results = new HashSet<string>();
+
             foreach (var start in starts)
             {
                 foreach (var boolean in booleans)
                 {
+                    var begin = start + boolean + " ";
+
                     foreach (var verb in verbs)
                     {
+                        var beginWithVerb = begin + verb + " ";
+
                         foreach (var condition in conditions)
                         {
-                            yield return $"{start}{boolean} {verb} {condition} ";
+                            results.Add(beginWithVerb + condition + " ");
                         }
                     }
                 }
@@ -166,9 +173,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var condition in conditions)
             {
-                yield return $"Indicates {condition} ";
+                results.Add($"Indicates {condition} ");
             }
+
+            return results;
         }
+
 //// ncrunch: rdi default
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType) => CommentCanBeFixed(comment)

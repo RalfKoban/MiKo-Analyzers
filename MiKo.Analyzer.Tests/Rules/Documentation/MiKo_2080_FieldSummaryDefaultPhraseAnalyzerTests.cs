@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2080_FieldSummaryDefaultPhraseAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] WrongBooleanPhrases = [.. Enumerable.ToHashSet(CreateWrongBooleanPhrases().Take(TestLimit))];
+        private static readonly string[] WrongBooleanPhrases = [.. CreateWrongBooleanPhrases().Take(TestLimit)];
 
         [Test]
         public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
@@ -406,8 +406,9 @@ public class TestMe
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2080_CodeFixProvider();
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateWrongBooleanPhrases()
+        private static HashSet<string> CreateWrongBooleanPhrases()
         {
             string[] starts =
                               [
@@ -421,80 +422,86 @@ public class TestMe
             string[] middles = ["indicating", "that indicates", "to indicate", "which indicates", "controlling", "that controls", "to control", "which controls"];
             string[] ends = ["if", "that", "whether", "whether or not"];
 
+            var results = new HashSet<string>();
+
             foreach (var start in starts)
             {
                 foreach (var middle in middles)
                 {
+                    var begin = string.Concat(start, " ", middle, " ");
+
                     foreach (var end in ends)
                     {
-                        var phrase = $"{start} {middle} {end}";
+                        var phrase = begin + end;
 
-                        yield return phrase;
-                        yield return phrase.ToLowerCaseAt(0);
+                        results.Add(phrase);
+                        results.Add(phrase.ToLowerCaseAt(0));
                     }
                 }
             }
 
-            yield return "Controls if";
-            yield return "Controls that";
-            yield return "Controls whether";
-            yield return "Controls whether or not";
-            yield return "Indicates if";
-            yield return "Indicates that";
+            results.Add("Controls if");
+            results.Add("Controls that");
+            results.Add("Controls whether");
+            results.Add("Controls whether or not");
+            results.Add("Indicates if");
+            results.Add("Indicates that");
 
-            yield return "Controlling if";
-            yield return "Controlling that";
-            yield return "Controlling whether";
-            yield return "Controlling whether or not";
-            yield return "Indicating if";
-            yield return "Indicating that";
-            yield return "Indicating whether";
-            yield return "Indicating whether or not";
+            results.Add("Controlling if");
+            results.Add("Controlling that");
+            results.Add("Controlling whether");
+            results.Add("Controlling whether or not");
+            results.Add("Indicating if");
+            results.Add("Indicating that");
+            results.Add("Indicating whether");
+            results.Add("Indicating whether or not");
 
-            yield return "Shall control if";
-            yield return "Shall control that";
-            yield return "Shall control whether";
-            yield return "Shall control whether or not";
-            yield return "Shall indicate if";
-            yield return "Shall indicate that";
-            yield return "Shall indicate whether";
-            yield return "Shall indicate whether or not";
+            results.Add("Shall control if");
+            results.Add("Shall control that");
+            results.Add("Shall control whether");
+            results.Add("Shall control whether or not");
+            results.Add("Shall indicate if");
+            results.Add("Shall indicate that");
+            results.Add("Shall indicate whether");
+            results.Add("Shall indicate whether or not");
 
-            yield return "Should control if";
-            yield return "Should control that";
-            yield return "Should control whether";
-            yield return "Should control whether or not";
-            yield return "Should indicate if";
-            yield return "Should indicate that";
-            yield return "Should indicate whether";
-            yield return "Should indicate whether or not";
+            results.Add("Should control if");
+            results.Add("Should control that");
+            results.Add("Should control whether");
+            results.Add("Should control whether or not");
+            results.Add("Should indicate if");
+            results.Add("Should indicate that");
+            results.Add("Should indicate whether");
+            results.Add("Should indicate whether or not");
 
-            yield return "To control if";
-            yield return "To control that";
-            yield return "To control whether";
-            yield return "To control whether or not";
-            yield return "To indicate if";
-            yield return "To indicate that";
-            yield return "To indicate whether";
-            yield return "To indicate whether or not";
+            results.Add("To control if");
+            results.Add("To control that");
+            results.Add("To control whether");
+            results.Add("To control whether or not");
+            results.Add("To indicate if");
+            results.Add("To indicate that");
+            results.Add("To indicate whether");
+            results.Add("To indicate whether or not");
 
-            yield return "Will control if";
-            yield return "Will control that";
-            yield return "Will control whether";
-            yield return "Will control whether or not";
-            yield return "Will indicate if";
-            yield return "Will indicate that";
-            yield return "Will indicate whether";
-            yield return "Will indicate whether or not";
+            results.Add("Will control if");
+            results.Add("Will control that");
+            results.Add("Will control whether");
+            results.Add("Will control whether or not");
+            results.Add("Will indicate if");
+            results.Add("Will indicate that");
+            results.Add("Will indicate whether");
+            results.Add("Will indicate whether or not");
 
-            yield return "Would control if";
-            yield return "Would control that";
-            yield return "Would control whether";
-            yield return "Would control whether or not";
-            yield return "Would indicate if";
-            yield return "Would indicate that";
-            yield return "Would indicate whether";
-            yield return "Would indicate whether or not";
+            results.Add("Would control if");
+            results.Add("Would control that");
+            results.Add("Would control whether");
+            results.Add("Would control whether or not");
+            results.Add("Would indicate if");
+            results.Add("Would indicate that");
+            results.Add("Would indicate whether");
+            results.Add("Would indicate whether or not");
+
+            return results;
         }
     }
 }
