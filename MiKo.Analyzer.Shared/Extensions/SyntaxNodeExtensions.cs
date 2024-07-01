@@ -1945,9 +1945,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsSupported(this SyntaxNodeAnalysisContext value, LanguageVersion expectedVersion) => IsSupported(value.Node.SyntaxTree, expectedVersion);
-
-        internal static bool IsSupported(this SyntaxTree value, LanguageVersion expectedVersion)
+        internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
         {
             var languageVersion = ((CSharpParseOptions)value.Options).LanguageVersion;
 

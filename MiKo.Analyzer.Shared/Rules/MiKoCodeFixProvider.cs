@@ -71,6 +71,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
 
+        protected static IsPatternExpressionSyntax IsNotPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+
         protected static IsPatternExpressionSyntax IsFalsePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.FalseLiteralExpression));
 
         protected static IsPatternExpressionSyntax IsTruePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.TrueLiteralExpression));
@@ -161,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules
                         .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
         }
 
-        protected static bool HasMinimumCSharpVersion(Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.IsSupported(wantedVersion);
+        protected static bool HasMinimumCSharpVersion(Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
 
         protected static bool IsConst(Document document, ArgumentSyntax syntax)
         {
