@@ -3872,7 +3872,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is' pattern</value>
   </data>
   <data name="MiKo_3082_Description" xml:space="preserve">
-    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' operator.</value>
+    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
   </data>
   <data name="MiKo_3082_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3884,7 +3884,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is null' pattern</value>
   </data>
   <data name="MiKo_3083_Description" xml:space="preserve">
-    <value>Null checks using the 'is' pattern matching is more natural and therefore easier to read and understand than using the '==' operator.</value>
+    <value>Null checks using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
   </data>
   <data name="MiKo_3083_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3936,7 +3936,7 @@ They should be either short (to see at a glance what's going on) or refactored i
     <value>Apply 'is not null' pattern</value>
   </data>
   <data name="MiKo_3088_Description" xml:space="preserve">
-    <value>Null checks using the 'is not' pattern matching is more natural and therefore easier to read and understand than using the '!=' operator.</value>
+    <value>Null checks using the 'is not' pattern matching are more natural and therefore easier to read and understand than using the '!=' inequality operator.</value>
   </data>
   <data name="MiKo_3088_MessageFormat" xml:space="preserve">
     <value>Use 'is not' instead of '!='</value>

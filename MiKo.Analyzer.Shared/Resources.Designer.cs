@@ -10957,7 +10957,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; operator..
+        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
         /// </summary>
         internal static string MiKo_3082_Description {
             get {
@@ -10993,7 +10993,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is&apos; pattern matching is more natural and therefore easier to read and understand than using the &apos;==&apos; operator..
+        ///   Looks up a localized string similar to Null checks using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
         /// </summary>
         internal static string MiKo_3083_Description {
             get {
@@ -11147,7 +11147,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is not&apos; pattern matching is more natural and therefore easier to read and understand than using the &apos;!=&apos; operator..
+        ///   Looks up a localized string similar to Null checks using the &apos;is not&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;!=&apos; inequality operator..
         /// </summary>
         internal static string MiKo_3088_Description {
             get {
