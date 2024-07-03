@@ -14,11 +14,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         // Ordinal is important here as we want to have only those with a suffix and not all (e.g. we want 'comparisonView' but not 'view')
         private const StringComparison Comparison = StringComparison.Ordinal;
 
-        private static readonly string[] Prefixes =
-                                                    {
-                                                        "old",
-                                                        "new",
-                                                    };
+        private static readonly string[] AcceptedPrefixes =
+                                                            {
+                                                                "old",
+                                                                "new",
+                                                                "source",
+                                                                "target",
+                                                                "xml",
+                                                            };
 
         private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
                                                                                {
@@ -36,20 +39,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(IParameterSymbol symbol, Compilation compilation)
         {
-            var symbolName = symbol.Name;
+            var name = symbol.Name;
 
-            if (symbolName.EndsWith(Constants.Entity, Comparison))
+            if (name.StartsWithAny(AcceptedPrefixes, Comparison))
             {
-                var proposal = symbolName.WithoutSuffix(Constants.Entity);
+                return Array.Empty<Diagnostic>();
+            }
+
+            if (name.EndsWith(Constants.Entity, Comparison))
+            {
+                var proposal = name.WithoutSuffix(Constants.Entity);
 
                 return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
             }
 
-            if (symbolName.EndsWith("Element", Comparison))
+            if (name.EndsWith(Constants.Element, Comparison))
             {
-                var proposal = symbolName == "frameworkElement"
-                               ? "element"
-                               : symbolName.WithoutSuffix("Element");
+                var proposal = name == Constants.frameworkElement ? Constants.element : name.WithoutSuffix(Constants.Element);
 
                 return new[] { Issue(symbol, proposal, CreateBetterNameProposal(proposal)) };
             }
@@ -60,7 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 foreach (var pair in WrongSuffixes)
                 {
-                    if (symbolName.EndsWith(pair.Key, Comparison) && symbolName.StartsWithAny(Prefixes) is false)
+                    if (name.EndsWith(pair.Key, Comparison))
                     {
                         var proposal = pair.Value;
 
