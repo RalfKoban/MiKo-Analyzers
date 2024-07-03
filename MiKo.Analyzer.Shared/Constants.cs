@@ -26,6 +26,13 @@ namespace MiKoSolutions.Analyzers
         internal const string entities = "entities";
 #pragma warning restore SA1303 // Const field names should begin with upper-case letter
 
+        internal const string Element = "Element";
+
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
+        internal const string element = "element";
+        internal const string frameworkElement = "frameworkElement";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
+
         internal const string EnvironmentNewLine = "\r\n";
 
         internal const string TODO = "TODO";

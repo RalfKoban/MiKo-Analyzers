@@ -29,7 +29,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_method_with_properly_named_parameter_([Values("comparer", "view", "item", "entity", "oldView", "newView")] string name)
+        public void No_issue_is_reported_for_method_with_properly_named_parameter_([Values("comparer", "view", "item", "entity", "oldView", "newView", "xmlElement", "sourceView", "targetView", "sourceEntity", "targetEntity")] string name)
             => No_issue_is_reported_for(@"
 
 public class TestMe
