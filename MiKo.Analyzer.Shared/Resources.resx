@@ -3872,7 +3872,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is' pattern</value>
   </data>
   <data name="MiKo_3082_Description" xml:space="preserve">
-    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' operator.</value>
+    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
   </data>
   <data name="MiKo_3082_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3884,7 +3884,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is null' pattern</value>
   </data>
   <data name="MiKo_3083_Description" xml:space="preserve">
-    <value>Null checks using the 'is' pattern matching is more natural and therefore easier to read and understand than using the '==' operator.</value>
+    <value>Null checks using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
   </data>
   <data name="MiKo_3083_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3931,6 +3931,18 @@ They should be either short (to see at a glance what's going on) or refactored i
   </data>
   <data name="MiKo_3087_Title" xml:space="preserve">
     <value>Do not use negative complex conditions</value>
+  </data>
+  <data name="MiKo_3088_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is not null' pattern</value>
+  </data>
+  <data name="MiKo_3088_Description" xml:space="preserve">
+    <value>Null checks using the 'is not' pattern matching are more natural and therefore easier to read and understand than using the '!=' inequality operator.</value>
+  </data>
+  <data name="MiKo_3088_MessageFormat" xml:space="preserve">
+    <value>Use 'is not' instead of '!='</value>
+  </data>
+  <data name="MiKo_3088_Title" xml:space="preserve">
+    <value>Prefer pattern matching for not-null checks</value>
   </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
     <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.

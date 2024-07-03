@@ -71,6 +71,8 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
 
+        protected static IsPatternExpressionSyntax IsNotPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+
         protected static IsPatternExpressionSyntax IsFalsePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.FalseLiteralExpression));
 
         protected static IsPatternExpressionSyntax IsTruePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.TrueLiteralExpression));
@@ -96,7 +98,15 @@ namespace MiKoSolutions.Analyzers.Rules
             return SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, type, method);
         }
 
-        protected static SemanticModel GetSemanticModel(Document document) => document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
+        protected static SemanticModel GetSemanticModel(Document document)
+        {
+            if (document.TryGetSemanticModel(out var result))
+            {
+                return result;
+            }
+
+            return document.GetSemanticModelAsync(CancellationToken.None).GetAwaiter().GetResult();
+        }
 
         protected static ISymbol GetSymbol(Document document, SyntaxNode syntax) => GetSymbolAsync(document, syntax, CancellationToken.None).GetAwaiter().GetResult();
 
@@ -107,7 +117,10 @@ namespace MiKoSolutions.Analyzers.Rules
                 return null;
             }
 
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            if (document.TryGetSemanticModel(out var semanticModel) is false)
+            {
+                semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            }
 
             if (syntax is TypeSyntax typeSyntax)
             {
@@ -116,6 +129,41 @@ namespace MiKoSolutions.Analyzers.Rules
 
             return semanticModel?.GetDeclaredSymbol(syntax, cancellationToken);
         }
+
+        protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, int spaces) where TSyntaxNode : SyntaxNode
+        {
+            var syntax = syntaxNode.WithLeadingSpaces(spaces);
+
+            var additionalSpaces = syntax.GetPositionWithinStartLine() - syntaxNode.GetPositionWithinStartLine();
+
+            // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
+            var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
+
+            if (startingNodes.Count == 0)
+            {
+                return syntax;
+            }
+
+            return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
+        }
+
+        protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces) => GetSyntaxWithLeadingSpaces(statement, spaces);
+
+        protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)
+        {
+            if (block is null)
+            {
+                return null;
+            }
+
+            var indentation = spaces + Constants.Indentation;
+
+            return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
+                        .WithStatements(block.Statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
+                        .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
+        }
+
+        protected static bool HasMinimumCSharpVersion(Document document, LanguageVersion wantedVersion) => document.TryGetSyntaxTree(out var syntaxTree) && syntaxTree.HasMinimumCSharpVersion(wantedVersion);
 
         protected static bool IsConst(Document document, ArgumentSyntax syntax)
         {
@@ -234,6 +282,61 @@ namespace MiKoSolutions.Analyzers.Rules
             var newDocument = document.WithSyntaxRoot(finalRoot);
 
             return Task.FromResult(newDocument);
+        }
+
+        private static IEnumerable<SyntaxNodeOrToken> GetNodesAndTokensStartingOnSeparateLines(SyntaxNode startingNode)
+        {
+            var currentLine = startingNode.GetStartingLine();
+
+            foreach (var nodeOrToken in startingNode.DescendantNodesAndTokens(_ => true, true))
+            {
+                var startingLine = nodeOrToken.GetStartingLine();
+
+                if (startingLine != currentLine)
+                {
+                    currentLine = startingLine;
+
+                    if (nodeOrToken.IsToken)
+                    {
+                        var token = nodeOrToken.AsToken();
+
+                        switch (token.Kind())
+                        {
+                            case SyntaxKind.PlusToken when IsStringCreation(token.Parent):
+                            {
+                                // ignore string constructions via add
+                                continue;
+                            }
+
+                            case SyntaxKind.CloseParenToken when token.Parent is ArgumentListSyntax l && IsStringCreation(l.Arguments.Last().Expression):
+                            {
+                                // ignore string constructions via add
+                                continue;
+                            }
+                        }
+                    }
+
+                    yield return nodeOrToken;
+                }
+            }
+        }
+
+        private static bool IsStringCreation(SyntaxNode node)
+        {
+            if (node is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
+            {
+                if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
+                {
+                    return true;
+                }
+
+                if (IsStringCreation(b.Left) || IsStringCreation(b.Right))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private CodeAction CreateCodeFix(CodeFixContext context, SyntaxNode root, Diagnostic issue)

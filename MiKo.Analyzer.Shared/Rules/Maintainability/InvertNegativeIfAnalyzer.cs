@@ -16,7 +16,38 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected static bool IsAnyNegative(SyntaxNode condition) => GetConditionParts(condition).Exists(IsNegative);
+        protected static IReadOnlyList<SyntaxNode> GetConditionParts(SyntaxNode condition)
+        {
+            var parts = new List<SyntaxNode>();
+
+            GetConditionParts(condition, parts);
+
+            return parts;
+        }
+
+        protected static bool IsNegative(SyntaxNode node)
+        {
+            switch (node.Kind())
+            {
+                case SyntaxKind.LogicalNotExpression:
+                    return true;
+
+                case SyntaxKind.IsPatternExpression:
+                {
+                    var pattern = ((IsPatternExpressionSyntax)node).Pattern;
+
+                    if (pattern.IsKind(SyntaxKind.NotPattern))
+                    {
+                        return true;
+                    }
+
+                    return pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
+                }
+
+                default:
+                    return false;
+            }
+        }
 
         protected static bool IsMainlyNegative(SyntaxNode condition)
         {
@@ -41,30 +72,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeIfStatement, SyntaxKind.IfStatement);
 
         protected virtual IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context) => Enumerable.Empty<Diagnostic>();
-
-        private static bool IsNegative(SyntaxNode node)
-        {
-            switch (node.Kind())
-            {
-                case SyntaxKind.LogicalNotExpression:
-                    return true;
-
-                case SyntaxKind.IsPatternExpression:
-                    return ((IsPatternExpressionSyntax)node).Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
-
-                default:
-                    return false;
-            }
-        }
-
-        private static List<SyntaxNode> GetConditionParts(SyntaxNode condition)
-        {
-            var parts = new List<SyntaxNode>();
-
-            GetConditionParts(condition, parts);
-
-            return parts;
-        }
 
         private static void GetConditionParts(SyntaxNode condition, ICollection<SyntaxNode> parts)
         {

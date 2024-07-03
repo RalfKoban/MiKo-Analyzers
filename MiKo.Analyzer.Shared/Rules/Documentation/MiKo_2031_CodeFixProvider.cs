@@ -115,28 +115,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> CreateTextParts()
         {
-            yield return "An awaitable task.";
-            yield return "An awaitable task and";
-            yield return "An awaitable task";
-            yield return "A task to await.";
-            yield return "A task to await and";
-            yield return "A task to await";
-            yield return "A task that can be used to await.";
-            yield return "A task that can be used to await and";
-            yield return "A task that can be used to await";
+            var results = new HashSet<string>
+                              {
+                                  "An awaitable task.",
+                                  "An awaitable task and",
+                                  "An awaitable task",
+                                  "A task to await.",
+                                  "A task to await and",
+                                  "A task to await",
+                                  "A task that can be used to await.",
+                                  "A task that can be used to await and",
+                                  "A task that can be used to await",
+                              };
 
             foreach (var phrase in AlmostCorrectTaskReturnTypeStartingPhrases)
             {
-                yield return phrase;
+                results.Add(phrase);
             }
 
             foreach (var start in new[] { "A result", "A task", "The task" })
             {
                 foreach (var end in ContinueTextParts)
                 {
-                    yield return start + " " + end;
+                    results.Add(start + " " + end);
                 }
             }
+
+            return results;
         }
 
 //// ncrunch: rdi default

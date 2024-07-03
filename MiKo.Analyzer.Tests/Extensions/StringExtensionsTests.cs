@@ -8,8 +8,8 @@ namespace MiKoSolutions.Analyzers.Extensions
     [TestFixture]
     public static class StringExtensionsTests
     {
-        private static readonly string LowerCaseCharacters = " abcdefghijklmnopqrstuvwxyz1234567890";
-        private static readonly string UpperCaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string LowerCaseCharacters = " abcdefghijklmnopqrstuvwxyz1234567890";
+        private const string UpperCaseCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         [TestCase(null, ExpectedResult = null)]
         [TestCase("", ExpectedResult = "")]
