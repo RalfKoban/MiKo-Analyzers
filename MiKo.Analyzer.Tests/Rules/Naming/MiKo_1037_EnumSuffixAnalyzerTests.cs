@@ -14,6 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("struct")]
+        [TestCase("record")]
         public void No_issue_is_reported_for_type_with_correct_name_(string type) => No_issue_is_reported_for(@"
 public " + type + @" TestMe
 {
@@ -23,6 +24,7 @@ public " + type + @" TestMe
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("struct")]
+        [TestCase("record")]
         public void No_issue_is_reported_for_type_with_Enum_name_only_(string type) => No_issue_is_reported_for(@"
 public " + type + @" Enum
 {
@@ -32,6 +34,7 @@ public " + type + @" Enum
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("struct")]
+        [TestCase("record")]
         public void An_issue_is_reported_for_type_with_Enum_suffix_(string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMeEnum
 {
@@ -58,6 +61,7 @@ public enum TestMeEnums
         [TestCase("interface")]
         [TestCase("class")]
         [TestCase("struct")]
+        [TestCase("record")]
         [TestCase("enum")]
         public void Code_gets_fixed_(string type) => VerifyCSharpFix(
                                                                  "using System; " + type + " TestMeEnum { }",
