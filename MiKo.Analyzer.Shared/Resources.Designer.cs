@@ -12049,6 +12049,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change return type of test method to &apos;void&apos;.
+        /// </summary>
+        internal static string MiKo_3119_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3119_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods that return non-generic tasks are doing so for testing asynchronous behavior. Therefore they should not simply return &apos;Task.CompletedTask&apos;. Such methods should instead simply return &apos;void&apos;..
+        /// </summary>
+        internal static string MiKo_3119_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3119_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return void instead of Task.
+        /// </summary>
+        internal static string MiKo_3119_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3119_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not simply return completed task.
+        /// </summary>
+        internal static string MiKo_3119_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3119_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
