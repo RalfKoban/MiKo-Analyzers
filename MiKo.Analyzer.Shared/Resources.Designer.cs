@@ -2910,6 +2910,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Enum&apos; suffix.
+        /// </summary>
+        internal static string MiKo_1077_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1077_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicating that an enum member is an enum member by using &apos;Enum&apos; as its suffix does not make sense..
+        /// </summary>
+        internal static string MiKo_1077_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1077_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{0}&apos;.
+        /// </summary>
+        internal static string MiKo_1077_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1077_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum members should not be suffixed with &apos;Enum&apos;.
+        /// </summary>
+        internal static string MiKo_1077_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1077_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         internal static string MiKo_1080_Description {

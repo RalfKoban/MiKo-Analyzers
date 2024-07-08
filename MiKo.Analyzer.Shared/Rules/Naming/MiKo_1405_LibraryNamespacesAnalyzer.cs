@@ -21,13 +21,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             foreach (var name in names)
             {
+                var namespaceName = name.ValueText;
+
+                // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach (var libraryNamespace in LibraryNamespaces)
                 {
-                    var namespaceName = name.ValueText;
-
                     if (namespaceName.EndsWith(libraryNamespace, StringComparison.Ordinal))
                     {
                         yield return Issue(namespaceName, name, libraryNamespace);
+
+                        break;
                     }
                 }
             }
