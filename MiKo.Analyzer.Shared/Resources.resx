@@ -4251,6 +4251,18 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3118_Title" xml:space="preserve">
     <value>Test methods should not use ambiguous Linq calls</value>
   </data>
+  <data name="MiKo_3119_CodeFixTitle" xml:space="preserve">
+    <value>Change return type of test method to 'void'</value>
+  </data>
+  <data name="MiKo_3119_Description" xml:space="preserve">
+    <value>Test methods that return non-generic tasks are doing so for testing asynchronous behavior. Therefore they should not simply return 'Task.CompletedTask'. Such methods should instead simply return 'void'.</value>
+  </data>
+  <data name="MiKo_3119_MessageFormat" xml:space="preserve">
+    <value>Return void instead of Task</value>
+  </data>
+  <data name="MiKo_3119_Title" xml:space="preserve">
+    <value>Test methods should not simply return completed task</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>
