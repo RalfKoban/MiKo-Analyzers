@@ -72,7 +72,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_commented_enum_member_([Values("Defines", "Indicates", "Specifies")] string startingPhrase) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_commented_enum_member_([Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingPhrase) => An_issue_is_reported_for(@"
 using System;
 
 public enum TestMe
@@ -91,8 +91,8 @@ public enum TestMe
 
         [Test, Combinatorial]
         public void Code_gets_fixed_for_incorrectly_commented_enum_member_(
-                                                                       [Values("Defines", "Indicates", "Represents", "Specifies")] string startingWord,
-                                                                       [Values("", " that", ", that", " whether", ", whether")] string continuation)
+                                                                       [Values("Defines", "Indicates", "Represents", "Specifies", "Enum")] string startingWord,
+                                                                       [Values("", " that", ", that", " whether", ", whether", " for", ", for")] string continuation)
         {
             const string Template = @"
 using System;

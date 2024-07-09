@@ -793,6 +793,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  "Indicates",
                                                                                  "Represents",
                                                                                  "Specifies",
+                                                                                 "Enum",
                                                                              };
         }
 
