@@ -170,7 +170,7 @@ using Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_documented_class([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_documented_class_([Values("Provide", "This are")] string start) => An_issue_is_reported_for(@"
 using System;
 
 /// <summary>

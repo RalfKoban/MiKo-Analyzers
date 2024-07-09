@@ -245,7 +245,7 @@ namespace Bla
         }
 
         [TestCase("Assert.That(values.Any(_ => _ == 42))", @"Assert.That(values.Any(_ => _ == 42), ""wrong values"")")]
-        public void Code_gets_fixed_for_Linq_call(string originalCode, string fixedCode)
+        public void Code_gets_fixed_for_Linq_call_(string originalCode, string fixedCode)
         {
             const string Template = @"
 using System;

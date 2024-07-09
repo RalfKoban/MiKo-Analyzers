@@ -28,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
         [Ignore("Just for now")]
         [TestCase("TODO"), Explicit, Timeout(1 * 60 * 60 * 1000)]
-        public static void Performance(string path)
+        public static void Performance_(string path)
         {
             // ncrunch: no coverage start
             var files = GetDocuments(path).ToList();

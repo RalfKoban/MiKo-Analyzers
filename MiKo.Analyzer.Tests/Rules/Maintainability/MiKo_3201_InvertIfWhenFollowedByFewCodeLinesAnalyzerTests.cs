@@ -1348,7 +1348,7 @@ public class TestMe
         [TestCase("<= 42", "> 42")]
         [TestCase("> 42", "<= 42")]
         [TestCase("< 42", ">= 42")]
-        public void Code_gets_fixed_for_void_method_with_number_check_as_if_statement_and_no_else_block_and_3_following_lines(string originalCheck, string fixedCheck)
+        public void Code_gets_fixed_for_void_method_with_number_check_as_if_statement_and_no_else_block_and_3_following_lines_(string originalCheck, string fixedCheck)
         {
             var originalCode = @"
 public class TestMe
