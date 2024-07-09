@@ -1274,7 +1274,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (eg. &apos;User&apos; instead of &apos;UserModel&apos;).
+        ///   Looks up a localized string similar to Indicating that a type is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;User&apos; instead of &apos;UserModel&apos;).
         /// </summary>
         internal static string MiKo_1031_Description {
             get {
@@ -1346,7 +1346,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a parameter is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (eg. &apos;user&apos; instead of &apos;userModel&apos;).
+        ///   Looks up a localized string similar to Indicating that a parameter is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;user&apos; instead of &apos;userModel&apos;).
         /// </summary>
         internal static string MiKo_1033_Description {
             get {
@@ -1382,7 +1382,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a field is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (eg. &apos;user&apos; instead of &apos;userModel&apos;).
+        ///   Looks up a localized string similar to Indicating that a field is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;user&apos; instead of &apos;userModel&apos;).
         /// </summary>
         internal static string MiKo_1034_Description {
             get {
@@ -4554,7 +4554,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation is malformed (contains invalid characters, eg. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
+        ///   Looks up a localized string similar to Documentation is malformed (contains invalid characters, e.g. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
         /// </summary>
         internal static string MiKo_2000_MessageFormat {
             get {
@@ -7625,7 +7625,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
-        ///However, in the generated documentation (eg. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
+        ///However, in the generated documentation (e.g. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
         ///In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs..
         /// </summary>
         internal static string MiKo_2214_Description {
@@ -8150,7 +8150,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (eg. &quot;You cannot do this if it is not empty&quot;).
+        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (e.g. &quot;You cannot do this if it is not empty&quot;).
         ///Positive wording is much easier to understand as it is straight forward and comes to the point..
         /// </summary>
         internal static string MiKo_2228_Description {
@@ -12381,8 +12381,8 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to If methods start with &apos;Begin&apos; or &apos;Enter&apos; they probably have counterparts that start with &apos;End&apos; or &apos;Exit&apos;. Such methods are considered to define some kind of scope (for example, &apos;BeginUpdate&apos; and &apos;EndUpdate&apos; defines a scope for an update operation).
-        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
-        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that  [rest of string was truncated]&quot;;.
+        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (e.g. due to exceptions being thrown), those methods should not be made available to the public.
+        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3214_Description {
             get {

@@ -527,7 +527,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1031_Description" xml:space="preserve">
-    <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'User' instead of 'UserModel')</value>
+    <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'User' instead of 'UserModel')</value>
   </data>
   <data name="MiKo_1031_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -551,7 +551,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1033_Description" xml:space="preserve">
-    <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
+    <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'user' instead of 'userModel')</value>
   </data>
   <data name="MiKo_1033_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -563,7 +563,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1034_Description" xml:space="preserve">
-    <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
+    <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'user' instead of 'userModel')</value>
   </data>
   <data name="MiKo_1034_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1671,7 +1671,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>Documentation is malformed (contains invalid characters, eg. '&amp;', '&gt;', '&lt;')</value>
+    <value>Documentation is malformed (contains invalid characters, e.g. '&amp;', '&gt;', '&lt;')</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>Documentation should be valid XML</value>
@@ -2708,7 +2708,7 @@ It would therefore be better to clearly highlight the contradiction.</value>
   </data>
   <data name="MiKo_2214_Description" xml:space="preserve">
     <value>The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
-However, in the generated documentation (eg. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
+However, in the generated documentation (e.g. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
 In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs.</value>
   </data>
   <data name="MiKo_2214_MessageFormat" xml:space="preserve">
@@ -2893,7 +2893,7 @@ When defined, ReSharper disables the specific rule once or until the document en
     <value>Documentation should not contain ReSharper suppressions</value>
   </data>
   <data name="MiKo_2228_Description" xml:space="preserve">
-    <value>Negative wording is difficult to understand, especially when being combined (eg. "You cannot do this if it is not empty").
+    <value>Negative wording is difficult to understand, especially when being combined (e.g. "You cannot do this if it is not empty").
 Positive wording is much easier to understand as it is straight forward and comes to the point.</value>
   </data>
   <data name="MiKo_2228_MessageFormat" xml:space="preserve">
@@ -4368,7 +4368,7 @@ All the other calls should be invoked from the 'Dispose(bool disposing)' method.
   </data>
   <data name="MiKo_3214_Description" xml:space="preserve">
     <value>If methods start with 'Begin' or 'Enter' they probably have counterparts that start with 'End' or 'Exit'. Such methods are considered to define some kind of scope (for example, 'BeginUpdate' and 'EndUpdate' defines a scope for an update operation).
-As it is prone to errors to forget or not correctly invoke the 'End' methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
+As it is prone to errors to forget or not correctly invoke the 'End' methods (e.g. due to exceptions being thrown), those methods should not be made available to the public.
 Instead, a method should be made available that returns an 'IDisposable' to define that scope.
 By doing so developers can simply place the call inside a 'using' to guarantee that the 'End' method is invoked in all cases.</value>
   </data>
