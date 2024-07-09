@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static IEnumerable<string> CreateReplacementMapKeys()
         {
-            var continuations = new[] { "that", "whether" };
+            var continuations = new[] { "that", "whether", "for" };
 
             foreach (var start in Constants.Comments.EnumMemberWrongStartingWords)
             {
