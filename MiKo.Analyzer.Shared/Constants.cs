@@ -815,6 +815,7 @@ namespace MiKoSolutions.Analyzers
             internal const string ParamRef = "paramref";
             internal const string Permission = "permission";
             internal const string Remarks = "remarks";
+            internal const string Response = "response"; // used e.g. for Swagger
             internal const string Returns = "returns";
             internal const string See = "see";
             internal const string SeeAlso = "seealso";
