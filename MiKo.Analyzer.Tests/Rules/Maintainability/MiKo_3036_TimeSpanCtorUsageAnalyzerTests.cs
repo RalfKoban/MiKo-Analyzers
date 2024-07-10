@@ -45,7 +45,7 @@ namespace Bla
         [TestCase("1, 2, 3")]
         [TestCase("1, 2, 3, 4")]
         [TestCase("1, 2, 3, 4, 5")]
-        public void An_issue_is_reported_for_method_with_wrong_TimeSpan_usage(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_wrong_TimeSpan_usage_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -65,7 +65,7 @@ namespace Bla
         [TestCase("1, 2, 3")]
         [TestCase("1, 2, 3, 4")]
         [TestCase("1, 2, 3, 4, 5")]
-        public void An_issue_is_reported_for_method_body_with_wrong_TimeSpan_usage(string parameters) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_body_with_wrong_TimeSpan_usage_(string parameters) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla

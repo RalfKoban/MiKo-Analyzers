@@ -349,7 +349,7 @@ public class TestMe
 
         [TestCase("5", "4")]
         [TestCase("Guid.Empty", "new Guid()")]
-        public void An_issue_is_reported_for_object_Equals_method_on_structs_with_cast_to_object(string x, string y) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_object_Equals_method_on_structs_with_cast_to_object_(string x, string y) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

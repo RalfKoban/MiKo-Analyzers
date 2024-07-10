@@ -130,7 +130,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_comment_containing_similar_words([Values("heuristic", "et cetera", "superb")] string word) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_comment_containing_similar_words_([Values("heuristic", "et cetera", "superb")] string word) => No_issue_is_reported_for(@"
 /// <summary>
 /// The identifier " + word + @". Seems to be no problem.
 /// </summary>

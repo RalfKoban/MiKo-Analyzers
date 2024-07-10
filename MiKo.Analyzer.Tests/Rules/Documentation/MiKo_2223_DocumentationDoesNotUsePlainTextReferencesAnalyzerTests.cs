@@ -191,7 +191,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_documented_method_with_hyperlink_anchor_and_descriptive_text([Values(@"<a href=""http://www.nunit.org/"">NUnit</a>")] string text) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_documented_method_with_hyperlink_anchor_and_descriptive_text_([Values(@"<a href=""http://www.nunit.org/"">NUnit</a>")] string text) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
