@@ -18,6 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "intentionally empty",
                                                                   "empty with intent",
                                                                   "empty with intention",
+                                                                  "empty on purpose",
                                                                   "left empty on purpose",
                                                                   "on purpose left empty",
                                                                   "purposely left empty",
@@ -47,6 +48,23 @@ public class TestMe
     public void DoSomething()
     {
         // " + comment + @"
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_documentation_in_catch_block_([ValueSource(nameof(IntentionalPhrases))] string comment) => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething()
+    {
+        try
+        {
+            DoSomething();
+        }
+        catch
+        {
+            // " + comment + @"
+        }
     }
 }");
 
