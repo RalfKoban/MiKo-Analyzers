@@ -734,13 +734,20 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] IntentionallyPhrase =
                                                                     {
                                                                         "intentionally",
+                                                                        "intentionaly", // be able to detect typos
                                                                         "by intention",
                                                                         "with intention",
                                                                         "by intent",
                                                                         "with intent",
+                                                                        "indentionally", // be able to detect typos
+                                                                        "indentionaly", // be able to detect typos
+                                                                        "by indention", // be able to detect typos
+                                                                        "with indention", // be able to detect typos
+                                                                        "by indent", // be able to detect typos
+                                                                        "with indent", // be able to detect typos
                                                                         "on purpose",
                                                                         "purposely",
-                                                                        "purposly", // typo by intent
+                                                                        "purposly", // be able to detect typos
                                                                     };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
@@ -748,9 +755,9 @@ namespace MiKoSolutions.Analyzers
             internal static readonly HashSet<string> LangwordWrongAttributes = new HashSet<string>
                                                                                    {
                                                                                        XmlTag.Attribute.Langref,
-                                                                                       "langowrd", // find typos
-                                                                                       "langwrod", // find typos
-                                                                                       "langwowd", // find typos
+                                                                                       "langowrd", // be able to detect typos
+                                                                                       "langwrod", // be able to detect typos
+                                                                                       "langwowd", // be able to detect typos
                                                                                    };
 
             internal static readonly string[] TryWords = { "Try", "Tries" };
