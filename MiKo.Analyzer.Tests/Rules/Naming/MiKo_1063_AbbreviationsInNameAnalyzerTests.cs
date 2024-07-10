@@ -178,23 +178,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] BadPostfixes = BadMidTerms
                                                         .Union([
-                                                                    "Bl",
-                                                                    "BL",
-                                                                    "CLI",
-                                                                    "Dto",
-                                                                    "DTO",
-                                                                    "Itf",
-                                                                    "Meth",
-                                                                    "Param",
-                                                                    "Params",
-                                                                    "Pos",
-                                                                    "Proc",
-                                                                    "Prop",
-                                                                    "PropName",
-                                                                    "PropNames",
-                                                                    "Props",
-                                                                    "Vm",
-                                                                    "VM",
+                                                                   "Bl",
+                                                                   "BL",
+                                                                   "CLI",
+                                                                   "Dto",
+                                                                   "DTO",
+                                                                   "Itf",
+                                                                   "Meth",
+                                                                   "Param",
+                                                                   "Params",
+                                                                   "Pos",
+                                                                   "Proc",
+                                                                   "Prop",
+                                                                   "PropName",
+                                                                   "PropNames",
+                                                                   "Props",
+                                                                   "Vm",
+                                                                   "VM",
                                                                ])
                                                         .ToArray();
 
@@ -290,7 +290,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
 using System;
 using System.Text.Json.Serialization;
 
@@ -307,7 +307,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Newtonsoft_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Newtonsoft_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -343,6 +343,18 @@ namespace Bla
     public class TestMe
     {
         public static extern int DoSomething(int " + part + @"Parameter);
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_well_known_abbreviation_([Values("MEF")] string abbreviation) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static int " + abbreviation + @"DoSomething();
     }
 }");
 

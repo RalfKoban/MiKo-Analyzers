@@ -230,6 +230,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "OAuth",
                                                             "text",
                                                             "Text",
+                                                            "MEF",
                                                         };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)
