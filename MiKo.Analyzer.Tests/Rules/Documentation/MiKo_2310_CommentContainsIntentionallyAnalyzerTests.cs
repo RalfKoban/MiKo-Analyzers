@@ -15,7 +15,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "left empty by intent",
                                                                   "left empty by intention",
                                                                   "left empty intentionally",
+                                                                  "left empty intentionaly", // check for typo
                                                                   "intentionally empty",
+                                                                  "intentionaly empty", // check for typo
                                                                   "empty with intent",
                                                                   "empty with intention",
                                                                   "empty on purpose",
@@ -23,6 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "on purpose left empty",
                                                                   "purposely left empty",
                                                                   "purposly left empty", // check for typo
+                                                                  "by indent", // check for typo
+                                                                  "empty with indent", // check for typo
+                                                                  "empty with indention", // check for typo
+                                                                  "indentionally", // check for typo
+                                                                  "indentionaly", // check for typo
                                                               ];
 
         [Test]
