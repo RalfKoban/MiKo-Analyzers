@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 443 rules that are currently provided by the analyzer.
+The following tables lists all the 444 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -357,6 +357,7 @@ The following tables lists all the 443 rules that are currently provided by the 
 |MiKo_3086|Do not nest conditional statements|&#x2713;|\-|
 |MiKo_3087|Do not use negative complex conditions|&#x2713;|\-|
 |MiKo_3088|Prefer pattern matching for not-null checks|&#x2713;|&#x2713;|
+|MiKo_3089|Do not use simple constant property patterns as conditions of 'if' statements|&#x2713;|&#x2713;|
 |MiKo_3090|Do not throw exceptions in finally blocks|&#x2713;|\-|
 |MiKo_3091|Do not raise events in finally blocks|&#x2713;|\-|
 |MiKo_3092|Do not raise events in locks|&#x2713;|\-|
