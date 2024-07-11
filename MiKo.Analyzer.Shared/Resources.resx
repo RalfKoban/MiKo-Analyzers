@@ -3956,6 +3956,18 @@ They should be either short (to see at a glance what's going on) or refactored i
   <data name="MiKo_3088_Title" xml:space="preserve">
     <value>Prefer pattern matching for not-null checks</value>
   </data>
+  <data name="MiKo_3089_CodeFixTitle" xml:space="preserve">
+    <value>Convert property pattern condition into normal condition</value>
+  </data>
+  <data name="MiKo_3089_Description" xml:space="preserve">
+    <value>Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones.</value>
+  </data>
+  <data name="MiKo_3089_MessageFormat" xml:space="preserve">
+    <value>Convert property pattern condition into normal condition</value>
+  </data>
+  <data name="MiKo_3089_Title" xml:space="preserve">
+    <value>Do not use simple constant property patterns as conditions of 'if' statements</value>
+  </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
     <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
 Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations.</value>

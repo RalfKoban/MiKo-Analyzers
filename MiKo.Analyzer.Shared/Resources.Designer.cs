@@ -11210,6 +11210,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Convert property pattern condition into normal condition.
+        /// </summary>
+        internal static string MiKo_3089_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3089_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones..
+        /// </summary>
+        internal static string MiKo_3089_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3089_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert property pattern condition into normal condition.
+        /// </summary>
+        internal static string MiKo_3089_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3089_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use simple constant property patterns as conditions of &apos;if&apos; statements.
+        /// </summary>
+        internal static string MiKo_3089_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3089_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
         ///Those finally blocks are intended for cleaning stuff up; or to ensure that some code runs in all (except a few) situations..
         /// </summary>
