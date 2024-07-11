@@ -20,19 +20,43 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is IfStatementSyntax statement && statement.Condition is IsPatternExpressionSyntax p && p.Pattern is RecursivePatternSyntax r && r.PropertyPatternClause is PropertyPatternClauseSyntax pattern)
+            if (syntax is IfStatementSyntax statement && statement.Condition is IsPatternExpressionSyntax p)
             {
-                var subPatterns = pattern.Subpatterns;
+                var useIsNotPattern = false;
+                PatternSyntax pattern;
 
-                if (subPatterns.Count == 1)
+                if (p.Pattern is UnaryPatternSyntax u)
                 {
-                    var subPattern = subPatterns[0];
+                    useIsNotPattern = true;
 
-                    if (subPattern.Pattern is ConstantPatternSyntax constantPattern && constantPattern.Expression is LiteralExpressionSyntax literal)
+                    pattern = u.Pattern;
+                }
+                else
+                {
+                    pattern = p.Pattern;
+                }
+
+                if (pattern is RecursivePatternSyntax r && r.PropertyPatternClause is PropertyPatternClauseSyntax clause)
+                {
+                    var subPatterns = clause.Subpatterns;
+
+                    if (subPatterns.Count == 1)
                     {
-                        var updatedCondition = GetUpdatedCondition(p.Expression, subPattern.NameColon.GetName(), literal);
+                        var subPattern = subPatterns[0];
 
-                        return statement.WithCondition(updatedCondition);
+                        if (subPattern.Pattern is ConstantPatternSyntax constantPattern && constantPattern.Expression is LiteralExpressionSyntax literal)
+                        {
+                            var expressionKind = useIsNotPattern ? SyntaxKind.NotEqualsExpression : SyntaxKind.EqualsExpression;
+
+                            var updatedCondition = GetUpdatedCondition(p.Expression, subPattern.NameColon.GetName(), expressionKind, literal);
+
+                            if (useIsNotPattern && updatedCondition is IsPatternExpressionSyntax up)
+                            {
+                                updatedCondition = IsNotPattern(up);
+                            }
+
+                            return statement.WithCondition(updatedCondition);
+                        }
                     }
                 }
             }
@@ -40,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return base.GetUpdatedSyntax(document, syntax, issue);
         }
 
-        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, LiteralExpressionSyntax literal)
+        private static ExpressionSyntax GetUpdatedCondition(ExpressionSyntax expression, string name, SyntaxKind expressionKind, LiteralExpressionSyntax literal)
         {
             var operand = SimpleMemberAccess(expression, name);
 
@@ -50,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case SyntaxKind.FalseLiteralExpression: return IsFalsePattern(operand);
                 case SyntaxKind.NullLiteralExpression: return IsNullPattern(operand);
                 default:
-                    return SyntaxFactory.BinaryExpression(SyntaxKind.EqualsExpression, operand, literal.WithoutTrivia());
+                    return SyntaxFactory.BinaryExpression(expressionKind, operand, literal.WithoutTrivia());
             }
         }
     }

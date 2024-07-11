@@ -69,9 +69,13 @@ namespace MiKoSolutions.Analyzers.Rules
             return Invocation(member);
         }
 
-        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+        protected static IsPatternExpressionSyntax IsNotPattern(IsPatternExpressionSyntax syntax) => IsNotPattern(syntax.Expression, syntax.Pattern);
 
-        protected static IsPatternExpressionSyntax IsNotPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => SyntaxFactory.IsPatternExpression(operand, SyntaxFactory.ConstantPattern(literal));
+        protected static IsPatternExpressionSyntax IsNotPattern(ExpressionSyntax operand, PatternSyntax pattern) => IsPattern(operand, SyntaxFactory.UnaryPattern(pattern));
+
+        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, PatternSyntax pattern) => SyntaxFactory.IsPatternExpression(operand, pattern);
+
+        protected static IsPatternExpressionSyntax IsPattern(ExpressionSyntax operand, LiteralExpressionSyntax literal) => IsPattern(operand, SyntaxFactory.ConstantPattern(literal));
 
         protected static IsPatternExpressionSyntax IsFalsePattern(ExpressionSyntax operand) => IsPattern(operand, Literal(SyntaxKind.FalseLiteralExpression));
 

@@ -18,17 +18,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is IfStatementSyntax s && s.Condition is IsPatternExpressionSyntax p && p.Pattern is RecursivePatternSyntax r && r.PropertyPatternClause is PropertyPatternClauseSyntax pattern)
+            if (context.Node is IfStatementSyntax s && s.Condition is IsPatternExpressionSyntax p)
             {
-                var subPatterns = pattern.Subpatterns;
+                var pattern = p.Pattern is UnaryPatternSyntax u ? u.Pattern : p.Pattern;
 
-                if (subPatterns.Count == 1)
+                if (pattern is RecursivePatternSyntax r && r.PropertyPatternClause is PropertyPatternClauseSyntax clause)
                 {
-                    var subPattern = subPatterns[0];
+                    var subPatterns = clause.Subpatterns;
 
-                    if (subPattern.Pattern is ConstantPatternSyntax constantPattern && constantPattern.Expression is LiteralExpressionSyntax)
+                    if (subPatterns.Count == 1)
                     {
-                        ReportDiagnostics(context, Issue(subPattern));
+                        var subPattern = subPatterns[0];
+
+                        if (subPattern.Pattern is ConstantPatternSyntax constantPattern && constantPattern.Expression is LiteralExpressionSyntax)
+                        {
+                            ReportDiagnostics(context, Issue(p));
+                        }
                     }
                 }
             }
