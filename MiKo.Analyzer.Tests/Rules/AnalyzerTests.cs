@@ -232,6 +232,12 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
+        public static void Analyzers_are_available() => Assert.That(AllAnalyzers.Length, Is.Not.Zero);
+
+        [Test]
+        public static void CodeFixProviders_are_available() => Assert.That(AllCodeFixProviders.Length, Is.Not.Zero);
+
+        [Test]
         public static void CodeFixProvider_are_marked_with_ExportCodeFixProvider_attribute()
         {
             Assert.Multiple(() =>
