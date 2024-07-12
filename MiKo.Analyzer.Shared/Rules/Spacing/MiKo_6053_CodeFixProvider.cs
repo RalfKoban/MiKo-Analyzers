@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6051_CodeFixProvider)), Shared]
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6053_CodeFixProvider)), Shared]
     public sealed class MiKo_6053_CodeFixProvider : SpacingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_6053";
