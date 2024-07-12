@@ -107,6 +107,12 @@ namespace MiKoSolutions.Analyzers
             internal const string VerifyAll = nameof(VerifyAll);
             internal const string Verify = nameof(Verify);
             internal const string Verifiable = nameof(Verifiable);
+
+            internal static class ConditionMatcher
+            {
+                internal const string It = nameof(It);
+                internal const string Is = nameof(Is);
+            }
         }
 
         internal static class FluentAssertions

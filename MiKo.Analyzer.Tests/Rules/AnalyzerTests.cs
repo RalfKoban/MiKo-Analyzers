@@ -232,6 +232,12 @@ namespace MiKoSolutions.Analyzers.Rules
         }
 
         [Test]
+        public static void Analyzers_are_available() => Assert.That(AllAnalyzers.Length, Is.Not.Zero);
+
+        [Test]
+        public static void CodeFixProviders_are_available() => Assert.That(AllCodeFixProviders.Length, Is.Not.Zero);
+
+        [Test]
         public static void CodeFixProvider_are_marked_with_ExportCodeFixProvider_attribute()
         {
             Assert.Multiple(() =>
@@ -343,7 +349,7 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var markdownBuilder = new StringBuilder().AppendLine()
                                                      .AppendLine("## Available Rules")
-                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables list all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
+                                                     .AppendLine(CultureInfo.CurrentCulture, $"The following tables lists all the {AllAnalyzers.Length} rules that are currently provided by the analyzer.");
 
             var category = string.Empty;
             var tableFormat = "|{0}|{1}|{2}|{3}|" + Environment.NewLine;
@@ -369,7 +375,7 @@ namespace MiKoSolutions.Analyzers.Rules
                                          CultureInfo.CurrentCulture,
                                          tableFormat,
                                          descriptor.Id,
-                                         descriptor.Title.ToString(CultureInfo.CurrentCulture).Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("|", "&#124;").Replace("\"", "&quot;").Replace("'", "&apos;").Replace("#", "&num;"),
+                                         descriptor.Title.ToString(CultureInfo.CurrentCulture).Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("#", "&num;").Replace("|", "&#124;"), // .Replace("\"", "&quot;").Replace("'", "&apos;")
                                          descriptor.IsEnabledByDefault ? Check : NoCheck,
                                          codeFixProviders.Contains(descriptor.Id) ? Check : NoCheck);
             }
@@ -410,11 +416,11 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             var baseType = typeof(CodeFixProvider);
 
-            var allAnalyzers = typeof(Analyzer).Assembly.GetExportedTypes()
-                                               .Where(_ => _.IsAbstract is false && baseType.IsAssignableFrom(_))
-                                               .Select(_ => (CodeFixProvider)_.GetConstructor(Type.EmptyTypes).Invoke(null))
-                                               .OrderBy(_ => _.GetType().Name)
-                                               .ToArray();
+            var allAnalyzers = typeof(MiKoCodeFixProvider).Assembly.GetExportedTypes()
+                                                          .Where(_ => _.IsAbstract is false && baseType.IsAssignableFrom(_))
+                                                          .Select(_ => (CodeFixProvider)_.GetConstructor(Type.EmptyTypes).Invoke(null))
+                                                          .OrderBy(_ => _.GetType().Name)
+                                                          .ToArray();
 
             return allAnalyzers;
         }

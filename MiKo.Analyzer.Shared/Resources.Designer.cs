@@ -12157,6 +12157,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use value directly instead of condition matcher.
+        /// </summary>
+        internal static string MiKo_3120_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3120_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moq provides condition matchers to verify calls with given arguments. Those condition matchers exist to verify that parts of the argument match a specific criteria. They should not be used to test whether they match the exact value. For such cases the exact values should be provided instead of the condition matcher..
+        /// </summary>
+        internal static string MiKo_3120_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3120_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use value directly instead of condition matcher.
+        /// </summary>
+        internal static string MiKo_3120_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3120_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moq mocks should use values instead of &apos;It.Is&lt;&gt;(...)&apos; condition matcher to verify exact values.
+        /// </summary>
+        internal static string MiKo_3120_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3120_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

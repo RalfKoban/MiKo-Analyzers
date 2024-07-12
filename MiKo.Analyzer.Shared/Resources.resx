@@ -4287,6 +4287,18 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3119_Title" xml:space="preserve">
     <value>Test methods should not simply return completed task</value>
   </data>
+  <data name="MiKo_3120_CodeFixTitle" xml:space="preserve">
+    <value>Use value directly instead of condition matcher</value>
+  </data>
+  <data name="MiKo_3120_Description" xml:space="preserve">
+    <value>Moq provides condition matchers to verify calls with given arguments. Those condition matchers exist to verify that parts of the argument match a specific criteria. They should not be used to test whether they match the exact value. For such cases the exact values should be provided instead of the condition matcher.</value>
+  </data>
+  <data name="MiKo_3120_MessageFormat" xml:space="preserve">
+    <value>Use value directly instead of condition matcher</value>
+  </data>
+  <data name="MiKo_3120_Title" xml:space="preserve">
+    <value>Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>
