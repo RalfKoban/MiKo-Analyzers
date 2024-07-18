@@ -21,7 +21,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
             var method = diagnostic.Location.GetEnclosing<IMethodSymbol>(GetSemanticModel(document));
             var methodName = method.Name;
 
-            var methods = method.ContainingType.GetMembers(methodName).OfType<IMethodSymbol>();
+            var methods = method.ContainingType.GetMethods(methodName);
 
             var methodsOrderedByParameters = Orderer.GetMethodsOrderedByParameters(methods, methodName);
 

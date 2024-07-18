@@ -176,7 +176,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var method = syntax.GetEnclosingMethod(GetSemanticModel(document));
             var type = method.FindContainingType();
 
-            var isConst = type.GetMembers(identifierName).OfType<IFieldSymbol>().Any(_ => _.IsConst);
+            var isConst = type.GetFields(identifierName).Any(_ => _.IsConst);
 
             if (isConst)
             {

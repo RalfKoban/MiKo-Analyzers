@@ -61,6 +61,18 @@ namespace MiKoSolutions.Analyzers
             return methods.Where(_ => _.MethodKind == kind);
         }
 
+        internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value, string methodName)
+        {
+            var members = value.GetMembers(methodName);
+
+            if (members.Length > 0)
+            {
+                return members.OfType<IMethodSymbol>().ToList();
+            }
+
+            return Array.Empty<IMethodSymbol>();
+        }
+
         /// <summary>
         /// Gets all methods that can be referenced by name.
         /// </summary>
@@ -75,11 +87,53 @@ namespace MiKoSolutions.Analyzers
         /// Methods with <see cref="MethodKind.Constructor"/> or <see cref="MethodKind.StaticConstructor"/> cannot be referenced by name and therefore are not part of the result.
         /// </note>
         /// </remarks>
-        internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value) => value.GetMethods().Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<IMethodSymbol> GetNamedMethods(this ITypeSymbol value)
+        {
+            var methods = value.GetMethods();
 
-        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value) => value.GetMembers<IPropertySymbol>().Where(_ => _.CanBeReferencedByName);
+            if (methods.Count > 0)
+            {
+                return methods.Where(_ => _.CanBeReferencedByName);
+            }
 
-        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value) => value.GetMembers<IFieldSymbol>().Where(_ => _.CanBeReferencedByName);
+            return Enumerable.Empty<IMethodSymbol>();
+        }
+
+        internal static IEnumerable<IPropertySymbol> GetProperties(this ITypeSymbol value)
+        {
+            var properties = value.GetMembers<IPropertySymbol>();
+
+            if (properties.Count > 0)
+            {
+                return properties.Where(_ => _.CanBeReferencedByName);
+            }
+
+            return Enumerable.Empty<IPropertySymbol>();
+        }
+
+        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value)
+        {
+            var fields = value.GetMembers<IFieldSymbol>();
+
+            if (fields.Count > 0)
+            {
+                return fields.Where(_ => _.CanBeReferencedByName);
+            }
+
+            return Enumerable.Empty<IFieldSymbol>();
+        }
+
+        internal static IEnumerable<IFieldSymbol> GetFields(this ITypeSymbol value, string fieldName)
+        {
+            var members = value.GetMembers(fieldName);
+
+            if (members.Length > 0)
+            {
+                return members.OfType<IFieldSymbol>().ToList();
+            }
+
+            return Array.Empty<IFieldSymbol>();
+        }
 
         internal static IReadOnlyCollection<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
@@ -231,9 +285,27 @@ namespace MiKoSolutions.Analyzers
                                                                                                                            .Where(_ => _.IsImplicitlyDeclared is false)
                                                                                                                            .ToList();
 
-        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol => value.IncludingAllBaseTypes()
-                                                                                                                                           .SelectMany(_ => _.GetMembers<TSymbol>())
-                                                                                                                                           .Where(_ => _.CanBeReferencedByName);
+        internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value) where TSymbol : ISymbol
+        {
+            foreach (var type in value.IncludingAllBaseTypes())
+            {
+                var members = type.GetMembers<TSymbol>();
+                var membersCount = members.Count;
+
+                if (membersCount > 0)
+                {
+                    for (var index = 0; index < membersCount; index++)
+                    {
+                        var member = members[index];
+
+                        if (member.CanBeReferencedByName)
+                        {
+                            yield return member;
+                        }
+                    }
+                }
+            }
+        }
 
         internal static IEnumerable<TSymbol> GetMembersIncludingInherited<TSymbol>(this ITypeSymbol value, string name) where TSymbol : ISymbol
         {
@@ -380,8 +452,13 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<TSyntaxNode> GetSyntaxNodes<TSyntaxNode>(this ISymbol value) where TSyntaxNode : SyntaxNode
         {
-            foreach (var reference in value.DeclaringSyntaxReferences)
+            var references = value.DeclaringSyntaxReferences;
+            var length = references.Length;
+
+            for (var index = 0; index < length; index++)
             {
+                var reference = references[index];
+
                 if (reference.GetSyntax() is TSyntaxNode node)
                 {
                     var location = node.GetLocation();
@@ -399,14 +476,18 @@ namespace MiKoSolutions.Analyzers
                     // ignore non C# code (might be part of partial classes, e.g. for XAML)
                     if (filePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
                     {
-                        // ignore generated code (might be part of partial classes)
-                        if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase) is false)
+                        if (filePath.EndsWithAny(GeneratedCSharpFileExtensions, StringComparison.OrdinalIgnoreCase))
                         {
-                            yield return node;
+                            // ignore generated code (might be part of partial classes)
+                            continue;
                         }
+
+                        return new[] { node };
                     }
                 }
             }
+
+            return Enumerable.Empty<TSyntaxNode>();
         }
 
         internal static SyntaxNode GetSyntax(this ISymbol value)
@@ -566,13 +647,20 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
-            foreach (var implementedInterface in value.AllInterfaces)
-            {
-                var fullInterfaceName = implementedInterface.ToString();
+            var interfaces = value.AllInterfaces;
+            var length = interfaces.Length;
 
-                if (fullInterfaceName == interfaceTypeName)
+            if (length > 0)
+            {
+                for (var index = 0; index < length; index++)
                 {
-                    return true;
+                    var implementedInterface = interfaces[index];
+                    var fullInterfaceName = implementedInterface.ToString();
+
+                    if (fullInterfaceName == interfaceTypeName)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -651,13 +739,20 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
-            foreach (var implementedInterface in value.AllInterfaces)
-            {
-                var fullInterfaceName = implementedInterface.ToString();
+            var interfaces = value.AllInterfaces;
+            var length = interfaces.Length;
 
-                if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+            if (length > 0)
+            {
+                for (var i = 0; i < length; i++)
                 {
-                    return true;
+                    var implementedInterface = interfaces[i];
+                    var fullInterfaceName = implementedInterface.ToString();
+
+                    if (fullInterfaceName.StartsWith(interfaceTypeWithoutGeneric, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -1121,6 +1216,12 @@ namespace MiKoSolutions.Analyzers
                 return false;
             }
 
+            if (value.CanBeReferencedByName is false)
+            {
+                // cannot be an interface method as those have names
+                return false;
+            }
+
             switch (value)
             {
                 case IFieldSymbol _:
@@ -1150,15 +1251,7 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
 
-            if (value.CanBeReferencedByName is false)
-            {
-                // cannot be an interface method as those have names
-                return false;
-            }
-
-            var symbols = typeSymbol.AllInterfaces.SelectMany(_ => _.GetMembers<TSymbol>()).Where(_ => _.CanBeReferencedByName);
-
-            return symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_)));
+            return value.IsInterfaceImplementation(typeSymbol);
         }
 
         internal static bool IsInterfaceImplementation(this IMethodSymbol value)
@@ -1184,6 +1277,12 @@ namespace MiKoSolutions.Analyzers
                     return true;
             }
 
+            if (value.CanBeReferencedByName is false)
+            {
+                // cannot be an interface method as those have names
+                return false;
+            }
+
             var typeSymbol = value.ContainingType;
 
             switch (typeSymbol.TypeKind)
@@ -1204,25 +1303,7 @@ namespace MiKoSolutions.Analyzers
                 return true;
             }
 
-            if (value.CanBeReferencedByName is false)
-            {
-                // cannot be an interface method as those have names
-                return false;
-            }
-
-            var allInterfaces = typeSymbol.AllInterfaces;
-
-            if (allInterfaces.Length > 0)
-            {
-                var methodName = value.Name;
-
-                var symbols = allInterfaces.SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-                var result = symbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
-
-                return result;
-            }
-
-            return false;
+            return value.IsInterfaceImplementation(typeSymbol);
         }
 
         internal static bool IsInterfaceImplementationOf<T>(this IMethodSymbol value)
@@ -1275,13 +1356,7 @@ namespace MiKoSolutions.Analyzers
 
             if (typeSymbol.Implements(interfaceTypeName))
             {
-                var methodName = value.Name;
-
-                var methodSymbols = typeSymbol.AllInterfaces
-                                              .Where(_ => _.Name == interfaceTypeName)
-                                              .SelectMany(_ => _.GetMembers(methodName).OfType<IMethodSymbol>());
-
-                return methodSymbols.Any(_ => ReferenceEquals(value, typeSymbol.FindImplementationForInterfaceMember(_)));
+                return value.IsInterfaceImplementation(typeSymbol, interfaceTypeName);
             }
 
             return false;
@@ -1520,6 +1595,52 @@ namespace MiKoSolutions.Analyzers
             }
 
             return typeName;
+        }
+
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol) where TSymbol : ISymbol
+        {
+            var interfaces = typeSymbol.AllInterfaces;
+
+            if (interfaces.Length > 0)
+            {
+                return value.IsInterfaceImplementation(typeSymbol, interfaces);
+            }
+
+            return false;
+        }
+
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, string interfaceTypeName) where TSymbol : ISymbol
+        {
+            var interfaces = typeSymbol.AllInterfaces;
+
+            if (interfaces.Length > 0)
+            {
+                return value.IsInterfaceImplementation(typeSymbol, interfaces.Where(_ => _.Name == interfaceTypeName));
+            }
+
+            return false;
+        }
+
+        private static bool IsInterfaceImplementation<TSymbol>(this TSymbol value, ITypeSymbol typeSymbol, IEnumerable<INamedTypeSymbol> implementedInterfaces) where TSymbol : ISymbol
+        {
+            var name = value.Name;
+
+            foreach (var implementedInterface in implementedInterfaces)
+            {
+                var members = implementedInterface.GetMembers(name);
+
+                if (members.Length > 0)
+                {
+                    var symbols = members.OfType<TSymbol>();
+
+                    if (symbols.Any(_ => value.Equals(typeSymbol.FindImplementationForInterfaceMember(_), SymbolEqualityComparer.Default)))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static bool IsTestSpecificMethod(this IMethodSymbol value, ISet<string> attributeNames) => value?.MethodKind == MethodKind.Ordinary && value.IsPubliclyVisible() && value.HasAttribute(attributeNames);
