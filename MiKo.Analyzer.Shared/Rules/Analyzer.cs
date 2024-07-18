@@ -326,6 +326,11 @@ namespace MiKoSolutions.Analyzers.Rules
                 return true;
             }
 
+            if (compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
+            {
+                return true;
+            }
+
             return false;
         }
 
