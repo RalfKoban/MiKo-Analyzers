@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -14,6 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1115";
 
         private const string If = "If";
+        private const string IfIt = "If_It";
         private const string When = "When";
         private const string And = "And";
         private const string Returned = "Returned";
@@ -33,6 +36,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Should",
                                                                       "Throw",
                                                                       "Will",
+                                                                      "Try",
+                                                                      "Tries",
+                                                                      "Call",
+                                                                      "Invoke",
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
@@ -136,13 +143,21 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var addIf = IsIfRequired(part0, part1);
+            var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part0.AsSpan().FirstWord()) ? IfIt : If;
 
-            var builder = new StringBuilder(part0.Length + part1.Length);
+            var capacity = part0.Length + part1.Length;
+
+            if (addIf)
+            {
+                capacity += ifToAdd.Length;
+            }
+
+            var builder = new StringBuilder(capacity);
             FixReturn(builder, part1);
 
             if (addIf)
             {
-                builder.Append(If);
+                builder.Append(ifToAdd);
             }
 
             FixReturn(builder, part0);
@@ -165,14 +180,22 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var addIf = IsIfRequired(part1, part2);
+            var ifToAdd = Verbalizer.IsThirdPersonSingularVerb(part1.AsSpan().FirstWord()) ? IfIt : If;
 
-            var builder = new StringBuilder(part0.Length + part1.Length + part2.Length);
+            var capacity = part0.Length + part1.Length + part2.Length;
+
+            if (addIf)
+            {
+                capacity += ifToAdd.Length;
+            }
+
+            var builder = new StringBuilder(capacity);
             FixReturn(builder, part0);
             FixReturn(builder, part2);
 
             if (addIf)
             {
-                builder.Append(If);
+                builder.Append(ifToAdd);
             }
 
             FixReturn(builder, part1);
@@ -203,13 +226,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var useWhen = part1.StartsWith(When, StringComparison.Ordinal);
+
             var addIf = useWhen is false && IsIfRequired(part2, part3);
+            var ifToAdd = Verbalizer.IsThirdPersonSingularVerb((useWhen ? part1 : part2).AsSpan().FirstWord()) ? IfIt : If;
 
             var capacity = part0.Length + part1.Length + part2.Length + part3.Length + And.Length;
 
             if (addIf)
             {
-                capacity += If.Length;
+                capacity += ifToAdd.Length;
             }
 
             var builder = new StringBuilder(capacity);
@@ -218,7 +243,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (addIf)
             {
-                builder.Append(If);
+                builder.Append(ifToAdd);
             }
 
             if (useWhen)
