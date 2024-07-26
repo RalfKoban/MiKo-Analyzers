@@ -62,6 +62,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Xunit_test_method() => No_issue_is_reported_for(@"
+using Xunit;
+
+public class MyTests
+{
+    [Fact]
+    public void MyTest()
+    {
+        Assert.Equal(4, 2 + 2); // Xunit does not support assertion messages, see https://github.com/xunit/xunit/issues/350
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_empty_test_method() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 

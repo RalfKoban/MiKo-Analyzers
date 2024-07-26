@@ -25,6 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsUnitTestAnalyzer => true;
 
+        protected override bool SupportsXUnit => false; // Xunit does not support assertion messages, see https://github.com/xunit/xunit/issues/350
+
         protected override bool ShallAnalyze(IMethodSymbol symbol) => (symbol.ReturnsVoid || symbol.ReturnType.IsTask()) && symbol.IsTestMethod();
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
@@ -50,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool HasMessageParameter(InvocationExpressionSyntax i, IReadOnlyList<int> expectedParameterIndices, Compilation compilation)
         {
-            // last parameter must be a string and it must be at least the 3rd parameter (for assert.AreEqual)
+            // last parameter must be a string, and it must be at least the 3rd parameter (for assert.AreEqual)
             var arguments = i.ArgumentList.Arguments;
             var count = arguments.Count;
 

@@ -51,6 +51,12 @@ namespace MiKoSolutions.Analyzers.Rules
 
         protected virtual bool IsUnitTestAnalyzer => false;
 
+        protected virtual bool SupportsNUnit => true;
+
+        protected virtual bool SupportsXUnit => true;
+
+        protected virtual bool SupportsMSTest => true;
+
         public static void Reset() => KnownRules.Clear();
 
         // TODO: Consider registering other actions that act on syntax instead of or in addition to symbols
@@ -314,26 +320,6 @@ namespace MiKoSolutions.Analyzers.Rules
             ReportDiagnostics(context, analyzer((T)symbol, compilation));
         }
 
-        private static bool ReferencesTestAssemblies(Compilation compilation)
-        {
-            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestAttribute") != null)
-            {
-                return true;
-            }
-
-            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod") != null)
-            {
-                return true;
-            }
-
-            if (compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         private static string GetSymbolName(ISymbol symbol)
         {
             if (symbol is IMethodSymbol m)
@@ -378,6 +364,26 @@ namespace MiKoSolutions.Analyzers.Rules
 
                 default: return null;
             }
+        }
+
+        private bool ReferencesTestAssemblies(Compilation compilation)
+        {
+            if (compilation.GetTypeByMetadataName("NUnit.Framework.TestAttribute") != null)
+            {
+                return SupportsNUnit;
+            }
+
+            if (compilation.GetTypeByMetadataName("Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod") != null)
+            {
+                return SupportsMSTest;
+            }
+
+            if (compilation.GetTypeByMetadataName("Xunit.FactAttribute") != null)
+            {
+                return SupportsXUnit;
+            }
+
+            return false;
         }
     }
 }
