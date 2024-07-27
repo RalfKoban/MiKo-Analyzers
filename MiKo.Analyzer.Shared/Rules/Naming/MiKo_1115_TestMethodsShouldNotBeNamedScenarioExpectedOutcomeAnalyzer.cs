@@ -22,6 +22,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string Returned = "Returned";
         private const string Returns = "Returns";
         private const string Throws = "Throws";
+        private const string Throw = "Throw";
+        private const string NoLongerThrows = "NoLongerThrows";
+        private const string NoLongerThrow = "NoLongerThrow";
+        private const string NotThrows = "NotThrows";
+        private const string NotThrow = "NotThrow";
+        private const string Given = "Given";
+        private const string IsGiven = "IsGiven";
 
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
@@ -40,12 +47,29 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Tries",
                                                                       "Call",
                                                                       "Invoke",
+                                                                      Given,
+                                                                      "Everything",
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
                                                                {
                                                                    Returns,
                                                                    Throws,
+                                                                   Throw,
+                                                                   NotThrows,
+                                                                   NotThrow,
+                                                                   NoLongerThrows,
+                                                                   NoLongerThrow,
+                                                               };
+
+        private static readonly string[] SpecialThrowPhrases =
+                                                               {
+                                                                   Throws,
+                                                                   Throw,
+                                                                   NotThrows,
+                                                                   NotThrow,
+                                                                   NoLongerThrows,
+                                                                   NoLongerThrow,
                                                                };
 
         public MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzer() : base(Id)
@@ -134,7 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool TryGetInOrder(string part0, string part1, out string result)
         {
-            if (part1.StartsWith(Throws, StringComparison.OrdinalIgnoreCase) && part1.Contains(If, StringComparison.Ordinal))
+            if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase) && part1.Contains(If, StringComparison.Ordinal))
             {
                 // it seems like this is in normal order, so do not change the order
                 result = null;
@@ -171,7 +195,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool TryGetInOrder(string part0, string part1, string part2, out string result)
         {
-            if (part1.StartsWith(Throws, StringComparison.OrdinalIgnoreCase))
+            if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
             {
                 // it seems like this is in normal order, so do not change the order
                 result = null;
@@ -198,6 +222,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 builder.Append(ifToAdd);
             }
 
+            if (part1.StartsWith(Given, StringComparison.OrdinalIgnoreCase))
+            {
+                part1 = part1.Substring(Given.Length) + IsGiven;
+            }
+
             FixReturn(builder, part1);
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
@@ -217,7 +246,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (part1.StartsWith(Throws, StringComparison.OrdinalIgnoreCase))
+            if (part1.StartsWithAny(SpecialThrowPhrases, StringComparison.OrdinalIgnoreCase))
             {
                 // it seems like this is in normal order, so do not change the order
                 result = null;
