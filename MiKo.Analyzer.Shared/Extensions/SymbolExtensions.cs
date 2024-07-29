@@ -998,7 +998,22 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsConstructor(this IMethodSymbol value) => value.MethodKind == MethodKind.Constructor;
 
-        internal static bool IsPrimaryConstructor(this IMethodSymbol value) => value.IsConstructor() && value.GetSyntax() is RecordDeclarationSyntax record && record.HasPrimaryConstructor();
+        internal static bool IsPrimaryConstructor(this IMethodSymbol value)
+        {
+            if (value.IsConstructor())
+            {
+                switch (value.GetSyntax())
+                {
+#if VS2022
+                    case ClassDeclarationSyntax c: return c.HasPrimaryConstructor();
+                    case StructDeclarationSyntax s: return s.HasPrimaryConstructor();
+#endif
+                    case RecordDeclarationSyntax r: return r.HasPrimaryConstructor();
+                }
+            }
+
+            return false;
+        }
 
         internal static bool IsDependencyObject(this ITypeSymbol value) => value.InheritsFrom("DependencyObject", "System.Windows.DependencyObject");
 
