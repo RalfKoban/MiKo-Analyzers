@@ -196,6 +196,76 @@ namespace Bla
             VerifyCSharpFix(OriginalCode.Replace("#1#", type).Replace("#2#", comparison).Replace("#3#", value), FixedCode.Replace("#1#", type).Replace("#3#", value));
         }
 
+        [TestCase("object", "is", "null")]
+        [TestCase("bool", "is", "true")]
+        [TestCase("bool", "is", "false")]
+        [TestCase("object", "==", "null")]
+        [TestCase("bool", "==", "true")]
+        [TestCase("bool", "==", "false")]
+        [TestCase("string", "==", @"""42""")]
+        public void Code_gets_fixed_for_mock_method_invocation_using_direct_comparison_when_placed_on_new_kine_(string type, string comparison, string value)
+        {
+            const string OriginalCode = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(#1# text, int value);
+    }
+
+    public class TestMeTests
+    {
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(
+                                                  It.Is<#1#>(_ => _ #2# #3#),
+                                                  123456789),
+                                   Times.Once);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(#1# text, int value);
+    }
+
+    public class TestMeTests
+    {
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(
+                                                  #3#,
+                                                  123456789),
+                                   Times.Once);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("#1#", type).Replace("#2#", comparison).Replace("#3#", value), FixedCode.Replace("#1#", type).Replace("#3#", value));
+        }
+
         protected override string GetDiagnosticId() => MiKo_3120_UseValueInsteadOfItIsConditionMatcherAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3120_UseValueInsteadOfItIsConditionMatcherAnalyzer();

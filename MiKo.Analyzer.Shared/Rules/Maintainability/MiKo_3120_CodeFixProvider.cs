@@ -24,10 +24,10 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 switch (lambda.ExpressionBody)
                 {
                     case BinaryExpressionSyntax binary:
-                        return Argument(binary.Right);
+                        return Argument(binary.Right).WithTriviaFrom(argument);
 
                     case IsPatternExpressionSyntax pattern when pattern.Expression is IdentifierNameSyntax && pattern.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax literal:
-                        return Argument(literal);
+                        return Argument(literal).WithTriviaFrom(argument);
                 }
             }
 
