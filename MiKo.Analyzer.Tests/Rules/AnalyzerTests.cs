@@ -321,7 +321,7 @@ namespace MiKoSolutions.Analyzers.Rules
             }
         }
 
-        [Test, Ignore("Just to find gaps")]
+        [Test, Explicit, Ignore("Just to find gaps")]
         public static void Gaps_in_Analyzer_numbers_([Range(1, 6, 1)] int i)
         {
             var gaps = new List<string>();

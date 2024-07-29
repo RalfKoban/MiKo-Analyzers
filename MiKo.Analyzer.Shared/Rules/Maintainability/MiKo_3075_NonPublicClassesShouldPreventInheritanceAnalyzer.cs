@@ -47,15 +47,20 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             if (symbol.DeclaredAccessibility == Accessibility.Private)
             {
                 // find other symbols that inherit from this one
-                var privateClasses = symbol.ContainingType.GetMembers<INamedTypeSymbol>().Where(_ => _.TypeKind == TypeKind.Class).ToList();
-                privateClasses.Remove(symbol);
+                var privateTypes = symbol.ContainingType.GetMembers<INamedTypeSymbol>();
 
-                foreach (var otherClass in privateClasses)
+                if (privateTypes.Count > 0)
                 {
-                    if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
+                    var privateClasses = privateTypes.Where(_ => _.TypeKind == TypeKind.Class).ToList();
+                    privateClasses.Remove(symbol);
+
+                    foreach (var otherClass in privateClasses)
                     {
-                        // we found a private base class, so nothing to report
-                        return Enumerable.Empty<Diagnostic>();
+                        if (otherClass.InheritsFrom(symbol.FullyQualifiedName()))
+                        {
+                            // we found a private base class, so nothing to report
+                            return Enumerable.Empty<Diagnostic>();
+                        }
                     }
                 }
             }

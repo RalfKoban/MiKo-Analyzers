@@ -1481,7 +1481,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;Enum&apos; suffix.
+        ///   Looks up a localized string similar to Remove type suffix.
         /// </summary>
         internal static string MiKo_1037_CodeFixTitle {
             get {
@@ -1490,7 +1490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense..
+        ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense. The same applies for types in general such as interfaces, classes, records and structs..
         /// </summary>
         internal static string MiKo_1037_Description {
             get {
@@ -1508,7 +1508,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Enum&apos;.
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Type&apos;, &apos;Interface&apos;, &apos;Class&apos;, &apos;Struct&apos;, &apos;Record&apos; or &apos;Enum&apos;.
         /// </summary>
         internal static string MiKo_1037_Title {
             get {
@@ -3364,7 +3364,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifiers should not have the term &apos;Object&apos; or &apos;Struct&apos; as suffix. Many times, a mcuh better name can be given that avoids the usage of the term &apos;Object&apos; or &apos;Struct&apos; at all (such as &apos;Identifier&apos; instead of &apos;IdentificationObject&apos;)..
+        ///   Looks up a localized string similar to Identifiers should not have the term &apos;Object&apos; or &apos;Struct&apos; as suffix. Many times, a much better name can be given that avoids the usage of the term &apos;Object&apos; or &apos;Struct&apos; at all (such as &apos;Identifier&apos; instead of &apos;IdentificationObject&apos;)..
         /// </summary>
         internal static string MiKo_1093_Description {
             get {

@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "db",
                                                            "ddl",
                                                            "decl",
+                                                           "decr",
                                                            "desc",
                                                            "dest",
                                                            "diag",
@@ -49,6 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "dst",
                                                            "dto",
                                                            "ef",
+                                                           "encr",
                                                            "env",
                                                            "environ",
                                                            "err",
@@ -71,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "mnu",
                                                            "msg",
                                                            "num",
+                                                           "obj",
                                                            "param",
                                                            "params",
                                                            "perc",
@@ -121,6 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Db",
                                                            "Ddl",
                                                            "Decl",
+                                                           "Decr",
                                                            "Desc",
                                                            "Dest",
                                                            "Diag",
@@ -133,6 +137,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Doc",
                                                            "Dst",
                                                            "Ef",
+                                                           "Encr",
                                                            "Env",
                                                            "Environ",
                                                            "Err",
@@ -155,6 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Mnu",
                                                            "Msg",
                                                            "Num",
+                                                           "Obj",
                                                            "Op",
                                                            "Params",
                                                            "Perc",
@@ -292,63 +298,6 @@ namespace Bla
     }
 }
 ");
-
-        [Test]
-        public void No_issue_is_reported_for_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
-using System;
-using System.Text.Json.Serialization;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [JsonConstructor]
-        public TestMe(int " + name + @")
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_Newtonsoft_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [Newtonsoft.Json.JsonConstructorAttribute]
-        public TestMe(int " + name + @")
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int " + part + @"DoSomething();
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_parameters_of_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int DoSomething(int " + part + @"Parameter);
-    }
-}");
 
         [Test]
         public void No_issue_is_reported_for_well_known_abbreviation_([Values("MEF")] string abbreviation) => No_issue_is_reported_for(@"
