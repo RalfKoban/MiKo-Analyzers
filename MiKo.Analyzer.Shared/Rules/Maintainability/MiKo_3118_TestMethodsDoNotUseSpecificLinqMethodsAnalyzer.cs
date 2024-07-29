@@ -47,6 +47,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (ProblematicMethods.Contains(name))
                 {
+                    if (maes.Ancestors<InvocationExpressionSyntax>().Any(_ => _.IsMoqItIsConditionMatcher()))
+                    {
+                        continue;
+                    }
+
                     yield return Issue(name, node);
                 }
             }

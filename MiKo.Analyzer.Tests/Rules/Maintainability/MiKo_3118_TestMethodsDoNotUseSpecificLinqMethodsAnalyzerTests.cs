@@ -73,6 +73,31 @@ public class TestMe
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_test_method_using_Linq_in_Moq_matcher() => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+using NUnit.Framework;
+
+using Moq;
+
+public interface ITestee
+{
+    void DoSomething(IEnumerable<string> texts);
+}
+
+public class TestMe
+{
+    [Test]
+    public void DoSomething()
+    {
+        var testee = new Mock<ITestee>();
+
+        testee.Verify(_ => _.DoSomething(It.Is<IEnumerable<string>>(__ => __.Any())
+    }
+}
+");
+
         [TestCase(nameof(Enumerable.Skip) + "(1)")]
         [TestCase(nameof(Enumerable.SkipLast) + "()")]
         [TestCase(nameof(Enumerable.SkipWhile) + "(true)")]
