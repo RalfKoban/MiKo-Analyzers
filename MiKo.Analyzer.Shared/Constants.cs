@@ -754,7 +754,12 @@ namespace MiKoSolutions.Analyzers
                                                                         "on purpose",
                                                                         "purposely",
                                                                         "purposly", // be able to detect typos
+                                                                        "does not matter",
+                                                                        "doesn't matter",
+                                                                        "doesnt matter", // be able to detect typos
                                                                     };
+
+            internal static readonly string[] ReasoningPhrases = { "because", "reason" };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
 

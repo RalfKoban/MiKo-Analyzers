@@ -10,6 +10,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2226_DocumentationContainsIntentionallyAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] IntentionalPhrases =
+                                                              [
+                                                                  "left empty by intent",
+                                                                  "left empty by intention",
+                                                                  "left empty intentionally",
+                                                                  "left empty intentionaly", // check for typo
+                                                                  "intentionally empty",
+                                                                  "intentionaly empty", // check for typo
+                                                                  "empty with intent",
+                                                                  "empty with intention",
+                                                                  "empty on purpose",
+                                                                  "left empty on purpose",
+                                                                  "on purpose left empty",
+                                                                  "purposely left empty",
+                                                                  "purposly left empty", // check for typo
+                                                                  "by indent", // check for typo
+                                                                  "empty with indent", // check for typo
+                                                                  "empty with indention", // check for typo
+                                                                  "indentionally", // check for typo
+                                                                  "indentionaly", // check for typo
+                                                                  "does not matter",
+                                                                  "doesn't matter",
+                                                                  "doesnt matter", // check for typo
+                                                              ];
+
         [Test]
         public void No_issue_is_reported_for_undocumented_class() => No_issue_is_reported_for(@"
 public class TestMe
@@ -28,17 +53,32 @@ public class TestMe
     }
 }");
 
-        [TestCase("left empty by intent")]
-        [TestCase("left empty by intention")]
-        [TestCase("left empty intentionally")]
-        [TestCase("intentionally empty")]
-        [TestCase("empty with intent")]
-        [TestCase("empty with intention")]
-        [TestCase("left empty on purpose")]
-        [TestCase("on purpose left empty")]
-        [TestCase("purposely left empty")]
-        [TestCase("purposly left empty")] // check for typo
-        public void An_issue_is_reported_for_wrong_documentation_(string comment) => An_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_intentionally_documentation_with_reason_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// " + comment + @", reason is we like it.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_intentionally_documentation_with_because_([ValueSource(nameof(IntentionalPhrases))] string comment) => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// " + comment + @" because we like it.
+    /// </summary>
+    public void DoSomething()
+    {
+    }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_wrong_documentation_([ValueSource(nameof(IntentionalPhrases))] string comment) => An_issue_is_reported_for(@"
 public class TestMe
 {
     /// <summary>
