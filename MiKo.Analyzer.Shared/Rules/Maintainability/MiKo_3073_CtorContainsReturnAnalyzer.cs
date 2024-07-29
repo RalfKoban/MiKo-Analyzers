@@ -19,7 +19,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
         }
 
-        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor();
+        protected override bool ShallAnalyze(IMethodSymbol symbol) => symbol.IsConstructor()
+                                                                   && symbol.IsPrimaryConstructor() is false;
 
         protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation) => symbol.GetSyntax()
                                                                                                                    .DescendantNodes(_ => _.IsAnyKind(NestedCalls) is false)

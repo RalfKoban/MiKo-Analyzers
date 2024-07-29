@@ -1304,6 +1304,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
+#if VS2022
+
+        internal static bool HasPrimaryConstructor(this ClassDeclarationSyntax value) => value.ParameterList != null;
+
+        internal static bool HasPrimaryConstructor(this StructDeclarationSyntax value) => value.ParameterList != null;
+
+#endif
+
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
 
         internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode

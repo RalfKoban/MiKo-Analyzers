@@ -108,6 +108,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_primary_ctor_and_method_with_return_statement_([Values("class", "record", "struct")] string type) => No_issue_is_reported_for(@"
+using System;
+
+public " + type + @" TestMe(int field)
+{
+    public int Calculate()
+    {
+        return 42;
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_method_body_ctor_with_return() => An_issue_is_reported_for(@"
 using System;
 
