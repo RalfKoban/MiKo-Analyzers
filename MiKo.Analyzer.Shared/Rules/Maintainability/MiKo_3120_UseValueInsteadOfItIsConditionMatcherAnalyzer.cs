@@ -30,12 +30,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             context.RegisterSyntaxNodeAction(AnalyzeInvocationExpression, SyntaxKind.InvocationExpression);
         }
 
-        private static bool IsMoqConditionMatcher(InvocationExpressionSyntax node) => node.Expression is MemberAccessExpressionSyntax maes
-                                                                                      && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
-                                                                                      && maes.Expression is IdentifierNameSyntax invokedType
-                                                                                      && invokedType.GetName() == Constants.Moq.ConditionMatcher.It
-                                                                                      && maes.GetName() == Constants.Moq.ConditionMatcher.Is;
-
         private void AnalyzeInvocationExpression(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is InvocationExpressionSyntax node)
@@ -53,7 +47,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(InvocationExpressionSyntax node, ArgumentSyntax argument)
         {
-            if (IsMoqConditionMatcher(node) && argument.Expression is LambdaExpressionSyntax lambda)
+            if (node.IsMoqItIsConditionMatcher() && argument.Expression is LambdaExpressionSyntax lambda)
             {
                 switch (lambda.ExpressionBody)
                 {
