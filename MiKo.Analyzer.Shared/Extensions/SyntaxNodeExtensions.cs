@@ -1446,6 +1446,12 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsMoqItIsConditionMatcher(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
+                                                                                              && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                                                              && maes.Expression is IdentifierNameSyntax invokedType
+                                                                                              && invokedType.GetName() == Constants.Moq.ConditionMatcher.It
+                                                                                              && maes.GetName() == Constants.Moq.ConditionMatcher.Is;
+
         internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax value)
         {
             if (value.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
