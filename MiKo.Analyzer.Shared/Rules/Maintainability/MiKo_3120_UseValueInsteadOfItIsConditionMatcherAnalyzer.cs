@@ -38,24 +38,35 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (arguments.Count == 1)
                 {
-                    var issues = AnalyzeSimpleMemberAccessExpression(node, arguments[0]);
+                    var issues = AnalyzeSimpleMemberAccessExpression(node, arguments[0], context);
 
                     ReportDiagnostics(context, issues);
                 }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(InvocationExpressionSyntax node, ArgumentSyntax argument)
+        private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(InvocationExpressionSyntax node, ArgumentSyntax argument, SyntaxNodeAnalysisContext context)
         {
             if (node.IsMoqItIsConditionMatcher() && argument.Expression is LambdaExpressionSyntax lambda)
             {
                 switch (lambda.ExpressionBody)
                 {
-                    case BinaryExpressionSyntax binary when binary.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) && binary.Left is IdentifierNameSyntax && binary.Right is LiteralExpressionSyntax:
-                        return new[] { Issue(node) };
+                    case BinaryExpressionSyntax binary when binary.OperatorToken.IsKind(SyntaxKind.EqualsEqualsToken) && binary.Left is IdentifierNameSyntax:
+                    {
+                        switch (binary.Right)
+                        {
+                            case LiteralExpressionSyntax _:
+                            case IdentifierNameSyntax identifier when identifier.IsConst(context):
+                                return new[] { Issue(node) };
+                        }
+
+                        break;
+                    }
 
                     case IsPatternExpressionSyntax pattern when pattern.Expression is IdentifierNameSyntax && pattern.Pattern is ConstantPatternSyntax c && c.Expression is LiteralExpressionSyntax:
+                    {
                         return new[] { Issue(node) };
+                    }
                 }
             }
 

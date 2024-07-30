@@ -1550,6 +1550,33 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsConst(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ConstKeyword);
 
+        internal static bool IsConst(this SyntaxNode value, SyntaxNodeAnalysisContext context)
+        {
+            switch (value)
+            {
+                case IdentifierNameSyntax i:
+                {
+                    var type = context.FindContainingType();
+                    var isConst = type.GetFields(i.GetName()).Any(_ => _.IsConst);
+
+                    return isConst;
+                }
+
+                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                {
+                    var type = m.GetTypeSymbol(context.SemanticModel);
+
+                    // only get the real enum members, no local variables or something
+                    return type?.IsEnum() is true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
         internal static bool IsEventRegistration(this StatementSyntax value, SemanticModel semanticModel)
         {
             if (value is ExpressionStatementSyntax e && e.Expression is AssignmentExpressionSyntax assignment)

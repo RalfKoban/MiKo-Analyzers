@@ -99,14 +99,41 @@ namespace Bla
 }
 ");
 
-        [TestCase("object", "is", "null")]
-        [TestCase("bool", "is", "true")]
-        [TestCase("bool", "is", "false")]
-        [TestCase("object", "==", "null")]
-        [TestCase("bool", "==", "true")]
-        [TestCase("bool", "==", "false")]
-        [TestCase("string", "==", @"""42""")]
-        public void An_issue_is_reported_for_mock_method_invocation_using_direct_comparison_(string type, string comparison, string value) => An_issue_is_reported_for(@"
+        [Test]
+        public void No_issue_is_reported_for_mock_method_invocation_using_direct_comparison_(
+                                                                                         [Values("object", "bool", "string", "int")] string type,
+                                                                                         [Values("!=", ">=", "<=", ">", "<")] string comparison,
+                                                                                         [Values("null", "true", "false", "42", @"""42""")]string value)
+            => No_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(" + type + @" data);
+    }
+
+    public class TestMeTests
+    {
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(It.Is<" + type + @">(_ => _ " + comparison + " " + value + @")), Times.Once);
+        }
+    }
+}
+");
+
+        [TestCase("object", "is not", "null")]
+        [TestCase("bool", "is not", "true")]
+        [TestCase("bool", "is not", "false")]
+        public void No_issue_is_reported_for_mock_method_invocation_using_pattern_comparison_(string type, string comparison, string value) => No_issue_is_reported_for(@"
 using System;
 
 using Moq;
@@ -139,6 +166,74 @@ namespace Bla
         [TestCase("bool", "==", "true")]
         [TestCase("bool", "==", "false")]
         [TestCase("string", "==", @"""42""")]
+        [TestCase("int", "==", @"42")]
+        public void An_issue_is_reported_for_mock_method_invocation_using_direct_comparison_(string type, string comparison, string value) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(" + type + @" data);
+    }
+
+    public class TestMeTests
+    {
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(It.Is<" + type + @">(_ => _ " + comparison + " " + value + @")), Times.Once);
+        }
+    }
+}
+");
+
+        [TestCase("object", "==", "null")]
+        [TestCase("bool", "==", "true")]
+        [TestCase("bool", "==", "false")]
+        [TestCase("string", "==", @"""42""")]
+        [TestCase("int", "==", @"42")]
+        public void An_issue_is_reported_for_mock_method_invocation_using_direct_comparison_on_constant_(string type, string comparison, string value) => An_issue_is_reported_for(@"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(" + type + @" data);
+    }
+
+    public class TestMeTests
+    {
+        private const " + type + " myConstant = " + value + @";
+
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(It.Is<" + type + @">(_ => _ " + comparison + @" myConstant)), Times.Once);
+        }
+    }
+}
+");
+
+        [TestCase("object", "is", "null")]
+        [TestCase("bool", "is", "true")]
+        [TestCase("bool", "is", "false")]
+        [TestCase("object", "==", "null")]
+        [TestCase("bool", "==", "true")]
+        [TestCase("bool", "==", "false")]
+        [TestCase("string", "==", @"""42""")]
+        [TestCase("int", "==", @"42")]
         public void Code_gets_fixed_for_mock_method_invocation_using_direct_comparison_(string type, string comparison, string value)
         {
             const string OriginalCode = @"
@@ -196,6 +291,72 @@ namespace Bla
             VerifyCSharpFix(OriginalCode.Replace("#1#", type).Replace("#2#", comparison).Replace("#3#", value), FixedCode.Replace("#1#", type).Replace("#3#", value));
         }
 
+        [TestCase("object", "==", "null")]
+        [TestCase("bool", "==", "true")]
+        [TestCase("bool", "==", "false")]
+        [TestCase("string", "==", @"""42""")]
+        [TestCase("int", "==", @"42")]
+        public void Code_gets_fixed_for_mock_method_invocation_using_direct_comparison_on_constant_(string type, string comparison, string value)
+        {
+            const string OriginalCode = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(#1# text);
+    }
+
+    public class TestMeTests
+    {
+        private const #1# myConstant = #3#;
+
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(It.Is<#1#>(_ => _ #2# myConstant)), Times.Once);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Moq;
+
+namespace Bla
+{
+    public interface ITestMe
+    {
+        void DoSomething(#1# text);
+    }
+
+    public class TestMeTests
+    {
+        private const #1# myConstant = #3#;
+
+        private Mock<ITestMe> ObjectUnderTest { get; set; }
+
+        public void PrepareTest()
+        {
+            ObjectUnderTest = new Mock<ITestMe>();
+
+            ObjectUnderTest.Verify(_ => _.DoSomething(myConstant), Times.Once);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("#1#", type).Replace("#2#", comparison).Replace("#3#", value), FixedCode.Replace("#1#", type).Replace("#3#", value));
+        }
+
         [TestCase("object", "is", "null")]
         [TestCase("bool", "is", "true")]
         [TestCase("bool", "is", "false")]
@@ -203,7 +364,8 @@ namespace Bla
         [TestCase("bool", "==", "true")]
         [TestCase("bool", "==", "false")]
         [TestCase("string", "==", @"""42""")]
-        public void Code_gets_fixed_for_mock_method_invocation_using_direct_comparison_when_placed_on_new_kine_(string type, string comparison, string value)
+        [TestCase("int", "==", @"42")]
+        public void Code_gets_fixed_for_mock_method_invocation_using_direct_comparison_when_placed_on_new_line_(string type, string comparison, string value)
         {
             const string OriginalCode = @"
 using System;
