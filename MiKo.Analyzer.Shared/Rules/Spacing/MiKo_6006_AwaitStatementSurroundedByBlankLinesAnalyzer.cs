@@ -22,16 +22,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             context.RegisterSyntaxNodeAction(AnalyzeAwaitExpression, SyntaxKind.AwaitExpression);
         }
 
-        private static bool HasNonAwaitedExpression(IEnumerable<StatementSyntax> statements)
+        private static bool HasNonAwaitedStatement(IEnumerable<StatementSyntax> statements)
         {
             foreach (var statement in statements)
             {
-                if (statement is ExpressionStatementSyntax ess && ess.Expression.IsKind(SyntaxKind.AwaitExpression))
+                switch (statement)
                 {
-                    continue;
-                }
+                    case ExpressionStatementSyntax e when e.Expression.IsKind(SyntaxKind.AwaitExpression):
+                    case LocalDeclarationStatementSyntax l when l.AwaitKeyword.IsKind(SyntaxKind.AwaitKeyword):
+                        continue;
 
-                return true;
+                    default:
+                        return true;
+                }
             }
 
             return false;
@@ -111,8 +114,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 {
                     var callLineSpan = node.GetLocation().GetLineSpan();
 
-                    var noBlankLinesBefore = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
-                    var noBlankLinesAfter = HasNonAwaitedExpression(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
+                    var noBlankLinesBefore = HasNonAwaitedStatement(statements.Where(_ => HasNoBlankLinesBefore(callLineSpan, _)));
+                    var noBlankLinesAfter = HasNonAwaitedStatement(statements.Where(_ => HasNoBlankLinesAfter(callLineSpan, _)));
 
                     if (noBlankLinesBefore || noBlankLinesAfter)
                     {
