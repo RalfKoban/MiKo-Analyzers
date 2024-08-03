@@ -1086,6 +1086,60 @@ public class TestMe
         }
 
         [Test]
+        public void Code_gets_fixed_for_field_array_initializer_with_contained_object_creations()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                            {
+                              new Dto { Id = -1, Value = 4711 },
+                              new Dto
+                            {
+                                Id = 1,
+                                Value = 42,
+                            },
+                              new Dto { Id = 2, Value = 0815 },
+                            };
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class Dto
+{
+    public int Id { get; set; }
+    public int Value { get; set; }
+}
+
+public class TestMe
+{
+    private Dto[] MyField = new Dto[]
+                                {
+                                    new Dto { Id = -1, Value = 4711 },
+                                    new Dto
+                                        {
+                                            Id = 1,
+                                            Value = 42,
+                                        },
+                                    new Dto { Id = 2, Value = 0815 },
+                                };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_implicit_field_collection_initializer_when_placed_on_position_before_position_of_type()
         {
             const string OriginalCode = @"
@@ -1150,6 +1204,124 @@ public class TestMe
                                                2,
                                                3,
                                            };
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_dictionary_initializer_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public record ResponseMessage
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private ResponseMessage DoSomething()
+    {
+        var response = new ResponseMessage
+        {
+            Headers = new Dictionary(string, string[])
+            {
+                { ""key"", [""value""] },
+            },
+        };
+
+        return response;
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public record ResponseMessage
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private ResponseMessage DoSomething()
+    {
+        var response = new ResponseMessage
+                           {
+                               Headers = new Dictionary(string, string[])
+                                             {
+                                                 { ""key"", [""value""] },
+                                             },
+                           };
+
+        return response;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_dictionary_initializer_spanning_multiple_lines_when_placed_on_position_after_position_of_type()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public record ResponseMessage
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private ResponseMessage DoSomething()
+    {
+        var response = new ResponseMessage
+        {
+            Headers = new Dictionary(string, string[])
+            {
+                {
+                    ""key"", [""value""]
+                },
+            },
+        };
+
+        return response;
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public record ResponseMessage
+{
+    public Dictionary<string, string[]> Headers { get; set; }
+}
+
+public class TestMe
+{
+    private ResponseMessage DoSomething()
+    {
+        var response = new ResponseMessage
+                           {
+                               Headers = new Dictionary(string, string[])
+                                             {
+                                                 {
+                                                     ""key"", [""value""]
+                                                 },
+                                             },
+                           };
+
+        return response;
+    }
 }
 ";
 

@@ -70,7 +70,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
         }
 
-        protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
+        protected virtual TSyntaxNode GetUpdatedSyntax<TSyntaxNode>(TSyntaxNode node, int leadingSpaces) where TSyntaxNode : SyntaxNode => node.WithLeadingSpaces(leadingSpaces);
+
+        protected SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
             if (expressions.Count == 0)
             {
@@ -95,7 +97,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     currentLine = startingLine;
 
                     // it seems to be on a different line, so add with spaces
-                    updatedExpressions.Add(expression.WithLeadingSpaces(leadingSpaces));
+                    var updatedExpression = GetUpdatedSyntax(expression, leadingSpaces);
+
+                    updatedExpressions.Add(updatedExpression);
                 }
             }
 
