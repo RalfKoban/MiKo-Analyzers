@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     if (others.Count > 0)
                     {
                         others[0] = others[0].WithoutLeadingEndOfLine();
+
                         var spaces = others[0].GetPositionWithinStartLine();
 
                         newIf = newIf.WithStatement(GetUpdatedBlock(SyntaxFactory.Block(others), spaces)); // adjust spacing
