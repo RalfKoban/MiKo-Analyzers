@@ -1217,16 +1217,16 @@ public class TestMe
 using System;
 using System.Collections.Generic;
 
-public record ResponseMessage
+public record Testee
 {
     public Dictionary<string, string[]> Headers { get; set; }
 }
 
 public class TestMe
 {
-    private ResponseMessage DoSomething()
+    private Testee DoSomething()
     {
-        var response = new ResponseMessage
+        var result = new Testee
         {
             Headers = new Dictionary(string, string[])
             {
@@ -1234,7 +1234,7 @@ public class TestMe
             },
         };
 
-        return response;
+        return result;
     }
 }
 ";
@@ -1242,24 +1242,24 @@ public class TestMe
 using System;
 using System.Collections.Generic;
 
-public record ResponseMessage
+public record Testee
 {
     public Dictionary<string, string[]> Headers { get; set; }
 }
 
 public class TestMe
 {
-    private ResponseMessage DoSomething()
+    private Testee DoSomething()
     {
-        var response = new ResponseMessage
-                           {
-                               Headers = new Dictionary(string, string[])
-                                             {
-                                                 { ""key"", [""value""] },
-                                             },
-                           };
+        var result = new Testee
+                         {
+                             Headers = new Dictionary(string, string[])
+                                           {
+                                               { ""key"", [""value""] },
+                                           },
+                         };
 
-        return response;
+        return result;
     }
 }
 ";
@@ -1274,16 +1274,16 @@ public class TestMe
 using System;
 using System.Collections.Generic;
 
-public record ResponseMessage
+public record Testee
 {
     public Dictionary<string, string[]> Headers { get; set; }
 }
 
 public class TestMe
 {
-    private ResponseMessage DoSomething()
+    private Testee DoSomething()
     {
-        var response = new ResponseMessage
+        var result = new Testee
         {
             Headers = new Dictionary(string, string[])
             {
@@ -1293,7 +1293,7 @@ public class TestMe
             },
         };
 
-        return response;
+        return result;
     }
 }
 ";
@@ -1301,26 +1301,89 @@ public class TestMe
 using System;
 using System.Collections.Generic;
 
-public record ResponseMessage
+public record Testee
 {
     public Dictionary<string, string[]> Headers { get; set; }
 }
 
 public class TestMe
 {
-    private ResponseMessage DoSomething()
+    private Testee DoSomething()
     {
-        var response = new ResponseMessage
-                           {
-                               Headers = new Dictionary(string, string[])
-                                             {
-                                                 {
-                                                     ""key"", [""value""]
-                                                 },
-                                             },
-                           };
+        var result = new Testee
+                         {
+                             Headers = new Dictionary(string, string[])
+                                           {
+                                               {
+                                                   ""key"", [""value""]
+                                               },
+                                           },
+                         };
 
-        return response;
+        return result;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_nested_object_initializer_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Testee Nested { get; set; }
+
+    public string Name { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+        {
+            Nested = new Testeee
+            {
+                Name = ""nested""
+            },
+            Name = ""unnested""
+        };
+
+        return result;
+    }
+}
+";
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+
+public record Testee
+{
+    public Testee Nested { get; set; }
+
+    public string Name { get; set; }
+}
+
+public class TestMe
+{
+    private Testee DoSomething()
+    {
+        var result = new Testee
+                         {
+                             Nested = new Testeee
+                                          {
+                                              Name = ""nested""
+                                          },
+                             Name = ""unnested""
+                         };
+
+        return result;
     }
 }
 ";
