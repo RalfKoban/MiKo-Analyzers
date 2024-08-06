@@ -128,8 +128,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2032";
 
-        protected override string Title => Resources.MiKo_2032_CodeFixTitle;
-
 //// ncrunch: rdi off
 
         public static ISet<string> CreateSimpleStartingPhrases()

@@ -9,7 +9,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1070_CodeFixProvider : NamingLocalVariableCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_1070";
-
-        protected override string Title => Resources.MiKo_1070_CodeFixTitle;
     }
 }

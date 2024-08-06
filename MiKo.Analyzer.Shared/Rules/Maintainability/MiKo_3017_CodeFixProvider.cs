@@ -15,8 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3017";
 
-        protected override string Title => Resources.MiKo_3017_CodeFixTitle;
-
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax) => syntax.ArgumentList; // there might be multiple nodes to replace, hence return original and do replacement in GetUpdatedSyntaxRoot
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)

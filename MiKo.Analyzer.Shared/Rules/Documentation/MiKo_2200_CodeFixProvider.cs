@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2200";
 
-        protected override string Title => Resources.MiKo_2200_CodeFixTitle;
-
         protected override bool IsTrivia => true;
 
         protected override SyntaxToken GetToken(SyntaxTrivia trivia, Diagnostic issue)

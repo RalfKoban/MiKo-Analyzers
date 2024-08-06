@@ -42,8 +42,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2038";
 
-        protected override string Title => Resources.MiKo_2038_CodeFixTitle;
-
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap, FirstWordHandling.MakeLowerCase);
