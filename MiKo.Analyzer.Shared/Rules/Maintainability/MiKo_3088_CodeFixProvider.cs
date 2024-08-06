@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         public override string FixableDiagnosticId => "MiKo_3088";
 
-        protected override string Title => Resources.MiKo_3088_CodeFixTitle;
-
         protected override IsPatternExpressionSyntax GetUpdatedPatternSyntax(ExpressionSyntax operand, LiteralExpressionSyntax literal) => UnaryNot(IsPattern(operand, literal));
     }
 }

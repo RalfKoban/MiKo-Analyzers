@@ -16,15 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1037";
 
         private static readonly string[] WrongSuffixes =
-                                                        {
-                                                            // order is important here because of the order during removal
-                                                            "Enums", "Enum",
-                                                            "Types", "Type",
-                                                            "Interfaces", "Interface",
-                                                            "Classes", "Class",
-                                                            "Structs", "Struct",
-                                                            "Records", "Record",
-                                                        };
+                                                         {
+                                                             // order is important here because of the order during removal
+                                                             "Enums", "Enum",
+                                                             "Types", "Type",
+                                                             "Interfaces", "Interface",
+                                                             "Classes", "Class",
+                                                             "Structs", "Struct",
+                                                             "Records", "Record",
+                                                         };
 
         private static readonly string[] AllowedEnumSuffixes = { "Interfaces", "Interface", "Classes", "Class" };
 

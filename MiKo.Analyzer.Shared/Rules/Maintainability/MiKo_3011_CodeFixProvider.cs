@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3011";
 
-        protected override string Title => Resources.MiKo_3011_CodeFixTitle;
-
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)
         {
             // there might be multiple parameters, so we have to find out which parameter is meant
