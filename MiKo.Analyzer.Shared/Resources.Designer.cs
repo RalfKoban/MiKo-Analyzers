@@ -8575,6 +8575,43 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove separator comment.
+        /// </summary>
+        internal static string MiKo_2311_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2311_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
+        ///They should not be used to separate code..
+        /// </summary>
+        internal static string MiKo_2311_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2311_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove separator comment.
+        /// </summary>
+        internal static string MiKo_2311_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2311_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use separator comments.
+        /// </summary>
+        internal static string MiKo_2311_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2311_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If #region shall be used, then any empty #region shall be avoided.
         ///Such empty regions solely clutter the code without providing any benefit at all..
         /// </summary>

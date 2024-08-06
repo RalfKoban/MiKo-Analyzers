@@ -255,7 +255,7 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_separator_comment_([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => An_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_separator_comment_([Values("", " ")] string gap, [Values("----", "****", "====", "####")] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {
