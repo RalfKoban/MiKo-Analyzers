@@ -9,7 +9,5 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6021_CodeFixProvider : SurroundedByBlankLinesCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_6021";
-
-        protected override string Title => Resources.MiKo_6021_CodeFixTitle;
     }
 }

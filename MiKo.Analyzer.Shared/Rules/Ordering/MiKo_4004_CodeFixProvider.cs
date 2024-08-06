@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 
         public override string FixableDiagnosticId => "MiKo_4004";
 
-        protected override string Title => Resources.MiKo_4004_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
             var typeSyntax = syntax.FirstAncestorOrSelf<BaseTypeDeclarationSyntax>();

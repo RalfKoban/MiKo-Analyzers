@@ -10,8 +10,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3062";
 
-        protected override string Title => Resources.MiKo_3062_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntaxWithTextEnding(syntax, ":");
     }
 }

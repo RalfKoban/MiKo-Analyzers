@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => "MiKo_1300";
 
-        protected override string Title => Resources.MiKo_1300_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             foreach (var syntaxNode in syntaxNodes)

@@ -32,8 +32,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2031";
 
-        protected override string Title => Resources.MiKo_2031_CodeFixTitle;
-
         protected override SyntaxNode Comment(Document document, XmlElementSyntax comment, MethodDeclarationSyntax method)
         {
             return HandleSpecialMethod(comment, method) ?? base.Comment(document, comment, method);

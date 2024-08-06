@@ -18,9 +18,9 @@ namespace MiKoSolutions.Analyzers.Rules
 
         public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FixableDiagnosticId);
 
-        protected abstract string Title { get; }
+        protected virtual string Title => Resources.ResourceManager.GetString(FixableDiagnosticId + "_CodeFixTitle", Resources.Culture);
 
-//// ncrunch: rdi off
+        //// ncrunch: rdi off
 
         protected virtual bool IsSolutionWide => false;
 

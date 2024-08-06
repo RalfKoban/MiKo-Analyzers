@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 446 rules that are currently provided by the analyzer.
+The following tables lists all the 447 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -274,6 +274,7 @@ The following tables lists all the 446 rules that are currently provided by the 
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
+|MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|

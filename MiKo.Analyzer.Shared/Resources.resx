@@ -3041,6 +3041,19 @@ So developers have more background information at hand, allowing them to make be
   <data name="MiKo_2310_Title" xml:space="preserve">
     <value>Comments should explain the 'Why' and not the 'That'</value>
   </data>
+  <data name="MiKo_2311_CodeFixTitle" xml:space="preserve">
+    <value>Remove separator comment</value>
+  </data>
+  <data name="MiKo_2311_Description" xml:space="preserve">
+    <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
+They should not be used to separate code.</value>
+  </data>
+  <data name="MiKo_2311_MessageFormat" xml:space="preserve">
+    <value>Remove separator comment</value>
+  </data>
+  <data name="MiKo_2311_Title" xml:space="preserve">
+    <value>Do not use separator comments</value>
+  </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
 Such empty regions solely clutter the code without providing any benefit at all.</value>

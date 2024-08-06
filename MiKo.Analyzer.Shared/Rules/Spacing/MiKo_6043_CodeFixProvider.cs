@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6043";
 
-        protected override string Title => Resources.MiKo_6043_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             foreach (var node in syntaxNodes)
