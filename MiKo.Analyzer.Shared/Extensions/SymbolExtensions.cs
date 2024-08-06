@@ -153,6 +153,9 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case null: // currently I do not know how to reproduce the situation here, but I've seen AD0001 reported for that
+                    return string.Empty;
+
                 case IMethodSymbol m:
                     return m.ContainingType.FullyQualifiedName(useAlias) + "." + m.Name;
 
