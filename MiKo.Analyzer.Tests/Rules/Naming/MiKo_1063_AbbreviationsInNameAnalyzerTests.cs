@@ -271,6 +271,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "tires",
                                                         ];
 
+        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj"];
+
+        private static readonly string[] WrongWords = BadPrefixes.Except(AllowedWords).ToArray();
+
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"
 using System;
@@ -324,7 +328,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_method_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_method_([ValueSource(nameof(AllowedWords))] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -372,7 +376,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedTerms))] string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedWords))] string propertyName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -385,7 +389,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_variable_([ValueSource(nameof(AllowedTerms))] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_variable_([ValueSource(nameof(AllowedWords))] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -402,7 +406,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(BadPrefixes))] string variableName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -419,7 +423,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_foreach_variable_([ValueSource(nameof(BadPrefixes))] string variableName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_foreach_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
