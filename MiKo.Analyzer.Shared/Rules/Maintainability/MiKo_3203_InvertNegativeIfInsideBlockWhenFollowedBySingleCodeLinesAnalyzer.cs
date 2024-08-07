@@ -32,26 +32,40 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         protected override IEnumerable<Diagnostic> AnalyzeIfStatement(IfStatementSyntax node, SyntaxNodeAnalysisContext context)
         {
             // do not invert in case of an else block
-            if (node.Else is null && node.Parent is BlockSyntax block && IsAnyNegative(node.Condition))
+            if (node.Else is null && node.Parent is BlockSyntax block)
             {
-                var statements = block.Statements;
+                var condition = node.Condition;
+                var conditions = GetConditionParts(condition);
 
-                var index = statements.IndexOf(node);
-
-                if (index + 2 == statements.Count)
+                if (condition.IsKind(SyntaxKind.LogicalAndExpression) && conditions.Count == 2 && conditions[0].IsKind(SyntaxKind.IsPatternExpression) && IsNegative(conditions[1]))
                 {
-                    if (statements[index + 1].IsAnyKind(ForbiddenFollowUps))
-                    {
-                        // we assume that the follow-up also contain code, so inverting would make the code less readable
-                        return Enumerable.Empty<Diagnostic>();
-                    }
+                    // we do not want to report is-pattern checks for false because the inverted code looks much difficult to understand
+                    return Enumerable.Empty<Diagnostic>();
+                }
 
-                    // inspect only in case the if statement is followed by a single other statement
-                    switch (node.Statement)
+                if (conditions.Exists(IsNegative))
+                {
+                    var statements = block.Statements;
+
+                    var index = statements.IndexOf(node);
+
+                    if (statements.Count == index + 2)
                     {
-                        case ContinueStatementSyntax _:
-                        case BlockSyntax b when b.Statements.FirstOrDefault() is ContinueStatementSyntax:
-                            return new[] { Issue(node) };
+                        var followUpStatement = statements[index + 1];
+
+                        if (followUpStatement.IsAnyKind(ForbiddenFollowUps))
+                        {
+                            // we assume that the follow-up also contain code, so inverting would make the code less readable
+                            return Enumerable.Empty<Diagnostic>();
+                        }
+
+                        // inspect only in case the if statement is followed by a single other statement
+                        switch (node.Statement)
+                        {
+                            case ContinueStatementSyntax _:
+                            case BlockSyntax b when b.Statements.FirstOrDefault() is ContinueStatementSyntax:
+                                return new[] { Issue(node) };
+                        }
                     }
                 }
             }

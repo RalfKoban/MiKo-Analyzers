@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer : UsePatternMatchingForEqualsExpressionAnalyzer
+    public sealed class MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer : UsePatternMatchingForBinaryExpressionAnalyzer
     {
         public const string Id = "MiKo_3082";
 
-        public MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer() : base(Id)
+        public MiKo_3082_UsePatternMatchingForBooleanEqualsExpressionAnalyzer() : base(Id, SyntaxKind.EqualsExpression)
         {
         }
 

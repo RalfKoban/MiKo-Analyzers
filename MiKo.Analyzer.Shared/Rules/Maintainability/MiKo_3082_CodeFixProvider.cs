@@ -9,7 +9,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3082_CodeFixProvider : UsePatternMatchingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_3082";
-
-        protected override string Title => Resources.MiKo_3082_CodeFixTitle;
     }
 }

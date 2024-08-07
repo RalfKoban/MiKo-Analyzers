@@ -14,14 +14,12 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4001";
 
-        protected override string Title => Resources.MiKo_4001_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var method = diagnostic.Location.GetEnclosing<IMethodSymbol>(GetSemanticModel(document));
             var methodName = method.Name;
 
-            var methods = method.ContainingType.GetMembers(methodName).OfType<IMethodSymbol>();
+            var methods = method.ContainingType.GetMethods(methodName);
 
             var methodsOrderedByParameters = Orderer.GetMethodsOrderedByParameters(methods, methodName);
 

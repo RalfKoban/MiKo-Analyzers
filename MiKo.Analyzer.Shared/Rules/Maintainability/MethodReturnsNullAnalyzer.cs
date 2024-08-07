@@ -10,14 +10,14 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class MethodReturnsNullAnalyzer : MaintainabilityAnalyzer
     {
-        private static readonly SyntaxKind[] ImportantAncestors =
-                                                                  {
-                                                                      SyntaxKind.VariableDeclaration,
-                                                                      SyntaxKind.Parameter,
-                                                                      SyntaxKind.IfStatement,
-                                                                      SyntaxKind.ConditionalExpression,
-                                                                      SyntaxKind.SwitchStatement,
-                                                                  };
+        private static readonly ISet<SyntaxKind> ImportantAncestors = new HashSet<SyntaxKind>
+                                                                          {
+                                                                              SyntaxKind.VariableDeclaration,
+                                                                              SyntaxKind.Parameter,
+                                                                              SyntaxKind.IfStatement,
+                                                                              SyntaxKind.ConditionalExpression,
+                                                                              SyntaxKind.SwitchStatement,
+                                                                          };
 
         protected MethodReturnsNullAnalyzer(string diagnosticId) : base(diagnosticId)
         {
@@ -234,7 +234,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     hasIssue = HasIssue(assignment);
 
-                    if (hasIssue && assignment.Ancestors().Any(_ => ImportantAncestors.Contains(_.Kind())))
+                    if (hasIssue && assignment.Ancestors().Any(_ => _.IsAnyKind(ImportantAncestors)))
                     {
                         assignmentsWithIssues.Add(assignment);
                     }

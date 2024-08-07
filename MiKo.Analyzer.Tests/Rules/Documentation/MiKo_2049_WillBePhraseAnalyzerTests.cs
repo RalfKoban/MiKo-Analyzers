@@ -234,7 +234,7 @@ public interface ITestMe
         }
 
         [TestCase("This will start", "This starts", @"The return value will be <see langword=""false""/>.", @"The return value is <see langword=""false""/>.")]
-        public void Code_gets_fixed_when_on_separate_lines(string originalPhrase, string fixedPhrase, string originalReturn, string fixedReturn)
+        public void Code_gets_fixed_when_on_separate_lines_(string originalPhrase, string fixedPhrase, string originalReturn, string fixedReturn)
         {
             const string Template = @"
 using System;

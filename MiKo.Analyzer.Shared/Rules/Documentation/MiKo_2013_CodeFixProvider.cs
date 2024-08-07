@@ -18,31 +18,31 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private const string Phrase = Constants.Comments.EnumStartingPhrase;
 
-        private static readonly string[] StartingPhrases =
-                                                           {
-                                                               "Contains",
-                                                               "Define",
-                                                               "Defined",
-                                                               "Defines",
-                                                               "Describe",
-                                                               "Described",
-                                                               "Describes",
-                                                               "Identified",
-                                                               "Identifies",
-                                                               "Identify",
-                                                               "Indicate",
-                                                               "Indicated",
-                                                               "Indicates",
-                                                               "Present",
-                                                               "Presents",
-                                                               "Provide",
-                                                               "Provides",
-                                                               "Represent",
-                                                               "Represents",
-                                                               "Specified",
-                                                               "Specifies",
-                                                               "Specify",
-                                                           };
+        private static readonly string[] WrongStartingWords =
+                                                              {
+                                                                  "Contains",
+                                                                  "Define",
+                                                                  "Defined",
+                                                                  "Defines",
+                                                                  "Describe",
+                                                                  "Described",
+                                                                  "Describes",
+                                                                  "Identified",
+                                                                  "Identifies",
+                                                                  "Identify",
+                                                                  "Indicate",
+                                                                  "Indicated",
+                                                                  "Indicates",
+                                                                  "Present",
+                                                                  "Presents",
+                                                                  "Provide",
+                                                                  "Provides",
+                                                                  "Represent",
+                                                                  "Represents",
+                                                                  "Specified",
+                                                                  "Specifies",
+                                                                  "Specify",
+                                                              };
 
         private static readonly string[] EnumStartingPhrases = CreateEnumStartingPhrases().ToArray();
 
@@ -101,7 +101,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var existingText = textTokens[0].WithoutTrivia().ValueText.AsSpan();
                 var firstWord = existingText.FirstWord();
 
-                if (firstWord.EqualsAny(StartingPhrases))
+                if (firstWord.EqualsAny(WrongStartingWords))
                 {
                     existingText = existingText.WithoutFirstWord();
                 }
@@ -158,6 +158,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 yield return start + " which represents ";
 
                 yield return start + " ";
+
+                yield return "Gets or sets ";
+                yield return "Gets or Sets ";
+                yield return "Gets ";
+                yield return "Sets ";
             }
         }
 //// ncrunch: rdi default

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -19,9 +18,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            return from token in comment.GetXmlTextTokens()
-                   from location in GetAllLocations(token, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase)
-                   select Issue(symbol.Name, location);
+            foreach (var token in comment.GetXmlTextTokens())
+            {
+                var text = token.ValueText;
+
+                if (text.Length <= 2 && text.IsNullOrWhiteSpace())
+                {
+                    // nothing to inspect as the text is too short and consists of whitespaces only
+                    continue;
+                }
+
+                if (text.ContainsAny(Constants.Comments.ReasoningPhrases))
+                {
+                    continue;
+                }
+
+                foreach (var location in GetAllLocations(token, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
+                {
+                    yield return Issue(symbol.Name, location);
+                }
+            }
         }
     }
 }

@@ -302,6 +302,10 @@ public enum TestMe
         [TestCase("State which contains", "")]
         [TestCase("State which describes", "")]
         [TestCase("State which represents", "")]
+        [TestCase("Gets", "")]
+        [TestCase("Sets", "")]
+        [TestCase("Gets or sets", "")]
+        [TestCase("Gets or Sets", "")]
         public void Code_gets_fixed_for_documentation_(string start, string expectedStart)
         {
             var originalCode = @"

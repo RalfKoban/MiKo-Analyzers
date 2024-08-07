@@ -241,6 +241,28 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_awaited_call_preceded_by_awaited_using_assigned_to_local_variable() => No_issue_is_reported_for(@"
+using System;
+using System.Threading.Tasks;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async Task DoSomething()
+        {
+            await using var item = new Item();
+            await Task.FromResult(item);
+        }
+    }
+
+    public partial class Item : IAsyncDisposable
+    {
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_awaited_call_not_preceded_by_blank_line() => An_issue_is_reported_for(@"
 using System.Threading.Tasks;
 
@@ -365,7 +387,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             var result = await Task.FromResult(true);
             DoSomethingElse();
@@ -387,14 +409,10 @@ namespace Bla
 {
     public class TestMe
     {
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             var result = await Task.FromResult(true);
             await Task.FromResult(false);
-        }
-
-        private void DoSomethingElse()
-        {
         }
     }
 }
@@ -409,14 +427,10 @@ namespace Bla
 {
     public class TestMe
     {
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             await Task.FromResult(false);
             var result = await Task.FromResult(true);
-        }
-
-        private void DoSomethingElse()
-        {
         }
     }
 }
@@ -644,7 +658,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             DoSomethingElse();
             var result = await Task.FromResult(true);
@@ -664,7 +678,7 @@ namespace Bla
 {
     public class TestMe
     {
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             DoSomethingElse();
 
@@ -693,7 +707,7 @@ namespace Bla
     {
         private bool result;
 
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             DoSomethingElse();
             result = await Task.FromResult(true);
@@ -715,7 +729,7 @@ namespace Bla
     {
         private bool result;
 
-        public async Task DoSomething(int something)
+        public async Task DoSomething()
         {
             DoSomethingElse();
 

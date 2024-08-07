@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2080";
 
-        protected override string Title => Resources.MiKo_2080_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var comment = (XmlElementSyntax)syntax;
@@ -157,13 +155,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 string[] verbs = { "to indicate", "that indicates", "which indicates", "indicating", "to control", "that controls", "which controls", "controlling" };
                 string[] continuations = { " if", " whether or not", " whether", " that", string.Empty };
 
+                var results = new HashSet<string>();
+
                 foreach (var start in starts)
                 {
                     foreach (var verb in verbs)
                     {
+                        var begin = start + " " + verb;
+
                         foreach (var continuation in continuations)
                         {
-                            yield return $"{start} {verb}{continuation} ";
+                            results.Add(begin + continuation + " ");
                         }
                     }
                 }
@@ -172,28 +174,32 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var continuation in continuations)
                     {
-                        yield return $"{start} control{continuation} ";
-                        yield return $"{start} indicate{continuation} ";
+                        var end = continuation + " ";
+
+                        results.Add(start + " control" + end);
+                        results.Add(start + " indicate" + end);
                     }
                 }
 
-                yield return "Indicating if ";
-                yield return "Indicating that ";
-                yield return "Indicating whether or not";
-                yield return "Indicating whether ";
+                results.Add("Indicating if ");
+                results.Add("Indicating that ");
+                results.Add("Indicating whether or not");
+                results.Add("Indicating whether ");
 
-                yield return "Indicates if ";
-                yield return "Indicates that ";
+                results.Add("Indicates if ");
+                results.Add("Indicates that ");
 
-                yield return "Controlling if ";
-                yield return "Controlling that ";
-                yield return "Controlling whether or not";
-                yield return "Controlling whether ";
+                results.Add("Controlling if ");
+                results.Add("Controlling that ");
+                results.Add("Controlling whether or not");
+                results.Add("Controlling whether ");
 
-                yield return "Controls if ";
-                yield return "Controls that ";
-                yield return "Controls whether or not ";
-                yield return "Controls whether ";
+                results.Add("Controls if ");
+                results.Add("Controls that ");
+                results.Add("Controls whether or not ");
+                results.Add("Controls whether ");
+
+                return results;
             }
 
             private static IEnumerable<string> CreateGuidReplacementMapKeys()
@@ -208,9 +214,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var type in types)
                     {
+                        var begin = start + type + " ";
+
                         foreach (var continuation in continuations)
                         {
-                            results.Add($"{start}{type} {continuation} ");
+                            results.Add(begin + continuation + " ");
                         }
                     }
                 }

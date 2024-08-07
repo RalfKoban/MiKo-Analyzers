@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public override string FixableDiagnosticId => "MiKo_4101";
 
-        protected override string Title => Resources.MiKo_4101_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedTypeSyntax(Document document, BaseTypeDeclarationSyntax typeSyntax, SyntaxNode syntax, Diagnostic diagnostic)
         {
             var method = (MethodDeclarationSyntax)syntax;

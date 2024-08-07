@@ -16,8 +16,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] AcceptedPrefixes =
                                                             {
+                                                                "old",
+                                                                "new",
                                                                 "source",
                                                                 "target",
+                                                                "xml",
                                                             };
 
         private static readonly Dictionary<string, string> WrongSuffixes = new Dictionary<string, string>
@@ -37,6 +40,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var identifier in identifiers)
             {
                 var name = identifier.ValueText;
+
+                if (name.StartsWithAny(AcceptedPrefixes, Comparison))
+                {
+                    continue;
+                }
+
                 var location = identifier.GetLocation();
 
                 if (name.EndsWith(Constants.Entity, Comparison))
@@ -45,9 +54,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                     yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
                 }
-                else if (name.EndsWith("Element", Comparison))
+                else if (name.EndsWith(Constants.Element, Comparison))
                 {
-                    var betterName = name == "frameworkElement" ? "element" : name.WithoutSuffix("Element");
+                    var betterName = name == Constants.frameworkElement ? Constants.element : name.WithoutSuffix(Constants.Element);
 
                     yield return Issue(name, location, betterName, CreateBetterNameProposal(betterName));
                 }
@@ -55,7 +64,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     foreach (var pair in WrongSuffixes)
                     {
-                        if (name.EndsWith(pair.Key, Comparison) && name.StartsWithAny(AcceptedPrefixes, Comparison) is false)
+                        if (name.EndsWith(pair.Key, Comparison))
                         {
                             var betterName = pair.Value;
 

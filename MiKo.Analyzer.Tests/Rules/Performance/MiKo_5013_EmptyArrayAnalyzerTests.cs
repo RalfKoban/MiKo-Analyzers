@@ -148,7 +148,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_assignment_to_return_value([ValueSource(nameof(WrongArrayCreations))] string creation) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_assignment_to_return_value_([ValueSource(nameof(WrongArrayCreations))] string creation) => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe

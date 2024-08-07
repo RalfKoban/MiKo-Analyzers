@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -642,6 +643,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static string GetName(this MethodDeclarationSyntax value) => value?.Identifier.ValueText;
+
+        internal static string GetName(this NameColonSyntax value) => value?.Name.GetName();
 
         internal static string GetName(this NameEqualsSyntax value) => value?.Name.GetName();
 
@@ -1301,6 +1304,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool HasLinqExtensionMethod(this SyntaxNode value, SemanticModel semanticModel) => value.LinqExtensionMethods(semanticModel).Any();
 
+#if VS2022
+
+        internal static bool HasPrimaryConstructor(this ClassDeclarationSyntax value) => value.ParameterList != null;
+
+        internal static bool HasPrimaryConstructor(this StructDeclarationSyntax value) => value.ParameterList != null;
+
+#endif
+
         internal static bool HasPrimaryConstructor(this RecordDeclarationSyntax value) => value.ParameterList != null;
 
         internal static TRoot InsertNodeAfter<TRoot>(this TRoot value, SyntaxNode nodeInList, SyntaxNode newNode) where TRoot : SyntaxNode
@@ -1435,6 +1446,12 @@ namespace MiKoSolutions.Analyzers
             return false;
         }
 
+        internal static bool IsMoqItIsConditionMatcher(this InvocationExpressionSyntax value) => value.Expression is MemberAccessExpressionSyntax maes
+                                                                                              && maes.IsKind(SyntaxKind.SimpleMemberAccessExpression)
+                                                                                              && maes.Expression is IdentifierNameSyntax invokedType
+                                                                                              && invokedType.GetName() == Constants.Moq.ConditionMatcher.It
+                                                                                              && maes.GetName() == Constants.Moq.ConditionMatcher.Is;
+
         internal static bool IsInsideMoqCall(this MemberAccessExpressionSyntax value)
         {
             if (value.Parent is InvocationExpressionSyntax i && i.Parent is LambdaExpressionSyntax lambda)
@@ -1532,6 +1549,33 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsConst(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ConstKeyword);
+
+        internal static bool IsConst(this SyntaxNode value, SyntaxNodeAnalysisContext context)
+        {
+            switch (value)
+            {
+                case IdentifierNameSyntax i:
+                {
+                    var type = context.FindContainingType();
+                    var isConst = type.GetFields(i.GetName()).Any(_ => _.IsConst);
+
+                    return isConst;
+                }
+
+                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
+                {
+                    var type = m.GetTypeSymbol(context.SemanticModel);
+
+                    // only get the real enum members, no local variables or something
+                    return type?.IsEnum() is true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+        }
 
         internal static bool IsEventRegistration(this StatementSyntax value, SemanticModel semanticModel)
         {
@@ -1945,9 +1989,9 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static bool IsSupported(this SyntaxNodeAnalysisContext value, LanguageVersion expectedVersion)
+        internal static bool HasMinimumCSharpVersion(this SyntaxTree value, LanguageVersion expectedVersion)
         {
-            var languageVersion = ((CSharpParseOptions)value.Node.SyntaxTree.Options).LanguageVersion;
+            var languageVersion = ((CSharpParseOptions)value.Options).LanguageVersion;
 
             // ignore the latest versions (or above)
             return languageVersion >= expectedVersion && expectedVersion < LanguageVersion.LatestMajor;
@@ -2324,6 +2368,8 @@ namespace MiKoSolutions.Analyzers
                     return false;
             }
         }
+
+        internal static bool ReturnsCompletedTask(this ReturnStatementSyntax value) => value.Expression is MemberAccessExpressionSyntax maes && maes.Expression.GetName() == nameof(Task) && maes.GetName() == nameof(Task.CompletedTask);
 
         internal static SyntaxNode PreviousSibling(this SyntaxNode value)
         {
