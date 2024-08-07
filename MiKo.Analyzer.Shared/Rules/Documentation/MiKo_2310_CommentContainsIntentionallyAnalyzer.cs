@@ -20,6 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> CollectIssues(string name, SyntaxTrivia trivia) => GetAllLocations(trivia, Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase).Select(_ => Issue(name, _));
 
-        private static bool CommentHasIssue(ReadOnlySpan<char> comment) => comment.ContainsAny(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase);
+        private static bool CommentHasIssue(ReadOnlySpan<char> comment)
+        {
+            if (comment.ContainsAny(Constants.Comments.IntentionallyPhrase, StringComparison.OrdinalIgnoreCase))
+            {
+                return comment.ContainsAny(Constants.Comments.ReasoningPhrases, StringComparison.OrdinalIgnoreCase) is false;
+            }
+
+            return false;
+        }
     }
 }

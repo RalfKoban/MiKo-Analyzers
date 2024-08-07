@@ -18,10 +18,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: no coverage start
 
-        private static readonly string[] IndicatePhrases = [.. Enumerable.ToHashSet(CreateIndicatePhrases().Take(TestLimit))];
-        private static readonly string[] OptionalPhrases = [.. Enumerable.ToHashSet(CreateOptionalPhrases().Take(TestLimit))];
-        private static readonly string[] ConditionalPhrases = [.. Enumerable.ToHashSet(CreateConditionalStartPhrases().Take(TestLimit))];
-        private static readonly string[] DefaultCases = [.. Enumerable.ToHashSet(CreateDefaultCases().Take(TestLimit))];
+        private static readonly string[] IndicatePhrases = [.. CreateIndicatePhrases().Take(TestLimit)];
+        private static readonly string[] OptionalPhrases = [.. CreateOptionalPhrases().Take(TestLimit)];
+        private static readonly string[] ConditionalPhrases = [.. CreateConditionalStartPhrases().Take(TestLimit)];
+        private static readonly string[] DefaultCases = [.. CreateDefaultCases().Take(TestLimit)];
 
         private static readonly string[] TruePhrases =
                                                        [
@@ -896,33 +896,39 @@ public class TestMe
 
 //// ncrunch: no coverage start
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateStartTerms()
+        private static List<string> CreateStartTerms()
         {
             string[] terms = ["flag", "Flag", "value", "Value", "parameter", "Parameter"];
             string[] booleans = ["bool", "boolean"];
 
+            var results = new List<string>();
+
             foreach (var term in terms)
             {
-                yield return term;
-                yield return "A " + term;
-                yield return "The " + term;
+                results.Add(term);
+                results.Add("A " + term);
+                results.Add("The " + term);
 
                 foreach (var boolean in booleans)
                 {
                     var booleanTerm = boolean + " " + term;
 
-                    yield return boolean;
-                    yield return "A " + boolean;
-                    yield return "A " + booleanTerm;
-                    yield return "The " + boolean;
-                    yield return "The " + booleanTerm;
+                    results.Add(boolean);
+                    results.Add("A " + boolean);
+                    results.Add("A " + booleanTerm);
+                    results.Add("The " + boolean);
+                    results.Add("The " + booleanTerm);
                 }
             }
+
+            return results;
         }
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateIndicatePhrases()
+        private static HashSet<string> CreateIndicatePhrases()
         {
             var starts = CreateStartTerms();
 
@@ -953,6 +959,8 @@ public class TestMe
                                  "which specifies",
                              ];
 
+            var results = new HashSet<string>();
+
             foreach (var phrase in from verb in verbs
                                    select " " + verb + " " into middle // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from condition in conditions
@@ -960,8 +968,8 @@ public class TestMe
                                    from start in starts
                                    select start + end)
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                results.Add(phrase.ToUpperCaseAt(0));
+                results.Add(phrase.ToLowerCaseAt(0));
             }
 
             string[] startingVerbs =
@@ -988,13 +996,16 @@ public class TestMe
                                    from condition in conditions
                                    select string.Concat(startingVerb, " ", condition))
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                results.Add(phrase.ToUpperCaseAt(0));
+                results.Add(phrase.ToLowerCaseAt(0));
             }
+
+            return results;
         }
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateOptionalPhrases()
+        private static HashSet<string> CreateOptionalPhrases()
         {
             string[] starts = ["A optional", "An optional", "The optional", "An (optional)", "The (optional)", "Optional", "(Optional)"];
             string[] conditions = ["if", "whether", "whether or not", "if to", "whether to", "whether or not to"];
@@ -1025,6 +1036,8 @@ public class TestMe
                                  "which specifies",
                              ];
 
+            var results = new HashSet<string>();
+
             foreach (var phrase in from verb in verbs
                                    select " " + verb + " " into v // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from condition in conditions
@@ -1036,41 +1049,53 @@ public class TestMe
                                    from start in starts
                                    select (start + end).Replace("   ", " ").Replace("  ", " ").Trim())
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                results.Add(phrase.ToUpperCaseAt(0));
+                results.Add(phrase.ToLowerCaseAt(0));
             }
+
+            return results;
         }
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateConditionalStartPhrases()
+        private static HashSet<string> CreateConditionalStartPhrases()
         {
             string[] starts = ["If set to", "If given", "If", "When set to", "When given", "When", "In case set to", "In case"];
             string[] booleans = [@"<see langword=""true""/>", @"<see langref=""true""/>", "true"];
             string[] separators = [string.Empty, ":", ";", ","];
+
+            var results = new HashSet<string>();
 
             foreach (var phrase in from separator in separators
                                    from boolean in booleans
                                    from start in starts
                                    select string.Concat(start, " ", boolean, separator))
             {
-                yield return phrase.ToUpperCaseAt(0);
-                yield return phrase.ToLowerCaseAt(0);
+                results.Add(phrase.ToUpperCaseAt(0));
+                results.Add(phrase.ToLowerCaseAt(0));
             }
+
+            return results;
         }
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
-        private static IEnumerable<string> CreateDefaultCases()
+        private static HashSet<string> CreateDefaultCases()
         {
             string[] starts = ["The default is", "Default is", "Defaults to"];
             string[] booleans = [@"<see langword=""true""/>", @"<see langref=""true""/>", "true", @"<see langword=""false""/>", @"<see langref=""false""/>", "false"];
+
+            var results = new HashSet<string>();
 
             foreach (var start in starts)
             {
                 foreach (var boolean in booleans)
                 {
-                    yield return string.Concat(start, " ", boolean);
+                    results.Add(string.Concat(start, " ", boolean));
                 }
             }
+
+            return results;
         }
 
 //// ncrunch: no coverage end

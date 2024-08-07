@@ -527,7 +527,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1031_Description" xml:space="preserve">
-    <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'User' instead of 'UserModel')</value>
+    <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'User' instead of 'UserModel')</value>
   </data>
   <data name="MiKo_1031_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -551,7 +551,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1033_Description" xml:space="preserve">
-    <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
+    <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'user' instead of 'userModel')</value>
   </data>
   <data name="MiKo_1033_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -563,7 +563,7 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1034_Description" xml:space="preserve">
-    <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (eg. 'user' instead of 'userModel')</value>
+    <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'user' instead of 'userModel')</value>
   </data>
   <data name="MiKo_1034_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -596,16 +596,16 @@ Methods that are named 'Clear' and have parameters should be named 'Remove' inst
     <value>Events dealing with entities should not use a 'Model' marker</value>
   </data>
   <data name="MiKo_1037_CodeFixTitle" xml:space="preserve">
-    <value>Remove 'Enum' suffix</value>
+    <value>Remove type suffix</value>
   </data>
   <data name="MiKo_1037_Description" xml:space="preserve">
-    <value>Indicating that a type is an Enum by using 'Enum' as its suffix does not make sense.</value>
+    <value>Indicating that a type is an Enum by using 'Enum' as its suffix does not make sense. The same applies for types in general such as interfaces, classes, records and structs.</value>
   </data>
   <data name="MiKo_1037_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
   </data>
   <data name="MiKo_1037_Title" xml:space="preserve">
-    <value>Types should not be suffixed with 'Enum'</value>
+    <value>Types should not be suffixed with 'Type', 'Interface', 'Class', 'Struct', 'Record' or 'Enum'</value>
   </data>
   <data name="MiKo_1038_CodeFixTitle" xml:space="preserve">
     <value>Suffix type with 'Extensions'</value>
@@ -1100,6 +1100,18 @@ Types that end their names with 'EventArgs' but do not follow that pattern lie a
   <data name="MiKo_1076_Title" xml:space="preserve">
     <value>Prism event types should be suffixed with 'Event'</value>
   </data>
+  <data name="MiKo_1077_CodeFixTitle" xml:space="preserve">
+    <value>Remove 'Enum' suffix</value>
+  </data>
+  <data name="MiKo_1077_Description" xml:space="preserve">
+    <value>Indicating that an enum member is an enum member by using 'Enum' as its suffix does not make sense.</value>
+  </data>
+  <data name="MiKo_1077_MessageFormat" xml:space="preserve">
+    <value>Name it '{0}'</value>
+  </data>
+  <data name="MiKo_1077_Title" xml:space="preserve">
+    <value>Enum members should not be suffixed with 'Enum'</value>
+  </data>
   <data name="MiKo_1080_Description" xml:space="preserve">
     <value>It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. 'issue42' in contrast to 'issueFortyTwo').</value>
   </data>
@@ -1243,7 +1255,7 @@ The reason is that the type already states what the variable is - so its name sh
     <value>Remove suffix 'Object' or 'Struct'</value>
   </data>
   <data name="MiKo_1093_Description" xml:space="preserve">
-    <value>Identifiers should not have the term 'Object' or 'Struct' as suffix. Many times, a mcuh better name can be given that avoids the usage of the term 'Object' or 'Struct' at all (such as 'Identifier' instead of 'IdentificationObject').</value>
+    <value>Identifiers should not have the term 'Object' or 'Struct' as suffix. Many times, a much better name can be given that avoids the usage of the term 'Object' or 'Struct' at all (such as 'Identifier' instead of 'IdentificationObject').</value>
   </data>
   <data name="MiKo_1093_MessageFormat" xml:space="preserve">
     <value>Do not use suffix '{1}'</value>
@@ -1659,7 +1671,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
-    <value>Documentation is malformed (contains invalid characters, eg. '&amp;', '&gt;', '&lt;')</value>
+    <value>Documentation is malformed (contains invalid characters, e.g. '&amp;', '&gt;', '&lt;')</value>
   </data>
   <data name="MiKo_2000_Title" xml:space="preserve">
     <value>Documentation should be valid XML</value>
@@ -2696,7 +2708,7 @@ It would therefore be better to clearly highlight the contradiction.</value>
   </data>
   <data name="MiKo_2214_Description" xml:space="preserve">
     <value>The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
-However, in the generated documentation (eg. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
+However, in the generated documentation (e.g. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
 In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs.</value>
   </data>
   <data name="MiKo_2214_MessageFormat" xml:space="preserve">
@@ -2881,7 +2893,7 @@ When defined, ReSharper disables the specific rule once or until the document en
     <value>Documentation should not contain ReSharper suppressions</value>
   </data>
   <data name="MiKo_2228_Description" xml:space="preserve">
-    <value>Negative wording is difficult to understand, especially when being combined (eg. "You cannot do this if it is not empty").
+    <value>Negative wording is difficult to understand, especially when being combined (e.g. "You cannot do this if it is not empty").
 Positive wording is much easier to understand as it is straight forward and comes to the point.</value>
   </data>
   <data name="MiKo_2228_MessageFormat" xml:space="preserve">
@@ -3028,6 +3040,19 @@ So developers have more background information at hand, allowing them to make be
   </data>
   <data name="MiKo_2310_Title" xml:space="preserve">
     <value>Comments should explain the 'Why' and not the 'That'</value>
+  </data>
+  <data name="MiKo_2311_CodeFixTitle" xml:space="preserve">
+    <value>Remove separator comment</value>
+  </data>
+  <data name="MiKo_2311_Description" xml:space="preserve">
+    <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
+They should not be used to separate code.</value>
+  </data>
+  <data name="MiKo_2311_MessageFormat" xml:space="preserve">
+    <value>Remove separator comment</value>
+  </data>
+  <data name="MiKo_2311_Title" xml:space="preserve">
+    <value>Do not use separator comments</value>
   </data>
   <data name="MiKo_3000_Description" xml:space="preserve">
     <value>If #region shall be used, then any empty #region shall be avoided.
@@ -3872,7 +3897,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is' pattern</value>
   </data>
   <data name="MiKo_3082_Description" xml:space="preserve">
-    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' operator.</value>
+    <value>Logical comparisons using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
   </data>
   <data name="MiKo_3082_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3884,7 +3909,7 @@ Most times, such code can be simplified by refactoring the complete switch state
     <value>Apply 'is null' pattern</value>
   </data>
   <data name="MiKo_3083_Description" xml:space="preserve">
-    <value>Null checks using the 'is' pattern matching is more natural and therefore easier to read and understand than using the '==' operator.</value>
+    <value>Null checks using the 'is' pattern matching are more natural and therefore easier to read and understand than using the '==' equality operator.</value>
   </data>
   <data name="MiKo_3083_MessageFormat" xml:space="preserve">
     <value>Use 'is' instead of '=='</value>
@@ -3931,6 +3956,30 @@ They should be either short (to see at a glance what's going on) or refactored i
   </data>
   <data name="MiKo_3087_Title" xml:space="preserve">
     <value>Do not use negative complex conditions</value>
+  </data>
+  <data name="MiKo_3088_CodeFixTitle" xml:space="preserve">
+    <value>Apply 'is not null' pattern</value>
+  </data>
+  <data name="MiKo_3088_Description" xml:space="preserve">
+    <value>Null checks using the 'is not' pattern matching are more natural and therefore easier to read and understand than using the '!=' inequality operator.</value>
+  </data>
+  <data name="MiKo_3088_MessageFormat" xml:space="preserve">
+    <value>Use 'is not' instead of '!='</value>
+  </data>
+  <data name="MiKo_3088_Title" xml:space="preserve">
+    <value>Prefer pattern matching for not-null checks</value>
+  </data>
+  <data name="MiKo_3089_CodeFixTitle" xml:space="preserve">
+    <value>Convert property pattern condition into normal condition</value>
+  </data>
+  <data name="MiKo_3089_Description" xml:space="preserve">
+    <value>Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones.</value>
+  </data>
+  <data name="MiKo_3089_MessageFormat" xml:space="preserve">
+    <value>Convert property pattern condition into normal condition</value>
+  </data>
+  <data name="MiKo_3089_Title" xml:space="preserve">
+    <value>Do not use simple constant property patterns as conditions of 'if' statements</value>
   </data>
   <data name="MiKo_3090_Description" xml:space="preserve">
     <value>Exceptions should be thrown inside of try or catch blocks (or normal code blocks), but not inside of finally blocks.
@@ -4239,6 +4288,30 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3118_Title" xml:space="preserve">
     <value>Test methods should not use ambiguous Linq calls</value>
   </data>
+  <data name="MiKo_3119_CodeFixTitle" xml:space="preserve">
+    <value>Change return type of test method to 'void'</value>
+  </data>
+  <data name="MiKo_3119_Description" xml:space="preserve">
+    <value>Test methods that return non-generic tasks are doing so for testing asynchronous behavior. Therefore they should not simply return 'Task.CompletedTask'. Such methods should instead simply return 'void'.</value>
+  </data>
+  <data name="MiKo_3119_MessageFormat" xml:space="preserve">
+    <value>Return void instead of Task</value>
+  </data>
+  <data name="MiKo_3119_Title" xml:space="preserve">
+    <value>Test methods should not simply return completed task</value>
+  </data>
+  <data name="MiKo_3120_CodeFixTitle" xml:space="preserve">
+    <value>Use value directly instead of condition matcher</value>
+  </data>
+  <data name="MiKo_3120_Description" xml:space="preserve">
+    <value>Moq provides condition matchers to verify calls with given arguments. Those condition matchers exist to verify that parts of the argument match a specific criteria. They should not be used to test whether they match the exact value. For such cases the exact values should be provided instead of the condition matcher.</value>
+  </data>
+  <data name="MiKo_3120_MessageFormat" xml:space="preserve">
+    <value>Use value directly instead of condition matcher</value>
+  </data>
+  <data name="MiKo_3120_Title" xml:space="preserve">
+    <value>Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>
@@ -4332,7 +4405,7 @@ All the other calls should be invoked from the 'Dispose(bool disposing)' method.
   </data>
   <data name="MiKo_3214_Description" xml:space="preserve">
     <value>If methods start with 'Begin' or 'Enter' they probably have counterparts that start with 'End' or 'Exit'. Such methods are considered to define some kind of scope (for example, 'BeginUpdate' and 'EndUpdate' defines a scope for an update operation).
-As it is prone to errors to forget or not correctly invoke the 'End' methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
+As it is prone to errors to forget or not correctly invoke the 'End' methods (e.g. due to exceptions being thrown), those methods should not be made available to the public.
 Instead, a method should be made available that returns an 'IDisposable' to define that scope.
 By doing so developers can simply place the call inside a 'using' to guarantee that the 'End' method is invoked in all cases.</value>
   </data>

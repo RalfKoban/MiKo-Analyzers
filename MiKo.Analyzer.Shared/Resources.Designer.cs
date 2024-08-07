@@ -1274,7 +1274,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (eg. &apos;User&apos; instead of &apos;UserModel&apos;).
+        ///   Looks up a localized string similar to Indicating that a type is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;User&apos; instead of &apos;UserModel&apos;).
         /// </summary>
         internal static string MiKo_1031_Description {
             get {
@@ -1346,7 +1346,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a parameter is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (eg. &apos;user&apos; instead of &apos;userModel&apos;).
+        ///   Looks up a localized string similar to Indicating that a parameter is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;user&apos; instead of &apos;userModel&apos;).
         /// </summary>
         internal static string MiKo_1033_Description {
             get {
@@ -1382,7 +1382,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a field is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (eg. &apos;user&apos; instead of &apos;userModel&apos;).
+        ///   Looks up a localized string similar to Indicating that a field is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;user&apos; instead of &apos;userModel&apos;).
         /// </summary>
         internal static string MiKo_1034_Description {
             get {
@@ -1481,7 +1481,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove &apos;Enum&apos; suffix.
+        ///   Looks up a localized string similar to Remove type suffix.
         /// </summary>
         internal static string MiKo_1037_CodeFixTitle {
             get {
@@ -1490,7 +1490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense..
+        ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense. The same applies for types in general such as interfaces, classes, records and structs..
         /// </summary>
         internal static string MiKo_1037_Description {
             get {
@@ -1508,7 +1508,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Enum&apos;.
+        ///   Looks up a localized string similar to Types should not be suffixed with &apos;Type&apos;, &apos;Interface&apos;, &apos;Class&apos;, &apos;Struct&apos;, &apos;Record&apos; or &apos;Enum&apos;.
         /// </summary>
         internal static string MiKo_1037_Title {
             get {
@@ -2910,6 +2910,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;Enum&apos; suffix.
+        /// </summary>
+        internal static string MiKo_1077_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1077_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicating that an enum member is an enum member by using &apos;Enum&apos; as its suffix does not make sense..
+        /// </summary>
+        internal static string MiKo_1077_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1077_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name it &apos;{0}&apos;.
+        /// </summary>
+        internal static string MiKo_1077_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1077_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum members should not be suffixed with &apos;Enum&apos;.
+        /// </summary>
+        internal static string MiKo_1077_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1077_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         internal static string MiKo_1080_Description {
@@ -3328,7 +3364,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifiers should not have the term &apos;Object&apos; or &apos;Struct&apos; as suffix. Many times, a mcuh better name can be given that avoids the usage of the term &apos;Object&apos; or &apos;Struct&apos; at all (such as &apos;Identifier&apos; instead of &apos;IdentificationObject&apos;)..
+        ///   Looks up a localized string similar to Identifiers should not have the term &apos;Object&apos; or &apos;Struct&apos; as suffix. Many times, a much better name can be given that avoids the usage of the term &apos;Object&apos; or &apos;Struct&apos; at all (such as &apos;Identifier&apos; instead of &apos;IdentificationObject&apos;)..
         /// </summary>
         internal static string MiKo_1093_Description {
             get {
@@ -4518,7 +4554,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Documentation is malformed (contains invalid characters, eg. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
+        ///   Looks up a localized string similar to Documentation is malformed (contains invalid characters, e.g. &apos;&amp;&apos;, &apos;&gt;&apos;, &apos;&lt;&apos;).
         /// </summary>
         internal static string MiKo_2000_MessageFormat {
             get {
@@ -7589,7 +7625,7 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
-        ///However, in the generated documentation (eg. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
+        ///However, in the generated documentation (e.g. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
         ///In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs..
         /// </summary>
         internal static string MiKo_2214_Description {
@@ -8114,7 +8150,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (eg. &quot;You cannot do this if it is not empty&quot;).
+        ///   Looks up a localized string similar to Negative wording is difficult to understand, especially when being combined (e.g. &quot;You cannot do this if it is not empty&quot;).
         ///Positive wording is much easier to understand as it is straight forward and comes to the point..
         /// </summary>
         internal static string MiKo_2228_Description {
@@ -8535,6 +8571,43 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2310_Title {
             get {
                 return ResourceManager.GetString("MiKo_2310_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove separator comment.
+        /// </summary>
+        internal static string MiKo_2311_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2311_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
+        ///They should not be used to separate code..
+        /// </summary>
+        internal static string MiKo_2311_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2311_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove separator comment.
+        /// </summary>
+        internal static string MiKo_2311_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2311_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use separator comments.
+        /// </summary>
+        internal static string MiKo_2311_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2311_Title", resourceCulture);
             }
         }
         
@@ -10957,7 +11030,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; operator..
+        ///   Looks up a localized string similar to Logical comparisons using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
         /// </summary>
         internal static string MiKo_3082_Description {
             get {
@@ -10993,7 +11066,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Null checks using the &apos;is&apos; pattern matching is more natural and therefore easier to read and understand than using the &apos;==&apos; operator..
+        ///   Looks up a localized string similar to Null checks using the &apos;is&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;==&apos; equality operator..
         /// </summary>
         internal static string MiKo_3083_Description {
             get {
@@ -11134,6 +11207,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_3087_Title {
             get {
                 return ResourceManager.GetString("MiKo_3087_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply &apos;is not null&apos; pattern.
+        /// </summary>
+        internal static string MiKo_3088_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3088_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Null checks using the &apos;is not&apos; pattern matching are more natural and therefore easier to read and understand than using the &apos;!=&apos; inequality operator..
+        /// </summary>
+        internal static string MiKo_3088_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3088_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;is not&apos; instead of &apos;!=&apos;.
+        /// </summary>
+        internal static string MiKo_3088_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3088_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefer pattern matching for not-null checks.
+        /// </summary>
+        internal static string MiKo_3088_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3088_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert property pattern condition into normal condition.
+        /// </summary>
+        internal static string MiKo_3089_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3089_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal conditions are easier to understand than simple property pattern conditions that use constants. Hence, such property conditions should be converted into normal ones..
+        /// </summary>
+        internal static string MiKo_3089_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3089_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert property pattern condition into normal condition.
+        /// </summary>
+        internal static string MiKo_3089_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3089_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use simple constant property patterns as conditions of &apos;if&apos; statements.
+        /// </summary>
+        internal static string MiKo_3089_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3089_Title", resourceCulture);
             }
         }
         
@@ -12013,6 +12158,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change return type of test method to &apos;void&apos;.
+        /// </summary>
+        internal static string MiKo_3119_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3119_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods that return non-generic tasks are doing so for testing asynchronous behavior. Therefore they should not simply return &apos;Task.CompletedTask&apos;. Such methods should instead simply return &apos;void&apos;..
+        /// </summary>
+        internal static string MiKo_3119_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3119_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return void instead of Task.
+        /// </summary>
+        internal static string MiKo_3119_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3119_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not simply return completed task.
+        /// </summary>
+        internal static string MiKo_3119_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3119_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use value directly instead of condition matcher.
+        /// </summary>
+        internal static string MiKo_3120_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3120_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moq provides condition matchers to verify calls with given arguments. Those condition matchers exist to verify that parts of the argument match a specific criteria. They should not be used to test whether they match the exact value. For such cases the exact values should be provided instead of the condition matcher..
+        /// </summary>
+        internal static string MiKo_3120_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3120_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use value directly instead of condition matcher.
+        /// </summary>
+        internal static string MiKo_3120_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3120_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moq mocks should use values instead of &apos;It.Is&lt;&gt;(...)&apos; condition matcher to verify exact values.
+        /// </summary>
+        internal static string MiKo_3120_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3120_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
@@ -12273,8 +12490,8 @@ namespace MiKoSolutions.Analyzers {
         
         /// <summary>
         ///   Looks up a localized string similar to If methods start with &apos;Begin&apos; or &apos;Enter&apos; they probably have counterparts that start with &apos;End&apos; or &apos;Exit&apos;. Such methods are considered to define some kind of scope (for example, &apos;BeginUpdate&apos; and &apos;EndUpdate&apos; defines a scope for an update operation).
-        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (eg. due to exceptions being thrown), those methods should not be made available to the public.
-        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that  [rest of string was truncated]&quot;;.
+        ///As it is prone to errors to forget or not correctly invoke the &apos;End&apos; methods (e.g. due to exceptions being thrown), those methods should not be made available to the public.
+        ///Instead, a method should be made available that returns an &apos;IDisposable&apos; to define that [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_3214_Description {
             get {

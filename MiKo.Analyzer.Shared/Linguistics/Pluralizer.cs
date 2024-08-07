@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace MiKoSolutions.Analyzers.Linguistics
 {
@@ -7,18 +8,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
 
-        private static readonly string[] AllowedListNames =
-                                                            {
-                                                                "map",
-                                                                "list",
-                                                                "array",
-                                                                "stack",
-                                                                "playList",
-                                                                "blackList",
-                                                                "whiteList",
-                                                                "collection",
-                                                                "dictionary",
-                                                            };
+        private static readonly string[] AllowedNames =
+                                                        {
+                                                            "map",
+                                                            "list",
+                                                            "array",
+                                                            "stack",
+                                                            "playList",
+                                                            "blackList",
+                                                            "whiteList",
+                                                            "collection",
+                                                            "dictionary",
+                                                        };
+
+        private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, (prefix, name) => prefix + name).ToArray();
 
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 

@@ -312,6 +312,40 @@ namespace Bla
 }
 ");
 
+        [Test]
+        public void No_issue_is_reported_for_XUnit_True_with_assertion_message_using_operator_([ValueSource(nameof(Operators))] string @operator) => No_issue_is_reported_for(@"
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething()
+        {
+            Assert.True(42 " + @operator + @" 0815, ""some assertion message"");
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_XUnit_True_without_assertion_message_using_operator_([ValueSource(nameof(Operators))] string @operator) => An_issue_is_reported_for(@"
+using Xunit;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Fact]
+        public void DoSomething()
+        {
+            Assert.True(42 " + @operator + @" 0815);
+        }
+    }
+}
+");
+
         protected override string GetDiagnosticId() => MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3106_TestAssertsDoNotUseOperatorsAnalyzer();

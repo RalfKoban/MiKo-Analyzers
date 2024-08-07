@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 441 rules that are currently provided by the analyzer.
+The following tables lists all the 447 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -67,7 +67,7 @@ The following tables lists all the 441 rules that are currently provided by the 
 |MiKo_1034|Fields representing entities should not use a 'Model' suffix|&#x2713;|&#x2713;|
 |MiKo_1035|Properties dealing with entities should not use a 'Model' marker|&#x2713;|&#x2713;|
 |MiKo_1036|Events dealing with entities should not use a 'Model' marker|&#x2713;|&#x2713;|
-|MiKo_1037|Types should not be suffixed with 'Enum'|&#x2713;|&#x2713;|
+|MiKo_1037|Types should not be suffixed with 'Type', 'Interface', 'Class', 'Struct', 'Record' or 'Enum'|&#x2713;|&#x2713;|
 |MiKo_1038|Classes that contain extension methods should end with same suffix|&#x2713;|&#x2713;|
 |MiKo_1039|The 'this' parameter of extension methods should have a default name|&#x2713;|&#x2713;|
 |MiKo_1040|Parameters should not be suffixed with implementation details|&#x2713;|\-|
@@ -107,6 +107,7 @@ The following tables lists all the 441 rules that are currently provided by the 
 |MiKo_1074|Objects used to lock on should be suffixed with 'Lock'|&#x2713;|\-|
 |MiKo_1075|Non-'System.EventArgs' types should not be suffixed with 'EventArgs'|&#x2713;|&#x2713;|
 |MiKo_1076|Prism event types should be suffixed with 'Event'|&#x2713;|&#x2713;|
+|MiKo_1077|Enum members should not be suffixed with 'Enum'|&#x2713;|&#x2713;|
 |MiKo_1080|Names should contain numbers instead of their spellings|&#x2713;|\-|
 |MiKo_1081|Methods should not be suffixed with a number|&#x2713;|&#x2713;|
 |MiKo_1082|Properties should not be suffixed with a number if their types have number suffixes|&#x2713;|&#x2713;|
@@ -273,6 +274,7 @@ The following tables lists all the 441 rules that are currently provided by the 
 |MiKo_2308|Do not place comment on single line before closing brace but after code|&#x2713;|&#x2713;|
 |MiKo_2309|Comments should not use the contradiction "n't"|&#x2713;|&#x2713;|
 |MiKo_2310|Comments should explain the 'Why' and not the 'That'|&#x2713;|\-|
+|MiKo_2311|Do not use separator comments|&#x2713;|&#x2713;|
 
 ### Maintainability
 |ID|Title|Enabled by default|CodeFix available|
@@ -355,6 +357,8 @@ The following tables lists all the 441 rules that are currently provided by the 
 |MiKo_3085|Conditional statements should be short|&#x2713;|\-|
 |MiKo_3086|Do not nest conditional statements|&#x2713;|\-|
 |MiKo_3087|Do not use negative complex conditions|&#x2713;|\-|
+|MiKo_3088|Prefer pattern matching for not-null checks|&#x2713;|&#x2713;|
+|MiKo_3089|Do not use simple constant property patterns as conditions of 'if' statements|&#x2713;|&#x2713;|
 |MiKo_3090|Do not throw exceptions in finally blocks|&#x2713;|\-|
 |MiKo_3091|Do not raise events in finally blocks|&#x2713;|\-|
 |MiKo_3092|Do not raise events in locks|&#x2713;|\-|
@@ -383,6 +387,8 @@ The following tables lists all the 441 rules that are currently provided by the 
 |MiKo_3116|Test initialization methods should contain code|&#x2713;|\-|
 |MiKo_3117|Test cleanup methods should contain code|&#x2713;|\-|
 |MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
+|MiKo_3119|Test methods should not simply return completed task|&#x2713;|&#x2713;|
+|MiKo_3120|Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values|&#x2713;|&#x2713;|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|

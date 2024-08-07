@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -924,7 +925,53 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp8);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_nullable_is_null_if_statement_and_no_else_block_and_3_following_lines_in_CSharp9()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        if (flag is null)
+        {
+            return;
+        }
+
+        DoSomethingElse(1);
+        DoSomethingElse(2);
+        DoSomethingElse(3);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        if (flag is not null)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp9);
         }
 
         [Test]
@@ -970,7 +1017,53 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp8);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_nullable_is_true_if_statement_and_no_else_block_and_3_following_lines_in_CSharp9()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        if (flag is true)
+        {
+            return;
+        }
+
+        DoSomethingElse(1);
+        DoSomethingElse(2);
+        DoSomethingElse(3);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        if (flag is not true)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp9);
         }
 
         [Test]
@@ -1016,7 +1109,53 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp8);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_nullable_is_false_if_statement_and_no_else_block_and_3_following_lines_in_CSharp9()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        if (flag is false)
+        {
+            return;
+        }
+
+        DoSomethingElse(1);
+        DoSomethingElse(2);
+        DoSomethingElse(3);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        if (flag is not false)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp9);
         }
 
         [Test]
@@ -1154,7 +1293,53 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp8);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_null_pattern_check_as_if_statement_and_no_else_block_and_3_following_lines_in_CSharp9()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is null)
+        {
+            return;
+        }
+
+        DoSomethingElse(1);
+        DoSomethingElse(2);
+        DoSomethingElse(3);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is not null)
+        {
+            DoSomethingElse(1);
+            DoSomethingElse(2);
+            DoSomethingElse(3);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp9);
         }
 
         [TestCase("== 42", "!= 42")]
@@ -1163,7 +1348,7 @@ public class TestMe
         [TestCase("<= 42", "> 42")]
         [TestCase("> 42", "<= 42")]
         [TestCase("< 42", ">= 42")]
-        public void Code_gets_fixed_for_void_method_with_number_check_as_if_statement_and_no_else_block_and_3_following_lines(string originalCheck, string fixedCheck)
+        public void Code_gets_fixed_for_void_method_with_number_check_as_if_statement_and_no_else_block_and_3_following_lines_(string originalCheck, string fixedCheck)
         {
             var originalCode = @"
 public class TestMe
@@ -1255,7 +1440,57 @@ public class TestMe
 }
 ";
 
-            VerifyCSharpFix(OriginalCode, FixedCode);
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp8);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_comments_in_CSharp9()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is null)
+        {
+            return;
+        }
+
+        // some comment
+        DoSomethingElse(1);
+
+        // some other comment
+        DoSomethingElse(2);
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        if (o is not null)
+        {
+            // some comment
+            DoSomethingElse(1);
+
+            // some other comment
+            DoSomethingElse(2);
+        }
+    }
+
+    private void DoSomethingElse(int i)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode, LanguageVersion.CSharp9);
         }
 
         [Test]
@@ -1339,6 +1574,47 @@ public class TestMe
 
     private void DoSomethingElse(int i)
     {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_comment_on_follow_up_code()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values == null || !values.Any())
+            return;
+        // some comment
+        DoSomething(values.Select(i =>
+            i * 5));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values != null && values.Any())
+        {
+            // some comment
+            DoSomething(values.Select(i =>
+                i * 5));
+        }
     }
 }
 ";

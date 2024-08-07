@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2303";
 
-        protected override string Title => Resources.MiKo_2303_CodeFixTitle;
-
         protected override SyntaxTrivia ComputeReplacementTrivia(SyntaxTrivia original, SyntaxTrivia rewritten)
         {
             var comment = original.ToString().AsSpan().TrimEnd();

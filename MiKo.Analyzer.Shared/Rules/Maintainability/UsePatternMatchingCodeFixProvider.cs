@@ -9,7 +9,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     public abstract class UsePatternMatchingCodeFixProvider : MaintainabilityCodeFixProvider
     {
-        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(SyntaxKind.EqualsExpression));
+        private readonly SyntaxKind m_syntaxKind;
+
+        protected UsePatternMatchingCodeFixProvider(SyntaxKind syntaxKind = SyntaxKind.EqualsExpression) => m_syntaxKind = syntaxKind;
+
+        protected sealed override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.First(_ => _.IsKind(m_syntaxKind));
 
         protected sealed override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -18,15 +22,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             var operand = GetOperand(binary);
             var literal = GetLiteral(binary).WithoutTrailingTrivia(); // avoid unnecessary spaces at the end
 
-            return IsPattern(operand, literal);
+            return GetUpdatedPatternSyntax(operand, literal);
         }
+
+        protected virtual IsPatternExpressionSyntax GetUpdatedPatternSyntax(ExpressionSyntax operand, LiteralExpressionSyntax literal) => IsPattern(operand, literal);
 
         private static ExpressionSyntax GetOperand(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax
                                                                                      ? binary.Left
                                                                                      : binary.Right;
 
-        private static LiteralExpressionSyntax GetLiteral(BinaryExpressionSyntax binary) => binary.Right is LiteralExpressionSyntax literal
-                                                                                            ? literal
-                                                                                            : (LiteralExpressionSyntax)binary.Left;
+        private static LiteralExpressionSyntax GetLiteral(BinaryExpressionSyntax binary) => binary.Right as LiteralExpressionSyntax ?? (LiteralExpressionSyntax)binary.Left;
     }
 }
