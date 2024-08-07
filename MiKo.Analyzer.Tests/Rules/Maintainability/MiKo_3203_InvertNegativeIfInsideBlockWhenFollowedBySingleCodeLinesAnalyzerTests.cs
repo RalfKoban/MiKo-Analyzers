@@ -284,6 +284,82 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_void_method_with_pattern_expression_and_true_check_via_AND_condition_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is bool flag && flag is true)
+            {
+                continue;
+            }
+
+            DoSomething(p);
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_pattern_expression_and_false_check_via_AND_condition_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is bool flag && flag is false)
+            {
+                continue;
+            }
+
+            DoSomething(p);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_void_method_with_not_pattern_expression_and_false_check_via_OR_condition_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is not bool flag || flag)
+            {
+                continue;
+            }
+
+            DoSomething(o);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_void_method_with_negated_pattern_expression_and_false_check_via_OR_condition_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (!(o is bool flag) || flag)
+            {
+                continue;
+            }
+
+            DoSomething(o);
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_void_method_with_positive_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => No_issue_is_reported_for(@"
 public class TestMe
 {
@@ -322,7 +398,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_void_method_with_negative_pattern_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_void_method_with_is_false_pattern_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething(bool flag)
@@ -330,6 +406,25 @@ public class TestMe
         while(true)
         {
             if (flag is false)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_void_method_with_is_not_true_pattern_condition_if_statement_inside_loop_and_no_else_block_and_1_following_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag is not true)
             {
                 continue;
             }
@@ -381,7 +476,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_with_negative_pattern_condition()
+        public void Code_gets_fixed_with_is_false_pattern_condition()
         {
             const string OriginalCode = @"
 public class TestMe
@@ -409,6 +504,166 @@ public class TestMe
         while(true)
         {
             if (flag)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_is_not_true_pattern_condition_nullable()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        while(true)
+        {
+            if (flag is not true)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        while(true)
+        {
+            if (flag is true)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_is_not_false_pattern_condition_nullable()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        while(true)
+        {
+            if (flag is not false)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool? flag)
+    {
+        while(true)
+        {
+            if (flag is false)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_is_not_true_pattern_condition()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag is not true)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag)
+            {
+                DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_is_not_false_pattern_condition()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag is not false)
+            {
+                continue;
+            }
+
+            DoSomething(flag);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(bool flag)
+    {
+        while(true)
+        {
+            if (flag is false)
             {
                 DoSomething(flag);
             }
@@ -578,6 +833,47 @@ public class TestMe
                 // some comment
                 DoSomething(flag);
             }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_comment_on_follow_up_code_2()
+        {
+            const string OriginalCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values == null || !values.Any())
+            continue;
+        // some comment
+        DoSomething(values.Select(i =>
+            i * 5));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public void DoSomething(IEnumerable<int> values)
+    {
+        if (values != null && values.Any())
+        {
+            // some comment
+            DoSomething(values.Select(i =>
+                i * 5));
         }
     }
 }
@@ -932,6 +1228,126 @@ public class TestMe
             if (flag1 && flag2)
             {
                 DoSomething(flag);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_not_pattern_expression_and_false_check_via_OR_condition_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is not bool flag || flag)
+            {
+                continue;
+            }
+
+            DoSomething(o);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is bool flag && flag is false)
+            {
+                DoSomething(o);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_negated_pattern_expression_and_false_check_via_OR_condition_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (!(o is bool flag) || flag)
+            {
+                continue;
+            }
+
+            DoSomething(o);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is bool flag && flag is false)
+            {
+                DoSomething(o);
+            }
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_void_method_with_negative_type_check_in_if_statement_inside_loop_and_no_else_block_and_1_following_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (!(o is bool))
+            {
+                continue;
+            }
+
+            DoSomething(o);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    public void DoSomething(object o)
+    {
+        while(true)
+        {
+            if (o is bool)
+            {
+                DoSomething(o);
             }
         }
     }

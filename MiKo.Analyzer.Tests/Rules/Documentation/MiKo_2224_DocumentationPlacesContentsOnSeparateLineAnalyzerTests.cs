@@ -23,6 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                     Constants.XmlTag.Para,
                                                     Constants.XmlTag.Param,
                                                     Constants.XmlTag.Remarks,
+                                                    Constants.XmlTag.Response,
                                                     Constants.XmlTag.Returns,
                                                     Constants.XmlTag.Summary,
                                                     Constants.XmlTag.TypeParam,
@@ -760,6 +761,42 @@ public class TestMe
     /// This is some other text.
     /// </summary>
     public void DoSomething()
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_incorrectly_documented_response()
+        {
+            const string OriginalCode = @"
+using System;
+
+using Microsoft.AspNetCore.Mvc
+
+public class TestMe
+{
+    /// <response code=""404"">Not Found</response>
+    public IActionResult DoSomething()
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+using Microsoft.AspNetCore.Mvc
+
+public class TestMe
+{
+    /// <response code=""404"">
+    /// Not Found
+    /// </response>
+    public IActionResult DoSomething()
     {
     }
 }

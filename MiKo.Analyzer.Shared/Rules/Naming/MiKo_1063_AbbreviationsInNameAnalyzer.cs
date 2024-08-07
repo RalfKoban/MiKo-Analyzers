@@ -35,6 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "db", "database" },
                                                                                        { "ddl", "dropDownList" },
                                                                                        { "decl", "declaration" },
+                                                                                       { "decr", "decrypt" },
                                                                                        { "desc", "description" },
                                                                                        { "dest", "destination" },
                                                                                        { "diag", "diagnostic" },
@@ -49,10 +50,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "dto", string.Empty },
                                                                                        { "ef", "entityFramework" },
                                                                                        { "env", "environment" },
+                                                                                       { "encr", "encrypt" },
                                                                                        { "environ", "environment" },
                                                                                        { "err", "error" },
                                                                                        { "ext", "extension" },
                                                                                        { "frm", "form" },
+                                                                                       { "hdls", "headless" },
                                                                                        { "ident", "identification" },
                                                                                        { "idx", "index" },
                                                                                        { "init", "initialize" },
@@ -69,6 +72,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "mnu", "menuItem" },
                                                                                        { "msg", "message" },
                                                                                        { "num", "number" },
+                                                                                       { "obj", "object" },
                                                                                        { "param", "parameter" },
                                                                                        { "params", "parameters" },
                                                                                        { "perc", "percentage" },
@@ -88,6 +92,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "std", "standard" },
                                                                                        { "str", "string" },
                                                                                        { "sync", "synchronization" },
+                                                                                       { "svc", "service" },
                                                                                        { "tm", "time" },
                                                                                        { "tmp", "temp" },
                                                                                        { "txt", "text" },
@@ -119,6 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Db", "Database" },
                                                                                        { "Ddl", "DropDownList" },
                                                                                        { "Decl", "Declaration" },
+                                                                                       { "Decr", "Decrypt" },
                                                                                        { "Desc", "Description" },
                                                                                        { "Dest", "Destination" },
                                                                                        { "Diag", "Diagnostic" },
@@ -134,11 +140,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "DTO", string.Empty },
                                                                                        { "Ef", "EntityFramework" },
                                                                                        { "EF", "EntityFramework" },
+                                                                                       { "Encr", "Encrypt" },
                                                                                        { "Env", "Environment" },
                                                                                        { "Environ", "Environment" },
                                                                                        { "Err", "Error" },
                                                                                        { "Ext", "Extension" },
                                                                                        { "Frm", "Form" },
+                                                                                       { "Hdls", "Headless" },
                                                                                        { "Ident", "Identification" },
                                                                                        { "Idx", "Index" },
                                                                                        { "Init", "Initialize" },
@@ -155,6 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Mnu", "MenuItem" },
                                                                                        { "Msg", "Message" },
                                                                                        { "Num", "Number" },
+                                                                                       { "Obj", "Object" },
                                                                                        { "Op", "Operation" },
                                                                                        { "Param", "Parameter" },
                                                                                        { "Params", "Parameters" },
@@ -176,6 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Std", "Standard" },
                                                                                        { "Str", "String" },
                                                                                        { "Sync", "Synchronization" },
+                                                                                       { "Svc", "Service" },
                                                                                        { "Tm", "Time" },
                                                                                        { "Tmp", "Temp" },
                                                                                        { "Txt", "Text" },
@@ -213,7 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "wares",
                                                                };
 
-        private static readonly string[] AllowedNames =
+        private static readonly string[] AllowedParts =
                                                         {
                                                             "Async",
                                                             "Enumerable",
@@ -230,6 +240,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "OAuth",
                                                             "text",
                                                             "Text",
+                                                            "MEF",
+                                                        };
+
+        private static readonly string[] AllowedNames =
+                                                        {
+                                                            "obj",
+                                                            "next",
                                                         };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)
@@ -331,7 +348,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static IEnumerable<KeyValuePair<string, string>> AnalyzeName(string symbolName)
         {
-            symbolName = symbolName.Without(AllowedNames);
+            if (symbolName.EqualsAny(AllowedNames))
+            {
+                return Enumerable.Empty<KeyValuePair<string, string>>();
+            }
+
+            symbolName = symbolName.Without(AllowedParts);
 
 //// ncrunch: rdi off
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));

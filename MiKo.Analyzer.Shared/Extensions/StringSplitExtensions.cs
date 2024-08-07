@@ -7,7 +7,7 @@ namespace System
 {
     internal static class StringSplitExtensions
     {
-        public static IEnumerable<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<string> SplitBy(this string value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {
@@ -17,7 +17,7 @@ namespace System
             return SplitBy(value.AsSpan(), findings, comparison);
         }
 
-        public static IEnumerable<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {

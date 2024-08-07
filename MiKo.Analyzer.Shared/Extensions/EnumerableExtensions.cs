@@ -309,13 +309,6 @@ namespace System.Linq
             return count;
         }
 
-        internal static HashSet<T> Except<T>(this HashSet<T> source, params T[] values) where T : class
-        {
-            source.ExceptWith(values);
-
-            return source;
-        }
-
         internal static HashSet<T> Except<T>(this HashSet<T> source, IEnumerable<T> values) where T : class
         {
             source.ExceptWith(values);
@@ -400,8 +393,25 @@ namespace System.Linq
             }
         }
 
+        internal static HashSet<T> Except<T>(this HashSet<T> source, params T[] values) where T : class
+        {
+            source.ExceptWith(values);
+
+            return source;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool Exists<T>(this T[] value, Predicate<T> match) => value.Length > 0 && Array.Exists(value, match);
+
+        internal static bool Exists<T>(this IReadOnlyList<T> value, Predicate<T> match)
+        {
+            if (value is List<T> list)
+            {
+                return list.Exists(match);
+            }
+
+            return value.Any(new Func<T, bool>(match));
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static T Find<T>(this T[] value, Predicate<T> match) => value.Length > 0 ? Array.Find(value, match) : default;
@@ -562,15 +572,15 @@ namespace System.Linq
 
         internal static bool None<T>(this SeparatedSyntaxList<T> source) where T : SyntaxNode => source.Any() is false;
 
-        internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
-
-        internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
-
         internal static bool None(this SyntaxTokenList source) => source.Any() is false;
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
         internal static bool None<T>(this ImmutableArray<T> source) => source.Any() is false;
+
+        internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
+
+        internal static bool None<T>(this SeparatedSyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
 
         internal static bool None<T>(this SyntaxList<T> source, Func<T, bool> predicate) where T : SyntaxNode => source.All(_ => predicate(_) is false);
 

@@ -91,7 +91,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_XML_summary_of_named_enum_type([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_XML_summary_of_named_enum_type_([ValueSource(nameof(Phrases))] string phrase) => No_issue_is_reported_for(@"
 /// <summary>
 /// " + phrase.Replace(Marker, "bla") + @"
 /// </summary>

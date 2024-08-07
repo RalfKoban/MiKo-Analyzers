@@ -71,7 +71,7 @@ public class TestMe
                                         }
                                     });
 
-        [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_does_something")]
+        [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_it_does_something")]
         [TestCase("IfLoadFails_ReturnNull", "Returns_null_if_load_fails")]
         [TestCase("IfLoadFails_ReturnsNull", "Returns_null_if_load_fails")]
         [TestCase("NoDocumentIsDirty_ProjectIsNotDirty", "Project_is_not_dirty_if_no_document_is_dirty")]
@@ -93,6 +93,7 @@ public class TestMe
         [TestCase("SomeCondition_TrueReturned", "Returns_true_if_some_condition")]
         [TestCase("SomeCondition_Returned", "Returns_some_condition")]
         [TestCase("SomeCondition_ObjectReturned", "Returns_object_if_some_condition")]
+        [TestCase("ContainsData_TriesToDoStuff", "Tries_to_do_stuff_if_it_contains_data")]
         [TestCase("Method_ThrowsExceptionIfNull", "Method_throws_exception_if_null")]
         [TestCase("Method_ThrowsArgumentNullExceptionIfNull", "Method_throws_ArgumentNullException_if_null")]
         public void Code_gets_fixed_for_1_slash_in_(string originalName, string fixedName) => VerifyCSharpFix(
@@ -106,6 +107,7 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_ArgumentNullExceptionThrown", "Method_name_throws_ArgumentNullException_if_some_condition")]
         [TestCase("MethodName_SomeCondition_ArgumentOutOfRangeExceptionThrown", "Method_name_throws_ArgumentOutOfRangeException_if_some_condition")]
         [TestCase("MethodName_SomeCondition_ExceptionThrown", "Method_name_throws_exception_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_NoNullReferenceExceptionThrown", "Method_name_throws_no_NullReferenceException_if_some_condition")]
         [TestCase("MethodName_SomeCondition_FalseReturned", "Method_name_returns_false_if_some_condition")]
         [TestCase("MethodName_SomeCondition_InvalidOperationExceptionThrown", "Method_name_throws_InvalidOperationException_if_some_condition")]
         [TestCase("MethodName_SomeCondition_NotImplementedExceptionThrown", "Method_name_throws_NotImplementedException_if_some_condition")]
@@ -122,14 +124,33 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_GuidEmptyReturned", "Method_name_returns_empty_guid_if_some_condition")]
         [TestCase("MethodName_SomeCondition_StringEmptyReturned", "Method_name_returns_empty_string_if_some_condition")]
         [TestCase("MethodName_SomeCondition_Returned", "Method_name_returns_some_condition")]
+        [TestCase("MethodName_SomeCondition_TryToDoStuff", "Method_name_try_to_do_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_CallStuff", "Method_name_call_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_CallsStuff", "Method_name_calls_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_InvokeStuff", "Method_name_invoke_stuff_if_some_condition")]
+        [TestCase("MethodName_SomeCondition_InvokesStuff", "Method_name_invokes_stuff_if_some_condition")]
         [TestCase("MethodName_WhenSomeCondition_ThrowsException", "Method_name_throws_exception_if_some_condition")]
         [TestCase("MethodName_XYZObject_ThrowsException", "Method_name_throws_exception_if_XYZ_object")]
         [TestCase("MethodName_XYZType_ThrowsException", "Method_name_throws_exception_if_XYZ_type")]
         [TestCase("MethodName_XYZReference_ThrowsException", "Method_name_throws_exception_if_XYZ_reference")]
         [TestCase("MethodName_XYZDoesSomething_ThrowsException", "Method_name_throws_exception_if_XYZ_does_something")]
         [TestCase("MethodName_SomeConditionIsMet_ThrowsException", "Method_name_throws_exception_if_some_condition_is_met")]
+        [TestCase("MethodName_SomeConditionIsMet_RethrowsException", "Method_name_rethrows_exception_if_some_condition_is_met")]
         [TestCase("MethodName_ThrowsException_IfSomeConditionIsMet", "Method_name_throws_exception_if_some_condition_is_met")]
         [TestCase("MethodName_ThrowsArgumentException_IfSomeConditionIsMet", "Method_name_throws_ArgumentException_if_some_condition_is_met")]
+        [TestCase("MethodName_RetrievesSomething_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_it_retrieves_something")]
+        [TestCase("MethodName_ReceivesSomething_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_it_receives_something")]
+        [TestCase("MethodName_GetsSomething_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_it_gets_something")]
+        [TestCase("MethodName_ContainsSomething_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_it_contains_something")]
+        [TestCase("MethodName_GivenSomething_NoError", "Method_name_has_no_error_if_something_is_given")]
+        [TestCase("MethodName_GivenSomething_HasNoError", "Method_name_has_no_error_if_something_is_given")]
+        [TestCase("MethodName_GivenSomething_HasError", "Method_name_has_error_if_something_is_given")]
+        [TestCase("MethodName_EverythingFine_SendsData", "Method_name_sends_data_if_everything_is_fine")]
+        [TestCase("MethodName_NoLongerThrow_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
+        [TestCase("MethodName_NoLongerThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
+        [TestCase("MethodName_NotThrow_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
+        [TestCase("MethodName_NotThrows_NullReferenceException", "Method_name_throws_no_NullReferenceException")]
         public void Code_gets_fixed_for_2_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");
@@ -138,6 +159,7 @@ public class TestMe
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnNull", "Method_name_returns_null_if_load_fails_and_some_condition")]
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnTrue", "Method_name_returns_true_if_load_fails_and_some_condition")]
         [TestCase("MethodName_SomeCondition_LoadFails_ReturnFalse", "Method_name_returns_false_if_load_fails_and_some_condition")]
+        [TestCase("MethodName_SomeCondition_ContainsData_TriesToDoStuff", "Method_name_tries_to_do_stuff_if_it_contains_data_and_some_condition")]
         [TestCase("MethodName_WhenSome_Stuff_ReturnsTrue", "Method_name_returns_true_if_some_stuff")]
         [TestCase("MethodName_WhenSome_Stuff_ReturnsFalse", "Method_name_returns_false_if_some_stuff")]
         [TestCase("MethodName_WhenSome_Stuff_ReturnsNull", "Method_name_returns_null_if_some_stuff")]
@@ -147,6 +169,8 @@ public class TestMe
         [TestCase("MethodName_WhenSomething_Expect_NullReturned", "Method_name_returns_null_if_something")]
         [TestCase("MethodName_ThrowsException_if_SomeConditionIsMet", "Method_name_throws_exception_if_some_condition_is_met")]
         [TestCase("MethodName_ThrowsArgumentException_if_SomeConditionIsMet", "Method_name_throws_ArgumentException_if_some_condition_is_met")]
+        [TestCase("MethodName_NoLongerThrowsNullReferenceException_if_SomeConditionIsMet", "Method_name_throws_no_NullReferenceException_if_some_condition_is_met")]
+        [TestCase("MethodName_NotThrowsNullReferenceException_if_SomeConditionIsMet", "Method_name_throws_no_NullReferenceException_if_some_condition_is_met")]
         public void Code_gets_fixed_for_3_slashes_in_(string originalName, string fixedName) => VerifyCSharpFix(
                                                                                                             "class TestMe { [Test] public void " + originalName + "() { } }",
                                                                                                             "class TestMe { [Test] public void " + fixedName + "() { } }");

@@ -41,23 +41,23 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyCollection<string> GetSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Summary));
 
-        internal static IEnumerable<string> GetOverloadSummaries(this IMethodSymbol value) => GetOverloadSummaries(value.GetDocumentationCommentXml());
+        internal static IReadOnlyCollection<string> GetOverloadSummaries(this IMethodSymbol value) => GetOverloadSummaries(value.GetDocumentationCommentXml());
 
-        internal static IEnumerable<string> GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
+        internal static IReadOnlyCollection<string> GetOverloadSummaries(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Overloads, Constants.XmlTag.Summary));
 
-        internal static IEnumerable<string> GetRemarks(this ISymbol value) => GetRemarks(value.GetDocumentationCommentXml());
+        internal static IReadOnlyCollection<string> GetRemarks(this ISymbol value) => GetRemarks(value.GetDocumentationCommentXml());
 
-        internal static IEnumerable<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
+        internal static IReadOnlyCollection<string> GetRemarks(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Remarks));
 
-        internal static IEnumerable<string> GetReturns(this IMethodSymbol value) => GetReturns(value.GetDocumentationCommentXml());
+        internal static IReadOnlyCollection<string> GetReturns(this IMethodSymbol value) => GetReturns(value.GetDocumentationCommentXml());
 
-        internal static IEnumerable<string> GetReturns(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Returns));
+        internal static IReadOnlyCollection<string> GetReturns(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Returns));
 
-        internal static IEnumerable<string> GetValue(this IMethodSymbol value) => GetValue(value.GetDocumentationCommentXml());
+        internal static IReadOnlyCollection<string> GetValue(this IMethodSymbol value) => GetValue(value.GetDocumentationCommentXml());
 
-        internal static IEnumerable<string> GetValue(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Value));
+        internal static IReadOnlyCollection<string> GetValue(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Value));
 
-        internal static IEnumerable<string> GetExamples(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Example));
+        internal static IReadOnlyCollection<string> GetExamples(string commentXml) => Cleaned(GetComments(commentXml, Constants.XmlTag.Example));
 
         internal static XElement GetCommentElement(this ISymbol value) => GetCommentElement(value.GetDocumentationCommentXml());
 

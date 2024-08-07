@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3201";
 
-        protected override string Title => Resources.MiKo_3201_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<IfStatementSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax;
@@ -30,16 +28,19 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (index < statements.Length)
                 {
-                    var others = statements.Skip(index + 1).Select(_ => _.WithAdditionalLeadingSpaces(Constants.Indentation)).ToList(); // adjust spacing
+                    var condition = ifStatement.Condition;
+                    var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition));
+
+                    var others = statements.Skip(index + 1).ToList();
 
                     if (others.Count > 0)
                     {
                         others[0] = others[0].WithoutLeadingEndOfLine();
-                    }
 
-                    var condition = ifStatement.Condition;
-                    var newIf = ifStatement.WithCondition(InvertCondition(document, condition).WithTriviaFrom(condition))
-                                           .WithStatement(SyntaxFactory.Block(others));
+                        var spaces = others[0].GetPositionWithinStartLine();
+
+                        newIf = newIf.WithStatement(GetUpdatedBlock(SyntaxFactory.Block(others), spaces)); // adjust spacing
+                    }
 
                     return root.ReplaceNodes(statements.Skip(index), (original, rewritten) => original == ifStatement ? newIf : null);
                 }

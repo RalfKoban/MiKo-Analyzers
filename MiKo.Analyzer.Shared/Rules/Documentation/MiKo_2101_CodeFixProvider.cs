@@ -15,8 +15,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2101";
 
-        protected override string Title => Resources.MiKo_2101_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             var example = (XmlElementSyntax)syntax;

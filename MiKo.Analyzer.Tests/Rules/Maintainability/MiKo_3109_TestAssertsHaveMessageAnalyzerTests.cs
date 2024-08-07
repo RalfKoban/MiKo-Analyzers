@@ -62,6 +62,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Xunit_test_method() => No_issue_is_reported_for(@"
+using Xunit;
+
+public class MyTests
+{
+    [Fact]
+    public void MyTest()
+    {
+        Assert.Equal(4, 2 + 2); // Xunit does not support assertion messages, see https://github.com/xunit/xunit/issues/350
+    }
+}");
+
+        [Test]
         public void No_issue_is_reported_for_empty_test_method() => No_issue_is_reported_for(@"
 using NUnit.Framework;
 
@@ -245,7 +258,7 @@ namespace Bla
         }
 
         [TestCase("Assert.That(values.Any(_ => _ == 42))", @"Assert.That(values.Any(_ => _ == 42), ""wrong values"")")]
-        public void Code_gets_fixed_for_Linq_call(string originalCode, string fixedCode)
+        public void Code_gets_fixed_for_Linq_call_(string originalCode, string fixedCode)
         {
             const string Template = @"
 using System;

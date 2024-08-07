@@ -36,7 +36,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_TODO_comment_with_question_mark([Values("TODO:", "ToDo:", "TO DO:", "To Do:", "TODO", "ToDo", "TO DO", "To Do")] string comment) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_TODO_comment_with_question_mark_([Values("TODO:", "ToDo:", "TO DO:", "To Do:", "TODO", "ToDo", "TO DO", "To Do")] string comment) => No_issue_is_reported_for(@"
 
 public class TestMe
 {

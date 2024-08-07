@@ -116,12 +116,34 @@ namespace Bla
 }");
 
         [Test]
+        public void An_issue_is_reported_for_method_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public void " + prefix.ToUpperCaseAt(0) + @"Method() { }
+    }
+}");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
 {
     public class " + prefix + @"Class
+    { }
+}");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_uppercase_starting_prefix_([ValueSource(nameof(BadPrefixes))] string prefix) => An_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class " + prefix.ToUpperCaseAt(0) + @"Class
     { }
 }");
 
@@ -146,6 +168,63 @@ namespace Bla
         public void DoSomething(string " + specialName + @")
         {
         }
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+using System.Text.Json.Serialization;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [JsonConstructor]
+        public TestMe(int " + name + @"Value)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_Newtonsoft_Json_constructor_([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        [Newtonsoft.Json.JsonConstructorAttribute]
+        public TestMe(int " + name + @"Value)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static extern int " + part + @"DoSomething();
+    }
+}");
+
+        [Test]
+        public void No_issue_is_reported_for_parameters_of_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static extern int DoSomething(int " + part + @"Parameter);
     }
 }");
     }

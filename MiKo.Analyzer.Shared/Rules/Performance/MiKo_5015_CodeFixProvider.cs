@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public override string FixableDiagnosticId => "MiKo_5015";
 
-        protected override string Title => Resources.MiKo_5015_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<InvocationExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => syntax.FirstDescendant<LiteralExpressionSyntax>();

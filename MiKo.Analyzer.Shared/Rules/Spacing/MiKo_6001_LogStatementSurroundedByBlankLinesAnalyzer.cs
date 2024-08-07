@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return false;
         }
 
-        // it may happen that in some broken code Roslyn is unable to detect a type (eg. due to missing code paths), hence 'type' could be null here
+        // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
         protected override bool IsCall(ITypeSymbol type)
         {
             switch (type?.Name)

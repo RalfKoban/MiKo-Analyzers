@@ -74,7 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             // only ILog methods shall be reported
             var type = methodCall.GetTypeSymbol(semanticModel);
 
-            // it may happen that in some broken code Roslyn is unable to detect a type (eg. due to missing code paths), hence 'type' could be null here
+            // it may happen that in some broken code Roslyn is unable to detect a type (e.g. due to missing code paths), hence 'type' could be null here
             if (type?.Name == Constants.ILog.TypeName && arguments.Any(_ => _.IsException(semanticModel)))
             {
                 var enclosingMethod = methodCall.GetEnclosingMethod(semanticModel);

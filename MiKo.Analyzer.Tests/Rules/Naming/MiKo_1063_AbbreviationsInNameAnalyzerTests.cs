@@ -36,6 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "db",
                                                            "ddl",
                                                            "decl",
+                                                           "decr",
                                                            "desc",
                                                            "dest",
                                                            "diag",
@@ -49,11 +50,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "dst",
                                                            "dto",
                                                            "ef",
+                                                           "encr",
                                                            "env",
                                                            "environ",
                                                            "err",
                                                            "ext",
                                                            "frm",
+                                                           "hdls",
                                                            "ident",
                                                            "idx",
                                                            "init",
@@ -70,6 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "mnu",
                                                            "msg",
                                                            "num",
+                                                           "obj",
                                                            "param",
                                                            "params",
                                                            "perc",
@@ -89,6 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "std",
                                                            "str",
                                                            "sync",
+                                                           "svc",
                                                            "tm",
                                                            "tmp",
                                                            "txt",
@@ -119,6 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Db",
                                                            "Ddl",
                                                            "Decl",
+                                                           "Decr",
                                                            "Desc",
                                                            "Dest",
                                                            "Diag",
@@ -131,11 +137,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Doc",
                                                            "Dst",
                                                            "Ef",
+                                                           "Encr",
                                                            "Env",
                                                            "Environ",
                                                            "Err",
                                                            "Ext",
                                                            "Frm",
+                                                           "Hdls",
                                                            "Ident",
                                                            "Idx",
                                                            "Init",
@@ -152,6 +160,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Mnu",
                                                            "Msg",
                                                            "Num",
+                                                           "Obj",
                                                            "Op",
                                                            "Params",
                                                            "Perc",
@@ -170,6 +179,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Src",
                                                            "Std",
                                                            "Sync",
+                                                           "Svc",
                                                            "Tm",
                                                            "Tmp",
                                                            "Txt",
@@ -178,23 +188,23 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static readonly string[] BadPostfixes = BadMidTerms
                                                         .Union([
-                                                                    "Bl",
-                                                                    "BL",
-                                                                    "CLI",
-                                                                    "Dto",
-                                                                    "DTO",
-                                                                    "Itf",
-                                                                    "Meth",
-                                                                    "Param",
-                                                                    "Params",
-                                                                    "Pos",
-                                                                    "Proc",
-                                                                    "Prop",
-                                                                    "PropName",
-                                                                    "PropNames",
-                                                                    "Props",
-                                                                    "Vm",
-                                                                    "VM",
+                                                                   "Bl",
+                                                                   "BL",
+                                                                   "CLI",
+                                                                   "Dto",
+                                                                   "DTO",
+                                                                   "Itf",
+                                                                   "Meth",
+                                                                   "Param",
+                                                                   "Params",
+                                                                   "Pos",
+                                                                   "Proc",
+                                                                   "Prop",
+                                                                   "PropName",
+                                                                   "PropNames",
+                                                                   "Props",
+                                                                   "Vm",
+                                                                   "VM",
                                                                ])
                                                         .ToArray();
 
@@ -261,6 +271,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "tires",
                                                         ];
 
+        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj"];
+
+        private static readonly string[] WrongWords = BadPrefixes.Except(AllowedWords).ToArray();
+
         [Test]
         public void No_issue_is_reported_for_properly_named_code() => No_issue_is_reported_for(@"
 using System;
@@ -290,59 +304,14 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
-using System;
-using System.Text.Json.Serialization;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        [JsonConstructor]
-        public TestMe(int " + name + @")
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_Newtonsoft_Json_constructor([ValueSource(nameof(BadPrefixes))] string name) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_well_known_abbreviation_([Values("MEF")] string abbreviation) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
 {
     public class TestMe
     {
-        [Newtonsoft.Json.JsonConstructorAttribute]
-        public TestMe(int " + name + @")
-        {
-        }
-    }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int " + part + @"DoSomething();
-    }
-}");
-
-        [Test]
-        public void No_issue_is_reported_for_parameters_of_extern_method_([ValueSource(nameof(BadPrefixes))] string part) => No_issue_is_reported_for(@"
-using System;
-
-namespace Bla
-{
-    public class TestMe
-    {
-        public static extern int DoSomething(int " + part + @"Parameter);
+        public static int " + abbreviation + @"DoSomething();
     }
 }");
 
@@ -359,7 +328,7 @@ namespace Bla
 }");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_method_([ValueSource(nameof(AllowedTerms))] string methodName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_method_([ValueSource(nameof(AllowedWords))] string methodName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -407,7 +376,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedTerms))] string propertyName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_property_([ValueSource(nameof(AllowedWords))] string propertyName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -420,7 +389,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_properly_named_variable_([ValueSource(nameof(AllowedTerms))] string variableName) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_properly_named_variable_([ValueSource(nameof(AllowedWords))] string variableName) => No_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -437,7 +406,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(BadPrefixes))] string variableName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla
@@ -454,7 +423,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_incorrectly_named_foreach_variable_([ValueSource(nameof(BadPrefixes))] string variableName) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_incorrectly_named_foreach_variable_([ValueSource(nameof(WrongWords))] string variableName) => An_issue_is_reported_for(@"
 using System;
 
 namespace Bla

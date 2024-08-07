@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3015";
 
-        protected override string Title => Resources.MiKo_3015_CodeFixTitle;
-
         protected override TypeSyntax GetUpdatedSyntaxType(ObjectCreationExpressionSyntax syntax) => SyntaxFactory.ParseTypeName(nameof(InvalidOperationException));
 
         protected override ArgumentListSyntax GetUpdatedArgumentListSyntax(ObjectCreationExpressionSyntax syntax)

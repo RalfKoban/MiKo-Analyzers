@@ -13,14 +13,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly string[] ReplacementMapKeys = CreatePhrases().ToHashSet().ToArray();
+        private static readonly string[] ReplacementMapKeys = CreatePhrases().ToArray();
 
         private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
                                                                                                   .ToArray();
 
         public override string FixableDiagnosticId => "MiKo_2022";
-
-        protected override string Title => Resources.MiKo_2022_CodeFixTitle;
 
 //// ncrunch: rdi default
 
@@ -48,276 +46,276 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static IEnumerable<string> CreatePhrases()
-        {
-            yield return "A Flag indicating ";
-            yield return "A Flag that indicates ";
-            yield return "A Flag which indicates ";
-            yield return "A flag indicating ";
-            yield return "A flag that indicates ";
-            yield return "A flag which indicates ";
-            yield return "A value indicating ";
-            yield return "A value that indicates ";
-            yield return "A value which indicates ";
-            yield return "A variable that receives ";
-            yield return "A variable which receives ";
-            yield return "After return contains a flag indicating ";
-            yield return "After return contains a flag that indicates ";
-            yield return "After return contains a flag which indicates ";
-            yield return "After return contains a value indicating ";
-            yield return "After return contains a value that indicates ";
-            yield return "After return contains a value which indicates ";
-            yield return "After return provides a flag indicating ";
-            yield return "After return provides a flag that indicates ";
-            yield return "After return provides a flag which indicates ";
-            yield return "After return provides a value indicating ";
-            yield return "After return provides a value that indicates ";
-            yield return "After return provides a value which indicates ";
-            yield return "After return receives a flag indicating ";
-            yield return "After return receives a flag that indicates ";
-            yield return "After return receives a flag which indicates ";
-            yield return "After return receives a value indicating ";
-            yield return "After return receives a value that indicates ";
-            yield return "After return receives a value which indicates ";
-            yield return "After return, contains a flag indicating ";
-            yield return "After return, contains a flag that indicates ";
-            yield return "After return, contains a flag which indicates ";
-            yield return "After return, contains a value indicating ";
-            yield return "After return, contains a value that indicates ";
-            yield return "After return, contains a value which indicates ";
-            yield return "After return, provides a flag indicating ";
-            yield return "After return, provides a flag that indicates ";
-            yield return "After return, provides a flag which indicates ";
-            yield return "After return, provides a value indicating ";
-            yield return "After return, provides a value that indicates ";
-            yield return "After return, provides a value which indicates ";
-            yield return "After return, receives a flag indicating ";
-            yield return "After return, receives a flag that indicates ";
-            yield return "After return, receives a flag which indicates ";
-            yield return "After return, receives a value indicating ";
-            yield return "After return, receives a value that indicates ";
-            yield return "After return, receives a value which indicates ";
-            yield return "After successful return contains a flag indicating ";
-            yield return "After successful return contains a flag that indicates ";
-            yield return "After successful return contains a flag which indicates ";
-            yield return "After successful return contains a value indicating ";
-            yield return "After successful return contains a value that indicates ";
-            yield return "After successful return contains a value which indicates ";
-            yield return "After successful return provides a flag indicating ";
-            yield return "After successful return provides a flag that indicates ";
-            yield return "After successful return provides a flag which indicates ";
-            yield return "After successful return provides a value indicating ";
-            yield return "After successful return provides a value that indicates ";
-            yield return "After successful return provides a value which indicates ";
-            yield return "After successful return receives a flag indicating ";
-            yield return "After successful return receives a flag that indicates ";
-            yield return "After successful return receives a flag which indicates ";
-            yield return "After successful return receives a value indicating ";
-            yield return "After successful return receives a value that indicates ";
-            yield return "After successful return receives a value which indicates ";
-            yield return "After successful return, contains a flag indicating ";
-            yield return "After successful return, contains a flag that indicates ";
-            yield return "After successful return, contains a flag which indicates ";
-            yield return "After successful return, contains a value indicating ";
-            yield return "After successful return, contains a value that indicates ";
-            yield return "After successful return, contains a value which indicates ";
-            yield return "After successful return, provides a flag indicating ";
-            yield return "After successful return, provides a flag that indicates ";
-            yield return "After successful return, provides a flag which indicates ";
-            yield return "After successful return, provides a value indicating ";
-            yield return "After successful return, provides a value that indicates ";
-            yield return "After successful return, provides a value which indicates ";
-            yield return "After successful return, receives a flag indicating ";
-            yield return "After successful return, receives a flag that indicates ";
-            yield return "After successful return, receives a flag which indicates ";
-            yield return "After successful return, receives a value indicating ";
-            yield return "After successful return, receives a value that indicates ";
-            yield return "After successful return, receives a value which indicates ";
-            yield return "After return contains ";
-            yield return "After return indicates ";
-            yield return "After return provides ";
-            yield return "After return receives ";
-            yield return "After return, contains ";
-            yield return "After return, indicates ";
-            yield return "After return, provides ";
-            yield return "After return, receives ";
-            yield return "After successful return contains ";
-            yield return "After successful return indicates ";
-            yield return "After successful return provides ";
-            yield return "After successful return receives ";
-            yield return "After successful return, contains ";
-            yield return "After successful return, indicates ";
-            yield return "After successful return, provides ";
-            yield return "After successful return, receives ";
-            yield return "Contains ";
-            yield return "Flag indicating ";
-            yield return "Flag that indicates ";
-            yield return "Flag which indicates ";
-            yield return "Indicates ";
-            yield return "Indicating ";
-            yield return "OUT - ";
-            yield return "OUT -";
-            yield return "OUT ";
-            yield return "OUT: ";
-            yield return "On return contains a flag indicating ";
-            yield return "On return contains a flag that indicates ";
-            yield return "On return contains a flag which indicates ";
-            yield return "On return contains a value indicating ";
-            yield return "On return contains a value that indicates ";
-            yield return "On return contains a value which indicates ";
-            yield return "On return provides a flag indicating ";
-            yield return "On return provides a flag that indicates ";
-            yield return "On return provides a flag which indicates ";
-            yield return "On return provides a value indicating ";
-            yield return "On return provides a value that indicates ";
-            yield return "On return provides a value which indicates ";
-            yield return "On return receives a flag indicating ";
-            yield return "On return receives a flag that indicates ";
-            yield return "On return receives a flag which indicates ";
-            yield return "On return receives a value indicating ";
-            yield return "On return receives a value that indicates ";
-            yield return "On return receives a value which indicates ";
-            yield return "On return contains ";
-            yield return "On return indicates ";
-            yield return "On return provides ";
-            yield return "On return receives ";
-            yield return "On return, contains a flag indicating ";
-            yield return "On return, contains a flag that indicates ";
-            yield return "On return, contains a flag which indicates ";
-            yield return "On return, contains a value indicating ";
-            yield return "On return, contains a value that indicates ";
-            yield return "On return, contains a value which indicates ";
-            yield return "On return, provides a flag indicating ";
-            yield return "On return, provides a flag that indicates ";
-            yield return "On return, provides a flag which indicates ";
-            yield return "On return, provides a value indicating ";
-            yield return "On return, provides a value that indicates ";
-            yield return "On return, provides a value which indicates ";
-            yield return "On return, receives a flag indicating ";
-            yield return "On return, receives a flag that indicates ";
-            yield return "On return, receives a flag which indicates ";
-            yield return "On return, receives a value indicating ";
-            yield return "On return, receives a value that indicates ";
-            yield return "On return, receives a value which indicates ";
-            yield return "On return, contains ";
-            yield return "On return, indicates ";
-            yield return "On return, provides ";
-            yield return "On return, receives ";
-            yield return "Out parameter that contains ";
-            yield return "Out parameter that provides ";
-            yield return "Out parameter that receives ";
-            yield return "Out parameter that returns ";
-            yield return "Out parameter which contains ";
-            yield return "Out parameter which provides ";
-            yield return "Out parameter which receives ";
-            yield return "Out parameter which returns ";
-            yield return "Out parameter, contains ";
-            yield return "Out parameter, provides ";
-            yield return "Out parameter, receives ";
-            yield return "Out parameter, returns ";
-            yield return "Out - ";
-            yield return "Out -";
-            yield return "Out ";
-            yield return "Out: ";
-            yield return "Provides ";
-            yield return "Receives ";
-            yield return "Return ";
-            yield return "Returned on ";
-            yield return "Returned when ";
-            yield return "Returns ";
-            yield return "Specifies ";
-            yield return "To return ";
-            yield return "Value indicating ";
-            yield return "Value that indicates ";
-            yield return "Value which indicates ";
-            yield return "When the method returns ";
-            yield return "When the method returns, contains ";
-            yield return "When the method returns, indicates ";
-            yield return "When the method returns, provides ";
-            yield return "When the method returns, receives ";
-            yield return "When the method returns, ";
-            yield return "When this method returns ";
-            yield return "When this method returns, contains ";
-            yield return "When this method returns, indicates ";
-            yield return "When this method returns, provides ";
-            yield return "When this method returns, receives ";
-            yield return "When this method returns, ";
-            yield return "Will be ";
-            yield return "Will contain ";
-            yield return "Will provide ";
-            yield return "Will receive ";
-            yield return "Will return ";
-            yield return "[OUT] parameter that contains ";
-            yield return "[OUT] parameter that provides ";
-            yield return "[OUT] parameter that receives ";
-            yield return "[OUT] parameter that returns ";
-            yield return "[Out] parameter that contains ";
-            yield return "[Out] parameter that provides ";
-            yield return "[Out] parameter that receives ";
-            yield return "[Out] parameter that returns ";
-            yield return "[out] parameter that contains ";
-            yield return "[out] parameter that provides ";
-            yield return "[out] parameter that receives ";
-            yield return "[out] parameter that returns ";
-            yield return "[OUT] parameter which contains ";
-            yield return "[OUT] parameter which provides ";
-            yield return "[OUT] parameter which receives ";
-            yield return "[OUT] parameter which returns ";
-            yield return "[Out] parameter which contains ";
-            yield return "[Out] parameter which provides ";
-            yield return "[Out] parameter which receives ";
-            yield return "[Out] parameter which returns ";
-            yield return "[out] parameter which contains ";
-            yield return "[out] parameter which provides ";
-            yield return "[out] parameter which receives ";
-            yield return "[out] parameter which returns ";
-            yield return "[OUT] parameter, contains ";
-            yield return "[OUT] parameter, provides ";
-            yield return "[OUT] parameter, receives ";
-            yield return "[OUT] parameter, returns ";
-            yield return "[Out] parameter, contains ";
-            yield return "[Out] parameter, provides ";
-            yield return "[Out] parameter, receives ";
-            yield return "[Out] parameter, returns ";
-            yield return "[out] parameter, contains ";
-            yield return "[out] parameter, provides ";
-            yield return "[out] parameter, receives ";
-            yield return "[out] parameter, returns ";
-            yield return "[OUT] ";
-            yield return "[Out] ";
-            yield return "[out] ";
-            yield return "[OUT]: ";
-            yield return "[Out]: ";
-            yield return "[out]: ";
-            yield return "flag indicating ";
-            yield return "flag that indicates ";
-            yield return "flag which indicates ";
-            yield return "out parameter that contains ";
-            yield return "out parameter that provides ";
-            yield return "out parameter that receives ";
-            yield return "out parameter that returns ";
-            yield return "out parameter which contains ";
-            yield return "out parameter which provides ";
-            yield return "out parameter which receives ";
-            yield return "out parameter which returns ";
-            yield return "out parameter, contains ";
-            yield return "out parameter, provides ";
-            yield return "out parameter, receives ";
-            yield return "out parameter, returns ";
-            yield return "out - ";
-            yield return "out -";
-            yield return "out ";
-            yield return "out: ";
-            yield return "value indicating ";
-            yield return "value that indicates ";
-            yield return "value which indicates ";
-            yield return "will contain ";
-            yield return "will provide ";
-            yield return "will receive ";
-            yield return "will return ";
-            yield return "return ";
-            yield return "returns ";
-        }
+        private static IEnumerable<string> CreatePhrases() => new HashSet<string>
+                                                                  {
+                                                                      "A Flag indicating ",
+                                                                      "A Flag that indicates ",
+                                                                      "A Flag which indicates ",
+                                                                      "A flag indicating ",
+                                                                      "A flag that indicates ",
+                                                                      "A flag which indicates ",
+                                                                      "A value indicating ",
+                                                                      "A value that indicates ",
+                                                                      "A value which indicates ",
+                                                                      "A variable that receives ",
+                                                                      "A variable which receives ",
+                                                                      "After return contains a flag indicating ",
+                                                                      "After return contains a flag that indicates ",
+                                                                      "After return contains a flag which indicates ",
+                                                                      "After return contains a value indicating ",
+                                                                      "After return contains a value that indicates ",
+                                                                      "After return contains a value which indicates ",
+                                                                      "After return provides a flag indicating ",
+                                                                      "After return provides a flag that indicates ",
+                                                                      "After return provides a flag which indicates ",
+                                                                      "After return provides a value indicating ",
+                                                                      "After return provides a value that indicates ",
+                                                                      "After return provides a value which indicates ",
+                                                                      "After return receives a flag indicating ",
+                                                                      "After return receives a flag that indicates ",
+                                                                      "After return receives a flag which indicates ",
+                                                                      "After return receives a value indicating ",
+                                                                      "After return receives a value that indicates ",
+                                                                      "After return receives a value which indicates ",
+                                                                      "After return, contains a flag indicating ",
+                                                                      "After return, contains a flag that indicates ",
+                                                                      "After return, contains a flag which indicates ",
+                                                                      "After return, contains a value indicating ",
+                                                                      "After return, contains a value that indicates ",
+                                                                      "After return, contains a value which indicates ",
+                                                                      "After return, provides a flag indicating ",
+                                                                      "After return, provides a flag that indicates ",
+                                                                      "After return, provides a flag which indicates ",
+                                                                      "After return, provides a value indicating ",
+                                                                      "After return, provides a value that indicates ",
+                                                                      "After return, provides a value which indicates ",
+                                                                      "After return, receives a flag indicating ",
+                                                                      "After return, receives a flag that indicates ",
+                                                                      "After return, receives a flag which indicates ",
+                                                                      "After return, receives a value indicating ",
+                                                                      "After return, receives a value that indicates ",
+                                                                      "After return, receives a value which indicates ",
+                                                                      "After successful return contains a flag indicating ",
+                                                                      "After successful return contains a flag that indicates ",
+                                                                      "After successful return contains a flag which indicates ",
+                                                                      "After successful return contains a value indicating ",
+                                                                      "After successful return contains a value that indicates ",
+                                                                      "After successful return contains a value which indicates ",
+                                                                      "After successful return provides a flag indicating ",
+                                                                      "After successful return provides a flag that indicates ",
+                                                                      "After successful return provides a flag which indicates ",
+                                                                      "After successful return provides a value indicating ",
+                                                                      "After successful return provides a value that indicates ",
+                                                                      "After successful return provides a value which indicates ",
+                                                                      "After successful return receives a flag indicating ",
+                                                                      "After successful return receives a flag that indicates ",
+                                                                      "After successful return receives a flag which indicates ",
+                                                                      "After successful return receives a value indicating ",
+                                                                      "After successful return receives a value that indicates ",
+                                                                      "After successful return receives a value which indicates ",
+                                                                      "After successful return, contains a flag indicating ",
+                                                                      "After successful return, contains a flag that indicates ",
+                                                                      "After successful return, contains a flag which indicates ",
+                                                                      "After successful return, contains a value indicating ",
+                                                                      "After successful return, contains a value that indicates ",
+                                                                      "After successful return, contains a value which indicates ",
+                                                                      "After successful return, provides a flag indicating ",
+                                                                      "After successful return, provides a flag that indicates ",
+                                                                      "After successful return, provides a flag which indicates ",
+                                                                      "After successful return, provides a value indicating ",
+                                                                      "After successful return, provides a value that indicates ",
+                                                                      "After successful return, provides a value which indicates ",
+                                                                      "After successful return, receives a flag indicating ",
+                                                                      "After successful return, receives a flag that indicates ",
+                                                                      "After successful return, receives a flag which indicates ",
+                                                                      "After successful return, receives a value indicating ",
+                                                                      "After successful return, receives a value that indicates ",
+                                                                      "After successful return, receives a value which indicates ",
+                                                                      "After return contains ",
+                                                                      "After return indicates ",
+                                                                      "After return provides ",
+                                                                      "After return receives ",
+                                                                      "After return, contains ",
+                                                                      "After return, indicates ",
+                                                                      "After return, provides ",
+                                                                      "After return, receives ",
+                                                                      "After successful return contains ",
+                                                                      "After successful return indicates ",
+                                                                      "After successful return provides ",
+                                                                      "After successful return receives ",
+                                                                      "After successful return, contains ",
+                                                                      "After successful return, indicates ",
+                                                                      "After successful return, provides ",
+                                                                      "After successful return, receives ",
+                                                                      "Contains ",
+                                                                      "Flag indicating ",
+                                                                      "Flag that indicates ",
+                                                                      "Flag which indicates ",
+                                                                      "Indicates ",
+                                                                      "Indicating ",
+                                                                      "OUT - ",
+                                                                      "OUT -",
+                                                                      "OUT ",
+                                                                      "OUT: ",
+                                                                      "On return contains a flag indicating ",
+                                                                      "On return contains a flag that indicates ",
+                                                                      "On return contains a flag which indicates ",
+                                                                      "On return contains a value indicating ",
+                                                                      "On return contains a value that indicates ",
+                                                                      "On return contains a value which indicates ",
+                                                                      "On return provides a flag indicating ",
+                                                                      "On return provides a flag that indicates ",
+                                                                      "On return provides a flag which indicates ",
+                                                                      "On return provides a value indicating ",
+                                                                      "On return provides a value that indicates ",
+                                                                      "On return provides a value which indicates ",
+                                                                      "On return receives a flag indicating ",
+                                                                      "On return receives a flag that indicates ",
+                                                                      "On return receives a flag which indicates ",
+                                                                      "On return receives a value indicating ",
+                                                                      "On return receives a value that indicates ",
+                                                                      "On return receives a value which indicates ",
+                                                                      "On return contains ",
+                                                                      "On return indicates ",
+                                                                      "On return provides ",
+                                                                      "On return receives ",
+                                                                      "On return, contains a flag indicating ",
+                                                                      "On return, contains a flag that indicates ",
+                                                                      "On return, contains a flag which indicates ",
+                                                                      "On return, contains a value indicating ",
+                                                                      "On return, contains a value that indicates ",
+                                                                      "On return, contains a value which indicates ",
+                                                                      "On return, provides a flag indicating ",
+                                                                      "On return, provides a flag that indicates ",
+                                                                      "On return, provides a flag which indicates ",
+                                                                      "On return, provides a value indicating ",
+                                                                      "On return, provides a value that indicates ",
+                                                                      "On return, provides a value which indicates ",
+                                                                      "On return, receives a flag indicating ",
+                                                                      "On return, receives a flag that indicates ",
+                                                                      "On return, receives a flag which indicates ",
+                                                                      "On return, receives a value indicating ",
+                                                                      "On return, receives a value that indicates ",
+                                                                      "On return, receives a value which indicates ",
+                                                                      "On return, contains ",
+                                                                      "On return, indicates ",
+                                                                      "On return, provides ",
+                                                                      "On return, receives ",
+                                                                      "Out parameter that contains ",
+                                                                      "Out parameter that provides ",
+                                                                      "Out parameter that receives ",
+                                                                      "Out parameter that returns ",
+                                                                      "Out parameter which contains ",
+                                                                      "Out parameter which provides ",
+                                                                      "Out parameter which receives ",
+                                                                      "Out parameter which returns ",
+                                                                      "Out parameter, contains ",
+                                                                      "Out parameter, provides ",
+                                                                      "Out parameter, receives ",
+                                                                      "Out parameter, returns ",
+                                                                      "Out - ",
+                                                                      "Out -",
+                                                                      "Out ",
+                                                                      "Out: ",
+                                                                      "Provides ",
+                                                                      "Receives ",
+                                                                      "Return ",
+                                                                      "Returned on ",
+                                                                      "Returned when ",
+                                                                      "Returns ",
+                                                                      "Specifies ",
+                                                                      "To return ",
+                                                                      "Value indicating ",
+                                                                      "Value that indicates ",
+                                                                      "Value which indicates ",
+                                                                      "When the method returns ",
+                                                                      "When the method returns, contains ",
+                                                                      "When the method returns, indicates ",
+                                                                      "When the method returns, provides ",
+                                                                      "When the method returns, receives ",
+                                                                      "When the method returns, ",
+                                                                      "When this method returns ",
+                                                                      "When this method returns, contains ",
+                                                                      "When this method returns, indicates ",
+                                                                      "When this method returns, provides ",
+                                                                      "When this method returns, receives ",
+                                                                      "When this method returns, ",
+                                                                      "Will be ",
+                                                                      "Will contain ",
+                                                                      "Will provide ",
+                                                                      "Will receive ",
+                                                                      "Will return ",
+                                                                      "[OUT] parameter that contains ",
+                                                                      "[OUT] parameter that provides ",
+                                                                      "[OUT] parameter that receives ",
+                                                                      "[OUT] parameter that returns ",
+                                                                      "[Out] parameter that contains ",
+                                                                      "[Out] parameter that provides ",
+                                                                      "[Out] parameter that receives ",
+                                                                      "[Out] parameter that returns ",
+                                                                      "[out] parameter that contains ",
+                                                                      "[out] parameter that provides ",
+                                                                      "[out] parameter that receives ",
+                                                                      "[out] parameter that returns ",
+                                                                      "[OUT] parameter which contains ",
+                                                                      "[OUT] parameter which provides ",
+                                                                      "[OUT] parameter which receives ",
+                                                                      "[OUT] parameter which returns ",
+                                                                      "[Out] parameter which contains ",
+                                                                      "[Out] parameter which provides ",
+                                                                      "[Out] parameter which receives ",
+                                                                      "[Out] parameter which returns ",
+                                                                      "[out] parameter which contains ",
+                                                                      "[out] parameter which provides ",
+                                                                      "[out] parameter which receives ",
+                                                                      "[out] parameter which returns ",
+                                                                      "[OUT] parameter, contains ",
+                                                                      "[OUT] parameter, provides ",
+                                                                      "[OUT] parameter, receives ",
+                                                                      "[OUT] parameter, returns ",
+                                                                      "[Out] parameter, contains ",
+                                                                      "[Out] parameter, provides ",
+                                                                      "[Out] parameter, receives ",
+                                                                      "[Out] parameter, returns ",
+                                                                      "[out] parameter, contains ",
+                                                                      "[out] parameter, provides ",
+                                                                      "[out] parameter, receives ",
+                                                                      "[out] parameter, returns ",
+                                                                      "[OUT] ",
+                                                                      "[Out] ",
+                                                                      "[out] ",
+                                                                      "[OUT]: ",
+                                                                      "[Out]: ",
+                                                                      "[out]: ",
+                                                                      "flag indicating ",
+                                                                      "flag that indicates ",
+                                                                      "flag which indicates ",
+                                                                      "out parameter that contains ",
+                                                                      "out parameter that provides ",
+                                                                      "out parameter that receives ",
+                                                                      "out parameter that returns ",
+                                                                      "out parameter which contains ",
+                                                                      "out parameter which provides ",
+                                                                      "out parameter which receives ",
+                                                                      "out parameter which returns ",
+                                                                      "out parameter, contains ",
+                                                                      "out parameter, provides ",
+                                                                      "out parameter, receives ",
+                                                                      "out parameter, returns ",
+                                                                      "out - ",
+                                                                      "out -",
+                                                                      "out ",
+                                                                      "out: ",
+                                                                      "value indicating ",
+                                                                      "value that indicates ",
+                                                                      "value which indicates ",
+                                                                      "will contain ",
+                                                                      "will provide ",
+                                                                      "will receive ",
+                                                                      "will return ",
+                                                                      "return ",
+                                                                      "returns ",
+                                                                  };
 
         //// ncrunch: rdi default
     }
