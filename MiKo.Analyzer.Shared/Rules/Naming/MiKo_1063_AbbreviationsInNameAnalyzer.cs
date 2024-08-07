@@ -223,7 +223,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    "wares",
                                                                };
 
-        private static readonly string[] AllowedNames =
+        private static readonly string[] AllowedParts =
                                                         {
                                                             "Async",
                                                             "Enumerable",
@@ -241,6 +241,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "text",
                                                             "Text",
                                                             "MEF",
+                                                        };
+
+        private static readonly string[] AllowedNames =
+                                                        {
+                                                            "obj",
+                                                            "next",
                                                         };
 
         public MiKo_1063_AbbreviationsInNameAnalyzer() : base(Id)
@@ -342,7 +348,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static IEnumerable<KeyValuePair<string, string>> AnalyzeName(string symbolName)
         {
-            symbolName = symbolName.Without(AllowedNames);
+            if (symbolName.EqualsAny(AllowedNames))
+            {
+                return Enumerable.Empty<KeyValuePair<string, string>>();
+            }
+
+            symbolName = symbolName.Without(AllowedParts);
 
 //// ncrunch: rdi off
             var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
