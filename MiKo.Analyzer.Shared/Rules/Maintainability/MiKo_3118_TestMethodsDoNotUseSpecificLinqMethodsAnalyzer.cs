@@ -47,6 +47,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 if (ProblematicMethods.Contains(name))
                 {
+                    var expressionName = maes.Expression.GetName();
+
+                    if (Constants.Names.AssertionTypes.Contains(expressionName))
+                    {
+                        continue;
+                    }
+
                     if (maes.Ancestors<InvocationExpressionSyntax>().Any(_ => _.IsMoqItIsConditionMatcher()))
                     {
                         continue;
