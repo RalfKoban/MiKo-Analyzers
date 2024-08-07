@@ -54,7 +54,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 case INamedTypeSymbol s:
                 {
-                    names.AddRange(s.AllInterfaces.Select(_ => _.Name));
+                    var interfaces = s.AllInterfaces;
+
+                    if (interfaces.Length > 0)
+                    {
+                        names.AddRange(interfaces.Select(_ => _.Name));
+                    }
 
                     break;
                 }
@@ -62,7 +67,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case ISymbol s:
                 {
                     names.Add(s.ContainingType.Name);
-                    names.AddRange(s.ContainingType.AllInterfaces.Select(_ => _.Name));
+
+                    var interfaces = s.ContainingType.AllInterfaces;
+
+                    if (interfaces.Length > 0)
+                    {
+                        names.AddRange(interfaces.Select(_ => _.Name));
+                    }
 
                     break;
                 }

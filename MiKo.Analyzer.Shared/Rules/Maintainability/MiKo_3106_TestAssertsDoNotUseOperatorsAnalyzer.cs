@@ -34,6 +34,21 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                                     && node.Expression is IdentifierNameSyntax invokedType
                                                                                     && Constants.Names.AssertionTypes.Contains(invokedType.GetName());
 
+        private static bool IsXUnitAssertTrueMethod(MemberAccessExpressionSyntax node, SemanticModel semanticModel)
+        {
+            if (node.GetName() == "True" && node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() == "Assert")
+            {
+                var symbol = invokedType.GetTypeSymbol(semanticModel);
+
+                if (symbol?.FullyQualifiedName() == "Xunit.Assert")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static bool IsFrameworkAssertion(SyntaxNodeAnalysisContext context, ExpressionSyntax expression)
         {
             var type = expression.GetTypeSymbol(context.SemanticModel);
@@ -124,6 +139,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 // keep in local variable to avoid multiple requests (see Roslyn implementation)
                 var argumentsCount = arguments.Count;
+
+                if (argumentsCount == 2 && IsXUnitAssertTrueMethod(node, context.SemanticModel))
+                {
+                    // XUnit does not provide user assertion messages on other methods, so we have to ignore the operators here as the user like wants to use the assertion message
+                    yield break;
+                }
 
                 for (var index = 0; index < argumentsCount; index++)
                 {

@@ -9,7 +9,5 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3501_CodeFixProvider : DoNotUseSuppressNullableWarningAnalyzerCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_3501";
-
-        protected override string Title => Resources.MiKo_3501_CodeFixTitle;
     }
 }

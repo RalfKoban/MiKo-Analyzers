@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -14,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2001_EventSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly IEnumerable<string> StartingPhrases = CreatePhrases();
+        private static readonly string[] StartingPhrases = CreatePhrases().Take(TestLimit).ToArray();
 
         [Test]
         public void No_issue_is_reported_for_non_commented_event_on_class() => No_issue_is_reported_for(@"

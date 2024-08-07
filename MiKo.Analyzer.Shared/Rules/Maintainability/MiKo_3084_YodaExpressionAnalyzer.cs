@@ -41,40 +41,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsResponsibleNode(SyntaxKind kind) => ExpressionValues.Contains(kind);
 
-        private static bool IsConst(SyntaxNode syntax, SyntaxNodeAnalysisContext context)
-        {
-            switch (syntax)
-            {
-                case IdentifierNameSyntax i:
-                {
-                    var type = context.FindContainingType();
-                    var isConst = type.GetMembers(i.GetName()).OfType<IFieldSymbol>().Any(_ => _.IsConst);
-
-                    return isConst;
-                }
-
-                case MemberAccessExpressionSyntax m when m.IsKind(SyntaxKind.SimpleMemberAccessExpression):
-                {
-                    var type = m.GetTypeSymbol(context.SemanticModel);
-
-                    // only get the real enum members, no local variables or something
-                    return type?.IsEnum() is true;
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
-        }
-
         private void AnalyzeExpression(SyntaxNodeAnalysisContext context)
         {
             var node = (BinaryExpressionSyntax)context.Node;
 
             var left = node.Left;
 
-            if (IsResponsibleNode(left) || IsConst(left, context))
+            if (IsResponsibleNode(left) || left.IsConst(context))
             {
                 ReportIssue(context, node.OperatorToken, left);
             }

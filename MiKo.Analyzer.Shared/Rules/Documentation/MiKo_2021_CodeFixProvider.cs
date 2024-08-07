@@ -18,8 +18,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2021";
 
-        protected override string Title => Resources.MiKo_2021_CodeFixTitle;
-
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             var preparedComment = PrepareComment(comment);

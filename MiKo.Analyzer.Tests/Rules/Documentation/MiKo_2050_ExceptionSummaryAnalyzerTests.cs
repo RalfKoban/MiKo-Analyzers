@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -14,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2050_ExceptionSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreatePhrases()).Except([Constants.Comments.ExceptionTypeSummaryStartingPhrase])];
+        private static readonly string[] StartingPhrases = [.. CreatePhrases().Except([Constants.Comments.ExceptionTypeSummaryStartingPhrase])];
 
         [Test]
         public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
@@ -974,48 +976,61 @@ public sealed class BlaBlaException : Exception
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2050_CodeFixProvider();
 
-        private static IEnumerable<string> CreatePhrases()
+        [ExcludeFromCodeCoverage]
+        private static HashSet<string> CreatePhrases()
         {
             string[] starts = [
                                "A exception", "An exception", "The exception", "This exception", "Exception",
                                "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
                                "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
                               ];
-            string[] verbs = ["that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
+            string[] verbs = ["that is thrown", "which is thrown", "is thrown", "thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire"];
             string[] conditions = ["if", "when", "in case"];
+
+            var results = new HashSet<string>();
 
             foreach (var start in starts)
             {
+                var lowerStart = start.ToLowerCaseAt(0);
+
                 foreach (var verb in verbs)
                 {
+                    var middle = " " + verb + " ";
+
                     foreach (var condition in conditions)
                     {
-                        yield return start + " " + verb + " " + condition;
+                        var continuation = middle + condition;
+
+                        results.Add(start + continuation);
+                        results.Add("Represent " + lowerStart + continuation);
+                        results.Add("Represents " + lowerStart + continuation);
                     }
                 }
 
-                yield return start + " used by ";
-                yield return start + " is used by ";
-                yield return start + " that is used by ";
-                yield return start + " which is used by ";
-                yield return start + " indicates that ";
-                yield return start + " that indicates that ";
-                yield return start + " which indicates that ";
-                yield return start + " indicating that ";
+                results.Add(start + " used by ");
+                results.Add(start + " is used by ");
+                results.Add(start + " that is used by ");
+                results.Add(start + " which is used by ");
+                results.Add(start + " indicates that ");
+                results.Add(start + " that indicates that ");
+                results.Add(start + " which indicates that ");
+                results.Add(start + " indicating that ");
             }
 
             foreach (var condition in conditions)
             {
-                yield return "Throw " + condition;
-                yield return "Thrown " + condition;
+                results.Add("Throw " + condition);
+                results.Add("Thrown " + condition);
 
-                yield return "Fire " + condition;
-                yield return "Fired " + condition;
+                results.Add("Fire " + condition);
+                results.Add("Fired " + condition);
 
-                yield return "Occurs " + condition;
+                results.Add("Occurs " + condition);
 
-                yield return "Indicates that " + condition;
+                results.Add("Indicates that " + condition);
             }
+
+            return results;
         }
     }
 }

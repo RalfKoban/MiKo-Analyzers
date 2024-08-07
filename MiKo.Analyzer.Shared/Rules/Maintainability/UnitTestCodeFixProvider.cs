@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         private const int FormatIdentifierLength = 3; // '{0}' has length of 3
 
-        private static readonly string[] FormatIdentifiers = Enumerable.Range(0, 10).Select(_ => $"{{{_}}}").ToArray(); // use '{0}' till '{9}'
+        private static readonly string[] FormatIdentifiers = { "{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}" };
 
         protected static InvocationExpressionSyntax AssertThat(ExpressionSyntax expression, ArgumentSyntax constraint, SeparatedSyntaxList<ArgumentSyntax> arguments, int skip = 1, bool removeNameColon = false) // skip the first argument
             => AssertThat(Argument(expression), constraint, arguments, skip, removeNameColon);
@@ -165,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return Array.Empty<TypeSyntax>();
         }
 
-        private static ArgumentSyntax ConvertToInterpolatedStringArgument(List<ArgumentSyntax> otherArguments)
+        private static ArgumentSyntax ConvertToInterpolatedStringArgument(IReadOnlyList<ArgumentSyntax> otherArguments)
         {
             var argument = otherArguments[0];
 

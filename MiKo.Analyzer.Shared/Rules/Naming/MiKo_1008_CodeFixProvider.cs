@@ -9,7 +9,5 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1008_CodeFixProvider : ParameterNamingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_1008";
-
-        protected override string Title => Resources.MiKo_1008_CodeFixTitle;
     }
 }

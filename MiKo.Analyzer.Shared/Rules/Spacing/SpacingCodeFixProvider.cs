@@ -38,39 +38,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return descendants;
         }
 
-        protected static TSyntaxNode GetSyntaxWithLeadingSpaces<TSyntaxNode>(TSyntaxNode syntaxNode, int spaces) where TSyntaxNode : SyntaxNode
-        {
-            var syntax = syntaxNode.WithLeadingSpaces(spaces);
-
-            var additionalSpaces = syntax.GetPositionWithinStartLine() - syntaxNode.GetPositionWithinStartLine();
-
-            // collect all descendant nodes that are the first ones starting on a new line, then adjust leading space for each of those
-            var startingNodes = GetNodesAndTokensStartingOnSeparateLines(syntax).ToList();
-
-            if (startingNodes.Count == 0)
-            {
-                return syntax;
-            }
-
-            return syntax.WithAdditionalLeadingSpacesOnDescendants(startingNodes, additionalSpaces);
-        }
-
-        protected static StatementSyntax GetUpdatedStatement(StatementSyntax statement, int spaces) => GetSyntaxWithLeadingSpaces(statement, spaces);
-
-        protected static BlockSyntax GetUpdatedBlock(BlockSyntax block, int spaces)
-        {
-            if (block is null)
-            {
-                return null;
-            }
-
-            var indentation = spaces + Constants.Indentation;
-
-            return block.WithOpenBraceToken(block.OpenBraceToken.WithLeadingSpaces(spaces))
-                        .WithStatements(block.Statements.Select(_ => GetUpdatedStatement(_, indentation)).ToSyntaxList())
-                        .WithCloseBraceToken(block.CloseBraceToken.WithLeadingSpaces(spaces));
-        }
-
         protected static ExpressionSyntax GetUpdatedExpressionPlacedOnSameLine(ExpressionSyntax expression)
         {
             switch (expression)
@@ -133,61 +100,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
-        }
-
-        private static IEnumerable<SyntaxNodeOrToken> GetNodesAndTokensStartingOnSeparateLines(SyntaxNode startingNode)
-        {
-            var currentLine = startingNode.GetStartingLine();
-
-            foreach (var nodeOrToken in startingNode.DescendantNodesAndTokens(_ => true, true))
-            {
-                var startingLine = nodeOrToken.GetStartingLine();
-
-                if (startingLine != currentLine)
-                {
-                    currentLine = startingLine;
-
-                    if (nodeOrToken.IsToken)
-                    {
-                        var token = nodeOrToken.AsToken();
-
-                        switch (token.Kind())
-                        {
-                            case SyntaxKind.PlusToken when IsStringCreation(token.Parent):
-                            {
-                                // ignore string constructions via add
-                                continue;
-                            }
-
-                            case SyntaxKind.CloseParenToken when token.Parent is ArgumentListSyntax l && IsStringCreation(l.Arguments.Last().Expression):
-                            {
-                                // ignore string constructions via add
-                                continue;
-                            }
-                        }
-                    }
-
-                    yield return nodeOrToken;
-                }
-            }
-        }
-
-        private static bool IsStringCreation(SyntaxNode node)
-        {
-            if (node is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.AddExpression))
-            {
-                if (b.Left.IsStringLiteral() || b.Right.IsStringLiteral())
-                {
-                    return true;
-                }
-
-                if (IsStringCreation(b.Left) || IsStringCreation(b.Right))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

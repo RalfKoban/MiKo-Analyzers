@@ -36,8 +36,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2015";
 
-        protected override string Title => Resources.MiKo_2015_CodeFixTitle;
-
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var map = GetMap(syntax);
@@ -47,10 +45,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Dictionary<string, string> GetMap(SyntaxNode syntax)
         {
-            var txt = syntax.ToString();
+            var text = syntax.ToString();
 
             // inspect comment for 'event' or exception
-            return txt.Contains("xception") ? ExceptionReplacementMap : EventReplacementMap;
+            return text.Contains("xception") ? ExceptionReplacementMap : EventReplacementMap;
         }
     }
 }

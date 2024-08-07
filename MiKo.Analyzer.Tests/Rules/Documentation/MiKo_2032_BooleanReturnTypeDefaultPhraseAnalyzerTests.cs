@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using Microsoft.CodeAnalysis.CodeFixes;
+﻿using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -30,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "System.Threading.Tasks.Task<System.Boolean>",
                                                                    ];
 
-        private static readonly string[] SimpleStartingPhrases = MiKo_2032_CodeFixProvider.CreateSimpleStartingPhrases().ToArray();
+        private static readonly string[] SimpleStartingPhrases = [.. MiKo_2032_CodeFixProvider.CreateSimpleStartingPhrases()];
 
         private static readonly string[] BooleanReturnValues = [.. BooleanOnlyReturnValues, .. BooleanTaskReturnValues];
 

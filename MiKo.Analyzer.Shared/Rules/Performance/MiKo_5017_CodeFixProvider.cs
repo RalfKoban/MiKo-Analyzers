@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         public override string FixableDiagnosticId => "MiKo_5017";
 
-        protected override string Title => Resources.MiKo_5017_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes)
         {
             foreach (var node in syntaxNodes)

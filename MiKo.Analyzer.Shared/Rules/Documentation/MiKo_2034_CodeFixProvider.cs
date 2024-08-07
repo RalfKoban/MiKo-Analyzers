@@ -14,8 +14,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2034";
 
-        protected override string Title => Resources.MiKo_2034_CodeFixTitle;
-
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
         {
             return Comment(comment, Parts[0], SeeCrefTaskResult(), Parts[1], RemoveStartingWord(comment));

@@ -26,6 +26,13 @@ namespace MiKoSolutions.Analyzers
         internal const string entities = "entities";
 #pragma warning restore SA1303 // Const field names should begin with upper-case letter
 
+        internal const string Element = "Element";
+
+#pragma warning disable SA1303 // Const field names should begin with upper-case letter
+        internal const string element = "element";
+        internal const string frameworkElement = "frameworkElement";
+#pragma warning restore SA1303 // Const field names should begin with upper-case letter
+
         internal const string EnvironmentNewLine = "\r\n";
 
         internal const string TODO = "TODO";
@@ -100,6 +107,12 @@ namespace MiKoSolutions.Analyzers
             internal const string VerifyAll = nameof(VerifyAll);
             internal const string Verify = nameof(Verify);
             internal const string Verifiable = nameof(Verifiable);
+
+            internal static class ConditionMatcher
+            {
+                internal const string It = nameof(It);
+                internal const string Is = nameof(Is);
+            }
         }
 
         internal static class FluentAssertions
@@ -730,23 +743,35 @@ namespace MiKoSolutions.Analyzers
             internal static readonly string[] IntentionallyPhrase =
                                                                     {
                                                                         "intentionally",
+                                                                        "intentionaly", // be able to detect typos
                                                                         "by intention",
                                                                         "with intention",
                                                                         "by intent",
                                                                         "with intent",
+                                                                        "indentionally", // be able to detect typos
+                                                                        "indentionaly", // be able to detect typos
+                                                                        "by indention", // be able to detect typos
+                                                                        "with indention", // be able to detect typos
+                                                                        "by indent", // be able to detect typos
+                                                                        "with indent", // be able to detect typos
                                                                         "on purpose",
                                                                         "purposely",
-                                                                        "purposly", // typo by intent
+                                                                        "purposly", // be able to detect typos
+                                                                        "does not matter",
+                                                                        "doesn't matter",
+                                                                        "doesnt matter", // be able to detect typos
                                                                     };
+
+            internal static readonly string[] ReasoningPhrases = { "because", "reason" };
 
             internal static readonly string[] LangwordReferences = { "true", "false", "null" };
 
             internal static readonly HashSet<string> LangwordWrongAttributes = new HashSet<string>
                                                                                    {
                                                                                        XmlTag.Attribute.Langref,
-                                                                                       "langowrd", // find typos
-                                                                                       "langwrod", // find typos
-                                                                                       "langwowd", // find typos
+                                                                                       "langowrd", // be able to detect typos
+                                                                                       "langwrod", // be able to detect typos
+                                                                                       "langwowd", // be able to detect typos
                                                                                    };
 
             internal static readonly string[] TryWords = { "Try", "Tries" };
@@ -789,6 +814,7 @@ namespace MiKoSolutions.Analyzers
                                                                                  "Indicates",
                                                                                  "Represents",
                                                                                  "Specifies",
+                                                                                 "Enum",
                                                                              };
         }
 
@@ -811,6 +837,7 @@ namespace MiKoSolutions.Analyzers
             internal const string ParamRef = "paramref";
             internal const string Permission = "permission";
             internal const string Remarks = "remarks";
+            internal const string Response = "response"; // used e.g. for Swagger
             internal const string Returns = "returns";
             internal const string See = "see";
             internal const string SeeAlso = "seealso";

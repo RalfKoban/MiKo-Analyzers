@@ -12,8 +12,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3064";
 
-        protected override string Title => Resources.MiKo_3064_CodeFixTitle;
-
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
             return GetUpdatedSyntaxWithFixedText(syntax, _ => new StringBuilder(_).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan()).ToString());
