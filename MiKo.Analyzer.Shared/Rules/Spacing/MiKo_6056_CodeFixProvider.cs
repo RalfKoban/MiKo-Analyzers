@@ -10,12 +10,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6030_CodeFixProvider)), Shared]
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_6056_CodeFixProvider)), Shared]
     public sealed class MiKo_6056_CodeFixProvider : SpacingCodeFixProvider
     {
         public override string FixableDiagnosticId => "MiKo_6056";
-
-        protected override string Title => Resources.MiKo_6056_CodeFixTitle;
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<CollectionExpressionSyntax>().FirstOrDefault();
 

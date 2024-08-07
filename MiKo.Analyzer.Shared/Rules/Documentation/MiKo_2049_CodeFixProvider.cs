@@ -21,8 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2049";
 
-        protected override string Title => Resources.MiKo_2049_CodeFixTitle;
-
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var location = diagnostic.Location;

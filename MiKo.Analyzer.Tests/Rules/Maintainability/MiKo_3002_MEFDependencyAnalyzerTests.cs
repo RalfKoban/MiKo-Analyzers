@@ -25,7 +25,7 @@ public interface TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_class_with_less_than_allowd_dependencies() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_class_with_less_than_allowed_dependencies() => No_issue_is_reported_for(@"
 public class TestMe
 {
     [Import]

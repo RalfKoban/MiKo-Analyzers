@@ -325,7 +325,7 @@ namespace Bla
         [TestCase("ReceivedWithAnyArgs()")]
         [TestCase("DidNotReceive()")]
         [TestCase("DidNotReceiveWithAnyArgs()")]
-        public void No_issue_is_reported_for_a_test_method_that_invokes_a_NSubstitute_call(string call) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_a_test_method_that_invokes_a_NSubstitute_call_(string call) => No_issue_is_reported_for(@"
 using NUnit.Framework;
 using NSubstitute;
 using System;

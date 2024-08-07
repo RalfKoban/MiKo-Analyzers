@@ -87,7 +87,7 @@ public class TestMe
 }");
 
         [Test]
-        public void No_issue_is_reported_for_Expression_argument([ValueSource(nameof(BooleanValues))] string value) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_Expression_argument_([ValueSource(nameof(BooleanValues))] string value) => No_issue_is_reported_for(@"
 using System;
 using System.Linq.Expressions;
 

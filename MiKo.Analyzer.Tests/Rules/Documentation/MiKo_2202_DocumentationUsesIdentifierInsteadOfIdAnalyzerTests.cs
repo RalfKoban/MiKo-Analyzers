@@ -96,7 +96,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_for_type_special_start_with_A([ValueSource(nameof(WrongIds))] string wrongId)
+        public void Code_gets_fixed_for_type_special_start_with_A_([ValueSource(nameof(WrongIds))] string wrongId)
         {
             const string OriginalTemplate = @"
 /// <summary>

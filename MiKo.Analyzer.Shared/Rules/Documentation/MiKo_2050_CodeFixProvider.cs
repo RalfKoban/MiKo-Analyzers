@@ -21,8 +21,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public override string FixableDiagnosticId => "MiKo_2050";
 
-        protected override string Title => Resources.MiKo_2050_CodeFixTitle;
-
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var ctor = syntax.FirstAncestorOrSelf<ConstructorDeclarationSyntax>();
@@ -183,7 +181,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static XmlElementSyntax MessageParameterComment(ParameterSyntax messageParameter) => ParameterComment(messageParameter, Constants.Comments.ExceptionCtorMessageParamPhrase);
 
 //// ncrunch: rdi off
-        private static IEnumerable<string> CreateTypePhrases()
+        private static HashSet<string> CreateTypePhrases()
         {
             var starts = new[]
                              {
@@ -191,43 +189,49 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                  "A general exception", "An general exception", "The general exception", "This general exception", "General exception",
                                  "A most general exception", "An most general exception", "The most general exception", "This most general exception", "Most general exception",
                              };
-            var verbs = new[] { "that is thrown", "which is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
+            var verbs = new[] { "that is thrown", "which is thrown", "is thrown", "thrown", "to throw", "that is fired", "which is fired", "fired", "to fire" };
             var conditions = new[] { "if", "when", "in case" };
+
+            var results = new HashSet<string>();
 
             foreach (var condition in conditions)
             {
-                yield return "Fire " + condition;
-                yield return "Fired " + condition;
-
-                yield return "Indicates that " + condition;
-
-                yield return "Occurs " + condition;
-
-                yield return "Throw " + condition;
-                yield return "Thrown " + condition;
+                results.Add("Fire " + condition);
+                results.Add("Fired " + condition);
+                results.Add("Indicates that " + condition);
+                results.Add("Occurs " + condition);
+                results.Add("Throw " + condition);
+                results.Add("Thrown " + condition);
             }
 
             foreach (var start in starts)
             {
-                yield return start + " is used by ";
-                yield return start + " that is used by ";
-                yield return start + " which is used by ";
-                yield return start + " used by ";
-                yield return start + " indicates that ";
-                yield return start + " that indicates that ";
-                yield return start + " which indicates that ";
-                yield return start + " indicating that ";
+                results.Add(start + " is used by ");
+                results.Add(start + " that is used by ");
+                results.Add(start + " which is used by ");
+                results.Add(start + " used by ");
+                results.Add(start + " indicates that ");
+                results.Add(start + " that indicates that ");
+                results.Add(start + " which indicates that ");
+                results.Add(start + " indicating that ");
 
                 foreach (var verb in verbs)
                 {
-                    var begin = string.Concat(start, " ", verb, " ");
+                    var middle = string.Concat(" ", verb, " ");
+
+                    var begin = string.Concat(start, middle);
+                    var beginLowerCase = begin.ToLowerCaseAt(0);
 
                     foreach (var condition in conditions)
                     {
-                        yield return string.Concat(begin, condition);
+                        results.Add(string.Concat(begin, condition));
+                        results.Add(string.Concat("Represent ", beginLowerCase, condition));
+                        results.Add(string.Concat("Represents ", beginLowerCase, condition));
                     }
                 }
             }
+
+            return results;
         }
 //// ncrunch: rdi default
     }

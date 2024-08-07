@@ -11,8 +11,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public override string FixableDiagnosticId => "MiKo_2004";
 
-        protected override string Title => Resources.MiKo_2004_CodeFixTitle;
-
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
             if (index == 0)

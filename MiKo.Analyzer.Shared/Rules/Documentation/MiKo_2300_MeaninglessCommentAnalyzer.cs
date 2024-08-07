@@ -114,6 +114,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return false; // ignore all empty comments
             }
 
+            if (MiKo_2311_CommentIsSeparatorAnalyzer.CommentContainsSeparator(comment))
+            {
+                return false; // already reported by the other analyzer
+            }
+
             if (comment.StartsWithAny(MeaninglessPhrases) && comment.StartsWithAny(AllowedMarkers) is false)
             {
                 return true;
@@ -136,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (spaces < 3)
             {
-                // 3 or less words
+                // 3 or fewer words
                 if (comment.ContainsAny(AllowedMarkers))
                 {
                     return false;

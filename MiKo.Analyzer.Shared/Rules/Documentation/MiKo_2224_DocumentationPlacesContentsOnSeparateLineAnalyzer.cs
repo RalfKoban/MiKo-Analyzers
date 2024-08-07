@@ -28,6 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                Constants.XmlTag.Remarks,
                                                                Constants.XmlTag.Example,
                                                                Constants.XmlTag.List,
+                                                               Constants.XmlTag.Response,
                                                            };
 
         private static readonly HashSet<string> EmptyTags = new HashSet<string>

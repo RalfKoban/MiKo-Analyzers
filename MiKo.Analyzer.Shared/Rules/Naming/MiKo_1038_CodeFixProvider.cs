@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public override string FixableDiagnosticId => "MiKo_1038";
 
-        protected override string Title => Resources.MiKo_1038_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<TypeDeclarationSyntax>().FirstOrDefault();
     }
 }

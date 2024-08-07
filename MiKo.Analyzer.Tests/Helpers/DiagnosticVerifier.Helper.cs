@@ -142,12 +142,15 @@ namespace TestHelper
         /// <param name="source">
         /// Classes in the form of a string.
         /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
         /// <returns>
         /// A Document created from the source string.
         /// </returns>
-        protected static Document CreateDocument(string source)
+        protected static Document CreateDocument(string source, LanguageVersion languageVersion)
         {
-            return CreateProject([source]).Documents.First();
+            return CreateProject([source], languageVersion).Documents.First();
         }
 
         /// <summary>
@@ -156,15 +159,18 @@ namespace TestHelper
         /// <param name="sources">
         /// Classes in the form of strings.
         /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
         /// <param name="analyzers">
         /// The analyzers to be run on the sources.
         /// </param>
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(IReadOnlyCollection<string> sources, params DiagnosticAnalyzer[] analyzers)
+        private static Diagnostic[] GetSortedDiagnostics(IReadOnlyCollection<string> sources, LanguageVersion languageVersion, params DiagnosticAnalyzer[] analyzers)
         {
-            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources));
+            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion));
         }
 
         /// <summary>
@@ -187,12 +193,15 @@ namespace TestHelper
         /// <param name="sources">
         /// Classes in the form of strings.
         /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
         /// <returns>
         /// The <see cref="Document"/>s produced from the sources.
         /// </returns>
-        private static Document[] GetDocuments(IReadOnlyCollection<string> sources)
+        private static Document[] GetDocuments(IReadOnlyCollection<string> sources, LanguageVersion languageVersion)
         {
-            var project = CreateProject(sources);
+            var project = CreateProject(sources, languageVersion);
             var documents = project.Documents.ToArray();
 
             if (sources.Count != documents.Length)
@@ -209,15 +218,20 @@ namespace TestHelper
         /// <param name="sources">
         /// Classes in the form of strings.
         /// </param>
+        /// <param name="languageVersion">
+        /// The version of the programming language.
+        /// </param>
         /// <returns>
         /// A Project created out of the Documents created from the source strings.
         /// </returns>
-        private static Project CreateProject(IEnumerable<string> sources)
+        private static Project CreateProject(IEnumerable<string> sources, LanguageVersion languageVersion)
         {
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
+            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, TestProjectName, TestProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
 
             var solution = new AdhocWorkspace().CurrentSolution
-                                               .AddProject(projectId, TestProjectName, TestProjectName, LanguageNames.CSharp)
+                                               ////.AddProject(projectId, TestProjectName, TestProjectName, LanguageNames.CSharp)
+                                               .AddProject(projectInfo)
                                                .AddMetadataReference(projectId, CorlibReference)
                                                .AddMetadataReference(projectId, SystemCoreReference)
                                                .AddMetadataReference(projectId, SystemCompositionReference)

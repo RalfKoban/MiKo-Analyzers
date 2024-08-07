@@ -155,6 +155,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2308_CommentPlacedAfterCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2309_CommentContainsNtContradictionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2310_CommentContainsIntentionallyAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2311_CommentIsSeparatorAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MultiLineCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\OperatorAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\OverallDocumentationAnalyzer.cs" />
@@ -246,6 +247,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3085_ConditionalExpressionTooLongAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3086_DoNotNestConditionalExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3087_AvoidComplexNegativeConditionsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3088_UsePatternMatchingForNullNotEqualsExpressionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3089_DoNotUsePropertyPatternForConditionsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3090_FinallyBlockThrowsExceptionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3091_FinallyBlockRaisesEventAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3092_StatementInsideLockRaisesEventAnalyzer.cs" />
@@ -274,6 +277,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3116_TestSetUpMethodsContainCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3117_TestTearDownMethodsContainCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3118_TestMethodsDoNotUseSpecificLinqMethodsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3119_TestMethodsDoNotReturnCompletedTaskAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3120_UseValueInsteadOfItIsConditionMatcherAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.cs" />
@@ -294,7 +299,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3501_DoNotUseSuppressNullableWarningOnConditionalAccessAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3502_DoNotUseSuppressNullableWarningOnLinqCallAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\ObjectCreationExpressionMaintainabilityAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\UsePatternMatchingForEqualsExpressionAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\UsePatternMatchingForBinaryExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\UsePatternMatchingForExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\Counter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Metrics\MetricsAnalyzer.cs" />
@@ -341,7 +346,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1034_FieldModelSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1035_PropertyModelSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1036_EventModelSuffixAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1037_EnumSuffixAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1037_TypeSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1038_ExtensionMethodsClassSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1039_ExtensionMethodsParameterAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1040_ParameterCollectionSuffixAnalyzer.cs" />
@@ -381,6 +386,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1074_LockIdentifiersAreSuffixedWithLockAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1075_TypesSuffixedWithEventArgsInheritFromEventArgsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1076_PrismEventTypeAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1077_EnumMemberSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1080_UseNumbersInsteadOfWordingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1081_MethodsWithNumberSuffixAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Naming\MiKo_1082_PropertiesWithNumberSuffixAnalyzer.cs" />

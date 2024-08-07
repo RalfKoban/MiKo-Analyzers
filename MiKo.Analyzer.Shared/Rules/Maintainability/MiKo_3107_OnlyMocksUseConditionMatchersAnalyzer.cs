@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
+    /// <inheritdoc/>
+    /// <seealso cref="MiKo_3120_UseValueInsteadOfItIsConditionMatcherAnalyzer"/>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public sealed class MiKo_3107_OnlyMocksUseConditionMatchersAnalyzer : ObjectCreationExpressionMaintainabilityAnalyzer
     {
@@ -46,11 +48,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsConditionMatcher(MemberAccessExpressionSyntax node)
         {
-            if (node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() == "It")
+            if (node.Expression is IdentifierNameSyntax invokedType && invokedType.GetName() == Constants.Moq.ConditionMatcher.It)
             {
                 switch (node.GetName())
                 {
-                    case "Is":
+                    case Constants.Moq.ConditionMatcher.Is:
                     case "IsAny":
                     case "IsIn":
                     case "IsInRange":

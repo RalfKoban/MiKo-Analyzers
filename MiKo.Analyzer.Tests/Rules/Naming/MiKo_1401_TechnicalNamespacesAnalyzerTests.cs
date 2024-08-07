@@ -26,6 +26,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Base",
                                                                            "Class",
                                                                            "Classes",
+                                                                           "Client",
+                                                                           "Clients",
                                                                            "Compare",
                                                                            "Comparer",
                                                                            "Comparers",
@@ -59,12 +61,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Execution",
                                                                            "Executions",
                                                                            "Filters",
+                                                                           "Factories",
                                                                            "Func",
                                                                            "Funcs",
                                                                            "Function",
                                                                            "Functions",
                                                                            "Handler",
                                                                            "Handlers",
+                                                                           "HttpClient",
+                                                                           "HttpClients",
                                                                            "Imp",
                                                                            "Impl",
                                                                            "Implementation",
@@ -112,7 +117,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Type",
                                                                            "Types",
                                                                            "Transaction",
-                                                                           "Transactions");
+                                                                           "Transactions",
+                                                                           "Wrapper",
+                                                                           "Wrappers",
+                                                                           "ValueObject",
+                                                                           "ValueObjects");
 
         [TestCase("MiKoSolutions")]
         [TestCase("MiKoSolutions.Infrastructure")]

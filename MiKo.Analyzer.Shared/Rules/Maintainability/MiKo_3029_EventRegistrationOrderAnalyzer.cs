@@ -88,10 +88,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     else
                     {
                         // we have multiple or even different amounts of += and -= assignments, so check the used events and order of += or -= calls
-                        var addAssignmentsForInvestigation = addAssignments.ToList();
                         var subtractAssignmentsForInvestigation = subtractAssignments.ToList();
 
-                        foreach (var addAssignment in addAssignmentsForInvestigation.Where(_ => _.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression)))
+                        foreach (var addAssignment in addAssignments.Where(_ => _.Left.IsKind(SyntaxKind.SimpleMemberAccessExpression)))
                         {
                             if (addAssignment.Right is IdentifierNameSyntax addedHandler)
                             {

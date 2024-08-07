@@ -74,6 +74,25 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);
 
+        internal static bool IsAnyKind(this SyntaxTrivia value, ISet<SyntaxKind> kinds) => kinds.Contains(value.Kind());
+
+        internal static bool IsAnyKind(this SyntaxTrivia value, params SyntaxKind[] kinds)
+        {
+            var valueKind = value.Kind();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery  : For performance reasons we use indexing instead of an enumerator
+            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use indexing instead of an enumerator
+            for (var index = 0; index < kinds.Length; index++)
+            {
+                if (kinds[index] == valueKind)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         internal static IEnumerable<SyntaxToken> GetXmlTextTokens(this XmlElementSyntax value)
         {
             if (value is null)
@@ -135,7 +154,7 @@ namespace MiKoSolutions.Analyzers
             return value?.DescendantNodes(descendantNodesFilter).GetXmlTextTokens() ?? Enumerable.Empty<SyntaxToken>();
         }
 
-        internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count)
+        internal static IEnumerable<SyntaxTrivia> NextSiblings(this SyntaxTrivia value, int count = int.MaxValue)
         {
             if (count > 0)
             {
@@ -161,7 +180,7 @@ namespace MiKoSolutions.Analyzers
             return Enumerable.Empty<SyntaxTrivia>();
         }
 
-        internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count)
+        internal static IEnumerable<SyntaxTrivia> PreviousSiblings(this SyntaxTrivia value, int count = int.MaxValue)
         {
             if (count > 0)
             {

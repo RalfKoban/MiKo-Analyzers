@@ -57,7 +57,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_created_exception_after_null_check_3([ValueSource(nameof(Exceptions))] string exception) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_created_exception_after_null_check_3_([ValueSource(nameof(Exceptions))] string exception) => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe

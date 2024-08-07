@@ -10,12 +10,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1041_FieldCollectionSuffixAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] FieldPrefixes = Constants.Markers.FieldPrefixes;
+
         [Test]
-        public void No_issue_is_reported_for_correctly_named_field() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_field_(
+                                                                [ValueSource(nameof(FieldPrefixes))] string prefix,
+                                                                [Values("bla", "dictionary", "map", "array")] string field)
+            => No_issue_is_reported_for(@"
 
 public class TestMe
 {
-    private string bla;
+    private string " + prefix + field + @";
 }
 ");
 

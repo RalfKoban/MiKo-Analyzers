@@ -22,23 +22,13 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyze(ITypeSymbol symbol)
         {
-            if (symbol.IsEnumerable())
+            if (symbol.Name == "AssemblyCatalog")
             {
-                if (IsXmlNode(symbol))
-                {
-                    return false;
-                }
-
-                if (symbol.Name == "AssemblyCatalog")
-                {
-                    // ignore MEF aggregate catalog
-                    return false;
-                }
-
-                return true;
+                // ignore MEF aggregate catalog
+                return false;
             }
 
-            return false;
+            return symbol.IsEnumerable() && IsXmlNode(symbol) is false;
         }
 
         protected override IEnumerable<Diagnostic> AnalyzeIdentifiers(SemanticModel semanticModel, ITypeSymbol type, params SyntaxToken[] identifiers)
@@ -49,6 +39,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
                 // skip all short names
                 if (IsShort(originalName))
+                {
+                    continue;
+                }
+
+                if (originalName.EndsWith("Map", StringComparison.Ordinal))
                 {
                     continue;
                 }
@@ -114,6 +109,41 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
+        private static bool IsHash(string name, ITypeSymbol type) => name.EndsWith("Hash", StringComparison.OrdinalIgnoreCase) && type?.IsByteArray() is true;
+
+        private static bool IsGrouping(string name, ITypeSymbol type)
+        {
+            switch (name)
+            {
+                case "@group":
+                case "group":
+                case "grouping":
+                {
+                    return type?.IsIGrouping() is true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsXmlNode(ITypeSymbol type)
+        {
+            switch (type?.Name)
+            {
+                case nameof(XmlDocument):
+                case nameof(XmlElement):
+                case nameof(XmlNode):
+                {
+                    return true;
+                }
+
+                default:
+                {
+                    return false;
+                }
+            }
+        }
+
         private static string GetPluralName(string originalName, out string name)
         {
             if (originalName.EndsWith('s'))
@@ -145,49 +175,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             return Pluralizer.GetPluralName(name);
-        }
-
-        private static bool IsHash(string originalName, ITypeSymbol type)
-        {
-            if (originalName.EndsWith("Hash", StringComparison.OrdinalIgnoreCase))
-            {
-                return type?.IsByteArray() is true;
-            }
-
-            return false;
-        }
-
-        private static bool IsGrouping(string originalName, ITypeSymbol type)
-        {
-            switch (originalName)
-            {
-                case "@group":
-                case "group":
-                case "grouping":
-                {
-                    return type?.IsIGrouping() is true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool IsXmlNode(ITypeSymbol type)
-        {
-            switch (type?.Name)
-            {
-                case nameof(XmlDocument):
-                case nameof(XmlElement):
-                case nameof(XmlNode):
-                {
-                    return true;
-                }
-
-                default:
-                {
-                    return false;
-                }
-            }
         }
     }
 }

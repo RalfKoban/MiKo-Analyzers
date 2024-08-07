@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     {
         public override string FixableDiagnosticId => "MiKo_3112";
 
-        protected override string Title => Resources.MiKo_3112_CodeFixTitle;
-
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<MemberAccessExpressionSyntax>().FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)

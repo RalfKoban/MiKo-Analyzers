@@ -38,6 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Applications",
                                 "Attributes",
                                 "Base", "Class", "Classes",
+                                "Client", "Clients", "HttpClient", "HttpClients",
                                 "Compare", "Comparer", "Comparers",
                                 "Constants",
                                 "Controller", "Controllers",
@@ -51,6 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Events", "EventArgument", "EventArguments",
                                 "Exception", "Exceptions",
                                 "Execution", "Executions",
+                                "Factories",
                                 "Filters",
                                 "Func", "Funcs", "Function", "Functions",
                                 "Handler", "Handlers",
@@ -76,7 +78,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                 "Struct", "Structs",
                                 "Type", "Types",
                                 "Transaction", "Transactions",
-                                "Core", "Shared",
+                                "ValueObject", "ValueObjects",
+                                "Wrapper", "Wrappers",
                             };
 
             var result = new HashSet<string>

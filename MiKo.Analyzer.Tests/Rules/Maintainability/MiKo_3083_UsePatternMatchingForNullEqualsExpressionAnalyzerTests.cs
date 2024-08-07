@@ -11,11 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     [TestFixture]
     public sealed class MiKo_3083_UsePatternMatchingForNullEqualsExpressionAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] Operators =
-                                                     [
-                                                         "==",
-                                                         "!=",
-                                                     ];
+        private static readonly string[] Operators = ["==", "!="];
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_comparisons_of_2_variables_of_type_(
