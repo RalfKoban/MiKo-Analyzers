@@ -73,6 +73,23 @@ public class TestMe
 }
 ");
 
+        [TestCase("Single")]
+        [TestCase("All")]
+        public void No_issue_is_reported_for_Xunit_Assert_(string call) => No_issue_is_reported_for(@"
+using System.Collections.Generic;
+
+using Xunit;
+
+public class TestMe
+{
+    [Fact]
+    public void DoSomething()
+    {
+        Assert." + call + @"(Enumerable.Empty<int>());
+    }
+}
+");
+
         [Test]
         public void No_issue_is_reported_for_test_method_using_Linq_in_Moq_matcher() => No_issue_is_reported_for(@"
 using System.Collections.Generic;
