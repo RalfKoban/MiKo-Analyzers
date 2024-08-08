@@ -129,7 +129,7 @@ public class ChildClass : BaseClass
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_ctor_if_the_names_to_not_match() => An_issue_is_reported_for(3, @"
 using System;

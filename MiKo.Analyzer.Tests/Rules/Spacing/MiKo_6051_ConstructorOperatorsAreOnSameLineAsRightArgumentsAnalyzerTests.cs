@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public class MiKo_6051_ConstructorOperatorsAreOnSameLineAsRightArgumentsAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6051_ConstructorOperatorsAreOnSameLineAsRightArgumentsAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_incomplete_ctor__when_colon_is_on_same_line() => No_issue_is_reported_for(@"

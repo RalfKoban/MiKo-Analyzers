@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public class MiKo_6052_BaseListOperatorsAreOnSameLineAsBaseListTypeAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6052_BaseListOperatorsAreOnSameLineAsBaseListTypeAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_type_without_base_list() => No_issue_is_reported_for(@"
