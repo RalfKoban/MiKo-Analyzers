@@ -50,7 +50,7 @@ public class TestMe
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [TestCase("EventArgs args", 1)]
         [TestCase("EventArgs args, object s", 1)]
         [TestCase("EventArgs e, EventArgs a", 2)]
@@ -81,7 +81,7 @@ namespace Bla
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [TestCase("EventArgs args", 1)]
         [TestCase("EventArgs args, object s", 1)]
         [TestCase("EventArgs e, EventArgs a", 2)]
