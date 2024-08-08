@@ -1791,6 +1791,14 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsSpanningMultipleLines(this SyntaxNode value)
+        {
+            var startingLine = value.GetStartingLine();
+            var endingLine = value.GetEndingLine();
+
+            return startingLine != endingLine;
+        }
+
         internal static bool IsSeeLangword(this SyntaxNode value)
         {
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)

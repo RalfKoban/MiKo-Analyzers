@@ -5383,4 +5383,16 @@ Hence, their open brackets should be positioned at the same position where the c
   <data name="MiKo_6056_Title" xml:space="preserve">
     <value>Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned</value>
   </data>
+  <data name="MiKo_6057_CodeFixTitle" xml:space="preserve">
+    <value>Align type parameter constraint vertically along with others</value>
+  </data>
+  <data name="MiKo_6057_Description" xml:space="preserve">
+    <value>The code is easier to read if type parameter constraint clauses are aligned vertically.</value>
+  </data>
+  <data name="MiKo_6057_MessageFormat" xml:space="preserve">
+    <value>Align type parameter constraint vertically along with others</value>
+  </data>
+  <data name="MiKo_6057_Title" xml:space="preserve">
+    <value>Type parameter constraint clauses should be aligned vertically</value>
+  </data>
 </root>
