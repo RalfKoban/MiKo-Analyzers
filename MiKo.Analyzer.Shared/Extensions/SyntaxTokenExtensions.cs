@@ -107,6 +107,31 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsLocatedAt(this SyntaxToken value, Location location) => value.GetLocation().Equals(location);
 
+        internal static bool IsSpanningMultipleLines(this SyntaxToken value)
+        {
+            var foundLine = false;
+
+            var leadingTrivia = value.LeadingTrivia;
+
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var count = leadingTrivia.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                if (leadingTrivia[index].IsComment())
+                {
+                    if (foundLine)
+                    {
+                        return true;
+                    }
+
+                    foundLine = true;
+                }
+            }
+
+            return false;
+        }
+
         internal static IReadOnlyList<SyntaxToken> OfKind(this SyntaxTokenList source, SyntaxKind kind)
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)

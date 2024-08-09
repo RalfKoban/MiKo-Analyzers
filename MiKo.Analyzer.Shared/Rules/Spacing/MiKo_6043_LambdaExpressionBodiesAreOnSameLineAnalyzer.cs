@@ -147,10 +147,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeBody(SyntaxNodeAnalysisContext context, SyntaxNode lambda)
         {
-            var startingLine = lambda.GetStartingLine();
-            var endingLine = lambda.GetEndingLine();
-
-            if (startingLine != endingLine && FitsOnSingleLine(lambda))
+            if (lambda.IsSpanningMultipleLines() && FitsOnSingleLine(lambda))
             {
                 ReportDiagnostics(context, Issue(lambda));
             }

@@ -15392,5 +15392,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6056_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint vertically along with others.
+        /// </summary>
+        internal static string MiKo_6057_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6057_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned vertically..
+        /// </summary>
+        internal static string MiKo_6057_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6057_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint vertically along with others.
+        /// </summary>
+        internal static string MiKo_6057_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6057_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type parameter constraint clauses should be aligned vertically.
+        /// </summary>
+        internal static string MiKo_6057_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6057_Title", resourceCulture);
+            }
+        }
     }
 }
