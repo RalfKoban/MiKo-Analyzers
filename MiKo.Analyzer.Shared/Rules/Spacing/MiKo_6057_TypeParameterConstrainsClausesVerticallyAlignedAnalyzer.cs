@@ -12,28 +12,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6057";
 
-        private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> Empty = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
-
         public MiKo_6057_TypeParameterConstrainsClausesVerticallyAlignedAnalyzer() : base(Id)
         {
         }
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeTypeParameterConstraintClause, SyntaxKind.TypeParameterConstraintClause);
-
-        private static SyntaxList<TypeParameterConstraintClauseSyntax> GetConstraintClauses(SyntaxNode node)
-        {
-            switch (node)
-            {
-                case ClassDeclarationSyntax c: return c.ConstraintClauses;
-                case InterfaceDeclarationSyntax i: return i.ConstraintClauses;
-                case RecordDeclarationSyntax r: return r.ConstraintClauses;
-                case StructDeclarationSyntax s: return s.ConstraintClauses;
-                case MethodDeclarationSyntax b: return b.ConstraintClauses;
-
-                default:
-                    return Empty;
-            }
-        }
 
         private void AnalyzeTypeParameterConstraintClause(SyntaxNodeAnalysisContext context)
         {
@@ -47,7 +30,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private IEnumerable<Diagnostic> AnalyzeTypeParameterConstraintClause(TypeParameterConstraintClauseSyntax node)
         {
-            var clauses = GetConstraintClauses(node.Parent);
+            var clauses = node.GetConstraintClauses();
 
             if (clauses.Count <= 1)
             {

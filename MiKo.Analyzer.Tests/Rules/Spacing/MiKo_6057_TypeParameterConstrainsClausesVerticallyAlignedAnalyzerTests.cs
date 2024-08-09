@@ -46,6 +46,16 @@ public " + type + @" TestMe<T1, T2, T3>
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_method_with_type_parameter_constraint_clauses_aligned_horizontally() => An_issue_is_reported_for(2, @"
+public class class TestMe
+{
+    public void DoSomething<T1, T2, T3>() where T1 : class where T2 : class where T3 : class
+    { }
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_method_with_type_parameter_constraint_clauses_aligned_vertically_and_one_aligned_more_to_left() => An_issue_is_reported_for(@"
 public class class TestMe
@@ -126,6 +136,14 @@ public " + type + @" TestMe<T1, T2, T3>
 }
 ");
 
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
+        [Test]
+        public void An_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clauses_aligned_horizontally_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(2, @"
+public " + type + @" TestMe<T1, T2, T3> where T1 : class where T2 : class where T3 : class
+{
+}
+");
+
         [Test]
         public void An_issue_is_reported_for_type_with_multiple_type_parameter_constraint_clauses_aligned_vertically_and_one_aligned_more_to_right_([ValueSource(nameof(Types))] string type) => An_issue_is_reported_for(@"
 public " + type + @" TestMe<T1, T2, T3>
@@ -179,6 +197,30 @@ public " + type + @" TestMe<T1, T2, T3>
 {
 }
 ");
+
+        [Test]
+        public void Code_gets_fixed_for_method_with_type_parameter_constraint_clauses_aligned_horizontally()
+        {
+            const string OriginalCode = @"
+public class class TestMe
+{
+    public void DoSomething<T1, T2, T3>() where T1 : class where T2 : class where T3 : class
+    { }
+}
+";
+
+            const string FixedCode = @"
+public class class TestMe
+{
+    public void DoSomething<T1, T2, T3>() where T1 : class
+                                          where T2 : class
+                                          where T3 : class
+    { }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         [Test]
         public void Code_gets_fixed_for_method_with_type_parameter_constraint_clauses_aligned_vertically_and_one_aligned_more_to_left()
@@ -337,6 +379,28 @@ public class class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_type_with_multiple_type_parameter_constraint_clauses_aligned_horizontally_([ValueSource(nameof(Types))] string type)
+        {
+            const string OriginalCode = @"
+public ### TestMe<T1, T2, T3>
+                                where T1 : class where T2 : class where T3 : class
+{
+}
+";
+
+            const string FixedCode = @"
+public ### TestMe<T1, T2, T3>
+                                where T1 : class
+                                where T2 : class
+                                where T3 : class
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("###", type), FixedCode.Replace("###", type));
         }
 
         [Test]

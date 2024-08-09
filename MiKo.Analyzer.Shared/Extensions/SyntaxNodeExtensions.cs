@@ -34,6 +34,8 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
+        private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> Empty = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
+
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
@@ -97,6 +99,21 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
+        internal static SyntaxList<TypeParameterConstraintClauseSyntax> GetConstraintClauses(this TypeParameterConstraintClauseSyntax value)
+        {
+            switch (value.Parent)
+            {
+                case ClassDeclarationSyntax c: return c.ConstraintClauses;
+                case InterfaceDeclarationSyntax i: return i.ConstraintClauses;
+                case RecordDeclarationSyntax r: return r.ConstraintClauses;
+                case StructDeclarationSyntax s: return s.ConstraintClauses;
+                case MethodDeclarationSyntax b: return b.ConstraintClauses;
+
+                default:
+                    return Empty;
+            }
+        }
 
         internal static Location GetContentsLocation(this XmlElementSyntax value)
         {
