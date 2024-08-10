@@ -115,6 +115,21 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static TypeParameterListSyntax GetTypeParameterList(this TypeParameterConstraintClauseSyntax value)
+        {
+            switch (value.Parent)
+            {
+                case ClassDeclarationSyntax c: return c.TypeParameterList;
+                case InterfaceDeclarationSyntax i: return i.TypeParameterList;
+                case RecordDeclarationSyntax r: return r.TypeParameterList;
+                case StructDeclarationSyntax s: return s.TypeParameterList;
+                case MethodDeclarationSyntax b: return b.TypeParameterList;
+
+                default:
+                    return default;
+            }
+        }
+
         internal static Location GetContentsLocation(this XmlElementSyntax value)
         {
             var contents = value.Content;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,11 +9,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_6057_TypeParameterConstrainsClausesVerticallyAlignedAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer : SpacingAnalyzer
     {
-        public const string Id = "MiKo_6057";
+        public const string Id = "MiKo_6058";
 
-        public MiKo_6057_TypeParameterConstrainsClausesVerticallyAlignedAnalyzer() : base(Id)
+        private const int Offset = Constants.Indentation / 2;
+
+        public MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer() : base(Id)
         {
         }
 
@@ -32,29 +35,31 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             var clauses = node.GetConstraintClauses();
 
-            if (clauses.Count <= 1)
+            if (clauses.IndexOf(node) > 0)
             {
-                // do not report the single one
-                yield break;
+                // only report for the first one
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            var reference = clauses[0];
-
-            if (node == reference)
-            {
-                // do not report for the first one
-                yield break;
-            }
+            var typeParameters = node.GetTypeParameterList();
+            var referencePosition = typeParameters.LessThanToken.GetStartPosition();
 
             var whereKeyword = node.WhereKeyword;
+            var position = whereKeyword.GetStartPosition();
 
-            var referencePosition = reference.GetPositionWithinStartLine();
-            var position = whereKeyword.GetPositionWithinStartLine();
-
-            if (position != referencePosition || whereKeyword.LeadingTrivia.Any(SyntaxKind.EndOfLineTrivia))
+            if (position.Line != referencePosition.Line)
             {
-                yield return Issue(whereKeyword, CreateProposalForSpaces(referencePosition));
+                var spaces = referencePosition.Character + Offset;
+
+                if (position.Character != spaces)
+                {
+                    var issue = Issue(whereKeyword, CreateProposalForSpaces(spaces));
+
+                    return new[] { issue };
+                }
             }
+
+            return Enumerable.Empty<Diagnostic>();
         }
     }
 }

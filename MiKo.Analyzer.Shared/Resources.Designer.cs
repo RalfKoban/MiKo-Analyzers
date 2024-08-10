@@ -15428,5 +15428,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6057_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        /// </summary>
+        internal static string MiKo_6058_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6058_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the corresponding type parameter list..
+        /// </summary>
+        internal static string MiKo_6058_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6058_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        /// </summary>
+        internal static string MiKo_6058_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6058_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type parameter constraint clauses should be indented below type parameter list.
+        /// </summary>
+        internal static string MiKo_6058_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6058_Title", resourceCulture);
+            }
+        }
     }
 }
