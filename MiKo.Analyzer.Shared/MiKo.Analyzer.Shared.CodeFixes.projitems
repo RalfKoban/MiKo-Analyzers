@@ -354,6 +354,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6055_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6056_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6057_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6058_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeNames.cs" />

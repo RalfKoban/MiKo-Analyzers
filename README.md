@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 448 rules that are currently provided by the analyzer.
+The following tables lists all the 449 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -492,3 +492,4 @@ The following tables lists all the 448 rules that are currently provided by the 
 |MiKo_6055|Assignment statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
 |MiKo_6057|Type parameter constraint clauses should be aligned vertically|&#x2713;|&#x2713;|
+|MiKo_6058|Type parameter constraint clauses should be indented below type parameter list|&#x2713;|&#x2713;|
