@@ -1075,8 +1075,14 @@ namespace System
         public static bool IsLowerCaseLetter(this char value) => value.IsLetter() && value.IsLowerCase();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value); // ncrunch: no coverage
+
+        public static bool IsNullOrEmpty(this ReadOnlySpan<char> value) => value.IsEmpty; // ncrunch: no coverage
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrWhiteSpace(this string value) => string.IsNullOrWhiteSpace(value); // ncrunch: no coverage
 
+//// ncrunch: no coverage start
         public static bool IsNullOrWhiteSpace(this ReadOnlySpan<char> value)
         {
             var length = value.Length;
@@ -1094,6 +1100,7 @@ namespace System
 
             return true;
         }
+//// ncrunch: no coverage end
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNumber(this char value) => char.IsNumber(value);
