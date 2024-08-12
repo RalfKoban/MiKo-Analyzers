@@ -2946,6 +2946,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename builder method.
+        /// </summary>
+        internal static string MiKo_1078_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1078_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The method belongs to a builder and therefore its name should be started with &apos;Build&apos;..
+        /// </summary>
+        internal static string MiKo_1078_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1078_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start name with &apos;Build&apos;.
+        /// </summary>
+        internal static string MiKo_1078_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1078_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Builder method names should start with &apos;Build&apos;.
+        /// </summary>
+        internal static string MiKo_1078_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1078_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         internal static string MiKo_1080_Description {
