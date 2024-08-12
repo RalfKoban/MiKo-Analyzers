@@ -109,6 +109,7 @@ namespace MiKoSolutions.Analyzers
                 case RecordDeclarationSyntax r: return r.ConstraintClauses;
                 case StructDeclarationSyntax s: return s.ConstraintClauses;
                 case MethodDeclarationSyntax b: return b.ConstraintClauses;
+                case LocalFunctionStatementSyntax f: return f.ConstraintClauses;
 
                 default:
                     return Empty;
@@ -124,6 +125,7 @@ namespace MiKoSolutions.Analyzers
                 case RecordDeclarationSyntax r: return r.TypeParameterList;
                 case StructDeclarationSyntax s: return s.TypeParameterList;
                 case MethodDeclarationSyntax b: return b.TypeParameterList;
+                case LocalFunctionStatementSyntax f: return f.TypeParameterList;
 
                 default:
                     return default;
