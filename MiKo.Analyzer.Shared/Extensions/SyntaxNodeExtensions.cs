@@ -2798,7 +2798,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlCommentExterior<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentExterior);
 
-        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            var removeOptions = node is DocumentationCommentTriviaSyntax
+                                ? SyntaxRemoveOptions.AddElasticMarker
+                                : SyntaxRemoveOptions.KeepNoTrivia;
+
+            return value.RemoveNode(node, removeOptions);
+        }
 
         internal static T Without<T>(this T value, IEnumerable<SyntaxNode> nodes) where T : SyntaxNode => value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
 
