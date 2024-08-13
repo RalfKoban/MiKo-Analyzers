@@ -174,6 +174,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 results.Add($"Indicates {condition} ");
             }
 
+            results.AddRange(booleans);
+
             return results;
         }
 
@@ -249,7 +251,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
                 else
                 {
-                    // its an empty element, so nothing to do
+                    // it's an empty element, so nothing to do
                 }
             }
 
@@ -277,9 +279,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                        .WithoutStartText(OtherStartingPhrases)
                                        .ReplaceText(OrIfPhrase, OrIfReplacementPhrase)
                                        .WithoutText(Phrases)
-                                       .WithoutFirstXmlNewLine()
-                                       .WithStartText(startingPhrase) // keep starting text and ensure that first character of original text is now lower-case
-                                       .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
+                                       .WithoutFirstXmlNewLine();
+
+            if (nodes.Count == 0)
+            {
+                // we have no comment, hence we add a "TODO" into the resulting comment
+                return new[] { XmlText(startingPhrase + Constants.TODO + endingPhrase) };
+            }
+
+            nodes = nodes.WithStartText(startingPhrase) // keep starting text and ensure that first character of original text is now lower-case
+                         .ReplaceText(OrIfReplacementPhrase, OrIfPhrase);
 
             // clean up comment and remove last node if it is ending with a dot
             if (nodes.LastOrDefault() is XmlTextSyntax sentenceEnding)
