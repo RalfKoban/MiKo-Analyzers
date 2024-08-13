@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 450 rules that are currently provided by the analyzer.
+The following tables lists all the 451 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -227,6 +227,7 @@ The following tables lists all the 450 rules that are currently provided by the 
 |MiKo_2076|Documentation should document default values of optional parameters|&#x2713;|&#x2713;|
 |MiKo_2077|&lt;summary&gt; documentation should not contain &lt;code&gt;|&#x2713;|\-|
 |MiKo_2078|&lt;code&gt; documentation should not contain XML tags|&#x2713;|\-|
+|MiKo_2079|&lt;summary&gt; documentation of properties should not have obvious text|&#x2713;|&#x2713;|
 |MiKo_2080|&lt;summary&gt; documentation of fields should have a default starting phrase|&#x2713;|&#x2713;|
 |MiKo_2081|&lt;summary&gt; documentation of public-visible read-only fields should have a default ending phrase|&#x2713;|&#x2713;|
 |MiKo_2082|&lt;summary&gt; documentation of Enum members should not start with default starting phrases of Enum &lt;summary&gt; documentation|&#x2713;|&#x2713;|

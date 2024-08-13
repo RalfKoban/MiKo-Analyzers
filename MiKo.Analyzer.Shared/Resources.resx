@@ -2462,6 +2462,18 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2078_Title" xml:space="preserve">
     <value>&lt;code&gt; documentation should not contain XML tags</value>
   </data>
+  <data name="MiKo_2079_CodeFixTitle" xml:space="preserve">
+    <value>Remove obvious comment</value>
+  </data>
+  <data name="MiKo_2079_Description" xml:space="preserve">
+    <value>A comment simply stating the name of the property and that is get or set provides no value. Such obvious comments should be removed.</value>
+  </data>
+  <data name="MiKo_2079_MessageFormat" xml:space="preserve">
+    <value>Comment is obvious and provides no value</value>
+  </data>
+  <data name="MiKo_2079_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation of properties should not have obvious text</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>

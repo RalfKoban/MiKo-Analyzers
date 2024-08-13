@@ -6912,6 +6912,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove obvious comment.
+        /// </summary>
+        internal static string MiKo_2079_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2079_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A comment simply stating the name of the property and that is get or set provides no value. Such obvious comments should be removed..
+        /// </summary>
+        internal static string MiKo_2079_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2079_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment is obvious and provides no value.
+        /// </summary>
+        internal static string MiKo_2079_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2079_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of properties should not have obvious text.
+        /// </summary>
+        internal static string MiKo_2079_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         internal static string MiKo_2080_CodeFixTitle {
