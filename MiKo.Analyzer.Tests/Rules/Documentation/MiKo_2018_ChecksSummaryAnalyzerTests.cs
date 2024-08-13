@@ -29,6 +29,41 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_empty_documentation_on_same_line() => No_issue_is_reported_for(@"
+/// <summary></summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_spaces_only_documentation_on_same_line() => No_issue_is_reported_for(@"
+/// <summary>   </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_empty_documentation_on_different_lines() => No_issue_is_reported_for(@"
+/// <summary>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_empty_lines_documentation_on_different_lines() => No_issue_is_reported_for(@"
+/// <summary>
+///
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_documentation() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation.
