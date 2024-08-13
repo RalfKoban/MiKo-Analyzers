@@ -8286,6 +8286,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &lt;inheritdoc/&gt;.
+        /// </summary>
+        internal static string MiKo_2231_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2231_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The very-special purpose of overridden &apos;GetHashCode()&apos; methods is to provide a hash code. So there is no need to write an own documentation for those. Instead, the &apos;&lt;inheritdoc/&gt;&apos; marker should be used here..
+        /// </summary>
+        internal static string MiKo_2231_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2231_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;inheritdoc/&gt; instead.
+        /// </summary>
+        internal static string MiKo_2231_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2231_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of overridden &apos;GetHashCode()&apos; methods shall use &apos;&lt;inheritdoc /&gt;&apos; marker.
+        /// </summary>
+        internal static string MiKo_2231_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2231_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
