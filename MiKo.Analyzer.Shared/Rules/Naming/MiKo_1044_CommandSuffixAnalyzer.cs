@@ -13,7 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1044";
 
         private const string Suffix = "Command";
-        private const string CreatePrefix = MiKo_1016_FactoryMethodsAnalyzer.Prefix;
 
         private static readonly string[] SingleSuffix = { Suffix };
         private static readonly string[] Suffixes = { "_command", Suffix };
@@ -39,7 +38,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return false;
             }
 
-            if (symbol.Name.StartsWith(CreatePrefix, StringComparison.Ordinal))
+            if (symbol.Name.StartsWith(Constants.Names.Create, StringComparison.Ordinal))
             {
                 // ignore factory methods
                 return false;

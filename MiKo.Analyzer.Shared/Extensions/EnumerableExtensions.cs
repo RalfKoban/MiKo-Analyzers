@@ -309,6 +309,26 @@ namespace System.Linq
             return count;
         }
 
+        internal static int Count(this SyntaxTriviaList value, Func<SyntaxTrivia, bool> filter)
+        {
+            // keep in local variable to avoid multiple requests (see Roslyn implementation)
+            var valueCount = value.Count;
+            var count = 0;
+
+            if (valueCount > 0)
+            {
+                for (var index = 0; index < valueCount; index++)
+                {
+                    if (filter(value[index]))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
         internal static HashSet<T> Except<T>(this HashSet<T> source, IEnumerable<T> values) where T : class
         {
             source.ExceptWith(values);

@@ -46,30 +46,7 @@ namespace MiKoSolutions.Analyzers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSingleLineComment(this SyntaxTrivia value) => value.IsKind(SyntaxKind.SingleLineCommentTrivia);
 
-        internal static bool IsSpanningMultipleLines(this SyntaxTrivia value)
-        {
-            var foundLine = false;
-
-            var leadingTrivia = value.Token.LeadingTrivia;
-
-            // keep in local variable to avoid multiple requests (see Roslyn implementation)
-            var count = leadingTrivia.Count;
-
-            for (var index = 0; index < count; index++)
-            {
-                if (leadingTrivia[index].IsComment())
-                {
-                    if (foundLine)
-                    {
-                        return true;
-                    }
-
-                    foundLine = true;
-                }
-            }
-
-            return false;
-        }
+        internal static bool IsSpanningMultipleLines(this SyntaxTrivia value) => value.Token.IsSpanningMultipleLines();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsWhiteSpace(this SyntaxTrivia value) => value.IsKind(SyntaxKind.WhitespaceTrivia);

@@ -24,7 +24,7 @@ public " + type + " " + name + @"
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [TestCase("interface", "ISomethingBase", 1)]
         [TestCase("class", "SomethingBase", 1)]
         [TestCase("interface", "IBaseSomething", 1)]

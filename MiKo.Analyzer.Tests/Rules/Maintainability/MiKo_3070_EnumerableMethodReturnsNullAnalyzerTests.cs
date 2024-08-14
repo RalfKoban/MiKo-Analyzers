@@ -489,7 +489,7 @@ namespace Bla
     }
 }");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_Enumerable_method_body_returning_a_result_that_is_potentially_null_because_of_quite_complex_ternary_operator() => An_issue_is_reported_for(2, @"
 using System.Collections;
