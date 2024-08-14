@@ -400,7 +400,7 @@ namespace Bla
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_awaited_call_not_followed_by_blank_line_if_its_result_gets_assigned_to_local_variable_when_coming_before_another_awaited_call_without_assignment() => An_issue_is_reported_for(2, @"
 using System.Threading.Tasks;
@@ -418,7 +418,7 @@ namespace Bla
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_awaited_call_not_preceded_by_blank_line_if_its_result_gets_assigned_to_local_variable_when_coming_after_another_awaited_call_without_assignment() => An_issue_is_reported_for(2, @"
 using System.Threading.Tasks;

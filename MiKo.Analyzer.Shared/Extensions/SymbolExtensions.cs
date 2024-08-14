@@ -1210,7 +1210,7 @@ namespace MiKoSolutions.Analyzers
             {
                 case TypeKind.Class:
                 case TypeKind.Interface:
-                    return value.Name.EndsWith("Factory", StringComparison.Ordinal) && value.Name.EndsWith("TaskFactory", StringComparison.Ordinal) is false;
+                    return value.Name.EndsWith(Constants.Names.Factory, StringComparison.Ordinal) && value.Name.EndsWith(nameof(TaskFactory), StringComparison.Ordinal) is false;
 
                 default:
                     return false;

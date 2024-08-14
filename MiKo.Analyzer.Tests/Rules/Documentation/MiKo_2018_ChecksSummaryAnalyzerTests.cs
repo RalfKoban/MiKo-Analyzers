@@ -29,6 +29,41 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_empty_documentation_on_same_line() => No_issue_is_reported_for(@"
+/// <summary></summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_spaces_only_documentation_on_same_line() => No_issue_is_reported_for(@"
+/// <summary>   </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_empty_documentation_on_different_lines() => No_issue_is_reported_for(@"
+/// <summary>
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_empty_lines_documentation_on_different_lines() => No_issue_is_reported_for(@"
+/// <summary>
+///
+/// </summary>
+public class TestMe
+{
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_documentation() => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation.
@@ -230,6 +265,131 @@ public class TestMe
 ";
 
             VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_with_spaces_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary> </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_without_contents_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary></summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_without_contents_on_different_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_without_leading_space()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_with_leading_space()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool IsSomething() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2018_ChecksSummaryAnalyzer.Id;

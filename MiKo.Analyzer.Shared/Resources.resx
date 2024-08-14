@@ -1112,6 +1112,18 @@ Types that end their names with 'EventArgs' but do not follow that pattern lie a
   <data name="MiKo_1077_Title" xml:space="preserve">
     <value>Enum members should not be suffixed with 'Enum'</value>
   </data>
+  <data name="MiKo_1078_CodeFixTitle" xml:space="preserve">
+    <value>Rename builder method</value>
+  </data>
+  <data name="MiKo_1078_Description" xml:space="preserve">
+    <value>The method belongs to a builder and therefore its name should be started with 'Build'.</value>
+  </data>
+  <data name="MiKo_1078_MessageFormat" xml:space="preserve">
+    <value>Start name with 'Build'</value>
+  </data>
+  <data name="MiKo_1078_Title" xml:space="preserve">
+    <value>Builder method names should start with 'Build'</value>
+  </data>
   <data name="MiKo_1080_Description" xml:space="preserve">
     <value>It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. 'issue42' in contrast to 'issueFortyTwo').</value>
   </data>
@@ -2450,6 +2462,18 @@ Instead, they should be mentioned as 'callback' because - as delegates represent
   <data name="MiKo_2078_Title" xml:space="preserve">
     <value>&lt;code&gt; documentation should not contain XML tags</value>
   </data>
+  <data name="MiKo_2079_CodeFixTitle" xml:space="preserve">
+    <value>Remove obvious comment</value>
+  </data>
+  <data name="MiKo_2079_Description" xml:space="preserve">
+    <value>A comment simply stating the name of the property and that is get or set provides no value. Such obvious comments should be removed.</value>
+  </data>
+  <data name="MiKo_2079_MessageFormat" xml:space="preserve">
+    <value>Comment is obvious and provides no value</value>
+  </data>
+  <data name="MiKo_2079_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation of properties should not have obvious text</value>
+  </data>
   <data name="MiKo_2080_CodeFixTitle" xml:space="preserve">
     <value>Start field with default phrase</value>
   </data>
@@ -2913,6 +2937,18 @@ Positive wording is much easier to understand as it is straight forward and come
   </data>
   <data name="MiKo_2229_Title" xml:space="preserve">
     <value>Documentation should not contain left-over XML fragments</value>
+  </data>
+  <data name="MiKo_2231_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;inheritdoc/&gt;</value>
+  </data>
+  <data name="MiKo_2231_Description" xml:space="preserve">
+    <value>The very-special purpose of overridden 'GetHashCode()' methods is to provide a hash code. So there is no need to write an own documentation for those. Instead, the '&lt;inheritdoc/&gt;' marker should be used here.</value>
+  </data>
+  <data name="MiKo_2231_MessageFormat" xml:space="preserve">
+    <value>Use &lt;inheritdoc/&gt; instead</value>
+  </data>
+  <data name="MiKo_2231_Title" xml:space="preserve">
+    <value>Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker</value>
   </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
@@ -4593,6 +4629,18 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4005_Title" xml:space="preserve">
     <value>The interface that gives a type its name should be placed directly after the type's declaration</value>
   </data>
+  <data name="MiKo_4007_CodeFixTitle" xml:space="preserve">
+    <value>Place operator before methods</value>
+  </data>
+  <data name="MiKo_4007_Description" xml:space="preserve">
+    <value>Operators are a very special kind of methods. As they are static, they should be placed before all other methods.</value>
+  </data>
+  <data name="MiKo_4007_MessageFormat" xml:space="preserve">
+    <value>Place operator before methods</value>
+  </data>
+  <data name="MiKo_4007_Title" xml:space="preserve">
+    <value>Operators should be placed before methods</value>
+  </data>
   <data name="MiKo_4101_CodeFixTitle" xml:space="preserve">
     <value>Place method after one-time methods and before test cleanup and all other test methods</value>
   </data>
@@ -5382,5 +5430,29 @@ Hence, their open brackets should be positioned at the same position where the c
   </data>
   <data name="MiKo_6056_Title" xml:space="preserve">
     <value>Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned</value>
+  </data>
+  <data name="MiKo_6057_CodeFixTitle" xml:space="preserve">
+    <value>Align type parameter constraint vertically along with others</value>
+  </data>
+  <data name="MiKo_6057_Description" xml:space="preserve">
+    <value>The code is easier to read if type parameter constraint clauses are aligned vertically.</value>
+  </data>
+  <data name="MiKo_6057_MessageFormat" xml:space="preserve">
+    <value>Align type parameter constraint vertically along with others</value>
+  </data>
+  <data name="MiKo_6057_Title" xml:space="preserve">
+    <value>Type parameter constraint clauses should be aligned vertically</value>
+  </data>
+  <data name="MiKo_6058_CodeFixTitle" xml:space="preserve">
+    <value>Align type parameter constraint indented below type parameter list</value>
+  </data>
+  <data name="MiKo_6058_Description" xml:space="preserve">
+    <value>The code is easier to read if type parameter constraint clauses are aligned indented below the corresponding type parameter list.</value>
+  </data>
+  <data name="MiKo_6058_MessageFormat" xml:space="preserve">
+    <value>Align type parameter constraint indented below type parameter list</value>
+  </data>
+  <data name="MiKo_6058_Title" xml:space="preserve">
+    <value>Type parameter constraint clauses should be indented below type parameter list</value>
   </data>
 </root>

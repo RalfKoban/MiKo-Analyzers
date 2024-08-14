@@ -94,7 +94,7 @@ public class TestMe
 {
 }");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_multiple_consecutive_empty_lines_at_begin_of_comment() => An_issue_is_reported_for(3, @"
 /// <summary>
@@ -107,7 +107,7 @@ public class TestMe
 {
 }");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_multiple_consecutive_empty_lines_at_middle_of_comment() => An_issue_is_reported_for(3, @"
 /// <summary>
@@ -121,7 +121,7 @@ public class TestMe
 {
 }");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_multiple_consecutive_empty_lines_at_end_of_comment() => An_issue_is_reported_for(3, @"
 /// <summary>
