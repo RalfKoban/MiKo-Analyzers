@@ -34,6 +34,8 @@ namespace MiKoSolutions.Analyzers
 
         private static readonly SyntaxKind[] MethodNameSyntaxKinds = { SyntaxKind.MethodDeclaration, SyntaxKind.ConstructorDeclaration };
 
+        private static readonly SyntaxList<TypeParameterConstraintClauseSyntax> Empty = SyntaxFactory.List<TypeParameterConstraintClauseSyntax>();
+
         internal static IEnumerable<T> Ancestors<T>(this SyntaxNode value) where T : SyntaxNode => value.Ancestors().OfType<T>(); // value.AncestorsAndSelf().OfType<T>();
 
         internal static bool Contains(this SyntaxNode value, char c) => value?.ToString().Contains(c) ?? false;
@@ -97,6 +99,38 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
+
+        internal static SyntaxList<TypeParameterConstraintClauseSyntax> GetConstraintClauses(this TypeParameterConstraintClauseSyntax value)
+        {
+            switch (value.Parent)
+            {
+                case ClassDeclarationSyntax c: return c.ConstraintClauses;
+                case InterfaceDeclarationSyntax i: return i.ConstraintClauses;
+                case RecordDeclarationSyntax r: return r.ConstraintClauses;
+                case StructDeclarationSyntax s: return s.ConstraintClauses;
+                case MethodDeclarationSyntax b: return b.ConstraintClauses;
+                case LocalFunctionStatementSyntax f: return f.ConstraintClauses;
+
+                default:
+                    return Empty;
+            }
+        }
+
+        internal static TypeParameterListSyntax GetTypeParameterList(this TypeParameterConstraintClauseSyntax value)
+        {
+            switch (value.Parent)
+            {
+                case ClassDeclarationSyntax c: return c.TypeParameterList;
+                case InterfaceDeclarationSyntax i: return i.TypeParameterList;
+                case RecordDeclarationSyntax r: return r.TypeParameterList;
+                case StructDeclarationSyntax s: return s.TypeParameterList;
+                case MethodDeclarationSyntax b: return b.TypeParameterList;
+                case LocalFunctionStatementSyntax f: return f.TypeParameterList;
+
+                default:
+                    return default;
+            }
+        }
 
         internal static Location GetContentsLocation(this XmlElementSyntax value)
         {
@@ -1791,6 +1825,14 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsSpanningMultipleLines(this SyntaxNode value)
+        {
+            var startingLine = value.GetStartingLine();
+            var endingLine = value.GetEndingLine();
+
+            return startingLine != endingLine;
+        }
+
         internal static bool IsSeeLangword(this SyntaxNode value)
         {
             if (value is XmlEmptyElementSyntax syntax && syntax.GetName() == Constants.XmlTag.See)
@@ -2756,7 +2798,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlCommentExterior<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentExterior);
 
-        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.RemoveNode(node, SyntaxRemoveOptions.KeepNoTrivia);
+        internal static T Without<T>(this T value, SyntaxNode node) where T : SyntaxNode
+        {
+            var removeOptions = node is DocumentationCommentTriviaSyntax
+                                ? SyntaxRemoveOptions.AddElasticMarker
+                                : SyntaxRemoveOptions.KeepNoTrivia;
+
+            return value.RemoveNode(node, removeOptions);
+        }
 
         internal static T Without<T>(this T value, IEnumerable<SyntaxNode> nodes) where T : SyntaxNode => value.RemoveNodes(nodes, SyntaxRemoveOptions.KeepNoTrivia);
 

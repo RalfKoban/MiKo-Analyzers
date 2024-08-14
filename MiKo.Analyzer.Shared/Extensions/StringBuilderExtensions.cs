@@ -20,6 +20,12 @@ namespace System.Text
             {
                 var oldValue = pair.Key;
 
+                if (oldValue.IsNullOrEmpty())
+                {
+                    // cannot replace any empty value
+                    continue;
+                }
+
                 if (QuickCompare(value, oldValue))
                 {
                     // can be part in the replacement as value seems to fit
@@ -40,6 +46,12 @@ namespace System.Text
                 var pair = replacementPairs[index];
                 var oldValue = pair.Key;
 
+                if (oldValue.IsNullOrEmpty())
+                {
+                    // cannot replace any empty value
+                    continue;
+                }
+
                 if (QuickCompare(value, oldValue))
                 {
                     // can be part in the replacement as value seems to fit
@@ -59,6 +71,12 @@ namespace System.Text
             {
                 var oldValue = texts[index];
 
+                if (oldValue.IsNullOrEmpty())
+                {
+                    // cannot replace any empty value
+                    continue;
+                }
+
                 if (QuickCompare(value, oldValue))
                 {
                     // can be part in the replacement as value seems to fit
@@ -71,6 +89,12 @@ namespace System.Text
 
         public static StringBuilder ReplaceWithCheck(this StringBuilder value, string oldValue, string newValue)
         {
+            if (oldValue.IsNullOrEmpty())
+            {
+                // cannot replace an empty value
+                return value;
+            }
+
             if (QuickCompare(value, oldValue))
             {
                 return value.Replace(oldValue, newValue);

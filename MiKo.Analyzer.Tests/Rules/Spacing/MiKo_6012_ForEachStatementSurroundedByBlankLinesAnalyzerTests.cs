@@ -144,7 +144,7 @@ namespace Bla
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_foreach_blocks_as_statements_without_blank_line_between_both_blocks_in_method() => An_issue_is_reported_for(2, @"
 using System.Generic.Collections;
