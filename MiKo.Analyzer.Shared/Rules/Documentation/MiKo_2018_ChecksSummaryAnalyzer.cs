@@ -36,6 +36,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var summaryXml in summaryXmls)
             {
+                if (symbol is ITypeSymbol && summaryXml.GetTextTrimmed().IsEmpty)
+                {
+                    // do not report for empty types
+                    continue;
+                }
+
                 yield return AnalyzeTextStart(symbol, summaryXml);
             }
         }

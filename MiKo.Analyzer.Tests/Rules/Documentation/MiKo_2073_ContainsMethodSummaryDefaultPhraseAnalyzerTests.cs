@@ -203,6 +203,131 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_with_spaces_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary> </summary>
+    public bool Contains() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_without_contents_on_same_line()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary></summary>
+    public bool Contains() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_without_contents_on_different_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_without_leading_space()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_empty_phrase_with_leading_space()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Determines whether
+    /// </summary>
+    public bool Contains() => true;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2073_ContainsMethodSummaryDefaultPhraseAnalyzer();
