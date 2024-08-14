@@ -2946,6 +2946,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rename builder method.
+        /// </summary>
+        internal static string MiKo_1078_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_1078_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The method belongs to a builder and therefore its name should be started with &apos;Build&apos;..
+        /// </summary>
+        internal static string MiKo_1078_Description {
+            get {
+                return ResourceManager.GetString("MiKo_1078_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start name with &apos;Build&apos;.
+        /// </summary>
+        internal static string MiKo_1078_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_1078_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Builder method names should start with &apos;Build&apos;.
+        /// </summary>
+        internal static string MiKo_1078_Title {
+            get {
+                return ResourceManager.GetString("MiKo_1078_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It is much easier to read a number inside a name if it is written as number and not its spelling (e.g. &apos;issue42&apos; in contrast to &apos;issueFortyTwo&apos;)..
         /// </summary>
         internal static string MiKo_1080_Description {
@@ -6903,6 +6939,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove obvious comment.
+        /// </summary>
+        internal static string MiKo_2079_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2079_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A comment simply stating the name of the property and that is get or set provides no value. Such obvious comments should be removed..
+        /// </summary>
+        internal static string MiKo_2079_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2079_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment is obvious and provides no value.
+        /// </summary>
+        internal static string MiKo_2079_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2079_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation of properties should not have obvious text.
+        /// </summary>
+        internal static string MiKo_2079_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2079_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start field with default phrase.
         /// </summary>
         internal static string MiKo_2080_CodeFixTitle {
@@ -8237,6 +8309,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_2229_Title {
             get {
                 return ResourceManager.GetString("MiKo_2229_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;inheritdoc/&gt;.
+        /// </summary>
+        internal static string MiKo_2231_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2231_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The very-special purpose of overridden &apos;GetHashCode()&apos; methods is to provide a hash code. So there is no need to write an own documentation for those. Instead, the &apos;&lt;inheritdoc/&gt;&apos; marker should be used here..
+        /// </summary>
+        internal static string MiKo_2231_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2231_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &lt;inheritdoc/&gt; instead.
+        /// </summary>
+        internal static string MiKo_2231_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2231_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Documentation of overridden &apos;GetHashCode()&apos; methods shall use &apos;&lt;inheritdoc /&gt;&apos; marker.
+        /// </summary>
+        internal static string MiKo_2231_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2231_Title", resourceCulture);
             }
         }
         
@@ -13065,6 +13173,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place operator before methods.
+        /// </summary>
+        internal static string MiKo_4006_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4006_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operators are a very special kind of methods. As they are static, they should be placed before all other methods..
+        /// </summary>
+        internal static string MiKo_4006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place operator before methods.
+        /// </summary>
+        internal static string MiKo_4006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operators should be placed before methods.
+        /// </summary>
+        internal static string MiKo_4006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place method after one-time methods and before test cleanup and all other test methods.
         /// </summary>
         internal static string MiKo_4101_CodeFixTitle {
@@ -15417,6 +15561,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6056_Title {
             get {
                 return ResourceManager.GetString("MiKo_6056_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint vertically along with others.
+        /// </summary>
+        internal static string MiKo_6057_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6057_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned vertically..
+        /// </summary>
+        internal static string MiKo_6057_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6057_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint vertically along with others.
+        /// </summary>
+        internal static string MiKo_6057_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6057_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type parameter constraint clauses should be aligned vertically.
+        /// </summary>
+        internal static string MiKo_6057_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6057_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        /// </summary>
+        internal static string MiKo_6058_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6058_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the corresponding type parameter list..
+        /// </summary>
+        internal static string MiKo_6058_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6058_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        /// </summary>
+        internal static string MiKo_6058_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6058_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type parameter constraint clauses should be indented below type parameter list.
+        /// </summary>
+        internal static string MiKo_6058_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6058_Title", resourceCulture);
             }
         }
     }

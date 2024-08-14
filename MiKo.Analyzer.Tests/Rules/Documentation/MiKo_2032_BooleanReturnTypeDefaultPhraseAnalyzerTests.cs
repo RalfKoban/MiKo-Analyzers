@@ -229,6 +229,7 @@ public class TestMe
 ");
 
         [TestCase("", "TODO")]
+        [TestCase("Boolean", "TODO")]
         [TestCase(" Something . ", "something")]
         [TestCase("Something.", "something")]
         [TestCase("If the stuff is done, True; False else.", "the stuff is done")]

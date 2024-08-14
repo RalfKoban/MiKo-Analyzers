@@ -118,7 +118,7 @@ namespace My
     }
 }");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [TestCase("bool b", 1)]
         [TestCase("bool b, int x", 1)]
         [TestCase("int x, bool b, int y", 1)]
