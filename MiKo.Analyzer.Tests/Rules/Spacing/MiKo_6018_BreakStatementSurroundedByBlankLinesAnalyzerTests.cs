@@ -108,7 +108,7 @@ namespace Bla
 }
 ");
 
-        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = "Would look strange otherwise.")]
+        [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
         public void An_issue_is_reported_for_break_statement_as_statement_without_blank_line_after_variable_assignment_in_switch_case_section() => An_issue_is_reported_for(4, @"
 namespace Bla

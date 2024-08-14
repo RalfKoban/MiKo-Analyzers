@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public class MiKo_6046_CalculationOperationsAreOnSameLineAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6046_CalculationOperationsAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] CalculationOperators = ["+", "-", "%", "*", "/", "<<", ">>"];
 
