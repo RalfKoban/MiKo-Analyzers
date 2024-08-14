@@ -2938,6 +2938,18 @@ Positive wording is much easier to understand as it is straight forward and come
   <data name="MiKo_2229_Title" xml:space="preserve">
     <value>Documentation should not contain left-over XML fragments</value>
   </data>
+  <data name="MiKo_2231_CodeFixTitle" xml:space="preserve">
+    <value>Use &lt;inheritdoc/&gt;</value>
+  </data>
+  <data name="MiKo_2231_Description" xml:space="preserve">
+    <value>The very-special purpose of overridden 'GetHashCode()' methods is to provide a hash code. So there is no need to write an own documentation for those. Instead, the '&lt;inheritdoc/&gt;' marker should be used here.</value>
+  </data>
+  <data name="MiKo_2231_MessageFormat" xml:space="preserve">
+    <value>Use &lt;inheritdoc/&gt; instead</value>
+  </data>
+  <data name="MiKo_2231_Title" xml:space="preserve">
+    <value>Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
