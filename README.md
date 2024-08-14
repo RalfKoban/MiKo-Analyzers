@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 452 rules that are currently provided by the analyzer.
+The following tables lists all the 453 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -420,6 +420,7 @@ The following tables lists all the 452 rules that are currently provided by the 
 |MiKo_4003|Dispose methods should be placed directly after constructors and finalizers|&#x2713;|&#x2713;|
 |MiKo_4004|Dispose methods should be placed before all other methods of the same accessibility|&#x2713;|&#x2713;|
 |MiKo_4005|The interface that gives a type its name should be placed directly after the type's declaration|&#x2713;|&#x2713;|
+|MiKo_4007|Operators should be placed before methods|&#x2713;|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered directly after One-Time methods|&#x2713;|&#x2713;|
 |MiKo_4102|Test cleanup methods should be ordered after test initialization methods and before test methods|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods|&#x2713;|&#x2713;|

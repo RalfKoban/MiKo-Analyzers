@@ -13146,6 +13146,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place operator before methods.
+        /// </summary>
+        internal static string MiKo_4006_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4006_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operators are a very special kind of methods. As they are static, they should be placed before all other methods..
+        /// </summary>
+        internal static string MiKo_4006_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4006_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place operator before methods.
+        /// </summary>
+        internal static string MiKo_4006_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4006_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operators should be placed before methods.
+        /// </summary>
+        internal static string MiKo_4006_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4006_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place method after one-time methods and before test cleanup and all other test methods.
         /// </summary>
         internal static string MiKo_4101_CodeFixTitle {

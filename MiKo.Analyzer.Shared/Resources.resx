@@ -4629,6 +4629,18 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4005_Title" xml:space="preserve">
     <value>The interface that gives a type its name should be placed directly after the type's declaration</value>
   </data>
+  <data name="MiKo_4007_CodeFixTitle" xml:space="preserve">
+    <value>Place operator before methods</value>
+  </data>
+  <data name="MiKo_4007_Description" xml:space="preserve">
+    <value>Operators are a very special kind of methods. As they are static, they should be placed before all other methods.</value>
+  </data>
+  <data name="MiKo_4007_MessageFormat" xml:space="preserve">
+    <value>Place operator before methods</value>
+  </data>
+  <data name="MiKo_4007_Title" xml:space="preserve">
+    <value>Operators should be placed before methods</value>
+  </data>
   <data name="MiKo_4101_CodeFixTitle" xml:space="preserve">
     <value>Place method after one-time methods and before test cleanup and all other test methods</value>
   </data>
