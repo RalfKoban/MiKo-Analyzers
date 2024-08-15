@@ -992,13 +992,17 @@ namespace MiKoSolutions.Analyzers
                         return null; // nothing more to do
                 }
 
-                var trivia = leadingTrivia[index];
-
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                // just go reverse from the likely index to find any documentation that might be separated via (multiple) empty lines
+                for (; index >= 0; index--)
                 {
-                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    var trivia = leadingTrivia[index];
+
+                    if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                     {
-                        return syntax;
+                        if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                        {
+                            return syntax;
+                        }
                     }
                 }
             }
