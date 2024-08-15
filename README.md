@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 453 rules that are currently provided by the analyzer.
+The following tables lists all the 454 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -371,6 +371,7 @@ The following tables lists all the 453 rules that are currently provided by the 
 |MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
 |MiKo_3097|Do not cast to type and return object|&#x2713;|\-|
 |MiKo_3098|Justifications of suppressed messages shall explain|&#x2713;|\-|
+|MiKo_3099|Do not compare enum values with null|&#x2713;|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
