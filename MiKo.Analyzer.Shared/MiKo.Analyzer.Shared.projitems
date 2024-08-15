@@ -260,6 +260,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3097_DoNotCastAndReturnUnnecessaryAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3098_SuppressMessageAttributeHasJustificationAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3099_DoNotCompareEnumsWithNullAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3101_TestClassesHaveTestsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3102_TestMethodsHaveNoConditionsAnalyzer.cs" />

@@ -11636,6 +11636,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix comparison to null.
+        /// </summary>
+        internal static string MiKo_3099_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3099_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum values are never null in case the enum type is a value type. So comparing them with null will always fail..
+        /// </summary>
+        internal static string MiKo_3099_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3099_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum can never be null.
+        /// </summary>
+        internal static string MiKo_3099_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3099_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not compare enum values with null.
+        /// </summary>
+        internal static string MiKo_3099_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3099_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
@@ -13148,36 +13184,36 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Place operator before methods.
         /// </summary>
-        internal static string MiKo_4006_CodeFixTitle {
+        internal static string MiKo_4007_CodeFixTitle {
             get {
-                return ResourceManager.GetString("MiKo_4006_CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_CodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Operators are a very special kind of methods. As they are static, they should be placed before all other methods..
         /// </summary>
-        internal static string MiKo_4006_Description {
+        internal static string MiKo_4007_Description {
             get {
-                return ResourceManager.GetString("MiKo_4006_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Place operator before methods.
         /// </summary>
-        internal static string MiKo_4006_MessageFormat {
+        internal static string MiKo_4007_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_4006_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Operators should be placed before methods.
         /// </summary>
-        internal static string MiKo_4006_Title {
+        internal static string MiKo_4007_Title {
             get {
-                return ResourceManager.GetString("MiKo_4006_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_Title", resourceCulture);
             }
         }
         
