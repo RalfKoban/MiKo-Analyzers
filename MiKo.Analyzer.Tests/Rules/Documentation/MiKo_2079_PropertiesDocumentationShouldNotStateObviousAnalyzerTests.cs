@@ -82,6 +82,20 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_property_with_obvious_documentation_and_empty_line_([ValueSource(nameof(ObviousStartingPhrases))] string obvious, [Values("", ".")] string ending) => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + obvious + " Age" + ending + @"
+    /// </summary>
+
+    public int Age { get; set; }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_property_with_obvious_documentation_([ValueSource(nameof(ObviousStartingPhrases))] string obvious, [Values("", ".")] string ending)
         {
             var originalCode = @"
@@ -92,6 +106,34 @@ public class TestMe
     /// <summary>
     /// " + obvious + " Age" + ending + @"
     /// </summary>
+    public int Age { get; set; }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public int Age { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_property_with_obvious_documentation_and_empty_line_([ValueSource(nameof(ObviousStartingPhrases))] string obvious, [Values("", ".")] string ending)
+        {
+            var originalCode = @"
+using System;
+
+public class TestMe
+{
+    /// <summary>
+    /// " + obvious + " Age" + ending + @"
+    /// </summary>
+
     public int Age { get; set; }
 }
 ";
