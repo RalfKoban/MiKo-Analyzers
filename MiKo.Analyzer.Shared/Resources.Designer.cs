@@ -15646,7 +15646,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        ///   Looks up a localized string similar to Align type parameter constraint indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_CodeFixTitle {
             get {
@@ -15655,7 +15655,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the corresponding type parameter list..
+        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the parameter list..
         /// </summary>
         internal static string MiKo_6058_Description {
             get {
@@ -15664,7 +15664,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        ///   Looks up a localized string similar to Align type parameter constraint indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_MessageFormat {
             get {
@@ -15673,7 +15673,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type parameter constraint clauses should be indented below type parameter list.
+        ///   Looks up a localized string similar to Type parameter constraint clauses should be indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_Title {
             get {

@@ -112,8 +112,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static bool DirectlyThrowsObjectDisposedException(IMethodSymbol symbol) => symbol.GetSyntax().DescendantNodes().Any(ThrowsObjectDisposedException);
 
         private static bool AlwaysThrows<T1, T2>(SyntaxNode syntax)
-                                                                where T1 : Exception
-                                                                where T2 : Exception
+                                                               where T1 : Exception
+                                                               where T2 : Exception
         {
             foreach (var node in syntax.ChildNodes())
             {

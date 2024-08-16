@@ -116,16 +116,19 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static TypeParameterListSyntax GetTypeParameterList(this TypeParameterConstraintClauseSyntax value)
+        internal static SyntaxToken GetTypeParameterConstraintReferenceToken(this TypeParameterConstraintClauseSyntax value)
         {
             switch (value.Parent)
             {
-                case ClassDeclarationSyntax c: return c.TypeParameterList;
-                case InterfaceDeclarationSyntax i: return i.TypeParameterList;
-                case RecordDeclarationSyntax r: return r.TypeParameterList;
-                case StructDeclarationSyntax s: return s.TypeParameterList;
-                case MethodDeclarationSyntax b: return b.TypeParameterList;
-                case LocalFunctionStatementSyntax f: return f.TypeParameterList;
+//// ReSharper disable PossibleNullReferenceException Cannot be null as there is already a type parameter constraint
+                case ClassDeclarationSyntax c: return c.TypeParameterList.GreaterThanToken;
+                case InterfaceDeclarationSyntax i: return i.TypeParameterList.GreaterThanToken;
+                case RecordDeclarationSyntax r: return r.TypeParameterList.GreaterThanToken;
+                case StructDeclarationSyntax s: return s.TypeParameterList.GreaterThanToken;
+//// ReSharper restore PossibleNullReferenceException
+
+                case MethodDeclarationSyntax b: return b.ParameterList.CloseParenToken;
+                case LocalFunctionStatementSyntax f: return f.ParameterList.CloseParenToken;
 
                 default:
                     return default;
@@ -2071,7 +2074,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
-        internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this SeparatedSyntaxList<TSyntaxNode> source, SyntaxKind kind) where TSyntaxNode : SyntaxNode where TResult : TSyntaxNode
+        internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this SeparatedSyntaxList<TSyntaxNode> source, SyntaxKind kind) where TSyntaxNode : SyntaxNode
+                                                                                                                                           where TResult : TSyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -2147,7 +2151,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
 
-        internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode where TResult : T
+        internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode
+                                                                                             where TResult : T
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -2201,8 +2206,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static T ReplaceNodes<T, TNode>(this T value, IEnumerable<TNode> nodes, Func<TNode, IEnumerable<SyntaxNode>> computeReplacementNodes)
-            where T : SyntaxNode
-            where TNode : SyntaxNode
+                                                                                                                                                  where T : SyntaxNode
+                                                                                                                                                  where TNode : SyntaxNode
         {
             // replace all nodes by following algorithm:
             // 1. Create a dictionary with SyntaxAnnotations and replacement nodes for the node to annotate (new SyntaxAnnotation)
