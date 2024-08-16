@@ -4519,6 +4519,18 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3219_Title" xml:space="preserve">
     <value>Public members should not be 'virtual'</value>
   </data>
+  <data name="MiKo_3220_CodeFixTitle" xml:space="preserve">
+    <value>Simplify condition</value>
+  </data>
+  <data name="MiKo_3220_Description" xml:space="preserve">
+    <value>Logical '&amp;&amp;' or '||' conditions using 'true' or 'false' can be simplified to not use 'true' or 'false' directly.</value>
+  </data>
+  <data name="MiKo_3220_MessageFormat" xml:space="preserve">
+    <value>Simplify condition</value>
+  </data>
+  <data name="MiKo_3220_Title" xml:space="preserve">
+    <value>Logical '&amp;&amp;' or '||' conditions using 'true' or 'false' should be simplified</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
