@@ -12826,6 +12826,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Simplify condition.
+        /// </summary>
+        internal static string MiKo_3220_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3220_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical &apos;&amp;&amp;&apos; or &apos;||&apos; conditions using &apos;true&apos; or &apos;false&apos; can be simplified to not use &apos;true&apos; or &apos;false&apos; directly..
+        /// </summary>
+        internal static string MiKo_3220_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3220_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify condition.
+        /// </summary>
+        internal static string MiKo_3220_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3220_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical &apos;&amp;&amp;&apos; or &apos;||&apos; conditions using &apos;true&apos; or &apos;false&apos; should be simplified.
+        /// </summary>
+        internal static string MiKo_3220_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3220_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
