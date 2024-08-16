@@ -12,26 +12,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2079_PropertiesDocumentationShouldNotStateObviousAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ObviousStartingPhrases =
-        [
-            "Get",
-            "Set",
-            "Get/Set",
-            "Get or Set",
-            "Get Or Set",
-            "Get OR Set",
-            "Get and Set",
-            "Get And Set",
-            "Get AND Set",
-            "Gets",
-            "Sets",
-            "Gets/Sets",
-            "Gets or Sets",
-            "Gets Or Sets",
-            "Gets OR Sets",
-            "Gets and Sets",
-            "Gets And Sets",
-            "Gets AND Sets",
-        ];
+                                                                  [
+                                                                      "Get",
+                                                                      "Set",
+                                                                      "Get/Set",
+                                                                      "Get or Set",
+                                                                      "Get Or Set",
+                                                                      "Get OR Set",
+                                                                      "Get and Set",
+                                                                      "Get And Set",
+                                                                      "Get AND Set",
+                                                                      "Gets",
+                                                                      "Sets",
+                                                                      "Gets/Sets",
+                                                                      "Gets or Sets",
+                                                                      "Gets Or Sets",
+                                                                      "Gets OR Sets",
+                                                                      "Gets and Sets",
+                                                                      "Gets And Sets",
+                                                                      "Gets AND Sets",
+                                                                  ];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_property() => No_issue_is_reported_for(@"

@@ -497,4 +497,4 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_6055|Assignment statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
 |MiKo_6057|Type parameter constraint clauses should be aligned vertically|&#x2713;|&#x2713;|
-|MiKo_6058|Type parameter constraint clauses should be indented below type parameter list|&#x2713;|&#x2713;|
+|MiKo_6058|Type parameter constraint clauses should be indented below parameter list|&#x2713;|&#x2713;|
