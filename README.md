@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 454 rules that are currently provided by the analyzer.
+The following tables lists all the 455 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -407,6 +407,7 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_3217|Do not use generic types that have other generic types as type arguments|&#x2713;|\-|
 |MiKo_3218|Do not define extension methods in unexpected places|&#x2713;|\-|
 |MiKo_3219|Public members should not be 'virtual'|&#x2713;|\-|
+|MiKo_3220|Logical '&amp;&amp;' or '&#124;&#124;' conditions using 'true' or 'false' should be simplified|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -497,4 +498,4 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_6055|Assignment statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
 |MiKo_6057|Type parameter constraint clauses should be aligned vertically|&#x2713;|&#x2713;|
-|MiKo_6058|Type parameter constraint clauses should be indented below type parameter list|&#x2713;|&#x2713;|
+|MiKo_6058|Type parameter constraint clauses should be indented below parameter list|&#x2713;|&#x2713;|
