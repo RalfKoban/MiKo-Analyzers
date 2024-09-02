@@ -17,6 +17,19 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
 
+        protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
+        {
+            if (syntax.Parent is IfStatementSyntax statement)
+            {
+                var updated = statement.WithOpenParenToken(statement.OpenParenToken.WithoutTrailingTrivia())
+                                       .WithCloseParenToken(statement.CloseParenToken.WithoutLeadingTrivia());
+
+                return root.ReplaceNode(statement, updated);
+            }
+
+            return base.GetUpdatedSyntaxRoot(document, root, syntax, annotationOfSyntax, issue);
+        }
+
         private static T GetUpdatedSyntax<T>(T syntax) where T : SyntaxNode
         {
             switch (syntax)
@@ -32,7 +45,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 case ParenthesizedExpressionSyntax parenthesized:
                 {
-                    var updated = parenthesized.WithExpression(GetUpdatedSyntax(parenthesized.Expression));
+                    var updated = parenthesized.WithOpenParenToken(parenthesized.OpenParenToken.WithoutTrivia())
+                                               .WithExpression(GetUpdatedSyntax(parenthesized.Expression))
+                                               .WithCloseParenToken(parenthesized.CloseParenToken.WithoutTrivia());
 
                     return updated as T;
                 }

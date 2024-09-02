@@ -214,6 +214,84 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_parenthesized_logical_condition_parts_are_all_on_their_own_line_but_combined_condition_is_on_same_line_as_last_and_parenthesis_are_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2, bool flag3)
+    {
+        if (
+            (flag1
+            || flag2) && flag3
+           )
+            return;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool flag1, bool flag2, bool flag3)
+    {
+        if ((flag1 || flag2) && flag3)
+            return;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_parenthesized_logical_condition_parts_are_all_on_their_own_lines_and_parenthesis_are_on_separate_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public string A, B, D;
+    public object C;
+
+    public bool Equals(TestMe other)
+    {
+        return (
+A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal)))
+&& (
+B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)))
+&& (
+C == other.C || (C != null && C.Equals(other.C)))
+&& (
+D == other.D || (D != null && D.Equals(other.D, StringComparison.Ordinal))) && base.Equals(other);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public string A, B, D;
+    public object C;
+
+    public bool Equals(TestMe other)
+    {
+        return (A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal))) && (B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal))) && (C == other.C || (C != null && C.Equals(other.C))) && (D == other.D || (D != null && D.Equals(other.D, StringComparison.Ordinal))) && base.Equals(other);
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         //// TODO RKN: Add tests for inline-comments after condition parts
 
         protected override string GetDiagnosticId() => MiKo_6048_LogicalConditionsAreOnSameLineAnalyzer.Id;
