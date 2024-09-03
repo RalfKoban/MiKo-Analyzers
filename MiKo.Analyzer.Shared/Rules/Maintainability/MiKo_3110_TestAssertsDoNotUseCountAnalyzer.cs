@@ -25,30 +25,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                                            "GreaterOrEqual",
                                                                        };
 
-        public MiKo_3110_TestAssertsDoNotUseCountAnalyzer() : base(Id)
+        public MiKo_3110_TestAssertsDoNotUseCountAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
         protected override bool IsUnitTestAnalyzer => true;
 
-        // For yet (2023-09-24) unknown reason the compiler warnings will not show up when running inside the CompilationStartAnalysisContext context, so we use the symbol context instead
-        ////    protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
-
-        protected override IEnumerable<Diagnostic> Analyze(IMethodSymbol symbol, Compilation compilation)
-        {
-            foreach (var node in symbol.GetSyntax().DescendantNodes<MemberAccessExpressionSyntax>())
-            {
-                if (node.IsKind(SyntaxKind.SimpleMemberAccessExpression))
-                {
-                    var issues = AnalyzeSimpleMemberAccessExpression(node);
-
-                    foreach (var issue in issues)
-                    {
-                        yield return issue;
-                    }
-                }
-            }
-        }
+        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => AssertionMethods.Contains(node.GetName())
                                                                                     && node.Expression is IdentifierNameSyntax invokedType
@@ -85,6 +68,16 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             token = default;
 
             return false;
+        }
+
+        private void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is MemberAccessExpressionSyntax maes)
+            {
+                var issues = AnalyzeSimpleMemberAccessExpression(maes);
+
+                ReportDiagnostics(context, issues);
+            }
         }
 
         private IEnumerable<Diagnostic> AnalyzeSimpleMemberAccessExpression(MemberAccessExpressionSyntax node)
