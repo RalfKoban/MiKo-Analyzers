@@ -12862,6 +12862,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use &apos;HashCode.Combine&apos;.
+        /// </summary>
+        internal static string MiKo_3221_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3221_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To improve the quality of the hash code returned by &apos;GetHashCode&apos;, developers should use &apos;HashCode.Combine&apos; (when the underlying data type is simple, for example, an integer value)..
+        /// </summary>
+        internal static string MiKo_3221_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3221_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;HashCode.Combine&apos; instead.
+        /// </summary>
+        internal static string MiKo_3221_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3221_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode overrides should use &apos;HashCode.Combine&apos;.
+        /// </summary>
+        internal static string MiKo_3221_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3221_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
