@@ -958,6 +958,19 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsAspNetCoreStartUp(this IMethodSymbol value)
+        {
+            switch (value.Name)
+            {
+                case "Configure":
+                case "ConfigureServices":
+                    return value.ReturnsVoid && value.ContainingType?.Name == "Startup";
+
+                default:
+                    return false;
+            }
+        }
+
         internal static bool IsAsyncTaskBased(this IMethodSymbol value) => value.IsAsync || value.ReturnType.IsTask();
 
         internal static bool IsBoolean(this ITypeSymbol value) => value.SpecialType == SpecialType.System_Boolean;
