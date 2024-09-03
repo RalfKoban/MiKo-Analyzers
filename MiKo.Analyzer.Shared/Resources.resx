@@ -4531,6 +4531,18 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3220_Title" xml:space="preserve">
     <value>Logical '&amp;&amp;' or '||' conditions using 'true' or 'false' should be simplified</value>
   </data>
+  <data name="MiKo_3221_CodeFixTitle" xml:space="preserve">
+    <value>Use 'HashCode.Combine'</value>
+  </data>
+  <data name="MiKo_3221_Description" xml:space="preserve">
+    <value>To improve the quality of the hash code returned by 'GetHashCode', developers should use 'HashCode.Combine' (when the underlying data type is simple, for example, an integer value).</value>
+  </data>
+  <data name="MiKo_3221_MessageFormat" xml:space="preserve">
+    <value>Use 'HashCode.Combine' instead</value>
+  </data>
+  <data name="MiKo_3221_Title" xml:space="preserve">
+    <value>GetHashCode overrides should use 'HashCode.Combine'</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
