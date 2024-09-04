@@ -4360,6 +4360,16 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3120_Title" xml:space="preserve">
     <value>Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values</value>
   </data>
+  <data name="MiKo_3121_Description" xml:space="preserve">
+    <value>To ease development and to be able to jump directly into code, an object under test should be a concrete type and no interface.
+Otherwise, when attempting to jump into the code, developers just end up at the interface and have to find out which implementation they actually want to inspect / test.</value>
+  </data>
+  <data name="MiKo_3121_MessageFormat" xml:space="preserve">
+    <value>Test concrete type instead of interface</value>
+  </data>
+  <data name="MiKo_3121_Title" xml:space="preserve">
+    <value>Tests should test concrete implementations and no interfaces</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>

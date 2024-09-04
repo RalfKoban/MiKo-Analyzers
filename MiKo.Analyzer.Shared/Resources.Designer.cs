@@ -12374,6 +12374,34 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease development and to be able to jump directly into code, an object under test should be a concrete type and no interface.
+        ///Otherwise, when attempting to jump into the code, developers just end up at the interface and have to find out which implementation they actually want to inspect / test..
+        /// </summary>
+        internal static string MiKo_3121_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3121_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test concrete type instead of interface.
+        /// </summary>
+        internal static string MiKo_3121_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3121_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tests should test concrete implementations and no interfaces.
+        /// </summary>
+        internal static string MiKo_3121_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3121_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
