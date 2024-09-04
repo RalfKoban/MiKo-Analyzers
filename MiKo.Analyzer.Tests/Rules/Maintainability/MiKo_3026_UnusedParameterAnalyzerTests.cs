@@ -492,7 +492,7 @@ namespace Bla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_Startup_class() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_AspNetCore_Startup_class() => No_issue_is_reported_for(@"
 using System;
 
 using Microsoft.AspNetCore.Builder;
@@ -516,6 +516,24 @@ namespace Bla
         /// </summary>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_AspNetCore_ControllerBase_class() => No_issue_is_reported_for(@"
+using System;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Bla
+{
+    public class MyController : ControllerBase
+    { 
+        public IActionResult DoSomething(byte[] data)
+        {
+            return null;
         }
     }
 }

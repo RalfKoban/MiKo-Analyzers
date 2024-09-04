@@ -958,6 +958,20 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static bool IsAspNetCoreController(this IMethodSymbol value)
+        {
+            if (value.DeclaredAccessibility == Accessibility.Public)
+            {
+                var returnType = value.ReturnType;
+
+                return returnType.TypeKind == TypeKind.Interface
+                    && returnType.FullyQualifiedName() == "Microsoft.AspNetCore.Mvc.IActionResult"
+                    && value.ContainingType.InheritsFrom("ControllerBase", "Microsoft.AspNetCore.Mvc.ControllerBase");
+            }
+
+            return false;
+        }
+
         internal static bool IsAspNetCoreStartUp(this IMethodSymbol value)
         {
             switch (value.Name)
