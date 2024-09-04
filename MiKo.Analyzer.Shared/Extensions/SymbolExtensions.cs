@@ -536,15 +536,32 @@ namespace MiKoSolutions.Analyzers
 
         internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
 
-        internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
+        internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)
+        {
+            switch (value)
+            {
+                case IMethodSymbol method: return method.ReturnType;
+                case IPropertySymbol property: return property.Type;
+                case IFieldSymbol field: return field.Type;
+                default: return null;
+            }
+        }
+
+        internal static IReadOnlyCollection<ISymbol> GetTypeUnderTestMembers(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).Select(_ => _.ReturnType);
-            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
-            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
+            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod);
+            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name));
+            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
 
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+            return Enumerable.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet(SymbolEqualityComparer.Default);
+        }
+
+        internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
+        {
+            // TODO: RKN what about base types?
+            return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
         internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
