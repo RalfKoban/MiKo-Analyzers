@@ -78,6 +78,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true;
             }
 
+            if (method.IsAspNetCoreController())
+            {
+                return true;
+            }
+
             // TODO: RKN check if the documentation contains the phrase 'Unused.' and Do not report an issue in such case
             if (method.IsEnhancedByPostSharpAdvice())
             {
