@@ -8322,6 +8322,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove empty &lt;summary&gt;.
+        /// </summary>
+        internal static string MiKo_2232_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2232_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty &lt;summary&gt; documentation do not provide any value to developers and can be removed..
+        /// </summary>
+        internal static string MiKo_2232_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2232_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty &lt;summary&gt;.
+        /// </summary>
+        internal static string MiKo_2232_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2232_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not be empty.
+        /// </summary>
+        internal static string MiKo_2232_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2232_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>

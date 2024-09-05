@@ -179,6 +179,26 @@ namespace MiKoSolutions.Analyzers
         {
             var trivia = value.LeadingTrivia;
 
+            // remove existing empty lines
+            var indicesToRemove = new Stack<int>();
+
+            var count = trivia.Count;
+            for (var index = 0; index < count; index++)
+            {
+                var t = trivia[index];
+
+                if (t.IsEndOfLine())
+                {
+                    indicesToRemove.Push(index);
+                }
+            }
+
+            foreach (var index in indicesToRemove)
+            {
+                trivia = trivia.RemoveAt(index);
+            }
+
+            // add new lines
             for (var i = 0; i < lines; i++)
             {
                 trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again

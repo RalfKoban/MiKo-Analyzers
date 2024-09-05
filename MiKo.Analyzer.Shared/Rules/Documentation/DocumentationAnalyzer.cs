@@ -146,15 +146,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-                if (comment != null)
+                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
-                    return AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    var issues = AnalyzeType(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    foreach (var issue in issues)
+                    {
+                        yield return issue;
+                    }
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeType(INamedTypeSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -163,15 +164,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-                if (comment != null)
+                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
-                    return AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    var issues = AnalyzeMethod(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    foreach (var issue in issues)
+                    {
+                        yield return issue;
+                    }
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeMethod(IMethodSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -180,15 +182,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-                if (comment != null)
+                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
-                    return AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    var issues = AnalyzeEvent(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    foreach (var issue in issues)
+                    {
+                        yield return issue;
+                    }
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeEvent(IEventSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -197,15 +200,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-                if (comment != null)
+                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
-                    return AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    var issues = AnalyzeProperty(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    foreach (var issue in issues)
+                    {
+                        yield return issue;
+                    }
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeProperty(IPropertySymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
@@ -214,15 +218,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             if (ShallAnalyze(symbol))
             {
-                var comment = symbol.GetDocumentationCommentTriviaSyntax();
-
-                if (comment != null)
+                foreach (var comment in symbol.GetDocumentationCommentTriviaSyntax())
                 {
-                    return AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+                    var issues = AnalyzeField(symbol, compilation, symbol.GetDocumentationCommentXml(), comment);
+
+                    foreach (var issue in issues)
+                    {
+                        yield return issue;
+                    }
                 }
             }
-
-            return Enumerable.Empty<Diagnostic>();
         }
 
         protected virtual IEnumerable<Diagnostic> AnalyzeField(IFieldSymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment) => AnalyzeComment(symbol, compilation, commentXml, comment);
