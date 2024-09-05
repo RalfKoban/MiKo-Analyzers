@@ -17,6 +17,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected override bool ConsiderEmptyTextAsIssue => false;
+
         protected override void InitializeCore(CompilationStartAnalysisContext context) => InitializeCore(context, SymbolKind.Method, SymbolKind.Property);
 
         protected override bool ShallAnalyze(IMethodSymbol symbol)
