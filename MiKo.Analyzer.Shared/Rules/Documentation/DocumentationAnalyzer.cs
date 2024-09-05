@@ -16,6 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
+        protected virtual bool ConsiderEmptyTextAsIssue => true;
+
         protected static Dictionary<string, string> CreateStartingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase } };
 
         protected static Dictionary<string, string> CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new Dictionary<string, string>
@@ -271,7 +273,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (endTag.Parent is XmlElementSyntax element)
                         {
-                            return StartIssue(symbol, element.GetContentsLocation()); // it's an empty text
+                            if (ConsiderEmptyTextAsIssue)
+                            {
+                                return StartIssue(symbol, element.GetContentsLocation()); // it's an empty text
+                            }
+
+                            continue;
                         }
 
                         return StartIssue(symbol, node); // it's no text, so it must be something different
