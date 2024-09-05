@@ -55,13 +55,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var comment = method.GetDocumentationCommentTriviaSyntax();
-
-            if (comment is null)
-            {
-                return; // no comment available
-            }
-
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
             if (methodBody is null)
@@ -76,7 +69,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var issues = Analyze(context, methodBody, methodSymbol, comment);
+            var issues = Analyze(context, method, methodBody, methodSymbol);
 
             ReportDiagnostics(context, issues);
         }
@@ -92,13 +85,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var comment = method.GetDocumentationCommentTriviaSyntax();
-
-            if (comment is null)
-            {
-                return; // no comment available
-            }
-
             var methodBody = method.Body ?? (SyntaxNode)method.ExpressionBody?.Expression;
 
             if (methodBody is null)
@@ -113,29 +99,37 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return;
             }
 
-            var issues = Analyze(context, methodBody, methodSymbol, comment);
+            var issues = Analyze(context, method, methodBody, methodSymbol);
 
             ReportDiagnostics(context, issues);
         }
 
-        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode methodBody, IMethodSymbol method, DocumentationCommentTriviaSyntax comment)
+        private IEnumerable<Diagnostic> Analyze(SyntaxNodeAnalysisContext context, SyntaxNode method, SyntaxNode methodBody, IMethodSymbol methodSymbol)
         {
-            var used = methodBody.GetAllUsedVariables(context.SemanticModel);
+            var comments = method.GetDocumentationCommentTriviaSyntax().ToList();
 
-            if (used.Any())
+            if (comments.Count > 0)
             {
-                foreach (var parameter in method.Parameters.Where(_ => used.Contains(_.Name)))
+                var used = methodBody.GetAllUsedVariables(context.SemanticModel);
+
+                if (used.Any())
                 {
-                    var parameterComment = comment.GetParameterComment(parameter.Name);
-
-                    if (parameterComment is null)
+                    foreach (var parameter in methodSymbol.Parameters.Where(_ => used.Contains(_.Name)))
                     {
-                        continue;
-                    }
+                        foreach (var comment in comments)
+                        {
+                            var parameterComment = comment.GetParameterComment(parameter.Name);
 
-                    if (parameterComment.GetTextTrimmed().EqualsAny(Phrases))
-                    {
-                        yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
+                            if (parameterComment is null)
+                            {
+                                continue;
+                            }
+
+                            if (parameterComment.GetTextTrimmed().EqualsAny(Phrases))
+                            {
+                                yield return Issue(parameter.Name, parameterComment.GetContentsLocation());
+                            }
+                        }
                     }
                 }
             }

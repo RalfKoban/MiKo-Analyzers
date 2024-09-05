@@ -963,54 +963,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
-        internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
-            if (value is null)
+            if (value != null)
             {
-                return null;
-            }
+                var token = value.DescendantTokens().First();
 
-            var token = value.DescendantTokens().First();
-
-            if (token.HasStructuredTrivia)
-            {
-                // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero, so we can save some time and memory by doing it by ourselves
-                var leadingTrivia = token.LeadingTrivia;
-
-                int index;
-
-                switch (leadingTrivia.Count)
+                if (token.HasStructuredTrivia)
                 {
-                    case 1:
-                        index = 0; break;
-
-                    case 2:
-                    case 3:
-                        index = 1; break;
-
-                    case 4:
-                        index = 2; break;
-
-                    default:
-                        return null; // nothing more to do
-                }
-
-                // just go reverse from the likely index to find any documentation that might be separated via (multiple) empty lines
-                for (; index >= 0; index--)
-                {
-                    var trivia = leadingTrivia[index];
-
-                    if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                    foreach (var trivia in token.LeadingTrivia)
                     {
-                        if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                        if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
                         {
-                            return syntax;
+                            if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                            {
+                                yield return syntax;
+                            }
                         }
                     }
                 }
             }
-
-            return null;
         }
 
         internal static ReadOnlySpan<char> GetTextTrimmed(this XmlElementSyntax value)
@@ -2661,9 +2633,16 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingTrivia(trivia);
         }
 
-        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticMarker); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+        internal static SyntaxList<T> WithIndentation<T>(this SyntaxList<T> values) where T : SyntaxNode
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithIndentation());
+        }
+
+        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
@@ -2752,7 +2731,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
-        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia().WithLeadingXmlComment());
+        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> values)
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithoutLeadingTrivia().WithLeadingXmlComment());
+        }
 
         internal static SyntaxNode WithModifiers(this FieldDeclarationSyntax value, IEnumerable<SyntaxKind> modifiers)
         {
@@ -2913,7 +2897,12 @@ namespace MiKoSolutions.Analyzers
                    : value;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
+        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values)
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithoutLeadingTrivia());
+        }
 
         internal static T WithoutLeadingEndOfLine<T>(this T value) where T : SyntaxNode
         {
