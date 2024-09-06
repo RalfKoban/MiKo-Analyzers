@@ -48,6 +48,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().Where(predicate);
 
+        internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
+
         internal static bool EnclosingMethodHasParameter(this SyntaxNode value, string parameterName, SemanticModel semanticModel)
         {
             var method = value.GetEnclosingMethod(semanticModel);
@@ -97,6 +99,10 @@ namespace MiKoSolutions.Analyzers
         internal static T FirstDescendant<T>(this SyntaxNode value, SyntaxKind kind) where T : SyntaxNode => value.DescendantNodes().OfKind(kind).FirstOrDefault() as T;
 
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
+
+        internal static SyntaxToken FirstDescendantToken(this SyntaxNode value) => value.DescendantTokens().FirstOrDefault();
+
+        internal static SyntaxToken FirstDescendantToken(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind).First();
 
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
 
@@ -967,7 +973,7 @@ namespace MiKoSolutions.Analyzers
         {
             if (value != null)
             {
-                var token = value.DescendantTokens().First();
+                var token = value.FirstDescendantToken();
 
                 if (token.HasStructuredTrivia)
                 {

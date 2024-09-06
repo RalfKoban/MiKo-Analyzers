@@ -40,11 +40,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntaxRoot(Document document, SyntaxNode root, SyntaxNode syntax, SyntaxAnnotation annotationOfSyntax, Diagnostic issue)
         {
-            var token = syntax is DocumentationCommentTriviaSyntax comment
-                        ? comment.ParentTrivia.Token
-                        : root.FindToken(issue.Location.SourceSpan.Start); // XML comment should be removed here, so adjust empty line on token
+            SyntaxToken token;
 
-            return root.ReplaceToken(token, token.WithLeadingEmptyLine());
+            if (syntax is DocumentationCommentTriviaSyntax comment)
+            {
+                token = comment.ParentTrivia.Token;
+            }
+            else
+            {
+                // XML comment should be removed here, so adjust empty line on token
+                // (we need to be aware of attributes, so we have to find the node first to get the attribute and it's first token)
+                var node = root.FindNode(issue.Location.SourceSpan);
+
+                token = node.FirstDescendantToken();
+            }
+
+            var updatedToken = token.WithLeadingEmptyLine();
+
+            var updatedRoot = root.ReplaceToken(token, updatedToken);
+
+            return updatedRoot;
         }
 
         private static SyntaxList<XmlNodeSyntax> GetUpdatedXmlContent(SyntaxList<XmlNodeSyntax> originalContent, XmlElementSyntax issue)

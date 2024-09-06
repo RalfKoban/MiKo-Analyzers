@@ -416,6 +416,31 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_type_with_attribute_and_empty_summary_on_single_line()
+        {
+            const string OriginalCode = @"
+using System;
+
+/// <summary></summary>
+[SomeAttribute]
+public class TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+[SomeAttribute]
+public class TestMe
+{
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2232_EmptySummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2232_EmptySummaryAnalyzer();
