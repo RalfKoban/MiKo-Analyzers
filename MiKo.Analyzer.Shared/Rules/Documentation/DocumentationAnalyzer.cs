@@ -16,8 +16,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected virtual bool ConsiderEmptyTextAsIssue => true;
-
         protected static Dictionary<string, string> CreateStartingPhraseProposal(string phrase) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.StartingPhrase, phrase } };
 
         protected static Dictionary<string, string> CreateStartingEndingPhraseProposal(string startPhrase, string endingPhrase) => new Dictionary<string, string>
@@ -273,7 +271,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (endTag.Parent is XmlElementSyntax element)
                         {
-                            if (ConsiderEmptyTextAsIssue)
+                            if (ConsiderEmptyTextAsIssue(symbol))
                             {
                                 return StartIssue(symbol, element.GetContentsLocation()); // it's an empty text
                             }
@@ -358,6 +356,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return false;
         }
+
+        protected virtual bool ConsiderEmptyTextAsIssue(ISymbol symbol) => true;
 
         private static IEnumerable<Location> GetAllLocations(string text, SyntaxTree syntaxTree, int spanStart, string value, StringComparison comparison, int startOffset, int endOffset)
         {
