@@ -454,6 +454,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4007_OperatorsOrderedBeforeMethodsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4008_GetHashCodeMethodsOrderedAfterEqualsMethodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4101_TestSetUpMethodOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4102_TestTearDownMethodOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4103_TestOneTimeSetUpMethodOrderingAnalyzer.cs" />

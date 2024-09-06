@@ -297,6 +297,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4004_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4005_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4007_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4008_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4101_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4102_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4103_CodeFixProvider.cs" />

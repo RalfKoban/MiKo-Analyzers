@@ -13354,6 +13354,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place &apos;GetHashCode&apos; after &apos;Equals&apos;.
+        /// </summary>
+        internal static string MiKo_4008_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4008_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The methods &apos;GetHashCode&apos; and &apos;Equals&apos; are used in conjunction to place instances based on their hashes inside dictionaries or hashsets. &apos;GetHashCode&apos; is used to calculate a hash and in case of a hash collision, &apos;Equals&apos; is used to identify the instance. So both methods are strongly related and therefore should be located nearby..
+        /// </summary>
+        internal static string MiKo_4008_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4008_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;GetHashCode&apos; after &apos;Equals&apos;.
+        /// </summary>
+        internal static string MiKo_4008_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4008_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode methods should be placed directly after Equals methods.
+        /// </summary>
+        internal static string MiKo_4008_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4008_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place method after one-time methods and before test cleanup and all other test methods.
         /// </summary>
         internal static string MiKo_4101_CodeFixTitle {
