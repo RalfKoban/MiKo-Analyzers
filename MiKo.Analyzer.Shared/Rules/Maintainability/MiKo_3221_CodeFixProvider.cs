@@ -58,7 +58,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static SyntaxNode GetUpdatedSyntaxWithHashCodeCreation(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
         {
             var statements = nodes.Select(_ => SyntaxFactory.ParseStatement("hash.Add(" + _ + ");")).ToList();
-            statements.Insert(0, SyntaxFactory.ParseStatement("var hash = new HashCode();"));
+            statements.Insert(0, SyntaxFactory.ParseStatement("var hash = default(HashCode);"));
             statements.Add(SyntaxFactory.ParseStatement("return hash.ToHashCode();"));
 
             return method.WithBody(SyntaxFactory.Block(statements.Select(_ => _.WithIndentation().WithTrailingNewLine())))
