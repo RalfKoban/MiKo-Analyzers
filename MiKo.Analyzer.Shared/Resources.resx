@@ -4699,6 +4699,18 @@ Such namespaces should be flattened.</value>
   <data name="MiKo_4007_Title" xml:space="preserve">
     <value>Operators should be placed before methods</value>
   </data>
+  <data name="MiKo_4008_CodeFixTitle" xml:space="preserve">
+    <value>Place 'GetHashCode' after 'Equals'</value>
+  </data>
+  <data name="MiKo_4008_Description" xml:space="preserve">
+    <value>The methods 'GetHashCode' and 'Equals' are used in conjunction to place instances based on their hashes inside dictionaries or hashsets. 'GetHashCode' is used to calculate a hash and in case of a hash collision, 'Equals' is used to identify the instance. So both methods are strongly related and therefore should be located nearby.</value>
+  </data>
+  <data name="MiKo_4008_MessageFormat" xml:space="preserve">
+    <value>Place 'GetHashCode' after 'Equals'</value>
+  </data>
+  <data name="MiKo_4008_Title" xml:space="preserve">
+    <value>GetHashCode methods should be placed directly after Equals methods</value>
+  </data>
   <data name="MiKo_4101_CodeFixTitle" xml:space="preserve">
     <value>Place method after one-time methods and before test cleanup and all other test methods</value>
   </data>
