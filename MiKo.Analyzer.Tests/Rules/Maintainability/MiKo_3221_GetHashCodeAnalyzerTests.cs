@@ -22,7 +22,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_GetHashCode_method_using_HashCode_Add() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_GetHashCode_method_using_HashCode_Add_with_ctor() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -32,6 +32,56 @@ public class TestMe
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(m_field1);
+        hash.Add(m_field2);
+        hash.Add(m_field3);
+        hash.Add(m_field4);
+        hash.Add(m_field5);
+        hash.Add(m_field6);
+        hash.Add(m_field7);
+        hash.Add(m_field8);
+        hash.Add(m_field9);
+        return hash.ToHashCode();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_GetHashCode_method_using_HashCode_with_default_and_var() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private object m_field1, m_field2, m_field3, m_field4, m_field5, m_field6, m_field7, m_field8, m_field9;
+
+    public override int GetHashCode()
+    {
+        var hash = default(HashCode);
+        hash.Add(m_field1);
+        hash.Add(m_field2);
+        hash.Add(m_field3);
+        hash.Add(m_field4);
+        hash.Add(m_field5);
+        hash.Add(m_field6);
+        hash.Add(m_field7);
+        hash.Add(m_field8);
+        hash.Add(m_field9);
+        return hash.ToHashCode();
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_GetHashCode_method_using_HashCode_with_default_and_explicit_type() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private object m_field1, m_field2, m_field3, m_field4, m_field5, m_field6, m_field7, m_field8, m_field9;
+
+    public override int GetHashCode()
+    {
+        HashCode hash = default();
         hash.Add(m_field1);
         hash.Add(m_field2);
         hash.Add(m_field3);
@@ -226,7 +276,7 @@ public class TestMe
 
     public override int GetHashCode()
     {
-        var hash = new HashCode();
+        var hash = default(HashCode);
         hash.Add(m_field1);
         hash.Add(m_field2);
         hash.Add(m_field3);
@@ -311,7 +361,7 @@ public class TestMe
 
     public override int GetHashCode()
     {
-        var hash = new HashCode();
+        var hash = default(HashCode);
         hash.Add(m_field1);
         hash.Add(m_field2);
         hash.Add(m_field3);
