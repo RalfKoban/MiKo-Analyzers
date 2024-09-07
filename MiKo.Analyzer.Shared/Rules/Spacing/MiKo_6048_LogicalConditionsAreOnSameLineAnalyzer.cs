@@ -10,7 +10,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public const string Id = "MiKo_6048";
 
-        private static readonly SyntaxKind[] LogicalExpressions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
+        private static readonly SyntaxKind[] LogicalExpressions =
+                                                                  {
+                                                                      SyntaxKind.LogicalAndExpression,
+                                                                      SyntaxKind.LogicalOrExpression,
+                                                                  };
 
         public MiKo_6048_LogicalConditionsAreOnSameLineAnalyzer() : base(Id)
         {
