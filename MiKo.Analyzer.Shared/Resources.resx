@@ -4383,13 +4383,13 @@ Otherwise, when attempting to jump into the code, developers just end up at the 
     <value>Tests should test concrete implementations and no interfaces</value>
   </data>
   <data name="MiKo_3122_Description" xml:space="preserve">
-    <value>Test methods using more than 2 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones.</value>
+    <value>Test methods using more than 3 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones.</value>
   </data>
   <data name="MiKo_3122_MessageFormat" xml:space="preserve">
-    <value>Split into multiple tests so that you do not need more than 2 parameters</value>
+    <value>Split into multiple tests so that you do not need more than 3 parameters</value>
   </data>
   <data name="MiKo_3122_Title" xml:space="preserve">
-    <value>Test methods should not use more than 2 parameters</value>
+    <value>Test methods should not use more than 3 parameters</value>
   </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
