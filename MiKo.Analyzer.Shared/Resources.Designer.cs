@@ -12438,6 +12438,33 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Test methods using more than 2 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones..
+        /// </summary>
+        internal static string MiKo_3122_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3122_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split into multiple tests so that you do not need more than 2 parameters.
+        /// </summary>
+        internal static string MiKo_3122_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3122_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not use more than 2 parameters.
+        /// </summary>
+        internal static string MiKo_3122_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3122_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {

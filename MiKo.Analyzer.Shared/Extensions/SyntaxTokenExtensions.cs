@@ -181,6 +181,7 @@ namespace MiKoSolutions.Analyzers
             var indicesToRemove = new Stack<int>();
 
             var count = trivia.Count;
+
             for (var index = 0; index < count; index++)
             {
                 var t = trivia[index];

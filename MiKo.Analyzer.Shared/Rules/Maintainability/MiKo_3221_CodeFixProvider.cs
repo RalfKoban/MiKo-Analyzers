@@ -30,10 +30,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             case IdentifierNameSyntax identifier:
                                 nodes.Add(identifier);
+
                                 break;
 
                             case BaseExpressionSyntax _:
                                 nodes.Add(expression.Parent);
+
                                 break;
                         }
                     }
