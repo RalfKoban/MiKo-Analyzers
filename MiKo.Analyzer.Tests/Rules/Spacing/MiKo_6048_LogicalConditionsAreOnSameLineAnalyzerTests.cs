@@ -292,6 +292,47 @@ public class TestMe : IEquatable<TestMe>
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_if_parenthesized_logical_condition_parts_are_all_on_their_own_lines_and_parenthesis_are_on_separate_lines_2()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public string A, B;
+
+    public bool Equals(TestMe other)
+    {
+        return (
+                A == other.A
+                || (A != null
+        && A.Equals(other.A, StringComparison.Ordinal)))
+        && (
+                        B == other.B
+                        || (B != null
+        && B.Equals(other.B, StringComparison.Ordinal)));
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public string A, B;
+
+    public bool Equals(TestMe other)
+    {
+        return (A == other.A || (A != null && A.Equals(other.A, StringComparison.Ordinal))) && (B == other.B || (B != null && B.Equals(other.B, StringComparison.Ordinal)));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         //// TODO RKN: Add tests for inline-comments after condition parts
 
         protected override string GetDiagnosticId() => MiKo_6048_LogicalConditionsAreOnSameLineAnalyzer.Id;
