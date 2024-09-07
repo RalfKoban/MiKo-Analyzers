@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 459 rules that are currently provided by the analyzer.
+The following tables lists all the 460 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -395,6 +395,7 @@ The following tables lists all the 459 rules that are currently provided by the 
 |MiKo_3119|Test methods should not simply return completed task|&#x2713;|&#x2713;|
 |MiKo_3120|Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values|&#x2713;|&#x2713;|
 |MiKo_3121|Tests should test concrete implementations and no interfaces|&#x2713;|\-|
+|MiKo_3122|Test methods should not use more than 2 parameters|&#x2713;|\-|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|
