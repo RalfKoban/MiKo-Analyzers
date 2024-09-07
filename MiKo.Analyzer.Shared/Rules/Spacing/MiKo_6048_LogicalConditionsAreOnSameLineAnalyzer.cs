@@ -26,7 +26,21 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             switch (syntax)
             {
                 case ParenthesizedExpressionSyntax parenthesized:
-                    return IsOnSingleLine(parenthesized.Expression); // we have a parenthesized one, so let's check
+                {
+                    if (IsOnSingleLine(parenthesized.Expression))
+                    {
+                        // we have a parenthesized one, so let's check also the parenthesis
+                        var openParenthesisSpan = parenthesized.OpenParenToken.GetLocation().GetLineSpan();
+                        var closeParenthesisSpan = parenthesized.CloseParenToken.GetLocation().GetLineSpan();
+
+                        if (openParenthesisSpan.StartLinePosition.Line == closeParenthesisSpan.EndLinePosition.Line)
+                        {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
 
                 case BinaryExpressionSyntax binary:
                 {
