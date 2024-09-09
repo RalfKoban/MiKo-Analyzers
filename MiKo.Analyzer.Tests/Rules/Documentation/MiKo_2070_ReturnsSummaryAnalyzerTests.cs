@@ -24,6 +24,17 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_empty_summary_of_documented_items() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary></summary>
+    public int DoSomething()
+    {
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_correctly_documented_items() => No_issue_is_reported_for(@"
 public class TestMe
 {

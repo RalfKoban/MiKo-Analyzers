@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public const string Id = "MiKo_4003";
 
-        public MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_4003_DisposeMethodsOrderedAfterCtorsAndFinalizersAnalyzer() : base(Id)
         {
         }
 

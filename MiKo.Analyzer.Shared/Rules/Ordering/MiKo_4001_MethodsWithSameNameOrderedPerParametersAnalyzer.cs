@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public const string Id = "MiKo_4001";
 
-        public MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_4001_MethodsWithSameNameOrderedPerParametersAnalyzer() : base(Id)
         {
         }
 
