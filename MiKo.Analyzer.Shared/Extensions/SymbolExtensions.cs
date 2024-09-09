@@ -534,17 +534,34 @@ namespace MiKoSolutions.Analyzers
                                                                                         .Select(_ => _.GetEnclosing<T>())
                                                                                         .FirstOrDefault();
 
-        internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax();
+        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Enumerable.Empty<DocumentationCommentTriviaSyntax>();
+
+        internal static ITypeSymbol GetReturnTypeSymbol(this ISymbol value)
+        {
+            switch (value)
+            {
+                case IMethodSymbol method: return method.ReturnType;
+                case IPropertySymbol property: return property.Type;
+                case IFieldSymbol field: return field.Type;
+                default: return null;
+            }
+        }
+
+        internal static IReadOnlyCollection<ISymbol> GetTypeUnderTestMembers(this ITypeSymbol value)
+        {
+            // TODO: RKN what about base types?
+            var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
+            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod);
+            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name));
+            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
+
+            return Enumerable.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet(SymbolEqualityComparer.Default);
+        }
 
         internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)
         {
             // TODO: RKN what about base types?
-            var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod).Select(_ => _.ReturnType);
-            var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name)).Select(_ => _.GetReturnType());
-            var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name)).Select(_ => _.Type);
-
-            return propertyTypes.Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
+            return value.GetTypeUnderTestMembers().Select(_ => _.GetReturnTypeSymbol()).Where(_ => _ != null).ToHashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         }
 
         internal static bool HasAttribute(this ISymbol value, ISet<string> attributeNames)
@@ -955,6 +972,33 @@ namespace MiKoSolutions.Analyzers
                 {
                     return false;
                 }
+            }
+        }
+
+        internal static bool IsAspNetCoreController(this IMethodSymbol value)
+        {
+            if (value.DeclaredAccessibility == Accessibility.Public)
+            {
+                var returnType = value.ReturnType;
+
+                return returnType.TypeKind == TypeKind.Interface
+                    && returnType.FullyQualifiedName() == "Microsoft.AspNetCore.Mvc.IActionResult"
+                    && value.ContainingType.InheritsFrom("ControllerBase", "Microsoft.AspNetCore.Mvc.ControllerBase");
+            }
+
+            return false;
+        }
+
+        internal static bool IsAspNetCoreStartUp(this IMethodSymbol value)
+        {
+            switch (value.Name)
+            {
+                case "Configure":
+                case "ConfigureServices":
+                    return value.ReturnsVoid && value.ContainingType?.Name == "Startup";
+
+                default:
+                    return false;
             }
         }
 

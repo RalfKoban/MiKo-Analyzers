@@ -48,6 +48,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<T> DescendantNodes<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().Where(predicate);
 
+        internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
+
         internal static bool EnclosingMethodHasParameter(this SyntaxNode value, string parameterName, SemanticModel semanticModel)
         {
             var method = value.GetEnclosingMethod(semanticModel);
@@ -98,6 +100,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static T FirstDescendant<T>(this SyntaxNode value, Func<T, bool> predicate) where T : SyntaxNode => value.DescendantNodes<T>().FirstOrDefault(predicate);
 
+        internal static SyntaxToken FirstDescendantToken(this SyntaxNode value) => value.DescendantTokens().FirstOrDefault();
+
+        internal static SyntaxToken FirstDescendantToken(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind).First();
+
         internal static T LastChild<T>(this SyntaxNode value) where T : SyntaxNode => value.ChildNodes<T>().LastOrDefault();
 
         internal static SyntaxList<TypeParameterConstraintClauseSyntax> GetConstraintClauses(this TypeParameterConstraintClauseSyntax value)
@@ -116,16 +122,19 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static TypeParameterListSyntax GetTypeParameterList(this TypeParameterConstraintClauseSyntax value)
+        internal static SyntaxToken GetTypeParameterConstraintReferenceToken(this TypeParameterConstraintClauseSyntax value)
         {
             switch (value.Parent)
             {
-                case ClassDeclarationSyntax c: return c.TypeParameterList;
-                case InterfaceDeclarationSyntax i: return i.TypeParameterList;
-                case RecordDeclarationSyntax r: return r.TypeParameterList;
-                case StructDeclarationSyntax s: return s.TypeParameterList;
-                case MethodDeclarationSyntax b: return b.TypeParameterList;
-                case LocalFunctionStatementSyntax f: return f.TypeParameterList;
+//// ReSharper disable PossibleNullReferenceException Cannot be null as there is already a type parameter constraint
+                case ClassDeclarationSyntax c: return c.TypeParameterList.GreaterThanToken;
+                case InterfaceDeclarationSyntax i: return i.TypeParameterList.GreaterThanToken;
+                case RecordDeclarationSyntax r: return r.TypeParameterList.GreaterThanToken;
+                case StructDeclarationSyntax s: return s.TypeParameterList.GreaterThanToken;
+//// ReSharper restore PossibleNullReferenceException
+
+                case MethodDeclarationSyntax b: return b.ParameterList.CloseParenToken;
+                case LocalFunctionStatementSyntax f: return f.ParameterList.CloseParenToken;
 
                 default:
                     return default;
@@ -960,50 +969,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static LinePosition GetEndPosition(this SyntaxNode value) => value.GetLocation().GetEndPosition();
 
-        internal static DocumentationCommentTriviaSyntax GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
+        internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this SyntaxNode value)
         {
-            if (value is null)
+            if (value != null)
             {
-                return null;
-            }
+                var token = value.FirstDescendantToken();
 
-            var token = value.DescendantTokens().First();
-
-            if (token.HasStructuredTrivia)
-            {
-                // 'HasLeadingTrivia' creates the list as well and checks for a count greater than zero, so we can save some time and memory by doing it by ourselves
-                var leadingTrivia = token.LeadingTrivia;
-
-                int index;
-
-                switch (leadingTrivia.Count)
+                if (token.HasStructuredTrivia)
                 {
-                    case 1:
-                        index = 0; break;
-
-                    case 2:
-                    case 3:
-                        index = 1; break;
-
-                    case 4:
-                        index = 2; break;
-
-                    default:
-                        return null; // nothing more to do
-                }
-
-                var trivia = leadingTrivia[index];
-
-                if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
-                {
-                    if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                    foreach (var trivia in token.LeadingTrivia)
                     {
-                        return syntax;
+                        if (trivia.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia))
+                        {
+                            if (trivia.GetStructure() is DocumentationCommentTriviaSyntax syntax)
+                            {
+                                yield return syntax;
+                            }
+                        }
                     }
                 }
             }
-
-            return null;
         }
 
         internal static ReadOnlySpan<char> GetTextTrimmed(this XmlElementSyntax value)
@@ -2067,7 +2052,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<InvocationExpressionSyntax> LinqExtensionMethods(this SyntaxNode value, SemanticModel semanticModel) => value.DescendantNodes<InvocationExpressionSyntax>(_ => IsLinqExtensionMethod(_, semanticModel));
 
-        internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this SeparatedSyntaxList<TSyntaxNode> source, SyntaxKind kind) where TSyntaxNode : SyntaxNode where TResult : TSyntaxNode
+        internal static IReadOnlyList<TResult> OfKind<TResult, TSyntaxNode>(this SeparatedSyntaxList<TSyntaxNode> source, SyntaxKind kind) where TSyntaxNode : SyntaxNode
+                                                                                                                                           where TResult : TSyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -2143,7 +2129,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyList<TResult> OfType<TResult>(this SyntaxList<XmlAttributeSyntax> source) where TResult : XmlAttributeSyntax => source.OfType<XmlAttributeSyntax, TResult>();
 
-        internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode where TResult : T
+        internal static IReadOnlyList<TResult> OfType<T, TResult>(this SyntaxList<T> source) where T : SyntaxNode
+                                                                                             where TResult : T
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var sourceCount = source.Count;
@@ -2197,8 +2184,8 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static T ReplaceNodes<T, TNode>(this T value, IEnumerable<TNode> nodes, Func<TNode, IEnumerable<SyntaxNode>> computeReplacementNodes)
-            where T : SyntaxNode
-            where TNode : SyntaxNode
+                                                                                                                                                  where T : SyntaxNode
+                                                                                                                                                  where TNode : SyntaxNode
         {
             // replace all nodes by following algorithm:
             // 1. Create a dictionary with SyntaxAnnotations and replacement nodes for the node to annotate (new SyntaxAnnotation)
@@ -2653,9 +2640,16 @@ namespace MiKoSolutions.Analyzers
             return value.WithLeadingTrivia(trivia);
         }
 
-        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticSpace); // use elastic one to allow formatting to be done automatically
+        internal static T WithIndentation<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticMarker); // use elastic one to allow formatting to be done automatically
 
-        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed);
+        internal static SyntaxList<T> WithIndentation<T>(this SyntaxList<T> values) where T : SyntaxNode
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithIndentation());
+        }
+
+        internal static T WithLeadingEmptyLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
 
         internal static T WithLeadingEndOfLine<T>(this T value) where T : SyntaxNode => value.WithFirstLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed); // use elastic one to allow formatting to be done automatically
 
@@ -2744,7 +2738,12 @@ namespace MiKoSolutions.Analyzers
 
         internal static T WithLeadingXmlComment<T>(this T value) where T : SyntaxNode => value.WithLeadingTrivia(XmlCommentStart);
 
-        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia().WithLeadingXmlComment());
+        internal static SyntaxList<XmlNodeSyntax> WithLeadingXmlComment(this SyntaxList<XmlNodeSyntax> values)
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithoutLeadingTrivia().WithLeadingXmlComment());
+        }
 
         internal static SyntaxNode WithModifiers(this FieldDeclarationSyntax value, IEnumerable<SyntaxKind> modifiers)
         {
@@ -2905,7 +2904,12 @@ namespace MiKoSolutions.Analyzers
                    : value;
         }
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values) => values.Replace(values[0], values[0].WithoutLeadingTrivia());
+        internal static SyntaxList<XmlNodeSyntax> WithoutLeadingTrivia(this SyntaxList<XmlNodeSyntax> values)
+        {
+            var value = values[0];
+
+            return values.Replace(value, value.WithoutLeadingTrivia());
+        }
 
         internal static T WithoutLeadingEndOfLine<T>(this T value) where T : SyntaxNode
         {

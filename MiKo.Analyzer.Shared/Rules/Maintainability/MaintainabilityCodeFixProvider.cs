@@ -129,8 +129,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected static LiteralExpressionSyntax Literal(int value, string valueRepresentation) => Literal(SyntaxFactory.Literal(valueRepresentation, value));
 
-        protected static LiteralExpressionSyntax NullLiteral() => Literal(SyntaxKind.NullLiteralExpression);
-
         protected static LiteralExpressionSyntax StringLiteral(string text)
         {
             var token = text.SurroundedWithDoubleQuote().AsToken();
