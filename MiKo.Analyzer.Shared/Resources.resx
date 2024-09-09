@@ -2964,6 +2964,18 @@ In contrast, when the documentation is just some plain text then that is very di
   <data name="MiKo_2231_Title" xml:space="preserve">
     <value>Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker</value>
   </data>
+  <data name="MiKo_2232_CodeFixTitle" xml:space="preserve">
+    <value>Remove empty &lt;summary&gt;</value>
+  </data>
+  <data name="MiKo_2232_Description" xml:space="preserve">
+    <value>Empty &lt;summary&gt; documentation do not provide any value to developers and can be removed.</value>
+  </data>
+  <data name="MiKo_2232_MessageFormat" xml:space="preserve">
+    <value>Remove empty &lt;summary&gt;</value>
+  </data>
+  <data name="MiKo_2232_Title" xml:space="preserve">
+    <value>&lt;summary&gt; documentation should not be empty</value>
+  </data>
   <data name="MiKo_2300_Description" xml:space="preserve">
     <value>Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
 They should not describe how it is achieved because that's what the code is for.</value>
@@ -4114,6 +4126,18 @@ Those finally blocks are intended for cleaning stuff up.</value>
   <data name="MiKo_3098_Title" xml:space="preserve">
     <value>Justifications of suppressed messages shall explain</value>
   </data>
+  <data name="MiKo_3099_CodeFixTitle" xml:space="preserve">
+    <value>Fix comparison to null</value>
+  </data>
+  <data name="MiKo_3099_Description" xml:space="preserve">
+    <value>Enum values are never null in case the enum type is a value type. So comparing them with null will always fail.</value>
+  </data>
+  <data name="MiKo_3099_MessageFormat" xml:space="preserve">
+    <value>Enum can never be null</value>
+  </data>
+  <data name="MiKo_3099_Title" xml:space="preserve">
+    <value>Do not compare enum values with null</value>
+  </data>
   <data name="MiKo_3100_Description" xml:space="preserve">
     <value>To ease maintenance, test classes should be in the exact same namespace as the type they test.
 This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier.</value>
@@ -4362,6 +4386,25 @@ For example, if the test uses 'Skip', it is unclear for the reader why the code 
   <data name="MiKo_3120_Title" xml:space="preserve">
     <value>Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values</value>
   </data>
+  <data name="MiKo_3121_Description" xml:space="preserve">
+    <value>To ease development and to be able to jump directly into code, an object under test should be a concrete type and no interface.
+Otherwise, when attempting to jump into the code, developers just end up at the interface and have to find out which implementation they actually want to inspect / test.</value>
+  </data>
+  <data name="MiKo_3121_MessageFormat" xml:space="preserve">
+    <value>Test concrete type instead of interface</value>
+  </data>
+  <data name="MiKo_3121_Title" xml:space="preserve">
+    <value>Tests should test concrete implementations and no interfaces</value>
+  </data>
+  <data name="MiKo_3122_Description" xml:space="preserve">
+    <value>Test methods using more than 2 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones.</value>
+  </data>
+  <data name="MiKo_3122_MessageFormat" xml:space="preserve">
+    <value>Split into multiple tests so that you do not need more than 2 parameters</value>
+  </data>
+  <data name="MiKo_3122_Title" xml:space="preserve">
+    <value>Test methods should not use more than 2 parameters</value>
+  </data>
   <data name="MiKo_3201_CodeFixTitle" xml:space="preserve">
     <value>Invert if to simplify</value>
   </data>
@@ -4521,6 +4564,30 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3219_Title" xml:space="preserve">
     <value>Public members should not be 'virtual'</value>
   </data>
+  <data name="MiKo_3220_CodeFixTitle" xml:space="preserve">
+    <value>Simplify condition</value>
+  </data>
+  <data name="MiKo_3220_Description" xml:space="preserve">
+    <value>Logical '&amp;&amp;' or '||' conditions using 'true' or 'false' can be simplified to not use 'true' or 'false' directly.</value>
+  </data>
+  <data name="MiKo_3220_MessageFormat" xml:space="preserve">
+    <value>Simplify condition</value>
+  </data>
+  <data name="MiKo_3220_Title" xml:space="preserve">
+    <value>Logical '&amp;&amp;' or '||' conditions using 'true' or 'false' should be simplified</value>
+  </data>
+  <data name="MiKo_3221_CodeFixTitle" xml:space="preserve">
+    <value>Use 'HashCode.Combine'</value>
+  </data>
+  <data name="MiKo_3221_Description" xml:space="preserve">
+    <value>To improve the quality of the hash code returned by 'GetHashCode', developers should use 'HashCode.Combine' (when the underlying data type is simple, for example, an integer value).</value>
+  </data>
+  <data name="MiKo_3221_MessageFormat" xml:space="preserve">
+    <value>Use 'HashCode.Combine' instead</value>
+  </data>
+  <data name="MiKo_3221_Title" xml:space="preserve">
+    <value>GetHashCode overrides should use 'HashCode.Combine'</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
@@ -4654,6 +4721,18 @@ Such namespaces should be flattened.</value>
   </data>
   <data name="MiKo_4007_Title" xml:space="preserve">
     <value>Operators should be placed before methods</value>
+  </data>
+  <data name="MiKo_4008_CodeFixTitle" xml:space="preserve">
+    <value>Place 'GetHashCode' after 'Equals'</value>
+  </data>
+  <data name="MiKo_4008_Description" xml:space="preserve">
+    <value>The methods 'GetHashCode' and 'Equals' are used in conjunction to place instances based on their hashes inside dictionaries or hashsets. 'GetHashCode' is used to calculate a hash and in case of a hash collision, 'Equals' is used to identify the instance. So both methods are strongly related and therefore should be located nearby.</value>
+  </data>
+  <data name="MiKo_4008_MessageFormat" xml:space="preserve">
+    <value>Place 'GetHashCode' after 'Equals'</value>
+  </data>
+  <data name="MiKo_4008_Title" xml:space="preserve">
+    <value>GetHashCode methods should be placed directly after Equals methods</value>
   </data>
   <data name="MiKo_4101_CodeFixTitle" xml:space="preserve">
     <value>Place method after one-time methods and before test cleanup and all other test methods</value>
@@ -5458,15 +5537,15 @@ Hence, their open brackets should be positioned at the same position where the c
     <value>Type parameter constraint clauses should be aligned vertically</value>
   </data>
   <data name="MiKo_6058_CodeFixTitle" xml:space="preserve">
-    <value>Align type parameter constraint indented below type parameter list</value>
+    <value>Align type parameter constraint indented below parameter list</value>
   </data>
   <data name="MiKo_6058_Description" xml:space="preserve">
-    <value>The code is easier to read if type parameter constraint clauses are aligned indented below the corresponding type parameter list.</value>
+    <value>The code is easier to read if type parameter constraint clauses are aligned indented below the parameter list.</value>
   </data>
   <data name="MiKo_6058_MessageFormat" xml:space="preserve">
-    <value>Align type parameter constraint indented below type parameter list</value>
+    <value>Align type parameter constraint indented below parameter list</value>
   </data>
   <data name="MiKo_6058_Title" xml:space="preserve">
-    <value>Type parameter constraint clauses should be indented below type parameter list</value>
+    <value>Type parameter constraint clauses should be indented below parameter list</value>
   </data>
 </root>

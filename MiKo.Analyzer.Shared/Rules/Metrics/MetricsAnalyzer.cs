@@ -15,8 +15,11 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                         SyntaxKind.AddAccessorDeclaration,
                                                                         SyntaxKind.RemoveAccessorDeclaration,
                                                                         SyntaxKind.ConstructorDeclaration,
-                                                                        SyntaxKind.LocalDeclarationStatement,
+                                                                        SyntaxKind.DestructorDeclaration,
                                                                         SyntaxKind.MethodDeclaration,
+                                                                        SyntaxKind.OperatorDeclaration,
+                                                                        SyntaxKind.ConversionOperatorDeclaration,
+                                                                        SyntaxKind.LocalDeclarationStatement,
                                                                     };
 
         private readonly SyntaxKind[] m_syntaxKinds;
@@ -27,26 +30,62 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 
         protected virtual void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var body = GetBody(context);
+            var issue = AnalyzeSyntaxNode(context, context.ContainingSymbol);
 
-            if (body != null)
-            {
-                ReportDiagnostics(context, AnalyzeBody(body, context.ContainingSymbol));
-            }
+            ReportDiagnostics(context, issue);
         }
 
         protected virtual Diagnostic AnalyzeBody(BlockSyntax body, ISymbol containingSymbol) => null;
+
+        protected virtual Diagnostic AnalyzeExpressionBody(ArrowExpressionClauseSyntax body, ISymbol containingSymbol) => null;
 
         private static BlockSyntax GetBody(SyntaxNodeAnalysisContext context)
         {
             switch (context.Node)
             {
-                case AccessorDeclarationSyntax s: return s.Body;
-                case ConstructorDeclarationSyntax s: return s.Body;
+                case AccessorDeclarationSyntax a: return a.Body;
+                case ConstructorDeclarationSyntax c: return c.Body;
+                case DestructorDeclarationSyntax d: return d.Body;
+                case MethodDeclarationSyntax m: return m.Body;
+                case OperatorDeclarationSyntax o: return o.Body;
+                case ConversionOperatorDeclarationSyntax co: return co.Body;
                 case LocalFunctionStatementSyntax l: return l.Body;
-                case MethodDeclarationSyntax s: return s.Body;
                 default: return null;
             }
+        }
+
+        private static ArrowExpressionClauseSyntax GetExpressionBody(SyntaxNodeAnalysisContext context)
+        {
+            switch (context.Node)
+            {
+                case AccessorDeclarationSyntax a: return a.ExpressionBody;
+                case ConstructorDeclarationSyntax c: return c.ExpressionBody;
+                case DestructorDeclarationSyntax d: return d.ExpressionBody;
+                case MethodDeclarationSyntax m: return m.ExpressionBody;
+                case OperatorDeclarationSyntax o: return o.ExpressionBody;
+                case ConversionOperatorDeclarationSyntax co: return co.ExpressionBody;
+                case LocalFunctionStatementSyntax l: return l.ExpressionBody;
+                default: return null;
+            }
+        }
+
+        private Diagnostic AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context, ISymbol symbol)
+        {
+            var body = GetBody(context);
+
+            if (body != null)
+            {
+                return AnalyzeBody(body, symbol);
+            }
+
+            var expressionBody = GetExpressionBody(context);
+
+            if (expressionBody != null)
+            {
+                return AnalyzeExpressionBody(expressionBody, symbol);
+            }
+
+            return null;
         }
     }
 }

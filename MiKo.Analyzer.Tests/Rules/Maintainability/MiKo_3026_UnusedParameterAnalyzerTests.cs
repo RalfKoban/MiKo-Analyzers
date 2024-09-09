@@ -492,6 +492,54 @@ namespace Bla
 ");
 
         [Test]
+        public void No_issue_is_reported_for_AspNetCore_Startup_class() => No_issue_is_reported_for(@"
+using System;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Bla
+{
+    public class Startup
+    {
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        public void ConfigureServices(IServiceCollection services)
+        {
+        }
+
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_AspNetCore_ControllerBase_class() => No_issue_is_reported_for(@"
+using System;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Bla
+{
+    public class MyController : ControllerBase
+    { 
+        public IActionResult DoSomething(byte[] data)
+        {
+            return null;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_expression_bodied_method_that_has_unused_parameter() => An_issue_is_reported_for(@"
 using System;
 

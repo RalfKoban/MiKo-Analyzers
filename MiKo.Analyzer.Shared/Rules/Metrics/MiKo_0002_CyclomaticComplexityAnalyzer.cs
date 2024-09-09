@@ -24,5 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                    ? Issue(containingSymbol, cc, MaxCyclomaticComplexity)
                    : null;
         }
+
+        protected override Diagnostic AnalyzeExpressionBody(ArrowExpressionClauseSyntax body, ISymbol containingSymbol)
+        {
+            var cc = Counter.CountCyclomaticComplexity(body, SyntaxKind.LocalFunctionStatement);
+
+            return cc > MaxCyclomaticComplexity
+                   ? Issue(containingSymbol, cc, MaxCyclomaticComplexity)
+                   : null;
+        }
     }
 }

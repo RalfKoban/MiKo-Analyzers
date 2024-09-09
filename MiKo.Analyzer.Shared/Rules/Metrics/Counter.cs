@@ -11,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
 {
     internal static class Counter
     {
-        // if | do... while | while | for | foreach | case | switch expression arm | continue | goto | && | and | || | or | catch | catch when | ternary operator ?: | ?? | ??= | ?.
+        // if | do... while | while | for | foreach | case | switch expression arm | continue | goto | &= | & | && | and | |= | | | || | or | catch | catch when | ternary operator ?: | ?? | ??= | ?.
         private static readonly HashSet<int> CCSyntaxKinds = new HashSet<int>
                                                                  {
                                                                      (int)SyntaxKind.IfStatement,
@@ -24,8 +24,12 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                      (int)SyntaxKind.SwitchExpressionArm,
                                                                      (int)SyntaxKind.ContinueStatement,
                                                                      (int)SyntaxKind.GotoStatement,
+                                                                     (int)SyntaxKind.AndAssignmentExpression,
+                                                                     (int)SyntaxKind.BitwiseAndExpression,
                                                                      (int)SyntaxKind.LogicalAndExpression,
                                                                      (int)SyntaxKind.AndPattern,
+                                                                     (int)SyntaxKind.OrAssignmentExpression,
+                                                                     (int)SyntaxKind.BitwiseOrExpression,
                                                                      (int)SyntaxKind.LogicalOrExpression,
                                                                      (int)SyntaxKind.OrPattern,
                                                                      (int)SyntaxKind.CatchClause,
@@ -37,6 +41,13 @@ namespace MiKoSolutions.Analyzers.Rules.Metrics
                                                                  };
 
         public static int CountCyclomaticComplexity(BlockSyntax body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
+        {
+            var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
+
+            return 1 + count;
+        }
+
+        public static int CountCyclomaticComplexity(ArrowExpressionClauseSyntax body, SyntaxKind syntaxKindToIgnore = SyntaxKind.None)
         {
             var count = SyntaxNodeCollector.Collect<SyntaxNode>(body, syntaxKindToIgnore).Count(_ => CCSyntaxKinds.Contains(_.RawKind));
 

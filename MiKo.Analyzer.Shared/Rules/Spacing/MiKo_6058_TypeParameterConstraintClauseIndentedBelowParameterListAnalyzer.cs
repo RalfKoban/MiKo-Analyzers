@@ -9,13 +9,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer : SpacingAnalyzer
     {
         public const string Id = "MiKo_6058";
 
-        private const int Offset = Constants.Indentation / 2;
-
-        public MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer() : base(Id)
+        public MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer() : base(Id)
         {
         }
 
@@ -41,15 +39,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            var typeParameters = node.GetTypeParameterList();
-            var referencePosition = typeParameters.LessThanToken.GetStartPosition();
+            var referenceToken = node.GetTypeParameterConstraintReferenceToken();
+            var referencePosition = referenceToken.GetStartPosition();
 
             var whereKeyword = node.WhereKeyword;
             var position = whereKeyword.GetStartPosition();
 
             if (position.Line != referencePosition.Line)
             {
-                var spaces = referencePosition.Character + Offset;
+                var spaces = referencePosition.Character + 1 - Constants.Indentation;
 
                 if (position.Character != spaces)
                 {

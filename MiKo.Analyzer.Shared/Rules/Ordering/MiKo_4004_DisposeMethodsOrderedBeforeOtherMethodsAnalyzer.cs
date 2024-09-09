@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
                                                                       Accessibility.Private,
                                                                   };
 
-        public MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer() : base(Id)
         {
         }
 

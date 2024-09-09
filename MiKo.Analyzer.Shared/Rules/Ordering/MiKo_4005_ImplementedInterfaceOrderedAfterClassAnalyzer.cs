@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
     {
         public const string Id = "MiKo_4005";
 
-        public MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer() : base(Id, SymbolKind.NamedType)
+        public MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer() : base(Id)
         {
         }
 

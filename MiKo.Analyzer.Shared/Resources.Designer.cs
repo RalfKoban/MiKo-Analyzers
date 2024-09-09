@@ -8360,6 +8360,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove empty &lt;summary&gt;.
+        /// </summary>
+        internal static string MiKo_2232_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_2232_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty &lt;summary&gt; documentation do not provide any value to developers and can be removed..
+        /// </summary>
+        internal static string MiKo_2232_Description {
+            get {
+                return ResourceManager.GetString("MiKo_2232_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove empty &lt;summary&gt;.
+        /// </summary>
+        internal static string MiKo_2232_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_2232_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;summary&gt; documentation should not be empty.
+        /// </summary>
+        internal static string MiKo_2232_Title {
+            get {
+                return ResourceManager.GetString("MiKo_2232_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comments should explain the deeper reasons behind the code to understand why the code is written in that way.
         ///They should not describe how it is achieved because that&apos;s what the code is for..
         /// </summary>
@@ -11674,6 +11710,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fix comparison to null.
+        /// </summary>
+        internal static string MiKo_3099_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3099_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum values are never null in case the enum type is a value type. So comparing them with null will always fail..
+        /// </summary>
+        internal static string MiKo_3099_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3099_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum can never be null.
+        /// </summary>
+        internal static string MiKo_3099_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3099_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not compare enum values with null.
+        /// </summary>
+        internal static string MiKo_3099_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3099_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To ease maintenance, test classes should be in the exact same namespace as the type they test.
         ///This allows easy usage without any arbitrary using directives. It also mimics the project structure and allows to discover the tests much easier..
         /// </summary>
@@ -12376,6 +12448,61 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To ease development and to be able to jump directly into code, an object under test should be a concrete type and no interface.
+        ///Otherwise, when attempting to jump into the code, developers just end up at the interface and have to find out which implementation they actually want to inspect / test..
+        /// </summary>
+        internal static string MiKo_3121_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3121_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test concrete type instead of interface.
+        /// </summary>
+        internal static string MiKo_3121_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3121_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tests should test concrete implementations and no interfaces.
+        /// </summary>
+        internal static string MiKo_3121_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3121_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods using more than 2 parameters most likely are combined tests. Such test are hard to read. Hence, to ease reading, these tests should be split into separate ones..
+        /// </summary>
+        internal static string MiKo_3122_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3122_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split into multiple tests so that you do not need more than 2 parameters.
+        /// </summary>
+        internal static string MiKo_3122_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3122_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test methods should not use more than 2 parameters.
+        /// </summary>
+        internal static string MiKo_3122_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3122_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invert if to simplify.
         /// </summary>
         internal static string MiKo_3201_CodeFixTitle {
@@ -12828,6 +12955,78 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Simplify condition.
+        /// </summary>
+        internal static string MiKo_3220_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3220_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical &apos;&amp;&amp;&apos; or &apos;||&apos; conditions using &apos;true&apos; or &apos;false&apos; can be simplified to not use &apos;true&apos; or &apos;false&apos; directly..
+        /// </summary>
+        internal static string MiKo_3220_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3220_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Simplify condition.
+        /// </summary>
+        internal static string MiKo_3220_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3220_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logical &apos;&amp;&amp;&apos; or &apos;||&apos; conditions using &apos;true&apos; or &apos;false&apos; should be simplified.
+        /// </summary>
+        internal static string MiKo_3220_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3220_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;HashCode.Combine&apos;.
+        /// </summary>
+        internal static string MiKo_3221_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3221_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To improve the quality of the hash code returned by &apos;GetHashCode&apos;, developers should use &apos;HashCode.Combine&apos; (when the underlying data type is simple, for example, an integer value)..
+        /// </summary>
+        internal static string MiKo_3221_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3221_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use &apos;HashCode.Combine&apos; instead.
+        /// </summary>
+        internal static string MiKo_3221_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3221_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode overrides should use &apos;HashCode.Combine&apos;.
+        /// </summary>
+        internal static string MiKo_3221_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3221_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
@@ -13186,36 +13385,72 @@ namespace MiKoSolutions.Analyzers {
         /// <summary>
         ///   Looks up a localized string similar to Place operator before methods.
         /// </summary>
-        internal static string MiKo_4006_CodeFixTitle {
+        internal static string MiKo_4007_CodeFixTitle {
             get {
-                return ResourceManager.GetString("MiKo_4006_CodeFixTitle", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_CodeFixTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Operators are a very special kind of methods. As they are static, they should be placed before all other methods..
         /// </summary>
-        internal static string MiKo_4006_Description {
+        internal static string MiKo_4007_Description {
             get {
-                return ResourceManager.GetString("MiKo_4006_Description", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Place operator before methods.
         /// </summary>
-        internal static string MiKo_4006_MessageFormat {
+        internal static string MiKo_4007_MessageFormat {
             get {
-                return ResourceManager.GetString("MiKo_4006_MessageFormat", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_MessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Operators should be placed before methods.
         /// </summary>
-        internal static string MiKo_4006_Title {
+        internal static string MiKo_4007_Title {
             get {
-                return ResourceManager.GetString("MiKo_4006_Title", resourceCulture);
+                return ResourceManager.GetString("MiKo_4007_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;GetHashCode&apos; after &apos;Equals&apos;.
+        /// </summary>
+        internal static string MiKo_4008_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_4008_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The methods &apos;GetHashCode&apos; and &apos;Equals&apos; are used in conjunction to place instances based on their hashes inside dictionaries or hashsets. &apos;GetHashCode&apos; is used to calculate a hash and in case of a hash collision, &apos;Equals&apos; is used to identify the instance. So both methods are strongly related and therefore should be located nearby..
+        /// </summary>
+        internal static string MiKo_4008_Description {
+            get {
+                return ResourceManager.GetString("MiKo_4008_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place &apos;GetHashCode&apos; after &apos;Equals&apos;.
+        /// </summary>
+        internal static string MiKo_4008_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_4008_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetHashCode methods should be placed directly after Equals methods.
+        /// </summary>
+        internal static string MiKo_4008_Title {
+            get {
+                return ResourceManager.GetString("MiKo_4008_Title", resourceCulture);
             }
         }
         
@@ -15612,7 +15847,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        ///   Looks up a localized string similar to Align type parameter constraint indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_CodeFixTitle {
             get {
@@ -15621,7 +15856,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the corresponding type parameter list..
+        ///   Looks up a localized string similar to The code is easier to read if type parameter constraint clauses are aligned indented below the parameter list..
         /// </summary>
         internal static string MiKo_6058_Description {
             get {
@@ -15630,7 +15865,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Align type parameter constraint indented below type parameter list.
+        ///   Looks up a localized string similar to Align type parameter constraint indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_MessageFormat {
             get {
@@ -15639,7 +15874,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type parameter constraint clauses should be indented below type parameter list.
+        ///   Looks up a localized string similar to Type parameter constraint clauses should be indented below parameter list.
         /// </summary>
         internal static string MiKo_6058_Title {
             get {
