@@ -3033,7 +3033,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, params string[] texts) => value.Content.WithoutText(texts);
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts)
+        {
+            var result = values;
+            var length = texts.Length;
+
+            for (var index = 0; index < length; index++)
+            {
+                result = result.WithoutText(texts[index]);
+            }
+
+            return result;
+        }
 
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text) => value.WithoutTrailing(new[] { text });
 
@@ -3060,8 +3071,12 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                foreach (var text in texts)
+                var textsLength = texts.Length;
+
+                for (var textIndex = 0; textIndex < textsLength; textIndex++)
                 {
+                    var text = texts[textIndex];
+
                     if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
                     {
                         var modifiedText = originalText.WithoutSuffix(text);

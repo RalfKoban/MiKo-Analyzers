@@ -137,10 +137,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static IReadOnlyCollection<LocalFunctionStatementSyntax> GetLocalFunctions(this IMethodSymbol value)
         {
-            return value.GetSyntaxNodes()
-                        .SelectMany(_ => _.DescendantNodes(__ => __.IsAnyKind(LocalFunctionContainerSyntaxKinds)))
-                        .OfType<LocalFunctionStatementSyntax>()
-                        .ToList();
+            var node = value.GetSyntaxNodeInSource();
+
+            if (node != null)
+            {
+                var functions = node.DescendantNodes(_ => _.IsAnyKind(LocalFunctionContainerSyntaxKinds))
+                                    .OfType<LocalFunctionStatementSyntax>()
+                                    .ToList();
+
+                return functions;
+            }
+
+            return Array.Empty<LocalFunctionStatementSyntax>();
         }
 
         internal static bool ContainsExtensionMethods(this INamedTypeSymbol value) => value.TypeKind == TypeKind.Class && value.IsStatic && value.MightContainExtensionMethods && value.GetExtensionMethods().Any();
@@ -451,9 +459,9 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetStartingLine(this IMethodSymbol value) => value.Locations.First(_ => _.IsInSource).GetStartingLine();
 
-        internal static IEnumerable<SyntaxNode> GetSyntaxNodes(this ISymbol value) => value.GetSyntaxNodes<SyntaxNode>();
+        internal static SyntaxNode GetSyntaxNodeInSource(this ISymbol value) => value.GetSyntaxNodeInSource<SyntaxNode>();
 
-        internal static IEnumerable<TSyntaxNode> GetSyntaxNodes<TSyntaxNode>(this ISymbol value) where TSyntaxNode : SyntaxNode
+        internal static TSyntaxNode GetSyntaxNodeInSource<TSyntaxNode>(this ISymbol value) where TSyntaxNode : SyntaxNode
         {
             var references = value.DeclaringSyntaxReferences;
             var length = references.Length;
@@ -485,12 +493,12 @@ namespace MiKoSolutions.Analyzers
                             continue;
                         }
 
-                        return new[] { node };
+                        return node;
                     }
                 }
             }
 
-            return Enumerable.Empty<TSyntaxNode>();
+            return null;
         }
 
         internal static SyntaxNode GetSyntax(this ISymbol value)
@@ -524,15 +532,18 @@ namespace MiKoSolutions.Analyzers
                     return GetSyntax(parameter);
 
                 default:
-                    return value?.GetSyntaxNodes().FirstOrDefault();
+                    return value?.GetSyntaxNodeInSource();
             }
         }
 
-        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodes<ParameterSyntax>().FirstOrDefault();
+        internal static ParameterSyntax GetSyntax(this IParameterSymbol value) => value.GetSyntaxNodeInSource<ParameterSyntax>();
 
-        internal static T GetSyntax<T>(this ISymbol value) where T : SyntaxNode => value.GetSyntaxNodes()
-                                                                                        .Select(_ => _.GetEnclosing<T>())
-                                                                                        .FirstOrDefault();
+        internal static T GetSyntax<T>(this ISymbol value) where T : SyntaxNode
+        {
+            var node = value.GetSyntaxNodeInSource();
+
+            return node?.GetEnclosing<T>();
+        }
 
         internal static IEnumerable<DocumentationCommentTriviaSyntax> GetDocumentationCommentTriviaSyntax(this ISymbol value) => value.GetSyntax()?.GetDocumentationCommentTriviaSyntax() ?? Enumerable.Empty<DocumentationCommentTriviaSyntax>();
 
