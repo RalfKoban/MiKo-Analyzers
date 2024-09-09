@@ -33,9 +33,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (symbolName.Contains(TestMarker))
             {
-                var betterName = FindBetterName(symbolName);
+                var marker = GetTestMarker(symbolName);
+                var betterName = FindBetterName(symbolName, marker);
 
-                return new[] { Issue(symbol, GetTestMarker(symbolName), CreateBetterNameProposal(betterName)) };
+                return new[] { Issue(symbol, marker, CreateBetterNameProposal(betterName)) };
             }
 
             return Enumerable.Empty<Diagnostic>();
@@ -48,9 +49,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return testCase ? TestCaseMarker : TestMarker;
         }
 
-        private static string FindBetterName(string symbolName)
+        private static string FindBetterName(string symbolName, string marker)
         {
-            var marker = GetTestMarker(symbolName);
             var phrases = new[]
                               {
                                   marker.SurroundedWith(Constants.Underscore),

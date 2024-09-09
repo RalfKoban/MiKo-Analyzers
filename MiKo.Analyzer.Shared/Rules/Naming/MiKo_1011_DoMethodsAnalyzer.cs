@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var proposal = FindBetterName(symbol);
 
-            if (proposal == null)
+            if (proposal is null)
             {
                 return Enumerable.Empty<Diagnostic>();
             }
