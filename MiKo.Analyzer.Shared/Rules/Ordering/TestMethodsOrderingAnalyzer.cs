@@ -7,7 +7,7 @@ namespace MiKoSolutions.Analyzers.Rules.Ordering
 {
     public abstract class TestMethodsOrderingAnalyzer : OrderingAnalyzer
     {
-        protected TestMethodsOrderingAnalyzer(string diagnosticId) : base(diagnosticId, SymbolKind.NamedType)
+        protected TestMethodsOrderingAnalyzer(string diagnosticId) : base(diagnosticId)
         {
         }
 
