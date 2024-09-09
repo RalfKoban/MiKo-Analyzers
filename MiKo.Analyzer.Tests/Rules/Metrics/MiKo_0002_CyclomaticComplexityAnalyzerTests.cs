@@ -32,24 +32,28 @@ public class TestMe
 }
 ");
 
-        [TestCase("if (false) return; ")]
-        [TestCase("var x = true ? 42 : 1; ")]
-        [TestCase("var x = null ?? new object(); ")]
-        [TestCase("var x = ((object)(null))?.ToString(); ")]
-        [TestCase("foreach (var x in y); ")]
-        [TestCase("for (var i = 0; i < 10; i++) ; ")]
-        [TestCase("while(true); ")]
-        [TestCase("do { i++; } while (true); ")]
+        [TestCase("if (false) return;")]
+        [TestCase("var x = true ? 42 : 1;")]
+        [TestCase("var x = null ?? new object();")]
+        [TestCase("var x = ((object)(null))?.ToString();")]
+        [TestCase("foreach (var x in y);")]
+        [TestCase("for (var i = 0; i < 10; i++) ;")]
+        [TestCase("while(true);")]
+        [TestCase("do { i++; } while (true);")]
         [TestCase("int x = 10; switch(x) { case 1: break; }")]
         [TestCase("object x = null; switch(x) { case null: break; }")]
         [TestCase("var x = new object(); switch (x) { case string _: break; }")]
         [TestCase("int x = 1 && 2;")]
         [TestCase("bool result = true && false;")]
         [TestCase("bool result = true || false;")]
-        [TestCase("bool result = true and false;", Ignore = "Currently not testable")]
-        [TestCase("bool result = true or false;", Ignore = "Currently not testable")]
         [TestCase("try { throw new Exception(); } catch { }")]
         [TestCase("try { throw new Exception(); } catch (Exception ex) when (ex is InvalidOperationException) { }")]
+        [TestCase("var x |= true;")]
+        [TestCase("var x = false | true;")]
+        [TestCase("var x &= true;")]
+        [TestCase("var x = false & true;")]
+        [TestCase("char c; bool result = c is (>= 'a' and <= 'z');")]
+        [TestCase("char c; bool result = c is (<= 'a' or >= 'z');")]
         public void Method_with_too_complex_term_is_reported_(string term) => An_issue_is_reported_for(@"
 public class TestMe
 {
@@ -74,7 +78,7 @@ public class TestMe
 }
 ");
 
-        [Test, Ignore("Currently not testable")]
+        [Test]
         public void Method_with_switch_expression_arms_is_reported() => An_issue_is_reported_for(@"
 public enum LifeStage
 {

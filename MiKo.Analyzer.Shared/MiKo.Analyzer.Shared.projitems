@@ -146,6 +146,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2228_DocumentationIsNotNegativeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2229_XmlFragmentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2231_InheritdocGetHashCodeAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2232_EmptySummaryAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2300_MeaninglessCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2301_TestArrangeActAssertCommentAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Documentation\MiKo_2302_CommentedOutCodeAnalyzer.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3096_UseDictionaryInsteadOfLargeSwitchAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3097_DoNotCastAndReturnUnnecessaryAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3098_SuppressMessageAttributeHasJustificationAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3099_DoNotCompareEnumsWithNullAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3100_TestClassesAreInSameNamespaceAsTypeUnderTestAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3101_TestClassesHaveTestsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3102_TestMethodsHaveNoConditionsAnalyzer.cs" />
@@ -281,6 +283,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3118_TestMethodsDoNotUseSpecificLinqMethodsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3119_TestMethodsDoNotReturnCompletedTaskAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3120_UseValueInsteadOfItIsConditionMatcherAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3121_ObjectUnderTestIsNoInterfaceAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3122_TestMethodsDoNotHaveMultipleParametersAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3201_InvertIfWhenFollowedByFewCodeLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3202_InvertNegativeIfWhenReturningOnAllPathsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3203_InvertNegativeIfInsideBlockWhenFollowedBySingleCodeLinesAnalyzer.cs" />
@@ -295,6 +299,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3217_DoNotUseGenericsWithGenericsWithGenericsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3218_DoNotDefineExtensionMethodsInUnexpectedPlacesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3219_PublicMembersAreNotVirtualAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3220_LogicalConditionsUsingTrueFalseCanBeSimplifiedAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3221_GetHashCodeAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3302_SimpleLambdaExpressionIsUsedInsteadOfParenthesizedLambdaExpressionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Maintainability\MiKo_3401_NamespaceDepthAnalyzer.cs" />
@@ -449,6 +455,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4004_DisposeMethodsOrderedBeforeOtherMethodsAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4005_ImplementedInterfaceOrderedAfterClassAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4007_OperatorsOrderedBeforeMethodsAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4008_GetHashCodeMethodsOrderedAfterEqualsMethodAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4101_TestSetUpMethodOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4102_TestTearDownMethodOrderingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Ordering\MiKo_4103_TestOneTimeSetUpMethodOrderingAnalyzer.cs" />
@@ -522,7 +529,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6055_SimpleAssignmentInBlockSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6057_TypeParameterConstraintClausesVerticallyAlignedAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\StatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesAnalyzer.cs" />
