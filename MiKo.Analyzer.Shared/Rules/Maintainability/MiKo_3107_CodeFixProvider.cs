@@ -32,13 +32,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             switch (kind)
             {
-                case SyntaxKind.BoolKeyword: return Literal(SyntaxKind.FalseLiteralExpression);
+                case SyntaxKind.BoolKeyword: return FalseLiteral();
                 case SyntaxKind.CharKeyword: return Literal(char.MinValue);
                 case SyntaxKind.DecimalKeyword: return Literal(decimal.Zero);
                 case SyntaxKind.DoubleKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(double.NaN));
                 case SyntaxKind.FloatKeyword: return SimpleMemberAccess(PredefinedType(kind), nameof(float.NaN));
-                case SyntaxKind.ObjectKeyword: return Literal(SyntaxKind.NullLiteralExpression);
-                case SyntaxKind.StringKeyword: return Literal(SyntaxKind.NullLiteralExpression);
+                case SyntaxKind.ObjectKeyword: return NullLiteral();
+                case SyntaxKind.StringKeyword: return NullLiteral();
                 default: return Literal(0);
             }
         }

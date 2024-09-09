@@ -20,23 +20,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeComment(ISymbol symbol, Compilation compilation, string commentXml, DocumentationCommentTriviaSyntax comment)
         {
-            foreach (var node in comment.Content)
+            var tagNames = comment.Content.ToHashSet(_ => _.GetXmlTagName());
+
+            if (tagNames.Contains(Constants.XmlTag.Inheritdoc))
             {
-                if (node is XmlTextSyntax)
-                {
-                    // ignore texts
-                    continue;
-                }
-
-                var tagName = node.GetXmlTagName();
-
-                if (tagName != Constants.XmlTag.Inheritdoc)
-                {
-                    return new[] { Issue(comment) };
-                }
+                return Enumerable.Empty<Diagnostic>();
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return new[] { Issue(comment) };
         }
     }
 }

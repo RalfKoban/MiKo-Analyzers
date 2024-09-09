@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public sealed class MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Types = ["class", "interface", "record", "struct"];
 
@@ -45,7 +45,7 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething<T>()
-                             where T : class
+                            where T : class
     { }
 }
 ");
@@ -55,8 +55,8 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething<T1, T2>()
-                             where T1 : class
-                             where T2 : class
+                                 where T1 : class
+                                 where T2 : class
     { }
 }
 ");
@@ -104,7 +104,7 @@ public class TestMe
     public void DoSomething()
     {
         void DoAnything<T>()
-                         where T : class
+                        where T : class
         { }
     }
 }
@@ -117,8 +117,8 @@ public class TestMe
     public void DoSomething()
     {
         void DoAnything<T1, T2>()
-                         where T1 : class
-                         where T2 : class
+                             where T1 : class
+                             where T2 : class
         { }
     }
 }
@@ -291,7 +291,7 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething<T>()
-                             where T : class
+                            where T : class
     { }
 }
 ";
@@ -315,7 +315,7 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething<T>()
-                             where T : class
+                            where T : class
     { }
 }
 ";
@@ -340,7 +340,7 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething<T1, T2>()
-                             where T1 : class
+                                 where T1 : class
         where T2 : class
     { }
 }
@@ -366,7 +366,7 @@ public class TestMe
 public class TestMe
 {
     public void DoSomething<T1, T2>()
-                             where T1 : class
+                                 where T1 : class
                                       where T2 : class
     { }
 }
@@ -396,7 +396,7 @@ public class TestMe
     public void DoSomething()
     {
         void DoAnything<T>()
-                         where T : class
+                        where T : class
         { }
     }
 }
@@ -426,7 +426,7 @@ public class TestMe
     public void DoSomething()
     {
         void DoAnything<T>()
-                         where T : class
+                        where T : class
         { }
     }
 }
@@ -457,7 +457,7 @@ public class TestMe
     public void DoSomething()
     {
         void DoAnything<T1, T2>()
-                         where T1 : class
+                             where T1 : class
             where T2 : class
         { }
     }
@@ -489,7 +489,7 @@ public class TestMe
     public void DoSomething()
     {
         void DoAnything<T1, T2>()
-                         where T1 : class
+                             where T1 : class
                                     where T2 : class
         { }
     }
@@ -511,7 +511,7 @@ public class TestMe<T>
 
             const string FixedCode = @"
 public class TestMe<T>
-                     where T : class
+                  where T : class
 {
 }
 ";
@@ -530,7 +530,7 @@ public class TestMe<T>
 
             const string FixedCode = @"
 public class TestMe<T>
-                     where T : class
+                  where T : class
 {
 }
 ";
@@ -551,7 +551,7 @@ public class TestMe<T1, T2>
 
             const string FixedCode = @"
 public class TestMe<T1, T2>
-                     where T1 : class
+                       where T1 : class
     where T2 : class
 {
 }
@@ -572,7 +572,7 @@ public class TestMe<T1, T2>
 
             const string FixedCode = @"
 public class TestMe<T1, T2>
-                     where T1 : class
+                       where T1 : class
                               where T2 : class
 {
 }
@@ -593,7 +593,7 @@ public interface TestMe<T>
 
             const string FixedCode = @"
 public interface TestMe<T>
-                         where T : class
+                      where T : class
 {
 }
 ";
@@ -612,7 +612,7 @@ public interface TestMe<T>
 
             const string FixedCode = @"
 public interface TestMe<T>
-                         where T : class
+                      where T : class
 {
 }
 ";
@@ -633,7 +633,7 @@ public interface TestMe<T1, T2>
 
             const string FixedCode = @"
 public interface TestMe<T1, T2>
-                         where T1 : class
+                           where T1 : class
     where T2 : class
 {
 }
@@ -654,7 +654,7 @@ public interface TestMe<T1, T2>
 
             const string FixedCode = @"
 public interface TestMe<T1, T2>
-                         where T1 : class
+                           where T1 : class
                               where T2 : class
 {
 }
@@ -675,7 +675,7 @@ public record TestMe<T>
 
             const string FixedCode = @"
 public record TestMe<T>
-                      where T : class
+                   where T : class
 {
 }
 ";
@@ -694,7 +694,7 @@ public record TestMe<T>
 
             const string FixedCode = @"
 public record TestMe<T>
-                      where T : class
+                   where T : class
 {
 }
 ";
@@ -715,7 +715,7 @@ public record TestMe<T1, T2>
 
             const string FixedCode = @"
 public record TestMe<T1, T2>
-                      where T1 : class
+                        where T1 : class
     where T2 : class
 {
 }
@@ -736,7 +736,7 @@ public record TestMe<T1, T2>
 
             const string FixedCode = @"
 public record TestMe<T1, T2>
-                      where T1 : class
+                        where T1 : class
                               where T2 : class
 {
 }
@@ -757,7 +757,7 @@ public struct TestMe<T>
 
             const string FixedCode = @"
 public struct TestMe<T>
-                      where T : class
+                   where T : class
 {
 }
 ";
@@ -776,7 +776,7 @@ public struct TestMe<T>
 
             const string FixedCode = @"
 public struct TestMe<T>
-                      where T : class
+                   where T : class
 {
 }
 ";
@@ -797,7 +797,7 @@ public struct TestMe<T1, T2>
 
             const string FixedCode = @"
 public struct TestMe<T1, T2>
-                      where T1 : class
+                        where T1 : class
     where T2 : class
 {
 }
@@ -818,7 +818,7 @@ public struct TestMe<T1, T2>
 
             const string FixedCode = @"
 public struct TestMe<T1, T2>
-                      where T1 : class
+                        where T1 : class
                               where T2 : class
 {
 }
@@ -827,9 +827,9 @@ public struct TestMe<T1, T2>
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6058_TypeParameterConstraintClauseIndentedBelowTypeParameterListAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6058_CodeFixProvider();
     }

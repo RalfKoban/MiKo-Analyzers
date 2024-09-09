@@ -96,6 +96,155 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_empty_documentation_on_same_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary></summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_spaces_only_documentation_on_same_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>   </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_empty_documentation_on_different_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_void_method_with_empty_lines_documentation_on_different_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_method_with_empty_documentation_on_same_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary></summary>
+    public object DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_method_with_spaces_only_documentation_on_same_line() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>   </summary>
+    public object DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_method_with_empty_documentation_on_different_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    public object DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_object_method_with_empty_lines_documentation_on_different_lines() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public object DoSomething() => null;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// Some documentation.
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_method_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// <para>
+    /// Some documentation.
+    /// </para>
+    /// </summary>
+    public void DoSomething() { }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_boolean_method_with_empty_documentation_on_same_line() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary></summary>
+    public bool DoSomething() => true;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_boolean_method_with_spaces_only_documentation_on_same_line() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>   </summary>
+    public bool DoSomething() => true;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_boolean_method_with_empty_documentation_on_different_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    /// </summary>
+    public bool DoSomething() => true;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_boolean_method_with_empty_lines_documentation_on_different_lines() => An_issue_is_reported_for(@"
+public class TestMe
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public bool DoSomething() => true;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_ambiguous_phrase_([ValueSource(nameof(AmbiguousPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
@@ -122,38 +271,6 @@ public interface ITestMe
 /// </summary>
 public class TestMe : ITestMe
 {
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    public void DoSomething() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_with_documentation() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// Some documentation.
-    /// </summary>
-    public void DoSomething() { }
-}
-");
-
-        [Test]
-        public void No_issue_is_reported_for_method_with_documentation_in_para_tag() => No_issue_is_reported_for(@"
-public class TestMe
-{
-    /// <summary>
-    /// <para>
-    /// Some documentation.
-    /// </para>
-    /// </summary>
-    public void DoSomething() { }
 }
 ");
 

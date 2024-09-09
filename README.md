@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 454 rules that are currently provided by the analyzer.
+The following tables lists all the 461 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -267,6 +267,7 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_2228|Documentation should use positive wording instead of negative|&#x2713;|\-|
 |MiKo_2229|Documentation should not contain left-over XML fragments|&#x2713;|&#x2713;|
 |MiKo_2231|Documentation of overridden 'GetHashCode()' methods shall use '&lt;inheritdoc /&gt;' marker|&#x2713;|&#x2713;|
+|MiKo_2232|&lt;summary&gt; documentation should not be empty|&#x2713;|&#x2713;|
 |MiKo_2300|Comments should explain the 'Why' and not the 'How'|&#x2713;|\-|
 |MiKo_2301|Do not use obvious comments in AAA-Tests|&#x2713;|&#x2713;|
 |MiKo_2302|Do not keep code that is commented out|&#x2713;|\-|
@@ -372,6 +373,7 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_3096|Use dictionaries instead of large switch statements|&#x2713;|\-|
 |MiKo_3097|Do not cast to type and return object|&#x2713;|\-|
 |MiKo_3098|Justifications of suppressed messages shall explain|&#x2713;|\-|
+|MiKo_3099|Do not compare enum values with null|&#x2713;|&#x2713;|
 |MiKo_3100|Test classes and types under test belong in same namespace|&#x2713;|\-|
 |MiKo_3101|Test classes should contain tests|&#x2713;|\-|
 |MiKo_3102|Test methods should not contain conditional statements (such as 'if', 'switch', etc.)|&#x2713;|\-|
@@ -393,6 +395,8 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_3118|Test methods should not use ambiguous Linq calls|&#x2713;|\-|
 |MiKo_3119|Test methods should not simply return completed task|&#x2713;|&#x2713;|
 |MiKo_3120|Moq mocks should use values instead of 'It.Is&lt;&gt;(...)' condition matcher to verify exact values|&#x2713;|&#x2713;|
+|MiKo_3121|Tests should test concrete implementations and no interfaces|&#x2713;|\-|
+|MiKo_3122|Test methods should not use more than 2 parameters|&#x2713;|\-|
 |MiKo_3201|If statements can be inverted in short methods|&#x2713;|&#x2713;|
 |MiKo_3202|Use positive conditions when returning in all paths|&#x2713;|&#x2713;|
 |MiKo_3203|If-continue statements can be inverted when followed by single line|&#x2713;|&#x2713;|
@@ -407,6 +411,8 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_3217|Do not use generic types that have other generic types as type arguments|&#x2713;|\-|
 |MiKo_3218|Do not define extension methods in unexpected places|&#x2713;|\-|
 |MiKo_3219|Public members should not be 'virtual'|&#x2713;|\-|
+|MiKo_3220|Logical '&amp;&amp;' or '&#124;&#124;' conditions using 'true' or 'false' should be simplified|&#x2713;|&#x2713;|
+|MiKo_3221|GetHashCode overrides should use 'HashCode.Combine'|&#x2713;|&#x2713;|
 |MiKo_3301|Favor lambda expression bodies instead of parenthesized lambda expression blocks for single statements|&#x2713;|&#x2713;|
 |MiKo_3302|Favor simple lambda expression bodies instead of parenthesized lambda expression bodies for single parameters|&#x2713;|&#x2713;|
 |MiKo_3401|Namespace hierarchies should not be too deep|&#x2713;|\-|
@@ -422,6 +428,7 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_4004|Dispose methods should be placed before all other methods of the same accessibility|&#x2713;|&#x2713;|
 |MiKo_4005|The interface that gives a type its name should be placed directly after the type's declaration|&#x2713;|&#x2713;|
 |MiKo_4007|Operators should be placed before methods|&#x2713;|&#x2713;|
+|MiKo_4008|GetHashCode methods should be placed directly after Equals methods|&#x2713;|&#x2713;|
 |MiKo_4101|Test initialization methods should be ordered directly after One-Time methods|&#x2713;|&#x2713;|
 |MiKo_4102|Test cleanup methods should be ordered after test initialization methods and before test methods|&#x2713;|&#x2713;|
 |MiKo_4103|One-Time test initialization methods should be ordered before all other methods|&#x2713;|&#x2713;|
@@ -487,7 +494,7 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_6045|Comparisons using operators such as '==' or '!=' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6046|Calculations using operators such as '+' or '%' should be placed on same line(s)|&#x2713;|&#x2713;|
 |MiKo_6047|Braces of switch expressions should be placed directly below the corresponding switch keyword|&#x2713;|&#x2713;|
-|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|\-|
+|MiKo_6048|Logical conditions should be placed on a single line|&#x2713;|&#x2713;|
 |MiKo_6049|Event (un-)registrations should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6050|Multi-line arguments are positioned outdented at end of method call|&#x2713;|&#x2713;|
 |MiKo_6051|Colon of constructor call shall be placed on same line as constructor call|&#x2713;|&#x2713;|
@@ -497,4 +504,4 @@ The following tables lists all the 454 rules that are currently provided by the 
 |MiKo_6055|Assignment statements should be surrounded by blank lines|&#x2713;|&#x2713;|
 |MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
 |MiKo_6057|Type parameter constraint clauses should be aligned vertically|&#x2713;|&#x2713;|
-|MiKo_6058|Type parameter constraint clauses should be indented below type parameter list|&#x2713;|&#x2713;|
+|MiKo_6058|Type parameter constraint clauses should be indented below parameter list|&#x2713;|&#x2713;|

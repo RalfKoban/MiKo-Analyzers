@@ -17,8 +17,6 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxToken AsToken(this SyntaxKind value) => SyntaxFactory.Token(value);
 
-        internal static IEnumerable<SyntaxToken> DescendantTokens(this SyntaxNode value, SyntaxKind kind) => value.DescendantTokens().OfKind(kind);
-
         internal static SyntaxToken First(this SyntaxTokenList value, SyntaxKind kind) => value.OfKind(kind).FirstOrDefault();
 
         internal static T GetEnclosing<T>(this SyntaxToken value) where T : SyntaxNode => value.Parent.GetEnclosing<T>();
@@ -179,6 +177,27 @@ namespace MiKoSolutions.Analyzers
         {
             var trivia = value.LeadingTrivia;
 
+            // remove existing empty lines
+            var indicesToRemove = new Stack<int>();
+
+            var count = trivia.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var t = trivia[index];
+
+                if (t.IsEndOfLine())
+                {
+                    indicesToRemove.Push(index);
+                }
+            }
+
+            foreach (var index in indicesToRemove)
+            {
+                trivia = trivia.RemoveAt(index);
+            }
+
+            // add new lines
             for (var i = 0; i < lines; i++)
             {
                 trivia = trivia.Insert(0, SyntaxFactory.CarriageReturnLineFeed); // do not use elastic one to prevent formatting it away again
