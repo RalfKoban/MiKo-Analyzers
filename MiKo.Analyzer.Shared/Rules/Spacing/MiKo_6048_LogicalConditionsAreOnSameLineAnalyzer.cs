@@ -14,6 +14,29 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                                            {
                                                                SyntaxKind.LogicalAndExpression,
                                                                SyntaxKind.LogicalOrExpression,
+                                                               SyntaxKind.IsPatternExpression,
+                                                               SyntaxKind.ParenthesizedExpression,
+                                                               SyntaxKind.AddExpression,
+                                                               SyntaxKind.SubtractExpression,
+                                                               SyntaxKind.MultiplyExpression,
+                                                               SyntaxKind.DivideExpression,
+                                                               SyntaxKind.ModuloExpression,
+                                                               SyntaxKind.LeftShiftExpression,
+                                                               SyntaxKind.RightShiftExpression,
+                                                               SyntaxKind.LogicalOrExpression,
+                                                               SyntaxKind.LogicalAndExpression,
+                                                               SyntaxKind.BitwiseOrExpression,
+                                                               SyntaxKind.BitwiseAndExpression,
+                                                               SyntaxKind.ExclusiveOrExpression,
+                                                               SyntaxKind.EqualsExpression,
+                                                               SyntaxKind.NotEqualsExpression,
+                                                               SyntaxKind.LessThanExpression,
+                                                               SyntaxKind.LessThanOrEqualExpression,
+                                                               SyntaxKind.GreaterThanExpression,
+                                                               SyntaxKind.GreaterThanOrEqualExpression,
+                                                               SyntaxKind.IsExpression,
+                                                               SyntaxKind.AsExpression,
+                                                               SyntaxKind.CoalesceExpression,
                                                            };
 
         public MiKo_6048_LogicalConditionsAreOnSameLineAnalyzer() : base(Id)
@@ -29,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return span.StartLinePosition.Line == span.EndLinePosition.Line;
         }
 
-        private static bool IsOnSingleLine(ExpressionSyntax syntax)
+        private static bool IsOnSingleLine(SyntaxNode syntax)
         {
             switch (syntax)
             {
@@ -38,6 +61,9 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                 case BinaryExpressionSyntax binary:
                     return IsOnSingleLine(binary);
+
+                case IsPatternExpressionSyntax isPattern:
+                    return IsOnSingleLine(isPattern);
 
                 default:
                     return IsOnSingleLineLocal(syntax);
@@ -91,7 +117,37 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return false;
         }
 
-        private static bool ShallAnalyzeNode(BinaryExpressionSyntax syntax)
+        private static bool IsOnSingleLine(IsPatternExpressionSyntax isPattern)
+        {
+            if (IsOnSingleLineLocal(isPattern))
+            {
+                return true;
+            }
+
+            var leftCondition = isPattern.Expression;
+            var rightCondition = isPattern.Pattern;
+
+            var leftSpan = leftCondition.GetLocation().GetLineSpan();
+            var rightSpan = rightCondition.GetLocation().GetLineSpan();
+
+            // let's see if both conditions are on same line
+            if (leftSpan.EndLinePosition.Line == rightSpan.StartLinePosition.Line)
+            {
+                if (leftSpan.StartLinePosition.Line == rightSpan.EndLinePosition.Line)
+                {
+                    // both are on same line
+                    return true;
+                }
+
+                // at least one condition spans multiple lines
+                return false;
+            }
+
+            // they span different lines
+            return IsOnSingleLine(leftCondition) && IsOnSingleLine(rightCondition);
+        }
+
+        private static bool ShallAnalyzeNode(ExpressionSyntax syntax)
         {
             switch (syntax.Parent)
             {
@@ -106,7 +162,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
         private void AnalyzeNode(SyntaxNodeAnalysisContext context)
         {
-            if (context.Node is BinaryExpressionSyntax syntax && ShallAnalyzeNode(syntax))
+            if (context.Node is ExpressionSyntax syntax && ShallAnalyzeNode(syntax))
             {
                 if (IsOnSingleLine(syntax))
                 {

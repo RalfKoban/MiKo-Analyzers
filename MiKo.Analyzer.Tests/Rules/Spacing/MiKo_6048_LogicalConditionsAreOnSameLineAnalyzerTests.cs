@@ -448,6 +448,191 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [TestCase("\r\n == null", "== null")]
+        [TestCase("== \r\n null", "== null")]
+        [TestCase("\r\n != null", "!= null")]
+        [TestCase("!= \r\n null", "!= null")]
+        [TestCase("\r\n is null", "is null")]
+        [TestCase("is \r\n null", "is null")]
+        [TestCase("\r\n is not null", "is not null")]
+        [TestCase("is \r\n not null", "is not null")]
+        [TestCase("is not \r\n null", "is not null")]
+        public void Code_gets_fixed_for_logical_condition_(string originalCondition, string fixedCondition)
+        {
+            const string Template = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty ###)
+        { }
+    }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", originalCondition), Template.Replace("###", fixedCondition));
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_1()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null
+            && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_2()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty
+                != null
+            && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_3()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty
+                !=
+                    null
+            && SomeProperty.Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_if_logical_condition_with_equality_conditions_as_logical_parts_are_on_different_lines_4()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null
+            && SomeProperty
+                        .Equals(o))
+        { }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public object SomeProperty { get; set; }
+
+    public void DoSomething(object o)
+    {
+        if (SomeProperty != null && SomeProperty.Equals(o))
+        { }
+    }
+
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         //// TODO RKN: Add tests for inline-comments after condition parts
 
         protected override string GetDiagnosticId() => MiKo_6048_LogicalConditionsAreOnSameLineAnalyzer.Id;
