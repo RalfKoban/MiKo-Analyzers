@@ -19,6 +19,8 @@ namespace System
 {
     internal static class StringExtensions
     {
+        private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
+
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
@@ -1278,8 +1280,22 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source); // ncrunch: no coverage
+//// ncrunch: no coverage start
+
+        public static char ToLowerCase(this char source)
+        {
+            if ((uint)(source - 'A') <= 'Z' - 'A')
+            {
+                return (char)(source + DifferenceBetweenUpperAndLowerCaseAscii);
+            }
+
+            if ((uint)(source - 'a') <= 'z' - 'a')
+            {
+                return source;
+            }
+
+            return char.ToLowerInvariant(source);
+        }
 
         /// <summary>
         /// Gets a <see cref="string"/> where the characters are lower-case.
@@ -1301,8 +1317,6 @@ namespace System
 
             return new string(characters);
         }
-
-//// ncrunch: no coverage start
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is lower-case.
@@ -1367,8 +1381,20 @@ namespace System
             return MakeLowerCaseAt(source, index);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToUpperCase(this char source) => char.ToUpperInvariant(source);
+        public static char ToUpperCase(this char source)
+        {
+            if ((uint)(source - 'a') <= 'z' - 'a')
+            {
+                return (char)(source - DifferenceBetweenUpperAndLowerCaseAscii);
+            }
+
+            if ((uint)(source - 'A') <= 'Z' - 'A')
+            {
+                return source;
+            }
+
+            return char.ToUpperInvariant(source);
+        }
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1752,12 +1778,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1773,12 +1799,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1794,12 +1820,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1815,12 +1841,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1836,12 +1862,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)

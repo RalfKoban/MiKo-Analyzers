@@ -170,5 +170,17 @@ namespace MiKoSolutions.Analyzers.Extensions
 
         [TestCaseSource(nameof(UpperCaseCharacters))]
         public static void IsUpperCase_is_true_for_(char c) => Assert.That(c.IsUpperCase(), Is.True);
+
+        [TestCaseSource(nameof(LowerCaseCharacters))]
+        public static void ToUpperCase_for_lower_case_(char c) => Assert.That(c.ToUpperCase(), Is.EqualTo(char.ToUpperInvariant(c)));
+
+        [TestCaseSource(nameof(UpperCaseCharacters))]
+        public static void ToUpperCase_for_upper_case_(char c) => Assert.That(c.ToUpperCase(), Is.EqualTo(c));
+
+        [TestCaseSource(nameof(LowerCaseCharacters))]
+        public static void ToLowerCase_for_lower_case_(char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(c));
+
+        [TestCaseSource(nameof(UpperCaseCharacters))]
+        public static void ToLowerCase_for_upper_case_(char c) => Assert.That(c.ToLowerCase(), Is.EqualTo(char.ToLowerInvariant(c)));
     }
 }
