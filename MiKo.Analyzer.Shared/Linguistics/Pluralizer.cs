@@ -59,6 +59,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool IsAllowedListName(string symbolName, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => symbolName.EqualsAny(AllowedListNames, comparison);
 
+        // TODO RKN: Use ReadonlySpan
         private static string CreatePluralName(string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (proposedName.EndsWith("y", comparison))

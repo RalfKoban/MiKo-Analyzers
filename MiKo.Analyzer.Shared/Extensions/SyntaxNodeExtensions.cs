@@ -2363,7 +2363,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (index > -1)
                 {
-                    var result = string.Concat(text.Substring(0, index), replacement, text.Substring(index + phrase.Length));
+                    var result = text.AsSpan(0, index).ConcatenatedWith(replacement, text.AsSpan(index + phrase.Length));
 
                     map[token] = token.WithText(result);
                 }

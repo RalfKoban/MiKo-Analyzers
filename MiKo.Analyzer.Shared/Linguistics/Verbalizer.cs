@@ -399,7 +399,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                     if (word.EndsWithAny(ThreeCharacterGerundEndingsWithE, StringComparison.OrdinalIgnoreCase))
                     {
-                        return word.Substring(0, wordLength - 3) + "e";
+                        return word.AsSpan(0, wordLength - 3).ConcatenatedWith('e');
                     }
 
                     return word.Substring(0, wordLength - 3);
@@ -427,7 +427,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 var word = sentenceEnding.TrimEnd(SentenceEndingMarkers);
 
-                return CreateThirdPersonSingularVerb(word) + sentenceEnding.Substring(word.Length);
+                return CreateThirdPersonSingularVerb(word).ConcatenatedWith(sentenceEnding.AsSpan(word.Length));
             }
 
             string CreateThirdPersonSingularVerb(string word)
@@ -457,7 +457,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                         return word + 's';
                     }
 
-                    return word.Substring(0, word.Length - 1) + "ies";
+                    return word.AsSpan(0, word.Length - 1).ConcatenatedWith("ies");
                 }
 
                 if (word.EndsWith('s'))
@@ -515,12 +515,12 @@ namespace MiKoSolutions.Analyzers.Linguistics
             {
                 if (word.EndsWith("dded", StringComparison.Ordinal))
                 {
-                    return word.Substring(0, word.Length - 2) + 's';
+                    return word.AsSpan(0, word.Length - 2).ConcatenatedWith('s');
                 }
 
                 if (word.EndsWith("tted", StringComparison.Ordinal))
                 {
-                    return word.Substring(0, word.Length - 3) + 's';
+                    return word.AsSpan(0, word.Length - 3).ConcatenatedWith('s');
                 }
 
                 if (word.EndsWith("eed", StringComparison.Ordinal))
@@ -530,10 +530,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWithAny(PastEndings, StringComparison.Ordinal))
                 {
-                    return word.Substring(0, word.Length - 1) + 's';
+                    return word.AsSpan(0, word.Length - 1).ConcatenatedWith('s');
                 }
 
-                return word.Substring(0, word.Length - 2) + 's';
+                return word.AsSpan(0, word.Length - 2).ConcatenatedWith('s');
             }
 
             string CreateFromGerund(string word)

@@ -115,10 +115,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var length = returnType.IndexOf('<'); // just until the first one
 
-                var firstPart = returnType.Substring(0, length);
+                var firstPart = returnType.AsSpan(0, length);
 
-                var returnTypeWithTs = string.Concat(firstPart, "{", ts, "}");
-                var returnTypeWithGenericCount = string.Concat(firstPart, "`", count.ToString());
+                var returnTypeWithTs = firstPart.ConcatenatedWith('{', ts, '}');
+                var returnTypeWithGenericCount = firstPart.ConcatenatedWith("`", count.ToString());
 
 //// ncrunch: rdi off
                 return Enumerable.Empty<string>()

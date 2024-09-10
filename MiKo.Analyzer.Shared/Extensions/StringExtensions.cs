@@ -213,7 +213,7 @@ namespace System
                 return value;
             }
 
-            var valueLength = value.Length;
+            var valueLength = value?.Length ?? 0;
 
             if (valueLength == 0)
             {
@@ -223,52 +223,109 @@ namespace System
             var chars = new char[valueLength + spanLength];
 
             span.CopyTo(chars.AsSpan(valueLength, spanLength));
-            value.CopyTo(0, chars, 0, valueLength);
+            value?.CopyTo(0, chars, 0, valueLength);
 
             return new string(chars);
         }
 
-        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value)
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0)
         {
-            var spanLength = span.Length;
+            var length = value.Length;
 
-            if (spanLength == 0)
+            var chars = new char[length + 1];
+
+            if (length > 0)
             {
-                return value;
+                value.CopyTo(chars);
             }
 
-            var valueLength = value.Length;
-
-            if (valueLength == 0)
-            {
-                return span.ToString();
-            }
-
-            var chars = new char[spanLength + valueLength];
-
-            span.CopyTo(chars);
-            value.CopyTo(0, chars, spanLength, valueLength);
+            chars[length] = arg0;
 
             return new string(chars);
         }
 
-        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value1, string value2)
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0)
         {
-            var spanLength = span.Length;
+            var spanLength = value.Length;
 
             if (spanLength == 0)
             {
-                return string.Concat(value1, value2);
+                return arg0;
             }
 
-            var value1Length = value1.Length;
-            var value2Length = value2.Length;
+            var length = arg0?.Length ?? 0;
 
-            var chars = new char[spanLength + value1Length + value2Length];
+            if (length == 0)
+            {
+                return value.ToString();
+            }
 
-            span.CopyTo(chars);
-            value1.CopyTo(0, chars, spanLength, value1Length);
-            value2.CopyTo(0, chars, spanLength + value1Length, value2Length);
+            var chars = new char[spanLength + length];
+
+            value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, spanLength, length);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, string arg1)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return string.Concat(arg0, arg1);
+            }
+
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var chars = new char[length + arg0Length + arg1Length];
+
+            value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, length, arg0Length);
+            arg1?.CopyTo(0, chars, length + arg0Length, arg1Length);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, ReadOnlySpan<char> arg1)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
+
+            var chars = new char[length + arg0Length + arg1Length];
+
+            value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, length, arg0Length);
+            arg1.CopyTo(chars.AsSpan(length + arg0Length, arg1Length));
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
+        {
+            var length = value.Length;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var chars = new char[length + arg1Length + 2];
+
+            if (length > 0)
+            {
+                value.CopyTo(chars);
+            }
+
+            chars[length + 1] = arg0;
+            chars[length + 1 + arg1Length] = arg2;
+
+            arg1?.CopyTo(0, chars, length + 2, arg1Length);
 
             return new string(chars);
         }
@@ -1572,6 +1629,35 @@ namespace System
 
             return end >= 0 && end <= totalLength
                    ? value.Substring(0, end)
+                   : value;
+        }
+
+        public static ReadOnlySpan<char> WithoutNumberSuffix(this ReadOnlySpan<char> value)
+        {
+            if (value.Length == 0)
+            {
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            var totalLength = value.Length - 1;
+            var end = totalLength;
+
+            while (end >= 0)
+            {
+                if (value[end].IsNumber())
+                {
+                    end--;
+                }
+                else
+                {
+                    end++; // fix last character
+
+                    break;
+                }
+            }
+
+            return end >= 0 && end <= totalLength
+                   ? value.Slice(0, end)
                    : value;
         }
 
