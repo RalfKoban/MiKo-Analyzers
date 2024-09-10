@@ -18,16 +18,16 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected static Dictionary<string, string> CreateBetterNameProposal(string betterName) => new Dictionary<string, string> { { Constants.AnalyzerCodeFixSharedData.BetterName, betterName } };
 
-        protected static string FindBetterNameForEntityMarker(ISymbol symbol)
+        protected static string FindBetterNameForEntityMarker(string symbolName)
         {
-            var expected = HandleSpecialEntityMarkerSituations(symbol.Name);
+            var expected = HandleSpecialEntityMarkerSituations(symbolName);
 
             if (expected.HasCollectionMarker())
             {
                 var plural = Pluralizer.GetPluralName(expected, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
 
                 // symbol may have both Entity and Collection marker, such as 'ModelCollection', so 'plural' may be null
-                expected = plural ?? (symbol.Name[0].IsUpperCase() ? Constants.Entities : Constants.entities);
+                expected = plural ?? (symbolName[0].IsUpperCase() ? Constants.Entities : Constants.entities);
             }
 
             return expected;
@@ -162,9 +162,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected IEnumerable<Diagnostic> AnalyzeEntityMarkers(ISymbol symbol)
         {
-            if (symbol.Name.HasEntityMarker())
+            var symbolName = symbol.Name;
+
+            if (symbolName.HasEntityMarker())
             {
-                var betterName = FindBetterNameForEntityMarker(symbol);
+                var betterName = FindBetterNameForEntityMarker(symbolName);
 
                 return new[] { Issue(symbol, betterName, CreateBetterNameProposal(betterName)) };
             }

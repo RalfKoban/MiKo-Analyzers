@@ -931,7 +931,9 @@ namespace System
 
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string value)
+        public static bool HasEntityMarker(this string value) => HasEntityMarker(value.AsSpan());
+
+        public static bool HasEntityMarker(this ReadOnlySpan<char> value)
         {
             var hasMarker = value.ContainsAny(Constants.Markers.Models);
 
@@ -1232,6 +1234,10 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
@@ -1669,18 +1675,32 @@ namespace System
 
         public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags());
 
-        public static string WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
+        public static string WithoutSuffix(this string value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length <= 0
+                   ? string.Empty
+                   : value.Substring(0, length);
+        }
+
+        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
         {
             if (value.EndsWith(suffix))
             {
                 var length = value.Length - 1;
 
                 return length <= 0
-                       ? string.Empty
-                       : value.Slice(0, length).ToString();
+                       ? ReadOnlySpan<char>.Empty
+                       : value.Slice(0, length);
             }
 
-            return value.ToString();
+            return value;
         }
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
@@ -1698,20 +1718,6 @@ namespace System
             }
 
             return value;
-        }
-
-        public static string WithoutSuffix(this string value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? string.Empty
-                   : value.Substring(0, length);
         }
 
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)

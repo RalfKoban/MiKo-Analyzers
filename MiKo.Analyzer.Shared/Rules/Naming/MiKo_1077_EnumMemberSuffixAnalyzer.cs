@@ -43,9 +43,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 {
                     if (name.EndsWith(suffix, StringComparison.Ordinal))
                     {
-                        var betterName = name.WithoutSuffix(suffix);
+                        var proposal = name.WithoutSuffix(suffix);
 
-                        yield return Issue(identifier, betterName, CreateBetterNameProposal(betterName));
+                        yield return Issue(identifier, proposal, CreateBetterNameProposal(proposal));
 
                         break;
                     }

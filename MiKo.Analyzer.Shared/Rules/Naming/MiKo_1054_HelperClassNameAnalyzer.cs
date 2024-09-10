@@ -36,9 +36,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             {
                 var wrongName = WrongNamesForConcreteLookup.First(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase));
 
-                var betterName = symbolName.WithoutSuffix(wrongName);
+                var proposal = symbolName.WithoutSuffix(wrongName);
 
-                return new[] { Issue(symbol, wrongName, CreateBetterNameProposal(betterName)) };
+                return new[] { Issue(symbol, wrongName, CreateBetterNameProposal(proposal)) };
             }
 
             return Enumerable.Empty<Diagnostic>();

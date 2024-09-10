@@ -760,8 +760,8 @@ namespace MiKoSolutions.Analyzers
 
             var index = interfaceType.IndexOf('`');
             var interfaceTypeWithoutGeneric = index > -1
-                                              ? interfaceType.Substring(0, index)
-                                              : interfaceType;
+                                              ? interfaceType.AsSpan(0, index)
+                                              : interfaceType.AsSpan();
 
             var fullName = value.ToString();
 
