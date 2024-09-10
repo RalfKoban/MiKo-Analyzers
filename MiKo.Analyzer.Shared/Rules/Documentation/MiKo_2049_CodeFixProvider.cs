@@ -72,11 +72,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         if (textToReplaceWith.StartsWith(IsPhrase, StringComparison.Ordinal))
                         {
-                            textToReplaceWith = ArePhrase + textToReplaceWith.Substring(2);
+                            textToReplaceWith = ArePhrase.ConcatenatedWith(textToReplaceWith.AsSpan(2));
                         }
                         else if (textToReplaceWith.StartsWith(DoesPhrase, StringComparison.Ordinal))
                         {
-                            textToReplaceWith = DoPhrase + textToReplaceWith.Substring(4);
+                            textToReplaceWith = DoPhrase.ConcatenatedWith(textToReplaceWith.AsSpan(4));
                         }
                     }
 

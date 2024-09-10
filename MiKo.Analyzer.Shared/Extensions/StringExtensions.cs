@@ -19,7 +19,13 @@ namespace System
 {
     internal static class StringExtensions
     {
+        private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
+
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
+
+        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+
+        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
         {
@@ -211,7 +217,7 @@ namespace System
                 return value;
             }
 
-            var valueLength = value.Length;
+            var valueLength = value?.Length ?? 0;
 
             if (valueLength == 0)
             {
@@ -221,52 +227,109 @@ namespace System
             var chars = new char[valueLength + spanLength];
 
             span.CopyTo(chars.AsSpan(valueLength, spanLength));
-            value.CopyTo(0, chars, 0, valueLength);
+            value?.CopyTo(0, chars, 0, valueLength);
 
             return new string(chars);
         }
 
-        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value)
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0)
         {
-            var spanLength = span.Length;
+            var length = value.Length;
 
-            if (spanLength == 0)
+            var chars = new char[length + 1];
+
+            if (length > 0)
             {
-                return value;
+                value.CopyTo(chars);
             }
 
-            var valueLength = value.Length;
-
-            if (valueLength == 0)
-            {
-                return span.ToString();
-            }
-
-            var chars = new char[spanLength + valueLength];
-
-            span.CopyTo(chars);
-            value.CopyTo(0, chars, spanLength, valueLength);
+            chars[length] = arg0;
 
             return new string(chars);
         }
 
-        public static string ConcatenatedWith(this ReadOnlySpan<char> span, string value1, string value2)
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0)
         {
-            var spanLength = span.Length;
+            var spanLength = value.Length;
 
             if (spanLength == 0)
             {
-                return string.Concat(value1, value2);
+                return arg0;
             }
 
-            var value1Length = value1.Length;
-            var value2Length = value2.Length;
+            var length = arg0?.Length ?? 0;
 
-            var chars = new char[spanLength + value1Length + value2Length];
+            if (length == 0)
+            {
+                return value.ToString();
+            }
 
-            span.CopyTo(chars);
-            value1.CopyTo(0, chars, spanLength, value1Length);
-            value2.CopyTo(0, chars, spanLength + value1Length, value2Length);
+            var chars = new char[spanLength + length];
+
+            value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, spanLength, length);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, string arg1)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return string.Concat(arg0, arg1);
+            }
+
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var chars = new char[length + arg0Length + arg1Length];
+
+            value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, length, arg0Length);
+            arg1?.CopyTo(0, chars, length + arg0Length, arg1Length);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, ReadOnlySpan<char> arg1)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
+
+            var chars = new char[length + arg0Length + arg1Length];
+
+            value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, length, arg0Length);
+            arg1.CopyTo(chars.AsSpan(length + arg0Length, arg1Length));
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
+        {
+            var length = value.Length;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var chars = new char[length + arg1Length + 2];
+
+            if (length > 0)
+            {
+                value.CopyTo(chars);
+            }
+
+            chars[length + 1] = arg0;
+            chars[length + 1 + arg1Length] = arg2;
+
+            arg1?.CopyTo(0, chars, length + 2, arg1Length);
 
             return new string(chars);
         }
@@ -872,7 +935,9 @@ namespace System
 
         public static bool HasCollectionMarker(this string value) => value.EndsWithAny(Constants.Markers.Collections);
 
-        public static bool HasEntityMarker(this string value)
+        public static bool HasEntityMarker(this string value) => HasEntityMarker(value.AsSpan());
+
+        public static bool HasEntityMarker(this ReadOnlySpan<char> value)
         {
             var hasMarker = value.ContainsAny(Constants.Markers.Models);
 
@@ -1057,7 +1122,7 @@ namespace System
 
             try
             {
-                return Regex.IsMatch(value, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+                return HyperlinkRegex.IsMatch(value);
             }
             catch (RegexMatchTimeoutException)
             {
@@ -1109,7 +1174,7 @@ namespace System
         {
             try
             {
-                return Regex.IsMatch(value, "[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+                return PascalCasingRegex.IsMatch(value);
             }
             catch (RegexMatchTimeoutException)
             {
@@ -1173,6 +1238,10 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this string value, char character) => value.HasCharacters() && value[0] == character;
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
@@ -1278,8 +1347,22 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToLowerCase(this char source) => char.ToLowerInvariant(source); // ncrunch: no coverage
+//// ncrunch: no coverage start
+
+        public static char ToLowerCase(this char source)
+        {
+            if ((uint)(source - 'A') <= 'Z' - 'A')
+            {
+                return (char)(source + DifferenceBetweenUpperAndLowerCaseAscii);
+            }
+
+            if ((uint)(source - 'a') <= 'z' - 'a')
+            {
+                return source;
+            }
+
+            return char.ToLowerInvariant(source);
+        }
 
         /// <summary>
         /// Gets a <see cref="string"/> where the characters are lower-case.
@@ -1301,8 +1384,6 @@ namespace System
 
             return new string(characters);
         }
-
-//// ncrunch: no coverage start
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is lower-case.
@@ -1367,8 +1448,20 @@ namespace System
             return MakeLowerCaseAt(source, index);
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static char ToUpperCase(this char source) => char.ToUpperInvariant(source);
+        public static char ToUpperCase(this char source)
+        {
+            if ((uint)(source - 'a') <= 'z' - 'a')
+            {
+                return (char)(source - DifferenceBetweenUpperAndLowerCaseAscii);
+            }
+
+            if ((uint)(source - 'A') <= 'Z' - 'A')
+            {
+                return source;
+            }
+
+            return char.ToUpperInvariant(source);
+        }
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1549,6 +1642,35 @@ namespace System
                    : value;
         }
 
+        public static ReadOnlySpan<char> WithoutNumberSuffix(this ReadOnlySpan<char> value)
+        {
+            if (value.Length == 0)
+            {
+                return ReadOnlySpan<char>.Empty;
+            }
+
+            var totalLength = value.Length - 1;
+            var end = totalLength;
+
+            while (end >= 0)
+            {
+                if (value[end].IsNumber())
+                {
+                    end--;
+                }
+                else
+                {
+                    end++; // fix last character
+
+                    break;
+                }
+            }
+
+            return end >= 0 && end <= totalLength
+                   ? value.Slice(0, end)
+                   : value;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
 
@@ -1557,18 +1679,32 @@ namespace System
 
         public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags());
 
-        public static string WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
+        public static string WithoutSuffix(this string value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length <= 0
+                   ? string.Empty
+                   : value.Substring(0, length);
+        }
+
+        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
         {
             if (value.EndsWith(suffix))
             {
                 var length = value.Length - 1;
 
                 return length <= 0
-                       ? string.Empty
-                       : value.Slice(0, length).ToString();
+                       ? ReadOnlySpan<char>.Empty
+                       : value.Slice(0, length);
             }
 
-            return value.ToString();
+            return value;
         }
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
@@ -1586,20 +1722,6 @@ namespace System
             }
 
             return value;
-        }
-
-        public static string WithoutSuffix(this string value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? string.Empty
-                   : value.Substring(0, length);
         }
 
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
@@ -1752,12 +1874,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1773,12 +1895,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1794,12 +1916,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1815,12 +1937,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)
@@ -1836,12 +1958,12 @@ namespace System
                     // uppercase both chars - notice that we need just one compare per char
                     if ((uint)(charA - 'a') <= 'z' - 'a')
                     {
-                        charA -= 0x20;
+                        charA -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if ((uint)(charB - 'a') <= 'z' - 'a')
                     {
-                        charB -= 0x20;
+                        charB -= DifferenceBetweenUpperAndLowerCaseAscii;
                     }
 
                     if (charA != charB)

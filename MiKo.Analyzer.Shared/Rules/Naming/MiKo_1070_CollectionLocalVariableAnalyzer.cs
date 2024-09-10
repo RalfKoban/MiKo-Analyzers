@@ -58,7 +58,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                     continue;
                 }
 
-                var pluralName = GetPluralName(originalName, out var name);
+                var name = originalName;
+                var span = originalName.AsSpan();
+                var pluralName = span.EndsWith('s')
+                                 ? originalName
+                                 : GetPluralName(span, out name);  // might return null in case there is none
 
                 if (pluralName is null)
                 {
@@ -144,37 +148,43 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static string GetPluralName(string originalName, out string name)
+        private static string GetPluralName(ReadOnlySpan<char> originalName, out string name)
         {
             if (originalName.EndsWith('s'))
             {
-                name = originalName;
+                name = originalName.ToString();
 
-                return originalName;
+                return name;
             }
 
             var index = originalName.IndexOfAny(Splitters, StringComparison.Ordinal);
 
             if (index > 0)
             {
-                var nameToInspect = originalName.Substring(0, index);
-                var remainingPart = originalName.Substring(index);
+                var nameToInspect = originalName.Slice(0, index);
+                var remainingPart = originalName.Slice(index);
 
                 var pluralName = GetPluralName(nameToInspect, out name);
 
-                name = string.Concat(name, remainingPart);
+                name = name.ConcatenatedWith(remainingPart);
 
-                return pluralName + remainingPart;
+                return pluralName.ConcatenatedWith(remainingPart);
             }
-
-            name = originalName.EndsWithNumber() ? originalName.WithoutNumberSuffix() : originalName;
-
-            if (name.EndsWithAny(Constants.Markers.Collections))
+            else
             {
-                return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
-            }
+                var pluralName = originalName.EndsWithNumber()
+                                 ? originalName.WithoutNumberSuffix()
+                                 : originalName;
 
-            return Pluralizer.GetPluralName(name);
+                name = pluralName.ToString();
+
+                if (pluralName.EndsWithAny(Constants.Markers.Collections))
+                {
+                    return Pluralizer.GetPluralName(name, StringComparison.OrdinalIgnoreCase, Constants.Markers.Collections);
+                }
+
+                return Pluralizer.GetPluralName(name);
+            }
         }
     }
 }
