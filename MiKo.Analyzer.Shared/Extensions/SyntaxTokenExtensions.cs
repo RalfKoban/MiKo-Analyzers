@@ -90,9 +90,9 @@ namespace MiKoSolutions.Analyzers
         {
             var valueKind = value.Kind();
 
-            // ReSharper disable once LoopCanBeConvertedToQuery  : For performance reasons we use indexing instead of an enumerator
-            // ReSharper disable once ForCanBeConvertedToForeach : For performance reasons we use indexing instead of an enumerator
-            for (var index = 0; index < kinds.Length; index++)
+            var length = kinds.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 if (kinds[index] == valueKind)
                 {
@@ -107,23 +107,26 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSpanningMultipleLines(this SyntaxToken value)
         {
-            var foundLine = false;
-
             var leadingTrivia = value.LeadingTrivia;
 
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var count = leadingTrivia.Count;
 
-            for (var index = 0; index < count; index++)
+            if (count > 0)
             {
-                if (leadingTrivia[index].IsComment())
-                {
-                    if (foundLine)
-                    {
-                        return true;
-                    }
+                var foundLine = false;
 
-                    foundLine = true;
+                for (var index = 0; index < count; index++)
+                {
+                    if (leadingTrivia[index].IsComment())
+                    {
+                        if (foundLine)
+                        {
+                            return true;
+                        }
+
+                        foundLine = true;
+                    }
                 }
             }
 
