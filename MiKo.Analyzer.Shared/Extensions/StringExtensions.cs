@@ -23,6 +23,10 @@ namespace System
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
 
+        private static readonly Regex HyperlinkRegex = new Regex(@"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+
+        private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
         {
             bool HasFlag(FirstWordHandling flag) => (handling & flag) == flag;
@@ -1118,7 +1122,7 @@ namespace System
 
             try
             {
-                return Regex.IsMatch(value, @"(www|ftp:|ftps:|http:|https:)+[^\s]+[\w]", RegexOptions.Compiled, 100.Milliseconds());
+                return HyperlinkRegex.IsMatch(value);
             }
             catch (RegexMatchTimeoutException)
             {
@@ -1170,7 +1174,7 @@ namespace System
         {
             try
             {
-                return Regex.IsMatch(value, "[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
+                return PascalCasingRegex.IsMatch(value);
             }
             catch (RegexMatchTimeoutException)
             {
