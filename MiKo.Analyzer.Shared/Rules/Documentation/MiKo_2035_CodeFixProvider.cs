@@ -18,6 +18,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] TaskParts = Constants.Comments.GenericTaskReturnTypeStartingPhraseTemplate.FormatWith("task", '|').Split('|');
 
+#if NCRUNCH
+        // do not define a static ctor to speed up tests
+#else
+        static MiKo_2035_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+#endif
+
         public override string FixableDiagnosticId => "MiKo_2035";
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
