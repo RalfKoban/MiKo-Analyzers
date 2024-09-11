@@ -372,6 +372,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
+                var strangeTexts = new[] { "methods a", "methods instance", "methods new", "methods the", "factory class method" };
+
+                results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
+
                 return results;
             }
 

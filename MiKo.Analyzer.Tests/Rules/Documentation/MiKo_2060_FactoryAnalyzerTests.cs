@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -667,7 +668,9 @@ internal interface IFactory
                                    "A factory which creates",
                                    "A factory which provides methods to create",
                                    "A implementation of the abstract factory pattern for creation of",
+                                   "A implementation of the abstract factory pattern for the creation of",
                                    "A implementation of the factory pattern for creation of",
+                                   "A implementation of the factory pattern for the creation of",
                                    "A interface for factories that create",
                                    "A interface for factories to create",
                                    "A interface for factories which create",
@@ -684,7 +687,9 @@ internal interface IFactory
                                    "A interface which is implemented by factories that create",
                                    "A interface which is implemented by factories which create",
                                    "An implementation of the abstract factory pattern for creation of",
+                                   "An implementation of the abstract factory pattern for the creation of",
                                    "An implementation of the factory pattern for creation of",
+                                   "An implementation of the factory pattern for the creation of",
                                    "An interface for factories that create",
                                    "An interface for factories to create",
                                    "An interface for factories which create",
@@ -757,7 +762,9 @@ internal interface IFactory
                                    "Factory which provides methods to create",
                                    "Factory which provides",
                                    "Implementation of the abstract factory pattern for creation of",
+                                   "Implementation of the abstract factory pattern for the creation of",
                                    "Implementation of the factory pattern for creation of",
+                                   "Implementation of the factory pattern for the creation of",
                                    "Interface for factories that create",
                                    "Interface for factories to create",
                                    "Interface for factories which create",
@@ -816,7 +823,9 @@ internal interface IFactory
                                    "The factory which creates",
                                    "The factory which provides methods to create",
                                    "The implementation of the abstract factory pattern for creation of",
+                                   "The implementation of the abstract factory pattern for the creation of",
                                    "The implementation of the factory pattern for creation of",
+                                   "The implementation of the factory pattern for the creation of",
                                    "The interface implemented by factories that create",
                                    "The interface implemented by factories to create",
                                    "The interface implemented by factories which create",
@@ -877,6 +886,8 @@ internal interface IFactory
                     }
                 }
             }
+
+            results.RemoveWhere(_ => _.ContainsAny(["methods a", "methods instance", "methods new", "methods the", "factory class method"]));
 
             results.Add("Implementations create ");
             results.Add("Implementations construct ");
