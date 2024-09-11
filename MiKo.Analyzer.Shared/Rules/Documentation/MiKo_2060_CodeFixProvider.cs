@@ -153,6 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "Implementations construct ",
                                       "Implementations create ",
                                       "Implementations build ",
+                                      "Implementations provide ",
                                   };
 
                 var phrases = new[]
@@ -206,11 +207,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "Class which contains methods",
                                       "Class which provides factory methods",
                                       "Class which provides methods",
+                                      "Class to provide factory methods",
+                                      "Class to provide methods",
                                       "Class",
                                       "Defines a factory",
                                       "Defines a method",
                                       "Defines methods",
                                       "Defines the factory",
+                                      "Defines factories",
                                       "Factory that provides methods",
                                       "Factory that provides",
                                       "Factory to provide methods",
@@ -222,14 +226,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "Implementation of the factory pattern",
                                       "Interface for factories",
                                       "Interface of a factory",
+                                      "Interface of factories",
                                       "Interface",
                                       "Provides a factory",
                                       "Provides a method",
                                       "Provides methods",
                                       "Provides the factory",
+                                      "Provides factories",
                                       "Provides",
                                       "Represents a factory",
                                       "Represents the factory",
+                                      "Represents factories",
+                                      "Represents a method",
+                                      "Represents the method",
+                                      "Represents methods",
                                       "The class containing factory methods",
                                       "The class containing methods",
                                       "The class contains factory methods",
@@ -252,6 +262,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "The factory to provide",
                                       "The factory which provides methods",
                                       "The factory which provides",
+                                      "The factory providing factory methods",
+                                      "The factory providing methods",
                                       "The factory",
                                       "The implementation of the abstract factory pattern",
                                       "The implementation of the factory pattern",
@@ -315,6 +327,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         results.Add(phrase + " that can create " + continuation);
                         results.Add(phrase + " that create " + continuation);
                         results.Add(phrase + " that creates " + continuation);
+                        results.Add(phrase + " that can provide " + continuation);
+                        results.Add(phrase + " that provide " + continuation);
                         results.Add(phrase + " that provides " + continuation);
                         results.Add(phrase + " that " + continuation);
 
@@ -327,6 +341,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         results.Add(phrase + " which can create " + continuation);
                         results.Add(phrase + " which create " + continuation);
                         results.Add(phrase + " which creates " + continuation);
+                        results.Add(phrase + " which can provide " + continuation);
+                        results.Add(phrase + " which provide " + continuation);
                         results.Add(phrase + " which provides " + continuation);
                         results.Add(phrase + " which " + continuation);
 
@@ -339,6 +355,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         results.Add(phrase + " for creating " + continuation);
                         results.Add(phrase + " for creation of " + continuation);
                         results.Add(phrase + " for the creation of " + continuation);
+                        results.Add(phrase + " for providing of " + continuation);
                         results.Add(phrase + " for providing " + continuation);
                         results.Add(phrase + " for " + continuation);
 
@@ -348,6 +365,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         results.Add(phrase + " constructs " + continuation);
                         results.Add(phrase + " creating " + continuation);
                         results.Add(phrase + " creates " + continuation);
+                        results.Add(phrase + " providing " + continuation);
+                        results.Add(phrase + " provides " + continuation);
 
                         results.Add(phrase + " that is able to build " + continuation);
                         results.Add(phrase + " which is able to build " + continuation);
@@ -361,6 +380,27 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         results.Add(phrase + " which is able to create " + continuation);
                         results.Add(phrase + " that is capable to create " + continuation);
                         results.Add(phrase + " which is capable to create " + continuation);
+                        results.Add(phrase + " that is able to provide " + continuation);
+                        results.Add(phrase + " which is able to provide " + continuation);
+                        results.Add(phrase + " that is capable to provide " + continuation);
+                        results.Add(phrase + " which is capable to provide " + continuation);
+
+                        results.Add(phrase + " that are able to build " + continuation);
+                        results.Add(phrase + " which are able to build " + continuation);
+                        results.Add(phrase + " that are capable to build " + continuation);
+                        results.Add(phrase + " which are capable to build " + continuation);
+                        results.Add(phrase + " that are able to construct " + continuation);
+                        results.Add(phrase + " which are able to construct " + continuation);
+                        results.Add(phrase + " that are capable to construct " + continuation);
+                        results.Add(phrase + " which are capable to construct " + continuation);
+                        results.Add(phrase + " that are able to create " + continuation);
+                        results.Add(phrase + " which are able to create " + continuation);
+                        results.Add(phrase + " that are capable to create " + continuation);
+                        results.Add(phrase + " which are capable to create " + continuation);
+                        results.Add(phrase + " that are able to provide " + continuation);
+                        results.Add(phrase + " which are able to provide " + continuation);
+                        results.Add(phrase + " that are capable to provide " + continuation);
+                        results.Add(phrase + " which are capable to provide " + continuation);
 
                         results.Add(phrase + " to build " + continuation);
                         results.Add(phrase + " to construct " + continuation);
@@ -378,7 +418,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                var strangeTexts = new[] { "methods a", "methods instance", "methods new", "methods the", "factory class method" };
+                var strangeTexts = new[]
+                                   {
+                                       "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
+                                       "es that is capable", "es which is capable", "es that is able", "es which is able",
+                                       "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
+                                       "y that are capable", "y which are capable", "y that are able", "y which are able",
+                                       "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
+                                       "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
+                                       "ies that provides", "ies which provides",
+                                       "providing provid", "provides provid", "provide provid",
+                                   };
 
                 results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
 
