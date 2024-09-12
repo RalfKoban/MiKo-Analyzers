@@ -1149,7 +1149,7 @@ namespace MiKoSolutions.Analyzers
 
             foreach (var summary in summaryXmls)
             {
-                // we have to delve into the trivias to find the XML syntax nodes
+                // we have to delve into the trivia to find the XML syntax nodes
                 foreach (var node in summary.DescendantNodes(_ => true, true))
                 {
                     switch (node)
@@ -1175,7 +1175,7 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlElementSyntax> GetValueXmls(this DocumentationCommentTriviaSyntax value) => value.GetXmlSyntax(Constants.XmlTag.Value);
 
         /// <summary>
-        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// Gets only those XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
         /// </summary>
         /// <param name="value">
         /// The documentation syntax.
@@ -1191,13 +1191,13 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
         internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, string tag)
         {
-            // we have to delve into the trivias to find the XML syntax nodes
+            // we have to delve into the trivia to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
                         .Where(_ => _.GetName() == tag);
         }
 
         /// <summary>
-        /// Only gets the XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
+        /// Gets only those XML elements that are NOT empty (have some content) and the given tag out of the documentation syntax.
         /// </summary>
         /// <param name="value">
         /// The documentation syntax.
@@ -1213,13 +1213,13 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetXmlSyntax(SyntaxNode,string)"/>
         internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, ISet<string> tags)
         {
-            // we have to delve into the trivias to find the XML syntax nodes
+            // we have to delve into the trivia to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
                         .Where(_ => tags.Contains(_.GetName()));
         }
 
         /// <summary>
-        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
+        /// Gets only those XML elements that are empty (have NO content) and the given tag out of the documentation syntax.
         /// </summary>
         /// <param name="value">
         /// The documentation syntax.
@@ -1235,13 +1235,13 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, string tag)
         {
-            // we have to delve into the trivias to find the XML syntax nodes
+            // we have to delve into the trivia to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
                         .Where(_ => _.GetName() == tag);
         }
 
         /// <summary>
-        /// Only gets the XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
+        /// Gets only those XML elements that are empty (have NO content) and the given tag out of the list of syntax nodes.
         /// </summary>
         /// <param name="value">
         /// The starting point of the XML elements to consider.
@@ -1257,7 +1257,7 @@ namespace MiKoSolutions.Analyzers
         /// <seealso cref="GetXmlSyntax(SyntaxNode,ISet{string})"/>
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, ISet<string> tags)
         {
-            // we have to delve into the trivias to find the XML syntax nodes
+            // we have to delve into the trivia to find the XML syntax nodes
             return value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
                         .Where(_ => tags.Contains(_.GetName()));
         }
@@ -2363,7 +2363,7 @@ namespace MiKoSolutions.Analyzers
 
                 if (index > -1)
                 {
-                    var result = string.Concat(text.Substring(0, index), replacement, text.Substring(index + phrase.Length));
+                    var result = text.AsSpan(0, index).ConcatenatedWith(replacement, text.AsSpan(index + phrase.Length));
 
                     map[token] = token.WithText(result);
                 }
@@ -3033,7 +3033,18 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this XmlElementSyntax value, params string[] texts) => value.Content.WithoutText(texts);
 
-        internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts) => texts.Aggregate(values, (current, text) => current.WithoutText(text));
+        internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts)
+        {
+            var result = values;
+            var length = texts.Length;
+
+            for (var index = 0; index < length; index++)
+            {
+                result = result.WithoutText(texts[index]);
+            }
+
+            return result;
+        }
 
         internal static XmlTextSyntax WithoutTrailing(this XmlTextSyntax value, string text) => value.WithoutTrailing(new[] { text });
 
@@ -3060,8 +3071,12 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                foreach (var text in texts)
+                var textsLength = texts.Length;
+
+                for (var textIndex = 0; textIndex < textsLength; textIndex++)
                 {
+                    var text = texts[textIndex];
+
                     if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
                     {
                         var modifiedText = originalText.WithoutSuffix(text);

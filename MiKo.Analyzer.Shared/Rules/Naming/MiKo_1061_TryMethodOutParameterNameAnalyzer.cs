@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             if (methodName.StartsWith("TryGet", StringComparison.Ordinal))
             {
-                var parameterName = methodName.Substring(6);
+                var parameterName = methodName.AsSpan(6);
 
                 if (parameterName.Length == 0)
                 {

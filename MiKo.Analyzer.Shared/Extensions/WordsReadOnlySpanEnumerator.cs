@@ -55,7 +55,7 @@ namespace System
         public ReadOnlySpanEnumeratorEntry Current { get; private set; }
 
         /// <summary>
-        /// Returns the numbers of elements within the enumerator.
+        /// Gets the numbers of elements within the enumerator.
         /// </summary>
         /// <returns>
         /// The numbers of elements within the enumerator.

@@ -224,7 +224,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (part1.StartsWith(Given, StringComparison.OrdinalIgnoreCase))
             {
-                part1 = part1.Substring(Given.Length) + IsGiven;
+                part1 = part1.AsSpan(Given.Length).ConcatenatedWith(IsGiven);
             }
 
             FixReturn(builder, part1);

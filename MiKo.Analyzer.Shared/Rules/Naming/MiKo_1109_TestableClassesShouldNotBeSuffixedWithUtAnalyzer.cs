@@ -23,7 +23,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override IEnumerable<Diagnostic> AnalyzeName(INamedTypeSymbol symbol, Compilation compilation)
         {
-            var symbolName = symbol.Name;
+            var symbolName = symbol.Name.AsSpan();
 
             if (symbolName.EndsWith(Suffix, StringComparison.Ordinal))
             {
@@ -35,8 +35,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(string symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
-                                                                   ? symbolName.WithoutSuffix(Suffix)
-                                                                   : Prefix + symbolName.WithoutSuffix(Suffix);
+        private static string FindBetterName(ReadOnlySpan<char> symbolName) => symbolName.StartsWith(Prefix, StringComparison.Ordinal)
+                                                                               ? symbolName.WithoutSuffix(Suffix).ToString()
+                                                                               : Prefix.ConcatenatedWith(symbolName.WithoutSuffix(Suffix));
     }
 }

@@ -66,6 +66,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "lv", "listView" },
                                                                                        { "max", "maximum" },
                                                                                        { "meth", "method" },
+                                                                                       { "mgmt", "management" },
                                                                                        { "mgr", "manager" },
                                                                                        { "min", "minimum" },
                                                                                        { "mngr", "manager" },
@@ -79,6 +80,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "perf", "performance" },
                                                                                        { "phys", "physical" },
                                                                                        { "pos", "position" },
+                                                                                       { "pow", "power" },
                                                                                        { "proc", "process" },
                                                                                        { "procs", "processes" },
                                                                                        { "prop", "property" },
@@ -162,6 +164,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Lv", "ListView" },
                                                                                        { "Max", "Maximum" },
                                                                                        { "Meth", "Method" },
+                                                                                       { "Mgmt", "Management" },
                                                                                        { "Mgr", "Manager" },
                                                                                        { "Min", "Minimum" },
                                                                                        { "Mngr", "Manager" },
@@ -176,6 +179,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                                        { "Perf", "Performance" },
                                                                                        { "Phys", "Physical" },
                                                                                        { "Pos", "Position" },
+                                                                                       { "Pow", "Power" },
                                                                                        { "Proc", "Process" },
                                                                                        { "Procs", "Processes" },
                                                                                        { "Prop", "Property" },
@@ -400,9 +404,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             string GetFieldNameWithoutPrefix(string fieldName)
             {
                 // remove any field marker
-                foreach (var fieldMarker in Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0 && fieldName.StartsWith(_, StringComparison.Ordinal)))
+                foreach (var fieldMarker in Constants.Markers.FieldPrefixes)
                 {
-                    return fieldName.Substring(fieldMarker.Length);
+                    if (fieldMarker.Length > 0 && fieldName.StartsWith(fieldMarker, StringComparison.Ordinal))
+                    {
+                        return fieldName.Substring(fieldMarker.Length);
+                    }
                 }
 
                 return fieldName;

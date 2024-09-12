@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     // remove the '<see langword="true"/>'
                     summary = summary.Without(element);
 
-                    // remove follow up contents ' if ' or ' whether '
+                    // remove follow-up contents ' if ' or ' whether '
                     if (summary.Content.Count > 1 && summary.Content[1] is XmlTextSyntax followUpText)
                     {
                         var textTokens = followUpText.TextTokens;
