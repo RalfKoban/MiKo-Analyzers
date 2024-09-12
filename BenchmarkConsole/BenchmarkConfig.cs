@@ -2,7 +2,7 @@
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.CsProj;
 
-namespace BenchmarkConsole
+namespace MiKoSolutions.Analyzers.BenchmarkConsole
 {
     public class BenchmarkConfig : ManualConfig
     {

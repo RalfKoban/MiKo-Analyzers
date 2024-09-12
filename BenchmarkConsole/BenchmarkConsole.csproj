@@ -4,6 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>MiKoSolutions.Analyzers.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>MiKoSolutions.Analyzers.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <StartupObject>MiKoSolutions.Analyzers.BenchmarkConsole.Program</StartupObject>
+    <BaseOutputPath></BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

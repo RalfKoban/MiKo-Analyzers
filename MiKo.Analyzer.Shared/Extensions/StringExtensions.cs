@@ -1020,58 +1020,16 @@ namespace System
                 case 1: return items[0];
             }
 
-            var items0 = items[0];
-            var items1 = items[1];
+            const string Separator = ", ";
 
-            return HumanizedConcatenatedCore().ToString();
+            var separatorForLast = " " + lastSeparator + " ";
 
-            StringBuilder HumanizedConcatenatedCore()
+            switch (count)
             {
-                const string Separator = ", ";
-
-                switch (count)
-                {
-                    case 2:
-                    {
-                        var builder = new StringBuilder(items0.Length + items1.Length + lastSeparator.Length + 2);
-
-                        return builder.Append(items0).Append(' ').Append(lastSeparator).Append(' ').Append(items1);
-                    }
-
-                    case 3:
-                    {
-                        var items2 = items[2];
-
-                        var builder = new StringBuilder(items0.Length + items1.Length + items2.Length + Separator.Length + lastSeparator.Length + 2);
-
-                        return builder.Append(items0).Append(Separator).Append(items1).Append(' ').Append(lastSeparator).Append(' ').Append(items2);
-                    }
-
-                    case 4:
-                    {
-                        var items2 = items[2];
-                        var items3 = items[3];
-
-                        var builder = new StringBuilder(items0.Length + items1.Length + items2.Length + items3.Length + Separator.Length + Separator.Length + lastSeparator.Length + 2);
-
-                        return builder.Append(items0).Append(Separator).Append(items1).Append(Separator).Append(items[2]).Append(' ').Append(lastSeparator).Append(' ').Append(items3);
-                    }
-
-                    default:
-                    {
-                        var builder = new StringBuilder(128);
-
-                        var last = count - 1;
-                        var beforeLast = last - 1;
-
-                        for (var index = 0; index < beforeLast; index++)
-                        {
-                            builder.Append(items[index]).Append(Separator);
-                        }
-
-                        return builder.Append(items[beforeLast]).Append(' ').Append(lastSeparator).Append(' ').Append(items[last]);
-                    }
-                }
+                case 2: return string.Concat(items[0], separatorForLast, items[1]);
+                case 3: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
+                case 4: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
+                default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
 

@@ -15,7 +15,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2060_CodeFixProvider)), Shared]
     public sealed class MiKo_2060_CodeFixProvider : SummaryDocumentationCodeFixProvider
     {
-        public static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
+        private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
         public override string FixableDiagnosticId => "MiKo_2060";
 
@@ -94,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
-        public sealed class MapData
+        private sealed class MapData
         {
             public MapData()
             {
