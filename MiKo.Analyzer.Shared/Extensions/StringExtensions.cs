@@ -27,10 +27,10 @@ namespace System
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
+        public static bool HasFlag(this FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
+
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
         {
-            bool HasFlag(FirstWordHandling flag) => (handling & flag) == flag;
-
             if (value.StartsWith('<'))
             {
                 return value;
@@ -40,11 +40,11 @@ namespace System
 
             string word;
 
-            if (HasFlag(FirstWordHandling.MakeLowerCase))
+            if (handling.HasFlag(FirstWordHandling.MakeLowerCase))
             {
                 word = valueSpan.FirstWord().ToLowerCaseAt(0);
             }
-            else if (HasFlag(FirstWordHandling.MakeUpperCase))
+            else if (handling.HasFlag(FirstWordHandling.MakeUpperCase))
             {
                 word = valueSpan.FirstWord().ToUpperCaseAt(0);
             }
@@ -56,21 +56,21 @@ namespace System
             // build continuation here because the word length may change based on the infinite term
             var continuation = valueSpan.TrimStart().Slice(word.Length);
 
-            if (HasFlag(FirstWordHandling.MakeInfinite))
+            if (handling.HasFlag(FirstWordHandling.MakeInfinite))
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
 
-            if (HasFlag(FirstWordHandling.KeepLeadingSpace))
+            if (handling.HasFlag(FirstWordHandling.KeepLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
                 {
-                    return " " + word + continuation.ToString();
+                    return " ".ConcatenatedWith(word, continuation);
                 }
             }
 
-            return word + continuation.ToString();
+            return word.ConcatenatedWith(continuation);
         }
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
@@ -308,6 +308,32 @@ namespace System
             var chars = new char[length + arg0Length + arg1Length];
 
             value.CopyTo(chars);
+            arg0?.CopyTo(0, chars, length, arg0Length);
+            arg1.CopyTo(chars.AsSpan(length + arg0Length, arg1Length));
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this string value, string arg0, ReadOnlySpan<char> arg1)
+        {
+            if (value is null)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var length = value.Length;
+
+            if (value.Length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
+
+            var chars = new char[length + arg0Length + arg1Length];
+
+            value.CopyTo(0, chars, 0, length);
             arg0?.CopyTo(0, chars, length, arg0Length);
             arg1.CopyTo(chars.AsSpan(length + arg0Length, arg1Length));
 
