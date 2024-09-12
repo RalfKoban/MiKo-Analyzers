@@ -55,7 +55,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 }
             }
 
-            return symbolName.ToString() + Suffix;
+            return symbolName.ConcatenatedWith(Suffix);
         }
     }
 }

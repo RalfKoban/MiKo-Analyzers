@@ -143,7 +143,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (originalText.ContainsAny(terms, StringComparison.OrdinalIgnoreCase))
                         {
                             var replacedText = new StringBuilder(originalText).ReplaceAllWithCheck(replacementMap)
-                                                                              .ToString()
                                                                               .AdjustFirstWord(firstWordHandling);
 
                             if (originalText.Equals(replacedText))
