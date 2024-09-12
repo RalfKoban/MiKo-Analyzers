@@ -29,7 +29,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         MakeUpperCase = 1 << 2,
 
         /// <summary>
-        /// Attempt to make the word starting with an lower case.
+        /// Attempt to make the word starting with a lower case.
         /// </summary>
         MakeLowerCase = 1 << 3,
     }
