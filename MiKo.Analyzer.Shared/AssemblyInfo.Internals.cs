@@ -1,4 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MiKoSolutions.Analyzers.Tests")]
-[assembly: InternalsVisibleTo("MiKoSolutions.Analyzers.BenchmarkConsole")]
+[assembly: InternalsVisibleTo("BenchmarkConsole")]
