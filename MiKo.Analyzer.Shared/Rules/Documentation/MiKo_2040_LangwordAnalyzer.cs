@@ -44,12 +44,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var proposal = Proposal(phrase);
 
-                results.Add($"{phrase}.", $"{proposal}.");
-                results.Add($"{phrase}?", $"{proposal}?");
-                results.Add($"{phrase}!", $"{proposal}!");
-                results.Add($"{phrase},", $"{proposal},");
-                results.Add($"{phrase};", $"{proposal};");
-                results.Add($"{phrase}:", $"{proposal}:");
+                results.Add(phrase + ".", proposal + ".");
+                results.Add(phrase + "?", proposal + "?");
+                results.Add(phrase + "!", proposal + "!");
+                results.Add(phrase + ",", proposal + ",");
+                results.Add(phrase + ";", proposal + ";");
+                results.Add(phrase + ":", proposal + ":");
             }
 
             return results.ToArray();
@@ -63,17 +63,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var proposal = Proposal(phrase);
 
-                results.Add($"({phrase} ", $"({proposal} ");
-                results.Add($"({phrase})", $"({proposal})");
-                results.Add($" {phrase})", $" {proposal})");
-                results.Add($" {phrase} ", $" {proposal} ");
-                results.Add($" {phrase}.", $" {proposal}.");
-                results.Add($" {phrase}?", $" {proposal}?");
-                results.Add($" {phrase}!", $" {proposal}!");
-                results.Add($" {phrase},", $" {proposal},");
-                results.Add($" {phrase};", $" {proposal};");
-                results.Add($" {phrase}:", $" {proposal}:");
-                results.Add($"'{phrase}'", $"{proposal}");
+                results.Add("(" + phrase + " ", "(" + proposal + " ");
+                results.Add("(" + phrase + ")", "(" + proposal + ")");
+                results.Add(" " + phrase + ")", " " + proposal + ")");
+                results.Add(" " + phrase + " ", " " + proposal + " ");
+                results.Add(" " + phrase + ".", " " + proposal + ".");
+                results.Add(" " + phrase + "?", " " + proposal + "?");
+                results.Add(" " + phrase + "!", " " + proposal + "!");
+                results.Add(" " + phrase + ",", " " + proposal + ",");
+                results.Add(" " + phrase + ";", " " + proposal + ";");
+                results.Add(" " + phrase + ":", " " + proposal + ":");
+                results.Add("'" + phrase + "'", proposal);
             }
 
             return results.ToArray();
@@ -87,13 +87,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var proposal = Proposal(phrase);
 
-                results.Add($" {phrase}", $" {proposal}");
+                results.Add(" " + phrase, " " + proposal);
             }
 
             return results.ToArray();
         }
 
-        private static string Proposal(string phrase) => $"<see {Constants.XmlTag.Attribute.Langword}=\"{phrase.AsSpan().Trim().ToLowerCase()}\"/>";
+        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase.AsSpan().Trim().ToLowerCase(), "\"/>");
 
 //// ncrunch: rdi default
 

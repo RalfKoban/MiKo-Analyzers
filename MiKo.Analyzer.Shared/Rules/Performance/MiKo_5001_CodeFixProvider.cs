@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_5001_CodeFixProvider)), Shared]
     public sealed class MiKo_5001_CodeFixProvider : PerformanceCodeFixProvider
     {
-        private enum MovePosition
+        private enum MovePosition : ushort
         {
             Start = 0,
             End = 1,

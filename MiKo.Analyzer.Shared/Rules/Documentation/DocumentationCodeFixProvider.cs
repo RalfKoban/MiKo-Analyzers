@@ -763,7 +763,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var valueText = token.ValueText;
                         var dotPos = valueText.IndexOf('.') + 1;
 
-                        var firstText = valueText.Substring(0, dotPos);
+                        var firstText = valueText.AsSpan(0, dotPos);
                         var lastText = valueText.AsSpan(dotPos).TrimStart().ToString();
 
                         tokensBeforeDot.Add(token.WithText(firstText));

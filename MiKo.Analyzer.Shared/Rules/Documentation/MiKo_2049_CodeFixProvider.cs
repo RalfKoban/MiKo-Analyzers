@@ -65,10 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     var startingPart = text.AsSpan(0, start);
-                    var lastWord = startingPart.LastWord().ToString();
+                    var lastWord = startingPart.LastWord();
 
                     // let's see if we have to deal with 'does' or 'is' but need to have plural
-                    if (Verbalizer.IsPlural(lastWord.AsSpan()))
+                    if (Verbalizer.IsPlural(lastWord))
                     {
                         if (textToReplaceWith.StartsWith(IsPhrase, StringComparison.Ordinal))
                         {

@@ -92,8 +92,8 @@ namespace MiKoSolutions.Analyzers.Extensions
             var builderMethod = typeof(StringBuilderExtensions).GetMethod(nameof(StringBuilderExtensions.AdjustFirstWord));
             var stringMethod = typeof(StringExtensions).GetMethod(nameof(StringExtensions.AdjustFirstWord));
 
-            var resultFromSB = builderMethod?.Invoke(null, [builder, handling]) as string;
-            var resultFromS = stringMethod?.Invoke(null, [s, handling]) as string;
+            var resultFromSB = builderMethod?.Invoke(null, [builder, (ushort)handling]) as string;
+            var resultFromS = stringMethod?.Invoke(null, [s, (ushort)handling]) as string;
 
             Assert.Multiple(() =>
                                  {

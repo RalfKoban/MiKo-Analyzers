@@ -27,7 +27,7 @@ namespace System
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
-        public static bool HasFlag(this FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
+        public static bool HasFlag(FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
         {
@@ -40,11 +40,11 @@ namespace System
 
             string word;
 
-            if (handling.HasFlag(FirstWordHandling.MakeLowerCase))
+            if (HasFlag(handling, FirstWordHandling.MakeLowerCase))
             {
                 word = valueSpan.FirstWord().ToLowerCaseAt(0);
             }
-            else if (handling.HasFlag(FirstWordHandling.MakeUpperCase))
+            else if (HasFlag(handling, FirstWordHandling.MakeUpperCase))
             {
                 word = valueSpan.FirstWord().ToUpperCaseAt(0);
             }
@@ -56,12 +56,12 @@ namespace System
             // build continuation here because the word length may change based on the infinite term
             var continuation = valueSpan.TrimStart().Slice(word.Length);
 
-            if (handling.HasFlag(FirstWordHandling.MakeInfinite))
+            if (HasFlag(handling, FirstWordHandling.MakeInfinite))
             {
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
 
-            if (handling.HasFlag(FirstWordHandling.KeepLeadingSpace))
+            if (HasFlag(handling, FirstWordHandling.KeepLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
                 if (value.StartsWith(' '))
@@ -340,6 +340,32 @@ namespace System
             return new string(chars);
         }
 
+        public static string ConcatenatedWith(this string value, ReadOnlySpan<char> arg0, string arg1)
+        {
+            if (value is null)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var length = value.Length;
+
+            if (value.Length == 0)
+            {
+                return arg0.ConcatenatedWith(arg1);
+            }
+
+            var arg0Length = arg0.Length;
+            var arg1Length = arg1?.Length ?? 0;
+
+            var chars = new char[length + arg0Length + arg1Length];
+
+            value.CopyTo(0, chars, 0, length);
+            arg0.CopyTo(chars.AsSpan(length, arg0Length));
+            arg1?.CopyTo(0, chars, length + arg0Length, arg1Length);
+
+            return new string(chars);
+        }
+
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
         {
             var length = value.Length;
@@ -381,31 +407,31 @@ namespace System
 
             var difference = findingLength - valueLength;
 
-            if (difference == 0)
+            if (difference >= 0)
             {
-                return QuickEquals();
-
-                bool QuickEquals()
+                if (difference == 0)
                 {
-                    const int QuickInspectionChars = 2;
+                    return QuickEquals();
 
-                    if (valueLength > QuickInspectionChars)
+                    bool QuickEquals()
                     {
-                        var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
-                        var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
+                        const int QuickInspectionChars = 2;
 
-                        if (valueSpan.CompareTo(findingSpan, comparison) != 0)
+                        if (valueLength > QuickInspectionChars)
                         {
-                            return false;
+                            var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
+                            var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
+
+                            if (valueSpan.CompareTo(findingSpan, comparison) != 0)
+                            {
+                                return false;
+                            }
                         }
+
+                        return value.Equals(finding, comparison);
                     }
-
-                    return value.Equals(finding, comparison);
                 }
-            }
 
-            if (difference > 0)
-            {
                 switch (comparison)
                 {
                     case StringComparison.Ordinal:
@@ -1459,14 +1485,7 @@ namespace System
         /// </returns>
         public static string ToLowerCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= source.Length)
-            {
-                return source.ToString();
-            }
-
-            var character = source[index];
-
-            if (character.IsLowerCase())
+            if (index >= source.Length || source[index].IsLowerCase())
             {
                 return source.ToString();
             }
@@ -1539,14 +1558,7 @@ namespace System
         /// </returns>
         public static string ToUpperCaseAt(this ReadOnlySpan<char> source, int index)
         {
-            if (index >= source.Length)
-            {
-                return source.ToString();
-            }
-
-            var character = source[index];
-
-            if (character.IsUpperCase())
+            if (index >= source.Length || source[index].IsUpperCase())
             {
                 return source.ToString();
             }
@@ -1619,7 +1631,7 @@ namespace System
             return text.Slice(firstSpace);
         }
 
-        public static string WithoutFirstWords(this string value, params string[] words) => WithoutFirstWords(value.AsSpan(), words).ToString();
+        public static ReadOnlySpan<char> WithoutFirstWords(this string value, params string[] words) => WithoutFirstWords(value.AsSpan(), words);
 
         public static ReadOnlySpan<char> WithoutFirstWords(this ReadOnlySpan<char> value, params string[] words)
         {
@@ -1733,13 +1745,13 @@ namespace System
             return value;
         }
 
-        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix)
+        public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
             if (suffix != null)
             {
                 var length = value.Length - suffix.Length;
 
-                if (length >= 0 && value.EndsWith(suffix, StringComparison.Ordinal))
+                if (length >= 0 && value.EndsWith(suffix, comparison))
                 {
                     return length > 0
                            ? value.Slice(0, length)

@@ -20,13 +20,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        protected override string[] GetSummaryPhrases(ISymbol symbol) => new[]
-                                                                             {
-                                                                                 $"Determines whether the specified <see cref=\"{symbol.ContainingType.Name}\"/> instances are considered equal.",
-                                                                                 $"Determines whether the specified <see cref=\"{symbol.ContainingType.Name}\" /> instances are considered equal.",
-                                                                                 $"Determines whether the specified <see cref=\"{symbol.ContainingType.FullyQualifiedName()}\"/> instances are considered equal.",
-                                                                                 $"Determines whether the specified <see cref=\"{symbol.ContainingType.FullyQualifiedName()}\" /> instances are considered equal.",
-                                                                             };
+        protected override string[] GetSummaryPhrases(ISymbol symbol)
+        {
+            var containingType = symbol.ContainingType;
+            var containingTypeName = containingType.Name;
+            var fullyQualifiedName = containingType.FullyQualifiedName();
+
+            return new[]
+                   {
+                       "Determines whether the specified <see cref=\"" + containingTypeName + "\"/> instances are considered equal.",
+                       "Determines whether the specified <see cref=\"" + containingTypeName + "\" /> instances are considered equal.",
+                       "Determines whether the specified <see cref=\"" + fullyQualifiedName + "\"/> instances are considered equal.",
+                       "Determines whether the specified <see cref=\"" + fullyQualifiedName + "\" /> instances are considered equal.",
+                   };
+        }
 
         protected override string[] GetReturnsPhrases(ISymbol symbol) => ReturnsPhrases;
     }
