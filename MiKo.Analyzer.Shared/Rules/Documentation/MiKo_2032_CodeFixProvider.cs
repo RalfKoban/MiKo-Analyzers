@@ -171,7 +171,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var condition in conditions)
             {
-                results.Add($"Indicates {condition} ");
+                results.Add("Indicates " + condition + " ");
             }
 
             results.AddRange(booleans);

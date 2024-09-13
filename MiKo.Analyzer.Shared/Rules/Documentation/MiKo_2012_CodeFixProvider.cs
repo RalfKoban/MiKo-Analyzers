@@ -462,16 +462,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var middle in middleParts)
                     {
-                        yield return new KeyValuePair<string, string>($"{start} {middle} {verb} ", fix);
-                        yield return new KeyValuePair<string, string>($"{start} {middle} {thirdPersonVerb} ", fix);
+                        var begin = string.Concat(start, " ", middle, " ");
+
+                        yield return new KeyValuePair<string, string>(string.Concat(begin, verb, " "), fix);
+                        yield return new KeyValuePair<string, string>(string.Concat(begin, thirdPersonVerb, " "), fix);
                     }
 
-                    yield return new KeyValuePair<string, string>($"{start} to {noun} ", fix);
-                    yield return new KeyValuePair<string, string>($"{start} to {verb} ", fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " to ", noun, " "), fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " to ", verb, " "), fix);
 
-                    yield return new KeyValuePair<string, string>($"{start} {verb} ", fix);
-                    yield return new KeyValuePair<string, string>($"{start} {thirdPersonVerb} ", fix);
-                    yield return new KeyValuePair<string, string>($"{start} {gerundVerb} ", fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", verb, " "), fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", thirdPersonVerb, " "), fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", gerundVerb, " "), fix);
                 }
             }
         }
@@ -486,9 +488,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var middle in middles)
                 {
+                    var begin = string.Concat(start, " ", middle);
+
                     foreach (var last in lasts)
                     {
-                        yield return $"{start} {middle}{last} ";
+                        yield return string.Concat(begin, last, " ");
                     }
                 }
             }

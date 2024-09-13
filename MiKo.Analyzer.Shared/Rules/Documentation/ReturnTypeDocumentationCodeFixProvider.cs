@@ -103,8 +103,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static IEnumerable<string> CreateAlmostCorrectTaskReturnTypeStartingPhrases()
         {
-            const string Result = "result";
-
             var starts = new[] { "a task", "an task" };
             var continuations = new[] { "that represents", "which represents", "representing" };
             var operations = new[] { "the operation", "the asynchronous operation" };
@@ -116,15 +114,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var operation in operations)
                     {
+                        var middle = string.Concat(" ", continuation, " ", operation);
+
+                        var middleLowerCase = middle + ". The result ";
+                        var middleUpperCase = middle + ". The Result ";
+
                         foreach (var verb in finalVerbs)
                         {
-                            yield return $"{start} {continuation} {operation}. The {Result} {verb} ";
-                            yield return $"{start} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
-                            yield return $"{start.ToUpperCaseAt(0)} {continuation} {operation}. The {Result} {verb} ";
-                            yield return $"{start.ToUpperCaseAt(0)} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+                            var endingLowerCase = middleLowerCase + verb + " ";
+                            var endingUpperCase = middleUpperCase + verb + " ";
 
-                            yield return $"Returns {start} {continuation} {operation}. The {Result} {verb} ";
-                            yield return $"Returns {start} {continuation} {operation}. The {Result.ToUpperCaseAt(0)} {verb} ";
+                            yield return start + endingLowerCase;
+                            yield return start + endingUpperCase;
+                            yield return start.ToUpperCaseAt(0) + endingLowerCase;
+                            yield return start.ToUpperCaseAt(0) + endingUpperCase;
+
+                            yield return "Returns " + start + endingLowerCase;
+                            yield return "Returns " + start + endingUpperCase;
                         }
                     }
                 }

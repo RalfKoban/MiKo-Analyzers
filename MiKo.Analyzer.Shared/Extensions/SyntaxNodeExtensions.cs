@@ -3001,7 +3001,7 @@ namespace MiKoSolutions.Analyzers
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = new StringBuilder(token.Text).Without(text).ReplaceWithCheck("  ", " ").ToString();
+                            var modifiedText = new StringBuilder(token.Text).Without(text).ReplaceWithCheck("  ", " ");
 
                             if (modifiedText.IsNullOrWhiteSpace())
                             {
@@ -3064,7 +3064,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var originalText = token.Text;
+                var originalText = token.Text.AsSpan();
 
                 if (originalText.IsNullOrWhiteSpace())
                 {
@@ -3079,7 +3079,7 @@ namespace MiKoSolutions.Analyzers
 
                     if (originalText.EndsWith(text, StringComparison.OrdinalIgnoreCase))
                     {
-                        var modifiedText = originalText.WithoutSuffix(text);
+                        var modifiedText = originalText.WithoutSuffix(text, StringComparison.OrdinalIgnoreCase);
 
                         textTokens[i] = token.WithText(modifiedText);
                         replaced = true;
@@ -3113,7 +3113,7 @@ namespace MiKoSolutions.Analyzers
                     continue;
                 }
 
-                var originalText = token.Text;
+                var originalText = token.Text.AsSpan();
 
                 if (originalText.IsNullOrWhiteSpace())
                 {

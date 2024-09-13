@@ -42,8 +42,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             problematicText = new StringBuilder(valueText).Without(Constants.Comments.AsynchronouslyStartingPhrase) // skip over async starting phrase
                                                           .Without(Constants.Comments.RecursivelyStartingPhrase) // skip over recursively starting phrase
                                                           .Without(",") // skip over first comma
-                                                          .ToString()
-                                                          .FirstWord();
+                                                          .FirstWord(out _);
 
             return Verbalizer.IsThirdPersonSingularVerb(problematicText) is false;
         }
