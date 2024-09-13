@@ -10,6 +10,8 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
+        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountWhitespaces(0) == value.Length;
+
         public static string AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
         {
             if (value is null)
@@ -29,21 +31,21 @@ namespace System.Text
                 return value.ToString();
             }
 
-            var spacesToKeep = handling.HasFlag(FirstWordHandling.KeepLeadingSpace) ? 1 : 0;
+            var spacesToKeep = StringExtensions.HasFlag(handling, FirstWordHandling.KeepLeadingSpace) ? 1 : 0;
 
             // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
             TrimLeadingSpacesTo(spacesToKeep);
 
-            if (handling.HasFlag(FirstWordHandling.MakeLowerCase))
+            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeLowerCase))
             {
                 MakeLowerCase();
             }
-            else if (handling.HasFlag(FirstWordHandling.MakeUpperCase))
+            else if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeUpperCase))
             {
                 MakeUpperCase();
             }
 
-            if (handling.HasFlag(FirstWordHandling.MakeInfinite))
+            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeInfinite))
             {
                 MakeInfinite();
             }
@@ -94,24 +96,9 @@ namespace System.Text
 
             void MakeInfinite()
             {
-                // 1. Find word begin
-                var whitespacesBefore = CountWhitespaces(0);
+                var word = FirstWord(value, out var whitespacesBefore);
 
-                // 2. Find word end
-                var wordLength = 0;
-                for (var i = whitespacesBefore; i < valueLength; i++)
-                {
-                    if (value[i].IsWhiteSpace())
-                    {
-                        break;
-                    }
-
-                    wordLength++;
-                }
-
-                // 3. Cut word
-                var word = value.ToString(whitespacesBefore, wordLength);
-                value.Remove(whitespacesBefore, wordLength);
+                value.Remove(whitespacesBefore, word.Length);
 
                 // 4. Make word infinite
                 var infiniteWord = Verbalizer.MakeInfiniteVerb(word);
@@ -124,7 +111,7 @@ namespace System.Text
             {
                 if (value[0] == ' ')
                 {
-                    var whitespaces = CountWhitespaces(0);
+                    var whitespaces = value.CountWhitespaces(0);
 
                     if (whitespaces > count)
                     {
@@ -134,25 +121,36 @@ namespace System.Text
                     }
                 }
             }
+        }
 
-            int CountWhitespaces(int i)
+        public static string FirstWord(this StringBuilder value, out int whitespacesBefore)
+        {
+            if (value is null)
             {
-                var whitespaces = 0;
+                whitespacesBefore = 0;
 
-                for (; i < valueLength; i++)
+                return string.Empty;
+            }
+
+            var length = value.Length;
+
+            // 1. Find word begin
+            whitespacesBefore = value.CountWhitespaces(0);
+
+            // 2. Find word end
+            var wordLength = 0;
+            for (var i = whitespacesBefore; i < length; i++)
+            {
+                if (value[i].IsWhiteSpace())
                 {
-                    if (value[i].IsWhiteSpace())
-                    {
-                        whitespaces++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    break;
                 }
 
-                return whitespaces;
+                wordLength++;
             }
+
+            // 3. Cut word
+            return value.ToString(whitespacesBefore, wordLength);
         }
 
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
@@ -395,6 +393,26 @@ namespace System.Text
             }
 
             return false;
+        }
+
+        private static int CountWhitespaces(this StringBuilder value, int start)
+        {
+            var whitespaces = 0;
+            var valueLength = value.Length;
+
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
         }
 
         // TODO RKN: StringReplace with StringComparison http://stackoverflow.com/a/244933/84852

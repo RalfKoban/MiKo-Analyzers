@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -15,7 +16,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2060_FactoryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] TypeSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
+        private static readonly string[] ClassSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
+        private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(100)];
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
@@ -258,7 +260,7 @@ public class TestMeFactory
 ");
 
         [Test]
-        public void Code_gets_fixed_for_class_summary_([ValueSource(nameof(TypeSummaryStartingPhrases))] string summary)
+        public void Code_gets_fixed_for_class_summary_([ValueSource(nameof(ClassSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -284,7 +286,7 @@ public class TestMeFactory
         }
 
         [Test]
-        public void Code_gets_fixed_for_interface_summary_([ValueSource(nameof(TypeSummaryStartingPhrases))] string summary)
+        public void Code_gets_fixed_for_interface_summary_([ValueSource(nameof(InterfaceSummaryStartingPhrases))] string summary)
         {
             var originalCode = @"
 /// <summary>
@@ -614,160 +616,139 @@ internal interface IFactory
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_2060_CodeFixProvider();
 
-        //// ncrunch: no coverage start
+//// ncrunch: no coverage start
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
         [ExcludeFromCodeCoverage]
         private static HashSet<string> CreateTypeSummaryStartingPhrases()
         {
-            string[] startingPhrases =
-                                       [
-                                           "A factory for creation of",
-                                           "A factory for the creation of",
-                                           "A factory for",
-                                           "A factory that creates",
-                                           "A factory that provides methods to create",
-                                           "A factory to create",
-                                           "A factory to provide methods to create",
-                                           "A factory which creates",
-                                           "A factory which provides methods to create",
-                                           "A implementation of the abstract factory pattern for creation of",
-                                           "A implementation of the factory pattern for creation of",
-                                           "A interface for factories that create",
-                                           "A interface for factories to create",
-                                           "A interface for factories which create",
-                                           "A interface implemented by factories that create",
-                                           "A interface implemented by factories to create",
-                                           "A interface implemented by factories which create",
-                                           "A interface that is implemented by factories that create",
-                                           "A interface that is implemented by factories which create",
-                                           "A interface to create",
-                                           "A interface which is implemented by factories that create",
-                                           "A interface which is implemented by factories which create",
-                                           "An implementation of the abstract factory pattern for creation of",
-                                           "An implementation of the factory pattern for creation of",
-                                           "An interface for factories that create",
-                                           "An interface for factories to create",
-                                           "An interface for factories which create",
-                                           "An interface implemented by factories that create",
-                                           "An interface implemented by factories to create",
-                                           "An interface implemented by factories which create",
-                                           "An interface that is implemented by factories that create",
-                                           "An interface that is implemented by factories which create",
-                                           "An interface to create",
-                                           "An interface which is implemented by factories that create",
-                                           "An interface which is implemented by factories which create",
-                                           "Defines a factory that can create",
-                                           "Defines a factory that creates",
-                                           "Defines a factory that provides",
-                                           "Defines a factory that is able to create",
-                                           "Defines a factory that is capable to create",
-                                           "Defines a factory to create",
-                                           "Defines a factory which can create",
-                                           "Defines a factory which creates",
-                                           "Defines a factory which provides",
-                                           "Defines a factory which is able to create",
-                                           "Defines a factory which is capable to create",
-                                           "Defines a factory for",
-                                           "Defines a method to create",
-                                           "Defines methods to create",
-                                           "Defines the factory that can create",
-                                           "Defines the factory that creates",
-                                           "Defines the factory that provides",
-                                           "Defines the factory that is able to create",
-                                           "Defines the factory that is capable to create",
-                                           "Defines the factory to create",
-                                           "Defines the factory which can create",
-                                           "Defines the factory which creates",
-                                           "Defines the factory which provides",
-                                           "Defines the factory which is able to create",
-                                           "Defines the factory which is capable to create",
-                                           "Defines the factory for",
-                                           "Factory for providing",
-                                           "Factory for creating",
-                                           "Factory for creation of",
-                                           "Factory for the creation of",
-                                           "Factory for",
-                                           "Factory that can create",
-                                           "Factory that provides methods to create",
-                                           "Factory that provides",
-                                           "Factory to create",
-                                           "Factory to provide methods to create",
-                                           "Factory to provide",
-                                           "Factory which can create",
-                                           "Factory which provides methods to create",
-                                           "Factory which provides",
-                                           "Implementation of the abstract factory pattern for creation of",
-                                           "Implementation of the factory pattern for creation of",
-                                           "Interface for factories that create",
-                                           "Interface for factories to create",
-                                           "Interface for factories which create",
-                                           "Interface that creates",
-                                           "Interface to create",
-                                           "Interface which creates",
-                                           "Provides a factory that creates",
-                                           "Provides a factory to create",
-                                           "Provides a factory which creates",
-                                           "Provides a factory for",
-                                           "Provides a method to create",
-                                           "Provides methods to create",
-                                           "Provides the factory that creates",
-                                           "Provides the factory to create",
-                                           "Provides the factory which creates",
-                                           "Provides the factory for",
-                                           "Provides",
-                                           "Represents a factory that can create",
-                                           "Represents a factory that creates",
-                                           "Represents a factory to create",
-                                           "Represents a factory which can create",
-                                           "Represents a factory which creates",
-                                           "Represents a factory for",
-                                           "Represents the factory that can create",
-                                           "Represents the factory that creates",
-                                           "Represents the factory to create",
-                                           "Represents the factory which can create",
-                                           "Represents the factory which creates",
-                                           "Represents the factory for",
-                                           "The factory that can create",
-                                           "The factory that creates",
-                                           "The factory that provides methods to create",
-                                           "The factory to create",
-                                           "The factory to provide methods to create",
-                                           "The factory which can create",
-                                           "The factory which creates",
-                                           "The factory which provides methods to create",
-                                           "The implementation of the abstract factory pattern for creation of",
-                                           "The implementation of the factory pattern for creation of",
-                                           "The interface implemented by factories that create",
-                                           "The interface implemented by factories to create",
-                                           "The interface implemented by factories which create",
-                                           "The interface that is implemented by factories that create",
-                                           "The interface that is implemented by factories to create",
-                                           "The interface that is implemented by factories which create",
-                                           "The interface which is implemented by factories that create",
-                                           "The interface which is implemented by factories to create",
-                                           "The interface which is implemented by factories which create",
-                                           "This factory creates",
-                                           "This factory provides methods to create",
-                                           "This interface is implemented by factories that create",
-                                           "This interface is implemented by factories to create",
-                                           "This interface is implemented by factories which create",
-                                           "Used for creating",
-                                           "Used for creation of",
-                                           "Used for the creation of",
-                                           "Used to create",
-                                           "Uses for creating", // typo in 'used'
-                                           "Uses for creation of", // typo in 'used'
-                                           "Uses for the creation of", // typo in 'used'
-                                           "Uses to create", // typo in 'used'
-                                       ];
+            string[] phrases =
+                               [
+                                   "A class containing factory methods",
+                                   "A class containing methods",
+                                   "A class providing factory methods",
+                                   "A class providing methods",
+                                   "A class that contains factory methods",
+                                   "A class that contains methods",
+                                   "A class that provides factory methods",
+                                   "A class that provides methods",
+                                   "A class which contains factory methods",
+                                   "A class which contains methods",
+                                   "A class which provides factory methods",
+                                   "A class which provides methods",
+                                   "A factory that provides methods",
+                                   "A factory to provide methods",
+                                   "A factory which provides methods",
+                                   "A factory",
+                                   "A implementation of the abstract factory pattern",
+                                   "A implementation of the factory pattern",
+                                   "A interface for factories",
+                                   "A interface implemented by factories",
+                                   "A interface of a factory",
+                                   "A interface that is implemented by factories",
+                                   "A interface which is implemented by factories",
+                                   "A interface",
+                                   "An implementation of the abstract factory pattern",
+                                   "An implementation of the factory pattern",
+                                   "An interface for factories",
+                                   "An interface implemented by factories",
+                                   "An interface of a factory",
+                                   "An interface that is implemented by factories",
+                                   "An interface which is implemented by factories",
+                                   "An interface",
+                                   "Class for factory methods",
+                                   "Class for methods",
+                                   "Class that provides factory methods",
+                                   "Class that provides methods",
+                                   "Class to provide factory methods",
+                                   "Class to provide methods",
+                                   "Class which provides factory methods",
+                                   "Class which provides methods",
+                                   "Class",
+                                   "Defines a factory",
+                                   "Defines a method",
+                                   "Defines factories",
+                                   "Defines methods",
+                                   "Defines the factory",
+                                   "Factory",
+                                   "Implementation of the abstract factory pattern",
+                                   "Implementation of the factory pattern",
+                                   "Interface for factories",
+                                   "Interface of a factory",
+                                   "Interface of factories",
+                                   "Interface",
+                                   "Provides a factory",
+                                   "Provides a method",
+                                   "Provides factories",
+                                   "Provides methods",
+                                   "Provides",
+                                   "Represents a factory",
+                                   "Represents a method",
+                                   "Represents factories",
+                                   "Represents methods",
+                                   "Represents",
+                                   "The class containing factory methods",
+                                   "The class containing methods",
+                                   "The class contains factory methods",
+                                   "The class contains methods",
+                                   "The class provides factory methods",
+                                   "The class provides methods",
+                                   "The class providing factory methods",
+                                   "The class providing methods",
+                                   "The class that contains factory methods",
+                                   "The class that contains methods",
+                                   "The class that provides factory methods",
+                                   "The class that provides methods",
+                                   "The class which contains factory methods",
+                                   "The class which contains methods",
+                                   "The class which provides factory methods",
+                                   "The class which provides methods",
+                                   "The factory providing methods",
+                                   "The factory that provides methods",
+                                   "The factory to provide methods",
+                                   "The factory which provides methods",
+                                   "The factory",
+                                   "The implementation of the abstract factory pattern",
+                                   "The implementation of the factory pattern",
+                                   "The interface implemented by factories",
+                                   "The interface of a factory",
+                                   "The interface that is implemented by factories",
+                                   "The interface which is implemented by factories",
+                                   "This class contains factory methods",
+                                   "This class contains methods",
+                                   "This class provides factory methods",
+                                   "This class provides methods",
+                                   "This factory provides methods",
+                                   "This factory",
+                                   "This interface is implemented by factories",
+                                   "Used",
+                                   "Uses", // typo in 'used'
+                               ];
 
-            string[] articles = [string.Empty, " a", " an", " the"];
-            string[] middles = [string.Empty, " instance of", " instances of", " new instance of", " new instances of"];
+            string[] verbs = [
+                                "creates",
+                                "for", "for creating", "for creation of", "for the creation of",
+                                "that create", "that can create", "that is able to create", "that are able to create", "that is capable to create", "that are capable to create", "that creates",
+                                "to create",
+                                "which create", "which can create", "which is able to create", "which are able to create", "which is capable to create", "which are capable to create", "which creates"
+                             ];
+
+            // we do not test them to limit number of tests
+            // string[] articles = [string.Empty, " a", " an", " the"];
+            // string[] middles = [string.Empty, " instance of", " instances of", " new instance of", " new instances of"];
+            string[] articles = [string.Empty, " the"];
+            string[] middles = [string.Empty, " instances of", " new instances of"];
+
+            var s = verbs.SelectMany(_ => phrases, (verb, phrase) => phrase + " " + verb).ToList();
+
+            var startingPhrases = s.Concat(s.Select(_ => _.Replace("actory", "actory class"))).ToList();
+            var constructionPhrases = startingPhrases.Select(_ => _.Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct")).ToList();
+            var buildingPhrases = startingPhrases.Select(_ => _.Replace("creation", "building").Replace("creating", "building").Replace("create", "build")).ToList();
+            var providingPhrases = startingPhrases.Select(_ => _.Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide")).ToList();
 
             var results = new HashSet<string>();
 
-            foreach (var startingPhrase in startingPhrases)
+            foreach (var startingPhrase in startingPhrases.Concat(constructionPhrases).Concat(buildingPhrases).Concat(providingPhrases))
             {
                 foreach (var article in articles)
                 {
@@ -787,7 +768,104 @@ internal interface IFactory
                 }
             }
 
+            string[] strangePhrases =
+                                      [
+
+                                          // "a instance",
+                                          // "a new instances",
+                                          // "an instances",
+                                          // "an new instance",
+                                          "epresents buil",
+                                          "epresents construc",
+                                          "epresents creat",
+                                          "epresents for",
+                                          "epresents provid",
+                                          "epresents that",
+                                          "epresents to",
+                                          "epresents which",
+                                          "factory class method",
+                                          "method that are",
+                                          "method which are",
+                                          "methods a",
+                                          "methods instance",
+                                          "methods new",
+                                          "methods that builds",
+                                          "methods that constructs",
+                                          "methods that creates",
+                                          "methods that is",
+                                          "methods that provides",
+                                          "methods the",
+                                          "methods which builds",
+                                          "methods which constructs",
+                                          "methods which creates",
+                                          "methods which is",
+                                          "methods which provides",
+                                          "Provides buil",
+                                          "Provides construct",
+                                          "Provides creat",
+                                          "Provides for",
+                                          "Provides provid",
+                                          "Provides that",
+                                          "Provides to",
+                                          "Provides which",
+                                          "for providing of",
+                                          "sed buil",
+                                          "sed construc",
+                                          "sed creat",
+                                          "sed provid",
+                                          "sed that",
+                                          "sed which",
+                                          "ses buil",
+                                          "ses construc",
+                                          "ses creat",
+                                          "ses provid",
+                                          "ses that",
+                                          "ses which",
+                                          "es that is capable",
+                                          "es which is capable",
+                                          "es that is able",
+                                          "es which is able",
+                                          "ss that are capable",
+                                          "ss which are capable",
+                                          "ss that are able",
+                                          "ss which are able",
+                                          "y that are capable",
+                                          "y which are capable",
+                                          "y that are able",
+                                          "y which are able",
+                                          "rn that are capable",
+                                          "rn which are capable",
+                                          "rn that are able",
+                                          "rn which are able",
+                                          "ace that are capable",
+                                          "ace which are capable",
+                                          "ace that are able",
+                                          "ace which are able",
+                                          "ies buil",
+                                          "ies construc",
+                                          "ies creat",
+                                          "ies provid",
+                                          "ies that provides",
+                                          "ies which provides",
+                                          "ds buil",
+                                          "ds construc",
+                                          "ds creat",
+                                          "ds provid",
+                                          "This factory class that",
+                                          "This factory class which",
+                                          "This factory class providing",
+                                          "This factory providing",
+                                          "for the constructing",
+                                          "for the creating",
+                                          "for the providing",
+                                      ];
+
+            results.RemoveWhere(_ => _.ContainsAny(strangePhrases));
+
             results.Add("Implementations create ");
+            results.Add("Implementations construct ");
+            results.Add("Implementations build ");
+            results.Add("Implementations provide ");
 
             return results;
         }

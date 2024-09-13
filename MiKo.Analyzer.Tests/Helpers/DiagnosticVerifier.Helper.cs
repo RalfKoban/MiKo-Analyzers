@@ -63,6 +63,31 @@ namespace TestHelper
 
         private static readonly MetadataReference SystemRuntimeNetStandardReference = MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=0.0.0.0").Location);
 
+        private static readonly MetadataReference[] References =
+                                                                 [
+                                                                     CorlibReference,
+                                                                     SystemCoreReference,
+                                                                     SystemCompositionReference,
+                                                                     SystemRuntimeReference,
+                                                                     SystemWindowsInputReference,
+                                                                     AttributeReference,
+                                                                     AttributeTargetsReference,
+                                                                     DescriptionAttributeReference,
+                                                                     AspNetCoreMvcAbstractionsReference,
+                                                                     CSharpSymbolsReference,
+                                                                     CodeAnalysisReference,
+                                                                     NUnitReference,
+                                                                     NUnitLegacyReference,
+                                                                     MiKoAnalyzersReference,
+                                                                     MiKoAnalyzersTestsReference,
+                                                                     NetStandardReference,
+                                                                     SystemRuntimeNetStandardReference,
+                                                                     SystemLinqReference,
+                                                                     SystemTextReference,
+                                                                     SystemTextJsonReference,
+                                                                     SystemXmlReference,
+                                                                 ];
+
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
         /// The returned diagnostics are then ordered by location in the source document.
@@ -230,35 +255,14 @@ namespace TestHelper
             var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, TestProjectName, TestProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
 
             var solution = new AdhocWorkspace().CurrentSolution
-                                               ////.AddProject(projectId, TestProjectName, TestProjectName, LanguageNames.CSharp)
                                                .AddProject(projectInfo)
-                                               .AddMetadataReference(projectId, CorlibReference)
-                                               .AddMetadataReference(projectId, SystemCoreReference)
-                                               .AddMetadataReference(projectId, SystemCompositionReference)
-                                               .AddMetadataReference(projectId, SystemRuntimeReference)
-                                               .AddMetadataReference(projectId, SystemWindowsInputReference)
-                                               .AddMetadataReference(projectId, AttributeReference)
-                                               .AddMetadataReference(projectId, AttributeTargetsReference)
-                                               .AddMetadataReference(projectId, DescriptionAttributeReference)
-                                               .AddMetadataReference(projectId, AspNetCoreMvcAbstractionsReference)
-                                               .AddMetadataReference(projectId, CSharpSymbolsReference)
-                                               .AddMetadataReference(projectId, CodeAnalysisReference)
-                                               .AddMetadataReference(projectId, NUnitReference)
-                                               .AddMetadataReference(projectId, NUnitLegacyReference)
-                                               .AddMetadataReference(projectId, MiKoAnalyzersReference)
-                                               .AddMetadataReference(projectId, MiKoAnalyzersTestsReference)
-                                               .AddMetadataReference(projectId, NetStandardReference)
-                                               .AddMetadataReference(projectId, SystemRuntimeNetStandardReference)
-                                               .AddMetadataReference(projectId, SystemLinqReference)
-                                               .AddMetadataReference(projectId, SystemTextReference)
-                                               .AddMetadataReference(projectId, SystemTextJsonReference)
-                                               .AddMetadataReference(projectId, SystemXmlReference);
+                                               .AddMetadataReferences(projectId, References);
 
             var count = 0;
 
             foreach (var source in sources)
             {
-                var newFileName = "Test" + count + "." + "cs";
+                var newFileName = "Test" + count + ".cs";
                 var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
                 solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
                 count++;

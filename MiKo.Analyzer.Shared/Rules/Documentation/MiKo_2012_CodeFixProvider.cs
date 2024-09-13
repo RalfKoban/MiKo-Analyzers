@@ -20,6 +20,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                  {
                                                      "Adopt",
                                                      "Allow",
+                                                     "Build",
+                                                     "Construct",
                                                      "Create",
                                                      "Describe",
                                                      "Detect",
@@ -143,15 +145,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return Comment(comment, XmlText("Represents a TODO"));
                 }
 
-                if (text.StartsWithAny(MiKo_2038_CodeFixProvider.CommandStartingPhrases, StringComparison.Ordinal))
+                if (syntax.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
                 {
-                    if (syntax.GetEnclosing(Declarations) is MemberDeclarationSyntax member)
-                    {
-                        var name = member.GetName();
+                    var name = member.GetName();
 
-                        if (name.Contains("Command", StringComparison.OrdinalIgnoreCase))
+                    if (name.Contains("Command", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (text.StartsWithAny(MiKo_2038_CodeFixProvider.CommandStartingPhrases, StringComparison.OrdinalIgnoreCase))
                         {
                             return MiKo_2038_CodeFixProvider.GetUpdatedSyntax(comment);
+                        }
+                    }
+                    else if (name.Contains("Factory", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var mappedData = MiKo_2060_CodeFixProvider.MappedData.Value;
+
+                        if (text.StartsWithAny(mappedData.TypeReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                         }
                     }
                 }
@@ -179,9 +191,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWithAny(Constants.Comments.AAnThePhraseWithSpaces, StringComparison.Ordinal))
                 {
-                    var member = syntax.FirstAncestorOrSelf<MemberDeclarationSyntax>();
+                    var ancestor = syntax.FirstAncestorOrSelf<MemberDeclarationSyntax>();
 
-                    switch (member)
+                    switch (ancestor)
                     {
                         case PropertyDeclarationSyntax property:
                         {
@@ -317,9 +329,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             // factories
             yield return new KeyValuePair<string, string>("Factory for ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class building ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class constructing ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Factory class creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class to build ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class to construct ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Factory class to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class that builds ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class that constructs ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Factory class that creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class which builds ", Constants.Comments.FactorySummaryPhrase);
+            yield return new KeyValuePair<string, string>("Factory class which constructs ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Factory class which creates ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Interface for factories creating ", Constants.Comments.FactorySummaryPhrase);
             yield return new KeyValuePair<string, string>("Interface for factories to create ", Constants.Comments.FactorySummaryPhrase);
@@ -380,6 +400,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var beginnings = new[]
                                  {
+                                     "A class",
+                                     "A interface",
+                                     "An interface",
                                      "Class",
                                      "Classes implementing the interfaces",
                                      "Classes implementing the interfaces,",
@@ -409,6 +432,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                      "The class implementing the interface",
                                      "The class implementing the interface,",
                                      "The class implementing this interface",
+                                     "The class",
+                                     "The interface",
                                      "This class",
                                      "This interface class",
                                      "This interface",
@@ -440,16 +465,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     foreach (var middle in middleParts)
                     {
-                        yield return new KeyValuePair<string, string>($"{start} {middle} {verb} ", fix);
-                        yield return new KeyValuePair<string, string>($"{start} {middle} {thirdPersonVerb} ", fix);
+                        var begin = string.Concat(start, " ", middle, " ");
+
+                        yield return new KeyValuePair<string, string>(string.Concat(begin, verb, " "), fix);
+                        yield return new KeyValuePair<string, string>(string.Concat(begin, thirdPersonVerb, " "), fix);
                     }
 
-                    yield return new KeyValuePair<string, string>($"{start} to {noun} ", fix);
-                    yield return new KeyValuePair<string, string>($"{start} to {verb} ", fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " to ", noun, " "), fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " to ", verb, " "), fix);
 
-                    yield return new KeyValuePair<string, string>($"{start} {verb} ", fix);
-                    yield return new KeyValuePair<string, string>($"{start} {thirdPersonVerb} ", fix);
-                    yield return new KeyValuePair<string, string>($"{start} {gerundVerb} ", fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", verb, " "), fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", thirdPersonVerb, " "), fix);
+                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", gerundVerb, " "), fix);
                 }
             }
         }
@@ -464,9 +491,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var middle in middles)
                 {
+                    var begin = string.Concat(start, " ", middle);
+
                     foreach (var last in lasts)
                     {
-                        yield return $"{start} {middle}{last} ";
+                        yield return string.Concat(begin, last, " ");
                     }
                 }
             }

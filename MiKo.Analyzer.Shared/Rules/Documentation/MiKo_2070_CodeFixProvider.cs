@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] BeginningConditions = { "true", "if", "whether" };
         private static readonly string[] MiddleConditions = { "if", "whether" };
 
-        private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { $"{marker}.", $"{marker} ." }).ToArray();
+        private static readonly string[] TrailingSentenceMarkers = Constants.TrailingSentenceMarkers.SelectMany(marker => new[] { marker + ".", marker + " ." }).ToArray();
 
         public override string FixableDiagnosticId => "MiKo_2070";
 
@@ -88,7 +88,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     if (valueText.StartsWithAny(Constants.Comments.ReturnWords))
                     {
                         var startText = GetCorrectStartText(summary);
-                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString();
+                        var remainingText = valueText.WithoutFirstWord().WithoutFirstWords(BeginningConditions).ToString(); // TODO RKN: Use Span and create a ConcatenatedWith
 
                         var newText = string.Concat(" ", startText, " ", remainingText);
 
@@ -215,7 +215,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         newText = newText.ReplaceAllWithCheck(TrailingSentenceMarkers, ".");
 
-                        summary = summary.ReplaceToken(token, token.WithText(newText.ToString()));
+                        summary = summary.ReplaceToken(token, token.WithText(newText));
                     }
                 }
             }

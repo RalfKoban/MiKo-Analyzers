@@ -42,14 +42,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var defaultStart = GetDefaultStartingPhrase(typeName);
 
+            var variantWithSpace = string.Concat(defaultStart, "<see cref=\"", type, "\" />" + DefaultEnding);
+            var variantWithoutSpace = string.Concat(defaultStart, "<see cref=\"", type, "\"/>" + DefaultEnding);
+
             return new[]
-                       {
-                           $"{defaultStart}<see cref=\"{typeName}\" />{DefaultEnding}.", // just used for the proposal
-                           $"{defaultStart}<see cref=\"{type}\" />{DefaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\" />{DefaultEnding}",
-                           $"{defaultStart}<see cref=\"{type}\"/>{DefaultEnding}.",
-                           $"{defaultStart}<see cref=\"{type}\"/>{DefaultEnding}",
-                       };
+                   {
+                       string.Concat(defaultStart, "<see cref=\"", typeName, "\" />" + DefaultEnding + "."), // just used for the proposal
+                       variantWithSpace + ".",
+                       variantWithSpace,
+                       variantWithoutSpace + ".",
+                       variantWithoutSpace,
+                   };
         }
 
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml, DocumentationCommentTriviaSyntax comment)

@@ -1241,9 +1241,9 @@ namespace MiKoSolutions.Analyzers
         }
 
         internal static bool IsException(this ITypeSymbol value) => value != null
-                                                                     && value.TypeKind == TypeKind.Class
-                                                                     && value.SpecialType == SpecialType.None
-                                                                     && value.OriginalDefinition.InheritsFrom<Exception>();
+                                                                 && value.TypeKind == TypeKind.Class
+                                                                 && value.SpecialType == SpecialType.None
+                                                                 && value.OriginalDefinition.InheritsFrom<Exception>();
 
         internal static bool IsException(this ArgumentSyntax value, SemanticModel semanticModel)
         {

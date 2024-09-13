@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2050_ExceptionSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] StartingPhrases = [.. CreatePhrases().Except([Constants.Comments.ExceptionTypeSummaryStartingPhrase])];
+        private static readonly string[] StartingPhrases = [.. CreatePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase)];
 
         [Test]
         public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
