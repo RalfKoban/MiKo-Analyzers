@@ -158,7 +158,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                     else if (name.Contains("Factory", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (text.StartsWithAny(MiKo_2060_CodeFixProvider.MappedData.Value.TypeReplacementMapKeys, StringComparison.OrdinalIgnoreCase))
+                        var mappedData = MiKo_2060_CodeFixProvider.MappedData.Value;
+
+                        if (text.StartsWithAny(mappedData.TypeReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase))
                         {
                             return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                         }
