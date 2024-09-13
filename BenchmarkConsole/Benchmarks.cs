@@ -7,7 +7,9 @@ using BenchmarkDotNet.Attributes;
 
 using Microsoft.Extensions.Primitives;
 
-namespace MiKoSolutions.Analyzers.BenchmarkConsole
+using MiKoSolutions.Analyzers;
+
+namespace BenchmarkConsole
 {
     // see https://adamsitnik.com/the-new-Memory-Diagnoser/
     [MemoryDiagnoser] // we need to enable it in explicit way
@@ -17,29 +19,28 @@ namespace MiKoSolutions.Analyzers.BenchmarkConsole
         private const string Text = "This is a very long text to test SubString() on types such as string or StringSegment.";
 
 
-        // [Params(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30)] // , */ 10, 100, 1000)] //, 10000, 100000)]
-        [Params(5, 10, 15, 20, 25, 30)] // , */ 10, 100, 1000)] //, 10000, 100000)]
+        [Params(1, 5, 10, 15, 20, 25, 50)] // , */ 10, 100, 1000)] //, 10000, 100000)]
         public int Times;
 
-        [Benchmark(Baseline = true)]
+        // [Benchmark(Baseline = true)]
         public string StringSubString()
         {
             return Text.Substring(5);
         }
 
-        [Benchmark]
+        // [Benchmark]
         public string StringSegmentSubString()
         {
             return new StringSegment(Text).Substring(5);
         }
 
-        // [Benchmark(Baseline = true)]
+        [Benchmark(Baseline = true)]
         public string HumanizedConcatenated_Before()
         {
             return data.HumanizedConcatenated();
         }
 
-        // [Benchmark]
+        [Benchmark]
         public string HumanizedConcatenated_After()
         {
             return HumanizedConcatenatedNew(data);

@@ -2,7 +2,7 @@
 
 using BenchmarkDotNet.Running;
 
-namespace MiKoSolutions.Analyzers.BenchmarkConsole
+namespace BenchmarkConsole
 {
     internal class Program
     {
