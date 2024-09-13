@@ -7,7 +7,7 @@
 #else
 
 [assembly: Timeout(60 * 1000)] // default timeout of 60 seconds
-[assembly: FixtureLifeCycle(LifeCycle.SingleInstance)]
+[assembly: FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 [assembly: Parallelizable(ParallelScope.All)]
 
 #endif

@@ -21,7 +21,7 @@ namespace TestHelper
     /// </summary>
     public abstract partial class CodeFixVerifier : DiagnosticVerifier
     {
-        private static int s_testLimit = int.MaxValue;
+        private static int s_testLimit = -1;
 
         protected static int TestLimit
         {
