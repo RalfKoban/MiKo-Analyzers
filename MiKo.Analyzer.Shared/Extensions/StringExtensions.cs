@@ -29,6 +29,8 @@ namespace System
 
         private static readonly Regex PascalCasingRegex = new Regex("[a-z]+[A-Z]+", RegexOptions.Compiled, 100.Milliseconds());
 
+//// ncrunch: no coverage start
+
         public static bool HasFlag(FirstWordHandling value, FirstWordHandling flag) => (value & flag) == flag;
 
         public static string AdjustFirstWord(this string value, FirstWordHandling handling)
@@ -74,6 +76,8 @@ namespace System
 
             return word.ConcatenatedWith(continuation);
         }
+
+//// ncrunch: no coverage end
 
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -191,6 +195,8 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
+
+//// ncrunch: no coverage start
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -411,8 +417,6 @@ namespace System
 
             return value.Contains(finding.AsSpan());
         }
-
-//// ncrunch: no coverage start
 
         public static bool Contains(this string value, string finding, StringComparison comparison)
         {
@@ -1166,8 +1170,9 @@ namespace System
                 // performance optimization to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see implementation inside MemoryExtensions)
                 if (comparison == StringComparison.Ordinal)
                 {
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var i = 0; i < phrases.Length; i++)
+                    var phrasesLength = phrases.Length;
+
+                    for (var i = 0; i < phrasesLength; i++)
                     {
                         var phrase = phrases[i];
 
@@ -1198,8 +1203,9 @@ namespace System
                     return IndexOfAny(value.AsSpan(), phrases, comparison);
                 }
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var i = 0; i < phrases.Length; i++)
+                var phrasesLength = phrases.Length;
+
+                for (var i = 0; i < phrasesLength; i++)
                 {
                     var phrase = phrases[i];
 
@@ -1224,8 +1230,9 @@ namespace System
 
             if (value.Length > 0)
             {
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var i = 0; i < phrases.Length; i++)
+                var phrasesLength = phrases.Length;
+
+                for (var i = 0; i < phrasesLength; i++)
                 {
                     var phrase = phrases[i];
 
@@ -1813,9 +1820,9 @@ namespace System
         public static string WithoutQuotes(this string value) => value.Without(@"""");
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags);
+        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags); // ncrunch: no coverage
 
-        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags());
+        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags()); // ncrunch: no coverage
 
         public static string WithoutSuffix(this string value, string suffix)
         {
@@ -1845,6 +1852,8 @@ namespace System
             return value;
         }
 
+//// ncrunch: no coverage start
+
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
             if (suffix != null)
@@ -1861,6 +1870,8 @@ namespace System
 
             return value;
         }
+
+//// ncrunch: no coverage end
 
         public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
         {

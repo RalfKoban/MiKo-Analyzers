@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Formatting;
 using NUnit.Framework;
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
 namespace TestHelper
 {
     /// <summary>

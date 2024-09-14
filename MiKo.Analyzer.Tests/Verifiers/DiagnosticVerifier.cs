@@ -11,6 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using NUnit.Framework;
 
 //// ncrunch: rdi off
+// ncrunch: no coverage start
 namespace TestHelper
 {
     /// <summary>
