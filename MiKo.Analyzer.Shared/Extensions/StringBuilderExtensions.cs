@@ -10,6 +10,8 @@ namespace System.Text
 {
     internal static class StringBuilderExtensions
     {
+        private const int QuickCompareLengthThreshold = 4;
+
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountWhitespaces(0) == value.Length;
 
         public static string AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
@@ -366,7 +368,7 @@ namespace System.Text
                 return current[lastIndex] == other[lastIndex];
             }
 
-            if (other.Length > 4)
+            if (other.Length > QuickCompareLengthThreshold)
             {
                 var otherFirst = other[0];
 

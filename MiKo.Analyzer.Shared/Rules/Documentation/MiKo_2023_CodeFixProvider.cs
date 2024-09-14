@@ -446,7 +446,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToArray();
 
-                KeyValuePair<string, string>[] ToMapArray(IReadOnlyList<KeyValuePair<string, string>> map, ICollection<string> keys, ICollection<KeyValuePair<string, string>> others)
+                KeyValuePair<string, string>[] ToMapArray(IReadOnlyList<KeyValuePair<string, string>> map, HashSet<string> keys, KeyValuePair<string, string>[] others)
                 {
                     var known = new List<KeyValuePair<string, string>>(keys.Count);
 
@@ -462,7 +462,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         }
                     }
 
-                    var results = new KeyValuePair<string, string>[known.Count + others.Count];
+                    var results = new KeyValuePair<string, string>[known.Count + others.Length];
                     known.CopyTo(results);
                     others.CopyTo(results, known.Count);
 

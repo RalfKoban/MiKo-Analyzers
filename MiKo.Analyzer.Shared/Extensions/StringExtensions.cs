@@ -19,6 +19,8 @@ namespace System
 {
     internal static class StringExtensions
     {
+        private const int QuickCompareLengthThreshold = 4;
+
         private const int DifferenceBetweenUpperAndLowerCaseAscii = 0x20; // valid for Roman ASCII characters ('A' ... 'Z')
 
         private static readonly char[] GenericTypeArgumentSeparator = { ',' };
@@ -1433,8 +1435,6 @@ namespace System
             return false;
         }
 
-//// ncrunch: no coverage end
-
         public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes, StringComparison comparison)
         {
             if (value.Length > 0)
@@ -1456,6 +1456,30 @@ namespace System
 
             return false;
         }
+
+        public static bool StartsWithAny(this ReadOnlySpan<char> value, List<string> prefixes, StringComparison comparison)
+        {
+            if (value.Length > 0)
+            {
+                var prefixesLength = prefixes.Count;
+
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                for (var index = 0; index < prefixesLength; index++)
+                {
+                    var prefix = prefixes[index];
+
+                    if (value.StartsWith(prefix, comparison))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+//// ncrunch: no coverage end
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
@@ -1936,7 +1960,7 @@ namespace System
             }
 
             // both are same length, so perform a quick compare first
-            if (valueLength > 4)
+            if (valueLength > QuickCompareLengthThreshold)
             {
                 switch (comparison)
                 {
@@ -1983,7 +2007,7 @@ namespace System
         {
             var length = value.Length;
 
-            if (length != others.Length && length < 4)
+            if (length != others.Length && length < QuickCompareLengthThreshold)
             {
                 return true;
             }
