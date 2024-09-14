@@ -78,11 +78,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
 
-        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment) => Comment(comment, MappedData.Value.TypeReplacementMapKeys, MappedData.Value.TypeReplacementMap);
+        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment)
+        {
+            var mappedData = MappedData.Value;
+
+            return Comment(comment, mappedData.TypeReplacementMapKeys, mappedData.TypeReplacementMap);
+        }
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
         {
-            var preparedComment = Comment(comment, MappedData.Value.MethodReplacementMapKeys, MappedData.Value.MethodReplacementMap);
+            var mappedData = MappedData.Value;
+
+            var preparedComment = Comment(comment, mappedData.MethodReplacementMapKeys, mappedData.MethodReplacementMap);
 
             var content = preparedComment.Content;
 
@@ -100,7 +107,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return preparedComment;
         }
 
-        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment) => Comment(comment, MappedData.Value.CleanupReplacementMap.Keys, MappedData.Value.CleanupReplacementMap);
+        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment)
+        {
+            var mappedData = MappedData.Value;
+
+            return Comment(comment, mappedData.CleanupReplacementMap.Keys, mappedData.CleanupReplacementMap);
+        }
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start

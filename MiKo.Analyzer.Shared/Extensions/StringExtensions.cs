@@ -390,15 +390,27 @@ namespace System
 
         public static bool Contains(this ReadOnlySpan<char> value, char c) => value.Length > 0 && value.IndexOf(c) >= 0;
 
-        public static bool Contains(this ReadOnlySpan<char> value, string finding)
+        public static bool Contains(this ReadOnlySpan<char> value, ReadOnlySpan<char> finding)
         {
             if (finding.Length > value.Length)
             {
                 return false;
             }
 
-            return value.IndexOf(finding.AsSpan()) >= 0;
+            return value.IndexOf(finding) >= 0;
         }
+
+        public static bool Contains(this ReadOnlySpan<char> value, string finding)
+        {
+            if (finding is null)
+            {
+                return false;
+            }
+
+            return value.Contains(finding.AsSpan());
+        }
+
+//// ncrunch: no coverage start
 
         public static bool Contains(this string value, string finding, StringComparison comparison)
         {
@@ -441,24 +453,15 @@ namespace System
                 }
             }
 
+            if (comparison == StringComparison.Ordinal)
+            {
+                return value.AsSpan().Contains(finding.AsSpan());
+            }
+
             return value.IndexOf(finding, comparison) >= 0;
         }
 
-        public static bool Contains(this ReadOnlySpan<char> value, string finding, StringComparison comparison)
-        {
-            if (finding.Length > value.Length)
-            {
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                    case StringComparison.OrdinalIgnoreCase:
-                        // cannot be contained as the item is longer than the string to search in
-                        return false;
-                }
-            }
-
-            return value.IndexOf(finding.AsSpan(), comparison) >= 0;
-        }
+//// ncrunch: no coverage end
 
         public static bool Contains(this ReadOnlySpan<char> value, string finding, Func<char, bool> nextCharValidationCallback, StringComparison comparison) => value.Contains(finding.AsSpan(), nextCharValidationCallback, comparison);
 
@@ -520,10 +523,47 @@ namespace System
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this string value, IList<string> phrases, StringComparison comparison)
-        {
 //// ncrunch: no coverage start
 
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
+        {
+            if (value.HasCharacters())
+            {
+                var valueSpan = value.AsSpan();
+                var phrasesLength = phrases.Length;
+
+                for (var index = 0; index < phrasesLength; index++)
+                {
+                    var phrase = phrases[index];
+                    var phraseSpan = phrase.AsSpan();
+
+                    if (QuickCompare(valueSpan, phraseSpan, comparison) is false)
+                    {
+                        continue;
+                    }
+
+                    if (comparison == StringComparison.Ordinal)
+                    {
+                        if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (value.Contains(phrase, comparison))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool ContainsAny(this string value, IList<string> phrases, StringComparison comparison)
+        {
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
@@ -534,22 +574,45 @@ namespace System
                 for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
+                    var phraseSpan = phrase.AsSpan();
 
-                    if (QuickCompare(valueSpan, phrase.AsSpan(), comparison) is false)
+                    if (QuickCompare(valueSpan, phraseSpan, comparison) is false)
                     {
                         continue;
                     }
 
-                    if (value.Contains(phrase, comparison))
+                    if (comparison == StringComparison.Ordinal)
                     {
-                        return true;
+                        if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (value.Contains(phrase, comparison))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
 
             return false;
+        }
 
 //// ncrunch: no coverage end
+
+        public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
+        {
+            if (value.Length > 0)
+            {
+                // use 'ToString' here for performance reasons
+                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
+                return value.ToString().ContainsAny(phrases, comparison);
+            }
+
+            return false;
         }
 
         public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases, StringComparison comparison)
@@ -566,9 +629,10 @@ namespace System
 
         public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
         {
-            if (phrases is IList<string> list)
+            switch (phrases)
             {
-                return value.ContainsAny(list, comparison);
+                case string[] array: return value.ContainsAny(array, comparison);
+                case IList<string> list: return value.ContainsAny(list, comparison);
             }
 
             if (value.HasCharacters())
@@ -577,14 +641,26 @@ namespace System
 
                 foreach (var phrase in phrases)
                 {
-                    if (QuickCompare(valueSpan, phrase.AsSpan(), comparison) is false)
+                    var phraseSpan = phrase.AsSpan();
+
+                    if (QuickCompare(valueSpan, phraseSpan, comparison) is false)
                     {
                         continue;
                     }
 
-                    if (value.Contains(phrase, comparison))
+                    if (comparison == StringComparison.Ordinal)
                     {
-                        return true;
+                        if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (value.Contains(phrase, comparison))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -660,10 +736,10 @@ namespace System
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
-        {
 //// ncrunch: no coverage start
 
+        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
+        {
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
@@ -688,9 +764,9 @@ namespace System
             }
 
             return false;
+        }
 
 //// ncrunch: no coverage end
-        }
 
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison)
         {
