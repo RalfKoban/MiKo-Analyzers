@@ -160,8 +160,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var mappedData = MiKo_2060_CodeFixProvider.MappedData.Value;
 
-                        if (text.StartsWithAny(mappedData.TypeReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase))
+                        if (text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysT, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase))
                         {
                             return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                         }

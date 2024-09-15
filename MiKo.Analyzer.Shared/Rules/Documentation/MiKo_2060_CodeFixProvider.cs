@@ -84,7 +84,39 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return Comment(comment, mappedData.TypeReplacementMapKeys, mappedData.TypeReplacementMap);
+            var updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysT, mappedData.TypeReplacementMapT);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysOthers, mappedData.TypeReplacementMapOthers);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysCD, mappedData.TypeReplacementMapCD);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            return comment;
         }
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
@@ -124,19 +156,54 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             public MapData()
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
+                var typeKeysLength = typeKeys.Length;
                 Array.Sort(typeKeys, AscendingStringComparer.Default);
 
-                var typeKeysLength = typeKeys.Length;
-                var typeReplacementMap = new KeyValuePair<string, string>[typeKeysLength];
-                for (var i = 0; i < typeKeysLength; i++)
-                {
-                    var key = typeKeys[i];
+                var typeKeysWithA = new List<string>(76298); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithCD = new List<string>(40477); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithT = new List<string>(94855); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysOther = new List<string>(63372); // TODO RKN: Adjust number as soon as there are other texts
 
-                    typeReplacementMap[i] = new KeyValuePair<string, string>(key, string.Empty);
+                for (var index = 0; index < typeKeysLength; index++)
+                {
+                    var typeKey = typeKeys[index];
+
+                    switch (typeKey[0])
+                    {
+                        case 'A':
+                        case 'a':
+                            typeKeysWithA.Add(typeKey);
+                            break;
+
+                        case 'C':
+                        case 'D':
+                        case 'c':
+                        case 'd':
+                            typeKeysWithCD.Add(typeKey);
+                            break;
+
+                        case 'T':
+                        case 't':
+                            typeKeysWithT.Add(typeKey);
+                            break;
+
+                        default:
+                            typeKeysOther.Add(typeKey);
+                            break;
+                    }
                 }
 
-                TypeReplacementMap = typeReplacementMap;
-                TypeReplacementMapKeys = GetTermsForQuickLookup(typeKeys);
+                TypeReplacementMapA = ToArray(typeKeysWithA);
+                TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysWithA);
+
+                TypeReplacementMapCD = ToArray(typeKeysWithCD);
+                TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysWithCD);
+
+                TypeReplacementMapT = ToArray(typeKeysWithT);
+                TypeReplacementMapKeysT = GetTermsForQuickLookup(typeKeysWithT);
+
+                TypeReplacementMapOthers = ToArray(typeKeysOther);
+                TypeReplacementMapKeysOthers = GetTermsForQuickLookup(typeKeysOther);
 
                 var methodKeys = CreateMethodReplacementMapKeys();
                 var methodKeysLength = methodKeys.Length;
@@ -169,11 +236,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 { " type with that ", " type with default values that " },
                                                 { " type with which ", " type with default values which " },
                                             };
+
+                KeyValuePair<string, string>[] ToArray(IReadOnlyList<string> keys)
+                {
+                    var length = keys.Count;
+                    var pairs = new KeyValuePair<string, string>[length];
+
+                    for (var i = 0; i < length; i++)
+                    {
+                        var key = keys[i];
+
+                        pairs[i] = new KeyValuePair<string, string>(key, string.Empty);
+                    }
+
+                    return pairs;
+                }
             }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap { get; }
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapA { get; }
 
-            public string[] TypeReplacementMapKeys { get; }
+            public string[] TypeReplacementMapKeysA { get; }
+
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapCD { get; }
+
+            public string[] TypeReplacementMapKeysCD { get; }
+
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapT { get; }
+
+            public string[] TypeReplacementMapKeysT { get; }
+
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapOthers { get; }
+
+            public string[] TypeReplacementMapKeysOthers { get; }
 
             public IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap { get; }
 

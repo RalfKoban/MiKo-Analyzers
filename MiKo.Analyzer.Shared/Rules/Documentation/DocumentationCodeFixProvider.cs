@@ -22,7 +22,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
-        protected static string[] GetTermsForQuickLookup(string[] terms)
+        protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
         {
             var orderedTerms = new Queue<string>(terms.Select(_ => _.ToUpperInvariant()).OrderBy(_ => _.Length).ThenBy(_ => _));
 
