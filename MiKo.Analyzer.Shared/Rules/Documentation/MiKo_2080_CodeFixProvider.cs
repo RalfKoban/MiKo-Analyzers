@@ -37,12 +37,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             public MapData()
             {
-                ReplacementMap = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
-                                                           .ThenBy(_ => _)
-                                                           .Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                           .ToArray();
+                var keys = CreateReplacementMapKeys().OrderByDescending(_ => _.Length) // get longest items first as shorter items may be part of the longer ones and would cause problems
+                                                     .ThenBy(_ => _)
+                                                     .ToArray();
 
-                ReplacementMapKeys = GetTermsForQuickLookup(ReplacementMap.Select(_ => _.Key));
+                ReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+
+                ReplacementMapKeys = GetTermsForQuickLookup(keys);
 
                 TypeGuidReplacementMapKeys = new[]
                                                  {

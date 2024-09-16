@@ -13,8 +13,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         public const string Id = "MiKo_2012";
 
-        private const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
-
         public MiKo_2012_MeaninglessSummaryAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
@@ -84,6 +82,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeSummaryPhrases(ISymbol symbol, IEnumerable<string> summaries, IEnumerable<string> phrases)
         {
+            const StringComparison Comparison = StringComparison.OrdinalIgnoreCase;
+
             foreach (var summary in summaries)
             {
                 foreach (var phrase in phrases.Where(_ => summary.StartsWith(_, Comparison)))

@@ -24,23 +24,44 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
         {
-            var hashedTerms = terms.ToHashSet(_ => _.ToUpperInvariant());
-            var orderedTerms = hashedTerms.OrderBy(_ => _.Length).ThenBy(_ => _);
+            var orderedTerms = new Queue<string>(terms.Select(_ => _.ToUpperInvariant()).OrderBy(_ => _.Length).ThenBy(_ => _));
 
-            var result = new List<string>(hashedTerms.Count);
+            var result = new string[orderedTerms.Count];
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var term in orderedTerms)
+            bool found;
+            var resultIndex = 0;
+
+            while (orderedTerms.Count > 0)
             {
-                if (term.StartsWithAny(result, StringComparison.OrdinalIgnoreCase))
+                var term = orderedTerms.Dequeue();
+                var span = term.AsSpan();
+
+                found = false;
+
+                for (var index = 0; index < resultIndex; index++)
+                {
+                    var item = result[index];
+
+                    if (span.StartsWith(item.AsSpan()))
+                    {
+                        found = true;
+
+                        break;
+                    }
+                }
+
+                if (found)
                 {
                     continue;
                 }
 
-                result.Add(term);
+                result[resultIndex] = term;
+                resultIndex++;
             }
 
-            return result.ToArray();
+            Array.Resize(ref result, resultIndex);
+
+            return result;
         }
 
 //// ncrunch: no coverage end

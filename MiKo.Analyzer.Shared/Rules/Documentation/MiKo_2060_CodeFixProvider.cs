@@ -40,7 +40,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                             if (preparedComment == summary)
                             {
-                                preparedComment = Comment(summary, MappedData.Value.InstancesReplacementMapKeys, MappedData.Value.InstancesReplacementMap);
+                                var mappedData = MappedData.Value;
+
+                                preparedComment = Comment(summary, mappedData.InstancesReplacementMapKeys, mappedData.InstancesReplacementMap);
                             }
 
                             return CommentStartingWith(preparedComment, Constants.Comments.FactorySummaryPhrase);
@@ -78,11 +80,50 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
 
-        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment) => Comment(comment, MappedData.Value.TypeReplacementMapKeys, MappedData.Value.TypeReplacementMap);
+        private static XmlElementSyntax PrepareTypeComment(XmlElementSyntax comment)
+        {
+            var mappedData = MappedData.Value;
+
+            var updated = Comment(comment, mappedData.TypeReplacementMapKeysA, mappedData.TypeReplacementMapA);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysT, mappedData.TypeReplacementMapT);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysOthers, mappedData.TypeReplacementMapOthers);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysCD, mappedData.TypeReplacementMapCD);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            return comment;
+        }
 
         private static XmlElementSyntax PrepareMethodComment(XmlElementSyntax comment)
         {
-            var preparedComment = Comment(comment, MappedData.Value.MethodReplacementMapKeys, MappedData.Value.MethodReplacementMap);
+            var mappedData = MappedData.Value;
+
+            var preparedComment = Comment(comment, mappedData.MethodReplacementMapKeys, mappedData.MethodReplacementMap);
 
             var content = preparedComment.Content;
 
@@ -100,7 +141,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return preparedComment;
         }
 
-        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment) => Comment(comment, MappedData.Value.CleanupReplacementMap.Keys, MappedData.Value.CleanupReplacementMap);
+        private static XmlElementSyntax CleanupMethodComment(XmlElementSyntax comment)
+        {
+            var mappedData = MappedData.Value;
+
+            return Comment(comment, mappedData.CleanupReplacementMap.Keys, mappedData.CleanupReplacementMap);
+        }
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
@@ -110,15 +156,76 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             public MapData()
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
-                TypeReplacementMap = typeKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray(_ => _.Key, AscendingStringComparer.Default);
-                TypeReplacementMapKeys = GetTermsForQuickLookup(typeKeys);
+                var typeKeysLength = typeKeys.Length;
+                Array.Sort(typeKeys, AscendingStringComparer.Default);
 
-                var keys = CreateMethodReplacementMapKeys();
-                MethodReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray(_ => _.Key, AscendingStringComparer.Default);
-                MethodReplacementMapKeys = GetTermsForQuickLookup(keys);
+                var typeKeysWithA = new List<string>(76298); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithCD = new List<string>(40477); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithT = new List<string>(94855); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysOther = new List<string>(63372); // TODO RKN: Adjust number as soon as there are other texts
 
-                InstancesReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, "instances of the ")).ToArray(_ => _.Key, AscendingStringComparer.Default);
-                InstancesReplacementMapKeys = GetTermsForQuickLookup(keys);
+                for (var index = 0; index < typeKeysLength; index++)
+                {
+                    var typeKey = typeKeys[index];
+
+                    switch (typeKey[0])
+                    {
+                        case 'A':
+                        case 'a':
+                            typeKeysWithA.Add(typeKey);
+                            break;
+
+                        case 'C':
+                        case 'D':
+                        case 'c':
+                        case 'd':
+                            typeKeysWithCD.Add(typeKey);
+                            break;
+
+                        case 'T':
+                        case 't':
+                            typeKeysWithT.Add(typeKey);
+                            break;
+
+                        default:
+                            typeKeysOther.Add(typeKey);
+                            break;
+                    }
+                }
+
+                TypeReplacementMapA = ToArray(typeKeysWithA);
+                TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysWithA);
+
+                TypeReplacementMapCD = ToArray(typeKeysWithCD);
+                TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysWithCD);
+
+                TypeReplacementMapT = ToArray(typeKeysWithT);
+                TypeReplacementMapKeysT = GetTermsForQuickLookup(typeKeysWithT);
+
+                TypeReplacementMapOthers = ToArray(typeKeysOther);
+                TypeReplacementMapKeysOthers = GetTermsForQuickLookup(typeKeysOther);
+
+                var methodKeys = CreateMethodReplacementMapKeys();
+                var methodKeysLength = methodKeys.Length;
+
+                Array.Sort(methodKeys, AscendingStringComparer.Default);
+
+                var methodReplacementMap = new KeyValuePair<string, string>[methodKeysLength];
+                var instancesReplacementMap = new KeyValuePair<string, string>[methodKeysLength];
+
+                for (var i = 0; i < methodKeysLength; i++)
+                {
+                    var key = methodKeys[i];
+
+                    methodReplacementMap[i] = new KeyValuePair<string, string>(key, string.Empty);
+                    instancesReplacementMap[i] = new KeyValuePair<string, string>(key, "instances of the ");
+                }
+
+                MethodReplacementMap = methodReplacementMap;
+                MethodReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
+
+                InstancesReplacementMap = instancesReplacementMap;
+                InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
 
                 CleanupReplacementMap = new Dictionary<string, string>
                                             {
@@ -129,11 +236,38 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                 { " type with that ", " type with default values that " },
                                                 { " type with which ", " type with default values which " },
                                             };
+
+                KeyValuePair<string, string>[] ToArray(IReadOnlyList<string> keys)
+                {
+                    var length = keys.Count;
+                    var pairs = new KeyValuePair<string, string>[length];
+
+                    for (var i = 0; i < length; i++)
+                    {
+                        var key = keys[i];
+
+                        pairs[i] = new KeyValuePair<string, string>(key, string.Empty);
+                    }
+
+                    return pairs;
+                }
             }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMap { get; }
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapA { get; }
 
-            public string[] TypeReplacementMapKeys { get; }
+            public string[] TypeReplacementMapKeysA { get; }
+
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapCD { get; }
+
+            public string[] TypeReplacementMapKeysCD { get; }
+
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapT { get; }
+
+            public string[] TypeReplacementMapKeysT { get; }
+
+            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapOthers { get; }
+
+            public string[] TypeReplacementMapKeysOthers { get; }
 
             public IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap { get; }
 
@@ -146,7 +280,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             public Dictionary<string, string> CleanupReplacementMap { get; }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
-            private static HashSet<string> CreateTypeReplacementMapKeys()
+            private static string[] CreateTypeReplacementMapKeys()
             {
                 var results = new HashSet<string> // avoid duplicates
                                   {
@@ -304,17 +438,29 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                         "new instances of ",
                                     };
 
-                var continuations = new List<string>();
+                var continuations = new HashSet<string>();
 
                 foreach (var article in articles)
                 {
-                    continuations.AddRange(instances.Select(_ => article + _ + article));
+                    foreach (var instance in instances)
+                    {
+                        continuations.Add(article + instance + article);
+                    }
+
                     continuations.Add(article);
                 }
 
                 continuations.Add(string.Empty);
 
-                foreach (var phrase in phrases.Concat(phrases.Select(_ => _.Replace("actory", "actory class"))))
+                var allPhrases = new HashSet<string>();
+
+                foreach (var phrase in phrases)
+                {
+                    allPhrases.Add(phrase);
+                    allPhrases.Add(phrase.Replace("actory", "actory class"));
+                }
+
+                foreach (var phrase in allPhrases)
                 {
                     foreach (var continuation in continuations)
                     {
@@ -432,11 +578,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
 
-                return results;
+                return results.ToArray();
             }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
-            private static HashSet<string> CreateMethodReplacementMapKeys()
+            private static string[] CreateMethodReplacementMapKeys()
             {
                 var results = new HashSet<string> // avoid duplicates
                                   {
@@ -504,10 +650,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                             " and returns",
                                         };
 
-                foreach (var word in startingWords)
+                var startingWordsLength = startingWords.Length;
+                var continuationsLength = continuations.Length;
+
+                for (var wordIndex = 0; wordIndex < startingWordsLength; wordIndex++)
                 {
-                    foreach (var continuation in continuations)
+                    var word = startingWords[wordIndex];
+
+                    for (var continuationsIndex = 0; continuationsIndex < continuationsLength; continuationsIndex++)
                     {
+                        var continuation = continuations[continuationsIndex];
                         var start = word + continuation;
 
                         results.Add(start + " an new instances of the ");
@@ -557,7 +709,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
-                return results;
+                var resultsArray = new string[results.Count];
+                results.CopyTo(resultsArray);
+
+                return resultsArray;
             }
         }
 //// ncrunch: no coverage end

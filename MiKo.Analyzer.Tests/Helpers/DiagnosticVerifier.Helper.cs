@@ -24,6 +24,7 @@ using NUnit.Framework.Legacy;
 using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
 namespace TestHelper
 {
     /// <summary>

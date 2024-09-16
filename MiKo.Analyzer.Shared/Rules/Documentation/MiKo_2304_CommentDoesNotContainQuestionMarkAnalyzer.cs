@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override bool CommentHasIssue(ReadOnlySpan<char> comment, SemanticModel semanticModel)
         {
-            if (comment.Contains("?") is false)
+            if (comment.Contains('?') is false)
             {
                 return false;
             }
@@ -31,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (ReadOnlySpan<char> word in comment.SplitBy(Constants.WhiteSpaceCharacters))
             {
-                if (word.Contains("?") && word.Contains("://") is false)
+                if (word.Contains('?') && word.Contains("://") is false)
                 {
                     return true;
                 }

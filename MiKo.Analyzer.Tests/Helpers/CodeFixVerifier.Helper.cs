@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Simplification;
 
 //// ncrunch: rdi off
+//// ncrunch: no coverage start
 namespace TestHelper
 {
     /// <summary>

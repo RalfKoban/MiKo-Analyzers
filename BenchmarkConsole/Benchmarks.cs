@@ -5,10 +5,6 @@ using System.Text;
 
 using BenchmarkDotNet.Attributes;
 
-using Microsoft.Extensions.Primitives;
-
-using MiKoSolutions.Analyzers;
-
 namespace BenchmarkConsole
 {
     // see https://adamsitnik.com/the-new-Memory-Diagnoser/
@@ -16,35 +12,26 @@ namespace BenchmarkConsole
     [SimpleJob] // [RyuJitX64Job]
     public class Benchmarks
     {
-        private const string Text = "This is a very long text to test SubString() on types such as string or StringSegment.";
-
-
-        [Params(1, 5, 10, 15, 20, 25, 50)] // , */ 10, 100, 1000)] //, 10000, 100000)]
+        [Params(1, 5, 10, 15, 25)] // , */ 10, 100, 1000)] //, 10000, 100000)]
         public int Times;
 
         // [Benchmark(Baseline = true)]
-        public string StringSubString()
-        {
-            return Text.Substring(5);
-        }
-
-        // [Benchmark]
-        public string StringSegmentSubString()
-        {
-            return new StringSegment(Text).Substring(5);
-        }
-
-        [Benchmark(Baseline = true)]
         public string HumanizedConcatenated_Before()
         {
             return data.HumanizedConcatenated();
         }
 
-        [Benchmark]
+        // [Benchmark]
         public string HumanizedConcatenated_After()
         {
             return HumanizedConcatenatedNew(data);
         }
+
+        // [Benchmark(Baseline = true)]
+        // public void MiKo_2060_Original()
+        // {
+        //     GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2060_CodeFixProvider.MapData());
+        // }
 
         private IEnumerable<string> data;
 
@@ -120,6 +107,5 @@ namespace BenchmarkConsole
                 }
             }
         }
-
     }
 }
