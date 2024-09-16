@@ -37,15 +37,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] Conditionals = { "if", "when", "in case", "whether or not", "whether" };
         private static readonly string[] ElseConditionals = { "else", "otherwise" };
 
-        private static readonly string[] ArticleStartingOrders =
-                                                                 {
-                                                                     StartWithArticleA,
-                                                                     StartWithArticleAn,
-                                                                     StartWithArticleThe,
-                                                                     StartWithArticleA.ToLowerCaseAt(0),
-                                                                     StartWithArticleAn.ToLowerCaseAt(0),
-                                                                     StartWithArticleThe.ToLowerCaseAt(0),
-                                                                 };
+        private static readonly IComparer<string> ArticleStartComparer = new StringStartComparer(
+                                                                                             StartWithArticleA,
+                                                                                             StartWithArticleAn,
+                                                                                             StartWithArticleThe,
+                                                                                             StartWithArticleA.ToLowerCaseAt(0),
+                                                                                             StartWithArticleAn.ToLowerCaseAt(0),
+                                                                                             StartWithArticleThe.ToLowerCaseAt(0));
 
         private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", "; otherwise");
 
@@ -132,7 +130,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 case 0:
                     return FixEmptyComment(comment.WithContent(XmlText(string.Empty)));
 
-                case 1 when contents.First() is XmlTextSyntax t:
+                case 1 when contents[0] is XmlTextSyntax t:
                 {
                     var text = t.GetTextWithoutTrivia();
 
@@ -221,7 +219,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var commentContinuation = new StringBuilder();
 
             // be aware of a gerund verb
-            if (Verbalizer.IsGerundVerb(subText.FirstWord().ToString()) || replacement == ReplacementTo)
+            if (replacement == ReplacementTo || Verbalizer.IsGerundVerb(subText.FirstWord()))
             {
                 commentContinuation.Append(ReplacementTo);
 
@@ -420,13 +418,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacementMapKeysForAHashSet = replacementMapKeysForA.ToHashSet();
                 var replacementMapKeysForAnHashSet = replacementMapKeysForAn.ToHashSet();
                 var replacementMapKeysForTheHashSet = replacementMapKeysForThe.ToHashSet();
-
-                var replacementMapKeysForOthers = replacementMapKeys.Except(replacementMapKeysForAHashSet)
-                                                                    .Except(replacementMapKeysForAnHashSet)
-                                                                    .Except(replacementMapKeysForTheHashSet)
-                                                                    .Concat(replacementMapKeysCommon)
-                                                                    .ToArray();
-                var replacementMapKeysForOthersHashSet = replacementMapKeysForOthers.ToHashSet();
+                var replacementMapKeysForOthersHashSet = replacementMapKeysCommon.ToHashSet();
+                replacementMapKeysForOthersHashSet.AddRange(replacementMapKeys.Except(replacementMapKeysForAHashSet)
+                                                                              .Except(replacementMapKeysForAnHashSet)
+                                                                              .Except(replacementMapKeysForTheHashSet));
 
                 ReplacementMapForA = ToMapArray(replacementMap, replacementMapKeysForAHashSet, replacementMapCommon);
                 ReplacementMapForAn = ToMapArray(replacementMap, replacementMapKeysForAnHashSet, replacementMapCommon);
@@ -436,7 +431,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 ReplacementMapKeysInUpperCaseForA = ToUpper(replacementMapKeysForA);
                 ReplacementMapKeysInUpperCaseForAn = ToUpper(replacementMapKeysForAn);
                 ReplacementMapKeysInUpperCaseForThe = ToUpper(replacementMapKeysForThe);
-                ReplacementMapKeysInUpperCaseForOthers = ToUpper(replacementMapKeysForOthers);
+                ReplacementMapKeysInUpperCaseForOthers = ToUpper(replacementMapKeysForOthersHashSet);
 
                 // now set keys here at the end as we want these keys sorted based on string contents (and only contain the smallest sub-sequences)
                 ReplacementMapKeysForA = GetTermsForQuickLookup(ReplacementMapKeysInUpperCaseForA);
@@ -446,11 +441,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.OrdinalIgnoreCase)).ToArray();
 
-                KeyValuePair<string, string>[] ToMapArray(IReadOnlyList<KeyValuePair<string, string>> map, HashSet<string> keys, KeyValuePair<string, string>[] others)
+                KeyValuePair<string, string>[] ToMapArray(KeyValuePair<string, string>[] map, HashSet<string> keys, KeyValuePair<string, string>[] others)
                 {
-                    var known = new List<KeyValuePair<string, string>>(keys.Count);
+                    var results = new KeyValuePair<string, string>[keys.Count + others.Length];
+                    var resultIndex = 0;
 
-                    var count = map.Count;
+                    var count = map.Length;
 
                     for (var index = 0; index < count; index++)
                     {
@@ -458,13 +454,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         if (keys.Contains(key.Key))
                         {
-                            known.Add(key);
+                            results[resultIndex++] = key;
                         }
                     }
 
-                    var results = new KeyValuePair<string, string>[known.Count + others.Length];
-                    known.CopyTo(results);
-                    others.CopyTo(results, known.Count);
+                    others.CopyTo(results, resultIndex);
+
+                    Array.Resize(ref results, resultIndex + others.Length);
 
                     return results;
                 }
@@ -498,22 +494,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             private static KeyValuePair<string, string>[] CreateReplacementMap()
             {
-                var comparer = new StringStartComparer(ArticleStartingOrders);
-
                 var startTerms = CreateStartTerms();
 
-                var texts = new List<string>(startTerms.Count);
-                texts.AddRange(startTerms.OrderBy(_ => _, comparer).ThenByDescending(_ => _.Length).ThenBy(_ => _));
-
-                var textsCount = texts.Count;
+                var textsCount = startTerms.Count;
 
                 var replacements = new KeyValuePair<string, string>[textsCount];
+                var index = 0;
 
-                for (var index = 0; index < textsCount; index++)
+                foreach (var text in startTerms.OrderBy(_ => _, ArticleStartComparer).ThenByDescending(_ => _.Length).ThenBy(_ => _))
                 {
-                    var text = texts[index];
-
-                    replacements[index] = new KeyValuePair<string, string>(text, Replacement);
+                    replacements[index++] = new KeyValuePair<string, string>(text, Replacement);
                 }
 
                 return replacements;
@@ -674,7 +664,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             private readonly string[] m_specialOrder;
 
-            internal StringStartComparer(string[] specialOrder) => m_specialOrder = specialOrder;
+            internal StringStartComparer(params string[] specialOrder) => m_specialOrder = specialOrder;
 
             public int Compare(string x, string y)
             {
@@ -683,7 +673,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (notNullX && notNullY)
                 {
-                    return CompareOrder(x, y);
+                    return GetOrder(x) - GetOrder(y);
                 }
 
                 if (notNullX)
@@ -699,17 +689,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return 0;
             }
 
-            private int CompareOrder(string x, string y)
-            {
-                var orderX = GetOrder(x);
-                var orderY = GetOrder(y);
-
-                return orderX - orderY;
-            }
-
             private int GetOrder(string text)
             {
-                for (var i = 0; i < m_specialOrder.Length; i++)
+                var length = m_specialOrder.Length;
+
+                for (var i = 0; i < length; i++)
                 {
                     var order = m_specialOrder[i];
 

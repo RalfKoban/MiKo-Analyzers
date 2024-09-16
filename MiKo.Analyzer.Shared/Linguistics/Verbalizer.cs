@@ -251,13 +251,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        public static bool IsGerundVerb(string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                return false;
-            }
+        public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
+        public static bool IsGerundVerb(ReadOnlySpan<char> value)
+        {
             if (value.Length <= 4)
             {
                 return false;
