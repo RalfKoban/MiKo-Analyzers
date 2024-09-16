@@ -2749,11 +2749,12 @@ namespace MiKoSolutions.Analyzers
             var oldModifiers = value.Modifiers;
 
             var newModifiers = modifiers.ToTokenList();
+            var modifier = newModifiers[0];
 
             if (oldModifiers.Count > 0)
             {
                 // keep comments
-                newModifiers = newModifiers.Replace(newModifiers[0], newModifiers[0].WithTriviaFrom(oldModifiers[0]));
+                newModifiers = newModifiers.Replace(modifier, modifier.WithTriviaFrom(oldModifiers[0]));
 
                 return value.WithModifiers(newModifiers);
             }
@@ -2762,7 +2763,7 @@ namespace MiKoSolutions.Analyzers
             var type = declaration.Type;
 
             // keep comments
-            newModifiers = newModifiers.Replace(newModifiers[0], newModifiers[0].WithLeadingTriviaFrom(type));
+            newModifiers = newModifiers.Replace(modifier, modifier.WithLeadingTriviaFrom(type));
 
             return value.WithModifiers(newModifiers)
                         .WithDeclaration(declaration.WithType(type.WithLeadingSpace()));
