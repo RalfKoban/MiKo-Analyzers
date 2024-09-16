@@ -66,9 +66,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static List<string> Phrases(string[] phrases, string typeName, string eventName)
         {
+            var eventFullName = typeName + "." + eventName;
+
             var results = new List<string>(2 * phrases.Length);
             results.AddRange(phrases.Select(_ => _.FormatWith(eventName))); // output as message to user
-            results.AddRange(phrases.Select(_ => _.FormatWith(typeName + "." + eventName)));
+            results.AddRange(phrases.Select(_ => _.FormatWith(eventFullName)));
 
             return results;
         }

@@ -39,11 +39,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var type = method.Parameters[1].Type;
             var typeName = type.Name;
+            var typeString = type.ToString();
 
             var defaultStart = GetDefaultStartingPhrase(typeName);
 
-            var variantWithSpace = string.Concat(defaultStart, "<see cref=\"", type, "\" />" + DefaultEnding);
-            var variantWithoutSpace = string.Concat(defaultStart, "<see cref=\"", type, "\"/>" + DefaultEnding);
+            var variantWithSpace = string.Concat(defaultStart, "<see cref=\"", typeString, "\" />" + DefaultEnding);
+            var variantWithoutSpace = string.Concat(defaultStart, "<see cref=\"", typeString, "\"/>" + DefaultEnding);
 
             return new[]
                    {

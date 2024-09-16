@@ -73,9 +73,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static List<string> Phrases(string[] phrases, string typeName, string propertyName)
         {
+            var propertyFullName = typeName + "." + propertyName;
+
             var results = new List<string>(2 * phrases.Length);
             results.AddRange(phrases.Select(_ => _.FormatWith(propertyName))); // output as message to user
-            results.AddRange(phrases.Select(_ => _.FormatWith(typeName + "." + propertyName)));
+            results.AddRange(phrases.Select(_ => _.FormatWith(propertyFullName)));
 
             return results;
         }

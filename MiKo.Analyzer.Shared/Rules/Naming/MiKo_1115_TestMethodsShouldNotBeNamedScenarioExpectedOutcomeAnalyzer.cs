@@ -96,10 +96,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool HasIssue(string methodName)
         {
-            var parts = methodName.SplitBy(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
+            var parts = methodName.Split(Constants.Underscores, StringSplitOptions.RemoveEmptyEntries);
             var first = true;
 
-            foreach (ReadOnlySpan<char> part in parts)
+            foreach (var part in parts)
             {
                 if (part[0].IsUpperCase() is false)
                 {

@@ -394,6 +394,23 @@ namespace System
             return new string(chars);
         }
 
+        public static string ConcatenatedWith(this char value, string arg0, char arg1)
+        {
+            var length = arg0?.Length ?? 0;
+
+            var chars = new char[length + 2];
+
+            if (length > 0)
+            {
+                arg0.CopyTo(0, chars, 1, length);
+            }
+
+            chars[0] = value;
+            chars[length + 1] = arg1;
+
+            return new string(chars);
+        }
+
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
 
         public static bool Contains(this ReadOnlySpan<char> value, char c) => value.Length > 0 && value.IndexOf(c) >= 0;
@@ -523,11 +540,7 @@ namespace System
 
         public static bool ContainsAny(this string value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
-
         public static bool ContainsAny(this string value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
 
@@ -609,30 +622,6 @@ namespace System
 
 //// ncrunch: no coverage end
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
-        {
-            if (value.Length > 0)
-            {
-                // use 'ToString' here for performance reasons
-                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
-                return value.ToString().ContainsAny(phrases, comparison);
-            }
-
-            return false;
-        }
-
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IList<string> phrases, StringComparison comparison)
-        {
-            if (value.Length > 0)
-            {
-                // use 'ToString' here for performance reasons
-                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
-                return value.ToString().ContainsAny(phrases, comparison);
-            }
-
-            return false;
-        }
-
         public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
         {
             switch (phrases)
@@ -669,18 +658,6 @@ namespace System
                         }
                     }
                 }
-            }
-
-            return false;
-        }
-
-        public static bool ContainsAny(this ReadOnlySpan<char> value, IEnumerable<string> phrases, StringComparison comparison)
-        {
-            if (value.Length > 0)
-            {
-                // use 'ToString' here for performance reasons
-                // because 'IndexOf' on 'ReadOnlySpan<char>' converts the text into a string anyway
-                return value.ToString().ContainsAny(phrases, comparison);
             }
 
             return false;
@@ -1073,16 +1050,18 @@ namespace System
 
         public static bool HasEntityMarker(this ReadOnlySpan<char> value)
         {
-            var hasMarker = value.ContainsAny(Constants.Markers.Models);
+            var s = value.ToString();
+
+            var hasMarker = s.ContainsAny(Constants.Markers.Models);
 
             if (hasMarker)
             {
-                if (value.ContainsAny(Constants.Markers.ViewModels))
+                if (s.ContainsAny(Constants.Markers.ViewModels))
                 {
                     return false;
                 }
 
-                if (value.ContainsAny(Constants.Markers.SpecialModels))
+                if (s.ContainsAny(Constants.Markers.SpecialModels))
                 {
                     return false;
                 }
@@ -1130,7 +1109,7 @@ namespace System
 
             const string Separator = ", ";
 
-            var separatorForLast = " " + lastSeparator + " ";
+            var separatorForLast = ' '.ConcatenatedWith(lastSeparator, ' ');
 
             switch (count)
             {
@@ -1423,8 +1402,6 @@ namespace System
                 var valueSpan = value.AsSpan();
                 var prefixesCount = prefixes.Count;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixesCount; index++)
                 {
                     var prefix = prefixes[index];
@@ -1448,8 +1425,6 @@ namespace System
             {
                 var prefixesLength = prefixes.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixesLength; index++)
                 {
                     var prefix = prefixes[index];
@@ -1470,8 +1445,6 @@ namespace System
             {
                 var prefixesLength = prefixes.Count;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < prefixesLength; index++)
                 {
                     var prefix = prefixes[index];
@@ -1695,18 +1668,21 @@ namespace System
         /// </returns>
         public static string[] WithDelimiters(this string[] values)
         {
-            var result = new List<string>();
+            var delimiters = Constants.Comments.Delimiters;
+            var result = new string[2 * delimiters.Length * values.Length];
 
-            foreach (var delimiter in Constants.Comments.Delimiters)
+            var resultIndex = 0;
+
+            foreach (var delimiter in delimiters)
             {
-                foreach (var phrase in values)
+                foreach (var value in values)
                 {
-                    result.Add(' ' + phrase + delimiter);
-                    result.Add('(' + phrase + delimiter);
+                    result[resultIndex++] = ' '.ConcatenatedWith(value, delimiter);
+                    result[resultIndex++] = '('.ConcatenatedWith(value, delimiter);
                 }
             }
 
-            return result.ToArray();
+            return result;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1744,8 +1720,9 @@ namespace System
         {
             var text = value.TrimStart();
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < words.Length; index++)
+            var wordsLength = words.Length;
+
+            for (var index = 0; index < wordsLength; index++)
             {
                 var word = words[index];
 

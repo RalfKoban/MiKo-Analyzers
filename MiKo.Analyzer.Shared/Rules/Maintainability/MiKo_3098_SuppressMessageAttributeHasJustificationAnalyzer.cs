@@ -36,7 +36,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return true; // justification is too short
             }
 
-            if (text.ContainsAny(BadJustificationMarkers, StringComparison.OrdinalIgnoreCase))
+            if (text.ToString().ContainsAny(BadJustificationMarkers, StringComparison.OrdinalIgnoreCase))
             {
                 return true; // no justification that explains
             }
