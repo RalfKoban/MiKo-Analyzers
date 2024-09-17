@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected override IEnumerable<Diagnostic> AnalyzeParameter(IParameterSymbol parameter, XmlElementSyntax parameterComment, string comment)
         {
-            if (parameterComment.GetTextTrimmed().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
+            if (parameterComment.GetTextTrimmed().ToString().ContainsAny(Phrases, StringComparison.OrdinalIgnoreCase))
             {
                 // seems like there is a default parameter mentioned
                 return Enumerable.Empty<Diagnostic>();

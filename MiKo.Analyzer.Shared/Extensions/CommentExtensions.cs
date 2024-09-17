@@ -127,8 +127,6 @@ namespace MiKoSolutions.Analyzers
             return Cleaned(element.Nodes().ConcatenatedWith());
         }
 
-        internal static IEnumerable<string> Cleaned(params XElement[] elements) => Cleaned((IEnumerable<XElement>)elements);
-
         private static IEnumerable<string> Cleaned(IEnumerable<XElement> elements)
         {
             foreach (var e in elements)

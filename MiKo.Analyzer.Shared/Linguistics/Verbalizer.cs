@@ -251,13 +251,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        public static bool IsGerundVerb(string value)
-        {
-            if (value.IsNullOrWhiteSpace())
-            {
-                return false;
-            }
+        public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
+        public static bool IsGerundVerb(ReadOnlySpan<char> value)
+        {
             if (value.Length <= 4)
             {
                 return false;
@@ -454,7 +451,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 {
                     if (word.EndsWith("ay", StringComparison.Ordinal) || word.EndsWith("ey", StringComparison.Ordinal))
                     {
-                        return word + 's';
+                        return word.AsSpan().ConcatenatedWith('s');
                     }
 
                     return word.AsSpan(0, word.Length - 1).ConcatenatedWith("ies");
@@ -525,7 +522,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
                 if (word.EndsWith("eed", StringComparison.Ordinal))
                 {
-                    return word + 's';
+                    return word.AsSpan().ConcatenatedWith('s');
                 }
 
                 if (word.EndsWithAny(PastEndings, StringComparison.Ordinal))
@@ -551,7 +548,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             string AppendEndingS(string word)
             {
-                var result = word + 's';
+                var result = word.AsSpan().ConcatenatedWith('s');
 
                 if (IsTwoCharacterEndingsWithS(result))
                 {
@@ -571,31 +568,33 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            var word = value.AsSpan();
+            var span = value.AsSpan();
 
-            if (HasAcceptableStartingPhrase(word))
+            if (HasAcceptableStartingPhrase(span))
             {
                 return false;
             }
 
-            if (HasAcceptableMiddlePhrase(word))
+            if (HasAcceptableMiddlePhrase(value))
             {
                 return false;
             }
 
-            if (HasAcceptableEndingPhrase(word))
+            if (HasAcceptableEndingPhrase(span))
             {
                 return false;
             }
 
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < Endings.Length; index++)
+            var length = Endings.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var pair = Endings[index];
+                var key = pair.Key;
 
-                if (word.EndsWith(pair.Key, StringComparison.Ordinal))
+                if (span.EndsWith(key, StringComparison.Ordinal))
                 {
-                    result = word.Slice(0, word.Length - pair.Key.Length).ConcatenatedWith(pair.Value);
+                    result = span.Slice(0, span.Length - key.Length).ConcatenatedWith(pair.Value);
 
                     return result.Equals(value, StringComparison.Ordinal) is false;
                 }
@@ -606,8 +605,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static bool HasAcceptableStartingPhrase(ReadOnlySpan<char> value)
         {
-            // ReSharper disable once ForCanBeConvertedToForeach
-            for (var index = 0; index < StartingPhrases.Length; index++)
+            var length = StartingPhrases.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 var phrase = StartingPhrases[index];
 
@@ -622,7 +622,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return false;
         }
 
-        private static bool HasAcceptableMiddlePhrase(ReadOnlySpan<char> value) => value.ContainsAny(MiddlePhrases);
+        private static bool HasAcceptableMiddlePhrase(string value) => value.ContainsAny(MiddlePhrases);
 
         private static bool HasAcceptableEndingPhrase(ReadOnlySpan<char> value) => value.EndsWithAny(EndingPhrases);
     }

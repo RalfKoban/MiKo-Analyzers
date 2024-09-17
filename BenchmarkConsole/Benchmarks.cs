@@ -12,7 +12,7 @@ namespace BenchmarkConsole
     [SimpleJob] // [RyuJitX64Job]
     public class Benchmarks
     {
-        [Params(1, 5, 10, 15, 25)] // , */ 10, 100, 1000)] //, 10000, 100000)]
+        [Params(1, 5, 10, 15, 20)] // , */ 10, 100, 1000)] //, 10000, 100000)]
         public int Times;
 
         // [Benchmark(Baseline = true)]
@@ -28,10 +28,19 @@ namespace BenchmarkConsole
         }
 
         // [Benchmark(Baseline = true)]
-        // public void MiKo_2060_Original()
-        // {
-        //     GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2060_CodeFixProvider.MapData());
-        // }
+        // public void MiKo_2023_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2023_CodeFixProvider.MapData());
+
+        //[Benchmark(Baseline = true)]
+        // [Benchmark]
+        // public void MiKo_2035_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2035_CodeFixProvider.MapData());
+
+        //[Benchmark(Baseline = true)]
+        // [Benchmark]
+        // public void MiKo_2060_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2060_CodeFixProvider.MapData());
+
+        //[Benchmark(Baseline = true)]
+        // [Benchmark]
+        // public void MiKo_2080_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2080_CodeFixProvider.MapData());
 
         private IEnumerable<string> data;
 

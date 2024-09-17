@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
         }
 
-        internal static bool CommentContainsSeparator(ReadOnlySpan<char> comment) => comment.ContainsAny(Separators);
+        internal static bool CommentContainsSeparator(ReadOnlySpan<char> comment) => comment.ToString().ContainsAny(Separators);
 
         protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeComment, SyntaxKind.CompilationUnit);
 

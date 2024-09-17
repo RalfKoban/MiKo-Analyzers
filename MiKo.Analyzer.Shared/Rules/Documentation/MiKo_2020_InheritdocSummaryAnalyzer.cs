@@ -68,7 +68,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                 var words = text.WordsAsSpan();
 
                                 if (words.First().Text.StartsWithAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase)
-                                 || words.Last().Text.ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
+                                 || words.Last().Text.ToString().ContainsAny(InheritMarkerTexts, StringComparison.OrdinalIgnoreCase))
                                 {
                                     yield return Issue(xmlTag);
                                 }

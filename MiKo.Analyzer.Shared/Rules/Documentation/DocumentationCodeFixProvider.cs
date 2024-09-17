@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
         {
-            var orderedTerms = new Queue<string>(terms.Select(_ => _.ToUpperInvariant()).OrderBy(_ => _.Length).ThenBy(_ => _));
+            var orderedTerms = new Queue<string>(terms.OrderBy(_ => _.Length).ThenBy(_ => _));
 
             var result = new string[orderedTerms.Count];
 
@@ -785,7 +785,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         var dotPos = valueText.IndexOf('.') + 1;
 
                         var firstText = valueText.AsSpan(0, dotPos);
-                        var lastText = valueText.AsSpan(dotPos).TrimStart().ToString();
+                        var lastText = valueText.AsSpan(dotPos).TrimStart();
 
                         tokensBeforeDot.Add(token.WithText(firstText));
 

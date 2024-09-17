@@ -171,11 +171,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (argument.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.StringLiteralExpression))
             {
-                var formatMessage = literal.Token.ValueText.AsSpan();
+                var formatMessage = literal.Token.ValueText;
 
                 if (formatMessage.ContainsAny(FormatIdentifiers))
                 {
-                    return Argument(ConvertToInterpolatedString(formatMessage, otherArguments));
+                    return Argument(ConvertToInterpolatedString(formatMessage.AsSpan(), otherArguments));
                 }
             }
 
