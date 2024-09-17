@@ -442,43 +442,40 @@ namespace System
 
             var difference = findingLength - valueLength;
 
-            if (difference >= 0)
+            if (difference < 0)
             {
-                if (difference == 0)
-                {
-                    return QuickEquals();
+                return value.IndexOf(finding, comparison) >= 0;
+            }
 
-                    bool QuickEquals()
+            if (difference == 0)
+            {
+                return QuickEquals();
+
+                bool QuickEquals()
+                {
+                    const int QuickInspectionChars = 2;
+
+                    if (valueLength > QuickInspectionChars)
                     {
-                        const int QuickInspectionChars = 2;
+                        var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
+                        var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
 
-                        if (valueLength > QuickInspectionChars)
+                        if (valueSpan.CompareTo(findingSpan, comparison) != 0)
                         {
-                            var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
-                            var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
-
-                            if (valueSpan.CompareTo(findingSpan, comparison) != 0)
-                            {
-                                return false;
-                            }
+                            return false;
                         }
-
-                        return value.Equals(finding, comparison);
                     }
-                }
 
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                    case StringComparison.OrdinalIgnoreCase:
-                        // cannot be contained as the item is longer than the string to search in
-                        return false;
+                    return value.Equals(finding, comparison);
                 }
             }
 
-            if (comparison == StringComparison.Ordinal)
+            switch (comparison)
             {
-                return value.AsSpan().Contains(finding.AsSpan());
+                case StringComparison.Ordinal:
+                case StringComparison.OrdinalIgnoreCase:
+                    // cannot be contained as the item is longer than the string to search in
+                    return false;
             }
 
             return value.IndexOf(finding, comparison) >= 0;
@@ -556,23 +553,24 @@ namespace System
                     var phrase = phrases[index];
                     var phraseSpan = phrase.AsSpan();
 
-                    if (QuickCompare(valueSpan, phraseSpan, comparison) is false)
-                    {
-                        continue;
-                    }
-
                     if (comparison == StringComparison.Ordinal)
                     {
-                        if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                        if (QuickCompare(valueSpan, phraseSpan, StringComparison.Ordinal))
                         {
-                            return true;
+                            if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                            {
+                                return true;
+                            }
                         }
                     }
                     else
                     {
-                        if (value.Contains(phrase, comparison))
+                        if (QuickCompare(valueSpan, phraseSpan, comparison))
                         {
-                            return true;
+                            if (value.Contains(phrase, comparison))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -1071,7 +1069,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false;
+        public static bool HasCharacters(this string value) => value?.Length > 0;
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 

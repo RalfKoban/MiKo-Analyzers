@@ -173,7 +173,7 @@ namespace System.Text
                     continue;
                 }
 
-                if (QuickCompare(value, oldValue))
+                if (QuickCompare(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, pair.Value);
@@ -199,7 +199,7 @@ namespace System.Text
                     continue;
                 }
 
-                if (QuickCompare(value, oldValue))
+                if (QuickCompare(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, pair.Value);
@@ -224,7 +224,7 @@ namespace System.Text
                     continue;
                 }
 
-                if (QuickCompare(value, oldValue))
+                if (QuickCompare(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, replacement);
@@ -242,7 +242,7 @@ namespace System.Text
                 return value;
             }
 
-            if (QuickCompare(value, oldValue))
+            if (QuickCompare(ref value, ref oldValue))
             {
                 return value.Replace(oldValue, newValue);
             }
@@ -342,7 +342,7 @@ namespace System.Text
             return value.ToString(0, length - end);
         }
 
-        private static bool QuickCompare(StringBuilder current, string other)
+        private static bool QuickCompare(ref StringBuilder current, ref string other)
         {
             var otherValueLength = other.Length;
             var currentValueLength = current.Length;
@@ -376,14 +376,14 @@ namespace System.Text
                 var otherLast = other[lastIndex];
 
                 // could be part in the replacement only if characters match
-                return QuickCompareAtIndices(current, otherFirst, lastIndex, otherLast, difference);
+                return QuickCompareAtIndices(ref current, ref otherFirst, ref lastIndex, ref otherLast, ref difference);
             }
 
             // can be part in the replacement as other value is smaller and could fit current value
             return true;
         }
 
-        private static bool QuickCompareAtIndices(StringBuilder current, char first, int lastIndex, char last, int count)
+        private static bool QuickCompareAtIndices(ref StringBuilder current, ref char first, ref int lastIndex, ref char last, ref int count)
         {
             // include count as value
             for (var i = 0; i <= count; i++)
