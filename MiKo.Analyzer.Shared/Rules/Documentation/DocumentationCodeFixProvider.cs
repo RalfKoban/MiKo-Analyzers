@@ -107,14 +107,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, XmlText(text + additionalComment));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, ReadOnlySpan<string> terms, ReadOnlySpan<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, ReadOnlySpan<string> terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, ReadOnlySpan<string> terms, ReadOnlySpan<KeyValuePair<string, string>> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, ReadOnlySpan<string> terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinLength(terms);
 
@@ -150,7 +150,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return minimum;
             }
 
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, ReadOnlySpan<string> phrases, ReadOnlySpan<KeyValuePair<string, string>> map)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, ReadOnlySpan<string> phrases, ReadOnlySpan<Pair> map)
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 

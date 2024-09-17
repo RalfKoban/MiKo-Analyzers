@@ -211,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.Select(_ => _.Identifier).ToArray());
+            var issues = AnalyzeIdentifiers(semanticModel, type, node.Declaration.Variables.ToArray(_ => _.Identifier));
 
             ReportDiagnostics(context, issues);
         }
@@ -269,7 +269,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 return;
             }
 
-            var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.Select(_ => _.Identifier).ToArray());
+            var issues = AnalyzeIdentifiers(semanticModel, type, variableDeclaration.Variables.ToArray(_ => _.Identifier));
 
             ReportDiagnostics(context, issues);
         }

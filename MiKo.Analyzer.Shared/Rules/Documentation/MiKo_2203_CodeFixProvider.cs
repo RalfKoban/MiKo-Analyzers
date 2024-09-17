@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap().ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
 //// ncrunch: rdi default
 
@@ -26,22 +25,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static Dictionary<string, string> CreateReplacementMap()
+        private static Pair[] CreateReplacementMap()
         {
-            var dictionary = new Dictionary<string, string>();
+            var terms = Constants.Comments.GuidTermsWithDelimiters;
+            var result = new Pair[2 * terms.Length];
+            var resultIndex = 0;
 
-            foreach (var term in Constants.Comments.GuidTermsWithDelimiters)
+            foreach (var term in terms)
             {
                 var termWithA = "A " + term.TrimStart();
 
                 var replacement = term.ToUpperInvariant().Replace("GUID", "unique identifier");
                 var replacementWithA = "An " + replacement.TrimStart();
 
-                dictionary.Add(termWithA, replacementWithA);
-                dictionary.Add(term, replacement);
+                result[resultIndex++] = new Pair(termWithA, replacementWithA);
+                result[resultIndex++] = new Pair(term, replacement);
             }
 
-            return dictionary;
+            return result;
         }
 
 //// ncrunch: rdi default

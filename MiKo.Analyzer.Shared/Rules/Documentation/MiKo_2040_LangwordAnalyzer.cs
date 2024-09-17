@@ -18,11 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Phrases = Constants.Comments.LangwordReferences;
 
-        private static readonly KeyValuePair<string, string>[] StartParts = CreateStartParts();
+        private static readonly Pair[] StartParts = CreateStartParts();
 
-        private static readonly KeyValuePair<string, string>[] MiddleParts = CreateMiddleParts();
+        private static readonly Pair[] MiddleParts = CreateMiddleParts();
 
-        private static readonly KeyValuePair<string, string>[] EndParts = CreateEndParts();
+        private static readonly Pair[] EndParts = CreateEndParts();
 
         public MiKo_2040_LangwordAnalyzer() : base(Id)
         {
@@ -36,61 +36,65 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
-        private static KeyValuePair<string, string>[] CreateStartParts()
+        private static Pair[] CreateStartParts()
         {
-            var results = new Dictionary<string, string>();
+            var results = new List<Pair>(6 * Phrases.Length);
 
             foreach (var phrase in Phrases)
             {
                 var proposal = Proposal(phrase);
 
-                results.Add(phrase + ".", proposal + ".");
-                results.Add(phrase + "?", proposal + "?");
-                results.Add(phrase + "!", proposal + "!");
-                results.Add(phrase + ",", proposal + ",");
-                results.Add(phrase + ";", proposal + ";");
-                results.Add(phrase + ":", proposal + ":");
+                results.Add(new Pair(phrase + ".", proposal + "."));
+                results.Add(new Pair(phrase + "?", proposal + "?"));
+                results.Add(new Pair(phrase + "!", proposal + "!"));
+                results.Add(new Pair(phrase + ",", proposal + ","));
+                results.Add(new Pair(phrase + ";", proposal + ";"));
+                results.Add(new Pair(phrase + ":", proposal + ":"));
             }
 
             return results.ToArray();
         }
 
-        private static KeyValuePair<string, string>[] CreateMiddleParts()
+        private static Pair[] CreateMiddleParts()
         {
-            var results = new Dictionary<string, string>();
+            var results = new List<Pair>(11 * Phrases.Length);
 
             foreach (var phrase in Phrases)
             {
                 var proposal = Proposal(phrase);
 
-                results.Add("(" + phrase + " ", "(" + proposal + " ");
-                results.Add("(" + phrase + ")", "(" + proposal + ")");
-                results.Add(" " + phrase + ")", " " + proposal + ")");
-                results.Add(" " + phrase + " ", " " + proposal + " ");
-                results.Add(" " + phrase + ".", " " + proposal + ".");
-                results.Add(" " + phrase + "?", " " + proposal + "?");
-                results.Add(" " + phrase + "!", " " + proposal + "!");
-                results.Add(" " + phrase + ",", " " + proposal + ",");
-                results.Add(" " + phrase + ";", " " + proposal + ";");
-                results.Add(" " + phrase + ":", " " + proposal + ":");
-                results.Add("'" + phrase + "'", proposal);
+                results.Add(new Pair("(" + phrase + " ", "(" + proposal + " "));
+                results.Add(new Pair("(" + phrase + ")", "(" + proposal + ")"));
+                results.Add(new Pair(" " + phrase + ")", " " + proposal + ")"));
+                results.Add(new Pair(" " + phrase + " ", " " + proposal + " "));
+                results.Add(new Pair(" " + phrase + ".", " " + proposal + "."));
+                results.Add(new Pair(" " + phrase + "?", " " + proposal + "?"));
+                results.Add(new Pair(" " + phrase + "!", " " + proposal + "!"));
+                results.Add(new Pair(" " + phrase + ",", " " + proposal + ","));
+                results.Add(new Pair(" " + phrase + ";", " " + proposal + ";"));
+                results.Add(new Pair(" " + phrase + ":", " " + proposal + ":"));
+                results.Add(new Pair("'" + phrase + "'", proposal));
             }
 
             return results.ToArray();
         }
 
-        private static KeyValuePair<string, string>[] CreateEndParts()
+        private static Pair[] CreateEndParts()
         {
-            var results = new Dictionary<string, string>();
+            var length = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new Pair[length];
+
+            for (var i = 0; i < length; i++)
             {
+                var phrase = Phrases[i];
+
                 var proposal = Proposal(phrase);
 
-                results.Add(" " + phrase, " " + proposal);
+                results[i] = new Pair(" " + phrase, " " + proposal);
             }
 
-            return results.ToArray();
+            return results;
         }
 
         private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase.AsSpan().Trim().ToLowerCase(), "\"/>");

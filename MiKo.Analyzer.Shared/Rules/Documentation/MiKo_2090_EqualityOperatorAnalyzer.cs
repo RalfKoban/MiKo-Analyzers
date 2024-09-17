@@ -27,12 +27,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var fullyQualifiedName = containingType.FullyQualifiedName();
 
             return new[]
-                   {
-                       "Determines whether the specified <see cref=\"" + containingTypeName + "\"/> instances are considered equal.",
-                       "Determines whether the specified <see cref=\"" + containingTypeName + "\" /> instances are considered equal.",
-                       "Determines whether the specified <see cref=\"" + fullyQualifiedName + "\"/> instances are considered equal.",
-                       "Determines whether the specified <see cref=\"" + fullyQualifiedName + "\" /> instances are considered equal.",
-                   };
+                       {
+                           "Determines whether the specified <see cref=\"" + containingTypeName + "\"/> instances are considered equal.",
+                           "Determines whether the specified <see cref=\"" + containingTypeName + "\" /> instances are considered equal.",
+                           "Determines whether the specified <see cref=\"" + fullyQualifiedName + "\"/> instances are considered equal.",
+                           "Determines whether the specified <see cref=\"" + fullyQualifiedName + "\" /> instances are considered equal.",
+                       };
         }
 
         protected override string[] GetReturnsPhrases(ISymbol symbol) => ReturnsPhrases;

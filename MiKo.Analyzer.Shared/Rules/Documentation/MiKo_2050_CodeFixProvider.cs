@@ -18,7 +18,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
         private static readonly string[] TypeReplacementMapKeys = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).ToArray();
 
-        private static readonly KeyValuePair<string, string>[] TypeReplacementMap = TypeReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+        private static readonly Pair[] TypeReplacementMap = TypeReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2050";

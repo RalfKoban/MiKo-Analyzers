@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -14,8 +13,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap().ToArray();
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
 
 //// ncrunch: rdi default
 
@@ -30,32 +29,35 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static Dictionary<string, string> CreateReplacementMap()
+        private static Pair[] CreateReplacementMap()
         {
             const string SyncPhrase = Constants.Comments.TryStartingPhrase + " ";
 
             var lowerCasePhrase = SyncPhrase.ToLowerCaseAt(0);
             var asyncPhrase = Constants.Comments.AsynchronouslyStartingPhrase + lowerCasePhrase;
 
-            var result = new Dictionary<string, string>();
+            var startingWords = Constants.Comments.TryWords;
 
-            foreach (var startingWord in Constants.Comments.TryWords)
+            var result = new Pair[1 + (6 * startingWords.Length)];
+            var resultIndex = 0;
+
+            foreach (var startingWord in startingWords)
             {
                 var phrase = startingWord + " ";
                 var alternativePhrase = startingWord + " to ";
 
-                result.Add(phrase, SyncPhrase);
-                result.Add(alternativePhrase, SyncPhrase);
+                result[resultIndex++] = new Pair(phrase, SyncPhrase);
+                result[resultIndex++] = new Pair(alternativePhrase, SyncPhrase);
 
-                result.Add(Constants.Comments.AsynchronouslyStartingPhrase + phrase, asyncPhrase);
-                result.Add(Constants.Comments.AsynchronouslyStartingPhrase + alternativePhrase, asyncPhrase);
+                result[resultIndex++] = new Pair(Constants.Comments.AsynchronouslyStartingPhrase + phrase, asyncPhrase);
+                result[resultIndex++] = new Pair(Constants.Comments.AsynchronouslyStartingPhrase + alternativePhrase, asyncPhrase);
 
-                result.Add(phrase.ToLowerCaseAt(0), lowerCasePhrase);
-                result.Add(alternativePhrase.ToLowerCaseAt(0), lowerCasePhrase);
+                result[resultIndex++] = new Pair(phrase.ToLowerCaseAt(0), lowerCasePhrase);
+                result[resultIndex++] = new Pair(alternativePhrase.ToLowerCaseAt(0), lowerCasePhrase);
             }
 
             // fix the wrong replacements (such as "Tries to" which was replaced into "Attempts to to" due to only first word was replaced)
-            result.Add(" to to ", " to ");
+            result[resultIndex] = new Pair(" to to ", " to ");
 
             return result;
         }

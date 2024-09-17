@@ -132,7 +132,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          .OrderByDescending(_ => _.Length)
                                                                          .ThenBy(_ => _)
                                                                          .ToArray();
-                ReplacementMap = keyInput.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ReplacementMap = keyInput.ToArray(_ => new Pair(_, string.Empty));
                 ReplacementMapKeys = GetTermsForQuickLookup(keyInput);
 
                 var byteKeyInput = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
@@ -167,7 +167,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                              .OrderByDescending(_ => _.Length)
                                                                              .ThenBy(_ => _)
                                                                              .ToArray();
-                ByteArrayReplacementMap = byteKeyInput.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ByteArrayReplacementMap = byteKeyInput.ToArray(_ => new Pair(_, string.Empty));
                 ByteArrayReplacementMapKeys = GetTermsForQuickLookup(byteKeyInput);
 
                 ByteArrayContinueTexts = new[]
@@ -181,11 +181,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              };
             }
 
-            public KeyValuePair<string, string>[] ReplacementMap { get; }
+            public Pair[] ReplacementMap { get; }
 
             public string[] ReplacementMapKeys { get; }
 
-            public KeyValuePair<string, string>[] ByteArrayReplacementMap { get; }
+            public Pair[] ByteArrayReplacementMap { get; }
 
             public string[] ByteArrayReplacementMapKeys { get; }
 

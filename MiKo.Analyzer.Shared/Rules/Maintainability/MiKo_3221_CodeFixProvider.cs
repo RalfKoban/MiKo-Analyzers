@@ -70,7 +70,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static SyntaxNode GetUpdatedSyntaxWithHashCodeCombine(IEnumerable<SyntaxNode> nodes, MethodDeclarationSyntax method)
         {
-            var arguments = nodes.Select(_ => Argument(_.ToString())).ToArray();
+            var arguments = nodes.ToArray(_ => Argument(_.ToString()));
             var invocation = Invocation("HashCode", "Combine", arguments);
 
             return method.WithBody(null)

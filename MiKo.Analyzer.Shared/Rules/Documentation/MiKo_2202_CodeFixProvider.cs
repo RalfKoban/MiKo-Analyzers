@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
-using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,7 +11,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2202_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap().ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
 //// ncrunch: rdi default
 
@@ -25,11 +24,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static Dictionary<string, string> CreateReplacementMap()
+        private static Pair[] CreateReplacementMap()
         {
-            var dictionary = new Dictionary<string, string>();
+            var terms = Constants.Comments.IdTerms;
 
-            foreach (var term in Constants.Comments.IdTerms)
+            var result = new Pair[6 * terms.Length];
+            var resultIndex = 0;
+
+            foreach (var term in terms)
             {
                 var alternative = term.Replace('i', 'I');
 
@@ -39,18 +41,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 var replacement = term.Replace(Constants.Comments.IdTerm, "identifier");
                 var replacementWithA = "An " + replacement.TrimStart();
 
-                dictionary.Add(termWithA, replacementWithA);
-                dictionary.Add(term, replacement);
+                result[resultIndex++] = new Pair(termWithA, replacementWithA);
+                result[resultIndex++] = new Pair(term, replacement);
 
-                dictionary.Add(alternativeWithA, replacementWithA);
-                dictionary.Add(alternative, replacement);
+                result[resultIndex++] = new Pair(alternativeWithA, replacementWithA);
+                result[resultIndex++] = new Pair(alternative, replacement);
 
                 // also consider the upper case as its a commonly used abbreviation
-                dictionary.Add(alternativeWithA.ToUpperInvariant(), replacementWithA);
-                dictionary.Add(alternative.ToUpperInvariant(), replacement);
+                result[resultIndex++] = new Pair(alternativeWithA.ToUpperInvariant(), replacementWithA);
+                result[resultIndex++] = new Pair(alternative.ToUpperInvariant(), replacement);
             }
 
-            return dictionary;
+            return result;
         }
 
 //// ncrunch: rdi default

@@ -193,10 +193,10 @@ namespace System
 
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
+//// ncrunch: no coverage start
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
-
-//// ncrunch: no coverage start
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -374,6 +374,23 @@ namespace System
             return new string(chars);
         }
 
+        public static string ConcatenatedWith(this char value, string arg0, char arg1)
+        {
+            var length = arg0?.Length ?? 0;
+
+            var chars = new char[length + 2];
+
+            if (length > 0)
+            {
+                arg0.CopyTo(0, chars, 1, length);
+            }
+
+            chars[0] = value;
+            chars[length + 1] = arg1;
+
+            return new string(chars);
+        }
+
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
         {
             var length = value.Length;
@@ -390,23 +407,6 @@ namespace System
             chars[length + 1 + arg1Length] = arg2;
 
             arg1?.CopyTo(0, chars, length + 2, arg1Length);
-
-            return new string(chars);
-        }
-
-        public static string ConcatenatedWith(this char value, string arg0, char arg1)
-        {
-            var length = arg0?.Length ?? 0;
-
-            var chars = new char[length + 2];
-
-            if (length > 0)
-            {
-                arg0.CopyTo(0, chars, 1, length);
-            }
-
-            chars[0] = value;
-            chars[length + 1] = arg1;
 
             return new string(chars);
         }
@@ -1095,7 +1095,7 @@ namespace System
 
         public static string HumanizedConcatenated(this IEnumerable<string> values, string lastSeparator = "or")
         {
-            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToArray();
+            var items = values.ToArray(_ => _.SurroundedWithApostrophe());
 
             var count = items.Length;
 
@@ -1355,13 +1355,13 @@ namespace System
 
         public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
 
-        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
@@ -1799,6 +1799,8 @@ namespace System
 
         public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags()); // ncrunch: no coverage
 
+//// ncrunch: no coverage start
+
         public static string WithoutSuffix(this string value, string suffix)
         {
             if (value is null)
@@ -1811,6 +1813,20 @@ namespace System
             return length <= 0
                    ? string.Empty
                    : value.Substring(0, length);
+        }
+
+        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length <= 0
+                   ? value.Remove(0, value.Length)
+                   : value.Remove(0, length);
         }
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
@@ -1826,8 +1842,6 @@ namespace System
 
             return value;
         }
-
-//// ncrunch: no coverage start
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1847,20 +1861,6 @@ namespace System
         }
 
 //// ncrunch: no coverage end
-
-        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? value.Remove(0, value.Length)
-                   : value.Remove(0, length);
-        }
 
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
         {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
 using System.Linq;
 
@@ -49,10 +49,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   "When the ",
                                                               };
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
-                                                                                                  .ThenBy(_ => _)
-                                                                                                  .Select(_ => new KeyValuePair<string, string>(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
-                                                                                                  .ToArray();
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.OrderByDescending(_ => _.Length)
+                                                                          .ThenBy(_ => _)
+                                                                          .Select(_ => new Pair(_, Constants.Comments.EventHandlerSummaryStartingPhrase))
+                                                                          .ToArray();
 
 //// ncrunch: rdi default
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
 using System.Linq;
 
@@ -13,8 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ReplacementMapKeys = { "Reference to the ", "Reference to a ", "Reference to an " };
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                  .ToArray();
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
 
         public override string FixableDiagnosticId => "MiKo_2021";
 

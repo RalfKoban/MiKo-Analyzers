@@ -54,7 +54,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 foreach (var parameter in parameters)
                 {
                     var parameterIndicatorPhrase = parameterIndicators[parameter];
-                    var phrases = m_exceptionPhrases.Select(_ => _.FormatWith(parameter.Name)).ToArray();
+                    var phrases = m_exceptionPhrases.ToArray(_ => _.FormatWith(parameter.Name));
 
                     foreach (var part in parts)
                     {

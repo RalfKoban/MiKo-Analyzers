@@ -41,7 +41,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                      .ThenBy(_ => _)
                                                      .ToArray();
 
-                ReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ReplacementMap = keys.ToArray(_ => new Pair(_, string.Empty));
 
                 ReplacementMapKeys = GetTermsForQuickLookup(keys);
 
@@ -71,25 +71,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 TypeGuidReplacementMap = TypeGuidReplacementMapKeys.OrderByDescending(_ => _.Length)
                                                                    .ThenBy(_ => _)
-                                                                   .Select(_ => new KeyValuePair<string, string>(_, "The unique identifier for the type of "))
-                                                                   .ToArray();
+                                                                   .ToArray(_ => new Pair(_, "The unique identifier for the type of "));
 
                 CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
 
-                CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
+                CleanupMap = CleanupMapKeys.ToArray(_ => new Pair(_, " the "));
             }
 
-            public KeyValuePair<string, string>[] ReplacementMap { get; }
+            public Pair[] ReplacementMap { get; }
 
             public string[] ReplacementMapKeys { get; }
 
             public string[] TypeGuidReplacementMapKeys { get; }
 
-            public KeyValuePair<string, string>[] TypeGuidReplacementMap { get; }
+            public Pair[] TypeGuidReplacementMap { get; }
 
             public string[] CleanupMapKeys { get; }
 
-            public KeyValuePair<string, string>[] CleanupMap { get; }
+            public Pair[] CleanupMap { get; }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static HashSet<string> CreateReplacementMapKeys()

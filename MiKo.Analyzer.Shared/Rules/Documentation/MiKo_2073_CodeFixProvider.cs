@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -32,22 +31,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var firstWord = startText.FirstWord();
 
-            var map = new KeyValuePair<string, string>[3];
+            var map = new Pair[3];
 
             if (firstWord == Constants.Comments.Asynchronously)
             {
                 firstWord = startText.SecondWord();
 
-                map[0] = new KeyValuePair<string, string>(AsyncStartingPhrase + firstWord, FixedAsyncStartingPhrase);
+                map[0] = new Pair(AsyncStartingPhrase + firstWord, FixedAsyncStartingPhrase);
             }
             else
             {
-                map[0] = new KeyValuePair<string, string>(firstWord, StartingPhrase);
+                map[0] = new Pair(firstWord, StartingPhrase);
             }
 
             // fix the wrong replacements (such as "Determines if " which was replaced into "Determines whether if " due to only first word was replaced)
-            map[1] = new KeyValuePair<string, string>("whether if", "whether");
-            map[2] = new KeyValuePair<string, string>("whether whether", "whether");
+            map[1] = new Pair("whether if", "whether");
+            map[2] = new Pair("whether whether", "whether");
 
             return Comment(comment, new[] { firstWord }, map);
         }

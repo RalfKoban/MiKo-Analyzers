@@ -173,6 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'A':
                         case 'a':
                             typeKeysWithA.Add(typeKey);
+
                             break;
 
                         case 'C':
@@ -180,15 +181,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'c':
                         case 'd':
                             typeKeysWithCD.Add(typeKey);
+
                             break;
 
                         case 'T':
                         case 't':
                             typeKeysWithT.Add(typeKey);
+
                             break;
 
                         default:
                             typeKeysOther.Add(typeKey);
+
                             break;
                     }
                 }
@@ -210,15 +214,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 Array.Sort(methodKeys, AscendingStringComparer.Default);
 
-                var methodReplacementMap = new KeyValuePair<string, string>[methodKeysLength];
-                var instancesReplacementMap = new KeyValuePair<string, string>[methodKeysLength];
+                var methodReplacementMap = new Pair[methodKeysLength];
+                var instancesReplacementMap = new Pair[methodKeysLength];
 
                 for (var i = 0; i < methodKeysLength; i++)
                 {
                     var key = methodKeys[i];
 
-                    methodReplacementMap[i] = new KeyValuePair<string, string>(key, string.Empty);
-                    instancesReplacementMap[i] = new KeyValuePair<string, string>(key, "instances of the ");
+                    methodReplacementMap[i] = new Pair(key, string.Empty);
+                    instancesReplacementMap[i] = new Pair(key, "instances of the ");
                 }
 
                 MethodReplacementMap = methodReplacementMap;
@@ -228,57 +232,57 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
 
                 CleanupReplacementMap = new[]
-                                        {
-                                            new KeyValuePair<string, string>(" based on ", " default values for "),
-                                            new KeyValuePair<string, string>(" with for ", " with "),
-                                            new KeyValuePair<string, string>(" with with ", " with "),
-                                            new KeyValuePair<string, string>(" type with type.", " type with default values."),
-                                            new KeyValuePair<string, string>(" type with that ", " type with default values that "),
-                                            new KeyValuePair<string, string>(" type with which ", " type with default values which "),
-                                        };
-                CleanupReplacementMapKeys = CleanupReplacementMap.Select(_ => _.Key).ToArray();
+                                            {
+                                                new Pair(" based on ", " default values for "),
+                                                new Pair(" with for ", " with "),
+                                                new Pair(" with with ", " with "),
+                                                new Pair(" type with type.", " type with default values."),
+                                                new Pair(" type with that ", " type with default values that "),
+                                                new Pair(" type with which ", " type with default values which "),
+                                            };
+                CleanupReplacementMapKeys = CleanupReplacementMap.ToArray(_ => _.Key);
 
-                KeyValuePair<string, string>[] ToArray(IReadOnlyList<string> keys)
+                Pair[] ToArray(IReadOnlyList<string> keys)
                 {
                     var length = keys.Count;
-                    var pairs = new KeyValuePair<string, string>[length];
+                    var pairs = new Pair[length];
 
                     for (var i = 0; i < length; i++)
                     {
                         var key = keys[i];
 
-                        pairs[i] = new KeyValuePair<string, string>(key, string.Empty);
+                        pairs[i] = new Pair(key, string.Empty);
                     }
 
                     return pairs;
                 }
             }
 
-            public KeyValuePair<string, string>[] TypeReplacementMapA { get; }
+            public Pair[] TypeReplacementMapA { get; }
 
             public string[] TypeReplacementMapKeysA { get; }
 
-            public KeyValuePair<string, string>[] TypeReplacementMapCD { get; }
+            public Pair[] TypeReplacementMapCD { get; }
 
             public string[] TypeReplacementMapKeysCD { get; }
 
-            public KeyValuePair<string, string>[] TypeReplacementMapT { get; }
+            public Pair[] TypeReplacementMapT { get; }
 
             public string[] TypeReplacementMapKeysT { get; }
 
-            public KeyValuePair<string, string>[] TypeReplacementMapOthers { get; }
+            public Pair[] TypeReplacementMapOthers { get; }
 
             public string[] TypeReplacementMapKeysOthers { get; }
 
-            public KeyValuePair<string, string>[] MethodReplacementMap { get; }
+            public Pair[] MethodReplacementMap { get; }
 
             public string[] MethodReplacementMapKeys { get; }
 
-            public KeyValuePair<string, string>[] InstancesReplacementMap { get; }
+            public Pair[] InstancesReplacementMap { get; }
 
             public string[] InstancesReplacementMapKeys { get; }
 
-            public KeyValuePair<string, string>[] CleanupReplacementMap { get; }
+            public Pair[] CleanupReplacementMap { get; }
 
             public string[] CleanupReplacementMapKeys { get; }
 
@@ -568,16 +572,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 var strangeTexts = new[]
-                                   {
-                                       "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
-                                       "es that is capable", "es which is capable", "es that is able", "es which is able",
-                                       "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
-                                       "y that are capable", "y which are capable", "y that are able", "y which are able",
-                                       "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
-                                       "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
-                                       "ies that provides", "ies which provides",
-                                       "providing provid", "provides provid", "provide provid",
-                                   };
+                                       {
+                                           "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
+                                           "es that is capable", "es which is capable", "es that is able", "es which is able",
+                                           "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
+                                           "y that are capable", "y which are capable", "y that are able", "y which are able",
+                                           "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
+                                           "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
+                                           "ies that provides", "ies which provides",
+                                           "providing provid", "provides provid", "provide provid",
+                                       };
 
                 results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
 

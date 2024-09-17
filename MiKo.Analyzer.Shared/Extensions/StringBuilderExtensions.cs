@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using MiKoSolutions.Analyzers.Linguistics;
+﻿using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation
 //// ncrunch: rdi off
@@ -141,6 +139,7 @@ namespace System.Text
 
             // 2. Find word end
             var wordLength = 0;
+
             for (var i = whitespacesBefore; i < length; i++)
             {
                 if (value[i].IsWhiteSpace())
@@ -155,7 +154,7 @@ namespace System.Text
             return value.ToString(whitespacesBefore, wordLength);
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<KeyValuePair<string, string>> replacementPairs)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<Pair> replacementPairs)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
             var count = replacementPairs.Length;

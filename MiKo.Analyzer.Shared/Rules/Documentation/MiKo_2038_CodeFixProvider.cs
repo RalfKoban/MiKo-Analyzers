@@ -34,11 +34,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "This class ",
                                                                    };
 
-        private static readonly KeyValuePair<string, string>[] CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
-                                                                                                                           .ThenBy(_ => _.Key)
-                                                                                                                           .ToArray();
+        private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
+                                                                                                   .ThenBy(_ => _.Key)
+                                                                                                   .ToArray();
 
-        private static readonly string[] CommandReplacementMapKeys = CommandReplacementMap.Select(_ => _.Key).ToArray();
+        private static readonly string[] CommandReplacementMapKeys = CommandReplacementMap.ToArray(_ => _.Key);
 
 //// ncrunch: rdi default
 
@@ -60,7 +60,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
+        private static IEnumerable<Pair> CreateCommandReplacementMapEntries()
         {
             var middleParts = new[]
                                   {
@@ -83,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "tries to",
                                   };
 
-            var results = new List<KeyValuePair<string, string>>();
+            var results = new List<Pair>();
 
             foreach (var phrase in CommandStartingPhrases)
             {
@@ -91,14 +91,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var middle in middleParts)
                 {
-                    results.Add(new KeyValuePair<string, string>(string.Concat(start, " ", middle, " "), string.Empty));
+                    results.Add(new Pair(string.Concat(start, " ", middle, " "), string.Empty));
                 }
 
-                results.Add(new KeyValuePair<string, string>(string.Concat(start, " "), string.Empty));
+                results.Add(new Pair(string.Concat(start, " "), string.Empty));
             }
 
-            results.Add(new KeyValuePair<string, string>(string.Concat("Offers to", " "), string.Empty));
-            results.Add(new KeyValuePair<string, string>(string.Concat("Tries to", " "), string.Empty));
+            results.Add(new Pair(string.Concat("Offers to", " "), string.Empty));
+            results.Add(new Pair(string.Concat("Tries to", " "), string.Empty));
 
             return results;
         }

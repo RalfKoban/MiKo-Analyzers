@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 
@@ -14,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly string[] ReplacementMapKeys = Constants.Comments.ActionTerms;
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, Constants.Comments.CallbackTerm)).ToArray();
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, Constants.Comments.CallbackTerm));
 
         public override string FixableDiagnosticId => "MiKo_2075";
 

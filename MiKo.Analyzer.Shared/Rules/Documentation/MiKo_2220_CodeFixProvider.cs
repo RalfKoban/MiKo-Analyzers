@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
 using System.Linq;
 
@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 
         private static readonly string[] ReplacementMapKeys = Constants.Comments.FindTerms;
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, Constants.Comments.ToSeekTerm)).ToArray();
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, Constants.Comments.ToSeekTerm));
 
 //// ncrunch: rdi default
 

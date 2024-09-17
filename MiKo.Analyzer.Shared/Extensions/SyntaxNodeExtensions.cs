@@ -829,7 +829,7 @@ namespace MiKoSolutions.Analyzers
                             return Array.Empty<string>();
                         }
 
-                        return parameters.Select(_ => _.GetName()).ToArray();
+                        return parameters.ToArray(_ => _.GetName());
                     }
 
                     case IndexerDeclarationSyntax indexer:
@@ -841,7 +841,7 @@ namespace MiKoSolutions.Analyzers
                             return Array.Empty<string>();
                         }
 
-                        return parameters.Select(_ => _.GetName()).ToArray();
+                        return parameters.ToArray(_ => _.GetName());
                     }
 
                     case BasePropertyDeclarationSyntax property:

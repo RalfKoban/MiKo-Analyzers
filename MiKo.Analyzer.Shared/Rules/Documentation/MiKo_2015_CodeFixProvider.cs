@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
 using System.Linq;
 
@@ -11,33 +11,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2015_CodeFixProvider)), Shared]
     public sealed class MiKo_2015_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
-        private static readonly KeyValuePair<string, string>[] EventReplacementMap =
-                                                                                     {
-                                                                                         new KeyValuePair<string, string>("fired", "raised"),
-                                                                                         new KeyValuePair<string, string>("fires", "raises"),
-                                                                                         new KeyValuePair<string, string>("firing", "raising"),
-                                                                                         new KeyValuePair<string, string>("fire", "raise"),
-                                                                                         new KeyValuePair<string, string>("Fired", "Raised"),
-                                                                                         new KeyValuePair<string, string>("Fires", "Raises"),
-                                                                                         new KeyValuePair<string, string>("Firing", "Raising"),
-                                                                                         new KeyValuePair<string, string>("Fire", "Raise"),
-                                                                                     };
+        private static readonly Pair[] EventReplacementMap =
+                                                             {
+                                                                 new Pair("fired", "raised"),
+                                                                 new Pair("fires", "raises"),
+                                                                 new Pair("firing", "raising"),
+                                                                 new Pair("fire", "raise"),
+                                                                 new Pair("Fired", "Raised"),
+                                                                 new Pair("Fires", "Raises"),
+                                                                 new Pair("Firing", "Raising"),
+                                                                 new Pair("Fire", "Raise"),
+                                                             };
 
-        private static readonly string[] EventReplacementMapKeys = EventReplacementMap.Select(_ => _.Key).ToArray();
+        private static readonly string[] EventReplacementMapKeys = EventReplacementMap.ToArray(_ => _.Key);
 
-        private static readonly KeyValuePair<string, string>[] ExceptionReplacementMap =
-                                                                                         {
-                                                                                             new KeyValuePair<string, string>("fired", "thrown"),
-                                                                                             new KeyValuePair<string, string>("fires", "throws"),
-                                                                                             new KeyValuePair<string, string>("firing", "throwing"),
-                                                                                             new KeyValuePair<string, string>("fire", "throw"),
-                                                                                             new KeyValuePair<string, string>("Fired", "Thrown"),
-                                                                                             new KeyValuePair<string, string>("Fires", "Throws"),
-                                                                                             new KeyValuePair<string, string>("Firing", "Throwing"),
-                                                                                             new KeyValuePair<string, string>("Fire", "Throw"),
-                                                                                         };
+        private static readonly Pair[] ExceptionReplacementMap =
+                                                                 {
+                                                                     new Pair("fired", "thrown"),
+                                                                     new Pair("fires", "throws"),
+                                                                     new Pair("firing", "throwing"),
+                                                                     new Pair("fire", "throw"),
+                                                                     new Pair("Fired", "Thrown"),
+                                                                     new Pair("Fires", "Throws"),
+                                                                     new Pair("Firing", "Throwing"),
+                                                                     new Pair("Fire", "Throw"),
+                                                                 };
 
-        private static readonly string[] ExceptionReplacementMapKeys = ExceptionReplacementMap.Select(_ => _.Key).ToArray();
+        private static readonly string[] ExceptionReplacementMapKeys = ExceptionReplacementMap.ToArray(_ => _.Key);
 
         public override string FixableDiagnosticId => "MiKo_2015";
 

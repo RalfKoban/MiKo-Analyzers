@@ -182,7 +182,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, ITypeSymbol type, VariableDeclarationSyntax syntax)
         {
-            AnalyzeIdentifiers(context, type, syntax.Variables.Select(_ => _.Identifier).ToArray());
+            AnalyzeIdentifiers(context, type, syntax.Variables.ToArray(_ => _.Identifier));
         }
 
         private void AnalyzeIdentifiers(SyntaxNodeAnalysisContext context, ITypeSymbol type, params SyntaxToken[] identifiers)
