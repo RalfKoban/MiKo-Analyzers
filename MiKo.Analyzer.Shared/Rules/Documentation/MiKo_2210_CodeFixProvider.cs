@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -12,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap().ToArray();
 
 //// ncrunch: rdi default
 

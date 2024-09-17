@@ -155,34 +155,6 @@ namespace System.Text
             return value.ToString(whitespacesBefore, wordLength);
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
-        {
-            if (replacementPairs is KeyValuePair<string, string>[] array)
-            {
-                return value.ReplaceAllWithCheck(array.AsSpan());
-            }
-
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var pair in replacementPairs)
-            {
-                var oldValue = pair.Key;
-
-                if (oldValue.IsNullOrEmpty())
-                {
-                    // cannot replace any empty value
-                    continue;
-                }
-
-                if (QuickCompare(ref value, ref oldValue))
-                {
-                    // can be part in the replacement as value seems to fit
-                    value.Replace(oldValue, pair.Value);
-                }
-            }
-
-            return value;
-        }
-
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<KeyValuePair<string, string>> replacementPairs)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
@@ -209,7 +181,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<string> texts, string replacement)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
             var length = texts.Length;

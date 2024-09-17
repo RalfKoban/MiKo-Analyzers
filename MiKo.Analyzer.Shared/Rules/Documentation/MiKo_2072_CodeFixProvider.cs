@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -13,7 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap().ToArray();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
 
 //// ncrunch: rdi default
 
@@ -23,7 +25,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
-            return Comment(comment, ReplacementMap.Keys, ReplacementMap);
+            return Comment(comment, ReplacementMapKeys, ReplacementMap);
         }
 
 //// ncrunch: rdi off

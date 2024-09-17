@@ -32,22 +32,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var firstWord = startText.FirstWord();
 
-            var map = new Dictionary<string, string>();
+            var map = new KeyValuePair<string, string>[3];
 
             if (firstWord == Constants.Comments.Asynchronously)
             {
                 firstWord = startText.SecondWord();
 
-                map.Add(AsyncStartingPhrase + firstWord, FixedAsyncStartingPhrase);
+                map[0] = new KeyValuePair<string, string>(AsyncStartingPhrase + firstWord, FixedAsyncStartingPhrase);
             }
             else
             {
-                map.Add(firstWord, StartingPhrase);
+                map[0] = new KeyValuePair<string, string>(firstWord, StartingPhrase);
             }
 
             // fix the wrong replacements (such as "Determines if " which was replaced into "Determines whether if " due to only first word was replaced)
-            map.Add("whether if", "whether");
-            map.Add("whether whether", "whether");
+            map[1] = new KeyValuePair<string, string>("whether if", "whether");
+            map[2] = new KeyValuePair<string, string>("whether whether", "whether");
 
             return Comment(comment, new[] { firstWord }, map);
         }

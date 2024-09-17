@@ -36,10 +36,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                          "with",
                                                      };
 
-        private static readonly IReadOnlyCollection<string> ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().Distinct().ToArray();
 
-        private static readonly IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                                                     .ToArray(_ => _.Key, AscendingStringComparer.Default);
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty))
+                                                                                                  .ToArray(_ => _.Key, AscendingStringComparer.Default);
 
 //// ncrunch: rdi default
 

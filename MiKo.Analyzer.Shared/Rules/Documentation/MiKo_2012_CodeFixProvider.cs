@@ -103,9 +103,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ComponentPhrases = CreateComponentPhrases().ToArray();
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMap().ToArray();
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.Keys.Select(_ => _.Trim()).ToArray();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key.Trim()).ToArray();
 
         private static readonly ISet<SyntaxKind> Declarations = new HashSet<SyntaxKind>
                                                                     {
@@ -173,7 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
                 {
-                    return Comment(comment, ReplacementMap.Keys, ReplacementMap);
+                    return Comment(comment, ReplacementMapKeys, ReplacementMap);
                 }
 
                 foreach (var phrase in ComponentPhrases.Concat(UsedToPhrases))
@@ -211,7 +211,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var updatedComment = Comment(comment, ReplacementMap.Keys, ReplacementMap, FirstWordHandling.MakeLowerCase);
+            var updatedComment = Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
 
             return updatedComment;
         }

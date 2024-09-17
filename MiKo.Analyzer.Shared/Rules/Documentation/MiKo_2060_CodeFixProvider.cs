@@ -145,7 +145,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return Comment(comment, mappedData.CleanupReplacementMap.Keys, mappedData.CleanupReplacementMap);
+            return Comment(comment, mappedData.CleanupReplacementMapKeys, mappedData.CleanupReplacementMap);
         }
 
 //// ncrunch: rdi off
@@ -227,15 +227,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 InstancesReplacementMap = instancesReplacementMap;
                 InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
 
-                CleanupReplacementMap = new Dictionary<string, string>
-                                            {
-                                                { " based on ", " default values for " },
-                                                { " with for ", " with " },
-                                                { " with with ", " with " },
-                                                { " type with type.", " type with default values." },
-                                                { " type with that ", " type with default values that " },
-                                                { " type with which ", " type with default values which " },
-                                            };
+                CleanupReplacementMap = new[]
+                                        {
+                                            new KeyValuePair<string, string>(" based on ", " default values for "),
+                                            new KeyValuePair<string, string>(" with for ", " with "),
+                                            new KeyValuePair<string, string>(" with with ", " with "),
+                                            new KeyValuePair<string, string>(" type with type.", " type with default values."),
+                                            new KeyValuePair<string, string>(" type with that ", " type with default values that "),
+                                            new KeyValuePair<string, string>(" type with which ", " type with default values which "),
+                                        };
+                CleanupReplacementMapKeys = CleanupReplacementMap.Select(_ => _.Key).ToArray();
 
                 KeyValuePair<string, string>[] ToArray(IReadOnlyList<string> keys)
                 {
@@ -253,31 +254,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapA { get; }
+            public KeyValuePair<string, string>[] TypeReplacementMapA { get; }
 
             public string[] TypeReplacementMapKeysA { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapCD { get; }
+            public KeyValuePair<string, string>[] TypeReplacementMapCD { get; }
 
             public string[] TypeReplacementMapKeysCD { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapT { get; }
+            public KeyValuePair<string, string>[] TypeReplacementMapT { get; }
 
             public string[] TypeReplacementMapKeysT { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapOthers { get; }
+            public KeyValuePair<string, string>[] TypeReplacementMapOthers { get; }
 
             public string[] TypeReplacementMapKeysOthers { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap { get; }
+            public KeyValuePair<string, string>[] MethodReplacementMap { get; }
 
             public string[] MethodReplacementMapKeys { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> InstancesReplacementMap { get; }
+            public KeyValuePair<string, string>[] InstancesReplacementMap { get; }
 
             public string[] InstancesReplacementMapKeys { get; }
 
-            public Dictionary<string, string> CleanupReplacementMap { get; }
+            public KeyValuePair<string, string>[] CleanupReplacementMap { get; }
+
+            public string[] CleanupReplacementMapKeys { get; }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static string[] CreateTypeReplacementMapKeys()

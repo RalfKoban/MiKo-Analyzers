@@ -79,17 +79,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
             }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap { get; }
+            public KeyValuePair<string, string>[] ReplacementMap { get; }
 
             public string[] ReplacementMapKeys { get; }
 
-            public IReadOnlyCollection<string> TypeGuidReplacementMapKeys { get; }
+            public string[] TypeGuidReplacementMapKeys { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeGuidReplacementMap { get; }
+            public KeyValuePair<string, string>[] TypeGuidReplacementMap { get; }
 
-            public IReadOnlyCollection<string> CleanupMapKeys { get; }
+            public string[] CleanupMapKeys { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap { get; }
+            public KeyValuePair<string, string>[] CleanupMap { get; }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static HashSet<string> CreateReplacementMapKeys()

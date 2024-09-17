@@ -541,7 +541,9 @@ namespace System
 
 //// ncrunch: no coverage start
 
-        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => value.ContainsAny(phrases.AsSpan(), comparison);
+
+        public static bool ContainsAny(this string value, ReadOnlySpan<string> phrases, StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -825,8 +827,6 @@ namespace System
             {
                 var phrasesLength = phrases.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
@@ -1153,7 +1153,7 @@ namespace System
                     {
                         var phrase = phrases[i];
 
-                        var index = value.IndexOf(phrase.AsSpan(), comparison);
+                        var index = value.IndexOf(phrase.AsSpan(), StringComparison.Ordinal);
 
                         if (index > -1)
                         {

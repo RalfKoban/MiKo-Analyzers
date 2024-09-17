@@ -13,15 +13,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Dictionary<string, string> ReplacementMap = Constants.Comments.FindTerms.ToDictionary(_ => _, _ => Constants.Comments.ToSeekTerm);
+        private static readonly string[] ReplacementMapKeys = Constants.Comments.FindTerms;
+        private static readonly KeyValuePair<string, string>[] ReplacementMap = ReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, Constants.Comments.ToSeekTerm)).ToArray();
 
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2220";
 
-        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
-        {
-            return Comment(syntax, Constants.Comments.FindTerms, ReplacementMap);
-        }
+        protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic) => Comment(syntax, ReplacementMapKeys, ReplacementMap);
     }
 }

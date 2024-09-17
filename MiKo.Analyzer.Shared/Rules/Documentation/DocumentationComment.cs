@@ -21,7 +21,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static bool ContainsPhrase(string phrase, ReadOnlySpan<char> comment)
         {
-            var index = comment.IndexOf(phrase.AsSpan(), StringComparison.OrdinalIgnoreCase);
+            // use string here to avoid unnecessary 'ToString' calls on 'ReadOnlySpan' (see 'IndexOf' method inside 'MemoryExtensions')
+            var index = comment.ToString().IndexOf(phrase, StringComparison.OrdinalIgnoreCase);
 
             if (index < 0)
             {

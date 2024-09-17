@@ -16,7 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     public sealed class MiKo_2050_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
 //// ncrunch: rdi off
-        private static readonly Dictionary<string, string> TypeReplacementMap = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).ToDictionary(_ => _, _ => string.Empty);
+        private static readonly string[] TypeReplacementMapKeys = CreateTypePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase).ToArray();
+
+        private static readonly KeyValuePair<string, string>[] TypeReplacementMap = TypeReplacementMapKeys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2050";
@@ -48,7 +50,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
             else
             {
-                var preparedSummary = Comment(summary, TypeReplacementMap.Keys, TypeReplacementMap, FirstWordHandling.MakeLowerCase);
+                var preparedSummary = Comment(summary, TypeReplacementMapKeys, TypeReplacementMap, FirstWordHandling.MakeLowerCase);
                 var newSummary = CommentStartingWith(preparedSummary, Phrase);
 
                 return comment.ReplaceNode(summary, newSummary);
