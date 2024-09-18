@@ -21,10 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #if NCRUNCH
         // do not define a static ctor to speed up tests
 #else
-        static MiKo_2035_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+        static MiKo_2035_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
         public override string FixableDiagnosticId => "MiKo_2035";
+
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
         {

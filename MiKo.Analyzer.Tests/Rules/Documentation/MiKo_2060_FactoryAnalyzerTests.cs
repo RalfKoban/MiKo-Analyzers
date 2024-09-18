@@ -19,6 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] ClassSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
         private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(100)];
 
+        [OneTimeSetUp]
+        public void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
+
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
 using System;

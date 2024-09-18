@@ -37,6 +37,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] StartingPhrases = [.. Enumerable.ToHashSet(CreateStartingPhrases().Take(TestLimit))];
 
+        [OneTimeSetUp]
+        public void PrepareTestEnvironment() => MiKo_2035_CodeFixProvider.LoadData();
+
         [Test]
         public void No_issue_is_reported_for_uncommented_method_([ValueSource(nameof(EnumerableReturnValues))] string returnType) => No_issue_is_reported_for(@"
 public class TestMe

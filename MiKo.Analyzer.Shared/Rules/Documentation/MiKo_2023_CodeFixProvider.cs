@@ -60,13 +60,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #if NCRUNCH
         // do not define a static ctor to speed up tests
 #else
-        static MiKo_2023_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+        static MiKo_2023_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
         public override string FixableDiagnosticId => "MiKo_2023";
 
-//// ncrunch: no coverage end
-//// ncrunch: rdi default
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
+
+        //// ncrunch: no coverage end
+        //// ncrunch: rdi default
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {

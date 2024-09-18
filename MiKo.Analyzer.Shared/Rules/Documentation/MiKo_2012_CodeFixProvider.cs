@@ -163,7 +163,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
                          || text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
                          || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysT, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysThe, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
                          || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase))
                         {
                             return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);

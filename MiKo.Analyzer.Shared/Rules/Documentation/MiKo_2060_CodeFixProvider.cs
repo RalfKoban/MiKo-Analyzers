@@ -20,10 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #if NCRUNCH
         // do not define a static ctor to speed up tests
 #else
-        static MiKo_2060_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+        static MiKo_2060_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
         public override string FixableDiagnosticId => "MiKo_2060";
+
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
@@ -92,7 +94,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return updated;
             }
 
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysT, mappedData.TypeReplacementMapT);
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
 
             if (ReferenceEquals(updated, comment) is false)
             {
@@ -157,11 +167,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
                 var typeKeysLength = typeKeys.Length;
-                Array.Sort(typeKeys, AscendingStringComparer.Default);
+
+                //// Array.Sort(typeKeys, AscendingStringComparer.Default);
 
                 var typeKeysWithA = new List<string>(76298); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysWithCD = new List<string>(40477); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithT = new List<string>(94855); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithThe = new List<string>(72645); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithThis = new List<string>(22210); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysOther = new List<string>(63372); // TODO RKN: Adjust number as soon as there are other texts
 
                 for (var index = 0; index < typeKeysLength; index++)
@@ -186,7 +198,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         case 'T':
                         case 't':
-                            typeKeysWithT.Add(typeKey);
+                            var list = typeKey[2] == 'e' ? typeKeysWithThe : typeKeysWithThis;
+                            list.Add(typeKey);
 
                             break;
 
@@ -197,14 +210,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                 }
 
+                typeKeysWithA.Sort(AscendingStringComparer.Default);
+                typeKeysWithCD.Sort(AscendingStringComparer.Default);
+                typeKeysWithThe.Sort(AscendingStringComparer.Default);
+                typeKeysWithThis.Sort(AscendingStringComparer.Default);
+                typeKeysOther.Sort(AscendingStringComparer.Default);
+
                 TypeReplacementMapA = ToArray(typeKeysWithA);
                 TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysWithA);
 
                 TypeReplacementMapCD = ToArray(typeKeysWithCD);
                 TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysWithCD);
 
-                TypeReplacementMapT = ToArray(typeKeysWithT);
-                TypeReplacementMapKeysT = GetTermsForQuickLookup(typeKeysWithT);
+                TypeReplacementMapThe = ToArray(typeKeysWithThe);
+                TypeReplacementMapKeysThe = GetTermsForQuickLookup(typeKeysWithThe);
+
+                TypeReplacementMapThis = ToArray(typeKeysWithThis);
+                TypeReplacementMapKeysThis = GetTermsForQuickLookup(typeKeysWithThis);
 
                 TypeReplacementMapOthers = ToArray(typeKeysOther);
                 TypeReplacementMapKeysOthers = GetTermsForQuickLookup(typeKeysOther);
@@ -266,9 +288,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public string[] TypeReplacementMapKeysCD { get; }
 
-            public Pair[] TypeReplacementMapT { get; }
+            public Pair[] TypeReplacementMapThe { get; }
 
-            public string[] TypeReplacementMapKeysT { get; }
+            public string[] TypeReplacementMapKeysThe { get; }
+
+            public Pair[] TypeReplacementMapThis { get; }
+
+            public string[] TypeReplacementMapKeysThis { get; }
 
             public Pair[] TypeReplacementMapOthers { get; }
 
