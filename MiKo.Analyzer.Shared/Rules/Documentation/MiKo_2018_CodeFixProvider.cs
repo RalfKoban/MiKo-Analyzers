@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -34,23 +33,23 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var firstWord = startText.FirstWord();
 
-            var map = new Dictionary<string, string>();
+            var map = new Pair[4];
 
             if (firstWord == Constants.Comments.Asynchronously)
             {
                 firstWord = startText.SecondWord();
 
-                map.Add(AsyncStartingPhrase + firstWord, FixedAsyncStartingPhrase);
+                map[0] = new Pair(AsyncStartingPhrase + firstWord, FixedAsyncStartingPhrase);
             }
             else
             {
-                map.Add(firstWord, StartingPhrase);
+                map[0] = new Pair(firstWord, StartingPhrase);
             }
 
             // fix the wrong replacements (such as "Determines if " which was replaced into "Determines whether if " due to only first word was replaced)
-            map.Add("whether if", "whether");
-            map.Add("whether that", "whether");
-            map.Add("whether whether", "whether");
+            map[1] = new Pair("whether if", "whether");
+            map[2] = new Pair("whether that", "whether");
+            map[3] = new Pair("whether whether", "whether");
 
             return Comment(comment, new[] { firstWord }, map);
         }

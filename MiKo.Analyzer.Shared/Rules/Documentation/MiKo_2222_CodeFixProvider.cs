@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Composition;
 
 using Microsoft.CodeAnalysis;
@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
 //// ncrunch: rdi off
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
 //// ncrunch: rdi default
 
@@ -25,23 +25,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static Dictionary<string, string> CreateReplacementMap()
+        private static Pair[] CreateReplacementMap()
         {
-            var dictionary = new Dictionary<string, string>();
+            var terms = Constants.Comments.IdentTerms;
 
-            foreach (var term in Constants.Comments.IdentTerms)
+            var result = new Pair[3 * terms.Length];
+            var resultIndex = 0;
+
+            foreach (var term in terms)
             {
                 var replacement = term.Replace(Constants.Comments.IdentTerm, "identification");
-                dictionary.Add(term, replacement);
+                result[resultIndex++] = new Pair(term, replacement);
 
                 // alternative 1
-                dictionary.Add(term.Replace('i', 'I'), replacement);
+                result[resultIndex++] = new Pair(term.Replace('i', 'I'), replacement);
 
                 // alternative 2
-                dictionary.Add(term.ToUpper(), replacement);
+                result[resultIndex++] = new Pair(term.ToUpper(), replacement);
             }
 
-            return dictionary;
+            return result;
         }
 
 //// ncrunch: rdi default

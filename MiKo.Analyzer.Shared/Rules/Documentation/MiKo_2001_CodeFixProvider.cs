@@ -20,16 +20,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] SpecialTerms = { SpecialTerm };
 
-        private static readonly KeyValuePair<string, string>[] SpecialTermReplacementMap = { new KeyValuePair<string, string>(SpecialTerm, "Occurs when ") };
+        private static readonly Pair[] SpecialTermReplacementMap = { new Pair(SpecialTerm, "Occurs when ") };
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreatePhrases().Select(_ => new KeyValuePair<string, string>(_, string.Empty))
-                                                                                               .Append(new KeyValuePair<string, string>("Invoked if ", "when "))
-                                                                                               .Append(new KeyValuePair<string, string>("Invoked when ", "when "))
-                                                                                               .OrderByDescending(_ => _.Key.Length)
-                                                                                               .ThenBy(_ => _.Key)
-                                                                                               .ToArray();
+        private static readonly Pair[] ReplacementMap = CreatePhrases().Select(_ => new Pair(_, string.Empty))
+                                                                       .Append(new Pair("Invoked if ", "when "))
+                                                                       .Append(new Pair("Invoked when ", "when "))
+                                                                       .OrderByDescending(_ => _.Key.Length)
+                                                                       .ThenBy(_ => _.Key)
+                                                                       .ToArray();
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key);
 
 //// ncrunch: rdi default
 

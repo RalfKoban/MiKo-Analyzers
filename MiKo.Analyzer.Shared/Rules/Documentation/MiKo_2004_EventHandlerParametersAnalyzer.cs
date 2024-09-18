@@ -47,13 +47,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var variantWithoutSpace = string.Concat(defaultStart, "<see cref=\"", typeString, "\"/>" + DefaultEnding);
 
             return new[]
-                   {
-                       string.Concat(defaultStart, "<see cref=\"", typeName, "\" />" + DefaultEnding + "."), // just used for the proposal
-                       variantWithSpace + ".",
-                       variantWithSpace,
-                       variantWithoutSpace + ".",
-                       variantWithoutSpace,
-                   };
+                       {
+                           string.Concat(defaultStart, "<see cref=\"", typeName, "\" />" + DefaultEnding + "."), // just used for the proposal
+                           variantWithSpace + ".",
+                           variantWithSpace,
+                           variantWithoutSpace + ".",
+                           variantWithoutSpace,
+                       };
         }
 
         private IEnumerable<Diagnostic> VerifyParameterComments(IMethodSymbol method, string xml, DocumentationCommentTriviaSyntax comment)

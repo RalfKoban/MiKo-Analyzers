@@ -490,7 +490,7 @@ namespace MiKoSolutions.Analyzers
 
             internal static readonly string[] EnumReturnTypeStartingPhrase = { "The enumerated constant that is the ", };
 
-            internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "the enumerated constant that is the ").ToArray();
+            internal static readonly string[] EnumTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "the enumerated constant that is the ");
 
             internal static readonly string[] EnumerableReturnTypeStartingPhrase =
                                                                                    {
@@ -501,15 +501,15 @@ namespace MiKoSolutions.Analyzers
                                                                                        "An <see cref=\"{0}\" /> that contains ",
                                                                                    };
 
-            internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a collection of ").ToArray();
+            internal static readonly string[] EnumerableTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "a collection of ");
 
             internal static readonly string[] ArrayReturnTypeStartingPhrase = { "An array of ", "The array of " };
 
             internal static readonly string[] ByteArrayReturnTypeStartingPhrase = { "A byte array containing ", "The byte array containing " };
 
-            internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "an array of ").ToArray();
+            internal static readonly string[] ArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "an array of ");
 
-            internal static readonly string[] ByteArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.Select(_ => _ + "a byte array containing ").ToArray();
+            internal static readonly string[] ByteArrayTaskReturnTypeStartingPhrase = GenericTaskReturnTypeStartingPhrase.ToArray(_ => _ + "a byte array containing ");
 
             internal static readonly string[] DependencyPropertyFieldSummaryPhrase =
                                                                                      {
@@ -712,30 +712,30 @@ namespace MiKoSolutions.Analyzers
                                                                            "neednt",
                                                                        };
 
-            internal static readonly KeyValuePair<string, string>[] NotContradictionReplacementMap =
-                                                                                                     {
-                                                                                                         new KeyValuePair<string, string>("adnt", "ad not"),
-                                                                                                         new KeyValuePair<string, string>("an't", "annot"),
-                                                                                                         new KeyValuePair<string, string>("arent", "are not"),
-                                                                                                         new KeyValuePair<string, string>("Arent", "Are not"),
-                                                                                                         new KeyValuePair<string, string>("asnt", "as not"),
-                                                                                                         new KeyValuePair<string, string>("avent", "ave not"),
-                                                                                                         new KeyValuePair<string, string>("cant", "cannot"),
-                                                                                                         new KeyValuePair<string, string>("Cant", "Cannot"),
-                                                                                                         new KeyValuePair<string, string>("dont", "do not"),
-                                                                                                         new KeyValuePair<string, string>("Dont", "Do not"),
-                                                                                                         new KeyValuePair<string, string>("eednt", "eed not"),
-                                                                                                         new KeyValuePair<string, string>("erent", "ere not"),
-                                                                                                         new KeyValuePair<string, string>("idnt", "id not"),
-                                                                                                         new KeyValuePair<string, string>("oesnt", "oes not"),
-                                                                                                         new KeyValuePair<string, string>("ouldnt", "ould not"),
-                                                                                                         new KeyValuePair<string, string>("snt", "s not"),
-                                                                                                         new KeyValuePair<string, string>("wont", "will not"),
-                                                                                                         new KeyValuePair<string, string>("won't", "will not"),
-                                                                                                         new KeyValuePair<string, string>("Wont", "Will not"),
-                                                                                                         new KeyValuePair<string, string>("Won't", "Will not"),
-                                                                                                         new KeyValuePair<string, string>("n't", " not"),
-                                                                                                     };
+            internal static readonly Pair[] NotContradictionReplacementMap =
+                                                                             {
+                                                                                 new Pair("adnt", "ad not"),
+                                                                                 new Pair("an't", "annot"),
+                                                                                 new Pair("arent", "are not"),
+                                                                                 new Pair("Arent", "Are not"),
+                                                                                 new Pair("asnt", "as not"),
+                                                                                 new Pair("avent", "ave not"),
+                                                                                 new Pair("cant", "cannot"),
+                                                                                 new Pair("Cant", "Cannot"),
+                                                                                 new Pair("dont", "do not"),
+                                                                                 new Pair("Dont", "Do not"),
+                                                                                 new Pair("eednt", "eed not"),
+                                                                                 new Pair("erent", "ere not"),
+                                                                                 new Pair("idnt", "id not"),
+                                                                                 new Pair("oesnt", "oes not"),
+                                                                                 new Pair("ouldnt", "ould not"),
+                                                                                 new Pair("snt", "s not"),
+                                                                                 new Pair("wont", "will not"),
+                                                                                 new Pair("won't", "will not"),
+                                                                                 new Pair("Wont", "Will not"),
+                                                                                 new Pair("Won't", "Will not"),
+                                                                                 new Pair("n't", " not"),
+                                                                             };
 
             internal static readonly string[] IntentionallyPhrase =
                                                                     {

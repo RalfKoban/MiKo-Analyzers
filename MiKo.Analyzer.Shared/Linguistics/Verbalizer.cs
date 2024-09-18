@@ -26,34 +26,34 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
 
-        private static readonly KeyValuePair<string, string>[] Endings =
-                                                                         {
-                                                                             new KeyValuePair<string, string>(nameof(Action), nameof(Action)),
-                                                                             new KeyValuePair<string, string>("Caption", "Caption"),
-                                                                             new KeyValuePair<string, string>("cution", "cute"),
-                                                                             new KeyValuePair<string, string>(nameof(Exception), nameof(Exception)),
-                                                                             new KeyValuePair<string, string>("Func", "Function"),
-                                                                             new KeyValuePair<string, string>("Function", "Function"),
-                                                                             new KeyValuePair<string, string>("estination", "estination"),
-                                                                             new KeyValuePair<string, string>("mentation", "ment"),
-                                                                             new KeyValuePair<string, string>("unction", "unction"),
-                                                                             new KeyValuePair<string, string>("ptation", "pt"),
-                                                                             new KeyValuePair<string, string>("iption", "ibe"),
-                                                                             new KeyValuePair<string, string>("rmation", "rm"),
-                                                                             new KeyValuePair<string, string>("allation", "all"),
-                                                                             new KeyValuePair<string, string>("ellation", "el"),
-                                                                             new KeyValuePair<string, string>("stration", "ster"),
-                                                                             new KeyValuePair<string, string>("ration", "re"),
-                                                                             new KeyValuePair<string, string>("isition", "ire"),
-                                                                             new KeyValuePair<string, string>("isation", "ise"),
-                                                                             new KeyValuePair<string, string>("ization", "ize"),
-                                                                             new KeyValuePair<string, string>("vocation", "voke"),
-                                                                             new KeyValuePair<string, string>("ation", "ate"),
-                                                                             new KeyValuePair<string, string>("ction", "ct"),
-                                                                             new KeyValuePair<string, string>("ption", "pt"),
-                                                                             new KeyValuePair<string, string>("rison", "re"),
-                                                                             new KeyValuePair<string, string>("sis", "ze"),
-                                                                         };
+        private static readonly Pair[] Endings =
+                                                 {
+                                                     new Pair(nameof(Action), nameof(Action)),
+                                                     new Pair("Caption", "Caption"),
+                                                     new Pair("cution", "cute"),
+                                                     new Pair(nameof(Exception), nameof(Exception)),
+                                                     new Pair("Func", "Function"),
+                                                     new Pair("Function", "Function"),
+                                                     new Pair("estination", "estination"),
+                                                     new Pair("mentation", "ment"),
+                                                     new Pair("unction", "unction"),
+                                                     new Pair("ptation", "pt"),
+                                                     new Pair("iption", "ibe"),
+                                                     new Pair("rmation", "rm"),
+                                                     new Pair("allation", "all"),
+                                                     new Pair("ellation", "el"),
+                                                     new Pair("stration", "ster"),
+                                                     new Pair("ration", "re"),
+                                                     new Pair("isition", "ire"),
+                                                     new Pair("isation", "ise"),
+                                                     new Pair("ization", "ize"),
+                                                     new Pair("vocation", "voke"),
+                                                     new Pair("ation", "ate"),
+                                                     new Pair("ction", "ct"),
+                                                     new Pair("ption", "pt"),
+                                                     new Pair("rison", "re"),
+                                                     new Pair("sis", "ze"),
+                                                 };
 
         private static readonly string[] IsAre = { "is", "are" };
 

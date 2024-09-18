@@ -34,9 +34,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                        "This class ",
                                                                    };
 
-        private static readonly Dictionary<string, string> CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
-                                                                                                                       .ThenBy(_ => _.Key)
-                                                                                                                       .ToDictionary(_ => _.Key, _ => _.Value);
+        private static readonly Pair[] CommandReplacementMap = CreateCommandReplacementMapEntries().OrderByDescending(_ => _.Key.Length)
+                                                                                                   .ThenBy(_ => _.Key)
+                                                                                                   .ToArray();
+
+        private static readonly string[] CommandReplacementMapKeys = CommandReplacementMap.ToArray(_ => _.Key);
 
 //// ncrunch: rdi default
 
@@ -44,16 +46,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
-            var c = Comment((XmlElementSyntax)syntax, CommandReplacementMap.Keys, CommandReplacementMap, FirstWordHandling.MakeLowerCase);
+            if (syntax is XmlElementSyntax element)
+            {
+                var comment = Comment(element, CommandReplacementMapKeys, CommandReplacementMap, FirstWordHandling.MakeLowerCase);
 
-            return CommentStartingWith(c, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeInfinite);
+                return CommentStartingWith(comment, Constants.Comments.CommandSummaryStartingPhrase, FirstWordHandling.MakeLowerCase | FirstWordHandling.MakeInfinite);
+            }
+
+            return syntax;
         }
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue) => GetUpdatedSyntax(syntax);
 
 //// ncrunch: rdi off
 
-        private static IEnumerable<KeyValuePair<string, string>> CreateCommandReplacementMapEntries()
+        private static IEnumerable<Pair> CreateCommandReplacementMapEntries()
         {
             var middleParts = new[]
                                   {
@@ -76,7 +83,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                       "tries to",
                                   };
 
-            var results = new List<KeyValuePair<string, string>>();
+            var results = new List<Pair>();
 
             foreach (var phrase in CommandStartingPhrases)
             {
@@ -84,14 +91,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 foreach (var middle in middleParts)
                 {
-                    results.Add(new KeyValuePair<string, string>(string.Concat(start, " ", middle, " "), string.Empty));
+                    results.Add(new Pair(string.Concat(start, " ", middle, " "), string.Empty));
                 }
 
-                results.Add(new KeyValuePair<string, string>(string.Concat(start, " "), string.Empty));
+                results.Add(new Pair(string.Concat(start, " "), string.Empty));
             }
 
-            results.Add(new KeyValuePair<string, string>(string.Concat("Offers to", " "), string.Empty));
-            results.Add(new KeyValuePair<string, string>(string.Concat("Tries to", " "), string.Empty));
+            results.Add(new Pair(string.Concat("Offers to", " "), string.Empty));
+            results.Add(new Pair(string.Concat("Tries to", " "), string.Empty));
 
             return results;
         }

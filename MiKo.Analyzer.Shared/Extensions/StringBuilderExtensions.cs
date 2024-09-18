@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using MiKoSolutions.Analyzers.Linguistics;
+﻿using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation
 //// ncrunch: rdi off
@@ -141,6 +139,7 @@ namespace System.Text
 
             // 2. Find word end
             var wordLength = 0;
+
             for (var i = whitespacesBefore; i < length; i++)
             {
                 if (value[i].IsWhiteSpace())
@@ -155,35 +154,7 @@ namespace System.Text
             return value.ToString(whitespacesBefore, wordLength);
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, IEnumerable<KeyValuePair<string, string>> replacementPairs)
-        {
-            if (replacementPairs is KeyValuePair<string, string>[] array)
-            {
-                return value.ReplaceAllWithCheck(array.AsSpan());
-            }
-
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var pair in replacementPairs)
-            {
-                var oldValue = pair.Key;
-
-                if (oldValue.IsNullOrEmpty())
-                {
-                    // cannot replace any empty value
-                    continue;
-                }
-
-                if (QuickCompare(value, oldValue))
-                {
-                    // can be part in the replacement as value seems to fit
-                    value.Replace(oldValue, pair.Value);
-                }
-            }
-
-            return value;
-        }
-
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<KeyValuePair<string, string>> replacementPairs)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<Pair> replacementPairs)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
             var count = replacementPairs.Length;
@@ -199,7 +170,7 @@ namespace System.Text
                     continue;
                 }
 
-                if (QuickCompare(value, oldValue))
+                if (QuickCompare(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, pair.Value);
@@ -209,7 +180,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<string> texts, string replacement)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
             var length = texts.Length;
@@ -224,7 +195,7 @@ namespace System.Text
                     continue;
                 }
 
-                if (QuickCompare(value, oldValue))
+                if (QuickCompare(ref value, ref oldValue))
                 {
                     // can be part in the replacement as value seems to fit
                     value.Replace(oldValue, replacement);
@@ -242,7 +213,7 @@ namespace System.Text
                 return value;
             }
 
-            if (QuickCompare(value, oldValue))
+            if (QuickCompare(ref value, ref oldValue))
             {
                 return value.Replace(oldValue, newValue);
             }
@@ -342,7 +313,7 @@ namespace System.Text
             return value.ToString(0, length - end);
         }
 
-        private static bool QuickCompare(StringBuilder current, string other)
+        private static bool QuickCompare(ref StringBuilder current, ref string other)
         {
             var otherValueLength = other.Length;
             var currentValueLength = current.Length;
@@ -376,14 +347,14 @@ namespace System.Text
                 var otherLast = other[lastIndex];
 
                 // could be part in the replacement only if characters match
-                return QuickCompareAtIndices(current, otherFirst, lastIndex, otherLast, difference);
+                return QuickCompareAtIndices(ref current, ref otherFirst, ref lastIndex, ref otherLast, ref difference);
             }
 
             // can be part in the replacement as other value is smaller and could fit current value
             return true;
         }
 
-        private static bool QuickCompareAtIndices(StringBuilder current, char first, int lastIndex, char last, int count)
+        private static bool QuickCompareAtIndices(ref StringBuilder current, ref char first, ref int lastIndex, ref char last, ref int count)
         {
             // include count as value
             for (var i = 0; i <= count; i++)

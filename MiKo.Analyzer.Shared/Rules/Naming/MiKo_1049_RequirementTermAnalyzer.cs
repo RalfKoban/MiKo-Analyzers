@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     {
         public const string Id = "MiKo_1049";
 
-        private static readonly KeyValuePair<string, string>[] ReplacementMap = CreateReplacementMapEntries().ToArray();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMapEntries().ToArray();
 
         public MiKo_1049_RequirementTermAnalyzer() : base(Id, (SymbolKind)(-1))
         {
@@ -37,45 +37,45 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         protected override bool ShallAnalyzeLocalFunction(IMethodSymbol symbol) => true;
 
-        private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
+        private static IEnumerable<Pair> CreateReplacementMapEntries()
         {
             foreach (var term in Constants.Markers.Requirements)
             {
                 var lowerTerm = term.ToLowerCase();
 
-                yield return new KeyValuePair<string, string>(term + "Be", "Is");
-                yield return new KeyValuePair<string, string>(term + "_Be", "Is");
-                yield return new KeyValuePair<string, string>(term + "Call", "Calls");
-                yield return new KeyValuePair<string, string>(term + "_Call", "Calls");
-                yield return new KeyValuePair<string, string>(term + "Create", "Creates");
-                yield return new KeyValuePair<string, string>(term + "_Create", "Creates");
-                yield return new KeyValuePair<string, string>(term + "Fail", "Fails");
-                yield return new KeyValuePair<string, string>(term + "Have", "Have");
-                yield return new KeyValuePair<string, string>(term + "NotHave", "DoNotHave");
-                yield return new KeyValuePair<string, string>(term + "NtHave", "DoNotHave");
-                yield return new KeyValuePair<string, string>(term + "ntHave", "DoNotHave");
-                yield return new KeyValuePair<string, string>(term + "NotBe", "IsNot");
-                yield return new KeyValuePair<string, string>(term + "NtBe", "IsNot");
-                yield return new KeyValuePair<string, string>(term + "ntBe", "IsNot");
-                yield return new KeyValuePair<string, string>(term + "Returns", "Returns");
-                yield return new KeyValuePair<string, string>(term + "Return", "Returns");
-                yield return new KeyValuePair<string, string>(term + "_Returns", "Returns");
-                yield return new KeyValuePair<string, string>(term + "_Return", "Returns");
-                yield return new KeyValuePair<string, string>(term + "Throw", "Throws");
-                yield return new KeyValuePair<string, string>(term + "_Throw", "Throws");
-                yield return new KeyValuePair<string, string>(term, "Does");
+                yield return new Pair(term + "Be", "Is");
+                yield return new Pair(term + "_Be", "Is");
+                yield return new Pair(term + "Call", "Calls");
+                yield return new Pair(term + "_Call", "Calls");
+                yield return new Pair(term + "Create", "Creates");
+                yield return new Pair(term + "_Create", "Creates");
+                yield return new Pair(term + "Fail", "Fails");
+                yield return new Pair(term + "Have", "Have");
+                yield return new Pair(term + "NotHave", "DoNotHave");
+                yield return new Pair(term + "NtHave", "DoNotHave");
+                yield return new Pair(term + "ntHave", "DoNotHave");
+                yield return new Pair(term + "NotBe", "IsNot");
+                yield return new Pair(term + "NtBe", "IsNot");
+                yield return new Pair(term + "ntBe", "IsNot");
+                yield return new Pair(term + "Returns", "Returns");
+                yield return new Pair(term + "Return", "Returns");
+                yield return new Pair(term + "_Returns", "Returns");
+                yield return new Pair(term + "_Return", "Returns");
+                yield return new Pair(term + "Throw", "Throws");
+                yield return new Pair(term + "_Throw", "Throws");
+                yield return new Pair(term, "Does");
 
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_be_", "_is_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_call", "_calls");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_create", "_creates");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_fail", "_fails");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_have_", "_has_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_not_have_", "_does_not_have_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_not_be_", "_is_not_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_return_", "_returns_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_returns_", "_returns_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_throw_", "_throws_");
-                yield return new KeyValuePair<string, string>("_" + lowerTerm + "_", "_does_");
+                yield return new Pair("_" + lowerTerm + "_be_", "_is_");
+                yield return new Pair("_" + lowerTerm + "_call", "_calls");
+                yield return new Pair("_" + lowerTerm + "_create", "_creates");
+                yield return new Pair("_" + lowerTerm + "_fail", "_fails");
+                yield return new Pair("_" + lowerTerm + "_have_", "_has_");
+                yield return new Pair("_" + lowerTerm + "_not_have_", "_does_not_have_");
+                yield return new Pair("_" + lowerTerm + "_not_be_", "_is_not_");
+                yield return new Pair("_" + lowerTerm + "_return_", "_returns_");
+                yield return new Pair("_" + lowerTerm + "_returns_", "_returns_");
+                yield return new Pair("_" + lowerTerm + "_throw_", "_throws_");
+                yield return new Pair("_" + lowerTerm + "_", "_does_");
             }
         }
 

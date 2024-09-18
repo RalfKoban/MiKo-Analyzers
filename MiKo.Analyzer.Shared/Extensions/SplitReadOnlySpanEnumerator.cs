@@ -6,12 +6,12 @@ namespace System
     // Must be a ref struct as it contains a ReadOnlySpan<char>
     internal ref struct SplitReadOnlySpanEnumerator
     {
-        private readonly char[] m_separatorChars;
+        private readonly ReadOnlySpan<char> m_separatorChars;
         private readonly StringSplitOptions m_options;
         private readonly ReadOnlySpan<char> m_initialText;
         private ReadOnlySpan<char> m_spanAfterMoveNext;
 
-        public SplitReadOnlySpanEnumerator(ReadOnlySpan<char> text, char[] separatorChars, StringSplitOptions options)
+        public SplitReadOnlySpanEnumerator(ReadOnlySpan<char> text, ReadOnlySpan<char> separatorChars, StringSplitOptions options)
         {
             m_initialText = text;
             m_spanAfterMoveNext = text;

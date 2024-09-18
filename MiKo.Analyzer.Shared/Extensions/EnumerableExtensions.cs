@@ -1064,6 +1064,76 @@ namespace System.Linq
 
         internal static T[] ToArray<T>(this IEnumerable<T> source, IComparer<T> comparer) => source.ToArray(_ => _, comparer);
 
+        internal static TKey[] ToArray<TKey, TSource>(this SeparatedSyntaxList<TSource> source, Func<TSource, TKey> keySelector) where TSource : SyntaxNode
+        {
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                var result = new TKey[length];
+
+                for (var index = 0; index < length; index++)
+                {
+                    result[index] = keySelector(source[index]);
+                }
+
+                return result;
+            }
+
+            return Array.Empty<TKey>();
+        }
+
+        internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyList<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                var result = new TKey[length];
+
+                for (var index = 0; index < length; index++)
+                {
+                    result[index] = keySelector(source[index]);
+                }
+
+                return result;
+            }
+
+            return Array.Empty<TKey>();
+        }
+
+        internal static TKey[] ToArray<TKey, TSource>(this IReadOnlyCollection<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            var length = source.Count;
+
+            if (length > 0)
+            {
+                var result = new TKey[length];
+                var index = 0;
+
+                foreach (var item in source)
+                {
+                    result[index++] = keySelector(item);
+                }
+
+                return result;
+            }
+
+            return Array.Empty<TKey>();
+        }
+
+        internal static TKey[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            switch (source)
+            {
+                case TSource[] array: return ToArray(array, keySelector);
+                case IReadOnlyList<TSource> list: return ToArray(list, keySelector);
+                case IReadOnlyCollection<TSource> collection: return ToArray(collection, keySelector);
+                default:
+                    return source.Select(keySelector).ToArray();
+            }
+        }
+
         internal static TSource[] ToArray<TKey, TSource>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IComparer<TKey> comparer) => source.OrderBy(keySelector, comparer).ToArray(); // ncrunch: no coverage
 
 #if NETSTANDARD2_0

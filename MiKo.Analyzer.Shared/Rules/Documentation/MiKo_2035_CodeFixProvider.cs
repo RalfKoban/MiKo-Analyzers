@@ -21,10 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #if NCRUNCH
         // do not define a static ctor to speed up tests
 #else
-        static MiKo_2035_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+        static MiKo_2035_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
         public override string FixableDiagnosticId => "MiKo_2035";
+
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
         protected override XmlElementSyntax GenericComment(Document document, XmlElementSyntax comment, string memberName, GenericNameSyntax returnType)
         {
@@ -132,7 +134,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                          .OrderByDescending(_ => _.Length)
                                                                          .ThenBy(_ => _)
                                                                          .ToArray();
-                ReplacementMap = keyInput.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ReplacementMap = keyInput.ToArray(_ => new Pair(_, string.Empty));
                 ReplacementMapKeys = GetTermsForQuickLookup(keyInput);
 
                 var byteKeyInput = AlmostCorrectTaskReturnTypeStartingPhrases.Concat(new[]
@@ -167,7 +169,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                              .OrderByDescending(_ => _.Length)
                                                                              .ThenBy(_ => _)
                                                                              .ToArray();
-                ByteArrayReplacementMap = byteKeyInput.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ByteArrayReplacementMap = byteKeyInput.ToArray(_ => new Pair(_, string.Empty));
                 ByteArrayReplacementMapKeys = GetTermsForQuickLookup(byteKeyInput);
 
                 ByteArrayContinueTexts = new[]
@@ -181,11 +183,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                              };
             }
 
-            public KeyValuePair<string, string>[] ReplacementMap { get; }
+            public Pair[] ReplacementMap { get; }
 
             public string[] ReplacementMapKeys { get; }
 
-            public KeyValuePair<string, string>[] ByteArrayReplacementMap { get; }
+            public Pair[] ByteArrayReplacementMap { get; }
 
             public string[] ByteArrayReplacementMapKeys { get; }
 

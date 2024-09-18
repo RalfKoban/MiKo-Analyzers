@@ -13,7 +13,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         public const string Id = "MiKo_1097";
 
         private static readonly string[] WrongPrefixes = Constants.Markers.FieldPrefixes.Where(_ => _.Length > 0).ToArray();
-        private static readonly char[] WrongPrefixChars = Constants.Markers.FieldPrefixes.Where(_ => _.Length > 1).Select(_ => _[0]).ToArray(); // we are not interested in '_' character
+        private static readonly char[] WrongPrefixChars = Constants.Markers.FieldPrefixes.Where(_ => _.Length > 1).ToArray(_ => _[0]); // we are not interested in '_' character
 
         public MiKo_1097_ParameterNameFollowsFieldNameSchemeAnalyzer() : base(Id, SymbolKind.Parameter)
         {

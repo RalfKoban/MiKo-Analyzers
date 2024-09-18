@@ -193,10 +193,10 @@ namespace System
 
         public static InterpolatedStringTextSyntax AsInterpolatedString(this string value) => SyntaxFactory.InterpolatedStringText(value.AsToken(SyntaxKind.InterpolatedStringTextToken));
 
+//// ncrunch: no coverage start
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values) => string.Concat(values.Where(_ => _ != null));
-
-//// ncrunch: no coverage start
 
         public static StringBuilder ConcatenatedWith<T>(this IEnumerable<T> values) where T : class
         {
@@ -374,6 +374,23 @@ namespace System
             return new string(chars);
         }
 
+        public static string ConcatenatedWith(this char value, string arg0, char arg1)
+        {
+            var length = arg0?.Length ?? 0;
+
+            var chars = new char[length + 2];
+
+            if (length > 0)
+            {
+                arg0.CopyTo(0, chars, 1, length);
+            }
+
+            chars[0] = value;
+            chars[length + 1] = arg1;
+
+            return new string(chars);
+        }
+
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
         {
             var length = value.Length;
@@ -390,23 +407,6 @@ namespace System
             chars[length + 1 + arg1Length] = arg2;
 
             arg1?.CopyTo(0, chars, length + 2, arg1Length);
-
-            return new string(chars);
-        }
-
-        public static string ConcatenatedWith(this char value, string arg0, char arg1)
-        {
-            var length = arg0?.Length ?? 0;
-
-            var chars = new char[length + 2];
-
-            if (length > 0)
-            {
-                arg0.CopyTo(0, chars, 1, length);
-            }
-
-            chars[0] = value;
-            chars[length + 1] = arg1;
 
             return new string(chars);
         }
@@ -442,43 +442,40 @@ namespace System
 
             var difference = findingLength - valueLength;
 
-            if (difference >= 0)
+            if (difference < 0)
             {
-                if (difference == 0)
-                {
-                    return QuickEquals();
+                return value.IndexOf(finding, comparison) >= 0;
+            }
 
-                    bool QuickEquals()
+            if (difference == 0)
+            {
+                return QuickEquals();
+
+                bool QuickEquals()
+                {
+                    const int QuickInspectionChars = 2;
+
+                    if (valueLength > QuickInspectionChars)
                     {
-                        const int QuickInspectionChars = 2;
+                        var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
+                        var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
 
-                        if (valueLength > QuickInspectionChars)
+                        if (valueSpan.CompareTo(findingSpan, comparison) != 0)
                         {
-                            var valueSpan = value.AsSpan(valueLength - QuickInspectionChars, QuickInspectionChars);
-                            var findingSpan = finding.AsSpan(findingLength - QuickInspectionChars, QuickInspectionChars);
-
-                            if (valueSpan.CompareTo(findingSpan, comparison) != 0)
-                            {
-                                return false;
-                            }
+                            return false;
                         }
-
-                        return value.Equals(finding, comparison);
                     }
-                }
 
-                switch (comparison)
-                {
-                    case StringComparison.Ordinal:
-                    case StringComparison.OrdinalIgnoreCase:
-                        // cannot be contained as the item is longer than the string to search in
-                        return false;
+                    return value.Equals(finding, comparison);
                 }
             }
 
-            if (comparison == StringComparison.Ordinal)
+            switch (comparison)
             {
-                return value.AsSpan().Contains(finding.AsSpan());
+                case StringComparison.Ordinal:
+                case StringComparison.OrdinalIgnoreCase:
+                    // cannot be contained as the item is longer than the string to search in
+                    return false;
             }
 
             return value.IndexOf(finding, comparison) >= 0;
@@ -544,7 +541,9 @@ namespace System
 
 //// ncrunch: no coverage start
 
-        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison)
+        public static bool ContainsAny(this string value, string[] phrases, StringComparison comparison) => value.ContainsAny(phrases.AsSpan(), comparison);
+
+        public static bool ContainsAny(this string value, ReadOnlySpan<string> phrases, StringComparison comparison)
         {
             if (value.HasCharacters())
             {
@@ -556,23 +555,24 @@ namespace System
                     var phrase = phrases[index];
                     var phraseSpan = phrase.AsSpan();
 
-                    if (QuickCompare(valueSpan, phraseSpan, comparison) is false)
-                    {
-                        continue;
-                    }
-
                     if (comparison == StringComparison.Ordinal)
                     {
-                        if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                        if (QuickCompare(valueSpan, phraseSpan, StringComparison.Ordinal))
                         {
-                            return true;
+                            if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
+                            {
+                                return true;
+                            }
                         }
                     }
                     else
                     {
-                        if (value.Contains(phrase, comparison))
+                        if (QuickCompare(valueSpan, phraseSpan, comparison))
                         {
-                            return true;
+                            if (value.Contains(phrase, comparison))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
@@ -827,8 +827,6 @@ namespace System
             {
                 var phrasesLength = phrases.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < phrasesLength; index++)
                 {
                     var phrase = phrases[index];
@@ -1071,7 +1069,7 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value) => string.IsNullOrEmpty(value) is false;
+        public static bool HasCharacters(this string value) => value?.Length > 0;
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
@@ -1097,7 +1095,7 @@ namespace System
 
         public static string HumanizedConcatenated(this IEnumerable<string> values, string lastSeparator = "or")
         {
-            var items = values.Select(_ => _.SurroundedWithApostrophe()).ToArray();
+            var items = values.ToArray(_ => _.SurroundedWithApostrophe());
 
             var count = items.Length;
 
@@ -1155,7 +1153,7 @@ namespace System
                     {
                         var phrase = phrases[i];
 
-                        var index = value.IndexOf(phrase.AsSpan(), comparison);
+                        var index = value.IndexOf(phrase.AsSpan(), StringComparison.Ordinal);
 
                         if (index > -1)
                         {
@@ -1357,13 +1355,13 @@ namespace System
 
         public static bool StartsWith(this string value, ReadOnlySpan<char> characters) => value.HasCharacters() && value.AsSpan().StartsWith(characters);
 
-        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[0] == character;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters) => characters.HasCharacters() && value.StartsWith(characters.AsSpan());
+
+        public static bool StartsWith(this string value, ReadOnlySpan<char> characters, StringComparison comparison) => value.HasCharacters() && value.AsSpan().StartsWith(characters, comparison);
 
         public static bool StartsWith(this ReadOnlySpan<char> value, string characters, StringComparison comparison)
         {
@@ -1801,6 +1799,8 @@ namespace System
 
         public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags()); // ncrunch: no coverage
 
+//// ncrunch: no coverage start
+
         public static string WithoutSuffix(this string value, string suffix)
         {
             if (value is null)
@@ -1813,6 +1813,20 @@ namespace System
             return length <= 0
                    ? string.Empty
                    : value.Substring(0, length);
+        }
+
+        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+            var length = value.Length - suffix.Length;
+
+            return length <= 0
+                   ? value.Remove(0, value.Length)
+                   : value.Remove(0, length);
         }
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, char suffix)
@@ -1828,8 +1842,6 @@ namespace System
 
             return value;
         }
-
-//// ncrunch: no coverage start
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, string suffix, StringComparison comparison = StringComparison.Ordinal)
         {
@@ -1849,20 +1861,6 @@ namespace System
         }
 
 //// ncrunch: no coverage end
-
-        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
-        {
-            if (value is null)
-            {
-                return null;
-            }
-
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? value.Remove(0, value.Length)
-                   : value.Remove(0, length);
-        }
 
         public static ReadOnlySpan<char> WithoutSuffixes(this ReadOnlySpan<char> value, string[] suffixes)
         {

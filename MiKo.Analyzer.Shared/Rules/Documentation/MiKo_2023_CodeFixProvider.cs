@@ -50,23 +50,25 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                                              StartWithArticleLowerCaseThe,
                                                                                              StartWithParenthesis);
 
-        private static readonly KeyValuePair<string, string> OtherwisePair = new KeyValuePair<string, string>(". Otherwise", "; otherwise");
+        private static readonly Pair OtherwisePair = new Pair(". Otherwise", "; otherwise");
 
         private static readonly string[] OtherwisePairKey = { OtherwisePair.Key };
-        private static readonly KeyValuePair<string, string>[] OtherwisePairArray = { OtherwisePair };
+        private static readonly Pair[] OtherwisePairArray = { OtherwisePair };
 
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
 #if NCRUNCH
         // do not define a static ctor to speed up tests
 #else
-        static MiKo_2023_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+        static MiKo_2023_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
         public override string FixableDiagnosticId => "MiKo_2023";
 
-//// ncrunch: no coverage end
-//// ncrunch: rdi default
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
+
+        //// ncrunch: no coverage end
+        //// ncrunch: rdi default
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
@@ -249,7 +251,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return FixComment(prepared, info.Keys, info.Map, commentContinuation.ToString());
         }
 
-        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, KeyValuePair<string, string>[] replacementMap, string commentContinue = null)
+        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, Pair[] replacementMap, string commentContinue = null)
         {
             var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
@@ -356,86 +358,86 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var replacementMapCommon = new[]
                                                {
-                                                   new KeyValuePair<string, string>("'true'", string.Empty),
-                                                   new KeyValuePair<string, string>("'True'", string.Empty),
-                                                   new KeyValuePair<string, string>("'TRUE'", string.Empty),
-                                                   new KeyValuePair<string, string>("\"true\"", string.Empty),
-                                                   new KeyValuePair<string, string>("\"True\"", string.Empty),
-                                                   new KeyValuePair<string, string>("\"TRUE\"", string.Empty),
-                                                   new KeyValuePair<string, string>("true", string.Empty),
-                                                   new KeyValuePair<string, string>("True", string.Empty),
-                                                   new KeyValuePair<string, string>("TRUE", string.Empty),
-                                                   new KeyValuePair<string, string>("'false'", string.Empty),
-                                                   new KeyValuePair<string, string>("'False'", string.Empty),
-                                                   new KeyValuePair<string, string>("'FALSE'", string.Empty),
-                                                   new KeyValuePair<string, string>("\"false\"", string.Empty),
-                                                   new KeyValuePair<string, string>("\"False\"", string.Empty),
-                                                   new KeyValuePair<string, string>("\"FALSE\"", string.Empty),
-                                                   new KeyValuePair<string, string>("false", string.Empty),
-                                                   new KeyValuePair<string, string>("False", string.Empty),
-                                                   new KeyValuePair<string, string>("FALSE", string.Empty),
-                                                   new KeyValuePair<string, string>("; otherwise ; otherwise, ", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>(", otherwise ; otherwise, ", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>(";  otherwise; otherwise, ", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>(",  otherwise; otherwise, ", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>("; otherwise; otherwise, ", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>(", otherwise; otherwise, ", OtherwiseReplacement),
-                                                   new KeyValuePair<string, string>("if you want to", ReplacementTo),
-                                                   new KeyValuePair<string, string>("if this is ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to value indicating, whether ", Replacement),
-                                                   new KeyValuePair<string, string>(" to value indicating, that ", Replacement),
-                                                   new KeyValuePair<string, string>(" to value indicating, if ", Replacement),
-                                                   new KeyValuePair<string, string>(" to value indicating whether ", Replacement),
-                                                   new KeyValuePair<string, string>(" to value indicating that ", Replacement),
-                                                   new KeyValuePair<string, string>(" to value indicating if ", Replacement),
-                                                   new KeyValuePair<string, string>(" to in case set to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to in case ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to if given ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to when given ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to if set to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to when set to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to if ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to when ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to whether to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to set to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to given ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to use  if ", Replacement),
-                                                   new KeyValuePair<string, string>(" to use  when ", Replacement),
-                                                   new KeyValuePair<string, string>(" to . if ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to , if ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to ; if ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to : if ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to , ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to ; ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to : ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to the to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to an to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to a to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to  to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to to ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to  ", ReplacementTo),
-                                                   new KeyValuePair<string, string>(" to the ", Replacement + "the "),
-                                                   new KeyValuePair<string, string>(" to an ", Replacement + "an "),
-                                                   new KeyValuePair<string, string>(" to a ", Replacement + "a "),
-                                                   new KeyValuePair<string, string>(" that to ", " that "),
-                                                   new KeyValuePair<string, string>(" the the ", " the "),
-                                                   new KeyValuePair<string, string>(" an an ", " an "),
-                                                   new KeyValuePair<string, string>(" a a ", " a "),
-                                                   //// new KeyValuePair<string, string>(". otherwise.", OtherwiseReplacement),
-                                                   //// new KeyValuePair<string, string>(",otherwise", "; otherwise,"),
-                                                   //// new KeyValuePair<string, string>(",  otherwise ", "; otherwise, "),
-                                                   //// new KeyValuePair<string, string>(",  otherwise", OtherwiseReplacement),
-                                                   //// new KeyValuePair<string, string>("; Otherwise; ", "; "),
-                                                   new KeyValuePair<string, string>(OrNotPhrase + ".", "."),
-                                                   new KeyValuePair<string, string>(OrNotPhrase + ";", ";"),
-                                                   new KeyValuePair<string, string>(OrNotPhrase + ",", ","),
-                                                   new KeyValuePair<string, string>(". ", "; "),
+                                                   new Pair("'true'", string.Empty),
+                                                   new Pair("'True'", string.Empty),
+                                                   new Pair("'TRUE'", string.Empty),
+                                                   new Pair("\"true\"", string.Empty),
+                                                   new Pair("\"True\"", string.Empty),
+                                                   new Pair("\"TRUE\"", string.Empty),
+                                                   new Pair("true", string.Empty),
+                                                   new Pair("True", string.Empty),
+                                                   new Pair("TRUE", string.Empty),
+                                                   new Pair("'false'", string.Empty),
+                                                   new Pair("'False'", string.Empty),
+                                                   new Pair("'FALSE'", string.Empty),
+                                                   new Pair("\"false\"", string.Empty),
+                                                   new Pair("\"False\"", string.Empty),
+                                                   new Pair("\"FALSE\"", string.Empty),
+                                                   new Pair("false", string.Empty),
+                                                   new Pair("False", string.Empty),
+                                                   new Pair("FALSE", string.Empty),
+                                                   new Pair("; otherwise ; otherwise, ", OtherwiseReplacement),
+                                                   new Pair(", otherwise ; otherwise, ", OtherwiseReplacement),
+                                                   new Pair(";  otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new Pair(",  otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new Pair("; otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new Pair(", otherwise; otherwise, ", OtherwiseReplacement),
+                                                   new Pair("if you want to", ReplacementTo),
+                                                   new Pair("if this is ", ReplacementTo),
+                                                   new Pair(" to value indicating, whether ", Replacement),
+                                                   new Pair(" to value indicating, that ", Replacement),
+                                                   new Pair(" to value indicating, if ", Replacement),
+                                                   new Pair(" to value indicating whether ", Replacement),
+                                                   new Pair(" to value indicating that ", Replacement),
+                                                   new Pair(" to value indicating if ", Replacement),
+                                                   new Pair(" to in case set to ", ReplacementTo),
+                                                   new Pair(" to in case ", ReplacementTo),
+                                                   new Pair(" to if given ", ReplacementTo),
+                                                   new Pair(" to when given ", ReplacementTo),
+                                                   new Pair(" to if set to ", ReplacementTo),
+                                                   new Pair(" to when set to ", ReplacementTo),
+                                                   new Pair(" to if ", ReplacementTo),
+                                                   new Pair(" to when ", ReplacementTo),
+                                                   new Pair(" to whether to ", ReplacementTo),
+                                                   new Pair(" to set to ", ReplacementTo),
+                                                   new Pair(" to given ", ReplacementTo),
+                                                   new Pair(" to use  if ", Replacement),
+                                                   new Pair(" to use  when ", Replacement),
+                                                   new Pair(" to . if ", ReplacementTo),
+                                                   new Pair(" to , if ", ReplacementTo),
+                                                   new Pair(" to ; if ", ReplacementTo),
+                                                   new Pair(" to : if ", ReplacementTo),
+                                                   new Pair(" to , ", ReplacementTo),
+                                                   new Pair(" to ; ", ReplacementTo),
+                                                   new Pair(" to : ", ReplacementTo),
+                                                   new Pair(" to the to ", ReplacementTo),
+                                                   new Pair(" to an to ", ReplacementTo),
+                                                   new Pair(" to a to ", ReplacementTo),
+                                                   new Pair(" to  to ", ReplacementTo),
+                                                   new Pair(" to to ", ReplacementTo),
+                                                   new Pair(" to  ", ReplacementTo),
+                                                   new Pair(" to the ", Replacement + "the "),
+                                                   new Pair(" to an ", Replacement + "an "),
+                                                   new Pair(" to a ", Replacement + "a "),
+                                                   new Pair(" that to ", " that "),
+                                                   new Pair(" the the ", " the "),
+                                                   new Pair(" an an ", " an "),
+                                                   new Pair(" a a ", " a "),
+                                                   //// new Pair(". otherwise.", OtherwiseReplacement),
+                                                   //// new Pair(",otherwise", "; otherwise,"),
+                                                   //// new Pair(",  otherwise ", "; otherwise, "),
+                                                   //// new Pair(",  otherwise", OtherwiseReplacement),
+                                                   //// new Pair("; Otherwise; ", "; "),
+                                                   new Pair(OrNotPhrase + ".", "."),
+                                                   new Pair(OrNotPhrase + ";", ";"),
+                                                   new Pair(OrNotPhrase + ",", ","),
+                                                   new Pair(". ", "; "),
                                                };
 
-                var replacementMapKeysCommon = replacementMapCommon.Select(_ => _.Key).ToArray();
+                var replacementMapKeysCommon = replacementMapCommon.ToArray(_ => _.Key);
 
                 var replacementMap = CreateReplacementMap();
-                var replacementMapKeys = replacementMap.Select(_ => _.Key).ToArray();
+                var replacementMapKeys = replacementMap.ToArray(_ => _.Key);
 
                 var replacementMapKeysForA = ToKeyArray(replacementMapKeys, StartWithArticleA);
                 var replacementMapKeysForAn = ToKeyArray(replacementMapKeys, StartWithArticleAn);
@@ -488,9 +490,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.Ordinal)).ToArray();
 
-                KeyValuePair<string, string>[] ToMapArray(KeyValuePair<string, string>[] map, HashSet<string> keys, KeyValuePair<string, string>[] others)
+                Pair[] ToMapArray(Pair[] map, HashSet<string> keys, Pair[] others)
                 {
-                    var results = new KeyValuePair<string, string>[keys.Count + others.Length];
+                    var results = new Pair[keys.Count + others.Length];
                     var resultIndex = 0;
 
                     var count = map.Length;
@@ -515,21 +517,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 string[] ToUpper(IEnumerable<string> strings) => strings.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
             }
 
-            public KeyValuePair<string, string>[] ReplacementMapForA { get; }
+            public Pair[] ReplacementMapForA { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForAn { get; }
+            public Pair[] ReplacementMapForAn { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForThe { get; }
+            public Pair[] ReplacementMapForThe { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForParenthesis { get; }
+            public Pair[] ReplacementMapForParenthesis { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForOthers { get; }
+            public Pair[] ReplacementMapForOthers { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForLowerCaseA { get; }
+            public Pair[] ReplacementMapForLowerCaseA { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForLowerCaseAn { get; }
+            public Pair[] ReplacementMapForLowerCaseAn { get; }
 
-            public KeyValuePair<string, string>[] ReplacementMapForLowerCaseThe { get; }
+            public Pair[] ReplacementMapForLowerCaseThe { get; }
 
             public string[] ReplacementMapKeysForA { get; }
 
@@ -557,18 +559,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             public string[] ReplacementMapKeysInUpperCaseForOthers { get; }
 
-            private static KeyValuePair<string, string>[] CreateReplacementMap()
+            private static Pair[] CreateReplacementMap()
             {
                 var startTerms = CreateStartTerms();
 
                 var textsCount = startTerms.Count;
 
-                var replacements = new KeyValuePair<string, string>[textsCount];
+                var replacements = new Pair[textsCount];
                 var index = 0;
 
                 foreach (var text in startTerms.OrderBy(_ => _, ArticleStartComparer).ThenByDescending(_ => _.Length).ThenBy(_ => _))
                 {
-                    replacements[index++] = new KeyValuePair<string, string>(text, Replacement);
+                    replacements[index++] = new Pair(text, Replacement);
                 }
 
                 return replacements;
@@ -711,14 +713,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private sealed class ConcreteMapInfo
         {
-            public ConcreteMapInfo(KeyValuePair<string, string>[] map, string[] keys, string[] keysInUpperCase)
+            public ConcreteMapInfo(Pair[] map, string[] keys, string[] keysInUpperCase)
             {
                 Map = map;
                 Keys = keys;
                 KeysInUpperCase = keysInUpperCase;
             }
 
-            public KeyValuePair<string, string>[] Map { get; }
+            public Pair[] Map { get; }
 
             public string[] Keys { get; }
 

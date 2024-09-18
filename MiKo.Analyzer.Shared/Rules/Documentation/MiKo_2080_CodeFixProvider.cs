@@ -16,7 +16,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
+#if NCRUNCH
+        // do not define a static ctor to speed up tests
+#else
+        static MiKo_2080_CodeFixProvider() => LoadData(); // ensure that we have the object available
+#endif
+
         public override string FixableDiagnosticId => "MiKo_2080";
+
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
@@ -41,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                      .ThenBy(_ => _)
                                                      .ToArray();
 
-                ReplacementMap = keys.Select(_ => new KeyValuePair<string, string>(_, string.Empty)).ToArray();
+                ReplacementMap = keys.ToArray(_ => new Pair(_, string.Empty));
 
                 ReplacementMapKeys = GetTermsForQuickLookup(keys);
 
@@ -71,25 +79,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 TypeGuidReplacementMap = TypeGuidReplacementMapKeys.OrderByDescending(_ => _.Length)
                                                                    .ThenBy(_ => _)
-                                                                   .Select(_ => new KeyValuePair<string, string>(_, "The unique identifier for the type of "))
-                                                                   .ToArray();
+                                                                   .ToArray(_ => new Pair(_, "The unique identifier for the type of "));
 
                 CleanupMapKeys = new[] { " a the ", " an the ", " the the " };
 
-                CleanupMap = CleanupMapKeys.Select(_ => new KeyValuePair<string, string>(_, " the ")).ToArray();
+                CleanupMap = CleanupMapKeys.ToArray(_ => new Pair(_, " the "));
             }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> ReplacementMap { get; }
+            public Pair[] ReplacementMap { get; }
 
             public string[] ReplacementMapKeys { get; }
 
-            public IReadOnlyCollection<string> TypeGuidReplacementMapKeys { get; }
+            public string[] TypeGuidReplacementMapKeys { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeGuidReplacementMap { get; }
+            public Pair[] TypeGuidReplacementMap { get; }
 
-            public IReadOnlyCollection<string> CleanupMapKeys { get; }
+            public string[] CleanupMapKeys { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> CleanupMap { get; }
+            public Pair[] CleanupMap { get; }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static HashSet<string> CreateReplacementMapKeys()

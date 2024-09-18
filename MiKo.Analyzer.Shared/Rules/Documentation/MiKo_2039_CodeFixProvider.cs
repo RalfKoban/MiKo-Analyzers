@@ -16,7 +16,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] Parts = Constants.Comments.ExtensionMethodClassStartingPhraseTemplate.FormatWith('|').Split('|');
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMapKeys().ToDictionary(_ => _, _ => string.Empty);
+        private static readonly string[] ReplacementMapKeys = CreateReplacementMapKeys().ToArray();
+
+        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
 
 //// ncrunch: rdi default
 
@@ -29,7 +31,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return CommentStartingWith(comment, Parts[0], SeeLangword("static"), Parts[1]);
         }
 
-        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMap.Keys, ReplacementMap);
+        private static XmlElementSyntax PrepareComment(XmlElementSyntax comment) => Comment(comment, ReplacementMapKeys, ReplacementMap);
 
 //// ncrunch: rdi off
 

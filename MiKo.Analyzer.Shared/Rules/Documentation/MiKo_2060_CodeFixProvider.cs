@@ -20,10 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 #if NCRUNCH
         // do not define a static ctor to speed up tests
 #else
-        static MiKo_2060_CodeFixProvider() => GC.KeepAlive(MappedData.Value); // ensure that we have the object available
+        static MiKo_2060_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
         public override string FixableDiagnosticId => "MiKo_2060";
+
+        public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
@@ -92,7 +94,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return updated;
             }
 
-            updated = Comment(comment, mappedData.TypeReplacementMapKeysT, mappedData.TypeReplacementMapT);
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysThe, mappedData.TypeReplacementMapThe);
+
+            if (ReferenceEquals(updated, comment) is false)
+            {
+                // has been replaced, so nothing more to do
+                return updated;
+            }
+
+            updated = Comment(comment, mappedData.TypeReplacementMapKeysThis, mappedData.TypeReplacementMapThis);
 
             if (ReferenceEquals(updated, comment) is false)
             {
@@ -145,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var mappedData = MappedData.Value;
 
-            return Comment(comment, mappedData.CleanupReplacementMap.Keys, mappedData.CleanupReplacementMap);
+            return Comment(comment, mappedData.CleanupReplacementMapKeys, mappedData.CleanupReplacementMap);
         }
 
 //// ncrunch: rdi off
@@ -157,11 +167,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var typeKeys = CreateTypeReplacementMapKeys();
                 var typeKeysLength = typeKeys.Length;
-                Array.Sort(typeKeys, AscendingStringComparer.Default);
+
+                //// Array.Sort(typeKeys, AscendingStringComparer.Default);
 
                 var typeKeysWithA = new List<string>(76298); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysWithCD = new List<string>(40477); // TODO RKN: Adjust number as soon as there are other texts
-                var typeKeysWithT = new List<string>(94855); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithThe = new List<string>(72645); // TODO RKN: Adjust number as soon as there are other texts
+                var typeKeysWithThis = new List<string>(22210); // TODO RKN: Adjust number as soon as there are other texts
                 var typeKeysOther = new List<string>(63372); // TODO RKN: Adjust number as soon as there are other texts
 
                 for (var index = 0; index < typeKeysLength; index++)
@@ -173,6 +185,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'A':
                         case 'a':
                             typeKeysWithA.Add(typeKey);
+
                             break;
 
                         case 'C':
@@ -180,18 +193,28 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         case 'c':
                         case 'd':
                             typeKeysWithCD.Add(typeKey);
+
                             break;
 
                         case 'T':
                         case 't':
-                            typeKeysWithT.Add(typeKey);
+                            var list = typeKey[2] == 'e' ? typeKeysWithThe : typeKeysWithThis;
+                            list.Add(typeKey);
+
                             break;
 
                         default:
                             typeKeysOther.Add(typeKey);
+
                             break;
                     }
                 }
+
+                typeKeysWithA.Sort(AscendingStringComparer.Default);
+                typeKeysWithCD.Sort(AscendingStringComparer.Default);
+                typeKeysWithThe.Sort(AscendingStringComparer.Default);
+                typeKeysWithThis.Sort(AscendingStringComparer.Default);
+                typeKeysOther.Sort(AscendingStringComparer.Default);
 
                 TypeReplacementMapA = ToArray(typeKeysWithA);
                 TypeReplacementMapKeysA = GetTermsForQuickLookup(typeKeysWithA);
@@ -199,8 +222,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 TypeReplacementMapCD = ToArray(typeKeysWithCD);
                 TypeReplacementMapKeysCD = GetTermsForQuickLookup(typeKeysWithCD);
 
-                TypeReplacementMapT = ToArray(typeKeysWithT);
-                TypeReplacementMapKeysT = GetTermsForQuickLookup(typeKeysWithT);
+                TypeReplacementMapThe = ToArray(typeKeysWithThe);
+                TypeReplacementMapKeysThe = GetTermsForQuickLookup(typeKeysWithThe);
+
+                TypeReplacementMapThis = ToArray(typeKeysWithThis);
+                TypeReplacementMapKeysThis = GetTermsForQuickLookup(typeKeysWithThis);
 
                 TypeReplacementMapOthers = ToArray(typeKeysOther);
                 TypeReplacementMapKeysOthers = GetTermsForQuickLookup(typeKeysOther);
@@ -210,15 +236,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 Array.Sort(methodKeys, AscendingStringComparer.Default);
 
-                var methodReplacementMap = new KeyValuePair<string, string>[methodKeysLength];
-                var instancesReplacementMap = new KeyValuePair<string, string>[methodKeysLength];
+                var methodReplacementMap = new Pair[methodKeysLength];
+                var instancesReplacementMap = new Pair[methodKeysLength];
 
                 for (var i = 0; i < methodKeysLength; i++)
                 {
                     var key = methodKeys[i];
 
-                    methodReplacementMap[i] = new KeyValuePair<string, string>(key, string.Empty);
-                    instancesReplacementMap[i] = new KeyValuePair<string, string>(key, "instances of the ");
+                    methodReplacementMap[i] = new Pair(key, string.Empty);
+                    instancesReplacementMap[i] = new Pair(key, "instances of the ");
                 }
 
                 MethodReplacementMap = methodReplacementMap;
@@ -227,57 +253,64 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 InstancesReplacementMap = instancesReplacementMap;
                 InstancesReplacementMapKeys = GetTermsForQuickLookup(methodKeys);
 
-                CleanupReplacementMap = new Dictionary<string, string>
+                CleanupReplacementMap = new[]
                                             {
-                                                { " based on ", " default values for " },
-                                                { " with for ", " with " },
-                                                { " with with ", " with " },
-                                                { " type with type.", " type with default values." },
-                                                { " type with that ", " type with default values that " },
-                                                { " type with which ", " type with default values which " },
+                                                new Pair(" based on ", " default values for "),
+                                                new Pair(" with for ", " with "),
+                                                new Pair(" with with ", " with "),
+                                                new Pair(" type with type.", " type with default values."),
+                                                new Pair(" type with that ", " type with default values that "),
+                                                new Pair(" type with which ", " type with default values which "),
                                             };
+                CleanupReplacementMapKeys = CleanupReplacementMap.ToArray(_ => _.Key);
 
-                KeyValuePair<string, string>[] ToArray(IReadOnlyList<string> keys)
+                Pair[] ToArray(IReadOnlyList<string> keys)
                 {
                     var length = keys.Count;
-                    var pairs = new KeyValuePair<string, string>[length];
+                    var pairs = new Pair[length];
 
                     for (var i = 0; i < length; i++)
                     {
                         var key = keys[i];
 
-                        pairs[i] = new KeyValuePair<string, string>(key, string.Empty);
+                        pairs[i] = new Pair(key, string.Empty);
                     }
 
                     return pairs;
                 }
             }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapA { get; }
+            public Pair[] TypeReplacementMapA { get; }
 
             public string[] TypeReplacementMapKeysA { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapCD { get; }
+            public Pair[] TypeReplacementMapCD { get; }
 
             public string[] TypeReplacementMapKeysCD { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapT { get; }
+            public Pair[] TypeReplacementMapThe { get; }
 
-            public string[] TypeReplacementMapKeysT { get; }
+            public string[] TypeReplacementMapKeysThe { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> TypeReplacementMapOthers { get; }
+            public Pair[] TypeReplacementMapThis { get; }
+
+            public string[] TypeReplacementMapKeysThis { get; }
+
+            public Pair[] TypeReplacementMapOthers { get; }
 
             public string[] TypeReplacementMapKeysOthers { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> MethodReplacementMap { get; }
+            public Pair[] MethodReplacementMap { get; }
 
             public string[] MethodReplacementMapKeys { get; }
 
-            public IReadOnlyCollection<KeyValuePair<string, string>> InstancesReplacementMap { get; }
+            public Pair[] InstancesReplacementMap { get; }
 
             public string[] InstancesReplacementMapKeys { get; }
 
-            public Dictionary<string, string> CleanupReplacementMap { get; }
+            public Pair[] CleanupReplacementMap { get; }
+
+            public string[] CleanupReplacementMapKeys { get; }
 
             // ReSharper disable once ReturnTypeCanBeEnumerable.Local Violates CA1859
             private static string[] CreateTypeReplacementMapKeys()
@@ -565,16 +598,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 var strangeTexts = new[]
-                                   {
-                                       "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
-                                       "es that is capable", "es which is capable", "es that is able", "es which is able",
-                                       "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
-                                       "y that are capable", "y which are capable", "y that are able", "y which are able",
-                                       "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
-                                       "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
-                                       "ies that provides", "ies which provides",
-                                       "providing provid", "provides provid", "provide provid",
-                                   };
+                                       {
+                                           "methods a", "methods instance", "methods new", "methods the", "factory class method", "method that are", "method which are",
+                                           "es that is capable", "es which is capable", "es that is able", "es which is able",
+                                           "ss that are capable", "ss which are capable", "ss that are able", "ss which are able",
+                                           "y that are capable", "y which are capable", "y that are able", "y which are able",
+                                           "rn that are capable", "rn which are capable", "rn that are able", "rn which are able",
+                                           "ace that are capable", "ace which are capable", "ace that are able", "ace which are able",
+                                           "ies that provides", "ies which provides",
+                                           "providing provid", "provides provid", "provide provid",
+                                       };
 
                 results.RemoveWhere(_ => _.ContainsAny(strangeTexts));
 

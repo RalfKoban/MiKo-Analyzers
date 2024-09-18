@@ -103,9 +103,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] ComponentPhrases = CreateComponentPhrases().ToArray();
 
-        private static readonly Dictionary<string, string> ReplacementMap = CreateReplacementMap();
+        private static readonly Pair[] ReplacementMap = CreateReplacementMap();
 
-        private static readonly string[] ReplacementMapKeys = ReplacementMap.Keys.Select(_ => _.Trim()).ToArray();
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.ToArray(_ => _.Key.Trim());
 
         private static readonly ISet<SyntaxKind> Declarations = new HashSet<SyntaxKind>
                                                                     {
@@ -163,7 +163,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         if (text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
                          || text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
                          || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysT, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysThe, StringComparison.OrdinalIgnoreCase)
+                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
                          || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase))
                         {
                             return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
@@ -173,7 +174,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (text.StartsWithAny(ReplacementMapKeys, StringComparison.Ordinal))
                 {
-                    return Comment(comment, ReplacementMap.Keys, ReplacementMap);
+                    return Comment(comment, ReplacementMapKeys, ReplacementMap);
                 }
 
                 foreach (var phrase in ComponentPhrases.Concat(UsedToPhrases))
@@ -211,7 +212,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            var updatedComment = Comment(comment, ReplacementMap.Keys, ReplacementMap, FirstWordHandling.MakeLowerCase);
+            var updatedComment = Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeLowerCase);
 
             return updatedComment;
         }
@@ -286,7 +287,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
 //// ncrunch: rdi off
 
-        private static Dictionary<string, string> CreateReplacementMap()
+        private static Pair[] CreateReplacementMap()
         {
             var entries = CreateReplacementMapEntries().ToArray(_ => _.Key, AscendingStringComparer.Default); // sort by first character
 
@@ -300,98 +301,98 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
             }
 
-            return result;
+            return result.ToArray(_ => new Pair(_.Key, _.Value));
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> CreateReplacementMapEntries()
+        private static IEnumerable<Pair> CreateReplacementMapEntries()
         {
             // event arguments
-            yield return new KeyValuePair<string, string>("Event argument for ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event argument that is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event argument that provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event argument which is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event argument which provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event arguments for ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event arguments that provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event arguments which provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event argument for ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event argument that is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event argument that provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event argument which is used in the ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event argument which provides information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event arguments for ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event arguments that provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
+            yield return new Pair("Event arguments which provide information ", Constants.Comments.EventArgsSummaryStartingPhrase);
 
             // events
-            yield return new KeyValuePair<string, string>("Event is fired ", Constants.Comments.EventSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event that is published ", Constants.Comments.EventSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event that is published, ", Constants.Comments.EventSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event which is published ", Constants.Comments.EventSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event which is published, ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event is fired ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event that is published ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event that is published, ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event which is published ", Constants.Comments.EventSummaryStartingPhrase);
+            yield return new Pair("Event which is published, ", Constants.Comments.EventSummaryStartingPhrase);
 
             // event handler
-            yield return new KeyValuePair<string, string>("EventHandler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("EventHandler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event handler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Event handler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Handler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
-            yield return new KeyValuePair<string, string>("Handler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new Pair("EventHandler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new Pair("EventHandler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new Pair("Event handler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new Pair("Event handler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new Pair("Handler for the ", Constants.Comments.EventHandlerSummaryStartingPhrase);
+            yield return new Pair("Handler for ", Constants.Comments.EventHandlerSummaryStartingPhrase);
 
             // factories
-            yield return new KeyValuePair<string, string>("Factory for ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class building ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class constructing ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class creating ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class to build ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class to construct ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class to create ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class that builds ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class that constructs ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class that creates ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class which builds ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class which constructs ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Factory class which creates ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface for factories creating ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface for factories to create ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface for factories that create ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface for factories which create ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface of a factory creating ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface of a factory that creates ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Interface of a factory which creates ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Used to create ", Constants.Comments.FactorySummaryPhrase);
-            yield return new KeyValuePair<string, string>("Used for creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory for ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class building ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class constructing ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class to build ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class to construct ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class that builds ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class that constructs ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class that creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class which builds ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class which constructs ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Factory class which creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface for factories creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface for factories to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface for factories that create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface for factories which create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface of a factory creating ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface of a factory that creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Interface of a factory which creates ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Used to create ", Constants.Comments.FactorySummaryPhrase);
+            yield return new Pair("Used for creating ", Constants.Comments.FactorySummaryPhrase);
 
-            yield return new KeyValuePair<string, string>("Class that serves as ", "Represents a ");
-            yield return new KeyValuePair<string, string>("Class that serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("Class which serves as ", "Represents a ");
-            yield return new KeyValuePair<string, string>("Class which serves ", "Provides ");
+            yield return new Pair("Class that serves as ", "Represents a ");
+            yield return new Pair("Class that serves ", "Provides ");
+            yield return new Pair("Class which serves as ", "Represents a ");
+            yield return new Pair("Class which serves ", "Provides ");
 
             // initialize method
-            yield return new KeyValuePair<string, string>("Initialize ", "Initializes ");
+            yield return new Pair("Initialize ", "Initializes ");
 
-            yield return new KeyValuePair<string, string>("Contain ", "Provides ");
-            yield return new KeyValuePair<string, string>("Contains ", "Provides ");
-            yield return new KeyValuePair<string, string>("Every class that implements the interface can ", "Allows to ");
-            yield return new KeyValuePair<string, string>("Every class that implements this interface can ", "Allows to ");
-            yield return new KeyValuePair<string, string>("Extension of ", "Extends the ");
-            yield return new KeyValuePair<string, string>("Interface definition for ", "Represents ");
-            yield return new KeyValuePair<string, string>("Interface for a ", "Represents a ");
-            yield return new KeyValuePair<string, string>("Interface for an ", "Represents an ");
-            yield return new KeyValuePair<string, string>("Interface for the ", "Represents a ");
-            yield return new KeyValuePair<string, string>("Interface of ", "Represents ");
-            yield return new KeyValuePair<string, string>("Interface that serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("Interface which serves ", "Provides ");
-            yield return new KeyValuePair<string, string>("The class offers ", "Provides ");
-            yield return new KeyValuePair<string, string>("The interface offers ", "Provides ");
-            yield return new KeyValuePair<string, string>("This class offers ", "Provides ");
-            yield return new KeyValuePair<string, string>("This interface offers ", "Provides ");
+            yield return new Pair("Contain ", "Provides ");
+            yield return new Pair("Contains ", "Provides ");
+            yield return new Pair("Every class that implements the interface can ", "Allows to ");
+            yield return new Pair("Every class that implements this interface can ", "Allows to ");
+            yield return new Pair("Extension of ", "Extends the ");
+            yield return new Pair("Interface definition for ", "Represents ");
+            yield return new Pair("Interface for a ", "Represents a ");
+            yield return new Pair("Interface for an ", "Represents an ");
+            yield return new Pair("Interface for the ", "Represents a ");
+            yield return new Pair("Interface of ", "Represents ");
+            yield return new Pair("Interface that serves ", "Provides ");
+            yield return new Pair("Interface which serves ", "Provides ");
+            yield return new Pair("The class offers ", "Provides ");
+            yield return new Pair("The interface offers ", "Provides ");
+            yield return new Pair("This class offers ", "Provides ");
+            yield return new Pair("This interface offers ", "Provides ");
 
             // view models
-            yield return new KeyValuePair<string, string>("ViewModel of ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View Model of ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View model of ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("ViewModel for ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View Model for ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View model for ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("ViewModel representing ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View Model representing ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View model representing ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("ViewModel that represents ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View Model that represents ", "Represents the view model of ");
-            yield return new KeyValuePair<string, string>("View model that represents ", "Represents the view model of ");
+            yield return new Pair("ViewModel of ", "Represents the view model of ");
+            yield return new Pair("View Model of ", "Represents the view model of ");
+            yield return new Pair("View model of ", "Represents the view model of ");
+            yield return new Pair("ViewModel for ", "Represents the view model of ");
+            yield return new Pair("View Model for ", "Represents the view model of ");
+            yield return new Pair("View model for ", "Represents the view model of ");
+            yield return new Pair("ViewModel representing ", "Represents the view model of ");
+            yield return new Pair("View Model representing ", "Represents the view model of ");
+            yield return new Pair("View model representing ", "Represents the view model of ");
+            yield return new Pair("ViewModel that represents ", "Represents the view model of ");
+            yield return new Pair("View Model that represents ", "Represents the view model of ");
+            yield return new Pair("View model that represents ", "Represents the view model of ");
 
             foreach (var phrase in CreatePhrases())
             {
@@ -399,7 +400,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, string>> CreatePhrases()
+        private static IEnumerable<Pair> CreatePhrases()
         {
             var beginnings = new[]
                                  {
@@ -470,16 +471,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     {
                         var begin = string.Concat(start, " ", middle, " ");
 
-                        yield return new KeyValuePair<string, string>(string.Concat(begin, verb, " "), fix);
-                        yield return new KeyValuePair<string, string>(string.Concat(begin, thirdPersonVerb, " "), fix);
+                        yield return new Pair(string.Concat(begin, verb, " "), fix);
+                        yield return new Pair(string.Concat(begin, thirdPersonVerb, " "), fix);
                     }
 
-                    yield return new KeyValuePair<string, string>(string.Concat(start, " to ", noun, " "), fix);
-                    yield return new KeyValuePair<string, string>(string.Concat(start, " to ", verb, " "), fix);
+                    yield return new Pair(string.Concat(start, " to ", noun, " "), fix);
+                    yield return new Pair(string.Concat(start, " to ", verb, " "), fix);
 
-                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", verb, " "), fix);
-                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", thirdPersonVerb, " "), fix);
-                    yield return new KeyValuePair<string, string>(string.Concat(start, " ", gerundVerb, " "), fix);
+                    yield return new Pair(string.Concat(start, " ", verb, " "), fix);
+                    yield return new Pair(string.Concat(start, " ", thirdPersonVerb, " "), fix);
+                    yield return new Pair(string.Concat(start, " ", gerundVerb, " "), fix);
                 }
             }
         }
