@@ -19,7 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] WrongBooleanPhrases = [.. CreateWrongBooleanPhrases().Take(TestLimit)];
 
         [OneTimeSetUp]
-        public void PrepareTestEnvironment() => MiKo_2080_CodeFixProvider.LoadData();
+        public static void PrepareTestEnvironment() => MiKo_2080_CodeFixProvider.LoadData();
 
         [Test]
         public void No_issue_is_reported_for_uncommented_field() => No_issue_is_reported_for(@"
