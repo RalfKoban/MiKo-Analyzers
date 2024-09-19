@@ -533,11 +533,9 @@ namespace System
 
         public static bool ContainsAny(this string value, char[] characters) => value?.IndexOfAny(characters) >= 0;
 
-        public static bool ContainsAny(this ReadOnlySpan<char> value, char[] characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
+        public static bool ContainsAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> characters) => value.Length > 0 && value.IndexOfAny(characters) >= 0;
 
-        public static bool ContainsAny(this string value, IList<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
-
-        public static bool ContainsAny(this string value, IEnumerable<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
+        public static bool ContainsAny(this string value, ReadOnlySpan<string> phrases) => value.ContainsAny(phrases, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
 
@@ -677,35 +675,15 @@ namespace System
 
         public static bool EndsWithAny(this string value, IEnumerable<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, string suffixCharacters)
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> suffixCharacters)
         {
             if (value.Length > 0)
             {
                 var lastChar = value[value.Length - 1];
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < suffixCharacters.Length; index++)
-                {
-                    if (lastChar == suffixCharacters[index])
-                    {
-                        return true;
-                    }
-                }
-            }
+                var length = suffixCharacters.Length;
 
-            return false;
-        }
-
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, char[] suffixCharacters)
-        {
-            if (value.Length > 0)
-            {
-                var lastChar = value[value.Length - 1];
-
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
-                for (var index = 0; index < suffixCharacters.Length; index++)
+                for (var index = 0; index < length; index++)
                 {
                     if (lastChar == suffixCharacters[index])
                     {
@@ -779,7 +757,9 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes, StringComparison comparison)
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes, StringComparison comparison) => value.EndsWithAny(suffixes.AsSpan(), comparison);
+
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<string> suffixes, StringComparison comparison)
         {
             var valueLength = value.Length;
             var suffixesLength = suffixes.Length;
@@ -1393,12 +1373,12 @@ namespace System
 
 //// ncrunch: no coverage start
 
-        public static bool StartsWithAny(this string value, IList<string> prefixes, StringComparison comparison)
+        public static bool StartsWithAny(this string value, ReadOnlySpan<string> prefixes, StringComparison comparison)
         {
             if (value.HasCharacters())
             {
                 var valueSpan = value.AsSpan();
-                var prefixesCount = prefixes.Count;
+                var prefixesCount = prefixes.Length;
 
                 for (var index = 0; index < prefixesCount; index++)
                 {
@@ -1417,7 +1397,7 @@ namespace System
             return false;
         }
 
-        public static bool StartsWithAny(this ReadOnlySpan<char> value, string[] prefixes, StringComparison comparison)
+        public static bool StartsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<string> prefixes, StringComparison comparison)
         {
             if (value.Length > 0)
             {
@@ -1427,26 +1407,7 @@ namespace System
                 {
                     var prefix = prefixes[index];
 
-                    if (value.StartsWith(prefix, comparison))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public static bool StartsWithAny(this ReadOnlySpan<char> value, List<string> prefixes, StringComparison comparison)
-        {
-            if (value.Length > 0)
-            {
-                var prefixesLength = prefixes.Count;
-
-                for (var index = 0; index < prefixesLength; index++)
-                {
-                    var prefix = prefixes[index];
-
+                    // TODO RKN: Add Quick compare ?
                     if (value.StartsWith(prefix, comparison))
                     {
                         return true;
@@ -1463,16 +1424,13 @@ namespace System
         public static bool StartsWithNumber(this string value) => value.HasCharacters() && value[0].IsNumber();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWith(this string value, char surrounding) => value?.SurroundedWith(surrounding.ToString());
+        public static string SurroundedWith(this string value, char surrounding) => surrounding.ConcatenatedWith(value, surrounding);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWith(this string value, string surrounding) => string.Concat(surrounding, value, surrounding);
+        public static string SurroundedWithApostrophe(this string value) => value?.SurroundedWith('\'');
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithApostrophe(this string value) => value?.SurroundedWith("\'");
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith("\"");
+        public static string SurroundedWithDoubleQuote(this string value) => value?.SurroundedWith('\"');
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToLowerCase(this string source) => source?.ToLower(CultureInfo.InvariantCulture);

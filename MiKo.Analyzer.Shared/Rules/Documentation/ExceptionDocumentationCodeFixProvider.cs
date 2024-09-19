@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 {
                     // more than 1 parameter, so pick the referenced ones
                     var comment = exceptionComment.ToString();
-                    var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_))).ToArray();
+                    var ps = parameters.Where(_ => comment.ContainsAny(GetParameterReferences(_).ToArray())).ToArray();
 
                     return exceptionComment.WithContent(ParameterIsNull(ps));
                 }
@@ -113,7 +113,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => string.Concat(" ", parameterName, _.ToString()));
+        private static IEnumerable<string> GetParameterAsTextReference(string parameterName) => Constants.TrailingSentenceMarkers.Select(_ => ' '.ConcatenatedWith(parameterName, _));
 
         private static string GetParameterAsReference(string parameterName) => parameterName.SurroundedWithDoubleQuote();
 
