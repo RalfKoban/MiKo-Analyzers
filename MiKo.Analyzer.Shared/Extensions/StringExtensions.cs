@@ -1043,15 +1043,16 @@ namespace System
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool HasCharacters(this string value) => value?.Length > 0;
+        public static bool HasCharacters(this string value) => value.IsNullOrEmpty() is false; // ncrunch: no coverage
 
         public static bool HasUpperCaseLettersAbove(this string value, ushort limit) => value != null && HasUpperCaseLettersAbove(value.AsSpan(), limit);
 
         public static bool HasUpperCaseLettersAbove(this ReadOnlySpan<char> value, ushort limit)
         {
             var count = 0;
+            var length = value.Length;
 
-            for (var index = 0; index < value.Length; index++)
+            for (var index = 0; index < length; index++)
             {
                 if (value[index].IsUpperCase())
                 {
@@ -1230,6 +1231,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value); // ncrunch: no coverage
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this ReadOnlySpan<char> value) => value.IsEmpty; // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
