@@ -21,7 +21,7 @@ namespace TestHelper
     {
         private static readonly string[] Placeholders = Enumerable.Range(0, 10).Select(_ => "{" + _ + "}").ToArray();
 
-        internal static Diagnostic[] GetDiagnostics(IReadOnlyCollection<string> sources, LanguageVersion languageVersion, DiagnosticAnalyzer[] analyzers) => GetSortedDiagnostics(sources, languageVersion, analyzers);
+        internal static Diagnostic[] GetDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers) => GetSortedDiagnostics(sources, languageVersion, analyzers);
 
         /// <summary>
         /// Gets the CSharp analyzer being tested - to be implemented in non-abstract class.
@@ -188,6 +188,6 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        private Diagnostic[] GetDiagnostics(string[] sources, LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, GetObjectUnderTest());
+        private Diagnostic[] GetDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion) => GetSortedDiagnostics(sources, languageVersion, [GetObjectUnderTest()]);
     }
 }
