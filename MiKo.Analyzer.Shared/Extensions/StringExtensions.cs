@@ -77,8 +77,6 @@ namespace System
             return word.ConcatenatedWith(continuation);
         }
 
-//// ncrunch: no coverage end
-
         public static IReadOnlyList<int> AllIndicesOf(this string value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
@@ -121,6 +119,8 @@ namespace System
 
             return indices;
         }
+
+//// ncrunch: no coverage end
 
         public static IReadOnlyList<int> AllIndicesOf(this ReadOnlySpan<char> value, string finding, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
@@ -618,47 +618,6 @@ namespace System
 
 //// ncrunch: no coverage end
 
-        public static bool ContainsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
-        {
-            switch (phrases)
-            {
-                case string[] array: return value.ContainsAny(array, comparison);
-                case IList<string> list: return value.ContainsAny(list, comparison);
-            }
-
-            if (value.HasCharacters())
-            {
-                var valueSpan = value.AsSpan();
-
-                foreach (var phrase in phrases)
-                {
-                    var phraseSpan = phrase.AsSpan();
-
-                    if (QuickCompare(valueSpan, phraseSpan, comparison) is false)
-                    {
-                        continue;
-                    }
-
-                    if (comparison == StringComparison.Ordinal)
-                    {
-                        if (valueSpan.Contains(phraseSpan, StringComparison.Ordinal))
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        if (value.Contains(phrase, comparison))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
         public static bool EndsWith(this string value, char character) => value.HasCharacters() && value[value.Length - 1] == character;
 
         public static bool EndsWith(this ReadOnlySpan<char> value, char character) => value.Length > 0 && value[value.Length - 1] == character;
@@ -795,6 +754,8 @@ namespace System
 
         public static bool EqualsAny(this ReadOnlySpan<char> value, string[] phrases) => EqualsAny(value, phrases, StringComparison.OrdinalIgnoreCase);
 
+//// ncrunch: no coverage start
+
         public static bool EqualsAny(this string value, string[] phrases, StringComparison comparison)
         {
             if (value.HasCharacters())
@@ -814,6 +775,8 @@ namespace System
 
             return false;
         }
+
+//// ncrunch: no coverage end
 
         public static bool EqualsAny(this string value, IEnumerable<string> phrases, StringComparison comparison)
         {
@@ -871,6 +834,8 @@ namespace System
                    : value;
         }
 
+//// ncrunch: no coverage start
+
         public static ReadOnlySpan<char> FirstWord(this ReadOnlySpan<char> value)
         {
             var text = value.TrimStart();
@@ -884,20 +849,22 @@ namespace System
             }
 
             // start at index 1 to skip first upper case character (and avoid return of empty word)
-            for (var index = 1; index < text.Length; index++)
+            var textLength = text.Length;
+
+            for (var index = 1; index < textLength; index++)
             {
                 var c = text[index];
 
                 if (c.IsUpperCase())
                 {
-                    var firstWord = text.Slice(0, index);
-
-                    return firstWord;
+                    return text.Slice(0, index);
                 }
             }
 
             return text;
         }
+
+//// ncrunch: no coverage end
 
         public static string SecondWord(this string value) => SecondWord(value.AsSpan()).ToString();
 
@@ -1650,9 +1617,9 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).Trim();
+        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).Trim(); // ncrunch: no coverage
 
-        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty);
+        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
 
         public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
 

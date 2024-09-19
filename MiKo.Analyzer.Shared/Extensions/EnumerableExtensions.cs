@@ -1139,16 +1139,18 @@ namespace System.Linq
 #if NETSTANDARD2_0
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source);
+        internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source) => new HashSet<T>(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static HashSet<T> ToHashSet<T>(this IEnumerable<T> source, IEqualityComparer<T> comparer) => new HashSet<T>(source, comparer);
 
 #endif
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet(); // ncrunch: no coverage
 
         internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
+
+//// ncrunch: no coverage start
 
         internal static List<SyntaxToken> ToList(this SyntaxTokenList source)
         {
@@ -1167,6 +1169,8 @@ namespace System.Linq
 
             return target;
         }
+
+//// ncrunch: no coverage end
 
         internal static List<T> ToList<T>(this SyntaxList<T> source) where T : SyntaxNode
         {
@@ -1208,7 +1212,7 @@ namespace System.Linq
         internal static SyntaxList<T> ToSyntaxList<T>(this T source) where T : SyntaxNode => new SyntaxList<T>(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source);
+        internal static SyntaxList<T> ToSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.List(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this T value) where T : SyntaxNode => new[] { value }.ToSeparatedSyntaxList();
@@ -1217,7 +1221,7 @@ namespace System.Linq
         internal static SeparatedSyntaxList<T> ToSeparatedSyntaxList<T>(this IEnumerable<T> source) where T : SyntaxNode => SyntaxFactory.SeparatedList(source);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxToken> source) => SyntaxFactory.TokenList(source);
+        internal static SyntaxTokenList ToTokenList(this IEnumerable<SyntaxToken> source) => SyntaxFactory.TokenList(source); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool TrueForAll<T>(this T[] source, Predicate<T> match) => Array.TrueForAll(source, match);
