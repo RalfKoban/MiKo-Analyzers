@@ -128,17 +128,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
+//// ncrunch: no coverage start
             int MinLength(ReadOnlySpan<string> source)
             {
-                if (source.Length <= 0)
+                var sourceLength = source.Length;
+
+                if (sourceLength <= 0)
                 {
                     return 0;
                 }
 
                 var minimum = int.MaxValue;
 
-                foreach (var value in source)
+                for (var index = 0; index < sourceLength; index++)
                 {
+                    var value = source[index];
+
                     var length = value.Length;
 
                     if (length < minimum)
@@ -149,6 +154,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 return minimum;
             }
+//// ncrunch: no coverage end
 
             Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, ReadOnlySpan<string> phrases, ReadOnlySpan<Pair> map)
             {
@@ -211,7 +217,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (result is null)
                     {
-                        result = new Dictionary<XmlTextSyntax, XmlTextSyntax>();
+                        result = new Dictionary<XmlTextSyntax, XmlTextSyntax>(1);
                     }
 
                     var newText = text.ReplaceTokens(tokenMap.Keys, (_, __) => tokenMap[_]);

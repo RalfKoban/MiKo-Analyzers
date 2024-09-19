@@ -46,7 +46,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var properties = new Dictionary<string, string>();
 
             string proposedEndingPhrase;
-            IEnumerable<string> endingPhrases;
+            string[] endingPhrases;
 
             if (returnType.IsBoolean())
             {
@@ -61,7 +61,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 proposedEndingPhrase = Constants.Comments.DefaultCrefPhrase.FormatWith("...");
 
                 endingPhrases = returnType.GetFields()
-                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol));
+                                          .SelectMany(_ => Constants.Comments.DefaultCrefPhrases, (symbol, phrase) => phrase.FormatWith(symbol))
+                                          .ToArray();
             }
 
             if (commentXml.EndsWithAny(endingPhrases, StringComparison.Ordinal))

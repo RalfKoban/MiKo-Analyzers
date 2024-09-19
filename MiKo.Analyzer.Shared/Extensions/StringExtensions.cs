@@ -179,14 +179,12 @@ namespace System
 
         public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
-            switch (kind)
+            if (kind == SyntaxKind.IdentifierToken)
             {
-                case SyntaxKind.IdentifierToken:
-                    return SyntaxFactory.Identifier(source);
-
-                default:
-                    return SyntaxFactory.Token(default, kind, source, source, default);
+                return SyntaxFactory.Identifier(source);
             }
+
+            return SyntaxFactory.Token(default, kind, source, source, default);
         }
 
         public static InterpolatedStringTextSyntax AsInterpolatedString(this ReadOnlySpan<char> value) => value.ToString().AsInterpolatedString();
@@ -673,7 +671,7 @@ namespace System
 
         public static bool EndsWithAny(this string value, char[] suffixCharacters) => value.HasCharacters() && suffixCharacters.Contains(value[value.Length - 1]);
 
-        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
+        public static bool EndsWithAny(this string value, ReadOnlySpan<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
         public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<char> suffixCharacters)
         {
@@ -695,19 +693,17 @@ namespace System
             return false;
         }
 
-        public static bool EndsWithAny(this ReadOnlySpan<char> value, string[] suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
+        public static bool EndsWithAny(this ReadOnlySpan<char> value, ReadOnlySpan<string> suffixes) => value.EndsWithAny(suffixes, StringComparison.OrdinalIgnoreCase);
 
 //// ncrunch: no coverage start
 
-        public static bool EndsWithAny(this string value, string[] suffixes, StringComparison comparison)
+        public static bool EndsWithAny(this string value, ReadOnlySpan<string> suffixes, StringComparison comparison)
         {
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
                 var suffixesLength = suffixes.Length;
 
-                // ReSharper disable once ForCanBeConvertedToForeach
-                // ReSharper disable once LoopCanBeConvertedToQuery
                 for (var index = 0; index < suffixesLength; index++)
                 {
                     var suffix = suffixes[index];
@@ -729,19 +725,17 @@ namespace System
 
 //// ncrunch: no coverage end
 
-        public static bool EndsWithAny(this string value, IEnumerable<string> suffixes, StringComparison comparison)
+        public static bool EndsWithAny(this string value, List<string> suffixes, StringComparison comparison)
         {
-            if (suffixes is string[] array)
-            {
-                return value.EndsWithAny(array, comparison);
-            }
-
             if (value.HasCharacters())
             {
                 var valueLength = value.Length;
+                var suffixesLength = suffixes.Count;
 
-                foreach (var suffix in suffixes)
+                for (var index = 0; index < suffixesLength; index++)
                 {
+                    var suffix = suffixes[index];
+
                     if (suffix.Length > valueLength)
                     {
                         continue;
@@ -1629,10 +1623,17 @@ namespace System
 
             var resultIndex = 0;
 
-            foreach (var delimiter in delimiters)
+            var delimitersLength = delimiters.Length;
+            var valuesLength = values.Length;
+
+            for (var delimitersIndex = 0; delimitersIndex < delimitersLength; delimitersIndex++)
             {
-                foreach (var value in values)
+                var delimiter = delimiters[delimitersIndex];
+
+                for (var valuesIndex = 0; valuesIndex < valuesLength; valuesIndex++)
                 {
+                    var value = values[valuesIndex];
+
                     result[resultIndex++] = ' '.ConcatenatedWith(value, delimiter);
                     result[resultIndex++] = '('.ConcatenatedWith(value, delimiter);
                 }
@@ -2074,6 +2075,6 @@ namespace System
             return true;
         }
 
-        //// ncrunch: no coverage end
+//// ncrunch: no coverage end
     }
 }
