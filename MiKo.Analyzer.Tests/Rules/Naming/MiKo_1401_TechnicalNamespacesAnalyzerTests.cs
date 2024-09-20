@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -13,12 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     public sealed class MiKo_1401_TechnicalNamespacesAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] ForbiddenNamespaceNames = CreateNames(
-                                                                           "API",
-                                                                           "APIs",
                                                                            "Action",
                                                                            "Actions",
-                                                                           "Api",
-                                                                           "Apis",
                                                                            "Applications",
                                                                            "ApplicationService",
                                                                            "ApplicationServices",
@@ -32,8 +29,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Comparer",
                                                                            "Comparers",
                                                                            "Constants",
-                                                                           "Controller",
-                                                                           "Controllers",
                                                                            "DTO",
                                                                            "DTOs",
                                                                            "Data",
@@ -42,11 +37,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Dependencies",
                                                                            "Dependency",
                                                                            "DependencyInjection",
-                                                                           "Domain",
-                                                                           "Domains",
                                                                            "Dto",
                                                                            "Dtos",
-                                                                           "Entities",
                                                                            "Enum",
                                                                            "Enumeration",
                                                                            "Enumerations",
@@ -78,7 +70,6 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Indexer",
                                                                            "Indexers",
                                                                            "Interactions",
-                                                                           "Interceptors",
                                                                            "Interface",
                                                                            "Interfaces",
                                                                            "Itf",
@@ -122,6 +113,17 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                            "Wrappers",
                                                                            "ValueObject",
                                                                            "ValueObjects");
+                                                                           //// TODO RKN: Shall this be acceptable to support ASP .NET Core projects based on Clean Architecture using API and Domain entities?
+                                                                           //// "API",
+                                                                           //// "APIs",
+                                                                           //// "Api",
+                                                                           //// "Apis",
+                                                                           //// "Controller",
+                                                                           //// "Controllers",
+                                                                           //// "Domain",
+                                                                           //// "Domains",
+                                                                           //// "Entities",
+                                                                           //// "Interceptors");
 
         [TestCase("MiKoSolutions")]
         [TestCase("MiKoSolutions.Infrastructure")]
@@ -163,6 +165,7 @@ namespace ABCD.EFG." + ns + @".HIJK
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1401_TechnicalNamespacesAnalyzer();
 
+        [ExcludeFromCodeCoverage]
         private static string[] CreateNames(params string[] names)
         {
             var results = new HashSet<string>((3 * names.Length) + 2)
