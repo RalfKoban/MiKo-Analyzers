@@ -42,14 +42,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var phrase in Phrases)
             {
-                var proposal = Proposal(phrase);
+                var phraseSpan = phrase.AsSpan();
+                var proposal = Proposal(phraseSpan);
+                var proposalSpan = proposal.AsSpan();
 
-                results.Add(new Pair(phrase + ".", proposal + "."));
-                results.Add(new Pair(phrase + "?", proposal + "?"));
-                results.Add(new Pair(phrase + "!", proposal + "!"));
-                results.Add(new Pair(phrase + ",", proposal + ","));
-                results.Add(new Pair(phrase + ";", proposal + ";"));
-                results.Add(new Pair(phrase + ":", proposal + ":"));
+                results.Add(new Pair(phraseSpan.ConcatenatedWith('.'), proposalSpan.ConcatenatedWith('.')));
+                results.Add(new Pair(phraseSpan.ConcatenatedWith('?'), proposalSpan.ConcatenatedWith('?')));
+                results.Add(new Pair(phraseSpan.ConcatenatedWith('!'), proposalSpan.ConcatenatedWith('!')));
+                results.Add(new Pair(phraseSpan.ConcatenatedWith(','), proposalSpan.ConcatenatedWith(',')));
+                results.Add(new Pair(phraseSpan.ConcatenatedWith(';'), proposalSpan.ConcatenatedWith(';')));
+                results.Add(new Pair(phraseSpan.ConcatenatedWith(':'), proposalSpan.ConcatenatedWith(':')));
             }
 
             return results.ToArray();
@@ -61,19 +63,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             foreach (var phrase in Phrases)
             {
-                var proposal = Proposal(phrase);
+                var phraseSpan = phrase.AsSpan();
+                var proposal = Proposal(phraseSpan);
+                var proposalSpan = proposal.AsSpan();
 
-                results.Add(new Pair("(" + phrase + " ", "(" + proposal + " "));
-                results.Add(new Pair("(" + phrase + ")", "(" + proposal + ")"));
-                results.Add(new Pair(" " + phrase + ")", " " + proposal + ")"));
-                results.Add(new Pair(" " + phrase + " ", " " + proposal + " "));
-                results.Add(new Pair(" " + phrase + ".", " " + proposal + "."));
-                results.Add(new Pair(" " + phrase + "?", " " + proposal + "?"));
-                results.Add(new Pair(" " + phrase + "!", " " + proposal + "!"));
-                results.Add(new Pair(" " + phrase + ",", " " + proposal + ","));
-                results.Add(new Pair(" " + phrase + ";", " " + proposal + ";"));
-                results.Add(new Pair(" " + phrase + ":", " " + proposal + ":"));
-                results.Add(new Pair("'" + phrase + "'", proposal));
+                results.Add(new Pair('('.ConcatenatedWith(phraseSpan, ' '), '('.ConcatenatedWith(proposalSpan, ' ')));
+                results.Add(new Pair('('.ConcatenatedWith(phraseSpan, ')'), '('.ConcatenatedWith(proposalSpan, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ')'), ' '.ConcatenatedWith(proposalSpan, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ' '), ' '.ConcatenatedWith(proposalSpan, ' ')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, '.'), ' '.ConcatenatedWith(proposalSpan, '.')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, '?'), ' '.ConcatenatedWith(proposalSpan, '?')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, '!'), ' '.ConcatenatedWith(proposalSpan, '!')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ','), ' '.ConcatenatedWith(proposalSpan, ',')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ';'), ' '.ConcatenatedWith(proposalSpan, ';')));
+                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ':'), ' '.ConcatenatedWith(proposalSpan, ':')));
+                results.Add(new Pair('\''.ConcatenatedWith(phraseSpan, '\''), proposal));
             }
 
             return results.ToArray();
@@ -87,17 +91,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             for (var i = 0; i < length; i++)
             {
-                var phrase = Phrases[i];
+                var phrase = Phrases[i].AsSpan();
 
                 var proposal = Proposal(phrase);
 
-                results[i] = new Pair(" " + phrase, " " + proposal);
+                results[i] = new Pair(' '.ConcatenatedWith(phrase), ' '.ConcatenatedWith(proposal.AsSpan()));
             }
 
             return results;
         }
 
-        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase.AsSpan().Trim().ToLowerCase(), "\"/>");
+        private static string Proposal(ReadOnlySpan<char> phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase.Trim().ToLowerCase(), "\"/>");
 
 //// ncrunch: rdi default
 
@@ -149,7 +153,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlElementSyntax e when e.IsWrongBooleanTag() || e.IsWrongNullTag():
                     {
                         var wrongText = e.Content.ToString();
-                        var proposal = Proposal(wrongText);
+                        var proposal = Proposal(wrongText.AsSpan());
 
                         yield return Issue(symbolName, e, wrongText, proposal);
 
@@ -159,7 +163,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlEmptyElementSyntax ee when ee.IsSee(WrongAttributes) || ee.IsSeeAlso(WrongAttributes):
                     {
                         var wrongText = GetWrongText(ee.Attributes);
-                        var proposal = Proposal(wrongText);
+                        var proposal = Proposal(wrongText.AsSpan());
 
                         yield return Issue(symbolName, ee, wrongText, proposal);
 
@@ -169,7 +173,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlElementSyntax e when e.IsSee(WrongAttributes) || e.IsSeeAlso(WrongAttributes):
                     {
                         var wrongText = GetWrongText(e.StartTag.Attributes);
-                        var proposal = Proposal(wrongText);
+                        var proposal = Proposal(wrongText.AsSpan());
 
                         yield return Issue(symbolName, e, wrongText, proposal);
 

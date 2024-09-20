@@ -180,7 +180,7 @@ namespace System.Text
             return value;
         }
 
-        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<string> texts, string replacement)
+        public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, string[] texts, string replacement)
         {
             // ReSharper disable once ForCanBeConvertedToForeach
             var length = texts.Length;

@@ -17,7 +17,7 @@ namespace System
             return SplitBy(value.AsSpan(), findings, comparison);
         }
 
-        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, ReadOnlySpan<string> findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
+        public static IReadOnlyList<string> SplitBy(this ReadOnlySpan<char> value, string[] findings, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (value.IsNullOrWhiteSpace())
             {

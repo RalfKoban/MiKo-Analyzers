@@ -83,12 +83,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, IEnumerable<XmlNodeSyntax> nodes) => Comment(comment, nodes.ToSyntaxList());
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, ReadOnlySpan<string> text, string additionalComment = null)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, string additionalComment = null)
         {
             return Comment(comment, text[0], additionalComment);
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax comment, ReadOnlySpan<string> text, SyntaxList<XmlNodeSyntax> additionalComment)
+        protected static XmlElementSyntax Comment(XmlElementSyntax comment, string[] text, SyntaxList<XmlNodeSyntax> additionalComment)
         {
             return Comment(comment, text[0], additionalComment);
         }
@@ -107,14 +107,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return Comment(comment, XmlText(text + additionalComment));
         }
 
-        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, ReadOnlySpan<string> terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
+        protected static XmlElementSyntax Comment(XmlElementSyntax syntax, string[] terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace)
         {
             var result = Comment<XmlElementSyntax>(syntax, terms, replacementMap, firstWordHandling);
 
             return CombineTexts(result);
         }
 
-        protected static T Comment<T>(T syntax, ReadOnlySpan<string> terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
+        protected static T Comment<T>(T syntax, string[] terms, ReadOnlySpan<Pair> replacementMap, FirstWordHandling firstWordHandling = FirstWordHandling.KeepLeadingSpace) where T : SyntaxNode
         {
             var minimumLength = MinLength(terms);
 
@@ -129,7 +129,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return syntax.ReplaceNodes(textMap.Keys, (_, __) => textMap[_]);
 
 //// ncrunch: no coverage start
-            int MinLength(ReadOnlySpan<string> source)
+            int MinLength(string[] source)
             {
                 var sourceLength = source.Length;
 
@@ -154,9 +154,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 return minimum;
             }
-//// ncrunch: no coverage end
 
-            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, ReadOnlySpan<string> phrases, ReadOnlySpan<Pair> map)
+            Dictionary<XmlTextSyntax, XmlTextSyntax> CreateReplacementTextMap(int minLength, string[] phrases, ReadOnlySpan<Pair> map)
             {
                 Dictionary<XmlTextSyntax, XmlTextSyntax> result = null;
 
@@ -229,6 +228,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
+//// ncrunch: no coverage end
 //// ncrunch: rdi default
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, string commentStart, TypeSyntax type, string commentEnd)
@@ -373,7 +373,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, ReadOnlySpan<string> phrases, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
+        protected static XmlElementSyntax CommentStartingWith(XmlElementSyntax comment, string[] phrases, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
         {
             return CommentStartingWith(comment, phrases[0], firstWordHandling);
         }
@@ -715,7 +715,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Para(SyntaxList<XmlNodeSyntax> nodes) => SyntaxFactory.XmlParaElement(nodes);
 
-        protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, ReadOnlySpan<string> comments) => ParameterComment(parameter, comments[0]);
+        protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string[] comments) => ParameterComment(parameter, comments[0]);
 
         protected static XmlElementSyntax ParameterComment(ParameterSyntax parameter, string comment) => Comment(SyntaxFactory.XmlParamElement(parameter.GetName()), comment);
 
@@ -740,7 +740,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string phrase, string replacement) where T : SyntaxNode => ReplaceText(comment, text, new[] { phrase }, replacement);
 
-        protected static T ReplaceText<T>(T comment, XmlTextSyntax text, ReadOnlySpan<string> phrases, string replacement) where T : SyntaxNode
+        protected static T ReplaceText<T>(T comment, XmlTextSyntax text, string[] phrases, string replacement) where T : SyntaxNode
         {
             var modifiedText = text.ReplaceText(phrases, replacement);
 
