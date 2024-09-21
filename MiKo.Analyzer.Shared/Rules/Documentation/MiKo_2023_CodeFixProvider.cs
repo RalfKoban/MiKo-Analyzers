@@ -155,19 +155,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var keysInUpperCase = data.KeysInUpperCase;
                     var length = keysInUpperCase.Length;
 
+//// ncrunch: no coverage start
                     for (var index = 0; index < length; index++)
                     {
                         var key = keysInUpperCase[index];
 
                         if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
                         {
+//// ncrunch: no coverage end
                             var subText = text.Slice(key.Length)
                                               .TrimStart(Constants.TrailingSentenceMarkers)
                                               .TrimEnd(Constants.TrailingSentenceMarkers);
 
                             return FixTextOnlyComment(comment, t, subText, replacement, data);
                         }
-                    }
+                    } // ncrunch: no coverage
 
                     // seems we could not fix the part
                     var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
