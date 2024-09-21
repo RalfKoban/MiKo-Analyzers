@@ -596,6 +596,8 @@ namespace System.Linq
 
         internal static bool None<T>(this IEnumerable<T> source) => source.Any() is false;
 
+        internal static bool None<T>(this IReadOnlyCollection<T> source) => source.Count == 0;
+
         internal static bool None<T>(this ImmutableArray<T> source) => source.Any() is false;
 
         internal static bool None<T>(this SyntaxList<T> source, SyntaxKind kind) where T : SyntaxNode => source.IndexOf(kind) == -1;
@@ -1146,11 +1148,90 @@ namespace System.Linq
 
 #endif
 
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet(); // ncrunch: no coverage
-
-        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector) => source.Select(selector).ToHashSet();
-
 //// ncrunch: no coverage start
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            switch (source)
+            {
+                case TSource[] array: return array.ToHashSet(selector);
+                case List<TSource> list: return list.ToHashSet(selector);
+            }
+
+            var result = new HashSet<TResult>();
+
+            foreach (var item in source)
+            {
+                result.Add(selector(item));
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this List<TSource> source, Func<TSource, TResult> selector)
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Count;
+
+            for (var index = 0; index < length; index++)
+            {
+                result.Add(selector(source[index]));
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this TSource[] source, Func<TSource, TResult> selector)
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Length;
+
+            for (var index = 0; index < length; index++)
+            {
+                result.Add(selector(source[index]));
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this SyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Count;
+
+            for (var index = 0; index < length; index++)
+            {
+                result.Add(selector(source[index]));
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this SeparatedSyntaxList<TSource> source, Func<TSource, TResult> selector) where TSource : SyntaxNode
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Count;
+
+            for (var index = 0; index < length; index++)
+            {
+                result.Add(selector(source[index]));
+            }
+
+            return result;
+        }
+
+        internal static HashSet<TResult> ToHashSet<TSource, TResult>(this ImmutableArray<TSource> source, Func<TSource, TResult> selector)
+        {
+            var result = new HashSet<TResult>();
+            var length = source.Length;
+
+            for (var index = 0; index < length; index++)
+            {
+                result.Add(selector(source[index]));
+            }
+
+            return result;
+        }
 
         internal static List<SyntaxToken> ToList(this SyntaxTokenList source)
         {
