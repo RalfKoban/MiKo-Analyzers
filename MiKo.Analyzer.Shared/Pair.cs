@@ -8,6 +8,9 @@ namespace System
 {
     public readonly struct Pair : IEquatable<Pair>
     {
+        public readonly string Key; // made as field instead of property for performance reasons
+        public readonly string Value; // made as field instead of property for performance reasons
+
         public Pair(KeyValuePair<string, string> pair) : this(pair.Key, pair.Value)
         {
         }
@@ -17,10 +20,6 @@ namespace System
             Key = key;
             Value = value;
         }
-
-        public string Key { get; }
-
-        public string Value { get; }
 
         public static bool operator ==(Pair left, Pair right) => left.Equals(right);
 

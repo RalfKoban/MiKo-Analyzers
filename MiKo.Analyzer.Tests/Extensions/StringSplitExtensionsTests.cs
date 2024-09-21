@@ -17,7 +17,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void SplitBy_splits_text_by_lines_and_removes_empty_lines()
         {
-            var lines = Text.SplitBy(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var lines = Text.AsSpan().SplitBy(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             var count = lines.Count();
 
             Assert.That(count, Is.EqualTo(2));
@@ -37,7 +37,7 @@ namespace MiKoSolutions.Analyzers.Extensions
         [Test]
         public static void SplitBy_splits_text_by_lines_and_keeps_empty_lines()
         {
-            var lines = Text.SplitBy(Environment.NewLine.ToCharArray());
+            var lines = Text.AsSpan().SplitBy(Environment.NewLine);
             var count = lines.Count();
 
             Assert.That(count, Is.EqualTo(3)); // additional 'empty' line between both lines
@@ -60,9 +60,9 @@ namespace MiKoSolutions.Analyzers.Extensions
         {
             var words = new List<string>();
 
-            foreach (ReadOnlySpan<char> line in Text.SplitBy(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+            foreach (ReadOnlySpan<char> line in Text.AsSpan().SplitBy(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
             {
-                foreach (var item in line.SplitBy(' '))
+                foreach (var item in line.SplitBy(" "))
                 {
                     words.Add(item.ToString());
                 }
