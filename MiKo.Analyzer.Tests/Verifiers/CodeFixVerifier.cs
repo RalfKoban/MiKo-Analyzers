@@ -33,7 +33,7 @@ namespace TestHelper
                     // see variable in appveyor.yml; used to limit number of tests as otherwise the test run takes too much time
                     var environmentVariable = Environment.GetEnvironmentVariable("APP_VEYOR", EnvironmentVariableTarget.Process);
 
-                    s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 15_000 : int.MaxValue;
+                    s_testLimit = bool.TryParse(environmentVariable, out var value) && value ? 10_000 : int.MaxValue;
                 }
 
                 return s_testLimit;
