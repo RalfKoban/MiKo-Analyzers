@@ -25,6 +25,7 @@ using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
+// ReSharper disable CheckNamespace
 namespace TestHelper
 {
     /// <summary>
