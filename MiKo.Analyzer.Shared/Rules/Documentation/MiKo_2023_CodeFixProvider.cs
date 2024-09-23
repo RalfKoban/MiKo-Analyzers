@@ -354,7 +354,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return new ConcreteMapInfo(mappedDataValue.ReplacementMapForOthers, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapKeysInUpperCaseForOthers);
         }
 
-        private ref struct ConcreteMapInfo
+        private readonly ref struct ConcreteMapInfo
         {
             public ConcreteMapInfo(ReadOnlySpan<Pair> map, string[] keys, string[] keysInUpperCase)
             {

@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Simplification;
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
+// ReSharper disable CheckNamespace
 namespace TestHelper
 {
     /// <summary>
