@@ -11,9 +11,16 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2021_CodeFixProvider)), Shared]
     public sealed class MiKo_2021_CodeFixProvider : ParameterDocumentationCodeFixProvider
     {
-        private static readonly string[] ReplacementMapKeys = { "Reference to the ", "Reference to a ", "Reference to an " };
+        private static readonly Pair[] ReplacementMap =
+                                                        {
+                                                            new Pair("Reference to a ", string.Empty),
+                                                            new Pair("Reference to an ", string.Empty),
+                                                            new Pair("Reference to the ", string.Empty),
+                                                            new Pair("Determines the ", string.Empty),
+                                                            new Pair("Determines to ", "value to "), // TODO RKN: new Pair("Determines to ", "value to "),
+                                                        };
 
-        private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
+        private static readonly string[] ReplacementMapKeys = ReplacementMap.Select(_ => _.Key).ToArray();
 
         public override string FixableDiagnosticId => "MiKo_2021";
 
