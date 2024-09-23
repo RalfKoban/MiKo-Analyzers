@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
@@ -38,7 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 return Enumerable.Empty<Diagnostic>();
             }
 
-            if (symbol.Name == "<Program>$") // TODO RKN: What about "$Program" ?
+            var node = symbol.GetSyntaxNodeInSource();
+
+            if (node is CompilationUnitSyntax)
             {
                 // nothing to report as we cannot use it anyway (such as the 'Program' class in the new C# global statement style)
                 return Enumerable.Empty<Diagnostic>();
