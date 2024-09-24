@@ -10,7 +10,7 @@ namespace System.Text
     {
         private const int QuickCompareLengthThreshold = 4;
 
-        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountWhitespaces(0) == value.Length;
+        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces(0) == value.Length;
 
         public static string AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
         {
@@ -48,6 +48,11 @@ namespace System.Text
             if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeInfinite))
             {
                 MakeInfinite();
+            }
+
+            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakePlural))
+            {
+                MakePlural();
             }
 
             return value.ToString();
@@ -100,18 +105,27 @@ namespace System.Text
 
                 value.Remove(whitespacesBefore, word.Length);
 
-                // 4. Make word infinite
                 var infiniteWord = Verbalizer.MakeInfiniteVerb(word);
 
-                // 5. Insert word at correct position
                 value.Insert(whitespacesBefore, infiniteWord);
+            }
+
+            void MakePlural()
+            {
+                var word = FirstWord(value, out var whitespacesBefore);
+
+                value.Remove(whitespacesBefore, word.Length);
+
+                var pluralWord = Verbalizer.MakePlural(word);
+
+                value.Insert(whitespacesBefore, pluralWord);
             }
 
             void TrimLeadingSpacesTo(int count)
             {
                 if (value[0] == ' ')
                 {
-                    var whitespaces = value.CountWhitespaces(0);
+                    var whitespaces = value.CountLeadingWhitespaces(0);
 
                     if (whitespaces > count)
                     {
@@ -135,14 +149,16 @@ namespace System.Text
             var length = value.Length;
 
             // 1. Find word begin
-            whitespacesBefore = value.CountWhitespaces(0);
+            whitespacesBefore = value.CountLeadingWhitespaces(0);
 
             // 2. Find word end
             var wordLength = 0;
 
             for (var i = whitespacesBefore; i < length; i++)
             {
-                if (value[i].IsWhiteSpace())
+                var c = value[i];
+
+                if (c.IsWhiteSpace() || c.IsSentenceEnding())
                 {
                     break;
                 }
@@ -368,7 +384,7 @@ namespace System.Text
             return false;
         }
 
-        private static int CountWhitespaces(this StringBuilder value, int start)
+        private static int CountLeadingWhitespaces(this StringBuilder value, int start)
         {
             var whitespaces = 0;
             var valueLength = value.Length;

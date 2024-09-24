@@ -306,7 +306,7 @@ public enum TestMe
         [TestCase("Sets", "")]
         [TestCase("Gets or sets", "")]
         [TestCase("Gets or Sets", "")]
-        public void Code_gets_fixed_for_documentation_(string start, string expectedStart)
+        public void Code_gets_fixed_for_documentation_(string start, string fixedStart)
         {
             var originalCode = @"
 /// <summary>
@@ -319,9 +319,43 @@ public enum TestMe
 
             var fixedCode = @"
 /// <summary>
-/// Defines values that specify " + expectedStart + @"something to do.
+/// Defines values that specify " + fixedStart + @"something to do.
 /// </summary>
 public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("Message", "messages")]
+        [TestCase("MessageEnum", "messages")]
+        [TestCase("MessageKind", "messages")]
+        [TestCase("MessageType", "messages")]
+        [TestCase("MessageTypes", "messages")]
+        [TestCase("MessageTypeKind", "messages")]
+        [TestCase("MessageTypeKinds", "messages")]
+        [TestCase("MessageTypeEnum", "messages")]
+        [TestCase("MessageTypeEnums", "messages")]
+        [TestCase("Direction", "directions")]
+        [TestCase("DirectionKind", "directions")]
+        [TestCase("ReferenceTypes", "references")]
+        public void Code_gets_fixed_for_special_documentation_(string typeName, string fixedEnding)
+        {
+            var originalCode = @"
+/// <summary>
+/// Gets or Sets " + typeName + @"
+/// </summary>
+public enum " + typeName + @"
+{
+}
+";
+
+            var fixedCode = @"
+/// <summary>
+/// Defines values that specify the different kinds of " + fixedEnding + @"
+/// </summary>
+public enum " + typeName + @"
 {
 }
 ";

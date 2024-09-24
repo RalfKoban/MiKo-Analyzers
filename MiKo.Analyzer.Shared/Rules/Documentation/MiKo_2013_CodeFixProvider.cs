@@ -9,6 +9,8 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Documentation
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2013_CodeFixProvider)), Shared]
@@ -17,6 +19,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 
         private const string Phrase = Constants.Comments.EnumStartingPhrase;
+        private const string KindPhrase = Phrase + "the different kinds of ";
 
         private static readonly string[] WrongStartingWords =
                                                               {
@@ -85,9 +88,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                         comment.EndTag.WithLeadingXmlComment());
         }
 
-        private static XmlNodeSyntax NewXmlComment(XmlTextSyntax comment, string text)
+        private static XmlNodeSyntax NewXmlComment(XmlTextSyntax text, string startingPhrase)
         {
-            var textTokens = comment.TextTokens.ToList();
+            var textTokens = text.TextTokens.ToList();
 
             // get rid of all empty tokens at the beginning
             while (textTokens.Any() && textTokens[0].ValueText.IsNullOrWhiteSpace())
@@ -108,16 +111,33 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 var continuation = new StringBuilder(existingText.Trim().ToString()).ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
 
+                if (continuation.IsSingleWord())
+                {
+                    var enumName = text.FirstAncestor<EnumDeclarationSyntax>()?.GetName();
+
+                    // seems like the continuation is a single word and ends with the name of the enum, so it can be lower-case plural
+                    if (continuation == enumName)
+                    {
+                        startingPhrase = KindPhrase;
+
+                        // get rid of 'Type', 'Enum' and 'Kind'
+                        continuation = new StringBuilder(continuation).Without("Type")
+                                                                      .Without("Kind")
+                                                                      .Without("Enum")
+                                                                      .AdjustFirstWord(FirstWordHandling.MakeLowerCase | FirstWordHandling.MakePlural);
+                    }
+                }
+
                 textTokens.RemoveAt(0);
-                textTokens.Insert(0, XmlTextToken(text + continuation));
+                textTokens.Insert(0, XmlTextToken(startingPhrase + continuation));
             }
             else
             {
                 // we are on same line
-                textTokens.Add(XmlTextToken(text));
+                textTokens.Add(XmlTextToken(startingPhrase));
             }
 
-            return WithoutEmptyTextAtEnd(comment, textTokens);
+            return WithoutEmptyTextAtEnd(text, textTokens);
         }
 
         private static XmlNodeSyntax WithoutEmptyTextAtEnd(XmlTextSyntax comment, IList<SyntaxToken> textTokens)

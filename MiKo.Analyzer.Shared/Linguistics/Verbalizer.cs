@@ -24,6 +24,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> InfiniteVerbs = new ConcurrentDictionary<string, string>();
 
+        private static readonly ConcurrentDictionary<string, string> Plurals = new ConcurrentDictionary<string, string>();
+
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
 
         private static readonly Pair[] Endings =
@@ -403,6 +405,31 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 }
 
                 return word;
+            }
+        }
+
+        public static string MakePlural(string value)
+        {
+            if (value.IsNullOrWhiteSpace())
+            {
+                return value;
+            }
+
+            return Plurals.GetOrAdd(value, CreatePlural);
+
+            string CreatePlural(string word)
+            {
+                if (word.EndsWith('s'))
+                {
+                    if (word.EndsWith("ss", StringComparison.Ordinal))
+                    {
+                        return word + "es";
+                    }
+
+                    return word;
+                }
+
+                return word.AsSpan().ConcatenatedWith('s');
             }
         }
 
