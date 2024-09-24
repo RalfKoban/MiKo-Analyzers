@@ -65,6 +65,11 @@ namespace System
                 word = Verbalizer.MakeInfiniteVerb(word);
             }
 
+            if (HasFlag(handling, FirstWordHandling.MakePlural))
+            {
+                word = Verbalizer.MakePlural(word);
+            }
+
             if (HasFlag(handling, FirstWordHandling.KeepLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)
@@ -827,25 +832,29 @@ namespace System
         public static ReadOnlySpan<char> FirstWord(this ReadOnlySpan<char> value)
         {
             var text = value.TrimStart();
-
-            var firstSpace = text.IndexOfAny(Constants.WhiteSpaceCharacters);
-
-            if (firstSpace != -1)
-            {
-                // we found a whitespace
-                return text.Slice(0, firstSpace);
-            }
-
-            // start at index 1 to skip first upper case character (and avoid return of empty word)
             var textLength = text.Length;
 
-            for (var index = 1; index < textLength; index++)
+            if (textLength > 0)
             {
-                var c = text[index];
-
-                if (c.IsUpperCase())
+                for (var index = 0; index < textLength; index++)
                 {
-                    return text.Slice(0, index);
+                    var c = text[index];
+
+                    if (c.IsWhiteSpace() || c.IsSentenceEnding())
+                    {
+                        return text.Slice(0, index);
+                    }
+                }
+
+                // start at index 1 to skip first upper case character (and avoid return of empty word)
+                for (var index = 1; index < textLength; index++)
+                {
+                    var c = text[index];
+
+                    if (c.IsUpperCase())
+                    {
+                        return text.Slice(0, index);
+                    }
                 }
             }
 
@@ -1242,7 +1251,11 @@ namespace System
             }
         }
 
-//// ncrunch: no coverage start
+        public static bool IsSingleWord(this string value) => value != null && IsSingleWord(value.AsSpan());
+
+        public static bool IsSingleWord(this ReadOnlySpan<char> value) => value.HasWhitespaces() is false;
+
+        //// ncrunch: no coverage start
 
         public static bool IsUpperCase(this char value)
         {
@@ -1811,6 +1824,21 @@ namespace System
         public static WordsReadOnlySpanEnumerator WordsAsSpan(this ReadOnlySpan<char> value) => new WordsReadOnlySpanEnumerator(value);
 
 //// ncrunch: no coverage start
+
+        private static bool HasWhitespaces(this ReadOnlySpan<char> value, int start = 0)
+        {
+            var valueLength = value.Length;
+
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private static string MakeUpperCaseAt(string source, int index)
         {

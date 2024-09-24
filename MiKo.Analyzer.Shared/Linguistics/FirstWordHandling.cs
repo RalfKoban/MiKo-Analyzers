@@ -19,18 +19,23 @@ namespace MiKoSolutions.Analyzers.Linguistics
         KeepLeadingSpace = 1 << 0,
 
         /// <summary>
-        /// Attempt to make it an infinite verb.
-        /// </summary>
-        MakeInfinite = 1 << 1,
-
-        /// <summary>
         /// Attempt to make the word starting with an upper case.
         /// </summary>
-        MakeUpperCase = 1 << 2,
+        MakeUpperCase = 1 << 1,
 
         /// <summary>
         /// Attempt to make the word starting with a lower case.
         /// </summary>
-        MakeLowerCase = 1 << 3,
+        MakeLowerCase = 1 << 2,
+
+        /// <summary>
+        /// Attempt to make it an infinite verb.
+        /// </summary>
+        MakeInfinite = 1 << 3,
+
+        /// <summary>
+        /// Attempt to make it a plural verb.
+        /// </summary>
+        MakePlural = 1 << 4,
     }
 }
