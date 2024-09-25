@@ -151,7 +151,7 @@ namespace TestHelper
                     break;
                 }
 
-                if (codeFixIndex != null)
+                if (codeFixIndex is not null)
                 {
                     document = ApplyFix(document, actions[(int)codeFixIndex]);
 
