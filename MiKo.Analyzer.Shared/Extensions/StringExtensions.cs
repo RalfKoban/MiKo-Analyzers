@@ -219,6 +219,22 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
 
+        public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0)
+        {
+            var length = arg0.Length;
+
+            var chars = new char[length + 1];
+
+            if (length > 0)
+            {
+                arg0.CopyTo(chars.AsSpan(1));
+            }
+
+            chars[0] = value;
+
+            return new string(chars);
+        }
+
         public static string ConcatenatedWith(this string value, ReadOnlySpan<char> span)
         {
             var spanLength = span.Length;
@@ -279,6 +295,54 @@ namespace System
 
             value.CopyTo(chars);
             arg0?.CopyTo(0, chars, spanLength, length);
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this char value, string arg0, char arg1)
+        {
+            var length = arg0?.Length ?? 0;
+
+            var chars = new char[length + 2];
+
+            if (length > 0)
+            {
+                arg0.CopyTo(0, chars, 1, length);
+            }
+
+            chars[0] = value;
+            chars[length + 1] = arg1;
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0, char arg1)
+        {
+            var length = arg0.Length;
+
+            var chars = new char[length + 2];
+
+            if (length > 0)
+            {
+                arg0.CopyTo(chars.AsSpan(1));
+            }
+
+            chars[0] = value;
+            chars[length + 1] = arg1;
+
+            return new string(chars);
+        }
+
+        public static string ConcatenatedWith(this char value, string arg0, ReadOnlySpan<char> arg1)
+        {
+            var arg0Length = arg0?.Length ?? 0;
+            var arg1Length = arg1.Length;
+
+            var chars = new char[1 + arg0Length + arg1Length];
+
+            chars[0] = value;
+            arg0?.CopyTo(0, chars, 1, arg0Length);
+            arg1.CopyTo(chars.AsSpan(1 + arg0Length, arg1Length));
 
             return new string(chars);
         }
@@ -373,70 +437,6 @@ namespace System
             value.CopyTo(0, chars, 0, length);
             arg0.CopyTo(chars.AsSpan(length, arg0Length));
             arg1?.CopyTo(0, chars, length + arg0Length, arg1Length);
-
-            return new string(chars);
-        }
-
-        public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0)
-        {
-            var length = arg0.Length;
-
-            var chars = new char[length + 1];
-
-            if (length > 0)
-            {
-                arg0.CopyTo(chars.AsSpan(1));
-            }
-
-            chars[0] = value;
-
-            return new string(chars);
-        }
-
-        public static string ConcatenatedWith(this char value, string arg0, char arg1)
-        {
-            var length = arg0?.Length ?? 0;
-
-            var chars = new char[length + 2];
-
-            if (length > 0)
-            {
-                arg0.CopyTo(0, chars, 1, length);
-            }
-
-            chars[0] = value;
-            chars[length + 1] = arg1;
-
-            return new string(chars);
-        }
-
-        public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0, char arg1)
-        {
-            var length = arg0.Length;
-
-            var chars = new char[length + 2];
-
-            if (length > 0)
-            {
-                arg0.CopyTo(chars.AsSpan(1));
-            }
-
-            chars[0] = value;
-            chars[length + 1] = arg1;
-
-            return new string(chars);
-        }
-
-        public static string ConcatenatedWith(this char value, string arg0, ReadOnlySpan<char> arg1)
-        {
-            var arg0Length = arg0?.Length ?? 0;
-            var arg1Length = arg1.Length;
-
-            var chars = new char[1 + arg0Length + arg1Length];
-
-            chars[0] = value;
-            arg0?.CopyTo(0, chars, 1, arg0Length);
-            arg1.CopyTo(chars.AsSpan(1 + arg0Length, arg1Length));
 
             return new string(chars);
         }
