@@ -18,11 +18,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                                                               nameof(ArgumentException),
                                                               nameof(ArgumentNullException),
                                                               nameof(ArgumentOutOfRangeException),
-                                                              "InvalidEnumArgumentException", // don't use nameof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
+                                                              "InvalidEnumArgumentException", // do not use nameof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
                                                               typeof(ArgumentException).FullName,
                                                               typeof(ArgumentNullException).FullName,
                                                               typeof(ArgumentOutOfRangeException).FullName,
-                                                              "System.ComponentModel.InvalidEnumArgumentException", // don't use typeof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
+                                                              "System.ComponentModel.InvalidEnumArgumentException", // do not use typeof as the unit test framework will not find it (.NET CORE does not support System.ComponentModel)
                                                           ];
 
         [Test]
