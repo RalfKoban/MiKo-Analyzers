@@ -12,6 +12,7 @@ using NUnit.Framework;
 
 //// ncrunch: rdi off
 // ncrunch: no coverage start
+// ReSharper disable once CheckNamespace
 namespace TestHelper
 {
     /// <summary>

@@ -157,7 +157,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
             if (parent != null && parent.IsKind(SyntaxKind.ParenthesizedExpression))
             {
-                parent = parent?.Parent;
+                parent = parent.Parent;
             }
 
             return parent;
@@ -169,7 +169,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 case SyntaxKind.UnaryMinusExpression:
                 case SyntaxKind.UnaryPlusExpression:
-                    return parent?.Parent;
+                    return parent.Parent;
 
                 default:
                     return parent;

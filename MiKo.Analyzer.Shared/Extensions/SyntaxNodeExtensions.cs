@@ -845,7 +845,7 @@ namespace MiKoSolutions.Analyzers
                     }
 
                     case BasePropertyDeclarationSyntax property:
-                        return property?.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
+                        return property.AccessorList?.Accessors.Any(_ => _.IsKind(SyntaxKind.SetAccessorDeclaration)) is true
                                ? Constants.Names.DefaultPropertyParameterNames
                                : Array.Empty<string>();
                 }
@@ -899,7 +899,11 @@ namespace MiKoSolutions.Analyzers
         {
             var symbol = semanticModel.GetDeclaredSymbol(value);
 
+#if VS2022
+            return symbol;
+#else
             return symbol as IMethodSymbol;
+#endif
         }
 
         internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Compilation compilation)
