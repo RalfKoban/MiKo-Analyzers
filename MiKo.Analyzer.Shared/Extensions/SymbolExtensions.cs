@@ -257,6 +257,7 @@ namespace MiKoSolutions.Analyzers
                     case IFieldSymbol _: return null;
 
                     default:
+                        // parameters might be part of properties or methods, so we have to do the loop here
                         symbol = symbol.ContainingSymbol;
 
                         break;

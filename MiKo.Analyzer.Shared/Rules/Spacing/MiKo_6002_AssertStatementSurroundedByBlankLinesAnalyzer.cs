@@ -23,12 +23,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 return false;
             }
 
-            if (typeName.EndsWith("Assert", StringComparison.Ordinal) is true)
+            if (typeName.EndsWith("Assert", StringComparison.Ordinal))
             {
                 return true;
             }
 
-            if (typeName.EndsWith("Assume", StringComparison.Ordinal) is true)
+            if (typeName.EndsWith("Assume", StringComparison.Ordinal))
             {
                 return true;
             }

@@ -78,7 +78,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     properties.Add(Constants.AnalyzerCodeFixSharedData.PropertyTypeName, type.GetNameOnlyPart());
                 }
 
-                var issue = Issue(symbol?.Name, node, issueTemplate.FormatWith(propertyName), properties);
+                var issue = Issue(symbol.Name, node, issueTemplate.FormatWith(propertyName), properties);
+
                 ReportDiagnostics(context, issue);
             }
         }

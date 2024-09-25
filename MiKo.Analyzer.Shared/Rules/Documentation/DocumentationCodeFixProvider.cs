@@ -28,8 +28,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var result = new string[orderedTerms.Count];
 
-            bool found;
             var resultIndex = 0;
+
+            // ReSharper disable once TooWideLocalVariableScope : it's done to have less memory pressure on garbage collector
+            bool found;
 
             while (orderedTerms.Count > 0)
             {
