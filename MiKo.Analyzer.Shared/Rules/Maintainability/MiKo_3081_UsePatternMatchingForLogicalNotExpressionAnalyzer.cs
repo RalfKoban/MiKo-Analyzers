@@ -18,26 +18,27 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var node = (PrefixUnaryExpressionSyntax)context.Node;
 
-            if (node.Operand is IdentifierNameSyntax right && node.Parent is AssignmentExpressionSyntax assignment && assignment.Left is IdentifierNameSyntax left)
+            if (node.Operand is IdentifierNameSyntax right)
             {
-                if (right.Identifier.ValueText == left.Identifier.ValueText)
+                switch (node.Parent)
                 {
-                    // same identifier, do not report
-                    return;
+                    case IfDirectiveTriviaSyntax _: // ignore directives
+                    case AssignmentExpressionSyntax assignment when assignment.Left is IdentifierNameSyntax left && left.Identifier.ValueText == right.Identifier.ValueText: // same identifier, do not report
+                        return;
                 }
             }
 
             var semanticModel = context.SemanticModel;
 
-            if (node.IsExpression(semanticModel))
-            {
-                // ignore expression trees
-                return;
-            }
-
             if (node.Operand.GetSymbol(semanticModel) is IFieldSymbol f && f.IsConst)
             {
                 // ignore constants
+                return;
+            }
+
+            if (node.IsExpression(semanticModel))
+            {
+                // ignore expression trees
                 return;
             }
 

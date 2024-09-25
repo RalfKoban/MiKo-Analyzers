@@ -17,9 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     {
         internal static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-#if NCRUNCH
-        // do not define a static ctor to speed up tests
-#else
+#if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
         static MiKo_2060_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
