@@ -67,7 +67,7 @@ namespace System
 
             if (HasFlag(handling, FirstWordHandling.MakePlural))
             {
-                word = Verbalizer.MakePlural(word);
+                word = Pluralizer.MakePluralName(word);
             }
 
             if (HasFlag(handling, FirstWordHandling.KeepLeadingSpace))

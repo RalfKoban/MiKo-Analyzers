@@ -34,5 +34,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("itemsToModel", ExpectedResult = "items")]
         [TestCase("itemModels", ExpectedResult = "items")]
         public static string Creates_correct_plural_name_(string singularName) => Pluralizer.GetPluralName(singularName);
+
+        [TestCase("access", ExpectedResult = "accesses")]
+        [TestCase("accesses", ExpectedResult = "accesses")]
+        [TestCase("Message", ExpectedResult = "Messages")]
+        [TestCase("Messages", ExpectedResult = "Messages")]
+        [TestCase("SyntaxTrivia", ExpectedResult = "SyntaxTrivia")]
+        [TestCase("Trivia", ExpectedResult = "Trivia")]
+        [TestCase("trivia", ExpectedResult = "trivia")]
+        public static string Makes_correct_plural_name_(string singularName) => Pluralizer.MakePluralName(singularName);
     }
 }
