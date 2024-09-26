@@ -116,7 +116,7 @@ namespace System.Text
 
                 value.Remove(whitespacesBefore, word.Length);
 
-                var pluralWord = Verbalizer.MakePlural(word);
+                var pluralWord = Pluralizer.MakePluralName(word);
 
                 value.Insert(whitespacesBefore, pluralWord);
             }

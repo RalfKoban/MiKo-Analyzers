@@ -277,11 +277,5 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("shutting", ExpectedResult = true)]
         [TestCase("Shutting", ExpectedResult = true)]
         public static bool IsGerundVerb_detects_gerund_verb_(string name) => Verbalizer.IsGerundVerb(name);
-
-        [TestCase("access", ExpectedResult = "accesses")]
-        [TestCase("accesses", ExpectedResult = "accesses")]
-        [TestCase("Message", ExpectedResult = "Messages")]
-        [TestCase("Messages", ExpectedResult = "Messages")]
-        public static string MakePlural_finds_proper_plural(string name) => Verbalizer.MakePlural(name);
     }
 }
