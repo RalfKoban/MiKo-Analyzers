@@ -221,18 +221,23 @@ namespace System
 
         public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0)
         {
-            var length = arg0.Length;
+            var arg0Length = arg0.Length;
+            var length = arg0Length + 1;
 
-            var chars = new char[length + 1];
-
-            if (length > 0)
+            unsafe
             {
-                arg0.CopyTo(chars.AsSpan(1));
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.CopyTo(bufferSpan.Slice(1));
+                }
+
+                return new string(buffer, 0, length);
             }
-
-            chars[0] = value;
-
-            return new string(chars);
         }
 
         public static string ConcatenatedWith(this string value, ReadOnlySpan<char> span)
@@ -251,28 +256,39 @@ namespace System
                 return span.ToString();
             }
 
-            var chars = new char[valueLength + spanLength];
+            var length = valueLength + spanLength;
 
-            span.CopyTo(chars.AsSpan(valueLength, spanLength));
-            value?.CopyTo(0, chars, 0, valueLength);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                span.CopyTo(bufferSpan.Slice(valueLength, spanLength));
+                value.AsSpan().CopyTo(bufferSpan);
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0)
         {
-            var length = value.Length;
+            var valueLength = value.Length;
+            var length = valueLength + 1;
 
-            var chars = new char[length + 1];
-
-            if (length > 0)
+            unsafe
             {
-                value.CopyTo(chars);
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                if (valueLength > 0)
+                {
+                    value.CopyTo(bufferSpan);
+                }
+
+                buffer[valueLength] = arg0;
+
+                return new string(buffer, 0, length);
             }
-
-            chars[length] = arg0;
-
-            return new string(chars);
         }
 
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0)
@@ -284,53 +300,73 @@ namespace System
                 return arg0;
             }
 
-            var length = arg0?.Length ?? 0;
+            var arg0Length = arg0?.Length ?? 0;
 
-            if (length == 0)
+            if (arg0Length == 0)
             {
                 return value.ToString();
             }
 
-            var chars = new char[spanLength + length];
+            var length = spanLength + arg0Length;
 
-            value.CopyTo(chars);
-            arg0?.CopyTo(0, chars, spanLength, length);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                value.CopyTo(bufferSpan);
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(spanLength, arg0Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this char value, string arg0, char arg1)
         {
-            var length = arg0?.Length ?? 0;
+            var arg0Length = arg0?.Length ?? 0;
 
-            var chars = new char[length + 2];
+            var length = arg0Length + 2;
 
-            if (length > 0)
+            unsafe
             {
-                arg0.CopyTo(0, chars, 1, length);
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.AsSpan().CopyTo(bufferSpan.Slice(1));
+                }
+
+                buffer[arg0Length + 1] = arg1;
+
+                return new string(buffer, 0, length);
             }
-
-            chars[0] = value;
-            chars[length + 1] = arg1;
-
-            return new string(chars);
         }
 
         public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0, char arg1)
         {
-            var length = arg0.Length;
+            var arg0Length = arg0.Length;
 
-            var chars = new char[length + 2];
+            var length = arg0Length + 2;
 
-            if (length > 0)
+            unsafe
             {
-                arg0.CopyTo(chars.AsSpan(1));
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.CopyTo(bufferSpan.Slice(1));
+                }
+
+                buffer[arg0Length + 1] = arg1;
+
+                return new string(buffer, 0, length);
             }
-
-            chars[0] = value;
-            chars[length + 1] = arg1;
-
-            return new string(chars);
         }
 
         public static string ConcatenatedWith(this char value, string arg0, ReadOnlySpan<char> arg1)
@@ -338,20 +374,27 @@ namespace System
             var arg0Length = arg0?.Length ?? 0;
             var arg1Length = arg1.Length;
 
-            var chars = new char[1 + arg0Length + arg1Length];
+            var length = 1 + arg0Length + arg1Length;
 
-            chars[0] = value;
-            arg0?.CopyTo(0, chars, 1, arg0Length);
-            arg1.CopyTo(chars.AsSpan(1 + arg0Length, arg1Length));
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                buffer[0] = value;
+
+                arg0?.AsSpan().CopyTo(bufferSpan.Slice(1));
+                arg1.CopyTo(bufferSpan.Slice(1 + arg0Length, arg1Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, string arg1)
         {
-            var length = value.Length;
+            var valueLength = value.Length;
 
-            if (length == 0)
+            if (valueLength == 0)
             {
                 return string.Concat(arg0, arg1);
             }
@@ -359,20 +402,26 @@ namespace System
             var arg0Length = arg0?.Length ?? 0;
             var arg1Length = arg1?.Length ?? 0;
 
-            var chars = new char[length + arg0Length + arg1Length];
+            var length = valueLength + arg0Length + arg1Length;
 
-            value.CopyTo(chars);
-            arg0?.CopyTo(0, chars, length, arg0Length);
-            arg1?.CopyTo(0, chars, length + arg0Length, arg1Length);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                value.CopyTo(bufferSpan);
+                arg0?.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1?.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, string arg0, ReadOnlySpan<char> arg1)
         {
-            var length = value.Length;
+            var valueLength = value.Length;
 
-            if (length == 0)
+            if (valueLength == 0)
             {
                 return arg0.ConcatenatedWith(arg1);
             }
@@ -380,13 +429,19 @@ namespace System
             var arg0Length = arg0?.Length ?? 0;
             var arg1Length = arg1.Length;
 
-            var chars = new char[length + arg0Length + arg1Length];
+            var length = valueLength + arg0Length + arg1Length;
 
-            value.CopyTo(chars);
-            arg0?.CopyTo(0, chars, length, arg0Length);
-            arg1.CopyTo(chars.AsSpan(length + arg0Length, arg1Length));
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                value.CopyTo(bufferSpan);
+                arg0?.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length, arg1Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this string value, string arg0, ReadOnlySpan<char> arg1)
@@ -396,7 +451,7 @@ namespace System
                 return arg0.ConcatenatedWith(arg1);
             }
 
-            var length = value.Length;
+            var valueLength = value.Length;
 
             if (value.Length == 0)
             {
@@ -406,13 +461,19 @@ namespace System
             var arg0Length = arg0?.Length ?? 0;
             var arg1Length = arg1.Length;
 
-            var chars = new char[length + arg0Length + arg1Length];
+            var length = valueLength + arg0Length + arg1Length;
 
-            value.CopyTo(0, chars, 0, length);
-            arg0?.CopyTo(0, chars, length, arg0Length);
-            arg1.CopyTo(chars.AsSpan(length + arg0Length, arg1Length));
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                value.AsSpan().CopyTo(bufferSpan);
+                arg0?.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this string value, ReadOnlySpan<char> arg0, string arg1)
@@ -422,7 +483,7 @@ namespace System
                 return arg0.ConcatenatedWith(arg1);
             }
 
-            var length = value.Length;
+            var valueLength = value.Length;
 
             if (value.Length == 0)
             {
@@ -432,33 +493,45 @@ namespace System
             var arg0Length = arg0.Length;
             var arg1Length = arg1?.Length ?? 0;
 
-            var chars = new char[length + arg0Length + arg1Length];
+            var length = valueLength + arg0Length + arg1Length;
 
-            value.CopyTo(0, chars, 0, length);
-            arg0.CopyTo(chars.AsSpan(length, arg0Length));
-            arg1?.CopyTo(0, chars, length + arg0Length, arg1Length);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                value.AsSpan().CopyTo(bufferSpan);
+                arg0.CopyTo(bufferSpan.Slice(valueLength));
+                arg1?.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static string ConcatenatedWith(this ReadOnlySpan<char> value, char arg0, string arg1, char arg2)
         {
-            var length = value.Length;
+            var valueLength = value.Length;
             var arg1Length = arg1?.Length ?? 0;
 
-            var chars = new char[length + arg1Length + 2];
+            var length = valueLength + arg1Length + 2;
 
-            if (length > 0)
+            unsafe
             {
-                value.CopyTo(chars);
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                if (valueLength > 0)
+                {
+                    value.CopyTo(bufferSpan);
+                }
+
+                buffer[valueLength + 1] = arg0;
+                buffer[valueLength + 1 + arg1Length] = arg2;
+
+                arg1?.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 2));
+
+                return new string(buffer, 0, length);
             }
-
-            chars[length + 1] = arg0;
-            chars[length + 1 + arg1Length] = arg2;
-
-            arg1?.CopyTo(0, chars, length + 2, arg1Length);
-
-            return new string(chars);
         }
 
         public static bool Contains(this string value, char c) => value?.IndexOf(c) >= 0;
@@ -1059,24 +1132,31 @@ namespace System
 
         public static string HumanizedTakeFirst(this ReadOnlySpan<char> value, int max)
         {
-            var length = Math.Min(max, value.Length);
+            var minimumLength = Math.Min(max, value.Length);
 
-            if (length <= 0 || length == value.Length)
+            if (minimumLength <= 0 || minimumLength == value.Length)
             {
                 return value.TrimEnd().ToString();
             }
 
-            var span = value.Slice(0, length).TrimEnd();
-            length = span.Length;
+            var span = value.Slice(0, minimumLength).TrimEnd();
+            minimumLength = span.Length;
 
-            var chars = new char[length + 3];
-            chars[length] = '.';
-            chars[length + 1] = '.';
-            chars[length + 2] = '.';
+            var length = minimumLength + 3;
 
-            span.CopyTo(chars);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
 
-            return new string(chars);
+                span.CopyTo(bufferSpan);
+
+                buffer[minimumLength] = '.';
+                buffer[minimumLength + 1] = '.';
+                buffer[minimumLength + 2] = '.';
+
+                return new string(buffer, 0, length);
+            }
         }
 
         public static int IndexOfAny(this ReadOnlySpan<char> value, string[] phrases, StringComparison comparison)
@@ -1427,14 +1507,24 @@ namespace System
         /// </returns>
         public static string ToLowerCase(this ReadOnlySpan<char> source)
         {
-            var characters = source.ToArray();
+            var length = source.Length;
 
-            for (var index = 0; index < characters.Length; index++)
+            if (length == 0)
             {
-                characters[index] = source[index].ToLowerCase();
+                return string.Empty;
             }
 
-            return new string(characters);
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+
+                for (var index = 0; index < length; index++)
+                {
+                    buffer[index] = source[index].ToLowerCase();
+                }
+
+                return new string(buffer, 0, length);
+            }
         }
 
         /// <summary>
@@ -1468,7 +1558,7 @@ namespace System
                 return source;
             }
 
-            return MakeLowerCaseAt(source, index);
+            return MakeLowerCaseAt(source.AsSpan(), index);
         }
 
         /// <summary>
@@ -1539,10 +1629,10 @@ namespace System
                 return source;
             }
 
-            return MakeUpperCaseAt(source, index);
+            return MakeUpperCaseAt(source.AsSpan(), index);
         }
 
-//// ncrunch: no coverage end
+        //// ncrunch: no coverage end
 
         /// <summary>
         /// Gets a <see cref="string"/> where the specified character is upper-case.
@@ -1840,56 +1930,36 @@ namespace System
             return false;
         }
 
-        private static string MakeUpperCaseAt(string source, int index)
-        {
-            if (index == 0)
-            {
-                return source[0].ToUpperCase().ConcatenatedWith(source.AsSpan(1));
-            }
-
-            var characters = source.ToCharArray();
-            characters[index] = characters[index].ToUpperCase();
-
-            return new string(characters);
-        }
-
         private static string MakeUpperCaseAt(ReadOnlySpan<char> source, int index)
         {
-            if (index == 0)
+            unsafe
             {
-                return source[0].ToUpperCase().ConcatenatedWith(source.Slice(1));
+                var length = source.Length;
+
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                source.CopyTo(bufferSpan);
+                buffer[index] = buffer[index].ToUpperCase();
+
+                return new string(buffer, 0, length);
             }
-
-            var characters = source.ToArray();
-            characters[index] = characters[index].ToUpperCase();
-
-            return new string(characters);
-        }
-
-        private static string MakeLowerCaseAt(string source, int index)
-        {
-            if (index == 0)
-            {
-                return source[0].ToLowerCase().ConcatenatedWith(source.AsSpan(1));
-            }
-
-            var characters = source.ToCharArray();
-            characters[index] = characters[index].ToLowerCase();
-
-            return new string(characters);
         }
 
         private static string MakeLowerCaseAt(ReadOnlySpan<char> source, int index)
         {
-            if (index == 0)
+            unsafe
             {
-                return source[0].ToLowerCase().ConcatenatedWith(source.Slice(1));
+                var length = source.Length;
+
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                source.CopyTo(bufferSpan);
+                buffer[index] = buffer[index].ToLowerCase();
+
+                return new string(buffer, 0, length);
             }
-
-            var characters = source.ToArray();
-            characters[index] = source[index].ToLowerCase();
-
-            return new string(characters);
         }
 
         private static bool QuickCompare(ReadOnlySpan<char> value, ReadOnlySpan<char> others, StringComparison comparison)
