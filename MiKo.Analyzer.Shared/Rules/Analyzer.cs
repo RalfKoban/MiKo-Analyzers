@@ -354,12 +354,12 @@ namespace MiKoSolutions.Analyzers.Rules
         {
             switch (symbolKind)
             {
-                case SymbolKind.Event: return AnalyzeEvent;
-                case SymbolKind.Field: return AnalyzeField;
                 case SymbolKind.Method: return AnalyzeMethod;
                 case SymbolKind.NamedType: return AnalyzeType;
-                case SymbolKind.Namespace: return AnalyzeNamespace;
                 case SymbolKind.Property: return AnalyzeProperty;
+                case SymbolKind.Event: return AnalyzeEvent;
+                case SymbolKind.Field: return AnalyzeField;
+                case SymbolKind.Namespace: return AnalyzeNamespace;
                 case SymbolKind.Parameter: return AnalyzeParameter;
 
                 default: return null;

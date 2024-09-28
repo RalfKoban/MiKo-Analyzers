@@ -477,10 +477,10 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
                 case MethodDeclarationSyntax s: return semanticModel.GetDeclaredSymbol(s);
                 case PropertyDeclarationSyntax p: return semanticModel.GetDeclaredSymbol(p);
                 case ConstructorDeclarationSyntax c: return semanticModel.GetDeclaredSymbol(c);
-                case FieldDeclarationSyntax f: return semanticModel.GetDeclaredSymbol(f);
                 case EventDeclarationSyntax e: return semanticModel.GetDeclaredSymbol(e);
                 default:
                     return semanticModel.GetEnclosingSymbol(value.GetLocation().SourceSpan.Start);
@@ -545,8 +545,8 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value.Name)
             {
-                case QualifiedNameSyntax q: return q.Right.GetName();
                 case SimpleNameSyntax s: return s.GetName();
+                case QualifiedNameSyntax q: return q.Right.GetName();
                 default: return string.Empty;
             }
         }
@@ -569,8 +569,8 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case EnumDeclarationSyntax s: return s.GetName();
                 case TypeDeclarationSyntax s: return s.GetName();
+                case EnumDeclarationSyntax s: return s.GetName();
                 default:
                     return string.Empty;
             }
@@ -591,8 +591,8 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case IndexerDeclarationSyntax i: return i.GetName();
                 case PropertyDeclarationSyntax p: return p.GetName();
+                case IndexerDeclarationSyntax i: return i.GetName();
                 case EventDeclarationSyntax e: return e.GetName();
                 default:
                     return string.Empty;
@@ -618,10 +618,10 @@ namespace MiKoSolutions.Analyzers
             switch (value)
             {
                 case IdentifierNameSyntax i: return i.GetName();
-                case InvocationExpressionSyntax i: return i.GetName();
-                case LiteralExpressionSyntax l: return l.GetName();
                 case MemberAccessExpressionSyntax m: return m.GetName();
+                case InvocationExpressionSyntax i: return i.GetName();
                 case SimpleNameSyntax s: return s.GetName();
+                case LiteralExpressionSyntax l: return l.GetName();
                 default: return string.Empty;
             }
         }
@@ -675,9 +675,9 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
+                case BaseTypeDeclarationSyntax s: return s.GetName();
                 case BaseMethodDeclarationSyntax s: return s.GetName();
                 case BasePropertyDeclarationSyntax s: return s.GetName();
-                case BaseTypeDeclarationSyntax s: return s.GetName();
                 case BaseFieldDeclarationSyntax s: return s.GetName();
                 case EnumMemberDeclarationSyntax s: return s.GetName();
                 default:
