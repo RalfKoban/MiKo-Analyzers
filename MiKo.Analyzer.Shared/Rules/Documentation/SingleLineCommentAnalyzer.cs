@@ -111,81 +111,90 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseMethodDeclarationSyntax node, SemanticModel semanticModel)
         {
-            foreach (var trivia in node.DescendantTrivia())
+            var triviaToAnalyze = FindTriviaToAnalyze(node);
+
+            if (triviaToAnalyze.Count > 0)
             {
-                if (ShallAnalyze(trivia))
-                {
-                    var hasIssue = AnalyzeComment(trivia, semanticModel);
+                var name = node.GetName();
 
-                    if (hasIssue)
-                    {
-                        var name = node.GetName();
-
-                        foreach (var issue in CollectIssues(name, trivia))
-                        {
-                            yield return issue;
-                        }
-                    }
-                }
+                return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
             }
+
+            return Array.Empty<Diagnostic>();
         }
 
         private IEnumerable<Diagnostic> AnalyzeCommentTrivia(BaseFieldDeclarationSyntax node, SemanticModel semanticModel)
         {
-            foreach (var trivia in node.DescendantTrivia())
+            var triviaToAnalyze = FindTriviaToAnalyze(node);
+
+            if (triviaToAnalyze.Count > 0)
             {
-                if (ShallAnalyze(trivia))
+                var name = node.GetName();
+
+                return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
+        {
+            var triviaToAnalyze = FindTriviaToAnalyze(node);
+
+            if (triviaToAnalyze.Count > 0)
+            {
+                var name = node.GetName();
+
+                return AnalyzeCommentTrivia(name, triviaToAnalyze, semanticModel);
+            }
+
+            return Array.Empty<Diagnostic>();
+        }
+
+        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(string name, IReadOnlyList<SyntaxTrivia> triviaToAnalyze, SemanticModel semanticModel)
+        {
+            var count = triviaToAnalyze.Count;
+
+            for (var index = 0; index < count; index++)
+            {
+                var trivia = triviaToAnalyze[index];
+
+                var hasIssue = AnalyzeComment(trivia, semanticModel);
+
+                if (hasIssue)
                 {
-                    var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                    if (hasIssue)
+                    foreach (var issue in CollectIssues(name, trivia))
                     {
-                        var name = node.GetName();
-
-                        foreach (var issue in CollectIssues(name, trivia))
-                        {
-                            yield return issue;
-                        }
+                        yield return issue;
                     }
                 }
             }
         }
 
-        private IEnumerable<Diagnostic> AnalyzeCommentTrivia(AccessorDeclarationSyntax node, SemanticModel semanticModel)
+        private IReadOnlyList<SyntaxTrivia> FindTriviaToAnalyze(SyntaxNode node)
         {
+            List<SyntaxTrivia> triviaToAnalyze = null;
+
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery : foreach loop is used intentionally for performance gains
             foreach (var trivia in node.DescendantTrivia())
             {
                 if (ShallAnalyze(trivia))
                 {
-                    var hasIssue = AnalyzeComment(trivia, semanticModel);
-
-                    if (hasIssue)
+                    if (triviaToAnalyze is null)
                     {
-                        var name = GetName();
-
-                        foreach (var issue in CollectIssues(name, trivia))
-                        {
-                            yield return issue;
-                        }
+                        triviaToAnalyze = new List<SyntaxTrivia>(1);
                     }
+
+                    triviaToAnalyze.Add(trivia);
                 }
             }
 
-            string GetName()
+            if (triviaToAnalyze is null)
             {
-                var syntaxNode = node.Parent?.Parent;
-
-                switch (syntaxNode)
-                {
-                    case BasePropertyDeclarationSyntax b:
-                        return b.GetName();
-
-                    case EventFieldDeclarationSyntax ef:
-                        return ef.GetName();
-                }
-
-                return string.Empty;
+                return Array.Empty<SyntaxTrivia>();
             }
+
+            return triviaToAnalyze;
         }
     }
 }

@@ -539,6 +539,22 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static string GetName(this AccessorDeclarationSyntax value)
+        {
+            var syntaxNode = value.Parent?.Parent;
+
+            switch (syntaxNode)
+            {
+                case BasePropertyDeclarationSyntax b:
+                    return b.GetName();
+
+                case EventFieldDeclarationSyntax ef:
+                    return ef.GetName();
+            }
+
+            return string.Empty;
+        }
+
         internal static string GetName(this ArgumentSyntax value) => value.Expression.GetName();
 
         internal static string GetName(this AttributeSyntax value)
