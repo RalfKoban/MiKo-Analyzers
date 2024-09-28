@@ -219,6 +219,27 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ConcatenatedWith(this IEnumerable<string> values, string separator) => string.Join(separator, values);
 
+        public static string ConcatenatedWith(this char value, string arg0)
+        {
+            var arg0Length = arg0?.Length ?? 0;
+            var length = arg0Length + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                buffer[0] = value;
+
+                if (arg0Length > 0)
+                {
+                    arg0.AsSpan().CopyTo(bufferSpan.Slice(1));
+                }
+
+                return new string(buffer, 0, length);
+            }
+        }
+
         public static string ConcatenatedWith(this char value, ReadOnlySpan<char> arg0)
         {
             var arg0Length = arg0.Length;
@@ -265,6 +286,27 @@ namespace System
 
                 span.CopyTo(bufferSpan.Slice(valueLength, spanLength));
                 value.AsSpan().CopyTo(bufferSpan);
+
+                return new string(buffer, 0, length);
+            }
+        }
+
+        public static string ConcatenatedWith(this string value, char arg0)
+        {
+            var valueLength = value?.Length ?? 0;
+            var length = valueLength + 1;
+
+            unsafe
+            {
+                var buffer = stackalloc char[length];
+                var bufferSpan = new Span<char>(buffer, length);
+
+                if (valueLength > 0)
+                {
+                    value.AsSpan().CopyTo(bufferSpan);
+                }
+
+                buffer[valueLength] = arg0;
 
                 return new string(buffer, 0, length);
             }
@@ -383,7 +425,7 @@ namespace System
 
                 buffer[0] = value;
 
-                arg0?.AsSpan().CopyTo(bufferSpan.Slice(1));
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(1));
                 arg1.CopyTo(bufferSpan.Slice(1 + arg0Length, arg1Length));
 
                 return new string(buffer, 0, length);
@@ -410,8 +452,8 @@ namespace System
                 var bufferSpan = new Span<char>(buffer, length);
 
                 value.CopyTo(bufferSpan);
-                arg0?.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
-                arg1?.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
 
                 return new string(buffer, 0, length);
             }
@@ -437,7 +479,7 @@ namespace System
                 var bufferSpan = new Span<char>(buffer, length);
 
                 value.CopyTo(bufferSpan);
-                arg0?.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
                 arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length, arg1Length));
 
                 return new string(buffer, 0, length);
@@ -469,7 +511,7 @@ namespace System
                 var bufferSpan = new Span<char>(buffer, length);
 
                 value.AsSpan().CopyTo(bufferSpan);
-                arg0?.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
+                arg0.AsSpan().CopyTo(bufferSpan.Slice(valueLength));
                 arg1.CopyTo(bufferSpan.Slice(valueLength + arg0Length));
 
                 return new string(buffer, 0, length);
@@ -502,7 +544,7 @@ namespace System
 
                 value.AsSpan().CopyTo(bufferSpan);
                 arg0.CopyTo(bufferSpan.Slice(valueLength));
-                arg1?.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + arg0Length));
 
                 return new string(buffer, 0, length);
             }
@@ -528,7 +570,7 @@ namespace System
                 buffer[valueLength + 1] = arg0;
                 buffer[valueLength + 1 + arg1Length] = arg2;
 
-                arg1?.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 2));
+                arg1.AsSpan().CopyTo(bufferSpan.Slice(valueLength + 2));
 
                 return new string(buffer, 0, length);
             }
@@ -1494,37 +1536,6 @@ namespace System
             }
 
             return char.ToLowerInvariant(source);
-        }
-
-        /// <summary>
-        /// Gets a <see cref="string"/> where the characters are lower-case.
-        /// </summary>
-        /// <param name="source">
-        /// The original text.
-        /// </param>
-        /// <returns>
-        /// A <see cref="string"/> where the character are lower-case.
-        /// </returns>
-        public static string ToLowerCase(this ReadOnlySpan<char> source)
-        {
-            var length = source.Length;
-
-            if (length == 0)
-            {
-                return string.Empty;
-            }
-
-            unsafe
-            {
-                var buffer = stackalloc char[length];
-
-                for (var index = 0; index < length; index++)
-                {
-                    buffer[index] = source[index].ToLowerCase();
-                }
-
-                return new string(buffer, 0, length);
-            }
         }
 
         /// <summary>
