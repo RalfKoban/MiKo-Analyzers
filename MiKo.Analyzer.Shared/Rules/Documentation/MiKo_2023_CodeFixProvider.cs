@@ -530,7 +530,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return results;
                 }
 
-                string[] ToUpper(IEnumerable<string> strings) => strings.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
+                string[] ToUpper(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
             }
 
             public Pair[] ReplacementMapForA { get; }
