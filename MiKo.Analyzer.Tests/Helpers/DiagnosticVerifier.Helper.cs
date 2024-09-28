@@ -131,9 +131,13 @@ namespace TestHelper
 
             foreach (var project in projects)
             {
+                JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
+
                 var compilation = project.GetCompilationAsync().Result;
                 var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+
+                JetBrains.Profiler.Api.MeasureProfiler.SaveData();
 
                 foreach (var diag in diags)
                 {
