@@ -36,22 +36,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+
         private static Pair[] CreateStartParts()
         {
-            var results = new List<Pair>(6 * Phrases.Length);
+            var phrasesLength = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new List<Pair>(6 * phrasesLength);
+
+            for (var i = 0; i < phrasesLength; i++)
             {
-                var phraseSpan = phrase.AsSpan();
-                var proposal = Proposal(phraseSpan);
-                var proposalSpan = proposal.AsSpan();
+                var phrase = Phrases[i];
+                var proposal = Proposal(phrase);
 
-                results.Add(new Pair(phraseSpan.ConcatenatedWith('.'), proposalSpan.ConcatenatedWith('.')));
-                results.Add(new Pair(phraseSpan.ConcatenatedWith('?'), proposalSpan.ConcatenatedWith('?')));
-                results.Add(new Pair(phraseSpan.ConcatenatedWith('!'), proposalSpan.ConcatenatedWith('!')));
-                results.Add(new Pair(phraseSpan.ConcatenatedWith(','), proposalSpan.ConcatenatedWith(',')));
-                results.Add(new Pair(phraseSpan.ConcatenatedWith(';'), proposalSpan.ConcatenatedWith(';')));
-                results.Add(new Pair(phraseSpan.ConcatenatedWith(':'), proposalSpan.ConcatenatedWith(':')));
+                results.Add(new Pair(phrase.ConcatenatedWith('.'), proposal.ConcatenatedWith('.')));
+                results.Add(new Pair(phrase.ConcatenatedWith('?'), proposal.ConcatenatedWith('?')));
+                results.Add(new Pair(phrase.ConcatenatedWith('!'), proposal.ConcatenatedWith('!')));
+                results.Add(new Pair(phrase.ConcatenatedWith(','), proposal.ConcatenatedWith(',')));
+                results.Add(new Pair(phrase.ConcatenatedWith(';'), proposal.ConcatenatedWith(';')));
+                results.Add(new Pair(phrase.ConcatenatedWith(':'), proposal.ConcatenatedWith(':')));
             }
 
             return results.ToArray();
@@ -59,25 +61,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateMiddleParts()
         {
-            var results = new List<Pair>(11 * Phrases.Length);
+            var phrasesLength = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new List<Pair>(11 * phrasesLength);
+
+            for (var i = 0; i < phrasesLength; i++)
             {
-                var phraseSpan = phrase.AsSpan();
-                var proposal = Proposal(phraseSpan);
-                var proposalSpan = proposal.AsSpan();
+                var phrase = Phrases[i];
+                var proposal = Proposal(phrase);
 
-                results.Add(new Pair('('.ConcatenatedWith(phraseSpan, ' '), '('.ConcatenatedWith(proposalSpan, ' ')));
-                results.Add(new Pair('('.ConcatenatedWith(phraseSpan, ')'), '('.ConcatenatedWith(proposalSpan, ')')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ')'), ' '.ConcatenatedWith(proposalSpan, ')')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ' '), ' '.ConcatenatedWith(proposalSpan, ' ')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, '.'), ' '.ConcatenatedWith(proposalSpan, '.')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, '?'), ' '.ConcatenatedWith(proposalSpan, '?')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, '!'), ' '.ConcatenatedWith(proposalSpan, '!')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ','), ' '.ConcatenatedWith(proposalSpan, ',')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ';'), ' '.ConcatenatedWith(proposalSpan, ';')));
-                results.Add(new Pair(' '.ConcatenatedWith(phraseSpan, ':'), ' '.ConcatenatedWith(proposalSpan, ':')));
-                results.Add(new Pair('\''.ConcatenatedWith(phraseSpan, '\''), proposal));
+                results.Add(new Pair('('.ConcatenatedWith(phrase, ' '), '('.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair('('.ConcatenatedWith(phrase, ')'), '('.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ')'), ' '.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ' '), ' '.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '.'), ' '.ConcatenatedWith(proposal, '.')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '?'), ' '.ConcatenatedWith(proposal, '?')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '!'), ' '.ConcatenatedWith(proposal, '!')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ','), ' '.ConcatenatedWith(proposal, ',')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ';'), ' '.ConcatenatedWith(proposal, ';')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ':'), ' '.ConcatenatedWith(proposal, ':')));
+                results.Add(new Pair('\''.ConcatenatedWith(phrase, '\''), proposal));
             }
 
             return results.ToArray();
@@ -85,23 +88,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateEndParts()
         {
-            var length = Phrases.Length;
+            var phrasesLength = Phrases.Length;
 
-            var results = new Pair[length];
+            var results = new Pair[phrasesLength];
 
-            for (var i = 0; i < length; i++)
+            for (var i = 0; i < phrasesLength; i++)
             {
-                var phrase = Phrases[i].AsSpan();
-
+                var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results[i] = new Pair(' '.ConcatenatedWith(phrase), ' '.ConcatenatedWith(proposal.AsSpan()));
+                results[i] = new Pair(' '.ConcatenatedWith(phrase), ' '.ConcatenatedWith(proposal));
             }
 
             return results;
         }
 
-        private static string Proposal(ReadOnlySpan<char> phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase.Trim().ToLowerCase(), "\"/>");
+        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase, "\"/>");
 
 //// ncrunch: rdi default
 
@@ -153,7 +155,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlElementSyntax e when e.IsWrongBooleanTag() || e.IsWrongNullTag():
                     {
                         var wrongText = e.Content.ToString();
-                        var proposal = Proposal(wrongText.AsSpan());
+                        var proposal = Proposal(wrongText);
 
                         yield return Issue(symbolName, e, wrongText, proposal);
 
@@ -163,7 +165,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlEmptyElementSyntax ee when ee.IsSee(WrongAttributes) || ee.IsSeeAlso(WrongAttributes):
                     {
                         var wrongText = GetWrongText(ee.Attributes);
-                        var proposal = Proposal(wrongText.AsSpan());
+                        var proposal = Proposal(wrongText);
 
                         yield return Issue(symbolName, ee, wrongText, proposal);
 
@@ -173,7 +175,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     case XmlElementSyntax e when e.IsSee(WrongAttributes) || e.IsSeeAlso(WrongAttributes):
                     {
                         var wrongText = GetWrongText(e.StartTag.Attributes);
-                        var proposal = Proposal(wrongText.AsSpan());
+                        var proposal = Proposal(wrongText);
 
                         yield return Issue(symbolName, e, wrongText, proposal);
 
