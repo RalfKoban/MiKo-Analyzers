@@ -375,9 +375,12 @@ namespace System.Text
             // include count as value
             for (var i = 0; i <= count; i++)
             {
-                if (current[i] == first && current[lastIndex + i] == last)
+                if (current[i] == first)
                 {
-                    return true;
+                    if (current[lastIndex + i] == last)
+                    {
+                        return true;
+                    }
                 }
             }
 

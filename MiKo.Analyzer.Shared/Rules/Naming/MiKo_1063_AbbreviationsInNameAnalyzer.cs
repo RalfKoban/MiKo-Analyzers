@@ -325,11 +325,11 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IndicatesNewWord(char c) => c == '_' || c.IsUpperCase();
 
-        private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && IndicatesNewWord(symbolName[key.Length]) && symbolName.StartsWith(key, StringComparison.Ordinal);
+        private static bool PrefixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> symbolName) => symbolName.Length > key.Length && IndicatesNewWord(symbolName[key.Length]) && symbolName.StartsWith(key, StringComparison.Ordinal);
 
-        private static bool PostFixHasIssue(string key, string symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
+        private static bool PostFixHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> symbolName) => symbolName.EndsWith(key, StringComparison.Ordinal) && symbolName.EndsWithAny(AllowedPostFixTerms, StringComparison.Ordinal) is false;
 
-        private static bool MidTermHasIssue(string key, string symbolName)
+        private static bool MidTermHasIssue(ReadOnlySpan<char> key, ReadOnlySpan<char> symbolName)
         {
             var index = 0;
             var keyLength = key.Length;
@@ -337,9 +337,19 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             var keyStartsUpperCase = key[0].IsUpperCase();
 
+            // ReSharper disable once TooWideLocalVariableScope : for performance reasons
+            int indexInSlice;
+
             while (true)
             {
-                index = symbolName.IndexOf(key, index, StringComparison.Ordinal);
+                indexInSlice = symbolName.Slice(index).IndexOf(key, StringComparison.Ordinal);
+
+                if (indexInSlice <= -1)
+                {
+                    return false;
+                }
+
+                index = indexInSlice + index;
 
                 if (index <= -1)
                 {
@@ -379,9 +389,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             symbolName = symbolName.Without(AllowedParts);
 
 //// ncrunch: rdi off
-            var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key, symbolName));
-            var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key, symbolName));
-            var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key, symbolName));
+            var prefixesWithIssues = Prefixes.Where(_ => PrefixHasIssue(_.Key.AsSpan(), symbolName.AsSpan()));
+            var postFixesWithIssues = Postfixes.Where(_ => PostFixHasIssue(_.Key.AsSpan(), symbolName.AsSpan()));
+            var midTermsWithIssues = MidTerms.Where(_ => MidTermHasIssue(_.Key.AsSpan(), symbolName.AsSpan()));
             var completeTermsWithIssues = Prefixes.Where(_ => CompleteTermHasIssue(_.Key, symbolName));
 //// ncrunch: rdi default
 
@@ -428,7 +438,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             internal static readonly KeyComparer Instance = new KeyComparer();
 
-            public bool Equals(Pair x, Pair y) => string.Equals(x.Key, y.Key, StringComparison.Ordinal);
+            public bool Equals(Pair x, Pair y) => x.Key.AsSpan().Equals(y.Key.AsSpan(), StringComparison.Ordinal);
 
             public int GetHashCode(Pair obj) => obj.Key.GetHashCode();
         }
