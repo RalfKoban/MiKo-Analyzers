@@ -1212,8 +1212,14 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, string tag)
         {
             // we have to delve into the trivia to find the XML syntax nodes
-            return value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
-                        .Where(_ => _.GetName() == tag);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>())
+            {
+                if (element.GetName() == tag)
+                {
+                    yield return element;
+                }
+            }
         }
 
         /// <summary>
@@ -1234,8 +1240,14 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlElementSyntax> GetXmlSyntax(this SyntaxNode value, ISet<string> tags)
         {
             // we have to delve into the trivia to find the XML syntax nodes
-            return value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>()
-                        .Where(_ => tags.Contains(_.GetName()));
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlElementSyntax>())
+            {
+                if (tags.Contains(element.GetName()))
+                {
+                    yield return element;
+                }
+            }
         }
 
         /// <summary>
@@ -1256,8 +1268,14 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, string tag)
         {
             // we have to delve into the trivia to find the XML syntax nodes
-            return value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
-                        .Where(_ => _.GetName() == tag);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>())
+            {
+                if (element.GetName() == tag)
+                {
+                    yield return element;
+                }
+            }
         }
 
         /// <summary>
@@ -1278,8 +1296,14 @@ namespace MiKoSolutions.Analyzers
         internal static IEnumerable<XmlEmptyElementSyntax> GetEmptyXmlSyntax(this SyntaxNode value, ISet<string> tags)
         {
             // we have to delve into the trivia to find the XML syntax nodes
-            return value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>()
-                        .Where(_ => tags.Contains(_.GetName()));
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var element in value.DescendantNodes(_ => true, true).OfType<XmlEmptyElementSyntax>())
+            {
+                if (tags.Contains(element.GetName()))
+                {
+                    yield return element;
+                }
+            }
         }
 
         internal static XmlCrefAttributeSyntax GetCref(this SyntaxNode value)
