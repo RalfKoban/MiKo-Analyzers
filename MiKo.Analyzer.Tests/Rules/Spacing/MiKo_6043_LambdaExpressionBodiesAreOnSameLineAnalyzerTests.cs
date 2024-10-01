@@ -1275,6 +1275,53 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_parenthesized_lambda_expression_body_with_conditional_access_that_spans_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static string DoSomething()
+        {
+            return DoSomethingCore((someValue) => someValue
+                                                    ?.ToString());
+        }
+
+        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public static string DoSomething()
+        {
+            return DoSomethingCore((someValue) => someValue?.ToString());
+        }
+
+        private static string DoSomethingCore(Func<int, string> callback, bool flag)
+        {
+            return callback(42);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6043_LambdaExpressionBodiesAreOnSameLineAnalyzer();
