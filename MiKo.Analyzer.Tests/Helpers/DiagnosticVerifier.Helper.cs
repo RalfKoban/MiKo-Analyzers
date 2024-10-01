@@ -103,7 +103,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments([analyzer], [document]);
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments([analyzer], [document], false);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
@@ -115,10 +115,13 @@ namespace TestHelper
         /// <param name="documents">
         /// The Documents that the analyzers will be run on.
         /// </param>
+        /// <param name="profileAnalysis">
+        /// <see langword="true"/> to collect and save profiling data; otherwise, <see langword="false"/>.
+        /// </param>
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(ReadOnlySpan<DiagnosticAnalyzer> analyzers, ReadOnlySpan<Document> documents)
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(ReadOnlySpan<DiagnosticAnalyzer> analyzers, ReadOnlySpan<Document> documents, bool profileAnalysis)
         {
             var projects = new HashSet<Project>();
 
@@ -131,13 +134,19 @@ namespace TestHelper
 
             foreach (var project in projects)
             {
-                JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
+                if (profileAnalysis)
+                {
+                    JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
+                }
 
                 var compilation = project.GetCompilationAsync().Result;
                 var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
 
-                JetBrains.Profiler.Api.MeasureProfiler.SaveData();
+                if (profileAnalysis)
+                {
+                    JetBrains.Profiler.Api.MeasureProfiler.SaveData();
+                }
 
                 foreach (var diag in diags)
                 {
@@ -196,12 +205,15 @@ namespace TestHelper
         /// <param name="analyzers">
         /// The analyzers to be run on the sources.
         /// </param>
+        /// <param name="profileAnalysis">
+        /// <see langword="true"/> to collect and save profiling data; otherwise, <see langword="false"/>.
+        /// </param>
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers)
+        private static Diagnostic[] GetSortedDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers, bool profileAnalysis)
         {
-            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion));
+            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
         }
 
         /// <summary>

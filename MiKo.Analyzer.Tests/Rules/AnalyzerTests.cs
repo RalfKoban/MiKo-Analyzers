@@ -32,7 +32,7 @@ namespace MiKoSolutions.Analyzers.Rules
             var files = GetDocuments(path).ToList();
             var sources = files.Select(File.ReadAllText).ToArray();
 
-            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray());
+            var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray(), true);
 
             Assert.That(results.Count, Is.Zero);
 
