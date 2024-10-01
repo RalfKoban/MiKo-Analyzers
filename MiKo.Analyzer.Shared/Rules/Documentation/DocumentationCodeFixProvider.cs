@@ -73,9 +73,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlElementSyntax Comment(XmlElementSyntax comment, SyntaxList<XmlNodeSyntax> content)
         {
-            var result = comment.WithStartTag(comment.StartTag.WithoutTrivia().WithTrailingXmlComment())
+            var result = comment.WithStartTag(comment.StartTag.WithoutLeadingTrivia().WithTrailingXmlComment())
                                 .WithContent(content)
-                                .WithEndTag(comment.EndTag.WithoutTrivia().WithLeadingXmlComment());
+                                .WithEndTag(comment.EndTag.WithoutTrailingTrivia().WithLeadingXmlComment());
 
             return CombineTexts(result);
         }
@@ -491,7 +491,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static IEnumerable<XmlElementSyntax> GetXmlSyntax(string startTag, IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.SelectMany(_ => _.GetXmlSyntax(startTag));
 
-        protected static XmlEmptyElementSyntax Inheritdoc() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Inheritdoc);
+        protected static XmlEmptyElementSyntax Inheritdoc() => XmlEmptyElement(Constants.XmlTag.Inheritdoc);
 
         protected static XmlEmptyElementSyntax Inheritdoc(XmlCrefAttributeSyntax cref) => Inheritdoc().WithAttributes(cref.ToSyntaxList<XmlAttributeSyntax>());
 
@@ -708,7 +708,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        protected static XmlEmptyElementSyntax Para() => SyntaxFactory.XmlEmptyElement(Constants.XmlTag.Para);
+        protected static XmlEmptyElementSyntax Para() => XmlEmptyElement(Constants.XmlTag.Para);
 
         protected static XmlElementSyntax Para(string text) => SyntaxFactory.XmlParaElement(XmlText(text));
 
@@ -724,7 +724,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var name = SyntaxFactory.XmlNameAttribute(parameterName);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
+            return XmlEmptyElement(Constants.XmlTag.ParamRef).WithAttribute(name);
         }
 
         protected static XmlElementSyntax ParaOr() => Para(Constants.Comments.SpecialOrPhrase);
@@ -756,10 +756,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax SeeLangword(string text)
         {
-            var token = text.AsToken();
-            var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Langword, token);
+            var attribute = XmlAttribute(Constants.XmlTag.Attribute.Langword, text);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
+            return XmlEmptyElement(Constants.XmlTag.See).WithAttribute(attribute);
         }
 
         protected static XmlEmptyElementSyntax SeeLangword_False() => SeeLangword("false");
@@ -847,17 +846,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected static XmlEmptyElementSyntax TypeParamRef(string name)
         {
-            var token = name.AsToken();
-            var attribute = SyntaxFactory.XmlTextAttribute(Constants.XmlTag.Attribute.Name, token);
+            var attribute = XmlAttribute(Constants.XmlTag.Attribute.Name, name);
 
-            return SyntaxFactory.XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
+            return XmlEmptyElement(Constants.XmlTag.TypeParamRef).WithAttribute(attribute);
         }
+
+        protected static XmlTextAttributeSyntax XmlAttribute(string tag, string text) => SyntaxFactory.XmlTextAttribute(tag, text.AsToken());
 
         protected static XmlElementSyntax XmlElement(string tag) => SyntaxFactory.XmlElement(tag, default);
 
         protected static XmlElementSyntax XmlElement(string tag, XmlNodeSyntax content) => SyntaxFactory.XmlElement(tag, content.ToSyntaxList());
 
         protected static XmlElementSyntax XmlElement(string tag, IEnumerable<XmlNodeSyntax> contents) => SyntaxFactory.XmlElement(tag, contents.ToSyntaxList());
+
+        protected static XmlEmptyElementSyntax XmlEmptyElement(string tag) => SyntaxFactory.XmlEmptyElement(tag);
 
         protected static XmlTextSyntax NewLineXmlText() => XmlText(string.Empty).WithLeadingXmlComment();
 
@@ -925,7 +927,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return result;
         }
 
-        private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => SyntaxFactory.XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
+        private static XmlEmptyElementSyntax Cref(string tag, CrefSyntax syntax) => XmlEmptyElement(tag).WithAttribute(SyntaxFactory.XmlCrefAttribute(syntax));
 
         private static int GetIndex(SyntaxList<XmlNodeSyntax> content)
         {
