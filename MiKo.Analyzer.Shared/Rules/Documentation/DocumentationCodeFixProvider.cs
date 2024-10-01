@@ -22,20 +22,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 
-        protected static string[] GetTermsForQuickLookup(IEnumerable<string> terms)
+        protected static string[] GetTermsForQuickLookup(IReadOnlyCollection<string> terms)
         {
-            var orderedTerms = new Queue<string>(terms.OrderBy(_ => _.Length).ThenBy(_ => _));
-
-            var result = new string[orderedTerms.Count];
+            var result = new string[terms.Count];
 
             var resultIndex = 0;
 
             // ReSharper disable once TooWideLocalVariableScope : it's done to have less memory pressure on garbage collector
             bool found;
 
-            while (orderedTerms.Count > 0)
+            foreach (var term in terms.OrderBy(_ => _.Length).ThenBy(_ => _))
             {
-                var term = orderedTerms.Dequeue();
                 var span = term.AsSpan();
 
                 found = false;
