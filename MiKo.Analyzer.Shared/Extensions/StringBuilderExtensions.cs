@@ -1,4 +1,6 @@
-﻿using MiKoSolutions.Analyzers.Linguistics;
+﻿using System.Buffers;
+
+using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation
 //// ncrunch: rdi off
@@ -9,6 +11,7 @@ namespace System.Text
     internal static class StringBuilderExtensions
     {
         private const int QuickCompareLengthThreshold = 4;
+        private const int QuickCompareRentLengthThreshold = 24;
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces(0) == value.Length;
 
@@ -362,18 +365,25 @@ namespace System.Text
                 var lastIndex = otherValueLength - 1;
                 var otherLast = other[lastIndex];
 
+                var length = difference + 1; // increased by 1 to have the complete difference investigated
+
+                if (difference > QuickCompareRentLengthThreshold)
+                {
+                    // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
+                    return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                }
+
                 // could be part in the replacement only if characters match
-                return QuickCompareAtIndices(ref current, ref otherFirst, ref lastIndex, ref otherLast, ref difference);
+                return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
             }
 
             // can be part in the replacement as other value is smaller and could fit current value
             return true;
         }
 
-        private static bool QuickCompareAtIndices(ref StringBuilder current, ref char first, ref int lastIndex, ref char last, ref int count)
+        private static bool QuickCompareAtIndices(ref StringBuilder current, ref char first, ref char last, ref int length, ref int lastIndex)
         {
-            // include count as value
-            for (var i = 0; i <= count; i++)
+            for (var i = 0; i < length; i++)
             {
                 if (current[i] == first)
                 {
@@ -385,6 +395,39 @@ namespace System.Text
             }
 
             return false;
+        }
+
+        private static bool QuickCompareAtIndicesWithRent(ref StringBuilder current, ref char first, ref char last, ref int length, ref int lastIndex)
+        {
+            // use a rented shared pool for performance reasons
+            var shared = ArrayPool<char>.Shared;
+            var begin = shared.Rent(length);
+            var end = shared.Rent(length);
+
+            try
+            {
+                current.CopyTo(0, begin, 0, length);
+                current.CopyTo(lastIndex, end, 0, length);
+
+                // could be part in the replacement only if characters match
+                for (var i = 0; i < length; i++)
+                {
+                    if (begin[i] == first)
+                    {
+                        if (end[i] == last)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+            finally
+            {
+                shared.Return(begin);
+                shared.Return(end);
+            }
         }
 
         private static int CountLeadingWhitespaces(this StringBuilder value, int start)
