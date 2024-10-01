@@ -109,7 +109,19 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     existingText = existingText.WithoutFirstWord();
                 }
 
-                var continuation = new StringBuilder(existingText.Trim().ToString()).ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
+                // fix sentence ending
+                var trimmedExistingText = existingText.Trim();
+                var trimmedExistingTextEnd = ReadOnlySpan<char>.Empty;
+
+                if (trimmedExistingText.EndsWithAny(Constants.SentenceMarkers))
+                {
+                    var end = trimmedExistingText.Length - 1;
+
+                    trimmedExistingTextEnd = trimmedExistingText.Slice(end);
+                    trimmedExistingText = trimmedExistingText.Slice(0, end);
+                }
+
+                var continuation = new StringBuilder(trimmedExistingText.ToString()).ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
 
                 if (continuation.IsSingleWord())
                 {
@@ -129,7 +141,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 textTokens.RemoveAt(0);
-                textTokens.Insert(0, XmlTextToken(startingPhrase + continuation));
+                textTokens.Insert(0, XmlTextToken(startingPhrase.ConcatenatedWith(continuation, trimmedExistingTextEnd)));
             }
             else
             {
