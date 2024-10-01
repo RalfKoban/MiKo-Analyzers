@@ -362,6 +362,40 @@ public enum " + typeName + @"
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [TestCase("Message", "messages")]
+        [TestCase("MessageEnum", "messages")]
+        [TestCase("MessageKind", "messages")]
+        [TestCase("MessageType", "messages")]
+        [TestCase("MessageTypes", "messages")]
+        [TestCase("MessageTypeKind", "messages")]
+        [TestCase("MessageTypeKinds", "messages")]
+        [TestCase("MessageTypeEnum", "messages")]
+        [TestCase("MessageTypeEnums", "messages")]
+        [TestCase("Direction", "directions")]
+        [TestCase("DirectionKind", "directions")]
+        [TestCase("ReferenceTypes", "references")]
+        public void Code_gets_fixed_for_sentenced_with_special_documentation_(string typeName, string fixedEnding)
+        {
+            var originalCode = @"
+/// <summary>
+/// Gets or Sets " + typeName + @".
+/// </summary>
+public enum " + typeName + @"
+{
+}
+";
+
+            var fixedCode = @"
+/// <summary>
+/// Defines values that specify the different kinds of " + fixedEnding + @".
+/// </summary>
+public enum " + typeName + @"
+{
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2013_EnumSummaryAnalyzer();
