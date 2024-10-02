@@ -95,10 +95,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         protected DocumentationCommentTriviaSyntax FixComment(SyntaxNode syntax, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic)
         {
-            return comment.Content.OfType<XmlElementSyntax>()
-                          .Where(_ => _.IsException())
-                          .Select(_ => FixExceptionComment(syntax, _, comment, diagnostic))
-                          .FirstOrDefault(_ => _ != null);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var exception in comment.Content.OfType<XmlElementSyntax>().Where(_ => _.IsException()))
+            {
+                var fixedException = FixExceptionComment(syntax, exception, comment, diagnostic);
+
+                if (fixedException != null)
+                {
+                    return fixedException;
+                }
+            }
+
+            return null;
         }
 
         protected virtual DocumentationCommentTriviaSyntax FixExceptionComment(SyntaxNode syntax, XmlElementSyntax exception, DocumentationCommentTriviaSyntax comment, Diagnostic diagnostic) => null;
@@ -186,7 +194,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return parts;
         }
 
-        //// ncrunch: rdi off
+//// ncrunch: rdi off
 
         // TODO RKN: see Constants.Comments.ExceptionForbiddenStartingPhrase
         private static IEnumerable<string> CreatePhrases()
@@ -275,6 +283,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        //// ncrunch: rdi default
+//// ncrunch: rdi default
     }
 }
