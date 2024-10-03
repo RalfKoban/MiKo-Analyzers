@@ -265,7 +265,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_getter_as_arrow_clause_with_Linq_extension_and_elvis_operator() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_getter_as_arrow_clause_with_Linq_extension_and_conditional_access_operator() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -278,7 +278,7 @@ namespace Bla
 
         public IEnumerable<string> Bla
         {
-            get => _bla?.Select(_ => _).ToList();
+            get => _bla?.Select(_ => _);
         }
     }
 }
@@ -300,7 +300,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_as_arrow_clause_with_Linq_extension_and_elvis_operator() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_as_arrow_clause_with_Linq_extension_and_conditional_access_operator() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -311,7 +311,7 @@ namespace Bla
     {
         private IEnumerable<string> _bla;
 
-        public IEnumerable<string> Bla => _bla?.Select(_ => _).ToList();
+        public IEnumerable<string> Bla => _bla?.Select(_ => _);
     }
 }
 ");
@@ -404,7 +404,7 @@ namespace Bla
 ");
 
         [Test]
-        public void An_issue_is_reported_for_property_setter_as_arrow_clause_with_Linq_extension_and_elvis_operator() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_setter_as_arrow_clause_with_Linq_extension_and_conditional_access_operator() => An_issue_is_reported_for(@"
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -417,7 +417,7 @@ namespace Bla
 
         public IEnumerable<string> Bla
         {
-            set => _bla = value?.Select(_ => _).ToList();
+            set => _bla = value?.Select(_ => _);
         }
     }
 }

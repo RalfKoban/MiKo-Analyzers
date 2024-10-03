@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -1054,7 +1055,7 @@ public class TestMe
                                    from boolean in booleans
                                    select " " + boolean + vc into end // we have lots of loops, so cache data to avoid unnecessary calculations
                                    from start in starts
-                                   select (start + end).Replace("   ", " ").Replace("  ", " ").Trim())
+                                   select new StringBuilder(start + end).Replace("   ", " ").Replace("  ", " ").Trim())
             {
                 results.Add(phrase.ToUpperCaseAt(0));
                 results.Add(phrase.ToLowerCaseAt(0));

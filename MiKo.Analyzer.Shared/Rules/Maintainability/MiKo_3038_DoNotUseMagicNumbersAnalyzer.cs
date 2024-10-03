@@ -224,13 +224,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     case InvocationExpressionSyntax i:
                     {
-                        var name = i.Expression.GetName();
+                        var name = i.GetName();
 
                         if (i.Expression is MemberAccessExpressionSyntax)
                         {
                             if (name.StartsWith("From", StringComparison.Ordinal))
                             {
-                                var typeName = i.GetName();
+                                var typeName = i.GetIdentifierName();
 
                                 switch (typeName)
                                 {

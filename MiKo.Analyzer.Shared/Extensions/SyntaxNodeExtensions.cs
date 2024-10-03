@@ -487,6 +487,23 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static ExpressionSyntax GetIdentifierExpression(this InvocationExpressionSyntax value)
+        {
+            switch (value?.Expression)
+            {
+                case MemberAccessExpressionSyntax maes:
+                    return maes.Expression;
+
+                case MemberBindingExpressionSyntax mbes: // find parent conditional access expression as that contains the identifier
+                    return mbes.FirstAncestor<ConditionalAccessExpressionSyntax>()?.Expression;
+
+                default:
+                    return null;
+            }
+        }
+
+        internal static string GetIdentifierName(this InvocationExpressionSyntax value) => value.GetIdentifierExpression().GetName();
+
         internal static SyntaxTrivia GetLeadingComment(this SyntaxNode value)
         {
             while (true)
@@ -635,6 +652,7 @@ namespace MiKoSolutions.Analyzers
             {
                 case IdentifierNameSyntax i: return i.GetName();
                 case MemberAccessExpressionSyntax m: return m.GetName();
+                case MemberBindingExpressionSyntax b: return b.GetName();
                 case InvocationExpressionSyntax i: return i.GetName();
                 case SimpleNameSyntax s: return s.GetName();
                 case LiteralExpressionSyntax l: return l.GetName();
@@ -666,7 +684,12 @@ namespace MiKoSolutions.Analyzers
 
                 case MemberAccessExpressionSyntax m:
                 {
-                    return m.Expression.GetName();
+                    return m.GetName();
+                }
+
+                case MemberBindingExpressionSyntax b:
+                {
+                    return b.GetName();
                 }
             }
 
@@ -906,10 +929,7 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
-        internal static ISymbol GetSymbol(this SyntaxNode value, Compilation compilation)
-        {
-            return value.GetSymbol(compilation.GetSemanticModel(value.SyntaxTree));
-        }
+        internal static ISymbol GetSymbol(this SyntaxNode value, Compilation compilation) => value?.GetSymbol(compilation.GetSemanticModel(value.SyntaxTree));
 
         internal static IMethodSymbol GetSymbol(this LocalFunctionStatementSyntax value, SemanticModel semanticModel)
         {
@@ -922,64 +942,51 @@ namespace MiKoSolutions.Analyzers
 #endif
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Compilation compilation)
-        {
-            return value.GetTypeSymbol(compilation.GetSemanticModel(value.SyntaxTree));
-        }
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, Compilation compilation) => value?.GetTypeSymbol(compilation.GetSemanticModel(value.SyntaxTree));
 
-        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel)
-        {
-            var type = value.Expression.GetTypeSymbol(semanticModel);
-
-            return type;
-        }
+        internal static ITypeSymbol GetTypeSymbol(this ArgumentSyntax value, SemanticModel semanticModel) => value?.Expression.GetTypeSymbol(semanticModel);
 
         internal static ITypeSymbol GetTypeSymbol(this ExpressionSyntax value, SemanticModel semanticModel)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var typeInfo = semanticModel.GetTypeInfo(value);
 
             return typeInfo.Type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, SemanticModel semanticModel)
-        {
-            var type = value.Expression.GetTypeSymbol(semanticModel);
-
-            return type;
-        }
+        internal static ITypeSymbol GetTypeSymbol(this MemberAccessExpressionSyntax value, SemanticModel semanticModel) => value?.Expression.GetTypeSymbol(semanticModel);
 
         internal static ITypeSymbol GetTypeSymbol(this TypeSyntax value, SemanticModel semanticModel)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var typeInfo = semanticModel.GetTypeInfo(value);
 
             return typeInfo.Type;
         }
 
-        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, SemanticModel semanticModel)
-        {
-            var type = value.Type.GetTypeSymbol(semanticModel);
+        internal static ITypeSymbol GetTypeSymbol(this BaseTypeSyntax value, SemanticModel semanticModel) => value?.Type.GetTypeSymbol(semanticModel);
 
-            return type;
-        }
+        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, SemanticModel semanticModel) => value?.Identifier.GetSymbol(semanticModel) as ITypeSymbol;
 
-        internal static ITypeSymbol GetTypeSymbol(this ClassDeclarationSyntax value, SemanticModel semanticModel)
-        {
-            var symbol = value.Identifier.GetSymbol(semanticModel);
+        internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, SemanticModel semanticModel) => value?.Identifier.GetSymbol(semanticModel) as ITypeSymbol;
 
-            return symbol as ITypeSymbol;
-        }
-
-        internal static ITypeSymbol GetTypeSymbol(this RecordDeclarationSyntax value, SemanticModel semanticModel)
-        {
-            var symbol = value.Identifier.GetSymbol(semanticModel);
-
-            return symbol as ITypeSymbol;
-        }
-
-        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, SemanticModel semanticModel) => value.Type.GetTypeSymbol(semanticModel);
+        internal static ITypeSymbol GetTypeSymbol(this VariableDeclarationSyntax value, SemanticModel semanticModel) => value?.Type.GetTypeSymbol(semanticModel);
 
         internal static ITypeSymbol GetTypeSymbol(this SyntaxNode value, SemanticModel semanticModel)
         {
+            if (value is null)
+            {
+                return null;
+            }
+
             var typeInfo = semanticModel.GetTypeInfo(value);
 
             return typeInfo.Type;
@@ -1555,13 +1562,7 @@ namespace MiKoSolutions.Analyzers
 
             if (value.GetName() == Constants.Moq.Object)
             {
-                var expression = value.Expression;
-
-                if (expression is ParenthesizedExpressionSyntax parenthesized)
-                {
-                    // let's see if we can fix it in case we remove the surrounding parenthesis
-                    expression = parenthesized.Expression;
-                }
+                var expression = value.Expression.WithoutParenthesis(); // let's see if we can fix it in case we remove the surrounding parenthesis
 
                 if (expression is ObjectCreationExpressionSyntax o && o.Type.GetNameOnlyPartWithoutGeneric() == Constants.Moq.Mock && o.Type is GenericNameSyntax genericName)
                 {
@@ -1838,6 +1839,28 @@ namespace MiKoSolutions.Analyzers
         internal static bool IsParameter(this IdentifierNameSyntax value, SemanticModel semanticModel) => value.EnclosingMethodHasParameter(value.GetName(), semanticModel);
 
         internal static bool IsPara(this SyntaxNode value) => value.IsXmlTag(Constants.XmlTag.Para);
+
+        internal static bool IsPatternCheckFor(this IsPatternExpressionSyntax value, SyntaxKind kind) => value?.Pattern.IsPatternCheckFor(kind) is true;
+
+        internal static bool IsPatternCheckFor(this PatternSyntax value, SyntaxKind kind)
+        {
+            while (true)
+            {
+                switch (value)
+                {
+                    case ConstantPatternSyntax pattern:
+                        return pattern.Expression.IsKind(kind);
+
+                    case UnaryPatternSyntax unary:
+                        value = unary.Pattern;
+
+                        continue;
+
+                    default:
+                        return false;
+                }
+            }
+        }
 
         internal static bool IsReadOnly(this FieldDeclarationSyntax value) => value.Modifiers.Any(SyntaxKind.ReadOnlyKeyword);
 
@@ -2889,6 +2912,21 @@ namespace MiKoSolutions.Analyzers
             var textTokens = value.TextTokens.WithoutLastXmlNewLine();
 
             return value.WithTextTokens(textTokens);
+        }
+
+        internal static ExpressionSyntax WithoutParenthesis(this ExpressionSyntax value)
+        {
+            while (true)
+            {
+                if (value is ParenthesizedExpressionSyntax parenthesized)
+                {
+                    value = parenthesized.Expression;
+
+                    continue;
+                }
+
+                return value;
+            }
         }
 
         internal static T WithTriviaFrom<T>(this T value, SyntaxNode node) where T : SyntaxNode => value.WithLeadingTriviaFrom(node)
