@@ -57,7 +57,7 @@ public class TestMe
 
         [TestCase("""a == b || a?.ToString("D") is null""")]
         [TestCase("a == b || a?.GetHashCode() == 42")]
-        [TestCase("a == b || a?.Equals(b, StringComparison.Ordinal) is false")]
+        [TestCase("a == b || a?.Equals(b, StringComparison.Ordinal) == false")]
         [TestCase("a == b || a?.Equals(b, StringComparison.Ordinal) is false")]
         [TestCase("a == b || a?.Equals(b) == false")]
         [TestCase("a == b || a?.Equals(b) is false")]
@@ -348,6 +348,72 @@ public class TestMe
 
         if (string.Equals(left.A, right.A, Comparison))
         { }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_multi_line_condition()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public string A { get; }
+    public object B { get; }
+    public string C { get; }
+
+    public bool Equals(TestMe other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+
+        return
+            (
+                A == other.A ||
+                A != null &&
+                A.Equals(other.A)
+            ) &&
+            (
+                B == other.B ||
+                B != null &&
+                B.Equals(other.B)
+            ) &&
+            (
+                C == other.C ||
+                C != null &&
+                C.Equals(other.C)
+            ) && base.Equals(other);
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public string A { get; }
+    public object B { get; }
+    public string C { get; }
+
+    public bool Equals(TestMe other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+
+        return
+            string.Equals(A, other.A) &&
+            (
+                B == other.B ||
+                B != null &&
+                B.Equals(other.B)
+            ) &&
+            string.Equals(C, other.C) && base.Equals(other);
     }
 }
 ";

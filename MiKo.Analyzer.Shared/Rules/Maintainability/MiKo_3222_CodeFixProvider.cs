@@ -39,9 +39,11 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                     var access = SimpleMemberAccess(PredefinedType(SyntaxKind.StringKeyword), nameof(string.Equals));
 
-                    return arguments?.Count > 1
-                           ? Invocation(access, argument1, argument2, arguments.Value[1])
-                           : Invocation(access, argument1, argument2);
+                    var updatedSyntax = arguments?.Count > 1
+                                        ? Invocation(access, argument1, argument2, arguments.Value[1])
+                                        : Invocation(access, argument1, argument2);
+
+                    return updatedSyntax.WithTriviaFrom(syntax);
                 }
             }
 
