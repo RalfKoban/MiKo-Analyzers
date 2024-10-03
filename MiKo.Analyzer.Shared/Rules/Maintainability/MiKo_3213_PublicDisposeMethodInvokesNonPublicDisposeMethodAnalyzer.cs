@@ -59,7 +59,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (arguments.Count == 1 && arguments[0].Expression?.IsKind(SyntaxKind.ThisExpression) is true && invocation.GetName() == nameof(GC) && invocation.Expression.GetName() == nameof(GC.SuppressFinalize))
+                if (arguments.Count == 1 && arguments[0].Expression?.IsKind(SyntaxKind.ThisExpression) is true && invocation.GetIdentifierName() == nameof(GC) && invocation.GetName() == nameof(GC.SuppressFinalize))
                 {
                     return true;
                 }
@@ -76,7 +76,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             {
                 var arguments = invocation.ArgumentList.Arguments;
 
-                if (arguments.Count == 1 && arguments[0].Expression?.IsKind(SyntaxKind.TrueLiteralExpression) is true && invocation.Expression.GetName() == nameof(IDisposable.Dispose))
+                if (arguments.Count == 1 && arguments[0].Expression?.IsKind(SyntaxKind.TrueLiteralExpression) is true && invocation.GetName() == nameof(IDisposable.Dispose))
                 {
                     return true;
                 }

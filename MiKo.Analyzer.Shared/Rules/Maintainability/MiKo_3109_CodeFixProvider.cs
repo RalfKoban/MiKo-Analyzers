@@ -24,15 +24,15 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         {
             var original = (InvocationExpressionSyntax)syntax;
 
-            if (original.Expression is MemberAccessExpressionSyntax maes && maes.Expression is IdentifierNameSyntax type)
-            {
-                var typeName = type.GetName();
+            var typeName = original.GetIdentifierName();
 
-                switch (typeName)
+            switch (typeName)
+            {
+                case "Assert":
+                case "CollectionAssert":
+                case "StringAssert":
                 {
-                    case "Assert":
-                    case "CollectionAssert":
-                    case "StringAssert":
+                    if (original.Expression is MemberAccessExpressionSyntax maes)
                     {
                         var args = original.ArgumentList;
                         var fixedArgs = UpdatedSyntax(maes, args);
@@ -41,9 +41,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                         {
                             return original.ReplaceNode(args, fixedArgs);
                         }
-
-                        break;
                     }
+
+                    break;
                 }
             }
 
@@ -85,7 +85,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 case InvocationExpressionSyntax method:
                 {
-                    var name = method.Expression.GetName();
+                    var name = method.GetName();
 
                     if (name == "Parse")
                     {
@@ -93,7 +93,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     }
 
                     return EnumerableMethods.Contains(name)
-                           ? method.GetName()
+                           ? method.GetIdentifierName()
                            : name;
                 }
 
