@@ -15879,5 +15879,41 @@ namespace MiKoSolutions.Analyzers {
                 return ResourceManager.GetString("MiKo_6058_Title", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch case label on single line.
+        /// </summary>
+        internal static string MiKo_6060_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6060_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, switch case labels should span a single line..
+        /// </summary>
+        internal static string MiKo_6060_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6060_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch case label on single line.
+        /// </summary>
+        internal static string MiKo_6060_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6060_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch case labels should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6060_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6060_Title", resourceCulture);
+            }
+        }
     }
 }
