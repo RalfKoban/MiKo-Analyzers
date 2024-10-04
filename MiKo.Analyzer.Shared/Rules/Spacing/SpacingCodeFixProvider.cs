@@ -92,6 +92,13 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                        .WithWhenClause(PlacedOnSameLine(patternLabel.WhenClause))
                                        .WithColonToken(patternLabel.ColonToken.WithoutLeadingTrivia()) as T;
 
+                case SwitchExpressionArmSyntax arm:
+                    return arm.WithoutTrailingTrivia()
+                              .WithEqualsGreaterThanToken(arm.EqualsGreaterThanToken.WithLeadingSpace().WithoutTrailingTrivia())
+                              .WithExpression(PlacedOnSameLine(arm.Expression))
+                              .WithWhenClause(PlacedOnSameLine(arm.WhenClause))
+                              .WithPattern(PlacedOnSameLine(arm.Pattern)) as T;
+
                 case MemberAccessExpressionSyntax maes:
                     return maes.WithoutTrivia()
                                .WithName(PlacedOnSameLine(maes.Name))
@@ -119,6 +126,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                     return clause?.WithoutTrivia()
                                   .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
                                   .WithCondition(PlacedOnSameLine(clause.Condition)) as T;
+
+                case ConstantPatternSyntax constantPattern:
+                    return constantPattern.WithoutTrivia()
+                                          .WithExpression(PlacedOnSameLine(constantPattern.Expression)) as T;
 
                 case DeclarationPatternSyntax declaration:
                     return declaration.WithoutTrivia()
@@ -155,6 +166,18 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                                            .WithArguments(PlacedOnSameLine(typeArgumentList.Arguments))
                                            .WithGreaterThanToken(typeArgumentList.GreaterThanToken.WithoutTrivia())
                                            .WithLessThanToken(typeArgumentList.LessThanToken.WithoutTrivia()) as T;
+
+                case ThrowExpressionSyntax throwExpression:
+                    return throwExpression.WithoutTrivia()
+                                          .WithThrowKeyword(throwExpression.ThrowKeyword.WithoutTrivia())
+                                          .WithExpression(PlacedOnSameLine(throwExpression.Expression)) as T;
+
+                case ObjectCreationExpressionSyntax creation:
+                    return creation.WithoutTrivia()
+                                   .WithNewKeyword(creation.NewKeyword.WithoutTrivia())
+                                   .WithType(PlacedOnSameLine(creation.Type).WithLeadingSpace())
+                                   .WithArgumentList(PlacedOnSameLine(creation.ArgumentList))
+                                   .WithInitializer(PlacedOnSameLine(creation.Initializer)) as T;
 
                 default:
                     return syntax.WithoutTrivia();

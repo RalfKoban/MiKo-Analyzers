@@ -15881,6 +15881,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        /// </summary>
+        internal static string MiKo_6059_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6059_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, switch expression arms should span a single line..
+        /// </summary>
+        internal static string MiKo_6059_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6059_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        /// </summary>
+        internal static string MiKo_6059_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6059_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch expression arms should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6059_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6059_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place switch case label on single line.
         /// </summary>
         internal static string MiKo_6060_CodeFixTitle {
