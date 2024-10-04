@@ -19,20 +19,16 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (syntax is InvocationExpressionSyntax invocation)
             {
-                return invocation.WithArgumentList(GetUpdatedArgumentList(invocation.ArgumentList))
-                                 .WithExpression(GetUpdatedExpressionPlacedOnSameLine(invocation.Expression).WithoutTrailingTrivia());
+                return invocation.WithArgumentList(PlacedOnSameLine(invocation.ArgumentList))
+                                 .WithExpression(PlacedOnSameLine(invocation.Expression))
+                                 .WithTrailingTriviaFrom(invocation);
             }
 
             return syntax;
         }
 
-        private static ArgumentListSyntax GetUpdatedArgumentList(ArgumentListSyntax argumentList)
-        {
-            var argumentSyntax = argumentList.Arguments.First();
-
-            return argumentList.WithArguments(argumentSyntax.WithoutTrivia().ToSeparatedSyntaxList())
-                               .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
-                               .WithCloseParenToken(argumentList.CloseParenToken.WithoutLeadingTrivia());
-        }
+        private static ExpressionSyntax PlacedOnSameLine(ExpressionSyntax expression) => expression is MemberAccessExpressionSyntax maes
+                                                                                         ? maes.WithName(SpacingCodeFixProvider.PlacedOnSameLine(maes.Name))
+                                                                                         : expression;
     }
 }

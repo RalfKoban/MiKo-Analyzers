@@ -13,8 +13,10 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         protected static LinePosition GetProposedLinePosition(Diagnostic diagnostic)
         {
-            if (diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.LineNumber, out var lineNumber)
-             && diagnostic.Properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.CharacterPosition, out var characterPosition))
+            var properties = diagnostic.Properties;
+
+            if (properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.LineNumber, out var lineNumber)
+             && properties.TryGetValue(Constants.AnalyzerCodeFixSharedData.CharacterPosition, out var characterPosition))
             {
                 return new LinePosition(int.Parse(lineNumber, NumberStyles.Integer), int.Parse(characterPosition, NumberStyles.Integer));
             }
@@ -38,38 +40,6 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return descendants;
         }
 
-        protected static ExpressionSyntax GetUpdatedExpressionPlacedOnSameLine(ExpressionSyntax expression)
-        {
-            switch (expression)
-            {
-                case MemberAccessExpressionSyntax maes:
-                {
-                    return maes.WithName((SimpleNameSyntax)GetUpdatedExpressionPlacedOnSameLine(maes.Name));
-                }
-
-                case GenericNameSyntax genericName:
-                {
-                    var types = genericName.TypeArgumentList;
-                    var arguments = types.Arguments;
-
-                    var separators = Enumerable.Repeat(arguments.GetSeparator(0).WithoutTrivia().WithTrailingSpace(), arguments.Count - 1);
-
-                    var updatedTypes = types.WithoutTrivia()
-                                            .WithArguments(SyntaxFactory.SeparatedList(arguments.Select(_ => _.WithoutTrivia()), separators))
-                                            .WithGreaterThanToken(types.GreaterThanToken.WithoutTrivia())
-                                            .WithLessThanToken(types.LessThanToken.WithoutTrivia());
-
-                    return genericName.WithIdentifier(genericName.Identifier.WithoutTrailingTrivia())
-                                      .WithTypeArgumentList(updatedTypes);
-                }
-
-                default:
-                {
-                    return expression;
-                }
-            }
-        }
-
         protected static SeparatedSyntaxList<TSyntaxNode> GetUpdatedSyntax<TSyntaxNode>(SeparatedSyntaxList<TSyntaxNode> expressions, int leadingSpaces) where TSyntaxNode : SyntaxNode
         {
             if (expressions.Count == 0)
@@ -79,7 +49,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
             int? currentLine = null;
 
-            var updatedExpressions = new List<TSyntaxNode>();
+            var updatedExpressions = new List<TSyntaxNode>(expressions.Count);
 
             foreach (var expression in expressions)
             {
@@ -100,6 +70,116 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             }
 
             return SyntaxFactory.SeparatedList(updatedExpressions, expressions.GetSeparators());
+        }
+
+        protected static T PlacedOnSameLine<T>(T syntax) where T : SyntaxNode
+        {
+            switch (syntax)
+            {
+                case null:
+                    return null;
+
+                case CaseSwitchLabelSyntax label:
+                    return label.WithoutTrivia()
+                                .WithKeyword(label.Keyword.WithoutTrailingTrivia())
+                                .WithValue(PlacedOnSameLine(label.Value).WithLeadingSpace().WithoutTrailingTrivia())
+                                .WithColonToken(label.ColonToken.WithoutLeadingTrivia()) as T;
+
+                case CasePatternSwitchLabelSyntax patternLabel:
+                    return patternLabel.WithoutTrivia()
+                                       .WithKeyword(patternLabel.Keyword.WithoutTrailingTrivia())
+                                       .WithPattern(PlacedOnSameLine(patternLabel.Pattern).WithLeadingSpace().WithoutTrailingTrivia())
+                                       .WithWhenClause(PlacedOnSameLine(patternLabel.WhenClause))
+                                       .WithColonToken(patternLabel.ColonToken.WithoutLeadingTrivia()) as T;
+
+                case MemberAccessExpressionSyntax maes:
+                    return maes.WithoutTrivia()
+                               .WithName(PlacedOnSameLine(maes.Name))
+                               .WithOperatorToken(maes.OperatorToken.WithoutTrivia())
+                               .WithExpression(PlacedOnSameLine(maes.Expression)) as T;
+
+                case BinaryExpressionSyntax binary:
+                    return binary.WithoutTrivia()
+                                 .WithLeft(PlacedOnSameLine(binary.Left))
+                                 .WithOperatorToken(binary.OperatorToken.WithLeadingSpace().WithoutTrailingTrivia())
+                                 .WithRight(PlacedOnSameLine(binary.Right)) as T;
+
+                case IsPatternExpressionSyntax pattern:
+                    return pattern.WithoutTrivia()
+                                  .WithPattern(PlacedOnSameLine(pattern.Pattern))
+                                  .WithIsKeyword(pattern.IsKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                  .WithExpression(PlacedOnSameLine(pattern.Expression)) as T;
+
+                case InvocationExpressionSyntax invocation:
+                    return invocation.WithoutTrivia()
+                                     .WithExpression(PlacedOnSameLine(invocation.Expression))
+                                     .WithArgumentList(PlacedOnSameLine(invocation.ArgumentList)) as T;
+
+                case WhenClauseSyntax clause:
+                    return clause?.WithoutTrivia()
+                                  .WithWhenKeyword(clause.WhenKeyword.WithLeadingSpace().WithoutTrailingTrivia())
+                                  .WithCondition(PlacedOnSameLine(clause.Condition)) as T;
+
+                case DeclarationPatternSyntax declaration:
+                    return declaration.WithoutTrivia()
+                                      .WithType(declaration.Type.WithoutTrailingTrivia())
+                                      .WithDesignation(PlacedOnSameLine(declaration.Designation)) as T;
+
+                case SingleVariableDesignationSyntax singleVariable:
+                    return singleVariable.WithoutTrivia()
+                                         .WithIdentifier(singleVariable.Identifier.WithoutTrivia()) as T;
+
+                case ArgumentListSyntax argumentList:
+                    return argumentList.WithoutTrivia()
+                                       .WithOpenParenToken(argumentList.OpenParenToken.WithoutTrivia())
+                                       .WithArguments(PlacedOnSameLine(argumentList.Arguments))
+                                       .WithCloseParenToken(argumentList.CloseParenToken.WithoutTrivia()) as T;
+
+                case ArgumentSyntax argument:
+                    return argument.WithoutTrivia()
+                                   .WithRefKindKeyword(argument.RefKindKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                   .WithRefOrOutKeyword(argument.RefOrOutKeyword.WithoutLeadingTrivia().WithTrailingSpace())
+                                   .WithNameColon(PlacedOnSameLine(argument.NameColon))
+                                   .WithExpression(PlacedOnSameLine(argument.Expression)) as T;
+
+                case GenericNameSyntax genericName:
+                    return genericName.WithoutTrivia()
+                                      .WithIdentifier(genericName.Identifier.WithoutTrailingTrivia())
+                                      .WithTypeArgumentList(PlacedOnSameLine(genericName.TypeArgumentList)) as T;
+
+                case SimpleNameSyntax simpleName:
+                    return simpleName.WithoutTrivia() as T;
+
+                case TypeArgumentListSyntax typeArgumentList:
+                    return typeArgumentList.WithoutTrivia()
+                                           .WithArguments(PlacedOnSameLine(typeArgumentList.Arguments))
+                                           .WithGreaterThanToken(typeArgumentList.GreaterThanToken.WithoutTrivia())
+                                           .WithLessThanToken(typeArgumentList.LessThanToken.WithoutTrivia()) as T;
+
+                default:
+                    return syntax.WithoutTrivia();
+            }
+        }
+
+        protected static SeparatedSyntaxList<T> PlacedOnSameLine<T>(SeparatedSyntaxList<T> syntax) where T : SyntaxNode
+        {
+            var updatedItems = syntax.GetWithSeparators()
+                                     .Select(token =>
+                                                     {
+                                                         if (token.IsNode)
+                                                         {
+                                                             return PlacedOnSameLine(token.AsNode());
+                                                         }
+
+                                                         if (token.IsToken)
+                                                         {
+                                                             return token.AsToken().WithoutLeadingTrivia().WithTrailingSpace();
+                                                         }
+
+                                                         return token;
+                                                     });
+
+            return SyntaxFactory.SeparatedList<T>(updatedItems);
         }
     }
 }
