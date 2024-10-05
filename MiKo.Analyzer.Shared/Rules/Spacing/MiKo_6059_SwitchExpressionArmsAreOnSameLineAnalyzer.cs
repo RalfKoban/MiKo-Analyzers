@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 var index = arms.IndexOf(arm);
 
                 // be aware that the last arm might have no separator
-                if (index < arms.Count - 1)
+                if (index < arms.SeparatorCount)
                 {
                     var token = arms.GetSeparator(index);
 

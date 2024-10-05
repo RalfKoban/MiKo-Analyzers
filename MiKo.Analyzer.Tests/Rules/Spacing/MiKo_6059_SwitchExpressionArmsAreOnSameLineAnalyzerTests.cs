@@ -119,6 +119,24 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_last_switch_expression_arm_if_value_is_on_different_line_but_arm_does_not_end_with_separator() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(StringComparison comparison)
+    {
+            return comparison switch
+                                    {
+                                        StringComparison.Ordinal => true,
+                                        _ =>
+                                             false
+                                    };
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_switch_expression_arm_if_it_spans_multiple_lines()
         {
             const string OriginalCode = @"
@@ -202,6 +220,45 @@ public class TestMe
                                     {
                                         StringComparison.Ordinal => true,
                                         _ => throw new ArgumentOutOfRangeException(nameof(direction), ""some value""),
+                                    };
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_last_switch_expression_arm_if_value_is_on_different_line_but_arm_does_not_end_with_separator()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(StringComparison comparison)
+    {
+            return comparison switch
+                                    {
+                                        StringComparison.Ordinal => true,
+                                        _ =>
+                                             false
+                                    };
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(StringComparison comparison)
+    {
+            return comparison switch
+                                    {
+                                        StringComparison.Ordinal => true,
+                                        _ => false
                                     };
     }
 }
