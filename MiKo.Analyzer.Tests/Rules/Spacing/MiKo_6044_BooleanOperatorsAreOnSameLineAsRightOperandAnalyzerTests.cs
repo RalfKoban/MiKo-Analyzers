@@ -12,7 +12,7 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     public sealed class MiKo_6044_BooleanOperatorsAreOnSameLineAsRightOperandAnalyzerTests : CodeFixVerifier
     {
         [Test]
-        public void No_issue_is_reported_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_binary_expression_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -27,7 +27,7 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_if_operator_is_on_same_line_as_right_operand() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_binary_expression_if_operator_is_on_same_line_as_right_operand() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -43,7 +43,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_if_operator_is_on_different_line_than_right_operand() => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_binary_expression_if_operator_is_on_different_line_than_right_operand() => An_issue_is_reported_for(@"
 using System;
 
 public class TestMe
@@ -59,7 +59,7 @@ public class TestMe
 ");
 
         [Test]
-        public void Code_gets_fixed_if_operator_is_on_different_line_than_right_operand()
+        public void Code_gets_fixed_for_binary_expression_if_operator_is_on_different_line_than_right_operand()
         {
             const string OriginalCode = @"
 using System;
@@ -95,7 +95,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_operators_with_comments_are_on_different_lines_than_right_operands()
+        public void Code_gets_fixed_for_binary_expression_if_operators_with_comments_are_on_different_lines_than_right_operands()
         {
             const string OriginalCode = @"
 using System;
@@ -133,7 +133,7 @@ public class TestMe
         }
 
         [Test]
-        public void Code_gets_fixed_if_complex_operators_with_comments_are_on_different_lines_than_right_operands()
+        public void Code_gets_fixed_for_binary_expression_if_complex_operators_with_comments_are_on_different_lines_than_right_operands()
         {
             const string OriginalCode = @"
 using System;
@@ -164,6 +164,170 @@ public class TestMe
             || (b == 0 || c <= 0) // comment 2
             && (d > 1 || e < 0) // comment 3
            )
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_prefix_unary_expression_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (!a)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_prefix_unary_expression_if_operator_is_on_same_line_as_right_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (
+            !a)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_prefix_unary_expression_if_operator_is_on_different_line_than_right_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (!
+             a)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_prefix_unary_expression_if_operator_is_on_different_line_than_right_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (!
+             a)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (!a)
+        {
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_postfix_unary_expression_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (a!)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_postfix_unary_expression_if_operator_is_on_same_line_as_right_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (
+            a!)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_postfix_unary_expression_if_operator_is_on_different_line_than_right_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (a
+             !)
+        {
+        }
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_postfix_unary_expression_if_operator_is_on_different_line_than_right_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (a
+             !)
+        {
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool a)
+    {
+        if (a!)
         {
         }
     }

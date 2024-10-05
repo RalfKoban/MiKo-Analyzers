@@ -5374,7 +5374,7 @@ Hence, as it is a block similar to the if block(s), the open brace of the block 
     <value>Place operator on same line as right operand</value>
   </data>
   <data name="MiKo_6044_Title" xml:space="preserve">
-    <value>Binary operators such as '&amp;&amp;' or '||' should be placed on same line(s) as their right operands</value>
+    <value>Operators such as '&amp;&amp;' or '||' should be placed on same line(s) as their (right) operands</value>
   </data>
   <data name="MiKo_6045_CodeFixTitle" xml:space="preserve">
     <value>Place comparison on same line</value>
