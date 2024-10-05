@@ -12,6 +12,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
     public sealed class MiKo_3081_UsePatternMatchingForLogicalNotExpressionAnalyzerTests : CodeFixVerifier
     {
         [Test]
+        public void No_issue_is_reported_for_directive() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool a)
+    {
+#if !DEBUG
+        a = false;
+#endif
+        return a;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_logical_condition() => No_issue_is_reported_for(@"
 using System;
 

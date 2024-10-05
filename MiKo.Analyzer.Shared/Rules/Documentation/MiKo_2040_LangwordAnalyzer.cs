@@ -36,20 +36,24 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         }
 
 //// ncrunch: rdi off
+
         private static Pair[] CreateStartParts()
         {
-            var results = new List<Pair>(6 * Phrases.Length);
+            var phrasesLength = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new List<Pair>(6 * phrasesLength);
+
+            for (var i = 0; i < phrasesLength; i++)
             {
+                var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results.Add(new Pair(phrase + ".", proposal + "."));
-                results.Add(new Pair(phrase + "?", proposal + "?"));
-                results.Add(new Pair(phrase + "!", proposal + "!"));
-                results.Add(new Pair(phrase + ",", proposal + ","));
-                results.Add(new Pair(phrase + ";", proposal + ";"));
-                results.Add(new Pair(phrase + ":", proposal + ":"));
+                results.Add(new Pair(phrase.ConcatenatedWith('.'), proposal.ConcatenatedWith('.')));
+                results.Add(new Pair(phrase.ConcatenatedWith('?'), proposal.ConcatenatedWith('?')));
+                results.Add(new Pair(phrase.ConcatenatedWith('!'), proposal.ConcatenatedWith('!')));
+                results.Add(new Pair(phrase.ConcatenatedWith(','), proposal.ConcatenatedWith(',')));
+                results.Add(new Pair(phrase.ConcatenatedWith(';'), proposal.ConcatenatedWith(';')));
+                results.Add(new Pair(phrase.ConcatenatedWith(':'), proposal.ConcatenatedWith(':')));
             }
 
             return results.ToArray();
@@ -57,23 +61,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateMiddleParts()
         {
-            var results = new List<Pair>(11 * Phrases.Length);
+            var phrasesLength = Phrases.Length;
 
-            foreach (var phrase in Phrases)
+            var results = new List<Pair>(11 * phrasesLength);
+
+            for (var i = 0; i < phrasesLength; i++)
             {
+                var phrase = Phrases[i];
                 var proposal = Proposal(phrase);
 
-                results.Add(new Pair("(" + phrase + " ", "(" + proposal + " "));
-                results.Add(new Pair("(" + phrase + ")", "(" + proposal + ")"));
-                results.Add(new Pair(" " + phrase + ")", " " + proposal + ")"));
-                results.Add(new Pair(" " + phrase + " ", " " + proposal + " "));
-                results.Add(new Pair(" " + phrase + ".", " " + proposal + "."));
-                results.Add(new Pair(" " + phrase + "?", " " + proposal + "?"));
-                results.Add(new Pair(" " + phrase + "!", " " + proposal + "!"));
-                results.Add(new Pair(" " + phrase + ",", " " + proposal + ","));
-                results.Add(new Pair(" " + phrase + ";", " " + proposal + ";"));
-                results.Add(new Pair(" " + phrase + ":", " " + proposal + ":"));
-                results.Add(new Pair("'" + phrase + "'", proposal));
+                results.Add(new Pair('('.ConcatenatedWith(phrase, ' '), '('.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair('('.ConcatenatedWith(phrase, ')'), '('.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ')'), ' '.ConcatenatedWith(proposal, ')')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ' '), ' '.ConcatenatedWith(proposal, ' ')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '.'), ' '.ConcatenatedWith(proposal, '.')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '?'), ' '.ConcatenatedWith(proposal, '?')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, '!'), ' '.ConcatenatedWith(proposal, '!')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ','), ' '.ConcatenatedWith(proposal, ',')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ';'), ' '.ConcatenatedWith(proposal, ';')));
+                results.Add(new Pair(' '.ConcatenatedWith(phrase, ':'), ' '.ConcatenatedWith(proposal, ':')));
+                results.Add(new Pair('\''.ConcatenatedWith(phrase, '\''), proposal));
             }
 
             return results.ToArray();
@@ -81,23 +88,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static Pair[] CreateEndParts()
         {
-            var length = Phrases.Length;
+            var phrasesLength = Phrases.Length;
 
-            var results = new Pair[length];
+            var results = new Pair[phrasesLength];
 
-            for (var i = 0; i < length; i++)
+            for (var i = 0; i < phrasesLength; i++)
             {
                 var phrase = Phrases[i];
-
                 var proposal = Proposal(phrase);
 
-                results[i] = new Pair(" " + phrase, " " + proposal);
+                results[i] = new Pair(' '.ConcatenatedWith(phrase), ' '.ConcatenatedWith(proposal));
             }
 
             return results;
         }
 
-        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase.AsSpan().Trim().ToLowerCase(), "\"/>");
+        private static string Proposal(string phrase) => string.Concat("<see " + Constants.XmlTag.Attribute.Langword + "=\"", phrase, "\"/>");
 
 //// ncrunch: rdi default
 

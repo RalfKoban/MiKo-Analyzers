@@ -10,9 +10,10 @@ namespace MiKoSolutions.Analyzers.Extensions
     public static class StringBuilderExtensionsTests
     {
         private const int KeepLeadingSpace = 1 << 0;
-        private const int MakeInfinite = 1 << 1;
-        private const int MakeUpperCase = 1 << 2;
-        private const int MakeLowerCase = 1 << 3;
+        private const int MakeUpperCase = 1 << 1;
+        private const int MakeLowerCase = 1 << 2;
+        private const int MakeInfinite = 1 << 3;
+        private const int MakePlural = 1 << 4;
 
         [TestCase("", ExpectedResult = "")]
         [TestCase(" ", ExpectedResult = "")]
@@ -86,6 +87,10 @@ namespace MiKoSolutions.Analyzers.Extensions
         [TestCase(" represent", MakeInfinite | KeepLeadingSpace, " represent")]
         [TestCase("   represent", MakeInfinite, "represent")]
         [TestCase("   represent", MakeInfinite | KeepLeadingSpace, " represent")]
+        [TestCase("message", MakePlural, "messages")]
+        [TestCase("message", MakePlural | KeepLeadingSpace, "messages")]
+        [TestCase(" message", MakePlural | KeepLeadingSpace, " messages")]
+        [TestCase("   message", MakePlural | KeepLeadingSpace, " messages")]
         public static void AdjustFirstWordHandling(string s, int handling, string expectedResult)
         {
             var builder = new StringBuilder(s);

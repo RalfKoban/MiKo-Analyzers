@@ -57,9 +57,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Lazy<MapData> MappedData = new Lazy<MapData>();
 
-#if NCRUNCH
-        // do not define a static ctor to speed up tests
-#else
+#if !NCRUNCH // do not define a static ctor to speed up tests in NCrunch
         static MiKo_2023_CodeFixProvider() => LoadData(); // ensure that we have the object available
 #endif
 
@@ -67,8 +65,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
-        //// ncrunch: no coverage end
-        //// ncrunch: rdi default
+//// ncrunch: no coverage end
+//// ncrunch: rdi default
 
         protected override XmlElementSyntax Comment(Document document, XmlElementSyntax comment, ParameterSyntax parameter, int index, Diagnostic issue)
         {
@@ -155,19 +153,21 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var keysInUpperCase = data.KeysInUpperCase;
                     var length = keysInUpperCase.Length;
 
+//// ncrunch: no coverage start
                     for (var index = 0; index < length; index++)
                     {
                         var key = keysInUpperCase[index];
 
                         if (text.StartsWith(key, StringComparison.OrdinalIgnoreCase))
                         {
+//// ncrunch: no coverage end
                             var subText = text.Slice(key.Length)
                                               .TrimStart(Constants.TrailingSentenceMarkers)
                                               .TrimEnd(Constants.TrailingSentenceMarkers);
 
                             return FixTextOnlyComment(comment, t, subText, replacement, data);
                         }
-                    }
+                    } // ncrunch: no coverage
 
                     // seems we could not fix the part
                     var otherPhraseStart = text.IndexOfAny(ElseConditionals, StringComparison.OrdinalIgnoreCase);
@@ -244,14 +244,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 commentContinuation.Append(continuation);
             }
 
-            commentContinuation.ReplaceAllWithCheck(info.Map.AsSpan());
+            commentContinuation.ReplaceAllWithCheck(info.Map);
 
             var prepared = comment.ReplaceNode(originalText, XmlText(string.Empty));
 
             return FixComment(prepared, info.Keys, info.Map, commentContinuation.ToString());
         }
 
-        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, Pair[] replacementMap, string commentContinue = null)
+        private static XmlElementSyntax FixComment(XmlElementSyntax prepared, string[] replacementMapKeys, ReadOnlySpan<Pair> replacementMap, string commentContinue = null)
         {
             var startFixed = CommentStartingWith(prepared, StartPhraseParts0, SeeLangword_True(), commentContinue ?? StartPhraseParts1);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
@@ -350,6 +350,22 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
 
             return new ConcreteMapInfo(mappedDataValue.ReplacementMapForOthers, mappedDataValue.ReplacementMapKeysForOthers, mappedDataValue.ReplacementMapKeysInUpperCaseForOthers);
+        }
+
+        private readonly ref struct ConcreteMapInfo
+        {
+            public ConcreteMapInfo(ReadOnlySpan<Pair> map, string[] keys, string[] keysInUpperCase)
+            {
+                Map = map;
+                Keys = keys;
+                KeysInUpperCase = keysInUpperCase;
+            }
+
+            public ReadOnlySpan<Pair> Map { get; }
+
+            public string[] Keys { get; }
+
+            public string[] KeysInUpperCase { get; }
         }
 
         private sealed class MapData
@@ -490,7 +506,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 string[] ToKeyArray(IEnumerable<string> keys, string text) => keys.Where(_ => _.StartsWith(text, StringComparison.Ordinal)).ToArray();
 
-                Pair[] ToMapArray(Pair[] map, HashSet<string> keys, Pair[] others)
+                Pair[] ToMapArray(ReadOnlySpan<Pair> map, HashSet<string> keys, Pair[] others)
                 {
                     var results = new Pair[keys.Count + others.Length];
                     var resultIndex = 0;
@@ -514,7 +530,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     return results;
                 }
 
-                string[] ToUpper(IEnumerable<string> strings) => strings.ToHashSet(_ => _.ToUpperInvariant()).ToArray();
+                string[] ToUpper(IEnumerable<string> strings) => new HashSet<string>(strings, StringComparer.OrdinalIgnoreCase).ToArray();
             }
 
             public Pair[] ReplacementMapForA { get; }
@@ -711,22 +727,6 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             }
         }
 
-        private sealed class ConcreteMapInfo
-        {
-            public ConcreteMapInfo(Pair[] map, string[] keys, string[] keysInUpperCase)
-            {
-                Map = map;
-                Keys = keys;
-                KeysInUpperCase = keysInUpperCase;
-            }
-
-            public Pair[] Map { get; }
-
-            public string[] Keys { get; }
-
-            public string[] KeysInUpperCase { get; }
-        }
-
         private sealed class StringStartComparer : IComparer<string>
         {
             private readonly string[] m_specialOrder;
@@ -740,7 +740,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                 if (notNullX && notNullY)
                 {
-                    return GetOrder(x) - GetOrder(y);
+                    var orders = m_specialOrder.AsSpan();
+
+                    return GetOrder(x.AsSpan(), orders) - GetOrder(y.AsSpan(), orders);
                 }
 
                 if (notNullX)
@@ -756,15 +758,15 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return 0;
             }
 
-            private int GetOrder(string text)
+            private static int GetOrder(ReadOnlySpan<char> text, ReadOnlySpan<string> orders)
             {
-                var length = m_specialOrder.Length;
+                var length = orders.Length;
 
                 for (var i = 0; i < length; i++)
                 {
-                    var order = m_specialOrder[i];
+                    var order = orders[i];
 
-                    if (text.StartsWith(order, StringComparison.Ordinal))
+                    if (text.StartsWith(order.AsSpan(), StringComparison.Ordinal))
                     {
                         return i;
                     }

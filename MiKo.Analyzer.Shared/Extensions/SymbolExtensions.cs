@@ -58,7 +58,14 @@ namespace MiKoSolutions.Analyzers
                           ? value.GetNamedMethods()
                           : value.GetMethods();
 
-            return methods.Where(_ => _.MethodKind == kind);
+            // ReSharper disable once LoopCanBePartlyConvertedToQuery
+            foreach (var method in methods)
+            {
+                if (method.MethodKind == kind)
+                {
+                    yield return method;
+                }
+            }
         }
 
         internal static IReadOnlyList<IMethodSymbol> GetMethods(this ITypeSymbol value, string methodName)
@@ -229,7 +236,19 @@ namespace MiKoSolutions.Analyzers
         // TODO RKN: find better name
         internal static IEnumerable<ObjectCreationExpressionSyntax> GetCreatedObjectSyntaxReturnedByMethods(this ITypeSymbol value)
         {
-            return value.GetNamedMethods().Where(IsTypeUnderTestCreationMethod).SelectMany(GetCreatedObjectSyntaxReturnedByMethod);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var method in value.GetNamedMethods())
+            {
+                if (IsTypeUnderTestCreationMethod(method))
+                {
+                    var items = method.GetCreatedObjectSyntaxReturnedByMethod();
+
+                    foreach (var item in items)
+                    {
+                        yield return item;
+                    }
+                }
+            }
         }
 
         internal static IMethodSymbol GetEnclosingMethod(this ISymbol value)
@@ -257,6 +276,7 @@ namespace MiKoSolutions.Analyzers
                     case IFieldSymbol _: return null;
 
                     default:
+                        // parameters might be part of properties or methods, so we have to do the loop here
                         symbol = symbol.ContainingSymbol;
 
                         break;
@@ -562,11 +582,22 @@ namespace MiKoSolutions.Analyzers
         {
             // TODO: RKN what about base types?
             var members = value.GetMembersIncludingInherited<ISymbol>().ToList();
-            var methodTypes = members.OfType<IMethodSymbol>().Where(IsTypeUnderTestCreationMethod);
+            var methodTypes = GetTestCreationMethods();
             var propertyTypes = members.OfType<IPropertySymbol>().Where(_ => Constants.Names.TypeUnderTestPropertyNames.Contains(_.Name));
             var fieldTypes = members.OfType<IFieldSymbol>().Where(_ => Constants.Names.TypeUnderTestFieldNames.Contains(_.Name));
 
             return Enumerable.Empty<ISymbol>().Concat(propertyTypes).Concat(fieldTypes).Concat(methodTypes).Where(_ => _ != null).ToHashSet(SymbolEqualityComparer.Default);
+
+            IEnumerable<IMethodSymbol> GetTestCreationMethods()
+            {
+                foreach (var method in members.OfType<IMethodSymbol>())
+                {
+                    if (method.IsTypeUnderTestCreationMethod())
+                    {
+                        yield return method;
+                    }
+                }
+            }
         }
 
         internal static IReadOnlyCollection<ITypeSymbol> GetTypeUnderTestTypes(this ITypeSymbol value)

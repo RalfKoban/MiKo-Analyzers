@@ -23,8 +23,46 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, (prefix, name) => prefix + name).ToArray();
 
+        /// <summary>
+        /// Create a plural name for a given name, but returns the same name in case if fails to do so.
+        /// </summary>
+        /// <param name="name">
+        /// The name to create a plural for.
+        /// </param>
+        /// <returns>
+        /// The plural for the given <paramref name="name"/>.
+        /// </returns>
+        public static string MakePluralName(string name) => GetPluralName(name, StringComparison.Ordinal) ?? name;
+
+        /// <summary>
+        /// Attempts to create a plural name for a given name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
+        /// </summary>
+        /// <param name="name">
+        /// The name to create a plural for.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// </param>
+        /// <returns>
+        /// The plural for the given <paramref name="name"/>.
+        /// </returns>
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase) => GetPluralName(name, name, comparison);
 
+        /// <summary>
+        /// Attempts to create a plural name for a given proposed name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
+        /// </summary>
+        /// <param name="name">
+        /// The name to create a plural for.
+        /// </param>
+        /// <param name="proposedName">
+        /// The proposed name to create the plural name for.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// </param>
+        /// <returns>
+        /// The plural for the given <paramref name="name"/>.
+        /// </returns>
         public static string GetPluralName(string name, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
             if (name.EndsWith("trivia", comparison))
@@ -35,6 +73,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return PluralNames.GetOrAdd(name, _ => CreatePluralName(proposedName.AsSpan(), comparison));
         }
 
+        /// <summary>
+        /// Attempts to create a plural name for a given name, but (in contrast to <see cref="MakePluralName"/>) returns <see langword="null"/> in case if fails to do so.
+        /// </summary>
+        /// <param name="name">
+        /// The name to create a plural for.
+        /// </param>
+        /// <param name="comparison">
+        /// One of the <see cref="StringComparison"/> values that specifies the rules for comparison.
+        /// </param>
+        /// <param name="suffixes">
+        /// The suffixes to remove from the plural name.
+        /// </param>
+        /// <returns>
+        /// The plural for the given <paramref name="name"/>.
+        /// </returns>
         public static string GetPluralName(string name, StringComparison comparison = StringComparison.OrdinalIgnoreCase, params string[] suffixes)
         {
             if (IsAllowedListName(name, comparison))

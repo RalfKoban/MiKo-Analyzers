@@ -12989,6 +12989,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Simplify comparison.
+        /// </summary>
+        internal static string MiKo_3222_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3222_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String comparisons for equality can be simplified by using the specific methods provided by the .NET framework. This makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_3222_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3222_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String comparison can be simplified.
+        /// </summary>
+        internal static string MiKo_3222_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3222_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String comparisons can be simplified.
+        /// </summary>
+        internal static string MiKo_3222_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3222_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
@@ -15330,7 +15366,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; should be placed on same line(s) as their right operands.
+        ///   Looks up a localized string similar to Operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; should be placed on same line(s) as their (right) operands.
         /// </summary>
         internal static string MiKo_6044_Title {
             get {
@@ -15841,6 +15877,78 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6058_Title {
             get {
                 return ResourceManager.GetString("MiKo_6058_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        /// </summary>
+        internal static string MiKo_6059_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6059_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, switch expression arms should span a single line..
+        /// </summary>
+        internal static string MiKo_6059_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6059_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        /// </summary>
+        internal static string MiKo_6059_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6059_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch expression arms should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6059_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6059_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch case label on single line.
+        /// </summary>
+        internal static string MiKo_6060_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6060_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, switch case labels should span a single line..
+        /// </summary>
+        internal static string MiKo_6060_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6060_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch case label on single line.
+        /// </summary>
+        internal static string MiKo_6060_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6060_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch case labels should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6060_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6060_Title", resourceCulture);
             }
         }
     }

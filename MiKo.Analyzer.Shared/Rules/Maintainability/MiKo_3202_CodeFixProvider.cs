@@ -143,9 +143,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static ExpressionSyntax GetUpdatedCondition(Document document, ExpressionSyntax condition)
         {
-            var newCondition = condition is ParenthesizedExpressionSyntax parenthesized
-                               ? parenthesized.Expression
-                               : condition;
+            var newCondition = condition.WithoutParenthesis();
 
             return InvertCondition(document, newCondition).WithTriviaFrom(condition);
         }

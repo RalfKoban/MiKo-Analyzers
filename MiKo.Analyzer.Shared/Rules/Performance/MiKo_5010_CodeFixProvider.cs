@@ -20,7 +20,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
             var parent = invocation.Parent;
 
-            switch (parent.Kind())
+            switch (parent?.Kind())
             {
                 case SyntaxKind.ParenthesizedExpression when parent.Parent.IsKind(SyntaxKind.LogicalNotExpression):
                     return parent.Parent;
@@ -40,7 +40,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (syntax is IsPatternExpressionSyntax pattern)
             {
-                var isFalsePattern = pattern.Pattern is ConstantPatternSyntax c && c.Expression.IsKind(SyntaxKind.FalseLiteralExpression);
+                var isFalsePattern = pattern.IsPatternCheckFor(SyntaxKind.FalseLiteralExpression);
 
                 return GetUpdatedSyntax(pattern.Expression, issue, isFalsePattern ? SyntaxKind.NotEqualsExpression : SyntaxKind.None).WithoutTrailingTrivia();
             }
@@ -124,7 +124,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
                     switch (child)
                     {
-                        case ParenthesizedExpressionSyntax p when p.Expression is InvocationExpressionSyntax pi:
+                        case ParenthesizedExpressionSyntax p when p.WithoutParenthesis() is InvocationExpressionSyntax pi:
                             return pi;
 
                         case InvocationExpressionSyntax i:

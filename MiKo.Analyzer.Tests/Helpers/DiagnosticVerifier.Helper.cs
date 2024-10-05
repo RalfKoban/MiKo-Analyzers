@@ -25,6 +25,7 @@ using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
 
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
+// ReSharper disable CheckNamespace
 namespace TestHelper
 {
     /// <summary>
@@ -102,7 +103,7 @@ namespace TestHelper
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments([analyzer], [document]);
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocument(DiagnosticAnalyzer analyzer, Document document) => GetSortedDiagnosticsFromDocuments([analyzer], [document], false);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzers and gather an array of diagnostics found in it.
@@ -114,10 +115,13 @@ namespace TestHelper
         /// <param name="documents">
         /// The Documents that the analyzers will be run on.
         /// </param>
+        /// <param name="profileAnalysis">
+        /// <see langword="true"/> to collect and save profiling data; otherwise, <see langword="false"/>.
+        /// </param>
         /// <returns>
         /// An array of Diagnostics that surfaced in the source code, sorted by Location.
         /// </returns>
-        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(DiagnosticAnalyzer[] analyzers, Document[] documents)
+        protected static Diagnostic[] GetSortedDiagnosticsFromDocuments(ReadOnlySpan<DiagnosticAnalyzer> analyzers, ReadOnlySpan<Document> documents, bool profileAnalysis)
         {
             var projects = new HashSet<Project>();
 
@@ -130,9 +134,19 @@ namespace TestHelper
 
             foreach (var project in projects)
             {
+                if (profileAnalysis)
+                {
+                    JetBrains.Profiler.Api.MeasureProfiler.StartCollectingData();
+                }
+
                 var compilation = project.GetCompilationAsync().Result;
                 var compilationWithAnalyzers = compilation.WithAnalyzers([..analyzers]);
                 var diags = compilationWithAnalyzers.GetAnalyzerDiagnosticsAsync().Result;
+
+                if (profileAnalysis)
+                {
+                    JetBrains.Profiler.Api.MeasureProfiler.SaveData();
+                }
 
                 foreach (var diag in diags)
                 {
@@ -191,12 +205,15 @@ namespace TestHelper
         /// <param name="analyzers">
         /// The analyzers to be run on the sources.
         /// </param>
+        /// <param name="profileAnalysis">
+        /// <see langword="true"/> to collect and save profiling data; otherwise, <see langword="false"/>.
+        /// </param>
         /// <returns>
         /// An array of <see cref="Diagnostic"/>s that surfaced in the source code, sorted by <see cref="Diagnostic.Location"/>.
         /// </returns>
-        private static Diagnostic[] GetSortedDiagnostics(IReadOnlyCollection<string> sources, LanguageVersion languageVersion, params DiagnosticAnalyzer[] analyzers)
+        private static Diagnostic[] GetSortedDiagnostics(ReadOnlySpan<string> sources, LanguageVersion languageVersion, ReadOnlySpan<DiagnosticAnalyzer> analyzers, bool profileAnalysis)
         {
-            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion));
+            return GetSortedDiagnosticsFromDocuments(analyzers, GetDocuments(sources, languageVersion), profileAnalysis);
         }
 
         /// <summary>
@@ -225,12 +242,12 @@ namespace TestHelper
         /// <returns>
         /// The <see cref="Document"/>s produced from the sources.
         /// </returns>
-        private static Document[] GetDocuments(IReadOnlyCollection<string> sources, LanguageVersion languageVersion)
+        private static Document[] GetDocuments(ReadOnlySpan<string> sources, LanguageVersion languageVersion)
         {
             var project = CreateProject(sources, languageVersion);
             var documents = project.Documents.ToArray();
 
-            if (sources.Count != documents.Length)
+            if (sources.Length != documents.Length)
             {
                 throw new InvalidOperationException("Amount of sources did not match amount of Documents created");
             }
@@ -250,7 +267,7 @@ namespace TestHelper
         /// <returns>
         /// A Project created out of the Documents created from the source strings.
         /// </returns>
-        private static Project CreateProject(IEnumerable<string> sources, LanguageVersion languageVersion)
+        private static Project CreateProject(ReadOnlySpan<string> sources, LanguageVersion languageVersion)
         {
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
             var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Default, TestProjectName, TestProjectName, LanguageNames.CSharp, parseOptions: CSharpParseOptions.Default.WithLanguageVersion(languageVersion));
@@ -259,14 +276,16 @@ namespace TestHelper
                                                .AddProject(projectInfo)
                                                .AddMetadataReferences(projectId, References);
 
-            var count = 0;
+            var length = sources.Length;
 
-            foreach (var source in sources)
+            for (var index = 0; index < length; index++)
             {
-                var newFileName = "Test" + count + ".cs";
+                var source = sources[index];
+
+                var newFileName = "Test" + index + ".cs";
                 var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
+
                 solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
-                count++;
             }
 
             return solution.GetProject(projectId);

@@ -39,9 +39,9 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsFixableAssertionForLinqCall(InvocationExpressionSyntax invocation)
         {
-            if (invocation.GetName() == "Is")
+            if (invocation.GetIdentifierName() == "Is")
             {
-                switch (invocation.Expression.GetName())
+                switch (invocation.GetName())
                 {
                     case "EqualTo":
                     case "Zero":

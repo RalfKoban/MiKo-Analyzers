@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,8 +20,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         private static readonly string[] ClassSummaryStartingPhrases = [.. CreateTypeSummaryStartingPhrases().Take(TestLimit).OrderBy(_ => _.Length).ThenBy(_ => _)];
         private static readonly string[] InterfaceSummaryStartingPhrases = [.. ClassSummaryStartingPhrases.Take(100)];
 
+#if NCRUNCH
+
         [OneTimeSetUp]
         public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
+
+#endif
 
         [Test]
         public void No_issue_is_reported_for_undocumented_non_factory_class() => No_issue_is_reported_for(@"
@@ -745,9 +750,9 @@ internal interface IFactory
             var s = verbs.SelectMany(_ => phrases, (verb, phrase) => phrase + " " + verb).ToList();
 
             var startingPhrases = s.Concat(s.Select(_ => _.Replace("actory", "actory class"))).ToList();
-            var constructionPhrases = startingPhrases.Select(_ => _.Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct")).ToList();
-            var buildingPhrases = startingPhrases.Select(_ => _.Replace("creation", "building").Replace("creating", "building").Replace("create", "build")).ToList();
-            var providingPhrases = startingPhrases.Select(_ => _.Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide")).ToList();
+            var constructionPhrases = startingPhrases.Select(_ => new StringBuilder(_).Replace("creation", "construction").Replace("creating", "constructing").Replace("create", "construct").ToString()).ToList();
+            var buildingPhrases = startingPhrases.Select(_ => new StringBuilder(_).Replace("creation", "building").Replace("creating", "building").Replace("create", "build").ToString()).ToList();
+            var providingPhrases = startingPhrases.Select(_ => new StringBuilder(_).Replace("creation", "providing").Replace("creating", "providing").Replace("create", "provide").ToString()).ToList();
 
             var results = new HashSet<string>();
 

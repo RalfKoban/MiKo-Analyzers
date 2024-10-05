@@ -28,13 +28,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 case "AddHandler":
                 case "RemoveHandler":
                 {
-                    if (node.Parent is InvocationExpressionSyntax i)
+                    if (node.Parent is InvocationExpressionSyntax invocation)
                     {
-                        var typeName = i.GetName();
+                        var typeName = invocation.GetIdentifierName();
 
                         if (typeName == "WeakEventManager")
                         {
-                            var arguments = i.ArgumentList.Arguments;
+                            var arguments = invocation.ArgumentList.Arguments;
 
                             if (arguments.Count >= 2)
                             {
