@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Linq;
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -22,7 +24,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (arm.IsSpanningMultipleLines())
             {
-                return true;
+                // maybe we have an initializer, so check for that
+                return arm.DescendantNodes<InitializerExpressionSyntax>().None();
             }
 
             // maybe the comma is not placed at same line, so let's find out

@@ -29,6 +29,28 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_switch_expression_arm_with_initializer_spanning_multiple_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get; }
+
+    public TestMe DoSomething(StringComparison comparison)
+    {
+            return comparison switch
+                                    {
+                                        StringComparison.Ordinal => new TestMe
+                                                                        {
+                                                                            Comparison = comparison,
+                                                                        },
+                                        _ => null,
+                                    };
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_switch_expression_arm_if_comma_is_on_different_line() => An_issue_is_reported_for(@"
 using System;
 
