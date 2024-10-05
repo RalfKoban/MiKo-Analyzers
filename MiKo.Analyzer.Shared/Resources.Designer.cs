@@ -15366,7 +15366,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Binary operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; should be placed on same line(s) as their right operands.
+        ///   Looks up a localized string similar to Operators such as &apos;&amp;&amp;&apos; or &apos;||&apos; should be placed on same line(s) as their (right) operands.
         /// </summary>
         internal static string MiKo_6044_Title {
             get {
