@@ -1129,6 +1129,7 @@ namespace System.Linq
             switch (source)
             {
                 case TSource[] array: return ToArray(array, keySelector);
+                case ImmutableArray<TSource> array: return ToArray(array, keySelector);
                 case IReadOnlyList<TSource> list: return ToArray(list, keySelector);
                 case IReadOnlyCollection<TSource> collection: return ToArray(collection, keySelector);
                 default:
@@ -1156,6 +1157,7 @@ namespace System.Linq
             {
                 case TSource[] array: return array.ToHashSet(selector);
                 case List<TSource> list: return list.ToHashSet(selector);
+                case ImmutableArray<TSource> array: return array.ToHashSet(selector);
             }
 
             var result = new HashSet<TResult>();
@@ -1173,9 +1175,12 @@ namespace System.Linq
             var result = new HashSet<TResult>();
             var length = source.Count;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                result.Add(selector(source[index]));
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
             }
 
             return result;
@@ -1186,9 +1191,12 @@ namespace System.Linq
             var result = new HashSet<TResult>();
             var length = source.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                result.Add(selector(source[index]));
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
             }
 
             return result;
@@ -1199,9 +1207,12 @@ namespace System.Linq
             var result = new HashSet<TResult>();
             var length = source.Count;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                result.Add(selector(source[index]));
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
             }
 
             return result;
@@ -1212,9 +1223,12 @@ namespace System.Linq
             var result = new HashSet<TResult>();
             var length = source.Count;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                result.Add(selector(source[index]));
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
             }
 
             return result;
@@ -1225,9 +1239,12 @@ namespace System.Linq
             var result = new HashSet<TResult>();
             var length = source.Length;
 
-            for (var index = 0; index < length; index++)
+            if (length > 0)
             {
-                result.Add(selector(source[index]));
+                for (var index = 0; index < length; index++)
+                {
+                    result.Add(selector(source[index]));
+                }
             }
 
             return result;
