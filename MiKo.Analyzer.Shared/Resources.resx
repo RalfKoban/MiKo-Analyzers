@@ -5546,6 +5546,18 @@ Hence, their open brackets should be positioned at the same position where the c
   <data name="MiKo_6058_Title" xml:space="preserve">
     <value>Type parameter constraint clauses should be indented below parameter list</value>
   </data>
+  <data name="MiKo_6059_CodeFixTitle" xml:space="preserve">
+    <value>Place switch expression arm on single line</value>
+  </data>
+  <data name="MiKo_6059_Description" xml:space="preserve">
+    <value>To ease reading, switch expression arms should span a single line.</value>
+  </data>
+  <data name="MiKo_6059_MessageFormat" xml:space="preserve">
+    <value>Place switch expression arm on single line</value>
+  </data>
+  <data name="MiKo_6059_Title" xml:space="preserve">
+    <value>Switch expression arms should be placed on same line</value>
+  </data>
   <data name="MiKo_6060_CodeFixTitle" xml:space="preserve">
     <value>Place switch case label on single line</value>
   </data>
