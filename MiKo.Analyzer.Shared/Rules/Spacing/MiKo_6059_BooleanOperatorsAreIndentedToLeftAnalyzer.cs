@@ -80,19 +80,23 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
         {
             if (node is BinaryExpressionSyntax binary)
             {
-                var orientationToken = GetOutdentedOrientationToken(binary);
                 var operatorToken = binary.OperatorToken;
 
-                var orientationStartingLine = orientationToken.GetStartingLine();
-                var operatorTokenStartingLine = operatorToken.GetStartingLine();
-
-                if (orientationStartingLine != operatorTokenStartingLine)
+                if (binary.Left.GetEndingLine() < operatorToken.GetStartingLine())
                 {
-                    var spaces = GetOutdentedPosition(binary);
+                    var orientationToken = GetOutdentedOrientationToken(binary);
 
-                    if (operatorToken.GetPositionWithinStartLine() != spaces)
+                    var orientationStartingLine = orientationToken.GetStartingLine();
+                    var operatorTokenStartingLine = operatorToken.GetStartingLine();
+
+                    if (orientationStartingLine != operatorTokenStartingLine)
                     {
-                        return Issue(operatorToken, CreateProposalForSpaces(spaces));
+                        var spaces = GetOutdentedPosition(binary);
+
+                        if (operatorToken.GetPositionWithinStartLine() != spaces)
+                        {
+                            return Issue(operatorToken, CreateProposalForSpaces(spaces));
+                        }
                     }
                 }
             }

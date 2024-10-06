@@ -27,6 +27,24 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_if_statement_in_case_operator_is_behind_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
+    {
+        if (condition1 &&
+            condition2 ||
+            condition3 &&
+            condition4)
+        {
+        }
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_if_statement_in_case_operator_is_correctly_outdented_to_left_operand() => No_issue_is_reported_for(@"
 using System;
 
@@ -212,6 +230,22 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_return_statement_in_case_operator_is_behind_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
+    {
+        return condition1 &&
+               condition2 ||
+               condition3 &&
+               condition4;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_return_statement_in_case_operator_is_correctly_outdented_to_left_operand() => No_issue_is_reported_for(@"
 using System;
 
@@ -374,6 +408,29 @@ public class TestMe
         switch (o)
         {
             case string s when s.Length > 1 && s.Length < 10:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_when_clause_in_case_operator_is_behind_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(object o)
+    {
+        switch (o)
+        {
+            case string s when s.Length > 1 &&
+                               s.Length < 10 ||
+                               s.Length > 11 &&
+                               s.Length <= 42:
                 return true;
 
             default:
