@@ -15881,7 +15881,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        ///   Looks up a localized string similar to Align condition outdented.
         /// </summary>
         internal static string MiKo_6059_CodeFixTitle {
             get {
@@ -15890,7 +15890,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease reading, switch expression arms should span a single line..
+        ///   Looks up a localized string similar to To easily read the multi-line conditions, those conditions should be positioned outdented below the corresponding call..
         /// </summary>
         internal static string MiKo_6059_Description {
             get {
@@ -15899,7 +15899,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        ///   Looks up a localized string similar to Align condition outdented.
         /// </summary>
         internal static string MiKo_6059_MessageFormat {
             get {
@@ -15908,7 +15908,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Switch expression arms should be placed on same line.
+        ///   Looks up a localized string similar to Multi-line conditions are positioned outdented below associated calls.
         /// </summary>
         internal static string MiKo_6059_Title {
             get {
@@ -15949,6 +15949,42 @@ namespace MiKoSolutions.Analyzers {
         internal static string MiKo_6060_Title {
             get {
                 return ResourceManager.GetString("MiKo_6060_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        /// </summary>
+        internal static string MiKo_6061_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6061_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To ease reading, switch expression arms should span a single line..
+        /// </summary>
+        internal static string MiKo_6061_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6061_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place switch expression arm on single line.
+        /// </summary>
+        internal static string MiKo_6061_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6061_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Switch expression arms should be placed on same line.
+        /// </summary>
+        internal static string MiKo_6061_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6061_Title", resourceCulture);
             }
         }
     }

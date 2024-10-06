@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [TestFixture]
-    public sealed class MiKo_6059_SwitchExpressionArmsAreOnSameLineAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzerTests : CodeFixVerifier
     {
         [Test]
         public void No_issue_is_reported_for_switch_expression_arm_on_same_line() => No_issue_is_reported_for(@"
@@ -289,10 +289,10 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
-        protected override string GetDiagnosticId() => MiKo_6059_SwitchExpressionArmsAreOnSameLineAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6059_SwitchExpressionArmsAreOnSameLineAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzer();
 
-        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6059_CodeFixProvider();
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_6061_CodeFixProvider();
     }
 }

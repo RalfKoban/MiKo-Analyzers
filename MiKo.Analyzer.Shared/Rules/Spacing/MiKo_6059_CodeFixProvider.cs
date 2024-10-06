@@ -4,8 +4,6 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
@@ -14,36 +12,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
     {
         public override string FixableDiagnosticId => "MiKo_6059";
 
-        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<SwitchExpressionSyntax>().FirstOrDefault();
+        protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.FirstOrDefault();
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            if (syntax is SwitchExpressionSyntax switchExpression)
-            {
-                var arms = switchExpression.Arms;
+            var token = syntax.FindToken(issue);
 
-                var updatedArms = arms.GetWithSeparators()
-                                      .Select(token =>
-                                                      {
-                                                          if (token.IsNode)
-                                                          {
-                                                              var node = token.AsNode();
+            var spaces = GetProposedSpaces(issue);
 
-                                                              return PlacedOnSameLine(node).WithLeadingTriviaFrom(node);
-                                                          }
-
-                                                          if (token.IsToken)
-                                                          {
-                                                              return token.AsToken().WithoutLeadingTrivia();
-                                                          }
-
-                                                          return token;
-                                                      });
-
-                return switchExpression.WithArms(SyntaxFactory.SeparatedList<SwitchExpressionArmSyntax>(updatedArms));
-            }
-
-            return syntax;
+            return syntax.ReplaceToken(token, token.WithLeadingSpaces(spaces));
         }
     }
 }

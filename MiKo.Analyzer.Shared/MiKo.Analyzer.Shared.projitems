@@ -532,8 +532,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6056_CollectionExpressionBracesAreOnSamePositionAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6057_TypeParameterConstraintClausesVerticallyAlignedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6058_TypeParameterConstraintClauseIndentedBelowParameterListAnalyzer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6059_SwitchExpressionArmsAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6059_BooleanOperatorsAreIndentedToLeftAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6060_SwitchCasesAreOnSameLineAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SpacingAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\StatementSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\SurroundedByBlankLinesAnalyzer.cs" />

@@ -8,13 +8,13 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Spacing
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_6059_SwitchExpressionArmsAreOnSameLineAnalyzer : SpacingAnalyzer
+    public sealed class MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzer : SpacingAnalyzer
     {
-        public const string Id = "MiKo_6059";
+        public const string Id = "MiKo_6061";
 
         private static readonly SyntaxKind[] SwitchArms = { SyntaxKind.SwitchExpressionArm };
 
-        public MiKo_6059_SwitchExpressionArmsAreOnSameLineAnalyzer() : base(Id)
+        public MiKo_6061_SwitchExpressionArmsAreOnSameLineAnalyzer() : base(Id)
         {
         }
 
