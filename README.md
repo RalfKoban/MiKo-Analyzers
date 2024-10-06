@@ -505,6 +505,6 @@ The following tables lists all the 463 rules that are currently provided by the 
 |MiKo_6056|Brackets of collection expressions should be placed directly at the same place collection initializer braces would be positioned|&#x2713;|&#x2713;|
 |MiKo_6057|Type parameter constraint clauses should be aligned vertically|&#x2713;|&#x2713;|
 |MiKo_6058|Type parameter constraint clauses should be indented below parameter list|&#x2713;|&#x2713;|
-|MiKo_6059|Switch expression arms should be placed on same line|&#x2713;|&#x2713;|
 |MiKo_6060|Switch case labels should be placed on same line|&#x2713;|&#x2713;|
+|MiKo_6061|Switch expression arms should be placed on same line|&#x2713;|&#x2713;|
 
