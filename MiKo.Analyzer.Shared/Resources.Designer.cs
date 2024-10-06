@@ -15881,6 +15881,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align condition outdented.
+        /// </summary>
+        internal static string MiKo_6059_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_6059_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To easily read the multi-line conditions, those conditions should be positioned outdented below the corresponding call..
+        /// </summary>
+        internal static string MiKo_6059_Description {
+            get {
+                return ResourceManager.GetString("MiKo_6059_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Align condition outdented.
+        /// </summary>
+        internal static string MiKo_6059_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_6059_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multi-line conditions are positioned outdented below associated calls.
+        /// </summary>
+        internal static string MiKo_6059_Title {
+            get {
+                return ResourceManager.GetString("MiKo_6059_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Place switch case label on single line.
         /// </summary>
         internal static string MiKo_6060_CodeFixTitle {
