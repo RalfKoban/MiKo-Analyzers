@@ -13025,6 +13025,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Simplify comparison.
+        /// </summary>
+        internal static string MiKo_3223_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3223_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comparisons for equality on reference types can be simplified by using the specific methods provided by the .NET framework. This makes the code easier to read and understand..
+        /// </summary>
+        internal static string MiKo_3223_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3223_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comparison can be simplified.
+        /// </summary>
+        internal static string MiKo_3223_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3223_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reference comparisons can be simplified.
+        /// </summary>
+        internal static string MiKo_3223_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3223_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use lambda expression body.
         /// </summary>
         internal static string MiKo_3301_CodeFixTitle {
