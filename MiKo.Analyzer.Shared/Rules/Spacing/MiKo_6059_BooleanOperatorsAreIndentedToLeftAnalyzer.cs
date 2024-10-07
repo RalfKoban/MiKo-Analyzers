@@ -40,6 +40,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case WhenClauseSyntax whenClause:
                         return whenClause.WhenKeyword;
+
+                    case ArgumentListSyntax argument:
+                        return argument.OpenParenToken;
+
+                    case EqualsValueClauseSyntax clause:
+                        return clause.EqualsToken;
+
+                    case AssignmentExpressionSyntax assignment:
+                        return assignment.OperatorToken;
                 }
             }
 
@@ -60,6 +69,15 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
 
                     case WhenClauseSyntax whenClause:
                         return whenClause.WhenKeyword.GetEndPosition().Character - 2;
+
+                    case ArgumentListSyntax argument:
+                        return argument.OpenParenToken.GetEndPosition().Character - 3;
+
+                    case EqualsValueClauseSyntax clause:
+                        return clause.EqualsToken.GetEndPosition().Character - 2;
+
+                    case AssignmentExpressionSyntax assignment:
+                        return assignment.OperatorToken.GetEndPosition().Character - 2;
                 }
             }
 
