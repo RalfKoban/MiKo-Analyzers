@@ -662,6 +662,597 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void No_issue_is_reported_for_variable_declaration_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1 && condition2;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_declaration_in_case_operator_is_behind_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
+    {
+        var x = condition1 &&
+                condition2 ||
+                condition3 &&
+                condition4;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_variable_declaration_in_case_operator_is_correctly_outdented_to_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+             && condition2;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_declaration_in_case_operator_is_indented_to_right_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+                    && condition2;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_declaration_in_case_operator_is_indented_below_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+                && condition2;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_variable_declaration_in_case_operator_is_outdented_to_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+            && condition2;
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_variable_declaration_in_case_operator_is_indented_to_right_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+                    && condition2;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+             && condition2;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_variable_declaration_in_case_operator_is_indented_below_left_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+                && condition2;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+             && condition2;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_variable_declaration_in_case_operator_is_outdented_to_left_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+            && condition2;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        var x = condition1
+             && condition2;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_assignment_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1 && condition2;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_assignment_in_case_operator_is_behind_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
+    {
+        condition1 = condition1 &&
+                     condition2 ||
+                     condition3 &&
+                     condition4;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_assignment_in_case_operator_is_correctly_outdented_to_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                  && condition2;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_assignment_in_case_operator_is_indented_to_right_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                          && condition2;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_assignment_in_case_operator_is_indented_below_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                     && condition2;
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_assignment_in_case_operator_is_outdented_to_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+            && condition2;
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_assignment_in_case_operator_is_indented_to_right_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                        && condition2;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                  && condition2;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_assignment_in_case_operator_is_indented_below_left_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                     && condition2;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                  && condition2;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_assignment_in_case_operator_is_outdented_to_left_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+            && condition2;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        condition1 = condition1
+                  && condition2;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void No_issue_is_reported_for_argument_if_complete_operation_is_on_same_line() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1 && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_argument_in_case_operator_is_behind_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2, bool condition3, bool condition4)
+    {
+        DoSomethingElse(condition1 &&
+                        condition2 ||
+                        condition3 &&
+                        condition4;
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_argument_in_case_operator_is_correctly_outdented_to_left_operand() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                     && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_argument_in_case_operator_is_indented_to_right_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                            && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_argument_in_case_operator_is_indented_below_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                        && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_argument_in_case_operator_is_outdented_to_left_operand() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                    && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+");
+
+        [Test]
+        public void Code_gets_fixed_for_argument_in_case_operator_is_indented_to_right_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                           && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                     && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_argument_in_case_operator_is_indented_below_left_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                        && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                     && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_argument_in_case_operator_is_outdented_to_left_operand()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                  && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public void DoSomething(bool condition1, bool condition2)
+    {
+        DoSomethingElse(condition1
+                     && condition2);
+    }
+
+    public void DoSomethingElse(bool condition)
+    {
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_6059_BooleanOperatorsAreIndentedToLeftAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_6059_BooleanOperatorsAreIndentedToLeftAnalyzer();
