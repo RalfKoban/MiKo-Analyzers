@@ -65,8 +65,8 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                 // a?.Equals(b) is true
                 case IsPatternExpressionSyntax p when p.IsPatternCheckFor(SyntaxKind.TrueLiteralExpression)
-                                                      && p.Expression is ConditionalAccessExpressionSyntax c
-                                                      && c.WhenNotNull is InvocationExpressionSyntax invocation:
+                                                   && p.Expression is ConditionalAccessExpressionSyntax c
+                                                   && c.WhenNotNull is InvocationExpressionSyntax invocation:
                 {
                     result = invocation;
 

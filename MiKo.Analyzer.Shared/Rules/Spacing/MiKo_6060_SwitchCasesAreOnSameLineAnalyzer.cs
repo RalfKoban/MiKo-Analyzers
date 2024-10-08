@@ -33,6 +33,11 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                         {
                             return false;
                         }
+
+                        if (condition.Left is IsPatternExpressionSyntax || condition.Right is IsPatternExpressionSyntax)
+                        {
+                            return false;
+                        }
                     }
 
                     return pattern.IsSpanningMultipleLines();
