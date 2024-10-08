@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -76,17 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private void AnalyzeLogicalExpressions(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is BinaryExpressionSyntax node)
-            {
-                var issues = AnalyzeLogicalExpressions(node, context);
-
-                ReportDiagnostics(context, issues);
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeLogicalExpressions(BinaryExpressionSyntax node, SyntaxNodeAnalysisContext context)
+        private static bool HasIssue(BinaryExpressionSyntax node, SyntaxNodeAnalysisContext context)
         {
             // "a == b || (a != null && a.Equals(b))"
             // "a == b || a?.Equals(b) is true)"
@@ -98,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (arguments.Count != 1)
                 {
                     // different arguments, so nothing to report here as simplifiable
-                    yield break;
+                    return false;
                 }
 
                 var name = invocation.GetName();
@@ -106,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (name != nameof(Equals))
                 {
                     // no Equals method, so nothing to report here as simplifiable
-                    yield break;
+                    return false;
                 }
 
                 var semanticModel = context.SemanticModel;
@@ -117,7 +105,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (typeSymbol.IsString())
                 {
                     // already reported by MiKo_3222
-                    yield break;
+                    return false;
                 }
 
                 if (typeSymbol.IsReferenceType)
@@ -135,9 +123,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (partA.GetTypeSymbol(semanticModel).IsReferenceType && partB.GetTypeSymbol(semanticModel).IsReferenceType && argument.GetTypeSymbol(semanticModel).IsReferenceType)
                         {
-                            yield return Issue(node);
+                            return true;
                         }
                     }
+                }
+            }
+
+            return false;
+        }
+
+        private void AnalyzeLogicalExpressions(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is BinaryExpressionSyntax node)
+            {
+                if (HasIssue(node, context))
+                {
+                    ReportDiagnostics(context, Issue(node));
                 }
             }
         }
