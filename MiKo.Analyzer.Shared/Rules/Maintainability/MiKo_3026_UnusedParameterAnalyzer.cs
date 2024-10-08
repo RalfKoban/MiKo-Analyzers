@@ -188,7 +188,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 var root = methodBody.SyntaxTree.GetCompilationUnitRoot();
 
                 var identifiers = root.DescendantNodes<IdentifierNameSyntax>(_ => _.Parent is ArgumentSyntax
-                                                                              || (_.Parent is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) && b.Parent is ArgumentSyntax));
+                                                                          || (_.Parent is BinaryExpressionSyntax b && b.IsKind(SyntaxKind.CoalesceExpression) && b.Parent is ArgumentSyntax));
 
                 return identifiers.ToHashSet(_ => _.Identifier.ValueText);
             }

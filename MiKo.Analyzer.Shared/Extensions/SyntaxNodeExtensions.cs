@@ -1879,8 +1879,10 @@ namespace MiKoSolutions.Analyzers
 
         internal static bool IsSpanningMultipleLines(this SyntaxNode value)
         {
-            var startingLine = value.GetStartingLine();
-            var endingLine = value.GetEndingLine();
+            var lineSpan = value.GetLocation().GetLineSpan();
+
+            var startingLine = lineSpan.StartLinePosition.Line;
+            var endingLine = lineSpan.EndLinePosition.Line;
 
             return startingLine != endingLine;
         }

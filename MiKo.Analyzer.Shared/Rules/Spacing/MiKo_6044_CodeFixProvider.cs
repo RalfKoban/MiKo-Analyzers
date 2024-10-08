@@ -41,6 +41,12 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             return syntax;
         }
 
+        private static PrefixUnaryExpressionSyntax GetUpdatedSyntax(PrefixUnaryExpressionSyntax unary) => unary.WithOperatorToken(unary.OperatorToken.WithoutTrailingTrivia())
+                                                                                                               .WithOperand(unary.Operand.WithoutLeadingTrivia());
+
+        private static PostfixUnaryExpressionSyntax GetUpdatedSyntax(PostfixUnaryExpressionSyntax unary) => unary.WithOperand(unary.Operand.WithoutTrailingTrivia())
+                                                                                                                 .WithOperatorToken(unary.OperatorToken.WithoutLeadingTrivia());
+
         private static BinaryExpressionSyntax GetUpdatedSyntax(BinaryExpressionSyntax binary, Diagnostic issue)
         {
             var spaces = GetProposedSpaces(issue);
@@ -50,8 +56,8 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
             var right = binary.Right;
 
             var updatedLeft = left.GetStartingLine() != operatorToken.GetStartingLine() && left.HasTrailingComment()
-                                  ? left // there is already a comment, so nothing to do here
-                                  : left.WithTrailingTriviaFrom(operatorToken); // copy comment or line break
+                              ? left // there is already a comment, so nothing to do here
+                              : left.WithTrailingTriviaFrom(operatorToken); // copy comment or line break
 
             var updatedToken = operatorToken.WithLeadingSpaces(spaces).WithTrailingSpace();
             var updatedRight = right.WithoutLeadingTrivia();
@@ -60,11 +66,5 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                          .WithOperatorToken(updatedToken)
                          .WithRight(updatedRight);
         }
-
-        private static PrefixUnaryExpressionSyntax GetUpdatedSyntax(PrefixUnaryExpressionSyntax unary) => unary.WithOperatorToken(unary.OperatorToken.WithoutTrailingTrivia())
-                                                                                                               .WithOperand(unary.Operand.WithoutLeadingTrivia());
-
-        private static PostfixUnaryExpressionSyntax GetUpdatedSyntax(PostfixUnaryExpressionSyntax unary) => unary.WithOperand(unary.Operand.WithoutTrailingTrivia())
-                                                                                                                 .WithOperatorToken(unary.OperatorToken.WithoutLeadingTrivia());
     }
 }

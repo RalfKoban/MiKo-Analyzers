@@ -1951,6 +1951,7 @@ namespace System
                 var bufferSpan = new Span<char>(buffer, length);
 
                 source.CopyTo(bufferSpan);
+
                 buffer[index] = buffer[index].ToUpperCase();
 
                 return new string(buffer, 0, length);
@@ -1967,6 +1968,7 @@ namespace System
                 var bufferSpan = new Span<char>(buffer, length);
 
                 source.CopyTo(bufferSpan);
+
                 buffer[index] = buffer[index].ToLowerCase();
 
                 return new string(buffer, 0, length);
