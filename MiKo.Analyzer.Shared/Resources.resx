@@ -4598,6 +4598,18 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3223_Title" xml:space="preserve">
     <value>Reference comparisons can be simplified</value>
   </data>
+  <data name="MiKo_3224_CodeFixTitle" xml:space="preserve">
+    <value>Simplify comparison</value>
+  </data>
+  <data name="MiKo_3224_Description" xml:space="preserve">
+    <value>Comparisons for equality on value types can be simplified by using the specific equality operators. This makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3224_MessageFormat" xml:space="preserve">
+    <value>Comparison can be simplified</value>
+  </data>
+  <data name="MiKo_3224_Title" xml:space="preserve">
+    <value>Value comparisons can be simplified</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
