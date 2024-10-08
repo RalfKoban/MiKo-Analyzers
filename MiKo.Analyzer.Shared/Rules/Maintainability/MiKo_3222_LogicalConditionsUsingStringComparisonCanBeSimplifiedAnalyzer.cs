@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -76,17 +74,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return false;
         }
 
-        private void AnalyzeLogicalExpressions(SyntaxNodeAnalysisContext context)
-        {
-            if (context.Node is BinaryExpressionSyntax node)
-            {
-                var issues = AnalyzeLogicalExpressions(node, context);
-
-                ReportDiagnostics(context, issues);
-            }
-        }
-
-        private IEnumerable<Diagnostic> AnalyzeLogicalExpressions(BinaryExpressionSyntax node, SyntaxNodeAnalysisContext context)
+        private static bool HasIssue(BinaryExpressionSyntax node, SyntaxNodeAnalysisContext context)
         {
             // "a == b || (a != null && a.Equals(b, StringComparison.Ordinal))"
             // "a == b || a?.Equals(b, StringComparison.Ordinal) is true)"
@@ -98,7 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (arguments.Count <= 0)
                 {
                     // no arguments, so nothing to report here as simplifiable
-                    yield break;
+                    return false;
                 }
 
                 var name = invocation.GetName();
@@ -106,7 +94,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 if (name != nameof(Equals))
                 {
                     // no Equals method, so nothing to report here as simplifiable
-                    yield break;
+                    return false;
                 }
 
                 var semanticModel = context.SemanticModel;
@@ -127,9 +115,22 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                     {
                         if (partA.GetTypeSymbol(semanticModel).IsString() && partB.GetTypeSymbol(semanticModel).IsString() && argument.GetTypeSymbol(semanticModel).IsString())
                         {
-                            yield return Issue(node);
+                            return true;
                         }
                     }
+                }
+            }
+
+            return false;
+        }
+
+        private void AnalyzeLogicalExpressions(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is BinaryExpressionSyntax node)
+            {
+                if (HasIssue(node, context))
+                {
+                    ReportDiagnostics(context, Issue(node));
                 }
             }
         }
