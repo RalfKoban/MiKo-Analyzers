@@ -23,6 +23,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetPositionWithinStartLine(this SyntaxToken value) => value.GetLocation().GetPositionWithinStartLine();
 
+        internal static int GetPositionWithinEndLine(this SyntaxToken value) => value.GetLocation().GetPositionWithinEndLine();
+
         internal static LinePosition GetPositionAfterEnd(this SyntaxToken value)
         {
             var position = value.GetEndPosition();

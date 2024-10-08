@@ -22,6 +22,8 @@ namespace MiKoSolutions.Analyzers
 
         internal static int GetPositionWithinStartLine(this Location value) => value.GetStartPosition().Character;
 
+        internal static int GetPositionWithinEndLine(this Location value) => value.GetEndPosition().Character;
+
         internal static int GetStartingLine(this Location value) => value.GetStartPosition().Line;
 
         internal static int GetEndingLine(this Location value) => value.GetEndPosition().Line;
