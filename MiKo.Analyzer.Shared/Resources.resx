@@ -4610,6 +4610,18 @@ Instead, it would be much easier to see what is meant if non-generic types would
   <data name="MiKo_3224_Title" xml:space="preserve">
     <value>Value comparisons can be simplified</value>
   </data>
+  <data name="MiKo_3225_CodeFixTitle" xml:space="preserve">
+    <value>Simplify redundant comparison</value>
+  </data>
+  <data name="MiKo_3225_Description" xml:space="preserve">
+    <value>Boolean comparisons comparing the same values on both sides are redundant and can be simplified by using only one of those sides. This makes the code easier to read and understand.</value>
+  </data>
+  <data name="MiKo_3225_MessageFormat" xml:space="preserve">
+    <value>Redundant comparison can be simplified</value>
+  </data>
+  <data name="MiKo_3225_Title" xml:space="preserve">
+    <value>Redundant comparisons can be simplified</value>
+  </data>
   <data name="MiKo_3301_CodeFixTitle" xml:space="preserve">
     <value>Use lambda expression body</value>
   </data>
