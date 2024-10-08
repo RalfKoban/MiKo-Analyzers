@@ -62,22 +62,22 @@ namespace MiKoSolutions.Analyzers.Rules.Spacing
                 switch (item)
                 {
                     case IfStatementSyntax ifStatement:
-                        return ifStatement.IfKeyword.GetEndPosition().Character - 1;
+                        return ifStatement.IfKeyword.GetPositionWithinEndLine() - 1;
 
                     case ReturnStatementSyntax returnStatement:
-                        return returnStatement.ReturnKeyword.GetEndPosition().Character - 2;
+                        return returnStatement.ReturnKeyword.GetPositionWithinEndLine() - 2;
 
                     case WhenClauseSyntax whenClause:
-                        return whenClause.WhenKeyword.GetEndPosition().Character - 2;
+                        return whenClause.WhenKeyword.GetPositionWithinEndLine() - 2;
 
                     case ArgumentListSyntax argument:
-                        return argument.OpenParenToken.GetEndPosition().Character - 3;
+                        return argument.OpenParenToken.GetPositionWithinEndLine() - 3;
 
                     case EqualsValueClauseSyntax clause:
-                        return clause.EqualsToken.GetEndPosition().Character - 2;
+                        return clause.EqualsToken.GetPositionWithinEndLine() - 2;
 
                     case AssignmentExpressionSyntax assignment:
-                        return assignment.OperatorToken.GetEndPosition().Character - 2;
+                        return assignment.OperatorToken.GetPositionWithinEndLine() - 2;
                 }
             }
 
