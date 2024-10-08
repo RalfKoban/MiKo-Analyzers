@@ -361,6 +361,32 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_switch_case_pattern_with_complex_when_clause_including_pattern_spanning_multiple_lines() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int DoSomething(object o, out int result)
+    {
+        result = 0;
+
+        switch (o)
+        {
+            case string s when string.IsNullOrEmpty(s)
+                            && s.Length is int i:
+            {
+                result = i;
+                return true;
+            }
+
+            default:
+                return false;
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_switch_case_pattern_if_type_of_expression_is_on_different_line() => An_issue_is_reported_for(@"
 using System;
 
