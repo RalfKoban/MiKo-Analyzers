@@ -128,7 +128,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var enumName = text.FirstAncestor<EnumDeclarationSyntax>()?.GetName();
 
                     // seems like the continuation is a single word and ends with the name of the enum, so it can be lower-case plural
-                    if (continuation == enumName)
+                    if (enumName == continuation || enumName == continuation + "Enum")
                     {
                         startingPhrase = KindPhrase;
 
