@@ -56,17 +56,12 @@ public class TestMe
 ");
 
         [TestCase("""a == b || a?.ToString("D") is null""")]
+        [TestCase("a == b || (c != null && c.Equals(d))")]
+        [TestCase("a == b || a?.Equals(b) == false")]
+        [TestCase("a == b || a?.Equals(b) is false")]
         [TestCase("a == b || a?.GetHashCode() == 42")]
-        [TestCase("a == b || a?.Equals(b) == false")]
-        [TestCase("a == b || a?.Equals(b) is false")]
-        [TestCase("a == b || a?.Equals(b) == false")]
-        [TestCase("a == b || a?.Equals(b) is false")]
         [TestCase("a == b || c?.Equals(d) == true")]
         [TestCase("a == b || c?.Equals(d) is true")]
-        [TestCase("a == b || c?.Equals(d) == true")]
-        [TestCase("a == b || c?.Equals(d) is true")]
-        [TestCase("a == b || (c != null && c.Equals(d))")]
-        [TestCase("a == b || (c != null && c.Equals(d))")]
         public void No_issue_is_reported_for_condition_with_unrelated_condition_(string condition) => No_issue_is_reported_for(@"
 using System;
 
@@ -80,24 +75,16 @@ public class TestMe
 }
 ");
 
-        [TestCase("a == b || a?.Equals(b) == true")]
-        [TestCase("a == b || a?.Equals(b) is true")]
-        [TestCase("a == b || (a != null && a.Equals(b))")]
-        [TestCase("(a == b) || (a != null && a.Equals(b))")]
-        [TestCase("(a == b || a?.Equals(b) == true)")]
-        [TestCase("(a == b || a?.Equals(b) is true)")]
-        [TestCase("(a == b || (a != null && a.Equals(b)))")]
         [TestCase("((a == b) || (a != null && a.Equals(b)))")]
+        [TestCase("(a == b || (a != null && a.Equals(b)))")]
         [TestCase("(a == b || (a?.Equals(b) == true))")]
         [TestCase("(a == b || (a?.Equals(b) is true))")]
-        [TestCase("a == b || a?.Equals(b) == true")]
-        [TestCase("a == b || a?.Equals(b) is true")]
-        [TestCase("a == b || (a != null && a.Equals(b))")]
-        [TestCase("(a == b) || (a != null && a.Equals(b))")]
         [TestCase("(a == b || a?.Equals(b) == true)")]
         [TestCase("(a == b || a?.Equals(b) is true)")]
-        [TestCase("(a == b || (a != null && a.Equals(b)))")]
-        [TestCase("((a == b) || (a != null && a.Equals(b)))")]
+        [TestCase("(a == b) || (a != null && a.Equals(b))")]
+        [TestCase("a == b || (a != null && a.Equals(b))")]
+        [TestCase("a == b || a?.Equals(b) == true")]
+        [TestCase("a == b || a?.Equals(b) is true")]
         public void An_issue_is_reported_for_condition_(string condition) => An_issue_is_reported_for(@"
 using System;
 
