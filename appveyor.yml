@@ -65,7 +65,7 @@ configuration:
   - Release
 
 test_script:
-  - "%PROGRAMFILES%\dotnet\dotnet.exe" test C:\projects\MiKo.Analyzers\MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj --configuration Release --no-build --output C:\Projects\MiKo.Analyzers\MiKo.Analyzer.Tests\bin\net8.0
+  - '"%PROGRAMFILES%\dotnet\dotnet.exe" test C:\projects\MiKo.Analyzers\MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj --configuration Release --no-build --output C:\Projects\MiKo.Analyzers\MiKo.Analyzer.Tests\bin\net8.0'
 #  - '%USERPROFILE%\.nuget\packages\OpenCover\4.7.1221\tools\OpenCover.Console.exe -register:user -target:"%PROGRAMFILES%\dotnet\dotnet.exe" -targetargs:"test C:\projects\MiKo.Analyzers\MiKo.Analyzer.Tests\MiKo.Analyzer.Tests.csproj --configuration Release --no-build --output C:\Projects\MiKo.Analyzers\MiKo.Analyzer.Tests\bin\net8.0 " -returntargetcode -filter:"+[MiKo*]* -[*Test*]*" -excludebyattribute:*.ExcludeFromCodeCoverage* -excludebyfile:*\*Designer.cs -hideskipped:All -output:"C:\Projects\MiKoAnalyzers_coverage.xml" '
 
 # Codecov Flags (https://docs.codecov.io/v4.3.6/docs/flags)
