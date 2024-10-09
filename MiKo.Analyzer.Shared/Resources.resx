@@ -3808,6 +3808,24 @@ It would therefore be better to clearly highlight the contradiction.</value>
   <data name="MiKo_3064_Title" xml:space="preserve">
     <value>Log messages should not use the contradiction "n't"</value>
   </data>
+  <data name="MiKo_3065_CodeFixTitle" xml:space="preserve">
+    <value>Change interpolated string into normal string</value>
+  </data>
+  <data name="MiKo_3065_Description" xml:space="preserve">
+    <value>The Microsoft Logging API supports Semantic or Structured Logging via message templates. These message template can contain placeholders for which arguments are provided.
+
+Although these placeholders are names (not numbers) and require arguments, the message template looks almost identical to an interpolated string (except of the '$' and the additional arguments) which can be confusing.
+
+The arguments themselves are passed to the logging system, not just the formatted message template. This enables logging providers to store the parameter values as fields which can be filtered on.
+
+Providing interpolated strings instead of message templates would prevent that filtering and contradict the intended Semantic or Structured Logging approach.</value>
+  </data>
+  <data name="MiKo_3065_MessageFormat" xml:space="preserve">
+    <value>Do not use interpolated string</value>
+  </data>
+  <data name="MiKo_3065_Title" xml:space="preserve">
+    <value>Microsoft Logging calls should not use interpolated strings</value>
+  </data>
   <data name="MiKo_3070_Description" xml:space="preserve">
     <value>Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
 It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null.</value>
