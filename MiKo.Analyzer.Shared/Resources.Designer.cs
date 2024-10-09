@@ -10786,6 +10786,46 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change interpolated string into normal string.
+        /// </summary>
+        internal static string MiKo_3065_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_3065_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Microsoft Logging API supports Semantic or Structured Logging via message templates. These message template can contain placeholders for which arguments are provided.
+        ///
+        ///Although these placeholders are names (not numbers) and require arguments, the message template looks almost identical to an interpolated string (except of the &apos;$&apos; and the additional arguments) which can be confusing.
+        ///
+        ///The arguments themselves are passed to the logging system, not just the formatted message template. This enables logg [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string MiKo_3065_Description {
+            get {
+                return ResourceManager.GetString("MiKo_3065_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use interpolated string.
+        /// </summary>
+        internal static string MiKo_3065_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_3065_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Logging calls should not use interpolated strings.
+        /// </summary>
+        internal static string MiKo_3065_Title {
+            get {
+                return ResourceManager.GetString("MiKo_3065_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Methods that return IEnumerable are expected to be used in foreach loops or Linq queries.
         ///It is unexpected that such places throw a NullReferenceException or ArgumentNullException, so these methods should never return null..
         /// </summary>

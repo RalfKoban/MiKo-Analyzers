@@ -90,6 +90,15 @@ namespace MiKoSolutions.Analyzers
             internal const string NamespaceName = "Microsoft.Extensions.Logging";
             internal const string TypeName = "ILogger";
             internal const string FullTypeName = NamespaceName + "." + TypeName;
+
+            internal const string BeginScope = nameof(BeginScope);
+            internal const string Log = nameof(Log);
+            internal const string LogCritical = nameof(LogCritical);
+            internal const string LogDebug = nameof(LogDebug);
+            internal const string LogError = nameof(LogError);
+            internal const string LogInformation = nameof(LogInformation);
+            internal const string LogTrace = nameof(LogTrace);
+            internal const string LogWarning = nameof(LogWarning);
         }
 
         internal static class Moq

@@ -15,7 +15,7 @@ Screenshots on how to use such analyzers can be found [here](https://learn.micro
 [![Build history](https://buildstats.info/appveyor/chart/RalfKoban/miko-analyzers)](https://ci.appveyor.com/project/RalfKoban/miko-analyzers/history)
 
 ## Available Rules
-The following tables lists all the 467 rules that are currently provided by the analyzer.
+The following tables lists all the 468 rules that are currently provided by the analyzer.
 
 ### Metrics
 |ID|Title|Enabled by default|CodeFix available|
@@ -343,6 +343,7 @@ The following tables lists all the 467 rules that are currently provided by the 
 |MiKo_3062|End log messages for exceptions with a colon|&#x2713;|&#x2713;|
 |MiKo_3063|End non-exceptional log messages with a dot|&#x2713;|&#x2713;|
 |MiKo_3064|Log messages should not use the contradiction "n't"|&#x2713;|&#x2713;|
+|MiKo_3065|Microsoft Logging calls should not use interpolated strings|&#x2713;|&#x2713;|
 |MiKo_3070|Do not return null for an IEnumerable|&#x2713;|\-|
 |MiKo_3071|Do not return null for a Task|&#x2713;|\-|
 |MiKo_3072|Non-private methods should not return 'List&lt;&gt;' or 'Dictionary&lt;&gt;'|&#x2713;|\-|
