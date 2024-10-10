@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System.Linq
 {
     internal static class EnumerableExtensions

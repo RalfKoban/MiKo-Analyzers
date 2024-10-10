@@ -1,12 +1,12 @@
 ﻿using System.Buffers;
 
-using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System.Text
 {
     internal static class StringBuilderExtensions
