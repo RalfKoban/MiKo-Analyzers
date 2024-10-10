@@ -1838,25 +1838,19 @@ namespace System
                 return null;
             }
 
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? string.Empty
-                   : value.Substring(0, length);
-        }
-
-        public static StringBuilder WithoutSuffix(this StringBuilder value, string suffix)
-        {
-            if (value is null)
+            if (value.EndsWith(suffix, StringComparison.Ordinal))
             {
-                return null;
+                var length = value.Length - suffix.Length;
+
+                if (length <= 0)
+                {
+                    return string.Empty;
+                }
+
+                return value.Substring(0, length);
             }
 
-            var length = value.Length - suffix.Length;
-
-            return length <= 0
-                   ? value.Remove(0, value.Length)
-                   : value.Remove(0, length);
+            return value;
         }
 
         public static ReadOnlySpan<char> WithoutSuffix(this ReadOnlySpan<char> value, char suffix)

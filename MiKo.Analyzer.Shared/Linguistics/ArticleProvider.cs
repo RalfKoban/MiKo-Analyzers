@@ -4,11 +4,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
 {
     internal static class ArticleProvider
     {
-        internal static string GetIndefiniteArticleFor(string text)
+        internal static string GetArticleFor(string text, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
+            if (text is null)
+            {
+                return string.Empty;
+            }
+
             if (text.StartsWithAny("AaEeIiOo"))
             {
-                return "An ";
+                return An();
             }
 
             if (text.StartsWithAny("Uu"))
@@ -18,14 +23,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     if (text.Length > 3 && text[3].ToUpperCase() == 'N')
                     {
                         // something like 'uninformed', so is a vowel sound
-                        return "An ";
+                        return An();
                     }
 
                     // uni is pronounced like 'yuni' where 'y' is a consonant and no vowel sound, hence we have to use 'A'
-                    return "A ";
+                    return A();
                 }
 
-                return "An ";
+                return An();
             }
 
             if (text.StartsWithAny("Hh"))
@@ -33,11 +38,15 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 if (text.StartsWith("hon", StringComparison.OrdinalIgnoreCase))
                 {
                     // it is a vowel sound if 'h' is followed by 'on' (as in such case 'h' it is silent, like in 'honest')
-                    return "An ";
+                    return An();
                 }
             }
 
-            return "A ";
+            return A();
+
+            string A() => firstWordHandling == FirstWordHandling.MakeLowerCase ? "a " : "A ";
+
+            string An() => firstWordHandling == FirstWordHandling.MakeLowerCase ? "an " : "An ";
         }
     }
 }

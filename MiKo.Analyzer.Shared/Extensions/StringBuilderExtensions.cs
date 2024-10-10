@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 
+using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation

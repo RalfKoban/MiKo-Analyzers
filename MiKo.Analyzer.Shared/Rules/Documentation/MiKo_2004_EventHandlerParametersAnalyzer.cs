@@ -33,7 +33,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             return VerifyParameterComments(symbol, commentXml, comment);
         }
 
-        private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetIndefiniteArticleFor(name);
+        private static string GetDefaultStartingPhrase(string name) => ArticleProvider.GetArticleFor(name);
 
         private static IEnumerable<string> CreatePhrases(IMethodSymbol method)
         {

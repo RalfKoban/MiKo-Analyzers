@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -28,6 +29,45 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = (XmlElementSyntax)syntax;
 
+            var contents = comment.Content;
+
+            if (contents.Count == 1 && contents[0] is XmlTextSyntax txt)
+            {
+                var text = txt.GetTextWithoutTrivia();
+
+                if (text.StartsWith("Enum"))
+                {
+                    var enumMember = txt.FirstAncestor<EnumMemberDeclarationSyntax>();
+
+                    var enumMemberName = enumMember?.GetName();
+                    var unsuffixed = enumMemberName.AsSpan().WithoutSuffix("Enum").ToString();
+
+                    var start = "Enum " + enumMemberName;
+
+                    var startPhrases = new[]
+                                           {
+                                               start + " for " + unsuffixed,
+                                               start + "Enum for " + enumMemberName,
+                                           };
+
+                    if (text.StartsWithAny(startPhrases, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var enumType = enumMember.FirstAncestor<EnumDeclarationSyntax>().GetName();
+                        var separated = WordSeparator.Separate(enumType, ' ', FirstWordHandling.MakeLowerCase);
+                        var article = ArticleProvider.GetArticleFor(unsuffixed, FirstWordHandling.MakeLowerCase);
+
+                        var replacement = new StringBuilder("The ").Append(separated)
+                                                                   .Append(" is ")
+                                                                   .Append(article)
+                                                                   .Append(unsuffixed)
+                                                                   .Append('.')
+                                                                   .ToString();
+
+                        return Comment(comment, replacement);
+                    }
+                }
+            }
+
             return Comment(comment, ReplacementMapKeys, ReplacementMap, FirstWordHandling.MakeUpperCase | FirstWordHandling.KeepLeadingSpace);
         }
 
@@ -41,8 +81,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 foreach (var continuation in continuations)
                 {
-                    yield return start + ", " + continuation + " ";
-                    yield return start + " " + continuation + " ";
+                    yield return string.Concat(start, ", ", continuation, " ");
+                    yield return string.Concat(start, " ", continuation, " ");
                 }
 
                 yield return start + " ";

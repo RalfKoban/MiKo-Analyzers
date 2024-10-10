@@ -323,7 +323,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
         }
 
-        private static bool IndicatesNewWord(char c) => c == '_' || c.IsUpperCase();
+        private static bool IndicatesNewWord(char c) => c == Constants.Underscore || c.IsUpperCase();
 
         private static bool PrefixHasIssue(string key, string symbolName) => symbolName.Length > key.Length && IndicatesNewWord(symbolName[key.Length]) && symbolName.StartsWith(key, StringComparison.Ordinal);
 
