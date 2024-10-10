@@ -10,6 +10,7 @@ using Microsoft.CodeAnalysis.Text;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace MiKoSolutions.Analyzers
 {
     internal static class SyntaxTriviaExtensions

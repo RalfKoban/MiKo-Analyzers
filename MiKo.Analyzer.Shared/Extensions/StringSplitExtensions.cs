@@ -3,6 +3,7 @@ using System.Linq;
 
 // ncrunch: rdi off
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     internal static class StringSplitExtensions
