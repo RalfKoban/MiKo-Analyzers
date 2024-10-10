@@ -55,8 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MiKo.Analyzer.2022\MiKo.Analyzer.2022.csproj" />
-    <ProjectReference Include="..\MiKo.Analyzer.Codefixes.2022\MiKo.Analyzer.CodeFixes.2022.csproj" />
+    <ProjectReference Include="..\MiKo.Analyzer.Shared\MiKo.Analyzer.Shared.ForTests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
