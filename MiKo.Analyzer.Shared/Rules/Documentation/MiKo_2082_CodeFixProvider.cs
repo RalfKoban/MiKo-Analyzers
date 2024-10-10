@@ -52,7 +52,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.StartsWithAny(startPhrases, StringComparison.OrdinalIgnoreCase))
                     {
-                        var enumType = enumMember.FirstAncestor<EnumDeclarationSyntax>().GetName();
+                        var enumType = enumMember.FirstAncestor<EnumDeclarationSyntax>().GetName().Without("Type").Without("Enum");
                         var separated = WordSeparator.Separate(enumType, ' ', FirstWordHandling.MakeLowerCase);
                         var article = ArticleProvider.GetArticleFor(unsuffixed, FirstWordHandling.MakeLowerCase);
 
