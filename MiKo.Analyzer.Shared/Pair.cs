@@ -1,19 +1,14 @@
-﻿using System.Collections.Generic;
-
-// for performance reasons we switch of RDI and NCrunch instrumentation
+﻿// for performance reasons we switch of RDI and NCrunch instrumentation
 //// ncrunch: rdi off
 //// ncrunch: no coverage start
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace System
 {
     public readonly struct Pair : IEquatable<Pair>
     {
         public readonly string Key; // made as field instead of property for performance reasons
         public readonly string Value; // made as field instead of property for performance reasons
-
-        public Pair(KeyValuePair<string, string> pair) : this(pair.Key, pair.Value)
-        {
-        }
 
         public Pair(string key, string value)
         {
@@ -38,11 +33,5 @@ namespace System
         }
 
         public override string ToString() => string.Concat(Key, " -> ", Value);
-
-        public void Deconstruct(out string key, out string value)
-        {
-            key = Key;
-            value = Value;
-        }
     }
 }
