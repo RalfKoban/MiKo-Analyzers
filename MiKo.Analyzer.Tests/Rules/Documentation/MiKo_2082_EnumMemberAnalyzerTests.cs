@@ -137,6 +137,66 @@ public enum TestMe
             VerifyCSharpFix(OriginalCode, OriginalCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member()
+        {
+            const string OriginalCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// Enum WhateverIdentifierEnum for WhateverIdentifier
+    /// </summary>
+    WhateverIdentifier = 0,
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// The test me kind is a WhateverIdentifier.
+    /// </summary>
+    WhateverIdentifier = 0,
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_enum()
+        {
+            const string OriginalCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// Enum WhateverIdentifierEnum for WhateverIdentifier
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public enum TestMeKind
+{
+    /// <summary>
+    /// The test me kind is a WhateverIdentifier.
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2082_EnumMemberAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2082_EnumMemberAnalyzer();

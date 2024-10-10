@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
 
+using MiKoSolutions.Analyzers.Linguistics;
+
 namespace MiKoSolutions.Analyzers.Rules.Naming
 {
     public static class NamesFinder
@@ -90,113 +92,37 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                    .ReplaceWithCheck(nameof(Exception) + "Thrown", "Throws" + nameof(Exception))
                                                                    .ToString();
 
-            var multipleUpperCases = false;
-
-            const int CharacterToStartWith = 1;
-
-            var characters = new List<char>(correctedSymbolName);
-
-            for (var index = CharacterToStartWith; index < characters.Count; index++)
-            {
-                var c = characters[index];
-
-                if (c == Constants.Underscore)
-                {
-                    // keep the existing underline
-                    continue;
-                }
-
-                if (c.IsUpperCase())
-                {
-                    if (index == CharacterToStartWith)
-                    {
-                        // multiple upper cases in a line at beginning of the name, so do not flip
-                        multipleUpperCases = true;
-                    }
-
-                    if (multipleUpperCases)
-                    {
-                        // let's see if we start with an IXyz interface
-                        if (characters[index - 1] == 'I')
-                        {
-                            // seems we are in an IXyz interface
-                            multipleUpperCases = false;
-                        }
-
-                        continue;
-                    }
-
-                    // let's consider an upper-case 'A' as a special situation as that is a single word
-                    var isSpecialCharA = c == 'A';
-
-                    multipleUpperCases = isSpecialCharA is false;
-
-                    var nextC = c.ToLowerCase();
-
-                    var nextIndex = index + 1;
-
-                    if ((nextIndex >= characters.Count || (nextIndex < characters.Count && characters[nextIndex].IsUpperCase())) && isSpecialCharA is false)
-                    {
-                        // multiple upper cases in a line, so do not flip
-                        nextC = c;
-                    }
-
-                    if (characters[index - 1] == Constants.Underscore)
-                    {
-                        characters[index] = nextC;
-                    }
-                    else
-                    {
-                        // only add an underline if we not already have one
-                        characters[index] = Constants.Underscore;
-                        index++;
-                        characters.Insert(index, nextC);
-                    }
-                }
-                else
-                {
-                    if (multipleUpperCases && characters[index - 1].IsUpperCase())
-                    {
-                        // we are behind multiple upper cases in a line, so add an underline
-                        characters[index++] = Constants.Underscore;
-
-                        characters.Insert(index, c);
-                    }
-
-                    multipleUpperCases = false;
-                }
-            }
+            var newSymbolName = WordSeparator.Separate(correctedSymbolName, Constants.Underscore);
 
             // fix some corrections, such as for known exceptions
-            var result = new StringBuilder(characters.Count).Append(characters.ToArray())
-                                                            .ReplaceWithCheck("argument_null_exception", nameof(ArgumentNullException))
-                                                            .ReplaceWithCheck("argument_exception", nameof(ArgumentException))
-                                                            .ReplaceWithCheck("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
-                                                            .ReplaceWithCheck("invalid_operation_exception", nameof(InvalidOperationException))
-                                                            .ReplaceWithCheck("object_disposed_exception", nameof(ObjectDisposedException))
-                                                            .ReplaceWithCheck("not_supported_exception", nameof(NotSupportedException))
-                                                            .ReplaceWithCheck("not_implemented_exception", nameof(NotImplementedException))
-                                                            .ReplaceWithCheck("task_canceled_exception", nameof(TaskCanceledException))
-                                                            .ReplaceWithCheck("operation_canceled_exception", nameof(OperationCanceledException))
-                                                            .ReplaceWithCheck("null_reference_exception", nameof(NullReferenceException))
-                                                            .ReplaceWithCheck("_guid_empty", "_empty_guid")
-                                                            .ReplaceWithCheck("_string_empty", "_empty_string")
-                                                            .ReplaceWithCheck("_in_return_", "<1>")
-                                                            .ReplaceWithCheck("_to_return_", "<2>")
-                                                            .ReplaceWithCheck("_not_throw_", "<3>")
-                                                            .ReplaceWithCheck("_return_", "_returns_")
-                                                            .ReplaceWithCheck("_throw_", "_throws_")
-                                                            .ReplaceWithCheck("<1>", "_in_return_")
-                                                            .ReplaceWithCheck("<2>", "_to_return_")
-                                                            .ReplaceWithCheck("<3>", "_not_throw_")
-                                                            .ReplaceWithCheck("_not_throws_", "_throws_no_")
-                                                            .ReplaceWithCheck("_no_throws_", "_throws_no_")
-                                                            .ReplaceWithCheck("_has_has_", "_has_")
-                                                            .ReplaceWithCheck("D_oes", "_does")
-                                                            .ReplaceWithCheck("O_bject", "_object")
-                                                            .ReplaceWithCheck("R_eference", "_reference")
-                                                            .ReplaceWithCheck("T_ype", "_type")
-                                                            .ToString();
+            var result = new StringBuilder(newSymbolName).ReplaceWithCheck("argument_null_exception", nameof(ArgumentNullException))
+                                                         .ReplaceWithCheck("argument_exception", nameof(ArgumentException))
+                                                         .ReplaceWithCheck("argument_out_of_range_exception", nameof(ArgumentOutOfRangeException))
+                                                         .ReplaceWithCheck("invalid_operation_exception", nameof(InvalidOperationException))
+                                                         .ReplaceWithCheck("object_disposed_exception", nameof(ObjectDisposedException))
+                                                         .ReplaceWithCheck("not_supported_exception", nameof(NotSupportedException))
+                                                         .ReplaceWithCheck("not_implemented_exception", nameof(NotImplementedException))
+                                                         .ReplaceWithCheck("task_canceled_exception", nameof(TaskCanceledException))
+                                                         .ReplaceWithCheck("operation_canceled_exception", nameof(OperationCanceledException))
+                                                         .ReplaceWithCheck("null_reference_exception", nameof(NullReferenceException))
+                                                         .ReplaceWithCheck("_guid_empty", "_empty_guid")
+                                                         .ReplaceWithCheck("_string_empty", "_empty_string")
+                                                         .ReplaceWithCheck("_in_return_", "<1>")
+                                                         .ReplaceWithCheck("_to_return_", "<2>")
+                                                         .ReplaceWithCheck("_not_throw_", "<3>")
+                                                         .ReplaceWithCheck("_return_", "_returns_")
+                                                         .ReplaceWithCheck("_throw_", "_throws_")
+                                                         .ReplaceWithCheck("<1>", "_in_return_")
+                                                         .ReplaceWithCheck("<2>", "_to_return_")
+                                                         .ReplaceWithCheck("<3>", "_not_throw_")
+                                                         .ReplaceWithCheck("_not_throws_", "_throws_no_")
+                                                         .ReplaceWithCheck("_no_throws_", "_throws_no_")
+                                                         .ReplaceWithCheck("_has_has_", "_has_")
+                                                         .ReplaceWithCheck("D_oes", "_does")
+                                                         .ReplaceWithCheck("O_bject", "_object")
+                                                         .ReplaceWithCheck("R_eference", "_reference")
+                                                         .ReplaceWithCheck("T_ype", "_type")
+                                                         .ToString();
 
             return result;
         }
@@ -222,7 +148,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 case ';': return "SEMICOLON";
                 case '/': return "SLASH";
                 case '\\': return "BACKSLASH";
-                case '_': return "UNDERLINE";
+                case Constants.Underscore: return "UNDERLINE";
                 case '+': return "PLUS";
                 case '-': return "MINUS";
                 case '*': return "ASTERIX";
