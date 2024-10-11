@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     trimmedExistingText = trimmedExistingText.Slice(0, end);
                 }
 
-                var continuation = new StringBuilder(trimmedExistingText.ToString()).ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
+                var continuation = trimmedExistingText.AsBuilder().ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
 
                 if (continuation.IsSingleWord())
                 {
@@ -133,10 +133,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         startingPhrase = KindPhrase;
 
                         // get rid of 'Type', 'Enum' and 'Kind'
-                        continuation = new StringBuilder(continuation).Without("Type")
-                                                                      .Without("Kind")
-                                                                      .Without("Enum")
-                                                                      .AdjustFirstWord(FirstWordHandling.MakeLowerCase | FirstWordHandling.MakePlural);
+                        continuation = continuation.AsBuilder()
+                                                   .Without("Type")
+                                                   .Without("Kind")
+                                                   .Without("Enum")
+                                                   .AdjustFirstWord(FirstWordHandling.MakeLowerCase | FirstWordHandling.MakePlural);
                     }
                 }
 

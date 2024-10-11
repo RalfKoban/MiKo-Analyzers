@@ -52,16 +52,20 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.StartsWithAny(startPhrases, StringComparison.OrdinalIgnoreCase))
                     {
-                        var enumType = enumMember.FirstAncestor<EnumDeclarationSyntax>().GetName().Without("Type").Without("Enum");
-                        var separated = WordSeparator.Separate(enumType, ' ', FirstWordHandling.MakeLowerCase);
+                        var enumType = enumMember.FirstAncestor<EnumDeclarationSyntax>().GetName();
+
                         var article = ArticleProvider.GetArticleFor(unsuffixed, FirstWordHandling.MakeLowerCase);
 
-                        var replacement = new StringBuilder("The ").Append(separated)
-                                                                   .Append(" is ")
-                                                                   .Append(article)
-                                                                   .Append(unsuffixed)
-                                                                   .Append('.')
-                                                                   .ToString();
+                        var replacement = enumType.AsBuilder()
+                                                  .Without(new[] { "Types", "Type", "Enum" })
+                                                  .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
+                                                  .Without(new[] { " kinds", " kind" })
+                                                  .Insert(0, "The ")
+                                                  .Append(" is ")
+                                                  .Append(article)
+                                                  .Append(unsuffixed)
+                                                  .Append('.')
+                                                  .ToString();
 
                         return Comment(comment, replacement);
                     }

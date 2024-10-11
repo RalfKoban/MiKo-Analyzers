@@ -209,7 +209,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         continue;
                     }
 
-                    var newText = new StringBuilder(valueText).Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
+                    var newText = valueText.AsBuilder().Without("otherwise").Without("false").ReplaceWithCheck("; , .", ".");
 
                     if (valueText.Length > newText.Length)
                     {

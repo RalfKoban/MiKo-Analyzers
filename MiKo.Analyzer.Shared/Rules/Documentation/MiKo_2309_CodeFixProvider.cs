@@ -19,8 +19,9 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (DocumentationComment.ContainsPhrases(Constants.Comments.NotContradictionPhrase, comment.AsSpan().TrimEnd()))
             {
-                var text = new StringBuilder(comment).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan())
-                                                     .ToString();
+                var text = comment.AsBuilder()
+                                  .ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan())
+                                  .ToString();
 
                 return SyntaxFactory.Comment(text);
             }

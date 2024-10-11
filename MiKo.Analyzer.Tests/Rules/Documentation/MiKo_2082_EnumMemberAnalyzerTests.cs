@@ -158,7 +158,7 @@ using System;
 public enum TestMeKind
 {
     /// <summary>
-    /// The test me kind is a WhateverIdentifier.
+    /// The test me is a WhateverIdentifier.
     /// </summary>
     WhateverIdentifier = 0,
 }
@@ -168,7 +168,7 @@ public enum TestMeKind
         }
 
         [Test]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_enum()
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_Enum()
         {
             const string OriginalCode = @"
 using System;
@@ -186,36 +186,6 @@ public enum TestMeKind
 using System;
 
 public enum TestMeKind
-{
-    /// <summary>
-    /// The test me kind is a WhateverIdentifier.
-    /// </summary>
-    WhateverIdentifierEnum = 0,
-}
-";
-
-            VerifyCSharpFix(OriginalCode, FixedCode);
-        }
-
-        [Test]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_enum_and_type_suffixed_with_type_enum()
-        {
-            const string OriginalCode = @"
-using System;
-
-public enum TestMeTypeEnum
-{
-    /// <summary>
-    /// Enum WhateverIdentifierEnum for WhateverIdentifier
-    /// </summary>
-    WhateverIdentifierEnum = 0,
-}
-";
-
-            const string FixedCode = @"
-using System;
-
-public enum TestMeTypeEnum
 {
     /// <summary>
     /// The test me is a WhateverIdentifier.
@@ -225,6 +195,38 @@ public enum TestMeTypeEnum
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [TestCase("TypeEnum")]
+        [TestCase("TypesEnum")]
+        [TestCase("KindsEnum")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_suffixed_with_Enum_and_type_suffixed_with_(string suffix)
+        {
+            var originalCode = @"
+using System;
+
+public enum TestMe" + suffix + @"
+{
+    /// <summary>
+    /// Enum WhateverIdentifierEnum for WhateverIdentifier
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            var fixedCode = @"
+using System;
+
+public enum TestMe" + suffix + @"
+{
+    /// <summary>
+    /// The test me is a WhateverIdentifier.
+    /// </summary>
+    WhateverIdentifierEnum = 0,
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2082_EnumMemberAnalyzer.Id;
