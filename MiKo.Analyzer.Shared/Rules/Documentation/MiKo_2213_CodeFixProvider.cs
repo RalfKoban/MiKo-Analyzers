@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
         {
             var token = syntax.FindToken(diagnostic);
-            var text = new StringBuilder(token.ValueText).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan());
+            var text = token.ValueText.AsBuilder().ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan());
 
             return syntax.ReplaceToken(token, token.WithText(text));
         }

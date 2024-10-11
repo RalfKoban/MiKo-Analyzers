@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis;
@@ -96,7 +95,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                     if (text.StartsWithAny(MappedData.Value.ByteArrayContinueTexts))
                     {
-                        var newContinueText = continueText.ReplaceToken(token, token.WithText(new StringBuilder(text).Without(MappedData.Value.ByteArrayContinueTexts)));
+                        var newContinueText = continueText.ReplaceToken(token, token.WithText(text.AsBuilder().Without(MappedData.Value.ByteArrayContinueTexts)));
 
                         preparedComment = preparedComment.ReplaceNode(continueText, newContinueText);
                     }

@@ -42,12 +42,13 @@ namespace BenchmarkConsole
         // [Benchmark]
         // public void MiKo_2080_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2080_CodeFixProvider.MapData());
 
-        private IEnumerable<string> data;
+        private string[] data;
 
         [GlobalSetup]
         public void Setup()
         {
-            data = Enumerable.Repeat("a", Times).ToArray();
+            data = new string[Times];
+            Array.Fill(data, "a");
         }
 
         public static string HumanizedConcatenatedNew(IEnumerable<string> values, string lastSeparator = "or")

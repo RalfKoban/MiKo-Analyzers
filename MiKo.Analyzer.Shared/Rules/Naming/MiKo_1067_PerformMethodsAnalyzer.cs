@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -29,7 +28,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         {
             var methodName = symbol.Name;
 
-            if (ContainsPhrase(methodName) && ContainsPhrase(new StringBuilder(methodName).Without("Performance").Without("Performed").ToString()))
+            if (ContainsPhrase(methodName) && ContainsPhrase(methodName.AsBuilder().Without("Performance").Without("Performed").ToString()))
             {
                 var proposal = FindBetterName(methodName);
 

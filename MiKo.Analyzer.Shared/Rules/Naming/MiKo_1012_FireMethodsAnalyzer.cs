@@ -38,10 +38,12 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return Enumerable.Empty<Diagnostic>();
         }
 
-        private static string FindBetterName(IMethodSymbol method) => new StringBuilder(method.Name).ReplaceWithCheck("Fire", "Raise")
-                                                                                                    .ReplaceWithCheck("_fire", "_raise")
-                                                                                                    .ReplaceWithCheck("Firing", "Raising")
-                                                                                                    .ReplaceWithCheck("_firing", "_raising")
-                                                                                                    .ToString();
+        private static string FindBetterName(IMethodSymbol method) => method.Name
+                                                                            .AsBuilder()
+                                                                            .ReplaceWithCheck("Fire", "Raise")
+                                                                            .ReplaceWithCheck("_fire", "_raise")
+                                                                            .ReplaceWithCheck("Firing", "Raising")
+                                                                            .ReplaceWithCheck("_firing", "_raising")
+                                                                            .ToString();
     }
 }

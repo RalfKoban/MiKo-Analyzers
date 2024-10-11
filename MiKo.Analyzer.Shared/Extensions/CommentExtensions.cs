@@ -91,7 +91,7 @@ namespace MiKoSolutions.Analyzers
 
         internal static IEnumerable<XElement> GetExceptionCommentElements(string commentXml)
         {
-            var comment = new StringBuilder(commentXml).Without(Constants.Markers.Symbols).ToString();
+            var comment = commentXml.AsBuilder().Without(Constants.Markers.Symbols).ToString();
             var commentElements = GetCommentElements(comment, Constants.XmlTag.Exception);
 
             return commentElements;

@@ -2341,7 +2341,7 @@ namespace MiKoSolutions.Analyzers
 
                 var replaced = false;
 
-                var result = new StringBuilder(text);
+                var result = text.AsBuilder();
 
                 if (text.Contains(phrase))
                 {
@@ -2386,7 +2386,7 @@ namespace MiKoSolutions.Analyzers
 
                 var replaced = false;
 
-                var result = new StringBuilder(text);
+                var result = text.AsBuilder();
 
                 foreach (var phrase in phrases)
                 {
@@ -3090,7 +3090,7 @@ namespace MiKoSolutions.Analyzers
                         if (token.IsKind(SyntaxKind.XmlTextLiteralToken) && token.Text.Contains(text))
                         {
                             // do not trim the end as we want to have a space before <param> or other tags
-                            var modifiedText = new StringBuilder(token.Text).Without(text).ReplaceWithCheck("  ", " ");
+                            var modifiedText = token.Text.AsBuilder().Without(text).ReplaceWithCheck("  ", " ");
 
                             if (modifiedText.IsNullOrWhiteSpace())
                             {

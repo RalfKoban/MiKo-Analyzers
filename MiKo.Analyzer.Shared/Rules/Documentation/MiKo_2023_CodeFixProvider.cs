@@ -618,12 +618,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         foreach (var boolean in booleans)
                         {
                             // we have lots of loops, so cache data to avoid unnecessary calculations
-                            var optionalBooleanStart = new StringBuilder(optionalStart).Append(boolean).Append(' ').ReplaceWithCheck("   ", " ").ReplaceWithCheck("  ", " ").TrimStart();
+                            var optionalBooleanStart = optionalStart.AsBuilder()
+                                                                    .Append(boolean)
+                                                                    .Append(' ')
+                                                                    .ReplaceWithCheck("   ", " ")
+                                                                    .ReplaceWithCheck("  ", " ")
+                                                                    .TrimStart();
 
                             // ReSharper disable once LoopCanBeConvertedToQuery
                             foreach (var parameter in parameters)
                             {
-                                var fixedStart = new StringBuilder(optionalBooleanStart).Append(parameter).TrimEnd();
+                                var fixedStart = optionalBooleanStart.AsBuilder().Append(parameter).TrimEnd();
 
                                 if (fixedStart.IsNullOrWhiteSpace() is false)
                                 {
@@ -704,8 +709,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         // for performance reasons we use for loops here
                         for (var startIndex = 0; startIndex < startsCount; startIndex++)
                         {
-                            var start = starts[startIndex];
-                            var text = new StringBuilder(start).Append(middle).TrimStart();
+                            var text = starts[startIndex].AsBuilder().Append(middle).TrimStart();
 
                             results.Add(text.ToUpperCaseAt(0));
                             results.Add(text.ToLowerCaseAt(0));

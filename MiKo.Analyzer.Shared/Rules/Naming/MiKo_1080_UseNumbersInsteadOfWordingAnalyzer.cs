@@ -161,7 +161,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string HandleKnownParts(string name)
         {
-            var finalName = new StringBuilder(name);
+            var finalName = name.AsBuilder();
 
             foreach (var part in KnownParts)
             {

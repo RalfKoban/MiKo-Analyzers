@@ -81,7 +81,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static string FindBetterName(string symbolName)
         {
-            var result = new StringBuilder(symbolName);
+            var result = symbolName.AsBuilder();
 
             foreach (var pair in ReplacementMap)
             {
@@ -93,12 +93,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private IEnumerable<Diagnostic> AnalyzeName(ISymbol symbol)
         {
-            var symbolName = new StringBuilder(symbol.Name).ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
-                                                           .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
-                                                           .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
-                                                           .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
-                                                           .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
-                                                           .ToString();
+            var symbolName = symbol.Name
+                                   .AsBuilder()
+                                   .ReplaceWithCheck("efresh", "#") // filter 'refresh' and 'Refresh'
+                                   .ReplaceWithCheck("hallow", "#") // filter 'shallow' and 'Shallow'
+                                   .ReplaceWithCheck("icenseNeed", "#") // filter 'licenseNeed' and 'LicenseNeed'
+                                   .ReplaceWithCheck("eeded", "#") // filter 'needed' and 'Needed'
+                                   .ReplaceWithCheck("eeds", "#") // filter 'needs' and 'Needs'
+                                   .ToString();
 
             return Constants.Markers.Requirements
                             .Where(_ => symbolName.Contains(_, StringComparison.OrdinalIgnoreCase))

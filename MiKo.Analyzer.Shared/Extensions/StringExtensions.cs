@@ -185,6 +185,10 @@ namespace System
 
 //// ncrunch: no coverage start
 
+        public static StringBuilder AsBuilder(this ReadOnlySpan<char> value) => new StringBuilder(value.ToString());
+
+        public static StringBuilder AsBuilder(this string value) => new StringBuilder(value);
+
         public static SyntaxToken AsToken(this string source, SyntaxKind kind = SyntaxKind.StringLiteralToken)
         {
             if (kind == SyntaxKind.IdentifierToken)
@@ -1167,8 +1171,8 @@ namespace System
             switch (count)
             {
                 case 2: return string.Concat(items[0], separatorForLast, items[1]);
-                case 3: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
-                case 4: return new StringBuilder(items[0]).Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
+                case 3: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(separatorForLast).Append(items[2]).ToString();
+                case 4: return items[0].AsBuilder().Append(Separator).Append(items[1]).Append(Separator).Append(items[2]).Append(separatorForLast).Append(items[3]).ToString();
                 default: return string.Concat(items.Take(count - 1).ConcatenatedWith(Separator), separatorForLast, items[count - 1]);
             }
         }
@@ -1317,6 +1321,9 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value); // ncrunch: no coverage
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0; // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this ReadOnlySpan<char> value) => value.IsEmpty; // ncrunch: no coverage
@@ -1720,7 +1727,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Without(this string value, string phrase) => value.Replace(phrase, string.Empty);
 
-        public static string Without(this string value, string[] phrases) => new StringBuilder(value).Without(phrases).Trim(); // ncrunch: no coverage
+        public static string Without(this string value, string[] phrases) => value.AsBuilder().Without(phrases).Trim(); // ncrunch: no coverage
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
 
@@ -1828,7 +1835,7 @@ namespace System
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags); // ncrunch: no coverage
 
-        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => new StringBuilder(_).WithoutParaTags()); // ncrunch: no coverage
+        public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => _.AsBuilder().WithoutParaTags()); // ncrunch: no coverage
 
 //// ncrunch: no coverage start
 

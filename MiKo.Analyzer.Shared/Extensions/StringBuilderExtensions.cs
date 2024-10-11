@@ -242,6 +242,104 @@ namespace System.Text
             return value;
         }
 
+        public static StringBuilder SeparateWords(this StringBuilder value, char separator, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        {
+            if (value.IsNullOrEmpty())
+            {
+                return value;
+            }
+
+            var multipleUpperCases = false;
+
+            const int CharacterToStartWith = 1;
+
+            for (var index = CharacterToStartWith; index < value.Length; index++)
+            {
+                var c = value[index];
+
+                if (c == separator)
+                {
+                    // keep the existing separator
+                    continue;
+                }
+
+                if (c.IsUpperCase())
+                {
+                    if (index == CharacterToStartWith)
+                    {
+                        // multiple upper cases in a line at beginning of the name, so do not flip
+                        multipleUpperCases = true;
+                    }
+
+                    if (multipleUpperCases)
+                    {
+                        // let's see if we start with an IXyz interface
+                        if (value[index - 1] == 'I')
+                        {
+                            // seems we are in an IXyz interface
+                            multipleUpperCases = false;
+                        }
+
+                        continue;
+                    }
+
+                    // let's consider an upper-case 'A' as a special situation as that is a single word
+                    var isSpecialCharA = c == 'A';
+
+                    multipleUpperCases = isSpecialCharA is false;
+
+                    var nextC = c.ToLowerCase();
+
+                    var nextIndex = index + 1;
+
+                    if ((nextIndex >= value.Length || (nextIndex < value.Length && value[nextIndex].IsUpperCase())) && isSpecialCharA is false)
+                    {
+                        // multiple upper cases in a line, so do not flip
+                        nextC = c;
+                    }
+
+                    if (value[index - 1] == separator)
+                    {
+                        value[index] = nextC;
+                    }
+                    else
+                    {
+                        // only add an underline if we not already have one
+                        value[index] = separator;
+                        index++;
+                        value.Insert(index, nextC);
+                    }
+                }
+                else
+                {
+                    if (multipleUpperCases && value[index - 1].IsUpperCase())
+                    {
+                        // we are behind multiple upper cases in a line, so add an underline
+                        value[index++] = separator;
+
+                        value.Insert(index, c);
+                    }
+
+                    multipleUpperCases = false;
+                }
+            }
+
+            switch (firstWordHandling)
+            {
+                case FirstWordHandling.MakeLowerCase:
+                    value[0] = value[0].ToLowerCase();
+
+                    break;
+
+                case FirstWordHandling.MakeUpperCase:
+                    value[0] = value[0].ToLowerCase();
+
+                    break;
+            }
+
+            return value;
+        }
+
         public static string Trim(this StringBuilder value)
         {
             var length = value.Length;

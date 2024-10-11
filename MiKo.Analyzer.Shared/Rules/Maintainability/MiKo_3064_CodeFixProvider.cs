@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override SyntaxNode GetUpdatedSyntax(Document document, SyntaxNode syntax, Diagnostic issue)
         {
-            return GetUpdatedSyntaxWithFixedText(syntax, _ => new StringBuilder(_).ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan()).ToString());
+            return GetUpdatedSyntaxWithFixedText(syntax, _ => _.AsBuilder().ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan()).ToString());
         }
     }
 }
