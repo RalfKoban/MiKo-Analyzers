@@ -393,7 +393,7 @@ namespace System.Linq
             }
         }
 
-        internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> first, List<T> second) where T : SyntaxNode
+        internal static IEnumerable<T> Except<T>(this SeparatedSyntaxList<T> first, IReadOnlyCollection<T> second) where T : SyntaxNode
         {
             // keep in local variable to avoid multiple requests (see Roslyn implementation)
             var firstCount = first.Count;

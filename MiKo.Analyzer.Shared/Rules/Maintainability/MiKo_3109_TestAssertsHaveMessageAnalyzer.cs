@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -18,6 +19,77 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
         private static readonly int[] Two = { 2 };
         private static readonly int[] OneTwo = { 1, 2 };
         private static readonly int[] TwoThree = { 2, 3 };
+
+        private static readonly ConcurrentDictionary<string, int[]> MethodNameToArgumentIndicesMapping = new ConcurrentDictionary<string, int[]>(new[]
+                                                                                                                                                     {
+                                                                                                                                                         // 0 arguments
+                                                                                                                                                         new KeyValuePair<string, int[]>("Fail", Zero),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Ignore", Zero),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Inconclusive", Zero),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Pass", Zero),
+
+                                                                                                                                                         // 1 argument
+                                                                                                                                                         new KeyValuePair<string, int[]>("AllItemsAreNotNull", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AllItemsAreUnique", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotExist", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotThrow", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotThrowAsync", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Exists", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("False", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsEmpty", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsFalse", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNaN", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNotEmpty", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNotNull", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNull", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsTrue", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Negative", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("NotNull", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("NotZero", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Null", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Positive", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("True", One),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Zero", One),
+
+                                                                                                                                                         // 2 arguments
+                                                                                                                                                         new KeyValuePair<string, int[]>("AllItemsAreInstancesOfType", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreEqualIgnoringCase", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreEquivalent", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreNotEqual", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreNotEqualIgnoringCase", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreNotEquivalent", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreNotSame", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreSame", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Contains", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotContain", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotEndWith", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotMatch", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("DoesNotStartsWith", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("EndsWith", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Greater", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("GreaterOrEqual", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsMatch", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNotSubsetOf", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsSubsetOf", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("Less", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("LessOrEqual", Two),
+                                                                                                                                                         new KeyValuePair<string, int[]>("StartsWith", Two),
+
+                                                                                                                                                         // 2 or 3 arguments, cannot determine for sure
+                                                                                                                                                         new KeyValuePair<string, int[]>("AreEqual", TwoThree),
+
+                                                                                                                                                         // 1 or 2 arguments, cannot determine for sure
+                                                                                                                                                         new KeyValuePair<string, int[]>("Catch", OneTwo),
+                                                                                                                                                         new KeyValuePair<string, int[]>("CatchAsync", OneTwo),
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsAssignableFrom", OneTwo), // (based on Generics)
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsInstanceOf", OneTwo), // (based on Generics)
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNotAssignableFrom", OneTwo), // (based on Generics)
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsNotInstanceOf", OneTwo), // (based on Generics)
+                                                                                                                                                         new KeyValuePair<string, int[]>("IsOrdered", OneTwo), // (based on comparer as last parameter)
+                                                                                                                                                         new KeyValuePair<string, int[]>("That", OneTwo), // (based on comparer as last parameter)
+                                                                                                                                                         new KeyValuePair<string, int[]>("Throws", OneTwo), // (based on Generics)
+                                                                                                                                                         new KeyValuePair<string, int[]>("ThrowsAsync", OneTwo), // (based on Generics)
+                                                                                                                                                     });
 
         public MiKo_3109_TestAssertsHaveMessageAnalyzer() : base(Id)
         {
@@ -48,44 +120,55 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         private static bool IsAssertionMethod(MemberAccessExpressionSyntax node) => node.Expression is IdentifierNameSyntax invokedType && Constants.Names.AssertionTypes.Contains(invokedType.GetName()) && node.GetName() != "Multiple";
 
-        private static bool HasMessageParameter(MemberAccessExpressionSyntax assertion, Compilation compilation) => assertion.Parent is InvocationExpressionSyntax i && HasMessageParameter(i, GetExpectedMessageParameterIndices(assertion.GetName()), compilation);
-
-        private static bool HasMessageParameter(InvocationExpressionSyntax i, IReadOnlyList<int> expectedParameterIndices, Compilation compilation)
+        private static bool HasMessageParameter(MemberAccessExpressionSyntax assertion, Compilation compilation)
         {
-            // last parameter must be a string, and it must be at least the 3rd parameter (for assert.AreEqual)
-            var arguments = i.ArgumentList.Arguments;
-            var count = arguments.Count;
-
-            if (count == 0)
+            if (assertion.Parent is InvocationExpressionSyntax invocation)
             {
-                // we have no message
-                return false;
+                var arguments = invocation.ArgumentList.Arguments;
+
+                if (arguments.Count == 0)
+                {
+                    // we have no message
+                    return false;
+                }
+
+                var methodName = assertion.GetName();
+                var expectedArgumentIndices = MethodNameToArgumentIndicesMapping.TryGetValue(methodName, out var result) ? result : Zero;
+
+                return HasMessageParameter(arguments, expectedArgumentIndices, compilation);
             }
 
-            if (expectedParameterIndices.Count == 1)
+            return false;
+        }
+
+        private static bool HasMessageParameter(SeparatedSyntaxList<ArgumentSyntax> arguments, IReadOnlyList<int> expectedArgumentIndices, Compilation compilation)
+        {
+            var count = arguments.Count;
+
+            if (expectedArgumentIndices.Count == 1)
             {
-                var expectedParameterIndex = expectedParameterIndices[0];
+                var expectedArgumentIndex = expectedArgumentIndices[0];
 
                 var index = count - 1;
 
-                if (expectedParameterIndex == index)
+                if (expectedArgumentIndex == index)
                 {
                     // we have a message
                     return arguments[index].IsStringLiteral();
                 }
 
-                if (expectedParameterIndex > index)
+                if (expectedArgumentIndex > index)
                 {
                     // we have no message
                     return false;
                 }
 
                 // we have some parameters and some arguments
-                return arguments[expectedParameterIndex].IsStringLiteral();
+                return arguments[expectedArgumentIndex].IsStringLiteral();
             }
 
             // we are unsure, so we have to test
-            foreach (var expectedParameterIndex in expectedParameterIndices)
+            foreach (var expectedParameterIndex in expectedArgumentIndices)
             {
                 if (expectedParameterIndex >= count)
                 {
@@ -114,83 +197,6 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             }
 
             return false;
-        }
-
-        private static int[] GetExpectedMessageParameterIndices(string methodName)
-        {
-            switch (methodName)
-            {
-                case "Fail":
-                case "Ignore":
-                case "Inconclusive":
-                case "Pass":
-                    return Zero;
-
-                case "AllItemsAreNotNull":
-                case "AllItemsAreUnique":
-                case "DoesNotExist":
-                case "DoesNotThrow":
-                case "DoesNotThrowAsync":
-                case "Exists":
-                case "False":
-                case "IsEmpty":
-                case "IsFalse":
-                case "IsNaN":
-                case "IsNotEmpty":
-                case "IsNotNull":
-                case "IsNull":
-                case "IsTrue":
-                case "Negative":
-                case "NotNull":
-                case "NotZero":
-                case "Null":
-                case "Positive":
-                case "True":
-                case "Zero":
-                    return One;
-
-                case "AllItemsAreInstancesOfType":
-                case "AreEqualIgnoringCase":
-                case "AreEquivalent":
-                case "AreNotEqual":
-                case "AreNotEqualIgnoringCase":
-                case "AreNotEquivalent":
-                case "AreNotSame":
-                case "AreSame":
-                case "Contains":
-                case "DoesNotContain":
-                case "DoesNotEndWith":
-                case "DoesNotMatch":
-                case "DoesNotStartsWith":
-                case "EndsWith":
-                case "Greater":
-                case "GreaterOrEqual":
-                case "IsMatch":
-                case "IsNotSubsetOf":
-                case "IsSubsetOf":
-                case "Less":
-                case "LessOrEqual":
-                case "StartsWith":
-                    return Two;
-
-                case "AreEqual": // 2 or 3, cannot determine for sure
-                    return TwoThree;
-
-                case "Catch": // 1 or 2, cannot determine for sure
-                case "CatchAsync": // 1 or 2, cannot determine for sure
-                case "IsAssignableFrom": // 1 or 2, cannot determine for sure (based on Generics)
-                case "IsInstanceOf": // 1 or 2, cannot determine for sure (based on Generics)
-                case "IsNotAssignableFrom": // 1 or 2, cannot determine for sure (based on Generics)
-                case "IsNotInstanceOf": // 1 or 2, cannot determine for sure (based on Generics)
-                case "IsOrdered": // 1 or 2, cannot determine for sure (based on comparer as last parameter)
-                case "That": // 1 or 2, cannot determine for sure (based on comparer as last parameter)
-                case "Throws": // 1 or 2, cannot determine for sure (based on Generics)
-                case "ThrowsAsync": // 1 or 2, cannot determine for sure (based on Generics)
-                    return OneTwo;
-
-                default:
-                    return Zero;
-            }
         }
     }
 }
