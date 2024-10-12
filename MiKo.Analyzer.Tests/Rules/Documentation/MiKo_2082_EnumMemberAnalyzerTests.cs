@@ -229,6 +229,35 @@ public enum TestMe" + suffix + @"
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [TestCase("On", "on")]
+        [TestCase("Off", "off")]
+        [TestCase("Undefined", "undefined")]
+        [TestCase("None", "none")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1, string phrase2)
+        {
+            const string OriginalCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// Enum #1#Enum for #2#
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            const string FixedCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// The message is #2#.
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", phrase2));
+        }
+
         protected override string GetDiagnosticId() => MiKo_2082_EnumMemberAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2082_EnumMemberAnalyzer();
