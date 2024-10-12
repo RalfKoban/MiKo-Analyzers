@@ -65,6 +65,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                   .Append(article)
                                                   .Append(unsuffixed)
                                                   .Append('.')
+                                                  .ReplaceWithCheck(" is a None.", " is none.")
+                                                  .ReplaceWithCheck(" is an On.", " is on.")
+                                                  .ReplaceWithCheck(" is an Off.", " is off.")
+                                                  .ReplaceWithCheck(" is an Undefined.", " is undefined.")
                                                   .ToString();
 
                         return Comment(comment, replacement);
