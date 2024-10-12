@@ -137,7 +137,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    .Without("Type")
                                                    .Without("Kind")
                                                    .Without("Enum")
-                                                   .AdjustFirstWord(FirstWordHandling.MakeLowerCase | FirstWordHandling.MakePlural);
+                                                   .AdjustFirstWord(FirstWordHandling.MakeLowerCase | FirstWordHandling.MakePlural)
+                                                   .ToString();
                     }
                 }
 
