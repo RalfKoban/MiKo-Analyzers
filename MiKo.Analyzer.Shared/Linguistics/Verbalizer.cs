@@ -10,9 +10,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
     {
         private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
-        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors" };
+        private static readonly string[] NonThirdPersonSingularEndingsWithS = { "pters", "tors", "gers", "chers" };
 
-        private static readonly string[] PastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "sed", "ved" };
+        private static readonly string[] SpecialPastEndings = { "ated", "dled", "ced", "ged", "ied", "red", "sed", "ved" };
+
+        private static readonly string[] PastEndings = SpecialPastEndings.Concat(new[] { "led", "eed", "ted", "ded" }).ToArray();
 
         private static readonly string[] FourCharacterGerundEndings = { "pping", "rring", "tting" };
 
@@ -206,8 +208,6 @@ namespace MiKoSolutions.Analyzers.Linguistics
             return value.EqualsAny(AdjectivesOrAdverbs, comparison);
         }
 
-        public static bool IsPlural(ReadOnlySpan<char> value) => value.EndsWith('s') && IsThirdPersonSingularVerb(value) is false;
-
         public static bool IsThirdPersonSingularVerb(ReadOnlySpan<char> value)
         {
             var length = value.Length;
@@ -227,14 +227,20 @@ namespace MiKoSolutions.Analyzers.Linguistics
                 return false;
             }
 
-            var previous = value[length - 2];
-
-            if (previous == 'r')
+            if (CharsForTwoCharacterEndingsWithS.Contains(value[length - 2]))
             {
-                return value.EndsWithAny(PluralEndings, StringComparison.OrdinalIgnoreCase) is false;
+                return false;
             }
 
-            return CharsForTwoCharacterEndingsWithS.Contains(previous) is false;
+            if (Pluralizer.IsPlural(value))
+            {
+                if (value.EndsWithAny(NonThirdPersonSingularEndingsWithS))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static bool IsThirdPersonSingularVerb(string value) => value != null && IsThirdPersonSingularVerb(value.AsSpan());
@@ -250,6 +256,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return false;
         }
+
+        public static bool IsPastTense(string value) => value != null && IsPastTense(value.AsSpan());
+
+        public static bool IsPastTense(ReadOnlySpan<char> value) => value.EndsWithAny(PastEndings, StringComparison.Ordinal);
 
         public static bool IsGerundVerb(string value) => value != null && IsGerundVerb(value.AsSpan());
 
@@ -526,7 +536,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return word.AsSpan().ConcatenatedWith('s');
                 }
 
-                if (word.EndsWithAny(PastEndings, StringComparison.Ordinal))
+                if (word.EndsWithAny(SpecialPastEndings, StringComparison.Ordinal))
                 {
                     return word.AsSpan(0, word.Length - 1).ConcatenatedWith('s');
                 }

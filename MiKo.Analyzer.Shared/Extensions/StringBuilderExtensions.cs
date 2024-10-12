@@ -16,23 +16,23 @@ namespace System.Text
 
         public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces(0) == value.Length;
 
-        public static string AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
+        public static StringBuilder AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
         {
             if (value is null)
             {
-                return string.Empty;
+                return null;
             }
 
             var valueLength = value.Length;
 
             if (valueLength == 0)
             {
-                return string.Empty;
+                return value;
             }
 
             if (value[0] == '<')
             {
-                return value.ToString();
+                return value;
             }
 
             var spacesToKeep = StringExtensions.HasFlag(handling, FirstWordHandling.KeepLeadingSpace) ? 1 : 0;
@@ -59,7 +59,7 @@ namespace System.Text
                 MakePlural();
             }
 
-            return value.ToString();
+            return value;
 
             void MakeLowerCase()
             {
@@ -324,20 +324,7 @@ namespace System.Text
                 }
             }
 
-            switch (firstWordHandling)
-            {
-                case FirstWordHandling.MakeLowerCase:
-                    value[0] = value[0].ToLowerCase();
-
-                    break;
-
-                case FirstWordHandling.MakeUpperCase:
-                    value[0] = value[0].ToLowerCase();
-
-                    break;
-            }
-
-            return value;
+            return value.AdjustFirstWord(firstWordHandling);
         }
 
         public static string Trim(this StringBuilder value)

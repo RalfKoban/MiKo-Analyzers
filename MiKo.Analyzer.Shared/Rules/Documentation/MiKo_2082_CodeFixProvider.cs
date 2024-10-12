@@ -21,6 +21,12 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly Pair[] ReplacementMap = ReplacementMapKeys.ToArray(_ => new Pair(_, string.Empty));
 
+        private static readonly string[] TypesSuffixes = { "Types", "Type", "Enum" };
+
+        private static readonly string[] KindEndings = { " kinds", " kind" };
+
+        private static readonly string[] WordsThatPreventArticle = { "On", "Off", "None", "Undefined" };
+
 //// ncrunch: rdi default
 
         public override string FixableDiagnosticId => "MiKo_2082";
@@ -40,35 +46,59 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var enumMember = txt.FirstAncestor<EnumMemberDeclarationSyntax>();
 
                     var enumMemberName = enumMember?.GetName();
-                    var unsuffixed = enumMemberName.AsSpan().WithoutSuffix("Enum").ToString();
+                    var unsuffixedSpan = enumMemberName.AsSpan().WithoutSuffix("Enum");
+                    var unsuffixed = unsuffixedSpan.ToString();
 
                     var start = "Enum " + enumMemberName;
+                    var startWithFor = start + " for ";
+                    var startWithEnumFor = start + "Enum for ";
 
                     var startPhrases = new[]
-                                           {
-                                               start + " for " + unsuffixed,
-                                               start + "Enum for " + enumMemberName,
-                                           };
+                                       {
+                                           startWithFor + unsuffixed,
+                                           startWithEnumFor + enumMemberName,
+                                       };
 
                     if (text.StartsWithAny(startPhrases, StringComparison.OrdinalIgnoreCase))
                     {
                         var enumType = enumMember.FirstAncestor<EnumDeclarationSyntax>().GetName();
 
-                        var article = ArticleProvider.GetArticleFor(unsuffixed, FirstWordHandling.MakeLowerCase);
+                        string article;
+
+                        var isPlural = Pluralizer.IsPlural(unsuffixedSpan);
+
+                        if (isPlural
+                         || unsuffixed.EqualsAny(WordsThatPreventArticle)
+                         || Verbalizer.IsGerundVerb(unsuffixedSpan)
+                         || Verbalizer.IsAdjectiveOrAdverb(unsuffixedSpan)
+                         || Verbalizer.IsPastTense(unsuffixedSpan))
+                        {
+                            // prevent articles for gerund and past tense words and make them lower case
+                            article = string.Empty;
+
+                            unsuffixed = unsuffixed.ToLowerCaseAt(0);
+                        }
+                        else
+                        {
+                            article = ArticleProvider.GetArticleFor(unsuffixed, FirstWordHandling.MakeLowerCase);
+                        }
+
+                        var firstWordHandling = FirstWordHandling.MakeLowerCase;
+
+                        if (isPlural)
+                        {
+                            firstWordHandling |= FirstWordHandling.MakePlural;
+                        }
 
                         var replacement = enumType.AsBuilder()
-                                                  .Without(new[] { "Types", "Type", "Enum" })
-                                                  .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
-                                                  .Without(new[] { " kinds", " kind" })
+                                                  .Without(TypesSuffixes)
+                                                  .SeparateWords(' ', firstWordHandling)
+                                                  .Without(KindEndings)
                                                   .Insert(0, "The ")
-                                                  .Append(" is ")
+                                                  .Append(isPlural ? " are " : " is ")
                                                   .Append(article)
                                                   .Append(unsuffixed)
                                                   .Append('.')
-                                                  .ReplaceWithCheck(" is a None.", " is none.")
-                                                  .ReplaceWithCheck(" is an On.", " is on.")
-                                                  .ReplaceWithCheck(" is an Off.", " is off.")
-                                                  .ReplaceWithCheck(" is an Undefined.", " is undefined.")
                                                   .ToString();
 
                         return Comment(comment, replacement);

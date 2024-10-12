@@ -189,7 +189,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             var replacedText = originalText.AsBuilder()
                                                            .ReplaceAllWithCheck(map)
-                                                           .AdjustFirstWord(firstWordHandling);
+                                                           .AdjustFirstWord(firstWordHandling)
+                                                           .ToString();
 
                             if (originalText.Equals(replacedText))
                             {

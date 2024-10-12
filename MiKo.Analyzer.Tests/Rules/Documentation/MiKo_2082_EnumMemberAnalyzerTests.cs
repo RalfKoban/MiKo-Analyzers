@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CodeFixes;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -229,12 +231,19 @@ public enum TestMe" + suffix + @"
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        [TestCase("On", "on")]
-        [TestCase("Off", "off")]
-        [TestCase("Undefined", "undefined")]
-        [TestCase("None", "none")]
-        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1, string phrase2)
+        [TestCase("On")]
+        [TestCase("Off")]
+        [TestCase("Undefined")]
+        [TestCase("None")]
+        [TestCase("Initiated")]
+        [TestCase("Running")]
+        [TestCase("Completed")]
+        [TestCase("Canceled")]
+        [TestCase("Failed")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1)
         {
+            var phrase2 = phrase1.ToLowerCaseAt(0);
+
             const string OriginalCode = @"
 public enum MessageType
 {
@@ -256,6 +265,32 @@ public enum MessageType
 ";
 
             VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", phrase2));
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_special_plural_phrase_of_enum_member_()
+        {
+            const string OriginalCode = @"
+public enum ItemsType
+{
+    /// <summary>
+    /// Enum MessagesEnum for messages
+    /// </summary>
+    MessagesEnum = 0,
+
+";
+
+            const string FixedCode = @"
+public enum ItemsType
+{
+    /// <summary>
+    /// The items are messages.
+    /// </summary>
+    MessagesEnum = 0,
+
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
         protected override string GetDiagnosticId() => MiKo_2082_EnumMemberAnalyzer.Id;

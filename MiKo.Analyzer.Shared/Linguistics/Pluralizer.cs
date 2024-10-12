@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -7,6 +8,8 @@ namespace MiKoSolutions.Analyzers.Linguistics
     internal static class Pluralizer
     {
         private static readonly ConcurrentDictionary<string, string> PluralNames = new ConcurrentDictionary<string, string>();
+
+        private static readonly HashSet<char> CharsForTwoCharacterEndingsWithS = new HashSet<char> { 'a', 'h', 'i', 'o', 's', 'u', 'x', 'z' };
 
         private static readonly string[] AllowedNames =
                                                         {
@@ -22,6 +25,53 @@ namespace MiKoSolutions.Analyzers.Linguistics
                                                         };
 
         private static readonly string[] AllowedListNames = Constants.Markers.FieldPrefixes.SelectMany(_ => AllowedNames, (prefix, name) => prefix + name).ToArray();
+
+        private static readonly string[] PluralEndings = { "gers", "tchers", "pters", "stors", "ptors", "tures", "ties", "dges", "rges", "sages" };
+        private static readonly string[] NonPluralEndings = { "ges", "nues", "curs", "opts", "nforms", "ses" };
+        private static readonly string[] SpecialPluralWords = { "ages", "loot" };
+        private static readonly string[] SpecialNonPluralWords = { "does", "lets" };
+        private static readonly string[] SpecialPluralEndingsWithS = { "deas", "llas" };
+        private static readonly string[] SpecialPluralEndingsWithoutS = { "cti", "men", "ngi", "data", "dren", "eeth", "feet", "heep", "mena", "mice", "eople", "teria", "moose", "trivia", "ircraft", "nformation", "nested" };
+
+        public static bool IsPlural(ReadOnlySpan<char> value)
+        {
+            if (value.Length <= 2)
+            {
+                return false;
+            }
+
+            if (value.EndsWith('s'))
+            {
+                if (value.EqualsAny(SpecialPluralWords, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                if (value.EqualsAny(SpecialNonPluralWords, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                if (CharsForTwoCharacterEndingsWithS.Contains(value[value.Length - 2]))
+                {
+                    return value.EndsWithAny(SpecialPluralEndingsWithS);
+                }
+
+                if (value.EndsWithAny(PluralEndings))
+                {
+                    return true;
+                }
+
+                if (value.EndsWithAny(NonPluralEndings))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return value.EndsWithAny(SpecialPluralEndingsWithoutS);
+        }
 
         /// <summary>
         /// Create a plural name for a given name, but returns the same name in case if fails to do so.
@@ -65,7 +115,7 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// </returns>
         public static string GetPluralName(string name, string proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            if (name.EndsWith("trivia", comparison))
+            if (name.EndsWithAny(SpecialPluralEndingsWithoutS, comparison))
             {
                 return null;
             }
@@ -114,6 +164,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static string CreatePluralName(ReadOnlySpan<char> proposedName, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
+            if (proposedName.EqualsAny(SpecialPluralWords, StringComparison.OrdinalIgnoreCase))
+            {
+                return proposedName.ToString();
+            }
+
             if (proposedName.EndsWith("y", comparison))
             {
                 if (proposedName.EndsWith("ay", comparison))
@@ -126,13 +181,21 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName.ConcatenatedWith('s');
                 }
 
+                if (proposedName.EndsWith("oy", comparison))
+                {
+                    return proposedName.ConcatenatedWith('s');
+                }
+
                 return proposedName.WithoutSuffix('y').ConcatenatedWith("ies");
             }
 
-            var pluralName = proposedName.ToString();
-
             if (proposedName.EndsWith("s", comparison))
             {
+                if (proposedName.EndsWith("us", comparison))
+                {
+                    return proposedName.WithoutSuffix("us").ConcatenatedWith('i');
+                }
+
                 if (proposedName.EndsWith("ys", comparison))
                 {
                     if (proposedName.EndsWith("ays", comparison))
@@ -153,9 +216,19 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName.ConcatenatedWith("es");
                 }
 
+                if (proposedName.EndsWith("sis", comparison))
+                {
+                    return proposedName.WithoutSuffix("sis").ConcatenatedWith("ses");
+                }
+
                 if (proposedName.EndsWith("Datas", comparison))
                 {
                     return proposedName.WithoutSuffix('s').ToString();
+                }
+
+                if (proposedName.EndsWith("ices", comparison))
+                {
+                    return proposedName.ToString();
                 }
 
                 if (proposedName.EndsWith("nformations", comparison))
@@ -165,34 +238,59 @@ namespace MiKoSolutions.Analyzers.Linguistics
             }
             else
             {
-                if (proposedName.EndsWith("sh", comparison))
-                {
-                    return proposedName.ConcatenatedWith("es");
-                }
-
                 if (proposedName.EndsWith("ed", comparison))
                 {
                     return proposedName.ToString();
                 }
 
-                if (proposedName.EndsWith("rivia", comparison))
+                if (proposedName.EndsWith("sh", comparison))
                 {
-                    return proposedName.ToString(); // keep 'trivia'
+                    return proposedName.ConcatenatedWith("es");
                 }
 
-                if (proposedName.EndsWith("child", comparison))
+                if (proposedName.EndsWith("ox", comparison))
                 {
-                    return proposedName.ConcatenatedWith("ren");
+                    return proposedName.ConcatenatedWith("es");
                 }
 
-                if (proposedName.EndsWith("children", comparison))
+                if (proposedName.EndsWith("iz", comparison))
                 {
-                    return proposedName.ToString();
+                    return proposedName.ConcatenatedWith("zes");
                 }
 
-                if (proposedName.EndsWith("complete", comparison))
+                if (proposedName.EndsWith("tz", comparison))
                 {
-                    return "all";
+                    return proposedName.ConcatenatedWith("es");
+                }
+
+                if (proposedName.EndsWith("ife", comparison))
+                {
+                    return proposedName.WithoutSuffix("fe").ConcatenatedWith("ves");
+                }
+
+                if (proposedName.EndsWith("ium", comparison))
+                {
+                    return proposedName.WithoutSuffix("um").ConcatenatedWith('a');
+                }
+
+                if (proposedName.EndsWith("man", comparison))
+                {
+                    return proposedName.WithoutSuffix("an").ConcatenatedWith("en");
+                }
+
+                if (proposedName.EndsWith("olf", comparison))
+                {
+                    return proposedName.WithoutSuffix('f').ConcatenatedWith("ves");
+                }
+
+                if (proposedName.EndsWith("oot", comparison))
+                {
+                    return proposedName.WithoutSuffix("oot").ConcatenatedWith("eet");
+                }
+
+                if (proposedName.EndsWith("ooth", comparison))
+                {
+                    return proposedName.WithoutSuffix("ooth").ConcatenatedWith("eeth");
                 }
 
                 if (proposedName.EndsWith("Data", comparison))
@@ -205,11 +303,61 @@ namespace MiKoSolutions.Analyzers.Linguistics
                     return proposedName.WithoutSuffix("ex").ConcatenatedWith("ices");
                 }
 
-                if (proposedName.EndsWith("nformation", comparison))
+                if (proposedName.EndsWith("oose", comparison))
+                {
+                    return proposedName.WithoutSuffix("oose").ConcatenatedWith("eese");
+                }
+
+                if (proposedName.EndsWith("rion", comparison))
+                {
+                    return proposedName.WithoutSuffix("on").ConcatenatedWith('a');
+                }
+
+                if (proposedName.EndsWith("child", comparison))
+                {
+                    return proposedName.ConcatenatedWith("ren");
+                }
+
+                if (proposedName.EndsWith("menon", comparison))
+                {
+                    return proposedName.WithoutSuffix("on").ConcatenatedWith("a");
+                }
+
+                if (proposedName.EndsWith("mouse", comparison))
+                {
+                    return proposedName.WithoutSuffix("ouse").ConcatenatedWith("ice");
+                }
+
+                if (proposedName.EndsWith("rivia", comparison))
+                {
+                    return proposedName.ToString(); // keep 'trivia'
+                }
+
+                if (proposedName.EndsWith("person", comparison))
+                {
+                    return proposedName.WithoutSuffix("rson").ConcatenatedWith("ople");
+                }
+
+                if (proposedName.EndsWith("children", comparison))
                 {
                     return proposedName.ToString();
                 }
 
+                if (proposedName.EndsWith("complete", comparison))
+                {
+                    return "all";
+                }
+
+                if (proposedName.EndsWith("nformation", comparison))
+                {
+                    return proposedName.ToString();
+                }
+            }
+
+            var pluralName = proposedName.ToString();
+
+            if (proposedName.EndsWith("s", comparison) is false)
+            {
                 if (proposedName.EndsWith("ToConvert", comparison))
                 {
                     pluralName = proposedName.WithoutSuffix("ToConvert").ToString();
