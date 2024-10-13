@@ -1886,7 +1886,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Classes that are value converters should end with a specific suffix..
+        ///   Looks up a localized string similar to To ease maintenance, the names of classes that are value converters should end with the same suffix..
         /// </summary>
         internal static string MiKo_1048_Description {
             get {
@@ -1904,7 +1904,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the names of classes that are value converters should end with the same suffix.
+        ///   Looks up a localized string similar to Classes that are value converters should end with a specific suffix.
         /// </summary>
         internal static string MiKo_1048_Title {
             get {
