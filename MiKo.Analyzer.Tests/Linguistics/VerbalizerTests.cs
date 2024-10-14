@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+
+using NUnit.Framework;
 
 //// ncrunch: rdi off
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -6,6 +8,65 @@ namespace MiKoSolutions.Analyzers.Linguistics
     [TestFixture]
     public static class VerbalizerTests
     {
+        private static readonly string[] Nouns =
+        [
+            "awakening",
+            "awning",
+            "blessing",
+            "booking",
+            "briefing",
+            "building",
+            "ceiling",
+            "darling",
+            "dealing",
+            "drawing",
+            "duckling",
+            "evening",
+            "feeling",
+            "finding",
+            "fledgling",
+            "gathering",
+            "guttering",
+            "hireling",
+            "inkling",
+            "leaning",
+            "meeting",
+            "misgiving",
+            "misunderstanding",
+            "morning",
+            "offering",
+            "outing",
+            "painting",
+            "quisling",
+            "reasoning",
+            "recording",
+            "restructuring",
+            "rising",
+            "roofing",
+            "sapling",
+            "seasoning",
+            "seating",
+            "setting",
+            "shooting",
+            "shopping",
+            "sibling",
+            "sitting",
+            "standing",
+            "tiding",
+            "timing",
+            "training",
+            "underling",
+            "understanding",
+            "undertaking",
+            "upbringing",
+            "uprising",
+            "warning",
+            "wedding",
+            "well-being",
+            "winning",
+            "wording",
+        ];
+
         [TestCase(null, ExpectedResult = null, Description = "There is no verb available")]
         [TestCase("", ExpectedResult = "", Description = "There is no verb available")]
         [TestCase(" ", ExpectedResult = " ", Description = "There is no verb available")]
@@ -280,6 +341,16 @@ namespace MiKoSolutions.Analyzers.Linguistics
         [TestCase("shutting", ExpectedResult = true)]
         [TestCase("Shutting", ExpectedResult = true)]
         public static bool IsGerundVerb_detects_gerund_verb_(string name) => Verbalizer.IsGerundVerb(name);
+
+        [Test]
+        public static void IsGerundVerb_detects_noun_([ValueSource(nameof(Nouns))] string name)
+        {
+            Assert.Multiple(() =>
+                                 {
+                                     Assert.That(Verbalizer.IsGerundVerb(name), Is.False, "lower-case not detected");
+                                     Assert.That(Verbalizer.IsGerundVerb(name.ToUpperCaseAt(0)), Is.False, "upper-case not detected");
+                                 });
+        }
 
         [TestCase("Canceled", ExpectedResult = true)]
         [TestCase("Cancel", ExpectedResult = false)]

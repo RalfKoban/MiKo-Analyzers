@@ -28,6 +28,29 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
 
+        private static readonly string[] NounsWithGerundEnding =
+                                                                {
+                                                                    "awakening", "awning",
+                                                                    "blessing", "booking", "briefing", "building",
+                                                                    "ceiling",
+                                                                    "darling", "dealing", "drawing", "duckling",
+                                                                    "evening",
+                                                                    "feeling", "finding", "fledgling",
+                                                                    "gathering", "guttering",
+                                                                    "hireling",
+                                                                    "inkling",
+                                                                    "leaning",
+                                                                    "meeting", "misgiving", "misunderstanding", "morning",
+                                                                    "offering", "outing",
+                                                                    "painting",
+                                                                    "quisling",
+                                                                    "reasoning", "recording", "restructuring", "rising", "roofing",
+                                                                    "sapling", "seasoning", "seating", "setting", "shooting", "shopping", "sibling", "sitting", "standing",
+                                                                    "tiding", "timing", "training",
+                                                                    "underling", "understanding", "undertaking", "upbringing", "uprising",
+                                                                    "warning", "wedding", "well-being", "winning", "wording",
+                                                                };
+
         private static readonly Pair[] Endings =
                                                  {
                                                      new Pair(nameof(Action), nameof(Action)),
@@ -272,9 +295,26 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             if (value.EndsWith("ing", StringComparison.Ordinal))
             {
+                if (value.EndsWith("ling", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
                 if (value.EndsWith("thing", StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
+                }
+
+                var length = NounsWithGerundEnding.Length;
+
+                for (var index = 0; index < length; index++)
+                {
+                    var noun = NounsWithGerundEnding[index];
+
+                    if (value.Equals(noun, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return false;
+                    }
                 }
 
                 return true;

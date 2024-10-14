@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace MiKoSolutions.Analyzers.Linguistics
@@ -31,7 +32,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly string[] SpecialPluralWords = { "ages", "loot" };
         private static readonly string[] SpecialNonPluralWords = { "does", "lets" };
         private static readonly string[] SpecialPluralEndingsWithS = { "deas", "llas" };
-        private static readonly string[] SpecialPluralEndingsWithoutS = { "cti", "men", "ngi", "data", "dren", "eeth", "feet", "heep", "mena", "mice", "eople", "teria", "moose", "trivia", "ircraft", "nformation", "nested" };
+        private static readonly string[] SingularOrPluralEndings = { "data", "heep", "moose", "trivia", "ircraft", "nformation", "nested" };
+        private static readonly string[] SpecialPluralEndingsWithoutS = new[] { "cti", "men", "ngi", "dren", "eeth", "feet", "mena", "mice", "eople", "teria" }.Concat(SingularOrPluralEndings).ToArray();
+
+        public static bool IsSingularAndPlural(ReadOnlySpan<char> value) => IsPlural(value) && value.EndsWithAny(SingularOrPluralEndings);
 
         public static bool IsPlural(ReadOnlySpan<char> value)
         {
