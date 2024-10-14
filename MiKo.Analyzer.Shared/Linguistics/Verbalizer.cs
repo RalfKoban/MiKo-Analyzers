@@ -29,27 +29,27 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly ConcurrentDictionary<string, string> ThirdPersonSingularVerbs = new ConcurrentDictionary<string, string>();
 
         private static readonly string[] NounsWithGerundEnding =
-                                                                {
-                                                                    "awakening", "awning",
-                                                                    "blessing", "booking", "briefing", "building",
-                                                                    "ceiling",
-                                                                    "darling", "dealing", "drawing", "duckling",
-                                                                    "evening",
-                                                                    "feeling", "finding", "fledgling",
-                                                                    "gathering", "guttering",
-                                                                    "hireling",
-                                                                    "inkling",
-                                                                    "leaning",
-                                                                    "meeting", "misgiving", "misunderstanding", "morning",
-                                                                    "offering", "outing",
-                                                                    "painting",
-                                                                    "quisling",
-                                                                    "reasoning", "recording", "restructuring", "rising", "roofing",
-                                                                    "sapling", "seasoning", "seating", "setting", "shooting", "shopping", "sibling", "sitting", "standing",
-                                                                    "tiding", "timing", "training",
-                                                                    "underling", "understanding", "undertaking", "upbringing", "uprising",
-                                                                    "warning", "wedding", "well-being", "winning", "wording",
-                                                                };
+                                                                 {
+                                                                     "awakening", "awning",
+                                                                     "blessing", "booking", "briefing", "building",
+                                                                     "ceiling",
+                                                                     "darling", "dealing", "drawing", "duckling",
+                                                                     "evening",
+                                                                     "feeling", "finding", "fledgling",
+                                                                     "gathering", "guttering",
+                                                                     "hireling",
+                                                                     "inkling",
+                                                                     "leaning",
+                                                                     "meeting", "misgiving", "misunderstanding", "morning",
+                                                                     "offering", "outing",
+                                                                     "painting",
+                                                                     "quisling",
+                                                                     "reasoning", "recording", "restructuring", "rising", "roofing",
+                                                                     "sapling", "seasoning", "seating", "setting", "shooting", "shopping", "sibling", "sitting", "standing",
+                                                                     "tiding", "timing", "training",
+                                                                     "underling", "understanding", "undertaking", "upbringing", "uprising",
+                                                                     "warning", "wedding", "well-being", "winning", "wording",
+                                                                 };
 
         private static readonly Pair[] Endings =
                                                  {
