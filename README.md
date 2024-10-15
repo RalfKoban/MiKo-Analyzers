@@ -93,7 +93,7 @@ The following tables lists all the 468 rules that are currently provided by the 
 |MiKo_1060|Use '&lt;Entity&gt;NotFound' instead of 'Get&lt;Entity&gt;Failed' or '&lt;Entity&gt;Missing'|&#x2713;|&#x2713;|
 |MiKo_1061|The name of 'Try' method's [out] parameter should be specific|&#x2713;|&#x2713;|
 |MiKo_1062|'Can/Has/Contains' methods, properties or fields shall consist of only a few words|&#x2713;|\-|
-|MiKo_1063|Do not use abbreviations in names|&#x2713;|\-|
+|MiKo_1063|Do not use abbreviations in names|&#x2713;|&#x2713;|
 |MiKo_1064|Parameter names reflect their meaning and not their type|&#x2713;|\-|
 |MiKo_1065|Operator parameters should be named according the .NET Framework Design Guidelines for operator overloads|&#x2713;|&#x2713;|
 |MiKo_1066|Constructor parameters that are assigned to a property should be named after the property|&#x2713;|&#x2713;|

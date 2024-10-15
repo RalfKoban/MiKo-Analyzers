@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 
+using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using NUnit.Framework;
@@ -106,6 +107,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "tm",
                                                            "tmp",
                                                            "txt",
+                                                           "var",
                                                            "ver",
                                                            "vol",
                                                        ];
@@ -203,6 +205,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                            "Tm",
                                                            "Tmp",
                                                            "Txt",
+                                                           "Var",
                                                            "Ver",
                                                            "Vol",
                                                        ];
@@ -292,7 +295,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                             "tires",
                                                         ];
 
-        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj"];
+        private static readonly string[] AllowedWords = [.. AllowedTerms, "obj", "href", "cref"];
 
         private static readonly string[] WrongWords = BadPrefixes.Except(AllowedWords).ToArray();
 
@@ -461,8 +464,55 @@ namespace Bla
     }
 }");
 
+        [TestCase("Min", "Minimum")]
+        [TestCase("MinLength", "MinimumLength")]
+        [TestCase("MaxVer", "MaximumVersion")]
+        public void Code_gets_fixed_for_incorrectly_named_property_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int ### { get; set; }
+    }
+}
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
+        [TestCase("app", "application")]
+        [TestCase("appVariable", "applicationVariable")]
+        [TestCase("appVar", "applicationVariable")]
+        public void Code_gets_fixed_for_incorrectly_named_foreach_variable_(string originalName, string fixedName)
+        {
+            const string Template = @"
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public int DoSomething(int[] variables)
+        {
+            foreach (var ### in variables)
+            {
+                return ###;
+            }
+        }
+    }
+}";
+
+            VerifyCSharpFix(Template.Replace("###", originalName), Template.Replace("###", fixedName));
+        }
+
         protected override string GetDiagnosticId() => MiKo_1063_AbbreviationsInNameAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_1063_AbbreviationsInNameAnalyzer();
+
+        protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_1063_CodeFixProvider();
     }
 }
