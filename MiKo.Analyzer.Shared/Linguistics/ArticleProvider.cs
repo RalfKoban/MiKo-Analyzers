@@ -4,9 +4,11 @@ namespace MiKoSolutions.Analyzers.Linguistics
 {
     internal static class ArticleProvider
     {
-        internal static string GetArticleFor(string text, FirstWordHandling firstWordHandling = FirstWordHandling.None)
+        internal static string GetArticleFor(string text, FirstWordHandling firstWordHandling = FirstWordHandling.None) => GetArticleFor(text.AsSpan(), firstWordHandling);
+
+        internal static string GetArticleFor(ReadOnlySpan<char> text, FirstWordHandling firstWordHandling = FirstWordHandling.None)
         {
-            if (text is null)
+            if (text.Length == 0)
             {
                 return string.Empty;
             }

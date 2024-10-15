@@ -160,7 +160,7 @@ using System;
 public enum TestMeKind
 {
     /// <summary>
-    /// The test me is a WhateverIdentifier.
+    /// The test me is a whateverIdentifier.
     /// </summary>
     WhateverIdentifier = 0,
 }
@@ -190,7 +190,7 @@ using System;
 public enum TestMeKind
 {
     /// <summary>
-    /// The test me is a WhateverIdentifier.
+    /// The test me is a whateverIdentifier.
     /// </summary>
     WhateverIdentifierEnum = 0,
 }
@@ -222,7 +222,7 @@ using System;
 public enum TestMe" + suffix + @"
 {
     /// <summary>
-    /// The test me is a WhateverIdentifier.
+    /// The test me is a whateverIdentifier.
     /// </summary>
     WhateverIdentifierEnum = 0,
 }
@@ -267,8 +267,39 @@ public enum MessageType
             VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", phrase2));
         }
 
+        [TestCase("Information", "an information")]
+        [TestCase("Warning", "a warning")]
+        [TestCase("Error", "an error")]
+        [TestCase("Exception", "an exception")]
+        public void Code_gets_fixed_for_special_phrase_of_enum_member_(string phrase1, string fixedPhrase2)
+        {
+            var phrase2 = phrase1.ToLowerCaseAt(0);
+
+            const string OriginalCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// Enum #1#Enum for #2#
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            const string FixedCode = @"
+public enum MessageType
+{
+    /// <summary>
+    /// The message is #2#.
+    /// </summary>
+    #1#Enum = 0,
+
+";
+
+            VerifyCSharpFix(OriginalCode.Replace("#1#", phrase1).Replace("#2#", phrase2), FixedCode.Replace("#1#", phrase1).Replace("#2#", fixedPhrase2));
+        }
+
         [Test]
-        public void Code_gets_fixed_for_special_plural_phrase_of_enum_member_()
+        public void Code_gets_fixed_for_special_plural_phrase_of_enum_member()
         {
             const string OriginalCode = @"
 public enum ItemsType

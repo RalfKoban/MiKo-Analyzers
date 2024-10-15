@@ -54,10 +54,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     var startWithEnumFor = start + "Enum for ";
 
                     var startPhrases = new[]
-                                       {
-                                           startWithFor + unsuffixed,
-                                           startWithEnumFor + enumMemberName,
-                                       };
+                                           {
+                                               startWithFor + unsuffixed,
+                                               startWithEnumFor + enumMemberName,
+                                           };
 
                     if (text.StartsWithAny(startPhrases, StringComparison.OrdinalIgnoreCase))
                     {
@@ -65,7 +65,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
                         string article;
 
-                        var isPlural = Pluralizer.IsPlural(unsuffixedSpan);
+                        var isPlural = Pluralizer.IsPlural(unsuffixedSpan) && Pluralizer.IsSingularAndPlural(unsuffixedSpan) is false;
 
                         if (isPlural
                          || unsuffixed.EqualsAny(WordsThatPreventArticle)
@@ -75,13 +75,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         {
                             // prevent articles for gerund and past tense words and make them lower case
                             article = string.Empty;
-
-                            unsuffixed = unsuffixed.ToLowerCaseAt(0);
                         }
                         else
                         {
-                            article = ArticleProvider.GetArticleFor(unsuffixed, FirstWordHandling.MakeLowerCase);
+                            article = ArticleProvider.GetArticleFor(unsuffixedSpan, FirstWordHandling.MakeLowerCase);
                         }
+
+                        unsuffixed = unsuffixed.ToLowerCaseAt(0);
 
                         var firstWordHandling = FirstWordHandling.MakeLowerCase;
 

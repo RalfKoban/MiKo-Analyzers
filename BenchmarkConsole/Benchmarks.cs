@@ -48,6 +48,7 @@ namespace BenchmarkConsole
         public void Setup()
         {
             data = new string[Times];
+
             Array.Fill(data, "a");
         }
 
