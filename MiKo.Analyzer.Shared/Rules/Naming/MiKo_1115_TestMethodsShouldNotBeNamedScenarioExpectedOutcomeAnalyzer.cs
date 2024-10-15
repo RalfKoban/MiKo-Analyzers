@@ -17,6 +17,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private const string If = "If";
         private const string IfIt = "If_It";
+        private const string Is = "Is";
         private const string When = "When";
         private const string And = "And";
         private const string Returned = "Returned";
@@ -28,16 +29,18 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private const string NotThrows = "NotThrows";
         private const string NotThrow = "NotThrow";
         private const string Given = "Given";
-        private const string IsGiven = "IsGiven";
+        private const string IsGiven = Is + Given;
+        private const string Consumed = "Consumed";
+        private const string Rejected = "Rejected";
 
         private static readonly string[] ExpectedOutcomeMarkers =
                                                                   {
                                                                       "Actual",
                                                                       "Expect",
-                                                                      "IsEmpty",
-                                                                      "IsExceptional",
-                                                                      "IsNot",
-                                                                      "IsNull",
+                                                                      Is + "Empty",
+                                                                      Is + "Exceptional",
+                                                                      Is + "Not",
+                                                                      Is + "Null",
                                                                       "Return",
                                                                       "Shall",
                                                                       "Should",
@@ -49,6 +52,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                       "Invoke",
                                                                       Given,
                                                                       "Everything",
+                                                                      Rejected,
+                                                                      Consumed,
                                                                   };
 
         private static readonly string[] SpecialFirstPhrases =
@@ -177,14 +182,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var builder = new StringBuilder(capacity);
-            FixReturn(builder, part1);
+            FixPart(builder, part1);
 
             if (addIf)
             {
                 builder.Append(ifToAdd);
             }
 
-            FixReturn(builder, part0);
+            FixPart(builder, part0);
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
@@ -214,8 +219,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var builder = new StringBuilder(capacity);
-            FixReturn(builder, part0);
-            FixReturn(builder, part2);
+            FixPart(builder, part0);
+            FixPart(builder, part2);
 
             if (addIf)
             {
@@ -227,7 +232,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                 part1 = part1.AsSpan(Given.Length).ConcatenatedWith(IsGiven);
             }
 
-            FixReturn(builder, part1);
+            FixPart(builder, part1);
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
 
@@ -267,8 +272,8 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             }
 
             var builder = new StringBuilder(capacity);
-            FixReturn(builder, part0);
-            FixReturn(builder, part3);
+            FixPart(builder, part0);
+            FixPart(builder, part3);
 
             if (addIf)
             {
@@ -277,14 +282,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
             if (useWhen)
             {
-                FixReturn(builder, part1);
-                FixReturn(builder, part2);
+                FixPart(builder, part1);
+                FixPart(builder, part2);
             }
             else
             {
-                FixReturn(builder, part2);
+                FixPart(builder, part2);
                 builder.Append(And);
-                FixReturn(builder, part1);
+                FixPart(builder, part1);
             }
 
             builder.ReplaceWithCheck(When, If).ReplaceWithCheck(If + If, If);
@@ -296,7 +301,9 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
 
         private static bool IsIfRequired(string part1, string part2)
         {
-            if (part1.StartsWith(If, StringComparison.OrdinalIgnoreCase) || part2.Equals(Returned, StringComparison.OrdinalIgnoreCase))
+            if (part1.StartsWith(If, StringComparison.OrdinalIgnoreCase)
+             || part1.StartsWith(Consumed, StringComparison.OrdinalIgnoreCase)
+             || part2.Equals(Returned, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }
@@ -304,11 +311,15 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             return true;
         }
 
-        private static void FixReturn(StringBuilder builder, string original)
+        private static void FixPart(StringBuilder builder, string original)
         {
             if (original.EndsWith(Returned, StringComparison.OrdinalIgnoreCase))
             {
                 builder.Append(Returns).Append(original, 0, original.Length - Returned.Length);
+            }
+            else if (original.StartsWith(Rejected, StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Append(original, Rejected.Length, original.Length - Rejected.Length).Append(Is).Append(Rejected);
             }
             else
             {
