@@ -399,6 +399,7 @@ public enum " + typeName + @"
         [TestCase("Message", "messages")]
         [TestCase("MessageKind", "messages")]
         [TestCase("MessageType", "messages")]
+        [TestCase("MessageDef", "message definitions")]
         public void Code_gets_fixed_for_sentenced_with_special_documentation_suffixed_with_Enum_(string typeName, string fixedEnding)
         {
             var originalCode = @"
@@ -421,6 +422,8 @@ public enum " + typeName + @"Enum
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        // TODO RKN: Replace abbreviations such as in 'DataTypeDef'
+        // TODO RKN: Replace preambles such as 'StateOf', 'TypeOf', 'KindOf', etc ('xyzOf'
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2013_EnumSummaryAnalyzer();
