@@ -1323,9 +1323,6 @@ namespace System
         public static bool IsNullOrEmpty(this string value) => string.IsNullOrEmpty(value); // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0; // ncrunch: no coverage
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsNullOrEmpty(this ReadOnlySpan<char> value) => value.IsEmpty; // ncrunch: no coverage
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1729,10 +1726,6 @@ namespace System
 
         public static string Without(this string value, string[] phrases) => value.AsBuilder().Without(phrases).Trim(); // ncrunch: no coverage
 
-        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
-
-        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
-
         public static string WithoutFirstWord(this string value) => WithoutFirstWord(value.AsSpan()).ToString();
 
         public static ReadOnlySpan<char> WithoutFirstWord(this ReadOnlySpan<char> value)
@@ -1831,9 +1824,6 @@ namespace System
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string WithoutQuotes(this string value) => value.Without(@"""");
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags); // ncrunch: no coverage
 
         public static IEnumerable<StringBuilder> WithoutParaTags(this IEnumerable<string> values) => values.Select(_ => _.AsBuilder().WithoutParaTags()); // ncrunch: no coverage
 

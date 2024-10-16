@@ -121,7 +121,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     trimmedExistingText = trimmedExistingText.Slice(0, end);
                 }
 
-                var continuation = trimmedExistingText.AsBuilder().ReplaceAllWithCheck(EnumStartingPhrases, string.Empty).ToString();
+                var continuation = trimmedExistingText.AsBuilder().Without(EnumStartingPhrases).Trimmed().ToString();
 
                 if (continuation.IsSingleWord())
                 {
@@ -137,7 +137,14 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                    .Without("Type")
                                                    .Without("Kind")
                                                    .Without("Enum")
-                                                   .AdjustFirstWord(FirstWordHandling.MakeLowerCase | FirstWordHandling.MakePlural)
+                                                   .WithoutAbbreviations()
+                                                   .ToString();
+
+                        // ensure we have a plural name here, but do not split yet into parts (as otherwise we would pluralize the wrong part)
+                        continuation = Pluralizer.MakePluralName(continuation);
+
+                        continuation = continuation.AsBuilder()
+                                                   .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
                                                    .ToString();
                     }
                 }

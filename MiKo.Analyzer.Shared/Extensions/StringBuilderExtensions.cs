@@ -1,5 +1,7 @@
 ﻿using System.Buffers;
+using System.Runtime.CompilerServices;
 
+using MiKoSolutions.Analyzers;
 using MiKoSolutions.Analyzers.Linguistics;
 
 // for performance reasons we switch of RDI and NCrunch instrumentation
@@ -14,7 +16,7 @@ namespace System.Text
         private const int QuickCompareLengthThreshold = 4;
         private const int QuickCompareRentLengthThreshold = 24;
 
-        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces(0) == value.Length;
+        public static bool IsNullOrWhiteSpace(this StringBuilder value) => value is null || value.CountLeadingWhitespaces() == value.Length;
 
         public static StringBuilder AdjustFirstWord(this StringBuilder value, FirstWordHandling handling)
         {
@@ -129,7 +131,7 @@ namespace System.Text
             {
                 if (value[0] == ' ')
                 {
-                    var whitespaces = value.CountLeadingWhitespaces(0);
+                    var whitespaces = value.CountLeadingWhitespaces();
 
                     if (whitespaces > count)
                     {
@@ -153,7 +155,7 @@ namespace System.Text
             var length = value.Length;
 
             // 1. Find word begin
-            whitespacesBefore = value.CountLeadingWhitespaces(0);
+            whitespacesBefore = value.CountLeadingWhitespaces();
 
             // 2. Find word end
             var wordLength = 0;
@@ -173,6 +175,31 @@ namespace System.Text
             // 3. Cut word
             return value.ToString(whitespacesBefore, wordLength);
         }
+
+        public static bool HasWhitespaces(this StringBuilder value, int start = 0)
+        {
+            if (value is null)
+            {
+                return false;
+            }
+
+            var valueLength = value.Length;
+
+            for (; start < valueLength; start++)
+            {
+                if (value[start].IsWhiteSpace())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsNullOrEmpty(this StringBuilder value) => value is null || value.Length == 0; // ncrunch: no coverage
+
+        public static bool IsSingleWord(this StringBuilder value) => value?.HasWhitespaces() is false;
 
         public static StringBuilder ReplaceAllWithCheck(this StringBuilder value, ReadOnlySpan<Pair> replacementPairs)
         {
@@ -327,6 +354,21 @@ namespace System.Text
             return value.AdjustFirstWord(firstWordHandling);
         }
 
+        public static StringBuilder Trimmed(this StringBuilder value)
+        {
+            var length = value.Length;
+
+            if (length == 0)
+            {
+                return value;
+            }
+
+            var start = value.CountLeadingWhitespaces();
+            var end = value.CountTrailingWhitespaces(start);
+
+            return value.Remove(0, start).Remove(length - start - end, end);
+        }
+
         public static string Trim(this StringBuilder value)
         {
             var length = value.Length;
@@ -336,34 +378,10 @@ namespace System.Text
                 return string.Empty;
             }
 
-            var start = 0;
-            var end = 0;
+            var start = value.CountLeadingWhitespaces();
+            var end = value.CountTrailingWhitespaces(start);
 
-            for (var i = 0; i < length; i++)
-            {
-                if (value[i].IsWhiteSpace())
-                {
-                    start++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            for (var i = length - 1; i >= start; i--)
-            {
-                if (value[i].IsWhiteSpace())
-                {
-                    end++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return value.ToString(start, length - (start + end));
+            return value.ToString(start, length - start - end);
         }
 
         public static string TrimStart(this StringBuilder value)
@@ -375,19 +393,7 @@ namespace System.Text
                 return string.Empty;
             }
 
-            var start = 0;
-
-            for (var i = 0; i < length; i++)
-            {
-                if (value[i].IsWhiteSpace())
-                {
-                    start++;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            var start = value.CountLeadingWhitespaces();
 
             return value.ToString(start, length - start);
         }
@@ -401,22 +407,19 @@ namespace System.Text
                 return string.Empty;
             }
 
-            var end = 0;
-
-            for (var i = length - 1; i >= 0; i--)
-            {
-                if (value[i].IsWhiteSpace())
-                {
-                    end++;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            var end = value.CountTrailingWhitespaces();
 
             return value.ToString(0, length - end);
         }
+
+        public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
+
+        public static StringBuilder Without(this StringBuilder value, string[] phrases) => value.ReplaceAllWithCheck(phrases, string.Empty); // ncrunch: no coverage
+
+        public static StringBuilder WithoutAbbreviations(this StringBuilder value) => AbbreviationDetector.FindAndReplaceAllAbbreviations(value); // ncrunch: no coverage
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static StringBuilder WithoutParaTags(this StringBuilder value) => value.Without(Constants.ParaTags); // ncrunch: no coverage
 
         private static bool QuickCompare(ref StringBuilder current, ref string other)
         {
@@ -516,7 +519,7 @@ namespace System.Text
             }
         }
 
-        private static int CountLeadingWhitespaces(this StringBuilder value, int start)
+        private static int CountLeadingWhitespaces(this StringBuilder value, int start = 0)
         {
             var whitespaces = 0;
             var valueLength = value.Length;
@@ -524,6 +527,25 @@ namespace System.Text
             for (; start < valueLength; start++)
             {
                 if (value[start].IsWhiteSpace())
+                {
+                    whitespaces++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return whitespaces;
+        }
+
+        private static int CountTrailingWhitespaces(this StringBuilder value, int start = 0)
+        {
+            var whitespaces = 0;
+
+            for (var i = value.Length - 1; i >= start; i--)
+            {
+                if (value[i].IsWhiteSpace())
                 {
                     whitespaces++;
                 }
