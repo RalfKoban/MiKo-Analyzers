@@ -90,7 +90,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILogger
     {
-        public void " + method + @"();
+        public void " + method + @"(string message, params object[] args);
     }
 
     public class TestMe
@@ -106,6 +106,30 @@ namespace Microsoft.Extensions.Logging
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Microsoft_logging_call_with_interpolation_as_argument_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int i)
+        {
+            _logger." + method + @"(""some text for {i}"", $""some text for {i}"");
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Microsoft_logging_call_with_interpolation_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 using System;
 using Microsoft.Extensions.Logging;
@@ -114,7 +138,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILogger
     {
-        public void " + method + @"(string message);
+        public void " + method + @"(string message, params object[] args);
     }
 
     public class TestMe
@@ -138,7 +162,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILogger
     {
-        public void " + method + @"(string message);
+        public void " + method + @"(string message, params object[] args);
     }
 
     public class TestMe
@@ -256,6 +280,8 @@ namespace Microsoft.Extensions.Logging
 
             VerifyCSharpFix(originalCode, fixedCode);
         }
+
+        //// TODO RKN: Add tests for 'string.Format'
 
         protected override string GetDiagnosticId() => MiKo_3065_MicrosoftLoggingMessagesDoNotUseInterpolatedStringsAnalyzer.Id;
 

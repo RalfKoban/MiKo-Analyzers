@@ -52,7 +52,12 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         if (type.Name == Constants.MicrosoftLogging.TypeName && type.ContainingNamespace.FullyQualifiedName() == Constants.MicrosoftLogging.NamespaceName)
                         {
-                            return new[] { Issue(node.StringStartToken) };
+                            var argumentSymbol = a.GetTypeSymbol(semanticModel);
+
+                            if (argumentSymbol.IsString())
+                            {
+                                return new[] { Issue(node.StringStartToken) };
+                            }
                         }
 
                         break;
