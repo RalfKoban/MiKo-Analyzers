@@ -5639,4 +5639,16 @@ Hence, their open brackets should be positioned at the same position where the c
   <data name="MiKo_6061_Title" xml:space="preserve">
     <value>Switch expression arms should be placed on same line</value>
   </data>
+  <data name="MiKo_6070_CodeFixTitle" xml:space="preserve">
+    <value>Surround with blank lines</value>
+  </data>
+  <data name="MiKo_6070_Description" xml:space="preserve">
+    <value>To separate Console in/output visually from the business code, they should be surrounded by blank lines. That makes them easier to spot and ignore.</value>
+  </data>
+  <data name="MiKo_6070_MessageFormat" xml:space="preserve">
+    <value>Surround Console statement(s) with blank lines</value>
+  </data>
+  <data name="MiKo_6070_Title" xml:space="preserve">
+    <value>Console statements should be surrounded by blank lines</value>
+  </data>
 </root>

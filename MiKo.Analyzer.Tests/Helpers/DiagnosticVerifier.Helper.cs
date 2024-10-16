@@ -47,6 +47,7 @@ namespace TestHelper
         private static readonly MetadataReference MiKoAnalyzersTestsReference = MetadataReference.CreateFromFile(typeof(DiagnosticVerifier).Assembly.Location);
         private static readonly MetadataReference NUnitLegacyReference = MetadataReference.CreateFromFile(typeof(DirectoryAssert).Assembly.Location);
         private static readonly MetadataReference NUnitReference = MetadataReference.CreateFromFile(typeof(Assert).Assembly.Location);
+        private static readonly MetadataReference SystemReference = MetadataReference.CreateFromFile(typeof(Console).Assembly.Location);
         private static readonly MetadataReference SystemCompositionReference = MetadataReference.CreateFromFile(typeof(ImportAttribute).Assembly.Location);
         private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
         private static readonly MetadataReference SystemLinqReference = MetadataReference.CreateFromFile(typeof(Expression).Assembly.Location);
@@ -83,6 +84,7 @@ namespace TestHelper
                                                                      MiKoAnalyzersReference,
                                                                      MiKoAnalyzersTestsReference,
                                                                      NetStandardReference,
+                                                                     SystemReference,
                                                                      SystemRuntimeNetStandardReference,
                                                                      SystemLinqReference,
                                                                      SystemTextReference,
