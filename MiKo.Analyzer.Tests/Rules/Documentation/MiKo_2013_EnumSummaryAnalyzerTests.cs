@@ -422,8 +422,31 @@ public enum " + typeName + @"Enum
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
-        // TODO RKN: Replace abbreviations such as in 'DataTypeDef'
-        // TODO RKN: Replace preambles such as 'StateOf', 'TypeOf', 'KindOf', etc ('xyzOf'
+        [TestCase("StateOfText", "states of texts")]
+        [TestCase("KindOfText", "kinds of texts")]
+        [TestCase("TypeOfText", "kinds of texts")]
+        public void Code_gets_fixed_for_sentenced_with_special_documentation_prefixed_with_(string prefix, string fixedText)
+        {
+            var originalCode = @"
+/// <summary>
+/// Gets or Sets " + prefix + @".
+/// </summary>
+public enum " + prefix + @"Enum
+{
+}
+";
+
+            var fixedCode = @"
+/// <summary>
+/// Defines values that specify the different " + fixedText + @".
+/// </summary>
+public enum " + prefix + @"Enum
+{
+}
+";
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2013_EnumSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2013_EnumSummaryAnalyzer();
