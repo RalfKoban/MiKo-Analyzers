@@ -143,14 +143,17 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                         // ensure we have a plural name here, but do not split yet into parts (as otherwise we would pluralize the wrong part)
                         continuation = Pluralizer.MakePluralName(continuation);
 
-                        continuation = continuation.AsBuilder()
-                                                   .SeparateWords(' ', FirstWordHandling.MakeLowerCase)
-                                                   .ToString();
+                        continuation = continuation.AsBuilder().SeparateWords(' ', FirstWordHandling.MakeLowerCase).ToString();
                     }
                 }
 
+                var finalText = startingPhrase.ConcatenatedWith(continuation, trimmedExistingTextEnd).AsBuilder()
+                                              .ReplaceWithCheck(" kinds of state ", " states of ")
+                                              .ReplaceWithCheck(" of of ", " of ")
+                                              .ToString();
+
                 textTokens.RemoveAt(0);
-                textTokens.Insert(0, XmlTextToken(startingPhrase.ConcatenatedWith(continuation, trimmedExistingTextEnd)));
+                textTokens.Insert(0, XmlTextToken(finalText));
             }
             else
             {
