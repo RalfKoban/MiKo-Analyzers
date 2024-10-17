@@ -50,6 +50,20 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_non_logging_calls_with_stringFormat() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe(int i) => SomeMethod($""some text for {i}"");
+
+    public void DoSomething(int i) => SomeMethod(string.Format(""some text for {0}"", i));
+
+    public void SomeMethod(string text) { }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_log4net_calls_with_interpolation_([ValueSource(nameof(LogForNetMethods))] string method) => No_issue_is_reported_for(@"
 using System;
 
@@ -90,7 +104,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILogger
     {
-        public void " + method + @"();
+        public void " + method + @"(string message, params object[] args);
     }
 
     public class TestMe
@@ -106,6 +120,30 @@ namespace Microsoft.Extensions.Logging
 ");
 
         [Test]
+        public void No_issue_is_reported_for_Microsoft_logging_call_with_interpolation_as_argument_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int i)
+        {
+            _logger." + method + @"(""some text for {i}"", $""some text for {i}"");
+        }
+    }
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_Microsoft_logging_call_with_interpolation_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
 using System;
 using Microsoft.Extensions.Logging;
@@ -114,7 +152,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILogger
     {
-        public void " + method + @"(string message);
+        public void " + method + @"(string message, params object[] args);
     }
 
     public class TestMe
@@ -138,7 +176,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILogger
     {
-        public void " + method + @"(string message);
+        public void " + method + @"(string message, params object[] args);
     }
 
     public class TestMe
@@ -148,6 +186,54 @@ namespace Microsoft.Extensions.Logging
         public void DoSomething(int i)
         {
             _logger." + method + @"($""some text for {i:D}"");
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Microsoft_logging_call_with_stringFormat_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int i)
+        {
+            _logger." + method + @"(string.Format(""some text for {0}"", i));
+        }
+    }
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_Microsoft_logging_call_with_stringFormat_and_format_provider_([ValueSource(nameof(Methods))] string method) => An_issue_is_reported_for(@"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int i)
+        {
+            _logger." + method + @"(string.Format(""some text for {0}"", i.ToString(""D"")));
         }
     }
 }
@@ -206,6 +292,58 @@ namespace Microsoft.Extensions.Logging
         }
 
         [Test]
+        public void Code_gets_fixed_for_Microsoft_logging_call_with_stringFormat_([ValueSource(nameof(Methods))] string method)
+        {
+            var originalCode = @"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object?[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int x, int y, int z)
+        {
+            _logger." + method + @"(string.Format(""some text for {0}, {1} and {2}"", x, y, z));
+        }
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object?[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int x, int y, int z)
+        {
+            _logger." + method + @"(""some text for {x}, {y} and {z}"", x, y, z);
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_Microsoft_logging_call_with_interpolation_and_format_provider_([ValueSource(nameof(Methods))] string method)
         {
             var originalCode = @"
@@ -226,6 +364,58 @@ namespace Microsoft.Extensions.Logging
         public void DoSomething(int x, int y, int z)
         {
             _logger." + method + @"($""some text for {x:D}, {y:G} and {z:C}"");
+        }
+    }
+}
+";
+
+            var fixedCode = @"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object?[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int x, int y, int z)
+        {
+            _logger." + method + @"(""some text for {x}, {y} and {z}"", x.ToString(""D""), y.ToString(""G""), z.ToString(""C""));
+        }
+    }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_Microsoft_logging_call_with_stringFormat_and_format_provider_([ValueSource(nameof(Methods))] string method)
+        {
+            var originalCode = @"
+using System;
+using Microsoft.Extensions.Logging;
+
+namespace Microsoft.Extensions.Logging
+{
+    public interface ILogger
+    {
+        public void " + method + @"(string message, params object?[] args);
+    }
+
+    public class TestMe
+    {
+        private ILogger _logger;
+
+        public void DoSomething(int x, int y, int z)
+        {
+            _logger." + method + @"(string.Format(""some text for {0}, {1} and {2}"", x.ToString(""D""), y.ToString(""G""), z.ToString(""C"")));
         }
     }
 }

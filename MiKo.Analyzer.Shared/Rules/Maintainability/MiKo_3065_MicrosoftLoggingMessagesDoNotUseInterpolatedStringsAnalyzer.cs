@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -19,19 +16,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
         protected override bool IsApplicable(CompilationStartAnalysisContext context) => context.Compilation.GetTypeByMetadataName(Constants.MicrosoftLogging.FullTypeName) != null;
 
-        protected override void InitializeCore(CompilationStartAnalysisContext context) => context.RegisterSyntaxNodeAction(AnalyzeInterpolatedString, SyntaxKind.InterpolatedStringExpression);
-
-        private void AnalyzeInterpolatedString(SyntaxNodeAnalysisContext context)
+        protected override void InitializeCore(CompilationStartAnalysisContext context)
         {
-            if (context.Node is InterpolatedStringExpressionSyntax node)
-            {
-                var issues = AnalyzeInterpolatedString(node, context.SemanticModel);
-
-                ReportDiagnostics(context, issues);
-            }
+            context.RegisterSyntaxNodeAction(AnalyzeInterpolatedString, SyntaxKind.InterpolatedStringExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeInvocation, SyntaxKind.InvocationExpression);
         }
 
-        private IEnumerable<Diagnostic> AnalyzeInterpolatedString(InterpolatedStringExpressionSyntax node, SemanticModel semanticModel)
+        private static bool IsLoggingCall(SyntaxNode node, SemanticModel semanticModel)
         {
             if (node.Parent is ArgumentSyntax a && a.Parent is ArgumentListSyntax al && al.Parent is InvocationExpressionSyntax invocation && invocation.Expression is MemberAccessExpressionSyntax methodCall)
             {
@@ -52,15 +43,33 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
 
                         if (type.Name == Constants.MicrosoftLogging.TypeName && type.ContainingNamespace.FullyQualifiedName() == Constants.MicrosoftLogging.NamespaceName)
                         {
-                            return new[] { Issue(node.StringStartToken) };
+                            var argumentSymbol = a.GetTypeSymbol(semanticModel);
+
+                            return argumentSymbol.IsString();
                         }
 
-                        break;
+                        return false;
                     }
                 }
             }
 
-            return Enumerable.Empty<Diagnostic>();
+            return false;
+        }
+
+        private void AnalyzeInterpolatedString(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is InterpolatedStringExpressionSyntax node && IsLoggingCall(node, context.SemanticModel))
+            {
+                ReportDiagnostics(context, Issue(node.StringStartToken));
+            }
+        }
+
+        private void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
+        {
+            if (context.Node is InvocationExpressionSyntax node && IsLoggingCall(node, context.SemanticModel))
+            {
+                ReportDiagnostics(context, Issue(node));
+            }
         }
     }
 }
