@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Linq;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -9,6 +10,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(MiKo_2042_CodeFixProvider)), Shared]
     public sealed class MiKo_2042_CodeFixProvider : OverallDocumentationCodeFixProvider
     {
+        private static readonly string[] Tags = { "br", "p" };
+
         public override string FixableDiagnosticId => "MiKo_2042";
 
         protected override DocumentationCommentTriviaSyntax GetUpdatedSyntax(Document document, DocumentationCommentTriviaSyntax syntax, Diagnostic diagnostic)
@@ -17,11 +20,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 switch (node)
                 {
-                    case XmlEmptyElementSyntax br when br.GetName() == "br":
-                        return syntax.ReplaceNode(br, Para());
+                    case XmlEmptyElementSyntax ee when Tags.Contains(ee.GetName()):
+                        return syntax.ReplaceNode(ee, Para());
 
-                    case XmlElementSyntax p when p.GetName() == "p":
-                        return syntax.ReplaceNode(p, Para(p.Content));
+                    case XmlElementSyntax e when Tags.Contains(e.GetName()):
+                        return syntax.ReplaceNode(e, Para(e.Content));
                 }
             }
 
