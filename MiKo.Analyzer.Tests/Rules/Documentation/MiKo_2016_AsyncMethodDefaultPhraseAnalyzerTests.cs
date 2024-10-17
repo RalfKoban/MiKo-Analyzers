@@ -206,6 +206,30 @@ public class TestMe
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_and_upper_case_text_adjusted_when_infinite_and_on_different_lines()
+        {
+            const string OriginalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Do something.
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            const string FixedCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// Asynchronously does something.
+    /// </summary>
+    public async void DoSomething() { }
+}";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2016_AsyncMethodDefaultPhraseAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2016_AsyncMethodDefaultPhraseAnalyzer();
