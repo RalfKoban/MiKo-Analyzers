@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
+using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
@@ -25,20 +27,13 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var argument = arguments[0];
 
-                    if (argument.Expression is InterpolatedStringExpressionSyntax interpolated)
+                    switch (argument.Expression)
                     {
-                        var interpolations = interpolated.Contents.OfType<InterpolationSyntax>().ToList();
+                        case InterpolatedStringExpressionSyntax interpolated:
+                            return GetUpdatedSyntax(interpolated, argument, argumentList);
 
-                        // filter for format clauses as they are not needed inside the resulting text
-                        var formatClauses = interpolations.Select(_ => _.FormatClause).Where(_ => _ != null);
-
-                        var text = interpolated.Without(formatClauses).Contents.ToString();
-
-                        // find interpolated arguments and convert them
-                        var argumentsFromInterpolation = interpolations.ToArray(_ => Argument(ConvertToExpression(_)));
-
-                        return argumentList.ReplaceNode(argument, Argument(StringLiteral(text)))
-                                           .AddArguments(argumentsFromInterpolation);
+                        case InvocationExpressionSyntax invocation: // string.Format
+                            return GetUpdatedSyntax(invocation, argument, argumentList);
                     }
                 }
             }
@@ -46,13 +41,68 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
             return syntax;
         }
 
+        private static SyntaxNode GetUpdatedSyntax(InterpolatedStringExpressionSyntax interpolated, ArgumentSyntax argument, ArgumentListSyntax argumentList)
+        {
+            var interpolations = interpolated.Contents.OfType<InterpolationSyntax>().ToList();
+
+            // filter for format clauses as they are not needed inside the resulting text
+            var formatClauses = interpolations.Select(_ => _.FormatClause).Where(_ => _ != null);
+
+            var text = interpolated.Without(formatClauses).Contents.ToString();
+
+            // find interpolated arguments and convert them
+            var argumentsFromInterpolation = interpolations.ToArray(_ => Argument(ConvertToExpression(_)));
+
+            return argumentList.ReplaceNode(argument, Argument(StringLiteral(text)))
+                               .AddArguments(argumentsFromInterpolation);
+        }
+
+        private static SyntaxNode GetUpdatedSyntax(InvocationExpressionSyntax invocation, ArgumentSyntax argument, ArgumentListSyntax argumentList)
+        {
+            var invocationArguments = invocation.ArgumentList.Arguments;
+
+            if (invocationArguments.Count > 0 && invocationArguments[0].Expression is LiteralExpressionSyntax literal)
+            {
+                var formatArguments = invocationArguments.Skip(1).ToArray();
+
+                var updatedLiteral = UpdateStringFormatLiteral(literal, formatArguments);
+
+                return argumentList.ReplaceNode(argument, Argument(updatedLiteral))
+                                   .AddArguments(formatArguments);
+            }
+
+            return argumentList;
+        }
+
+        private static ExpressionSyntax UpdateStringFormatLiteral(LiteralExpressionSyntax literal, ArgumentSyntax[] arguments)
+        {
+            var token = literal.Token;
+
+            // replace {0}... with {someParameter} and use the formatArguments
+            var pairs = new Pair[arguments.Length];
+
+            for (var i = 0; i < arguments.Length; i++)
+            {
+                var argument = arguments[i];
+
+                var indexString = i.ToString();
+                var identifier = argument.Expression.GetIdentifierName() ?? indexString;
+
+                pairs[i] = new Pair("{" + indexString + "}", "{" + identifier + "}");
+            }
+
+            var updatedText = token.ValueText.AsBuilder().ReplaceAllWithCheck(pairs);
+
+            return StringLiteral(updatedText.ToString());
+        }
+
         private static ExpressionSyntax ConvertToExpression(InterpolationSyntax syntax)
         {
             var clause = syntax.FormatClause;
 
             return clause is null
-                   ? syntax.Expression
-                   : Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
+                       ? syntax.Expression
+                       : Invocation(SimpleMemberAccess(syntax.Expression, nameof(ToString)), Argument(StringLiteral(clause.FormatStringToken.ValueText)));
         }
     }
 }

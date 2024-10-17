@@ -488,6 +488,21 @@ namespace MiKoSolutions.Analyzers
             }
         }
 
+        internal static ExpressionSyntax GetIdentifierExpression(this ExpressionSyntax value)
+        {
+            switch (value)
+            {
+                case InvocationExpressionSyntax invocation:
+                    return invocation.GetIdentifierExpression();
+
+                case IdentifierNameSyntax identifier:
+                    return identifier;
+
+                default:
+                    return null;
+            }
+        }
+
         internal static ExpressionSyntax GetIdentifierExpression(this InvocationExpressionSyntax value)
         {
             switch (value?.Expression)
@@ -502,6 +517,8 @@ namespace MiKoSolutions.Analyzers
                     return null;
             }
         }
+
+        internal static string GetIdentifierName(this ExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
         internal static string GetIdentifierName(this InvocationExpressionSyntax value) => value.GetIdentifierExpression().GetName();
 
