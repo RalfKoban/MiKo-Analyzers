@@ -71,6 +71,11 @@ namespace System
                 word = Pluralizer.MakePluralName(word);
             }
 
+            if (HasFlag(handling, FirstWordHandling.MakeThirdPersonSingular))
+            {
+                word = Verbalizer.MakeThirdPersonSingularVerb(word);
+            }
+
             if (HasFlag(handling, FirstWordHandling.KeepLeadingSpace))
             {
                 // only keep it if there is already a leading space (otherwise it may be on the same line without any leading space, and we would fix it in a wrong way)

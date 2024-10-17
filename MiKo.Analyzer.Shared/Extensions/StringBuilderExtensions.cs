@@ -61,6 +61,11 @@ namespace System.Text
                 MakePlural();
             }
 
+            if (StringExtensions.HasFlag(handling, FirstWordHandling.MakeThirdPersonSingular))
+            {
+                MakeThirdPersonSingular();
+            }
+
             return value;
 
             void MakeLowerCase()
@@ -123,6 +128,17 @@ namespace System.Text
                 value.Remove(whitespacesBefore, word.Length);
 
                 var pluralWord = Pluralizer.MakePluralName(word);
+
+                value.Insert(whitespacesBefore, pluralWord);
+            }
+
+            void MakeThirdPersonSingular()
+            {
+                var word = FirstWord(value, out var whitespacesBefore);
+
+                value.Remove(whitespacesBefore, word.Length);
+
+                var pluralWord = Verbalizer.MakeThirdPersonSingularVerb(word);
 
                 value.Insert(whitespacesBefore, pluralWord);
             }

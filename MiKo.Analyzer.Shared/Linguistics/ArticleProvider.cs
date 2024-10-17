@@ -46,9 +46,9 @@ namespace MiKoSolutions.Analyzers.Linguistics
 
             return A();
 
-            string A() => firstWordHandling == FirstWordHandling.MakeLowerCase ? "a " : "A ";
+            string A() => StringExtensions.HasFlag(firstWordHandling, FirstWordHandling.MakeLowerCase) ? "a " : "A ";
 
-            string An() => firstWordHandling == FirstWordHandling.MakeLowerCase ? "an " : "An ";
+            string An() => StringExtensions.HasFlag(firstWordHandling, FirstWordHandling.MakeLowerCase) ? "an " : "An ";
         }
     }
 }

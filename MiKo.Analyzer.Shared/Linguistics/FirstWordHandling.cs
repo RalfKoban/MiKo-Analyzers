@@ -37,5 +37,10 @@ namespace MiKoSolutions.Analyzers.Linguistics
         /// Attempt to make it a plural verb.
         /// </summary>
         MakePlural = 1 << 4,
+
+        /// <summary>
+        /// Attempt to make it a 3rd person singular verb.
+        /// </summary>
+        MakeThirdPersonSingular = 1 << 5,
     }
 }
