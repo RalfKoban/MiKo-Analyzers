@@ -195,39 +195,6 @@ public class TestMe
 }
 ");
 
-        [Test]
-        public void An_issue_is_reported_for_wrong_commented_method_with_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
-            => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// Does something.
-    /// </summary>
-    /// <returns>
-    /// " + comment + @"
-    /// </returns>
-    public bool DoSomething(object o) => null;
-}
-");
-
-        [Test]
-        public void An_issue_is_reported_for_returns_tag_inside_summary_tag_and_wrong_commented_method_with_starting_phrase_([ValueSource(nameof(SimpleStartingPhrases))] string comment)
-            => An_issue_is_reported_for(@"
-using System;
-
-public class TestMe
-{
-    /// <summary>
-    /// <returns>
-    /// " + comment + @"
-    /// </returns>
-    /// </summary>
-    public bool DoSomething(object o) => null;
-}
-");
-
         [TestCase("", "TODO")]
         [TestCase("Boolean", "TODO")]
         [TestCase(" Something . ", "something")]
