@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,8 @@ namespace BenchmarkConsole
     [SimpleJob] // [RyuJitX64Job]
     public class Benchmarks
     {
-        [Params(1, 5, 10, 15, 20)] // , */ 10, 100, 1000)] //, 10000, 100000)]
+        // [Params(1, 5, 10, 15, 20, 25, 50, 75, 100, 125, 150, 250, 1000, 10000, 100000)]
+        [Params(100, 125, 150, 175)]
         public int Times;
 
         // [Benchmark(Baseline = true)]
@@ -41,6 +43,18 @@ namespace BenchmarkConsole
         //[Benchmark(Baseline = true)]
         // [Benchmark]
         // public void MiKo_2080_Original() => GC.KeepAlive(new MiKoSolutions.Analyzers.Rules.Documentation.MiKo_2080_CodeFixProvider.MapData());
+
+        [Benchmark]
+        public void ArrayViaNew()
+        {
+            GC.KeepAlive(new int[Times]);
+        }
+        [Benchmark]
+        public void SharedArrayPool()
+        {
+            var array = ArrayPool<int>.Shared.Rent(Times);
+            ArrayPool<int>.Shared.Return(array);
+        }
 
         private string[] data;
 
