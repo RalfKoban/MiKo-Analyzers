@@ -190,6 +190,24 @@ public class TestMe : IEquatable<TestMe>
 ");
 
         [Test]
+        public void An_issue_is_reported_for_class_with_parenthesized_value_type_and_collection_type_comparison() => An_issue_is_reported_for(@"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public int Id { get; set; }
+    public List<Data> Data { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        return ((Data == other.Data) || (Data != null && Data.SequenceEqual(otherData))) && Id == other.Id;
+    }
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_class_with_value_type_and_array_type_AND_comparison_if_array_type_comparison_comes_first()
         {
             const string OriginalCode = @"
@@ -299,6 +317,46 @@ public class TestMe : IEquatable<TestMe>
     public object Data { get; set; }
 
     public bool Equals(TestMe other) => other is not null && Value == other.Value && Data == other.Data;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_parenthesized_value_type_and_collection_type_comparison()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public int Id { get; set; }
+    public List<Data> Data { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        return ((Data == other.Data) || (Data != null && Data.SequenceEqual(otherData))) && Id == other.Id;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public int Id { get; set; }
+    public List<Data> Data { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        return Id == other.Id && ((Data == other.Data) || (Data != null && Data.SequenceEqual(otherData)));
+    }
 }
 ";
 
