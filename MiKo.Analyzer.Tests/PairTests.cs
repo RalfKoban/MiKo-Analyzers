@@ -15,9 +15,13 @@ namespace MiKoSolutions.Analyzers
 
             Assert.Multiple(() =>
                                  {
+#pragma warning disable CS1718 // Comparison made to same variable
+
                                      // ReSharper disable once EqualExpressionComparison
                                      Assert.That(pair1 == pair1, "Equality operator for same instance");
                                      Assert.That(pair1 == pair2, "Equality operator for similar instances");
+
+#pragma warning restore CS1718 // Comparison made to same variable
                                  });
         }
 
@@ -39,9 +43,13 @@ namespace MiKoSolutions.Analyzers
 
             Assert.Multiple(() =>
                                  {
+#pragma warning disable CS1718 // Comparison made to same variable
+
                                      // ReSharper disable once EqualExpressionComparison
                                      Assert.That(pair1 != pair1, Is.False, "Inequality operator for same instance");
                                      Assert.That(pair1 != pair2, Is.False, "Inequality operator for similar instances");
+
+#pragma warning restore CS1718 // Comparison made to same variable
                                  });
         }
 

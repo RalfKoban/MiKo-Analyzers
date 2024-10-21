@@ -25,7 +25,7 @@ public " + type + @" TestMe
         public void No_issue_is_reported_for_enum_member_without_suffix_([ValueSource(nameof(Suffixes))] string suffix) => No_issue_is_reported_for(@"
 public enum TestMe
 {
-    None,
+    " + suffix + @"_None,
 }
 ");
 
