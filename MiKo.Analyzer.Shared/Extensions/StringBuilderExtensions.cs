@@ -450,7 +450,32 @@ namespace System.Text
                 return false;
             }
 
-            if (difference == 0)
+            if (difference > 0)
+            {
+                if (other.Length > QuickCompareLengthThreshold)
+                {
+                    var otherFirst = other[0];
+
+                    var lastIndex = otherValueLength - 1;
+                    var otherLast = other[lastIndex];
+
+                    var length = difference + 1; // increased by 1 to have the complete difference investigated
+
+                    if (difference < QuickCompareRentLengthThreshold)
+                    {
+                        // could be part in the replacement only if characters match
+                        return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                    }
+
+                    // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
+                    return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
+                }
+
+                // can be part in the replacement as other value is smaller and could fit current value
+                return true;
+            }
+
+            // if (difference == 0)
             {
                 // both values have same length, so do the quick check on whether the characters fit the expected ones (do not limit length as there are only 3 values below length of 8)
                 if (current[0] != other[0])
@@ -462,28 +487,6 @@ namespace System.Text
 
                 return current[lastIndex] == other[lastIndex];
             }
-
-            if (other.Length > QuickCompareLengthThreshold)
-            {
-                var otherFirst = other[0];
-
-                var lastIndex = otherValueLength - 1;
-                var otherLast = other[lastIndex];
-
-                var length = difference + 1; // increased by 1 to have the complete difference investigated
-
-                if (difference > QuickCompareRentLengthThreshold)
-                {
-                    // use rented arrays here (if we have larger differences, the start and end may be in different chunks)
-                    return QuickCompareAtIndicesWithRent(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
-                }
-
-                // could be part in the replacement only if characters match
-                return QuickCompareAtIndices(ref current, ref otherFirst, ref otherLast, ref length, ref lastIndex);
-            }
-
-            // can be part in the replacement as other value is smaller and could fit current value
-            return true;
         }
 
         private static bool QuickCompareAtIndices(ref StringBuilder current, ref char first, ref char last, ref int length, ref int lastIndex)

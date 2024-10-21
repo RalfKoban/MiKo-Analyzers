@@ -3141,8 +3141,14 @@ namespace MiKoSolutions.Analyzers
 
         internal static SyntaxList<XmlNodeSyntax> WithoutText(this SyntaxList<XmlNodeSyntax> values, params string[] texts)
         {
-            var result = values;
             var length = texts.Length;
+
+            if (length <= 0)
+            {
+                return values;
+            }
+
+            var result = values;
 
             for (var index = 0; index < length; index++)
             {
