@@ -18,12 +18,44 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_value_type_comparison_if_boolean_flag_comes_first() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(bool flag, int i) => flag && i == 42;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_value_type_comparison_if_string_comparison_comes_first() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(string s, int i) => s == ""whatever"" && i == 42;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_value_type_comparison() => No_issue_is_reported_for(@"
 using System;
 
 public class TestMe
 {
-    public bool DoSomething(int i) => i == 42 || i == 0815);
+    public bool DoSomething(int i) => i == 42 || i == 0815;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_pattern_matching_value_type_comparison() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public int Value { get; }
+
+    public bool DoSomething(object o) => o is TestMe t && t.Value == 42;
 }
 ");
 
@@ -33,7 +65,33 @@ using System;
 
 public class TestMe
 {
-    public bool DoSomething(int i) => 42 == i || 0815 == i);
+    public bool DoSomething(int i) => 42 == i || 0815 == i;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_public_static_readonly_field_comparison_when_field_comes_first() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private static void SetOwnerWindow(IntPtr intPtrOwned, IntPtr intPtrOwner)
+    {
+        if (IntPtr.Zero == intPtrOwned || IntPtr.Zero == intPtrOwner) return;
+    }
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_public_static_readonly_field_field_comparison_when_field_comes_last() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    private static void SetOwnerWindow(IntPtr intPtrOwned, IntPtr intPtrOwner)
+    {
+        if (intPtrOwned == IntPtr.Zero || intPtrOwner == IntPtr.Zero) return;
+    }
 }
 ");
 
@@ -43,7 +101,7 @@ using System;
 
 public class TestMe
 {
-    public bool DoSomething(int i, object o) => i == 42 || o.ToString() == ""whatever"");
+    public bool DoSomething(int i, object o) => i == 42 || o.ToString() == ""whatever"";
 }
 ");
 
@@ -208,6 +266,16 @@ public class TestMe
 ");
 
         [Test]
+        public void An_issue_is_reported_for_class_with_value_type_and_reference_type_OR_comparison_if_string_invocation_comes_first() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int i, object o) => o.ToString() == ""whatever"" || i == 42;
+}
+");
+
+        [Test]
         public void Code_gets_fixed_for_class_with_value_type_and_array_type_AND_comparison_if_array_type_comparison_comes_first()
         {
             const string OriginalCode = @"
@@ -324,6 +392,50 @@ public class TestMe : IEquatable<TestMe>
         }
 
         [Test]
+        public void Code_gets_fixed_for_complex_class_with_value_type_and_array_type_OR_comparison_in_if_clause_if_reference_type_comparison_comes_first_and_IsNotNull_pattern_expression()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Linq;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public int Value { get; set; }
+    public object Data { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        if (other is not null && Data == other.Data && Value == other.Value)
+            return true;
+
+        return false;
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Linq;
+
+public class TestMe : IEquatable<TestMe>
+{
+    public int Value { get; set; }
+    public object Data { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        if (other is not null && Value == other.Value && Data == other.Data)
+            return true;
+
+        return false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
         public void Code_gets_fixed_for_class_with_parenthesized_value_type_and_collection_type_comparison()
         {
             const string OriginalCode = @"
@@ -356,6 +468,58 @@ public class TestMe
     public bool Equals(TestMe other)
     {
         return Id == other.Id && ((Data == other.Data) || (Data != null && Data.SequenceEqual(otherData)));
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_parenthesized_value_type_and_collection_type_comparison_when_spanning_multiple_lines()
+        {
+            const string OriginalCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public List<Guid> Guids { get; set; }
+    public List<object> Objects { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        if (Guids.Count > 0 &&
+            Guids.All(_ => _ != Guid.Empty) &&
+            Objects.Count == 1 &&
+            Objects.First() != null)
+        {
+            return true;
+        }
+    }
+}
+";
+
+            const string FixedCode = @"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class TestMe
+{
+    public List<Guid> Guids { get; set; }
+    public List<object> Objects { get; set; }
+
+    public bool Equals(TestMe other)
+    {
+        if (Guids.Count > 0 &&
+            Objects.Count == 1 &&
+            Guids.All(_ => _ != Guid.Empty) &&
+            Objects.First() != null)
+        {
+            return true;
+        }
     }
 }
 ";

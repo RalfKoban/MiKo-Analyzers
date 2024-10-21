@@ -14,6 +14,8 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         private static readonly SyntaxKind[] LogicalConditions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
 
+        private static readonly SyntaxKind[] SpecialParentHandling = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement, SyntaxKind.IfStatement };
+
         public override string FixableDiagnosticId => "MiKo_5018";
 
         protected override SyntaxNode GetSyntax(IEnumerable<SyntaxNode> syntaxNodes) => syntaxNodes.OfType<BinaryExpressionSyntax>().FirstOrDefault();
@@ -25,7 +27,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                 var left = FindProblematicNode(binary.Left);
                 var right = binary.Right;
 
-                return binary.ReplaceNodes(new[] { left, right }, (original, rewritten) => ReferenceEquals(original, left) ? right.WithTrailingSpace() : left.WithoutTrivia());
+                var updatedSyntax = binary.ReplaceNodes(new[] { left, right }, (original, rewritten) => ReferenceEquals(original, left) ? right.WithTriviaFrom(original) : left.WithTriviaFrom(original));
+
+                return binary.Parent.IsAnyKind(SpecialParentHandling)
+                       ? updatedSyntax.WithoutTrailingTrivia() // only remove trailing trivia if condition is direct child of 'if/return/arrow clause' so that semicolon fits
+                       : updatedSyntax;
             }
 
             return syntax;
