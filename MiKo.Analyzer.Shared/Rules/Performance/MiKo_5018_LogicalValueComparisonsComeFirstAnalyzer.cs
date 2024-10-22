@@ -22,15 +22,18 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             switch (expression.WithoutParenthesis())
             {
-                case BinaryExpressionSyntax binary when binary.Left.IsKind(SyntaxKind.NullLiteralExpression) || binary.Right.IsKind(SyntaxKind.NullLiteralExpression):
+                case BinaryExpressionSyntax binary when IsNullCheck(binary):
                     return true;
 
                 case IsPatternExpressionSyntax pattern when pattern.Pattern is UnaryPatternSyntax unary && unary.Pattern is ConstantPatternSyntax constant && constant.Expression.IsKind(SyntaxKind.NullLiteralExpression):
                     return true;
-            }
 
-            return false;
+                default:
+                    return false;
+            }
         }
+
+        private static bool IsNullCheck(BinaryExpressionSyntax expression) => expression.Left.IsKind(SyntaxKind.NullLiteralExpression) || expression.Right.IsKind(SyntaxKind.NullLiteralExpression);
 
         private static bool HasIssue(BinaryExpressionSyntax binary, SyntaxNodeAnalysisContext context)
         {
@@ -48,42 +51,55 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
                     {
                         case IdentifierNameSyntax _: return false; // do not report checks on boolean members
                         case IsPatternExpressionSyntax e when e.Pattern is DeclarationPatternSyntax: return false; // do not report pattern checks
-                        case BinaryExpressionSyntax nested when nested.IsAnyKind(LogicalConditions) is false:
+                        case BinaryExpressionSyntax nested:
                         {
-                            var nestedLeft = nested.Left;
-                            var nestedRight = nested.Right;
-
-                            if (nestedLeft is InvocationExpressionSyntax
-                             || nestedRight is InvocationExpressionSyntax)
+                            if (nested.IsAnyKind(LogicalConditions))
                             {
-                                // report on method calls
-                                return true;
+                                if (IsNullCheck(nested.Right))
+                                {
+                                    return false; // do not report nested null checks
+                                }
                             }
-
-                            if (nestedLeft.IsKind(SyntaxKind.StringLiteralExpression)
-                             || nestedRight.IsKind(SyntaxKind.StringLiteralExpression))
+                            else
                             {
-                                // do not report checks on strings and value types
-                                return false;
-                            }
+                                // no logical condition
+                                var nestedLeft = nested.Left;
+                                var nestedRight = nested.Right;
 
-                            if (nestedLeft.IsKind(SyntaxKind.NumericLiteralExpression)
-                             || nestedRight.IsKind(SyntaxKind.NumericLiteralExpression))
-                            {
-                                // do not report checks on value types
-                                return false;
-                            }
+                                if (nestedLeft is InvocationExpressionSyntax || nestedRight is InvocationExpressionSyntax)
+                                {
+                                    // report on method calls
+                                    return true;
+                                }
 
-                            if (nestedLeft is MemberAccessExpressionSyntax
-                             || nestedRight is MemberAccessExpressionSyntax)
-                            {
-                                // do not report on members
-                                return false;
+                                if (nestedLeft.IsKind(SyntaxKind.StringLiteralExpression) || nestedRight.IsKind(SyntaxKind.StringLiteralExpression))
+                                {
+                                    // do not report checks on strings and value types
+                                    return false;
+                                }
+
+                                if (nestedLeft.IsKind(SyntaxKind.NumericLiteralExpression) || nestedRight.IsKind(SyntaxKind.NumericLiteralExpression))
+                                {
+                                    // do not report checks on value types
+                                    return false;
+                                }
+
+                                if (nestedLeft is MemberAccessExpressionSyntax || nestedRight is MemberAccessExpressionSyntax)
+                                {
+                                    // do not report on members
+                                    return false;
+                                }
                             }
 
                             break;
                         }
                     }
+                }
+
+                if (right.Left is ElementAccessExpressionSyntax && right.Right is LiteralExpressionSyntax)
+                {
+                    // do not report on element access
+                    return false;
                 }
 
                 var semanticModel = context.SemanticModel;

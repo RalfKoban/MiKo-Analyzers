@@ -24,7 +24,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
         {
             if (syntax is BinaryExpressionSyntax binary)
             {
-                var left = FindProblematicNode(binary.Left);
+                var left = FindProblematicNode(binary.Left); // TODO RKN: left will be "values.Length == 8"
                 var right = binary.Right;
 
                 var updatedSyntax = binary.ReplaceNodes(new[] { left, right }, (original, rewritten) => ReferenceEquals(original, left) ? right.WithTriviaFrom(original) : left.WithTriviaFrom(original));
@@ -39,15 +39,25 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
 
         private static ExpressionSyntax FindProblematicNode(ExpressionSyntax expression)
         {
+            var node = expression;
+
             while (true)
             {
-                if (expression is BinaryExpressionSyntax binary && binary.IsAnyKind(LogicalConditions))
+                if (node is BinaryExpressionSyntax binary && binary.IsAnyKind(LogicalConditions))
                 {
-                    expression = binary.Right;
+                    var right = binary.Right;
+
+                    if (right is BinaryExpressionSyntax binaryRight && (binaryRight.Left is ElementAccessExpressionSyntax || binaryRight.Right is ElementAccessExpressionSyntax))
+                    {
+                        // we have some element access, so we need to replace the complete node
+                        return expression;
+                    }
+
+                    node = right;
                 }
                 else
                 {
-                    return expression;
+                    return node;
                 }
             }
         }

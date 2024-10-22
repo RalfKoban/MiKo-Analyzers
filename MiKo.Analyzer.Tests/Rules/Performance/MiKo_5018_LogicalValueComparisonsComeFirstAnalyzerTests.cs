@@ -60,6 +60,45 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_multiple_null_checks_and_value_type_comparison() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg) => arg != null && arg.Nested != null && arg.Nested.Value == 42;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_class_with_array_content_checks_via_value_type_comparison() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int[] values)
+    {
+        if (values.Length == 8
+         && values[0] == 0
+         && values[1] == 1
+         && values[2] == 2
+         && values[3] == 3
+         && values[4] == 4
+         && values[5] == 5
+         && values[6] == 6
+         && values[7] == 7)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_value_type_comparison_if_constants_come_first() => No_issue_is_reported_for(@"
 using System;
 
@@ -194,6 +233,33 @@ public class TestMe
     public object Data { get; set; }
 
     public bool SomeComparison(TestMe other) => other is null || (Value != other.Value && Data != other.Data);
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_array_content_checks_via_value_type_comparison_and_additional_value_type_comparison() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int i, int[] values)
+    {
+        if (values.Length == 8
+         && values[0] == 0
+         && values[1] == 1
+         && values[2] == 2
+         && values[3] == 3
+         && values[4] == 4
+         && values[5] == 5
+         && values[6] == 6
+         && values[7] == 7
+         && i == 42)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 ");
 
@@ -525,6 +591,64 @@ public class TestMe
 ";
 
             VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_array_content_checks_via_value_type_comparison_and_additional_value_type_comparison()
+        {
+            const string OriginalText = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int i, int[] values)
+    {
+        if (values.Length == 8
+         && values[0] == 0
+         && values[1] == 1
+         && values[2] == 2
+         && values[3] == 3
+         && values[4] == 4
+         && values[5] == 5
+         && values[6] == 6
+         && values[7] == 7
+         && i == 42)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            const string FixedText = @"
+using System;
+
+public class TestMe
+{
+    public bool DoSomething(int i, int[] values)
+    {
+        if (i == 42
+         && values.Length == 8
+         && values[0] == 0
+         && values[1] == 1
+         && values[2] == 2
+         && values[3] == 3
+         && values[4] == 4
+         && values[5] == 5
+         && values[6] == 6
+         && values[7] == 7)
+        {
+            return true;
+        }
+
+        return false;
+    }
+}
+";
+
+            VerifyCSharpFix(OriginalText, FixedText);
         }
 
         //// TODO RKN: Add more complex AND/OR Comparisons with at least 3 comparisons and parenthesized ones
