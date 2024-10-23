@@ -321,6 +321,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5014_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5015_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5017_CodeFixProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5018_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\PerformanceCodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6001_CodeFixProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6002_CodeFixProvider.cs" />

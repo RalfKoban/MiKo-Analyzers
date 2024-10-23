@@ -14127,6 +14127,42 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move value comparison before reference comparison.
+        /// </summary>
+        internal static string MiKo_5018_CodeFixTitle {
+            get {
+                return ResourceManager.GetString("MiKo_5018_CodeFixTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comparisons on simple values are faster than comparisons on complex references such as collections. Hence, the value comparisons should be placed before the reference comparisons..
+        /// </summary>
+        internal static string MiKo_5018_Description {
+            get {
+                return ResourceManager.GetString("MiKo_5018_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place value comparison before reference comparison.
+        /// </summary>
+        internal static string MiKo_5018_MessageFormat {
+            get {
+                return ResourceManager.GetString("MiKo_5018_MessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value comparisons should be performed before reference comparisons.
+        /// </summary>
+        internal static string MiKo_5018_Title {
+            get {
+                return ResourceManager.GetString("MiKo_5018_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Surround with blank lines.
         /// </summary>
         internal static string MiKo_6001_CodeFixTitle {

@@ -4964,6 +4964,18 @@ When used e.g. on a list, that 'Contains' call has to loop over that list again 
   <data name="MiKo_5017_Title" xml:space="preserve">
     <value>Fields or variables assigned with string literals should be constant</value>
   </data>
+  <data name="MiKo_5018_CodeFixTitle" xml:space="preserve">
+    <value>Move value comparison before reference comparison</value>
+  </data>
+  <data name="MiKo_5018_Description" xml:space="preserve">
+    <value>Comparisons on simple values are faster than comparisons on complex references such as collections. Hence, the value comparisons should be placed before the reference comparisons.</value>
+  </data>
+  <data name="MiKo_5018_MessageFormat" xml:space="preserve">
+    <value>Place value comparison before reference comparison</value>
+  </data>
+  <data name="MiKo_5018_Title" xml:space="preserve">
+    <value>Value comparisons should be performed before reference comparisons</value>
+  </data>
   <data name="MiKo_6001_CodeFixTitle" xml:space="preserve">
     <value>Surround with blank lines</value>
   </data>

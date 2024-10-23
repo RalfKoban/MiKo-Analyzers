@@ -483,6 +483,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5015_StringLiteralGetsInternedAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5016_RemoveAllUsesContainsOfHashSetAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5017_StringLiteralVariableAssignmentIsConstantAnalyzer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\MiKo_5018_LogicalValueComparisonsComeFirstAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Performance\PerformanceAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\CallSurroundedByBlankLinesAnalyzer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rules\Spacing\MiKo_6001_LogStatementSurroundedByBlankLinesAnalyzer.cs" />
