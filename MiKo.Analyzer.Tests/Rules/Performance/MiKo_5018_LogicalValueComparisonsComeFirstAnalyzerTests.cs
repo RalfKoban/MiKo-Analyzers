@@ -73,6 +73,19 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_class_with_conditional_null_checks_and_value_type_comparison() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg) => arg != null && arg.Nested?.Value == 42;
+}
+");
+
+        [Test]
         public void No_issue_is_reported_for_class_with_array_content_checks_via_value_type_comparison() => No_issue_is_reported_for(@"
 using System;
 
@@ -237,6 +250,64 @@ public class TestMe
 ");
 
         [Test]
+        public void No_issue_is_reported_for_complex_class_with_value_type_enum_OR_comparison() => No_issue_is_reported_for(@"
+using System;
+using System.Linq;
+
+public class TestMe
+{
+    public StringComparison Comparison { get; set; }
+
+    public Guid Id { get; set; }
+
+    public bool SomeComparison(TestMe other) => other.Id == Guid.Empty && (other.Comparison == StringComparison.Ordinal || other.Comparison == StringComparison.OrdinalIgnoreCase);
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_parameters_only_value_type_comparisons() => No_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public static bool SomeComparison(Guid guid1, Guid guid2, Guid guid3, Guid guid4) => guid1 == guid3 && guid2 == guid4;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_CancellationToken_IsCancellationRequested_call() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public static bool SomeComparison(CancellationToken token, int value) => token.IsCancellationRequested || value == -1;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_version_comparison() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public static bool SomeComparison(Version version) => version.Major == 0 && version.Minor == 0 && version.Build == 0 && version.Revision == 0;
+}
+");
+
+        [Test]
+        public void No_issue_is_reported_for_version_comparison_when_numbers_are_on_left_side() => No_issue_is_reported_for(@"
+using System;
+using System.Threading;
+
+public class TestMe
+{
+    public static bool SomeComparison(Version version) => 0 == version.Major && 0 == version.Minor && 0 == version.Build && 0 == version.Revision;
+}
+");
+
+        [Test]
         public void An_issue_is_reported_for_class_with_array_content_checks_via_value_type_comparison_and_additional_value_type_comparison() => An_issue_is_reported_for(@"
 using System;
 
@@ -338,6 +409,32 @@ using System;
 public class TestMe
 {
     public bool DoSomething(int i, object o) => o.ToString() == ""whatever"" || i == 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_reference_type_comparison_and_multiple_null_checks_and_value_type_comparison() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg, object o) => o.ToString() == ""whatever"" && arg != null && arg.Nested != null && arg.Nested.Value == 42;
+}
+");
+
+        [Test]
+        public void An_issue_is_reported_for_class_with_conditional_value_type_comparison_and_reference_type_comparison_if_string_invocation_comes_first() => An_issue_is_reported_for(@"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg, object o) => o.ToString() == ""whatever"" && arg?.Nested?.Value == 42;
 }
 ");
 
@@ -651,7 +748,101 @@ public class TestMe
             VerifyCSharpFix(OriginalText, FixedText);
         }
 
-        //// TODO RKN: Add more complex AND/OR Comparisons with at least 3 comparisons and parenthesized ones
+        [Test]
+        public void Code_gets_fixed_for_class_with_reference_type_comparison_and_multiple_null_checks_and_value_type_comparison()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg, object o) => o.ToString() == ""whatever"" && arg != null && arg.Nested != null && arg.Nested.Value == 42;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg, object o) => arg != null && arg.Nested != null && arg.Nested.Value == 42 && o.ToString() == ""whatever"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_conditional_value_type_comparison_and_reference_type_comparison_if_string_invocation_comes_first()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg, object o) => o.ToString() == ""whatever"" && arg?.Nested?.Value == 42;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public TestMe Nested { get }
+    public int Value { get; }
+
+    public bool DoSomething(TestMe arg, object o) => arg?.Nested?.Value == 42 && o.ToString() == ""whatever"";
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_for_class_with_conditional_value_type_comparison_and_boolean_method_calls_if_method_calls_come_first()
+        {
+            const string OriginalCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get }
+
+    public bool DoSomething(TestMe t) => IsSomething(t) && FindSomething(t) == t && t.Comparison == StringComparison.Ordinal;
+
+    public bool IsSomething(object o) => true;
+
+    public object FindSomething(object o) => o;
+}
+";
+
+            const string FixedCode = @"
+using System;
+
+public class TestMe
+{
+    public StringComparison Comparison { get }
+
+    public bool DoSomething(TestMe t) => t.Comparison == StringComparison.Ordinal && IsSomething(t) && FindSomething(t) == t;
+
+    public bool IsSomething(object o) => true;
+
+    public object FindSomething(object o) => o;
+}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
 
         protected override string GetDiagnosticId() => MiKo_5018_LogicalValueComparisonsComeFirstAnalyzer.Id;
 

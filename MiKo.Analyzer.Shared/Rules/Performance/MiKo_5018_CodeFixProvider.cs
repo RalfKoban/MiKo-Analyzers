@@ -14,7 +14,7 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
     {
         private static readonly SyntaxKind[] LogicalConditions = { SyntaxKind.LogicalAndExpression, SyntaxKind.LogicalOrExpression };
 
-        private static readonly SyntaxKind[] SpecialParentHandling = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement, SyntaxKind.IfStatement };
+        private static readonly SyntaxKind[] SpecialParents = { SyntaxKind.ArrowExpressionClause, SyntaxKind.ReturnStatement, SyntaxKind.IfStatement };
 
         public override string FixableDiagnosticId => "MiKo_5018";
 
@@ -25,11 +25,11 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             if (syntax is BinaryExpressionSyntax binary)
             {
                 var left = FindProblematicNode(binary.Left); // TODO RKN: left will be "values.Length == 8"
-                var right = binary.Right;
+                var right = FindProblematicNode(binary.Right);
 
                 var updatedSyntax = binary.ReplaceNodes(new[] { left, right }, (original, rewritten) => ReferenceEquals(original, left) ? right.WithTriviaFrom(original) : left.WithTriviaFrom(original));
 
-                return binary.Parent.IsAnyKind(SpecialParentHandling)
+                return binary.Parent.IsAnyKind(SpecialParents)
                        ? updatedSyntax.WithoutTrailingTrivia() // only remove trailing trivia if condition is direct child of 'if/return/arrow clause' so that semicolon fits
                        : updatedSyntax;
             }
@@ -45,15 +45,18 @@ namespace MiKoSolutions.Analyzers.Rules.Performance
             {
                 if (node is BinaryExpressionSyntax binary && binary.IsAnyKind(LogicalConditions))
                 {
-                    var right = binary.Right;
+                    var next = binary.Right;
 
-                    if (right is BinaryExpressionSyntax binaryRight && (binaryRight.Left is ElementAccessExpressionSyntax || binaryRight.Right is ElementAccessExpressionSyntax))
+                    if (next is BinaryExpressionSyntax nested)
                     {
-                        // we have some element access, so we need to replace the complete node
-                        return expression;
+                        if (nested.Left is ElementAccessExpressionSyntax || nested.Right is ElementAccessExpressionSyntax)
+                        {
+                            // we have some null checks or some element access, so we need to replace the complete node
+                            return expression;
+                        }
                     }
 
-                    node = right;
+                    node = next;
                 }
                 else
                 {
