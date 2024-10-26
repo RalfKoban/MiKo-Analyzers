@@ -363,7 +363,8 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
 
                     return comment.ReplaceNode(t, XmlText(text))
-                                  .AddContent(seeCref, XmlText(commentContinue).WithTrailingXmlComment());
+                                  .AddContent(seeCref, XmlText(commentContinue))
+                                  .WithTagsOnSeparateLines();
                 }
 
                 default:
@@ -383,7 +384,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var content = CommentStartingWith(comment.Content, phrase, firstWordHandling);
 
-            return SyntaxFactory.XmlElement(comment.StartTag, content, comment.EndTag);
+            return CommentWithContent(comment, content);
         }
 
         protected static SyntaxList<XmlNodeSyntax> CommentStartingWith(SyntaxList<XmlNodeSyntax> content, string phrase, FirstWordHandling firstWordHandling = FirstWordHandling.MakeLowerCase)
@@ -428,7 +429,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 return comment;
             }
 
-            var startText = XmlText(commentStart).WithLeadingXmlComment();
+            var startText = XmlText(commentStart);
 
             XmlTextSyntax continueText;
             var syntax = content[index];
@@ -467,8 +468,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                     .Insert(index + 1, seeCref)
                                     .Insert(index + 2, continueText);
 
-            return SyntaxFactory.XmlElement(comment.StartTag, newContent, comment.EndTag);
+            return CommentWithContent(comment, newContent);
         }
+
+        protected static XmlElementSyntax CommentWithContent(XmlElementSyntax value, SyntaxList<XmlNodeSyntax> content) => SyntaxFactory.XmlElement(value.StartTag, content, value.EndTag).WithTagsOnSeparateLines();
 
         protected static XmlEmptyElementSyntax Cref(string tag, TypeSyntax type)
         {

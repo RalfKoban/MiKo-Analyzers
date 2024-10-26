@@ -16,7 +16,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
     [TestFixture]
     public sealed class MiKo_2050_ExceptionSummaryAnalyzerTests : CodeFixVerifier
     {
-        private static readonly string[] StartingPhrases = [.. CreatePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase)];
+        private static readonly string[] StartingPhrases = [.. CreatePhrases().Except(Constants.Comments.ExceptionTypeSummaryStartingPhrase.Trim())];
 
         [Test]
         public void No_issue_is_reported_for_non_exception_class() => No_issue_is_reported_for(@"
@@ -627,7 +627,9 @@ public sealed class BlaBlaException : Exception
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when </summary>
+/// <summary>
+/// The exception that is thrown when 
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
@@ -654,7 +656,9 @@ public sealed class BlaBlaException : Exception
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when </summary>
+/// <summary>
+/// The exception that is thrown when 
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
@@ -740,7 +744,9 @@ public sealed class BlaBlaException : Exception
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when something is done.</summary>
+/// <summary>
+/// The exception that is thrown when something is done.
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {
@@ -766,7 +772,9 @@ public sealed class BlaBlaException : Exception
 using System;
 using System.Runtime.Serialization;
 
-/// <summary>The exception that is thrown when something is done.</summary>
+/// <summary>
+/// The exception that is thrown when something is done.
+/// </summary>
 [Serializable]
 public sealed class BlaBlaException : Exception
 {

@@ -75,17 +75,11 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     contents[lastIndex] = WithoutEmptyTextAtEnd(last, last.TextTokens.ToList());
                 }
 
-                return SyntaxFactory.XmlElement(
-                                            comment.StartTag,
-                                            contents.ToSyntaxList(),
-                                            comment.EndTag.WithLeadingXmlComment());
+                return CommentWithContent(comment, contents.ToSyntaxList());
             }
 
             // happens if we start e.g. with a <see link
-            return SyntaxFactory.XmlElement(
-                                        comment.StartTag,
-                                        originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()),
-                                        comment.EndTag.WithLeadingXmlComment());
+            return CommentWithContent(comment, originalContent.Insert(0, XmlText(startingPhrase).WithLeadingXmlComment()));
         }
 
         private static XmlNodeSyntax NewXmlComment(XmlTextSyntax text, string startingPhrase)

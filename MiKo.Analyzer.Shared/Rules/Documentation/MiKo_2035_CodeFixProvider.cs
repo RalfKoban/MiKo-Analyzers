@@ -73,9 +73,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static XmlElementSyntax PrepareComment(XmlElementSyntax comment)
         {
-            // ensure that end tag is on different line
-            var adjustedComment = comment.WithContent(comment.Content.WithoutTrailingXmlComment())
-                                         .WithEndTag(comment.EndTag.WithLeadingXmlComment());
+            var adjustedComment = CommentWithContent(comment, comment.Content);
 
             return Comment(adjustedComment, MappedData.Value.ReplacementMapKeys, MappedData.Value.ReplacementMap);
         }

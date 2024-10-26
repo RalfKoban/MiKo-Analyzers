@@ -402,6 +402,45 @@ public class TestMe
             VerifyCSharpFix(Template.Replace("###", originalPhrase), Template.Replace("###", fixedPhrase));
         }
 
+        [TestCase("Some integers.", "A collection of some integers.")]
+        [TestCase("The mapping information.", "A collection of the mapping information.")]
+        public void Code_gets_fixed_for_generic_collection_on_same_line_(string originalPhrase, string fixedPhrase)
+        {
+            var originalCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>" + originalPhrase + @"</returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + fixedPhrase + @"
+    /// </returns>
+    public IEnumerable<int> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         [TestCase("Some integers.", "some integers.")]
         [TestCase("A task that can be used to await.", "")]
         [TestCase("A task that can be used to await", "")]
@@ -411,6 +450,55 @@ public class TestMe
         [TestCase("An awaitable task", "")]
         [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
         public void Code_gets_fixed_for_Task_with_generic_collection_(string originalText, string fixedText)
+        {
+            var originalCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// " + originalText + @"
+    /// </returns>
+    public Task<IList<int>> DoSomething { get; set; }
+}
+";
+
+            var fixedCode = @"
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The value of the <see cref=""Task{TResult}.Result""/> parameter contains a collection of " + fixedText + @"
+    /// </returns>
+    public Task<IList<int>> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
+        [TestCase("Some integers.", "some integers.")]
+        [TestCase("A task that can be used to await.", "")]
+        [TestCase("A task that can be used to await", "")]
+        [TestCase("A task to await.", "")]
+        [TestCase("A task to await", "")]
+        [TestCase("An awaitable task.", "")]
+        [TestCase("An awaitable task", "")]
+        [TestCase("A task that represents the asynchronous operation. The Result is something", "something")]
+        public void Code_gets_fixed_for_Task_with_generic_collection_on_same_line_(string originalText, string fixedText)
         {
             var originalCode = @"
 using System;
