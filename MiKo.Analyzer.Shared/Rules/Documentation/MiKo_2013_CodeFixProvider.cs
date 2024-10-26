@@ -104,47 +104,55 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                 }
 
                 // fix sentence ending
+                var trimmedExistingTextEnd = string.Empty;
                 var trimmedExistingText = existingText.Trim();
-                var trimmedExistingTextEnd = ReadOnlySpan<char>.Empty;
 
                 if (trimmedExistingText.EndsWithAny(Constants.SentenceMarkers))
                 {
                     var end = trimmedExistingText.Length - 1;
 
-                    trimmedExistingTextEnd = trimmedExistingText.Slice(end);
+                    // send end here before slice gets re-assigned
+                    trimmedExistingTextEnd = trimmedExistingText.Slice(end).ToString();
+
                     trimmedExistingText = trimmedExistingText.Slice(0, end);
                 }
 
-                var continuation = trimmedExistingText.AsBuilder().Without(EnumStartingPhrases).Trimmed().ToString();
+                var continuation = trimmedExistingText.AsBuilder().Without(EnumStartingPhrases).Trimmed();
 
                 if (continuation.IsSingleWord())
                 {
+                    var word = continuation.ToString();
+
                     var enumName = text.FirstAncestor<EnumDeclarationSyntax>()?.GetName();
 
                     // seems like the continuation is a single word and ends with the name of the enum, so it can be lower-case plural
-                    if (enumName == continuation || enumName == continuation + "Enum")
+                    if (enumName == word || enumName == word + "Enum")
                     {
                         startingPhrase = KindPhrase;
 
-                        // get rid of 'Type', 'Enum' and 'Kind'
-                        continuation = continuation.AsBuilder()
-                                                   .Without("Type")
+                        // get rid of 'Type', 'Enum' and 'Kind' and ensure that we have a plural name here, but do not split yet into parts (as otherwise we would pluralize the wrong part)
+                        continuation = continuation.Without("Type")
                                                    .Without("Kind")
                                                    .Without("Enum")
                                                    .WithoutAbbreviations()
-                                                   .ToString();
-
-                        // ensure we have a plural name here, but do not split yet into parts (as otherwise we would pluralize the wrong part)
-                        continuation = Pluralizer.MakePluralName(continuation);
-
-                        continuation = continuation.AsBuilder().SeparateWords(' ', FirstWordHandling.MakeLowerCase).ToString();
+                                                   .AdjustFirstWord(FirstWordHandling.MakePlural)
+                                                   .SeparateWords(' ', FirstWordHandling.MakeLowerCase);
+                    }
+                    else
+                    {
+                        continuation = continuation.AdjustFirstWord(FirstWordHandling.MakeLowerCase);
                     }
                 }
+                else
+                {
+                    continuation = continuation.AdjustFirstWord(FirstWordHandling.MakeLowerCase);
+                }
 
-                var finalText = startingPhrase.ConcatenatedWith(continuation, trimmedExistingTextEnd).AsBuilder()
-                                              .ReplaceWithCheck(" kinds of state ", " states of ")
-                                              .ReplaceWithCheck(" of of ", " of ")
-                                              .ToString();
+                var finalText = continuation.Insert(0, startingPhrase)
+                                            .Append(trimmedExistingTextEnd)
+                                            .ReplaceWithCheck(" kinds of state ", " states of ")
+                                            .ReplaceWithCheck(" of of ", " of ")
+                                            .ToString();
 
                 textTokens.RemoveAt(0);
                 textTokens.Insert(0, XmlTextToken(finalText));

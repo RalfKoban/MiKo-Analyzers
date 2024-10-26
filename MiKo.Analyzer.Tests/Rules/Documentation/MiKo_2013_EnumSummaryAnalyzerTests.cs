@@ -103,7 +103,7 @@ public enum TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Defines values that specify Something.
+/// Defines values that specify something.
 /// </summary>
 public enum TestMe
 {
@@ -124,7 +124,7 @@ public enum TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Defines values that specify Something to do.
+/// Defines values that specify something to do.
 /// </summary>
 public enum TestMe
 {
@@ -148,7 +148,7 @@ public enum TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Defines values that specify Something
+/// Defines values that specify something
 /// to do.
 /// </summary>
 public enum TestMe
@@ -172,7 +172,7 @@ public enum TestMe
 
             const string FixedCode = @"
 ///<summary>
-/// Defines values that specify Something to do.
+/// Defines values that specify something to do.
 /// </summary>
 public enum TestMe
 {
@@ -193,7 +193,7 @@ public enum TestMe
 
             const string FixedCode = @"
 ///<summary>
-/// Defines values that specify Something to do.
+/// Defines values that specify something to do.
 /// </summary>
 public enum TestMe
 {
@@ -217,7 +217,7 @@ public enum TestMe
 
             const string FixedCode = @"
 ///<summary>
-/// Defines values that specify Something
+/// Defines values that specify something
 ///to do.
 /// </summary>
 public enum TestMe
