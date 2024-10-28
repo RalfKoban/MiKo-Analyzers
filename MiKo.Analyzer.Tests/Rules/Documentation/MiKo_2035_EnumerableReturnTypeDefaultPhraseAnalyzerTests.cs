@@ -441,6 +441,32 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_generic_collection_with_non_primitive_type()
+        {
+            const string Template = @"
+using System;
+using System.Collections.Generic;
+
+public record GroupedRow
+{
+}
+
+public class TestMe
+{
+    /// <summary>
+    /// Does something.
+    /// </summary>
+    /// <returns>
+    /// ###.
+    /// </returns>
+    public IEnumerable<GroupedRow> DoSomething { get; set; }
+}
+";
+
+            VerifyCSharpFix(Template.Replace("###", "Some data"), Template.Replace("###", "A collection of grouped rows that contains some data"));
+        }
+
         [TestCase("Some integers.", "some integers.")]
         [TestCase("A task that can be used to await.", "")]
         [TestCase("A task that can be used to await", "")]

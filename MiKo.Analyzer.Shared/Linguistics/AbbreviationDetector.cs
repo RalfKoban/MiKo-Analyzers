@@ -241,14 +241,14 @@ namespace MiKoSolutions.Analyzers.Linguistics
         private static readonly Pair[] MidTerms = Prefixes.Concat(OnlyMidTerms).ToArray();
 
         private static readonly Pair[] Postfixes = OnlyMidTerms.Concat(new[]
-                                                                            {
-                                                                                new Pair("BL", "BusinessLogic"),
-                                                                                new Pair("Bl", "BusinessLogic"),
-                                                                                new Pair("VM", "ViewModel"),
-                                                                                new Pair("VMs", "ViewModels"),
-                                                                                new Pair("Vm", "ViewModel"),
-                                                                                new Pair("Vms", "ViewModels"),
-                                                                            })
+                                                                           {
+                                                                               new Pair("BL", "BusinessLogic"),
+                                                                               new Pair("Bl", "BusinessLogic"),
+                                                                               new Pair("VM", "ViewModel"),
+                                                                               new Pair("VMs", "ViewModels"),
+                                                                               new Pair("Vm", "ViewModel"),
+                                                                               new Pair("Vms", "ViewModels"),
+                                                                           })
                                                                .ToArray();
 
         private static readonly string[] AllowedPostFixTerms =

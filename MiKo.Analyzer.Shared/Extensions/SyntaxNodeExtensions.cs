@@ -668,12 +668,11 @@ namespace MiKoSolutions.Analyzers
         {
             switch (value)
             {
-                case IdentifierNameSyntax i: return i.GetName();
                 case MemberAccessExpressionSyntax m: return m.GetName();
                 case MemberBindingExpressionSyntax b: return b.GetName();
                 case InvocationExpressionSyntax i: return i.GetName();
-                case SimpleNameSyntax s: return s.GetName();
                 case LiteralExpressionSyntax l: return l.GetName();
+                case TypeSyntax t: return t.GetName();
                 default: return string.Empty;
             }
         }
@@ -770,6 +769,18 @@ namespace MiKoSolutions.Analyzers
                 case StructDeclarationSyntax s: return s.GetName();
                 default:
                     return string.Empty;
+            }
+        }
+
+        internal static string GetName(this TypeSyntax value)
+        {
+            switch (value)
+            {
+                case null: return string.Empty;
+                case IdentifierNameSyntax i: return i.GetName();
+                case SimpleNameSyntax s: return s.GetName();
+                default:
+                    return value.ToString();
             }
         }
 
