@@ -177,6 +177,30 @@ public class TestMe
             VerifyCSharpFix(originalCode, fixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_empty_summary_with_([ValueSource(nameof(AmbiguousPhrases))] string phrase)
+        {
+            var originalCode = @"
+public class TestMe
+{
+    /// <summary>
+    /// " + phrase + @"
+    /// </summary>
+    public void DoSomething() { }
+}
+";
+
+            var fixedCode = @"
+public class TestMe
+{
+    /// " + phrase + @"
+    public void DoSomething() { }
+}
+";
+
+            VerifyCSharpFix(originalCode, fixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_2041_InvalidXmlInSummaryAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_2041_InvalidXmlInSummaryAnalyzer();
