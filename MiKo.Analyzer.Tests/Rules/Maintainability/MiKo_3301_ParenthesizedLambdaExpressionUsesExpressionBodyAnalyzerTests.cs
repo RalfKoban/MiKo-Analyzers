@@ -455,6 +455,49 @@ namespace Bla
             VerifyCSharpFix(OriginalCode, FixedCode);
         }
 
+        [Test]
+        public void Code_gets_fixed_for_async_parenthesized_lambda_expression()
+        {
+            const string OriginalCode = @"
+namespace Bla
+{
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async void DoSomething()
+        {
+            var result = async () =>
+                            {
+                                await Task.CompletedTask;
+                            };
+        }
+    }
+}}
+";
+
+            const string FixedCode = @"
+namespace Bla
+{
+using System;
+
+namespace Bla
+{
+    public class TestMe
+    {
+        public async void DoSomething()
+        {
+            var result = async () => await Task.CompletedTask;
+        }
+    }
+}}
+";
+
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
         protected override string GetDiagnosticId() => MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer.Id;
 
         protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3301_ParenthesizedLambdaExpressionUsesExpressionBodyAnalyzer();
