@@ -96,8 +96,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             {
                 var contents = firstComment.Content.WithoutTrailingXmlComment()
                                            .Add(TrailingNewLineXmlText())
-                                           .AddRange(partsAfterSentence)
-                                           .Add(TrailingNewLineXmlText());
+                                           .AddRange(partsAfterSentence);
 
                 return firstComment.WithContent(contents);
             }
@@ -200,7 +199,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
             var startFixed = CommentStartingWith(comment, StartPhraseParts0, SeeLangword_True(), Replacement + Constants.TODO);
             var bothFixed = CommentEndingWith(startFixed, EndPhraseParts0, SeeLangword_False(), EndPhraseParts1);
 
-            return bothFixed;
+            return bothFixed.WithTagsOnSeparateLines();
         }
 
         private static XmlElementSyntax FixTextOnlyComment(XmlElementSyntax comment, XmlTextSyntax originalText, ReadOnlySpan<char> subText, string replacement, ConcreteMapInfo info)
@@ -258,7 +257,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             var fixedComment = Comment(bothFixed, replacementMapKeys, replacementMap);
 
-            return fixedComment;
+            return fixedComment.WithTagsOnSeparateLines();
         }
 
         private static XmlElementSyntax ModifyElseOtherwisePart(XmlElementSyntax comment)

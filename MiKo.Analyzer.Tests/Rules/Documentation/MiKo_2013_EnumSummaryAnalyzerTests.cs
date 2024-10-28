@@ -103,7 +103,7 @@ public enum TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Defines values that specify Something.
+/// Defines values that specify something.
 /// </summary>
 public enum TestMe
 {
@@ -124,7 +124,7 @@ public enum TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Defines values that specify Something to do.
+/// Defines values that specify something to do.
 /// </summary>
 public enum TestMe
 {
@@ -148,8 +148,77 @@ public enum TestMe
 
             const string FixedCode = @"
 /// <summary>
-/// Defines values that specify Something
+/// Defines values that specify something
 /// to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_no_spaces_after_slashes()
+        {
+            const string OriginalCode = @"
+///<summary>
+///Something to do.
+///</summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+///<summary>
+/// Defines values that specify something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed__when_on_same_line_with_no_spaces_after_slashes()
+        {
+            const string OriginalCode = @"
+///<summary>Something to do.</summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+///<summary>
+/// Defines values that specify something to do.
+/// </summary>
+public enum TestMe
+{
+}
+";
+            VerifyCSharpFix(OriginalCode, FixedCode);
+        }
+
+        [Test]
+        public void Code_gets_fixed_with_multiline_but_no_spaces_after_slashes()
+        {
+            const string OriginalCode = @"
+///<summary>
+///Something
+///to do.
+///</summary>
+public enum TestMe
+{
+}
+";
+
+            const string FixedCode = @"
+///<summary>
+/// Defines values that specify something
+///to do.
 /// </summary>
 public enum TestMe
 {
