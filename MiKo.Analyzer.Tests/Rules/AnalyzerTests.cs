@@ -25,7 +25,8 @@ namespace MiKoSolutions.Analyzers.Rules
         private static readonly CodeFixProvider[] AllCodeFixProviders = CreateAllCodeFixProviders();
 
         [Ignore("Just for now")]
-        [TestCase("TODO"), Explicit, Timeout(4 * 60 * 60 * 1000)] // 4h
+        [Explicit]
+        [TestCase("TODO"), Timeout(4 * 60 * 60 * 1000)] // 4h
         public static void Performance_(string path)
         {
             // ncrunch: no coverage start
@@ -34,7 +35,7 @@ namespace MiKoSolutions.Analyzers.Rules
 
             var results = DiagnosticVerifier.GetDiagnostics(sources, LanguageVersion.LatestMajor, AllAnalyzers.Cast<DiagnosticAnalyzer>().ToArray(), true);
 
-            Assert.That(results.Count, Is.Zero);
+            Assert.That(results.Length, Is.Zero);
 
             static IEnumerable<string> GetDocuments(string path)
             {

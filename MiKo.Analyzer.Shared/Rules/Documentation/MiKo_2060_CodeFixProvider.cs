@@ -25,6 +25,18 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         public static void LoadData() => GC.KeepAlive(MappedData.Value);
 
+        internal static bool CanFix(ReadOnlySpan<char> text)
+        {
+            var mappedData = MappedData.Value;
+
+            return text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysThe, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
+                || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase);
+        }
+
         internal static SyntaxNode GetUpdatedSyntax(SyntaxNode syntax)
         {
             if (syntax is XmlElementSyntax summary)
