@@ -159,6 +159,26 @@ namespace System.Text
             }
         }
 
+        public static bool EndsWith(this StringBuilder value, string ending, StringComparison comparison = StringComparison.Ordinal)
+        {
+            if (ending is null)
+            {
+                return false;
+            }
+
+            var valueLength = value.Length;
+            var endingLength = ending.Length;
+
+            if (valueLength >= endingLength)
+            {
+                var end = value.ToString(valueLength - endingLength, endingLength);
+
+                return end.Equals(ending, comparison);
+            }
+
+            return false;
+        }
+
         public static string FirstWord(this StringBuilder value, out int whitespacesBefore)
         {
             if (value is null)
@@ -426,6 +446,28 @@ namespace System.Text
             var end = value.CountTrailingWhitespaces();
 
             return value.ToString(0, length - end);
+        }
+
+        public static StringBuilder TrimEndBy(this StringBuilder value, int count)
+        {
+            if (count == 0)
+            {
+                return value;
+            }
+
+            if (count < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            var length = value.Length;
+
+            if (count > length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            return value.Remove(length - count, count);
         }
 
         public static StringBuilder Without(this StringBuilder value, string phrase) => value.ReplaceWithCheck(phrase, string.Empty); // ncrunch: no coverage
