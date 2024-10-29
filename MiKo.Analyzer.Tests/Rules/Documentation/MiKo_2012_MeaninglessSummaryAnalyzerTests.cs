@@ -34,6 +34,13 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
         private static readonly string[] MeaninglessFieldPhrases = MeaninglessPhrases.Except(Constants.Comments.FieldStartingPhrase).ToArray();
 
+#if NCRUNCH
+
+        [OneTimeSetUp]
+        public static void PrepareTestEnvironment() => MiKo_2060_CodeFixProvider.LoadData();
+
+#endif
+
         [Test]
         public void No_issue_is_reported_for_class_without_documentation() => No_issue_is_reported_for(@"
 public class TestMe

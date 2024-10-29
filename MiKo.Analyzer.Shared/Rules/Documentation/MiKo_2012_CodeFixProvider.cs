@@ -158,14 +158,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                     }
                     else if (name.Contains("Factory", StringComparison.OrdinalIgnoreCase))
                     {
-                        var mappedData = MiKo_2060_CodeFixProvider.MappedData.Value;
-
-                        if (text.StartsWithAny(mappedData.InstancesReplacementMapKeys, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysA, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysCD, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysThe, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysThis, StringComparison.OrdinalIgnoreCase)
-                         || text.StartsWithAny(mappedData.TypeReplacementMapKeysOthers, StringComparison.OrdinalIgnoreCase))
+                        if (MiKo_2060_CodeFixProvider.CanFix(text))
                         {
                             return MiKo_2060_CodeFixProvider.GetUpdatedSyntax(comment);
                         }
@@ -223,7 +216,7 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
 
             if (inheritdoc != null)
             {
-                // special case: its an inherit documentation, so mark it so
+                // special case: it's an inherit documentation, so mark it so
                 return inheritdoc;
             }
 
