@@ -53,6 +53,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "Bone",
                                                                          "omponent", // 'component'
                                                                          "OMPONENT",
+                                                                         "ondition", // prevent stuff like 'UseCondition' which contains the term 'seCond'
                                                                          "cone",
                                                                          "Cone",
                                                                          "done",
@@ -85,6 +86,7 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "NoOne",
                                                                          "onE", // 'SetupNonExistentDevice'
                                                                          "OnE",
+                                                                         "oneTime",
                                                                          "OneTime",
                                                                          "Ones",
                                                                          "oNeeded",
@@ -115,6 +117,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
                                                                          "ZONE",
                                                                          "xponent",
                                                                      };
+
+        private static readonly IEnumerable<string> KnownEndings = new[]
+                                                                       {
+                                                                           "_one",
+                                                                           "_first",
+                                                                           "_second",
+                                                                           "_third",
+                                                                       };
 
         public MiKo_1080_UseNumbersInsteadOfWordingAnalyzer() : base(Id)
         {
@@ -166,6 +176,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
             foreach (var part in KnownParts)
             {
                 finalName.ReplaceWithCheck(part, "#");
+            }
+
+            foreach (var ending in KnownEndings)
+            {
+                if (finalName.EndsWith(ending))
+                {
+                    finalName.TrimEndBy(ending.Length);
+                }
             }
 
             return finalName.ToString();
