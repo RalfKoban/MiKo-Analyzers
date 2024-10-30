@@ -43,28 +43,26 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
                                                                   " A.) ",
                                                               ];
 
+        private static readonly string[] Markers = ["-", "*"];
+
+        private static readonly string[] MarkerBeginnings = [string.Empty, ":", " "];
+
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_Enumeration_in_Xml_tag() => Assert.Multiple(() =>
-                                                                                              {
-                                                                                                  foreach (var xmlTag in XmlTags)
-                                                                                                  {
-                                                                                                      foreach (var marker in EnumerationMarkers)
-                                                                                                      {
-                                                                                                          An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_Enumeration_in_Xml_tag_(
+                                                                 [ValueSource(nameof(XmlTags))] string xmlTag,
+                                                                 [ValueSource(nameof(EnumerationMarkers))] string marker)
+            => An_issue_is_reported_for(2, @"
 /// <" + xmlTag + @">
 /// " + marker + @" something.
 /// " + marker + @" something else.
 /// </" + xmlTag + @">
 public sealed class TestMe { }
 ");
-                                                                                                      }
-                                                                                                  }
-                                                                                              });
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_dot_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_dot_enumeration_in_comment_([ValueSource(nameof(MarkerBeginnings))] string markerBegin) => An_issue_is_reported_for(2, @"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// * It is something.
@@ -75,7 +73,7 @@ public sealed class TestMe { }
 
         [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:ParameterMustNotSpanMultipleLines", Justification = Justifications.StyleCop.SA1118)]
         [Test]
-        public void An_issue_is_reported_for_slash_enumeration_in_comment_([Values("", ":", " ")] string markerBegin) => An_issue_is_reported_for(2, @"
+        public void An_issue_is_reported_for_slash_enumeration_in_comment_([ValueSource(nameof(MarkerBeginnings))] string markerBegin) => An_issue_is_reported_for(2, @"
 /// <summary>
 /// The reason" + markerBegin + @"
 /// - It is something.
@@ -138,7 +136,7 @@ public sealed class TestMe { }
 ");
 
         [Test]
-        public void Code_gets_fixed_with_multi_line_text_at_beginning_for_([Values("-", "*")] string marker)
+        public void Code_gets_fixed_with_multi_line_text_at_beginning_for_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -166,7 +164,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_single_line_text_at_beginning_for_([Values("-", "*")] string marker)
+        public void Code_gets_fixed_with_single_line_text_at_beginning_for_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -192,7 +190,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_multi_line_text_at_end_for_([Values("-", "*")] string marker)
+        public void Code_gets_fixed_with_multi_line_text_at_end_for_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>
@@ -220,7 +218,7 @@ public sealed class TestMe { }
         }
 
         [Test]
-        public void Code_gets_fixed_with_single_line_text_at_end_for_([Values("-", "*")] string marker)
+        public void Code_gets_fixed_with_single_line_text_at_end_for_([ValueSource(nameof(Markers))] string marker)
         {
             var originalCode = @"
 /// <summary>

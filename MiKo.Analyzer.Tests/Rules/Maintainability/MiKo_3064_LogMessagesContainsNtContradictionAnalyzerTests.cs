@@ -67,13 +67,10 @@ namespace log4net
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_with_contradiction() => Assert.Multiple(() =>
-                                                                                                       {
-                                                                                                           foreach (var method in Methods)
-                                                                                                           {
-                                                                                                               foreach (var contradiction in WrongContradictionPhrases)
-                                                                                                               {
-                                                                                                                   An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_ctor_with_contradiction_(
+                                                                          [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
+                                                                          [ValueSource(nameof(Methods))] string method)
+            => An_issue_is_reported_for(@"
 using System;
 
 namespace log4net
@@ -94,18 +91,12 @@ namespace log4net
     }
 }
 ");
-                                                                                                               }
-                                                                                                           }
-                                                                                                       });
 
         [Test]
-        public void An_issue_is_reported_for_interpolated_call_in_ctor_with_contradiction() => Assert.Multiple(() =>
-                                                                                                                    {
-                                                                                                                        foreach (var method in Methods)
-                                                                                                                        {
-                                                                                                                            foreach (var contradiction in WrongContradictionPhrases)
-                                                                                                                            {
-                                                                                                                                An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interpolated_call_in_ctor_with_contradiction_(
+                                                                                       [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
+                                                                                       [ValueSource(nameof(Methods))] string method)
+            => An_issue_is_reported_for(@"
 using System;
 
 namespace log4net
@@ -126,18 +117,12 @@ namespace log4net
     }
 }
 ");
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    });
 
         [Test]
-        public void An_issue_is_reported_for_call_in_method_with_contradiction() => Assert.Multiple(() =>
-                                                                                                         {
-                                                                                                             foreach (var method in Methods)
-                                                                                                             {
-                                                                                                                 foreach (var contradiction in WrongContradictionPhrases)
-                                                                                                                 {
-                                                                                                                     An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_call_in_method_with_contradiction_(
+                                                                            [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
+                                                                            [ValueSource(nameof(Methods))] string method)
+            => An_issue_is_reported_for(@"
 using System;
 
 namespace log4net
@@ -158,18 +143,12 @@ namespace log4net
     }
 }
 ");
-                                                                                                                 }
-                                                                                                             }
-                                                                                                         });
 
         [Test]
-        public void An_issue_is_reported_for_interpolated_call_in_method_with_contradiction() => Assert.Multiple(() =>
-                                                                                                                      {
-                                                                                                                          foreach (var method in Methods)
-                                                                                                                          {
-                                                                                                                              foreach (var contradiction in WrongContradictionPhrases)
-                                                                                                                              {
-                                                                                                                                  An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_interpolated_call_in_method_with_contradiction_(
+                                                                                         [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
+                                                                                         [ValueSource(nameof(Methods))] string method)
+            => An_issue_is_reported_for(@"
 using System;
 
 namespace log4net
@@ -190,9 +169,6 @@ namespace log4net
     }
 }
 ");
-                                                                                                                              }
-                                                                                                                          }
-                                                                                                                      });
 
         [Test]
         public void Code_gets_fixed_for_call_in_method_with_contradiction_([ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)
