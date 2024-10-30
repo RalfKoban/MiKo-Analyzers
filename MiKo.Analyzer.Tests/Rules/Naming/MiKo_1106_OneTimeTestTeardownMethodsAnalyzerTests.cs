@@ -20,10 +20,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_method_(
-                                                      [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                      [ValueSource(nameof(TestFixtures))] string fixture,
                                                       [ValueSource(nameof(Tests))] string test)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -33,10 +33,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_setup_method_(
-                                                            [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                            [ValueSource(nameof(TestFixtures))] string fixture,
                                                             [ValueSource(nameof(TestSetUps))] string test)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -46,10 +46,10 @@ public class TestMe
 
         [Test, Combinatorial]
         public void No_issue_is_reported_for_test_teardown_method_(
-                                                               [ValueSource(nameof(TestFixtures))] string testFixture,
+                                                               [ValueSource(nameof(TestFixtures))] string fixture,
                                                                [ValueSource(nameof(TestTearDowns))] string test)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -58,33 +58,33 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_one_time_test_setup_method_with_correct_name_(
-                                                                                       [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                       [ValueSource(nameof(TestOneTimeSetUps))] string test)
+        public void No_issue_is_reported_for_OneTimeSetUp_method_with_correct_name_(
+                                                                                [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                [ValueSource(nameof(TestOneTimeSetUps))] string oneTimeSetUp)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
-    [" + test + @"]
+    [" + oneTimeSetUp + @"]
     public void DoSometing() { }
 }
 ");
 
         [Test, Combinatorial]
-        public void No_issue_is_reported_for_one_time_test_teardown_method_with_correct_name_(
-                                                                                          [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                          [ValueSource(nameof(TestOneTimeTearDowns))] string test)
+        public void No_issue_is_reported_for_OneTimeTearDown_method_with_correct_name_(
+                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                   [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
             => No_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
-    [" + test + @"]
+    [" + oneTimeTearDown + @"]
     public void CleanupTestEnvironment() { }
 }
 ");
 
         [Test]
-        public void No_issue_is_reported_for_local_function_inside_one_time_test_teardown_method() => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_local_function_inside_OneTimeTearDown_method() => No_issue_is_reported_for(@"
 using NUnit;
 
 [TestFixture]
@@ -99,22 +99,22 @@ public class TestMe
 ");
 
         [Test, Combinatorial]
-        public void An_issue_is_reported_for_one_time_test_teardown_method_with_wrong_name_(
-                                                                                        [ValueSource(nameof(TestFixtures))] string testFixture,
-                                                                                        [ValueSource(nameof(TestOneTimeTearDowns))] string test)
+        public void An_issue_is_reported_for_OneTimeTearDown_method_with_wrong_name_(
+                                                                                 [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                 [ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown)
             => An_issue_is_reported_for(@"
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
-    [" + test + @"]
+    [" + oneTimeTearDown + @"]
     public void Teardown() { }
 }
 ");
 
         [Test]
-        public void Code_gets_fixed_([ValueSource(nameof(TestOneTimeTearDowns))] string test) => VerifyCSharpFix(
-                                                                                                             "using System; class TestMe { [" + test + "] public void Teardown()  { } }",
-                                                                                                             "using System; class TestMe { [" + test + "] public void CleanupTestEnvironment()  { } }");
+        public void Code_gets_fixed_([ValueSource(nameof(TestOneTimeTearDowns))] string oneTimeTearDown) => VerifyCSharpFix(
+                                                                                                                        "using System; class TestMe { [" + oneTimeTearDown + "] public void Teardown()  { } }",
+                                                                                                                        "using System; class TestMe { [" + oneTimeTearDown + "] public void CleanupTestEnvironment()  { } }");
 
         protected override string GetDiagnosticId() => MiKo_1106_OneTimeTestTeardownMethodsAnalyzer.Id;
 

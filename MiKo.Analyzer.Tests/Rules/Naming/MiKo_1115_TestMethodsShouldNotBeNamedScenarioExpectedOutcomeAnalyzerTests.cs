@@ -11,6 +11,14 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
     [TestFixture]
     public sealed class MiKo_1115_TestMethodsShouldNotBeNamedScenarioExpectedOutcomeAnalyzerTests : CodeFixVerifier
     {
+        private static readonly string[] CorrectMethodNames =
+                                                              [
+                                                                  "DoSomething_does_something",
+                                                                "Returns_null_if_load_fails",
+                                                                "Throws_ArgumentNullException_under_some_conditions",
+                                                                "Method_name_returns_false_if_load_fails_and_some_condition",
+                                                            ];
+
         private static readonly string[] WrongMethodNames =
                                                             [
                                                                 "MethodName_Scenario_ExpectedOutcome",
@@ -28,48 +36,33 @@ public class TestMe
 }
 ");
 
-        [TestCase("DoSomething_does_something")]
-        [TestCase("Returns_null_if_load_fails")]
-        [TestCase("Throws_ArgumentNullException_under_some_conditions")]
-        [TestCase("Method_name_returns_false_if_load_fails_and_some_condition")]
-        public void No_issue_is_reported_for_test_method_with_correct_name_(string methodName)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
-[" + testFixture + @"]
+        [Test]
+        public void No_issue_is_reported_for_test_method_with_correct_name_(
+                                                                        [ValueSource(nameof(CorrectMethodNames))] string methodName,
+                                                                        [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                        [ValueSource(nameof(Tests))] string test)
+        => No_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public void " + methodName + @"() { }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
-        public void An_issue_is_reported_for_test_method_with_wrong_name_([ValueSource(nameof(WrongMethodNames))] string methodName)
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                An_issue_is_reported_for(@"
-[" + testFixture + @"]
+        public void An_issue_is_reported_for_test_method_with_wrong_name_(
+                                                                      [ValueSource(nameof(WrongMethodNames))] string methodName,
+                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                      [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public void " + methodName + @"() { }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [TestCase("DoesSomething_IsExceptional", "Throws_exception_if_it_does_something")]
         [TestCase("IfLoadFails_ReturnNull", "Returns_null_if_load_fails")]

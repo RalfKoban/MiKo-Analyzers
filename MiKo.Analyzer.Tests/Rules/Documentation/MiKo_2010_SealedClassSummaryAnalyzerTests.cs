@@ -69,11 +69,11 @@ public sealed class TestMe
 ");
 
         [Test]
-        public void Missing_documentation_is_not_reported_for_TestClass_([ValueSource(nameof(TestFixtures))] string testFixture) => No_issue_is_reported_for(@"
+        public void Missing_documentation_is_not_reported_for_TestClass_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 /// <summary>
 /// Some documentation
 /// </summary>
-[" + testFixture + @"]
+[" + fixture + @"]
 public sealed class TestMe
 {
 }

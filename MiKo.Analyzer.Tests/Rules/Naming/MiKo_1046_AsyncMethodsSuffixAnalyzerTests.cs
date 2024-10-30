@@ -107,27 +107,18 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_test_method()
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
     public Task DoSomething() => Task.CompletedTask;
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
         public void No_issue_is_reported_for_TaskFactory_method_([ValueSource(nameof(TaskFactoryMethods))] string methodName) => No_issue_is_reported_for(@"
@@ -203,18 +194,12 @@ public class TestMe
 ");
 
         [Test]
-        public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method()
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_correctly_named_local_function_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+            => No_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -224,23 +209,14 @@ public class TestMe
     }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
-        public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method()
-            => Assert.Multiple(() =>
-                                    {
-                                        foreach (var testFixture in TestFixtures)
-                                        {
-                                            foreach (var test in Tests)
-                                            {
-                                                An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_correctly_named_local_function_inside_test_method_([ValueSource(nameof(TestFixtures))] string fixture, [ValueSource(nameof(Tests))] string test)
+            => An_issue_is_reported_for(@"
 using NUnit;
 using System.Threading.Tasks;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     [" + test + @"]
@@ -250,9 +226,6 @@ public class TestMe
     }
 }
 ");
-                                            }
-                                        }
-                                    });
 
         [Test]
         public void Code_gets_fixed_for_method() => VerifyCSharpFix(

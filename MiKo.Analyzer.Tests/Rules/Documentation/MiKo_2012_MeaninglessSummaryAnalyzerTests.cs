@@ -81,13 +81,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -99,9 +93,6 @@ public class TestMe : ITestMe
 {
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void An_issue_is_reported_for_class_with_meaningless_special_phrase_([Values("Contains", "Contain", "Has", "Is")] string phrase) => An_issue_is_reported_for(@"
@@ -125,13 +116,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_class_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -145,9 +130,6 @@ public class TestMe : ITestMe
 {
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void No_issue_is_reported_for_method_without_documentation() => No_issue_is_reported_for(@"
@@ -182,13 +164,7 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -201,18 +177,9 @@ public class TestMe : ITestMe
     public void DoSomething() { }
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
-        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -227,9 +194,6 @@ public class TestMe : ITestMe
     public void DoSomething() { }
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void An_issue_is_reported_for_method_with_meaningless_phrase_in_text_([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"
@@ -291,13 +255,7 @@ public enum TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessFieldPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -310,18 +268,9 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
-        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag()
-        {
-            Assert.Multiple(() =>
-                                 {
-                                     foreach (var phrase in MeaninglessFieldPhrases)
-                                     {
-                                         An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_with_meaningless_phrase_in_para_tag_([ValueSource(nameof(MeaninglessFieldPhrases))] string phrase) => An_issue_is_reported_for(@"
 public interface ITestMe
 {
 }
@@ -336,9 +285,6 @@ public class TestMe : ITestMe
     private int DoSomething;
 }
 ");
-                                     }
-                                 });
-        }
 
         [Test]
         public void An_issue_is_reported_for_field_with_meaningless_phrase_in_text_([ValueSource(nameof(MeaninglessTextPhrases))] string phrase) => An_issue_is_reported_for(@"

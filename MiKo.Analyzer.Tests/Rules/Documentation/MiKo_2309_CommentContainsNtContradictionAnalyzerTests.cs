@@ -42,13 +42,10 @@ public class TestMe
 }");
 
         [Test]
-        public void An_issue_is_reported_for_wrong_single_line_comment() => Assert.Multiple(() =>
-                                                                                                 {
-                                                                                                     foreach (var delimiter in Delimiters)
-                                                                                                     {
-                                                                                                         foreach (var wrongPhrase in WrongContradictionPhrases)
-                                                                                                         {
-                                                                                                             An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_single_line_comment_(
+                                                                    [ValueSource(nameof(Delimiters))] string delimiter,
+                                                                    [ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)
+            => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -56,18 +53,12 @@ public class TestMe
         // This " + wrongPhrase + delimiter + @"
     }
 }");
-                                                                                                         }
-                                                                                                     }
-                                                                                                 });
 
         [Test]
-        public void An_issue_is_reported_for_wrong_multi_line_comment() => Assert.Multiple(() =>
-                                                                                                {
-                                                                                                    foreach (var delimiter in Delimiters)
-                                                                                                    {
-                                                                                                        foreach (var wrongPhrase in WrongContradictionPhrases)
-                                                                                                        {
-                                                                                                            An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_wrong_multi_line_comment_(
+                                                                   [ValueSource(nameof(Delimiters))] string delimiter,
+                                                                   [ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)
+            => An_issue_is_reported_for(@"
 public class TestMe
 {
     public void DoSomething()
@@ -75,9 +66,6 @@ public class TestMe
         /* This " + wrongPhrase + delimiter + @" */
     }
 }");
-                                                                                                        }
-                                                                                                    }
-                                                                                                });
 
         [Test]
         public void Code_gets_fixed_for_single_line_([ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)

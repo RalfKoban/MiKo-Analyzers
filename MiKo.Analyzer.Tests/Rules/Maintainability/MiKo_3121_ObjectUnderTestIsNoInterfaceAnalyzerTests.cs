@@ -109,117 +109,91 @@ namespace BlaBla
 ");
 
         [Test]
-        public void No_issue_is_reported_for_empty_test_class() => Assert.Multiple(() =>
-                                                                                        {
-                                                                                            foreach (var testFixture in TestFixtures)
-                                                                                            {
-                                                                                                No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_empty_test_class_([ValueSource(nameof(TestFixtures))] string fixture) => No_issue_is_reported_for(@"
 namespace BlaBla
 {
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMe
     {
     }
 }
 ");
-                                                                                            }
-                                                                                        });
 
         [Test]
-        public void No_issue_is_reported_for_property_if_type_under_test_is_([ValueSource(nameof(AcceptableTestTypes))] string type) => Assert.Multiple(() =>
-                                                                                                                                                             {
-                                                                                                                                                                 foreach (var testFixture in TestFixtures)
-                                                                                                                                                                 {
-                                                                                                                                                                     foreach (var propertyName in PropertyNames)
-                                                                                                                                                                     {
-                                                                                                                                                                         No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_property_if_type_under_test_is_(
+                                                                         [ValueSource(nameof(AcceptableTestTypes))] string type,
+                                                                         [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                         [ValueSource(nameof(PropertyNames))] string propertyName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla
 {
     public " + type + @" TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + propertyName + @" { get; set; }
     }
 }
 ");
-                                                                                                                                                                     }
-                                                                                                                                                                 }
-                                                                                                                                                             });
 
         [Test]
-        public void No_issue_is_reported_for_method_if_type_under_test_is_([ValueSource(nameof(AcceptableTestTypes))] string type) => Assert.Multiple(() =>
-                                                                                                                                                           {
-                                                                                                                                                               foreach (var testFixture in TestFixtures)
-                                                                                                                                                               {
-                                                                                                                                                                   foreach (var propertyName in PropertyNames)
-                                                                                                                                                                   {
-                                                                                                                                                                       foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                                                                       {
-                                                                                                                                                                           No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_method_if_type_under_test_is_(
+                                                                       [ValueSource(nameof(AcceptableTestTypes))] string type,
+                                                                       [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                       [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                       [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => No_issue_is_reported_for(@"
 namespace BlaBla
 {
     public " + type + @" TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + methodPrefix + propertyName + @"() => null;
     }
 }
 ");
-                                                                                                                                                                       }
-                                                                                                                                                                   }
-                                                                                                                                                               }
-                                                                                                                                                           });
 
         [Test]
-        public void No_issue_is_reported_for_field_if_type_under_test_is_([ValueSource(nameof(AcceptableTestTypes))] string type) => Assert.Multiple(() =>
-                                                                                                                                                          {
-                                                                                                                                                              foreach (var testFixture in TestFixtures)
-                                                                                                                                                              {
-                                                                                                                                                                  foreach (var fieldName in FieldNames)
-                                                                                                                                                                  {
-                                                                                                                                                                      No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_field_if_type_under_test_is_(
+                                                                      [ValueSource(nameof(AcceptableTestTypes))] string type,
+                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                      [ValueSource(nameof(FieldNames))] string fieldName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public " + type + @" TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private TestMe " + fieldName + @";
     }
 }
 ");
-                                                                                                                                                                  }
-                                                                                                                                                              }
-                                                                                                                                                          });
 
         [Test]
-        public void No_issue_is_reported_for_localVariable_if_type_under_test_is_([ValueSource(nameof(AcceptableTestTypes))] string type) => Assert.Multiple(() =>
-                                                                                                                                                                  {
-                                                                                                                                                                      foreach (var testFixture in TestFixtures)
-                                                                                                                                                                      {
-                                                                                                                                                                          foreach (var test in Tests)
-                                                                                                                                                                          {
-                                                                                                                                                                              foreach (var variableName in VariableNames)
-                                                                                                                                                                              {
-                                                                                                                                                                                  No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_localVariable_if_type_under_test_is_(
+                                                                              [ValueSource(nameof(AcceptableTestTypes))] string type,
+                                                                              [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                              [ValueSource(nameof(Tests))] string test,
+                                                                              [ValueSource(nameof(VariableNames))] string variableName)
+            => No_issue_is_reported_for(@"
 namespace BlaBla
 {
     public " + type + @" TestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         [" + test + @"]
@@ -230,99 +204,71 @@ namespace BlaBla
     }
 }
 ");
-                                                                                                                                                                              }
-                                                                                                                                                                          }
-                                                                                                                                                                      }
-                                                                                                                                                                  });
 
         [Test]
-        public void An_issue_is_reported_for_property_if_type_under_test_is_an_interface() => Assert.Multiple(() =>
-                                                                                                                   {
-                                                                                                                       foreach (var testFixture in TestFixtures)
-                                                                                                                       {
-                                                                                                                           foreach (var propertyName in PropertyNames)
-                                                                                                                           {
-                                                                                                                               An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_property_if_type_under_test_is_an_interface_(
+                                                                                      [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                      [ValueSource(nameof(PropertyNames))] string propertyName)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public interface ITestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private ITestMe " + propertyName + @" { get; set; }
     }
 }
 ");
-                                                                                                                           }
-                                                                                                                       }
-                                                                                                                   });
 
         [Test]
-        public void An_issue_is_reported_for_method_if_type_under_test_is_an_interface() => Assert.Multiple(() =>
-                                                                                                                 {
-                                                                                                                     foreach (var testFixture in TestFixtures)
-                                                                                                                     {
-                                                                                                                         foreach (var propertyName in PropertyNames)
-                                                                                                                         {
-                                                                                                                             foreach (var methodPrefix in MethodPrefixes)
-                                                                                                                             {
-                                                                                                                                 An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_method_if_type_under_test_is_an_interface_(
+                                                                                    [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                    [ValueSource(nameof(PropertyNames))] string propertyName,
+                                                                                    [ValueSource(nameof(MethodPrefixes))] string methodPrefix)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public interface ITestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private ITestMe " + methodPrefix + propertyName + @"() => null;
     }
 }
 ");
-                                                                                                                             }
-                                                                                                                         }
-                                                                                                                     }
-                                                                                                                 });
 
         [Test]
-        public void An_issue_is_reported_for_field_if_type_under_test_is_an_interface() => Assert.Multiple(() =>
-                                                                                                                {
-                                                                                                                    foreach (var testFixture in TestFixtures)
-                                                                                                                    {
-                                                                                                                        foreach (var fieldName in FieldNames)
-                                                                                                                        {
-                                                                                                                            An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_field_if_type_under_test_is_an_interface_(
+                                                                                   [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                   [ValueSource(nameof(FieldNames))] string fieldName)
+            => An_issue_is_reported_for(@"
 namespace BlaBla.BlaBlubb
 {
     public interface ITestMe
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         private ITestMe " + fieldName + @";
     }
 }
 ");
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                });
 
         [Test]
-        public void An_issue_is_reported_for_localVariable_if_type_under_test_is_an_interface() => Assert.Multiple(() =>
-                                                                                                                        {
-                                                                                                                            foreach (var testFixture in TestFixtures)
-                                                                                                                            {
-                                                                                                                                foreach (var test in Tests)
-                                                                                                                                {
-                                                                                                                                    foreach (var variableName in VariableNames)
-                                                                                                                                    {
-                                                                                                                                        An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_localVariable_if_type_under_test_is_an_interface_(
+                                                                                           [ValueSource(nameof(TestFixtures))] string fixture,
+                                                                                           [ValueSource(nameof(Tests))] string test,
+                                                                                           [ValueSource(nameof(VariableNames))] string variableName)
+            => An_issue_is_reported_for(@"
 namespace BlaBla
 {
     public interface ITestMe
@@ -333,7 +279,7 @@ namespace BlaBla
     {
     }
 
-    [" + testFixture + @"]
+    [" + fixture + @"]
     public class TestMeTests
     {
         [" + test + @"]
@@ -344,10 +290,6 @@ namespace BlaBla
     }
 }
 ");
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        });
 
         protected override string GetDiagnosticId() => MiKo_3121_ObjectUnderTestIsNoInterfaceAnalyzer.Id;
 

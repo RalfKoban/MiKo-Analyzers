@@ -89,10 +89,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
    public void DoSomething()
@@ -103,10 +103,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_strangely_formatted_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_strangely_formatted_non_test_method_inside_a_test_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
    public void DoSomething()
@@ -120,10 +120,10 @@ public class TestMe
 ");
 
         [Test]
-        public void An_issue_is_reported_for_a_static_readonly_field_inside_a_test_class_([ValueSource(nameof(TestFixtures))] string testFixture) => An_issue_is_reported_for(@"
+        public void An_issue_is_reported_for_a_static_readonly_field_inside_a_test_class_([ValueSource(nameof(TestFixtures))] string fixture) => An_issue_is_reported_for(@"
 using NUnit.Framework;
 
-[" + testFixture + @"]
+[" + fixture + @"]
 public class TestMe
 {
     private static readonly Guid Something = Guid.NewGuid();
