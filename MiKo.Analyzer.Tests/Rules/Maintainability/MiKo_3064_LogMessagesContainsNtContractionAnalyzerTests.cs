@@ -9,7 +9,7 @@ using TestHelper;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [TestFixture]
-    public sealed class MiKo_3064_LogMessagesContainsNtContradictionAnalyzerTests : CodeFixVerifier
+    public sealed class MiKo_3064_LogMessagesContainsNtContractionAnalyzerTests : CodeFixVerifier
     {
         private static readonly string[] Methods = ["Debug", "Info", "Error", "Warn", "Fatal", "DebugFormat", "InfoFormat", "ErrorFormat", "WarnFormat", "FatalFormat"];
 
@@ -35,7 +35,7 @@ namespace log4net
 ");
 
         [Test]
-        public void No_issue_is_reported_for_calls_with_no_contradiction_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
+        public void No_issue_is_reported_for_calls_with_no_contraction_([ValueSource(nameof(Methods))] string method) => No_issue_is_reported_for(@"
 using System;
 
 namespace log4net
@@ -67,9 +67,9 @@ namespace log4net
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_ctor_with_contradiction_(
-                                                                          [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
-                                                                          [ValueSource(nameof(Methods))] string method)
+        public void An_issue_is_reported_for_call_in_ctor_with_contraction_(
+                                                                        [ValueSource(nameof(WrongContractionPhrases))] string contraction,
+                                                                        [ValueSource(nameof(Methods))] string method)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -86,16 +86,16 @@ namespace log4net
 
         public TestMe()
         {
-            Log." + method + @"(""some " + contradiction + @" text"");
+            Log." + method + @"(""some " + contraction + @" text"");
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_interpolated_call_in_ctor_with_contradiction_(
-                                                                                       [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
-                                                                                       [ValueSource(nameof(Methods))] string method)
+        public void An_issue_is_reported_for_interpolated_call_in_ctor_with_contraction_(
+                                                                                     [ValueSource(nameof(WrongContractionPhrases))] string contraction,
+                                                                                     [ValueSource(nameof(Methods))] string method)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -112,16 +112,16 @@ namespace log4net
 
         public TestMe(int i)
         {
-            Log." + method + @"($""some " + contradiction + @" text for {i}"");
+            Log." + method + @"($""some " + contraction + @" text for {i}"");
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_call_in_method_with_contradiction_(
-                                                                            [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
-                                                                            [ValueSource(nameof(Methods))] string method)
+        public void An_issue_is_reported_for_call_in_method_with_contraction_(
+                                                                          [ValueSource(nameof(WrongContractionPhrases))] string contraction,
+                                                                          [ValueSource(nameof(Methods))] string method)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -138,16 +138,16 @@ namespace log4net
 
         public void DoSomething()
         {
-            Log." + method + @"(""some " + contradiction + @" text"");
+            Log." + method + @"(""some " + contraction + @" text"");
         }
     }
 }
 ");
 
         [Test]
-        public void An_issue_is_reported_for_interpolated_call_in_method_with_contradiction_(
-                                                                                         [ValueSource(nameof(WrongContradictionPhrases))] string contradiction,
-                                                                                         [ValueSource(nameof(Methods))] string method)
+        public void An_issue_is_reported_for_interpolated_call_in_method_with_contraction_(
+                                                                                       [ValueSource(nameof(WrongContractionPhrases))] string contraction,
+                                                                                       [ValueSource(nameof(Methods))] string method)
             => An_issue_is_reported_for(@"
 using System;
 
@@ -164,14 +164,14 @@ namespace log4net
 
         public void DoSomething(int i)
         {
-            Log." + method + @"($""some " + contradiction + @" text for {i}"");
+            Log." + method + @"($""some " + contraction + @" text for {i}"");
         }
     }
 }
 ");
 
         [Test]
-        public void Code_gets_fixed_for_call_in_method_with_contradiction_([ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)
+        public void Code_gets_fixed_for_call_in_method_with_contraction_([ValueSource(nameof(WrongContractionPhrases))] string wrongPhrase)
         {
             const string Template = @"
 using System;
@@ -194,11 +194,11 @@ namespace log4net
     }
 }
 ";
-            VerifyCSharpFix(Template.Replace("###", wrongPhrase), Template.Replace("###", ContradictionMap[wrongPhrase]));
+            VerifyCSharpFix(Template.Replace("###", wrongPhrase), Template.Replace("###", ContractionMap[wrongPhrase]));
         }
 
         [Test]
-        public void Code_gets_fixed_for_interpolated_call_in_method_with_contradiction_after_interpolate_value_([ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)
+        public void Code_gets_fixed_for_interpolated_call_in_method_with_contraction_after_interpolate_value_([ValueSource(nameof(WrongContractionPhrases))] string wrongPhrase)
         {
             const string Template = @"
 using System;
@@ -221,11 +221,11 @@ namespace log4net
     }
 }
 ";
-            VerifyCSharpFix(Template.Replace("###", wrongPhrase), Template.Replace("###", ContradictionMap[wrongPhrase]));
+            VerifyCSharpFix(Template.Replace("###", wrongPhrase), Template.Replace("###", ContractionMap[wrongPhrase]));
         }
 
         [Test]
-        public void Code_gets_fixed_for_interpolated_call_in_method_with_contradiction_before_interpolate_value_([ValueSource(nameof(WrongContradictionPhrases))] string wrongPhrase)
+        public void Code_gets_fixed_for_interpolated_call_in_method_with_contraction_before_interpolate_value_([ValueSource(nameof(WrongContractionPhrases))] string wrongPhrase)
         {
             const string Template = @"
 using System;
@@ -248,12 +248,12 @@ namespace log4net
     }
 }
 ";
-            VerifyCSharpFix(Template.Replace("###", wrongPhrase), Template.Replace("###", ContradictionMap[wrongPhrase]));
+            VerifyCSharpFix(Template.Replace("###", wrongPhrase), Template.Replace("###", ContractionMap[wrongPhrase]));
         }
 
-        protected override string GetDiagnosticId() => MiKo_3064_LogMessagesContainsNtContradictionAnalyzer.Id;
+        protected override string GetDiagnosticId() => MiKo_3064_LogMessagesContainsNtContractionAnalyzer.Id;
 
-        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3064_LogMessagesContainsNtContradictionAnalyzer();
+        protected override DiagnosticAnalyzer GetObjectUnderTest() => new MiKo_3064_LogMessagesContainsNtContractionAnalyzer();
 
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new MiKo_3064_CodeFixProvider();
     }

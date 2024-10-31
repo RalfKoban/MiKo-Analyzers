@@ -17,10 +17,10 @@ namespace MiKoSolutions.Analyzers.Rules.Documentation
         {
             var comment = original.ToString();
 
-            if (DocumentationComment.ContainsPhrases(Constants.Comments.NotContradictionPhrase, comment.AsSpan().TrimEnd()))
+            if (DocumentationComment.ContainsPhrases(Constants.Comments.NotContractionPhrase, comment.AsSpan().TrimEnd()))
             {
                 var text = comment.AsBuilder()
-                                  .ReplaceAllWithCheck(Constants.Comments.NotContradictionReplacementMap.AsSpan())
+                                  .ReplaceAllWithCheck(Constants.Comments.NotContractionReplacementMap.AsSpan())
                                   .ToString();
 
                 return SyntaxFactory.Comment(text);
