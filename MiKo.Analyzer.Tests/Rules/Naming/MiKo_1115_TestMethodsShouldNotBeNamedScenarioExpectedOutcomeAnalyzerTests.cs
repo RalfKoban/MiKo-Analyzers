@@ -14,10 +14,10 @@ namespace MiKoSolutions.Analyzers.Rules.Naming
         private static readonly string[] CorrectMethodNames =
                                                               [
                                                                   "DoSomething_does_something",
-                                                                "Returns_null_if_load_fails",
-                                                                "Throws_ArgumentNullException_under_some_conditions",
-                                                                "Method_name_returns_false_if_load_fails_and_some_condition",
-                                                            ];
+                                                                  "Returns_null_if_load_fails",
+                                                                  "Throws_ArgumentNullException_under_some_conditions",
+                                                                  "Method_name_returns_false_if_load_fails_and_some_condition",
+                                                              ];
 
         private static readonly string[] WrongMethodNames =
                                                             [

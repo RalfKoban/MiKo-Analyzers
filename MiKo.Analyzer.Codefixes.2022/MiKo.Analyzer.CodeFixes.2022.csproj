@@ -57,7 +57,7 @@
   <ItemGroup>
     <None Include="..\MiKo.Analyzer.Shared\Resources.resx">
       <Link>Resources.resx</Link>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MiKoSolutions.Analyzers</CustomToolNamespace>
     </None>

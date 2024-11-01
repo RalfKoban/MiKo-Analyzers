@@ -707,51 +707,51 @@ namespace MiKoSolutions.Analyzers
                                                                                    "Marks ",
                                                                                };
 
-            internal static readonly string[] NotContradictionPhrase =
-                                                                       {
-                                                                           "n't",
-                                                                           "cant",
-                                                                           "dont",
-                                                                           "wont",
-                                                                           "couldnt",
-                                                                           "shouldnt",
-                                                                           "wouldnt",
-                                                                           "doesnt",
-                                                                           "didnt",
-                                                                           "isnt",
-                                                                           "hasnt",
-                                                                           "havent",
-                                                                           "hadnt",
-                                                                           "wasnt",
-                                                                           "werent",
-                                                                           "darent",
-                                                                           "neednt",
-                                                                       };
+            internal static readonly string[] NotContractionPhrase =
+                                                                     {
+                                                                         "n't",
+                                                                         "cant",
+                                                                         "dont",
+                                                                         "wont",
+                                                                         "couldnt",
+                                                                         "shouldnt",
+                                                                         "wouldnt",
+                                                                         "doesnt",
+                                                                         "didnt",
+                                                                         "isnt",
+                                                                         "hasnt",
+                                                                         "havent",
+                                                                         "hadnt",
+                                                                         "wasnt",
+                                                                         "werent",
+                                                                         "darent",
+                                                                         "neednt",
+                                                                     };
 
-            internal static readonly Pair[] NotContradictionReplacementMap =
-                                                                             {
-                                                                                 new Pair("adnt", "ad not"),
-                                                                                 new Pair("an't", "annot"),
-                                                                                 new Pair("arent", "are not"),
-                                                                                 new Pair("Arent", "Are not"),
-                                                                                 new Pair("asnt", "as not"),
-                                                                                 new Pair("avent", "ave not"),
-                                                                                 new Pair("cant", "cannot"),
-                                                                                 new Pair("Cant", "Cannot"),
-                                                                                 new Pair("dont", "do not"),
-                                                                                 new Pair("Dont", "Do not"),
-                                                                                 new Pair("eednt", "eed not"),
-                                                                                 new Pair("erent", "ere not"),
-                                                                                 new Pair("idnt", "id not"),
-                                                                                 new Pair("oesnt", "oes not"),
-                                                                                 new Pair("ouldnt", "ould not"),
-                                                                                 new Pair("snt", "s not"),
-                                                                                 new Pair("wont", "will not"),
-                                                                                 new Pair("won't", "will not"),
-                                                                                 new Pair("Wont", "Will not"),
-                                                                                 new Pair("Won't", "Will not"),
-                                                                                 new Pair("n't", " not"),
-                                                                             };
+            internal static readonly Pair[] NotContractionReplacementMap =
+                                                                           {
+                                                                               new Pair("adnt", "ad not"),
+                                                                               new Pair("an't", "annot"),
+                                                                               new Pair("arent", "are not"),
+                                                                               new Pair("Arent", "Are not"),
+                                                                               new Pair("asnt", "as not"),
+                                                                               new Pair("avent", "ave not"),
+                                                                               new Pair("cant", "cannot"),
+                                                                               new Pair("Cant", "Cannot"),
+                                                                               new Pair("dont", "do not"),
+                                                                               new Pair("Dont", "Do not"),
+                                                                               new Pair("eednt", "eed not"),
+                                                                               new Pair("erent", "ere not"),
+                                                                               new Pair("idnt", "id not"),
+                                                                               new Pair("oesnt", "oes not"),
+                                                                               new Pair("ouldnt", "ould not"),
+                                                                               new Pair("snt", "s not"),
+                                                                               new Pair("wont", "will not"),
+                                                                               new Pair("won't", "will not"),
+                                                                               new Pair("Wont", "Will not"),
+                                                                               new Pair("Won't", "Will not"),
+                                                                               new Pair("n't", " not"),
+                                                                           };
 
             internal static readonly string[] IntentionallyPhrase =
                                                                     {

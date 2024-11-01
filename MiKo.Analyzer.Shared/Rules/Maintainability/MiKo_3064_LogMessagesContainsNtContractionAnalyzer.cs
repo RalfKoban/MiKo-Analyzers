@@ -10,11 +10,11 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace MiKoSolutions.Analyzers.Rules.Maintainability
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class MiKo_3064_LogMessagesContainsNtContradictionAnalyzer : MaintainabilityAnalyzer
+    public sealed class MiKo_3064_LogMessagesContainsNtContractionAnalyzer : MaintainabilityAnalyzer
     {
         public const string Id = "MiKo_3064";
 
-        public MiKo_3064_LogMessagesContainsNtContradictionAnalyzer() : base(Id, (SymbolKind)(-1))
+        public MiKo_3064_LogMessagesContainsNtContractionAnalyzer() : base(Id, (SymbolKind)(-1))
         {
         }
 
@@ -123,7 +123,7 @@ namespace MiKoSolutions.Analyzers.Rules.Maintainability
                 {
                     var text = token.Text; // use 'Text' and not 'ValueText' here because otherwise the indices do not match (as 'Text' still contains the " )
 
-                    foreach (var value in Constants.Comments.NotContradictionPhrase)
+                    foreach (var value in Constants.Comments.NotContractionPhrase)
                     {
                         foreach (var index in text.AllIndicesOf(value))
                         {
