@@ -149,7 +149,7 @@ The following tables lists all the 469 rules that are currently provided by the 
 |MiKo_1300|Unimportant identifiers in lambda statements should be named '_'|&#x2713;|&#x2713;|
 |MiKo_1400|Namespace names should be in plural|&#x2713;|\-|
 |MiKo_1401|Namespaces should not contain technical language names|&#x2713;|\-|
-|MiKo_1402|Namespaces should not be named after WPF specific design patterns|&#x2713;|\-|
+|MiKo_1402|Namespaces should not be named after WPF-specific design patterns|&#x2713;|\-|
 |MiKo_1403|Namespaces should not be named after any of their parent namespaces|&#x2713;|\-|
 |MiKo_1404|Namespaces should not contain unspecific names|&#x2713;|\-|
 |MiKo_1405|Namespaces should not contain 'Lib'|&#x2713;|\-|

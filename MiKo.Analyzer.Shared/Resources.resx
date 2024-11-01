@@ -1337,8 +1337,7 @@ For instance, do not name a method 'RemoveUser' if the documentation states it '
     <value>Matching parameters on method overloads should have identical names</value>
   </data>
   <data name="MiKo_1100_Description" xml:space="preserve">
-    <value>A class that is marked as a unit test class should indicate via its name which type it tests.
-The name should be constructed by having the name of the type under test as prefix and 'Tests' as suffix (e.g. for class 'MyXyzClass' the test class should be named 'MyXyzClassTests').</value>
+    <value>A unit test class should clearly indicate the type it tests by naming it with the type's name as a prefix, followed by 'Tests'. For example, if testing 'MyXyzClass', the test class should be named 'MyXyzClassTests'. This makes it easy to identify what is being tested.</value>
   </data>
   <data name="MiKo_1100_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1350,7 +1349,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Append 'Tests' suffix</value>
   </data>
   <data name="MiKo_1101_Description" xml:space="preserve">
-    <value>A class that is marked as a unit test class should indicate that by the suffix 'Tests' as it normally contains multiple tests.</value>
+    <value>A unit test class should use the suffix 'Tests' rather than 'Test', since it typically contains multiple tests.</value>
   </data>
   <data name="MiKo_1101_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1362,7 +1361,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Remove test marker from name</value>
   </data>
   <data name="MiKo_1102_Description" xml:space="preserve">
-    <value>A method that is marked as a unit test should not additionally indicate that it is a unit test by having 'Test' in its name.</value>
+    <value>Methods marked as unit tests should not need 'Test' in their name. It's redundant, as the unit test framework already indicates they are tests. Keep the names clear and descriptive without 'Test'.</value>
   </data>
   <data name="MiKo_1102_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' from name</value>
@@ -1374,7 +1373,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Rename to 'PrepareTest'</value>
   </data>
   <data name="MiKo_1103_Description" xml:space="preserve">
-    <value>A method that is marked as unit test initialization method should be named 'PrepareTest'.</value>
+    <value>A unit test initialization method should be named 'PrepareTest' to clearly indicate its purpose in preparing the test environment. This naming makes the code easy to read and understand.</value>
   </data>
   <data name="MiKo_1103_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1386,7 +1385,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Rename to 'CleanupTest'</value>
   </data>
   <data name="MiKo_1104_Description" xml:space="preserve">
-    <value>A method that is marked as unit test cleanup method should be named 'CleanupTest'.</value>
+    <value>A unit test cleanup method should be named 'CleanupTest' to clearly indicate its purpose in tidying up the test environment after the test runs. This naming makes the code easy to read and understand.</value>
   </data>
   <data name="MiKo_1104_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1398,7 +1397,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Rename to 'PrepareTestEnvironment'</value>
   </data>
   <data name="MiKo_1105_Description" xml:space="preserve">
-    <value>A method that is marked as one-time unit test initialization method should be named 'PrepareTestEnvironment'.</value>
+    <value>A one-time unit test initialization method should be named 'PrepareTestEnvironment' to clearly indicate its role in setting up the test environment just once before all tests run. This ensures clarity and consistency in the test setup process.</value>
   </data>
   <data name="MiKo_1105_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1410,7 +1409,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Rename to 'CleanupTestEnvironment'</value>
   </data>
   <data name="MiKo_1106_Description" xml:space="preserve">
-    <value>A method that is marked as one-time unit test cleanup method should be named 'CleanupTestEnvironment'.</value>
+    <value>A one-time unit test cleanup method should be named 'CleanupTestEnvironment' to clearly indicate its role in cleaning up the test environment after all tests have run. This helps maintain consistency and clarity in your test suite.</value>
   </data>
   <data name="MiKo_1106_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1422,8 +1421,7 @@ The name should be constructed by having the name of the type under test as pref
     <value>Use underscores instead of Pascal-casing</value>
   </data>
   <data name="MiKo_1107_Description" xml:space="preserve">
-    <value>For maintenance reasons, test methods whose names are written in Pascal-casing are hard to read.
-To ease reading, use underscores between the different words instead.</value>
+    <value>To make maintenance easier, avoid using Pascal-casing for test method names. Instead, use underscores to separate the different words. This improves readability and makes the code easier to understand.</value>
   </data>
   <data name="MiKo_1107_MessageFormat" xml:space="preserve">
     <value>Use underscores instead of Pascal-casing</value>
@@ -1435,8 +1433,9 @@ To ease reading, use underscores between the different words instead.</value>
     <value>Remove Mock suffix</value>
   </data>
   <data name="MiKo_1108_Description" xml:space="preserve">
-    <value>For maintenance reasons, variables, parameters, properties and fields should be named about what they represent and not what they technically are.
-Hence naming them e.g. 'Mock', 'Stub', 'Fake' or 'Shim' does not provide any additional value and is just some cluttering noise. In addition, those names put the developer's attention and focus on the wrong thing.</value>
+    <value>For easier maintenance, name variables, parameters, properties, and fields based on what they represent, not what they technically are.
+Using names like 'Mock', 'Stub', 'Fake', or 'Shim' adds clutter and distracts developers from the actual purpose of the code.
+Clear, meaningful names keep the focus on what the code does.</value>
   </data>
   <data name="MiKo_1108_MessageFormat" xml:space="preserve">
     <value>Do not name it 'Mock', 'Stub', 'Fake' or 'Shim'</value>
@@ -1448,8 +1447,10 @@ Hence naming them e.g. 'Mock', 'Stub', 'Fake' or 'Shim' does not provide any add
     <value>Prefix with 'Testable' instead of suffix 'Ut'</value>
   </data>
   <data name="MiKo_1109_Description" xml:space="preserve">
-    <value>Sometimes types or some of their functionality cannot be tested directly due to wrong visibility. To work around that, a solution is to inherit from such types and use that special type during test. Additionally, additional methods or properties are added to such types to access the orginal, invisible method resp. property.
-Those specifically introduced types should be named as the original type, but prefixed with 'Testable' - they should not be suffixed with the hard-to-understand 'Ut' suffix.</value>
+    <value>Sometimes, types or their functionalities are not directly testable due to visibility issues. To bypass this, you can inherit from those types and use the inherited type for testing. Additional methods or properties can also be added to access the original, hidden ones.
+
+These specially introduced types should have the same name as the original, prefixed with 'Testable' (instead of using the confusing 'Ut' suffix).
+This approach is clearer and makes the test code more readable.</value>
   </data>
   <data name="MiKo_1109_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1461,11 +1462,8 @@ Those specifically introduced types should be named as the original type, but pr
     <value>Append underscore</value>
   </data>
   <data name="MiKo_1110_Description" xml:space="preserve">
-    <value>For maintenance reasons, parameterized test methods should be easy to read and parameters easy to spot.
-Therefore, the methods should be suffixed with underscores.
-
-Example:
-   "Do_something_for_value_(42)" is easier to read than "Do_something_for_value(42)" because of the additional space before the brace.</value>
+    <value>For easier maintenance, parameterized test methods should be clear and parameters should stand out. To achieve this, add an underscore before the parameters.
+For example, 'Do_something_for_value_(42)' is easier to read than 'Do_something_for_value(42)' due to the extra space before the parenthesis. This makes the method more readable.</value>
   </data>
   <data name="MiKo_1110_MessageFormat" xml:space="preserve">
     <value>Suffix name with underscore</value>
@@ -1477,10 +1475,8 @@ Example:
     <value>Remove underscore</value>
   </data>
   <data name="MiKo_1111_Description" xml:space="preserve">
-    <value>For maintenance reasons, parameterless test methods should be easy to read. Therefore they should not be suffixed with underscores, in contrast to parameterized methods.
-
-Example:
-   "Do_something_for_value()" is easier to read than "Do_something_for_value_()".</value>
+    <value>For easier maintenance, parameterless test methods should be clear and easy to read. Unlike parameterized methods, they should not have underscores before the parentheses.
+For example, 'Do_something_for_value()' is more readable than 'Do_something_for_value_()'.</value>
   </data>
   <data name="MiKo_1111_MessageFormat" xml:space="preserve">
     <value>Do not suffix name with underscore</value>
@@ -1492,7 +1488,7 @@ Example:
     <value>Remove 'arbitrary' from name</value>
   </data>
   <data name="MiKo_1112_Description" xml:space="preserve">
-    <value>Tests usually deal with arbitrary test data, hence there is no benefit in naming a field, parameter, variable (etc.) 'arbitrary'. That phrase can be removed without losing any meaning.</value>
+    <value>In tests, the term 'arbitrary' adds no real value to field, parameter, or variable names since test data is inherently arbitrary. Removing it keeps the names simpler and just as clear.</value>
   </data>
   <data name="MiKo_1112_MessageFormat" xml:space="preserve">
     <value>Remove 'arbitrary' from name</value>
@@ -1501,9 +1497,7 @@ Example:
     <value>Do not name test data 'arbitrary'</value>
   </data>
   <data name="MiKo_1113_Description" xml:space="preserve">
-    <value>The BDD style via "Given ... When ... Then ..." is considered to be used with stakeholders that are no developers.
-
-The audience of unit tests, however, are developers. Hence, such tests should not use the BDD style at all as that makes them harder to read and understand.</value>
+    <value>The "Given... When... Then..." BDD style is meant for non-developer stakeholders. Since unit tests are for developers, this style can make them harder to read and understand. Therefore, avoid using BDD style in unit tests for better clarity.</value>
   </data>
   <data name="MiKo_1113_MessageFormat" xml:space="preserve">
     <value>Do not name BDD style</value>
@@ -1512,7 +1506,7 @@ The audience of unit tests, however, are developers. Hence, such tests should no
     <value>Test methods should not be named according BDD style</value>
   </data>
   <data name="MiKo_1114_Description" xml:space="preserve">
-    <value>Test methods should be named according to what scenario they test but not according to whether that is a so-called 'happy path' or 'bad path' inside the code.</value>
+    <value>Test methods should be named based on the specific scenarios they test, rather than labeling them as 'happy path' or 'bad path'. This approach makes the purpose of each test clearer and more understandable.</value>
   </data>
   <data name="MiKo_1114_MessageFormat" xml:space="preserve">
     <value>Do not name '{0}' a happy or bad path</value>
@@ -1524,11 +1518,9 @@ The audience of unit tests, however, are developers. Hence, such tests should no
     <value>Fix "Yoda-speak" method name</value>
   </data>
   <data name="MiKo_1115_Description" xml:space="preserve">
-    <value>For maintenance reasons, the names of test methods should be easy to read.
-They should describe the scenario that is tested in a fluent way and not in a 'Yoda' like way.
-
-Example:
-"Send_EMailAddressValid_SendsMail" is hard to read. Much easier to read udn understand would be "Send_sends_email_to_valid_address".</value>
+    <value>Test method names should be easy to read and describe the scenario fluently.
+Avoid 'Yoda' style names like "Send_EMailAddressValid_SendsMail".
+A clearer name would be "Send_sends_email_to_valid_address", which is easier to read and understand.</value>
   </data>
   <data name="MiKo_1115_MessageFormat" xml:space="preserve">
     <value>Do not use "Yoda-speak" for method names</value>
@@ -1540,7 +1532,7 @@ Example:
     <value>Rename exception</value>
   </data>
   <data name="MiKo_1200_Description" xml:space="preserve">
-    <value>To ease maintenance, exceptions in catch blocks should be named consistently.</value>
+    <value>To make maintenance easier, name exceptions consistently across all catch blocks. Use the same name each time to keep the code clear.</value>
   </data>
   <data name="MiKo_1200_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1552,7 +1544,7 @@ Example:
     <value>Rename exception</value>
   </data>
   <data name="MiKo_1201_Description" xml:space="preserve">
-    <value>To ease maintenance, exceptions as parameters should be named consistently.</value>
+    <value>To make maintenance easier, exceptions passed as parameters should always have the same name. This consistency helps keep the code clear.</value>
   </data>
   <data name="MiKo_1201_MessageFormat" xml:space="preserve">
     <value>Name it '{1}' or '{2}'</value>
@@ -1564,7 +1556,7 @@ Example:
     <value>Name it '_'</value>
   </data>
   <data name="MiKo_1300_Description" xml:space="preserve">
-    <value>To ease maintenance and avoid visual noise, unimportant identifiers in lambdas should be consistently named '_'.</value>
+    <value>To make maintenance easier and reduce visual clutter, consistently name unimportant lambda parameters as '_'. This helps keep the code clean and easy to read.</value>
   </data>
   <data name="MiKo_1300_MessageFormat" xml:space="preserve">
     <value>Name it '_' instead</value>
@@ -1573,7 +1565,7 @@ Example:
     <value>Unimportant identifiers in lambda statements should be named '_'</value>
   </data>
   <data name="MiKo_1400_Description" xml:space="preserve">
-    <value>Namespaces group functionalities, so their names should be in plural.</value>
+    <value>Namespaces group functionalities, so their names should be plural. This makes it clear that they encompass multiple related functions or classes, enhancing readability and organization.</value>
   </data>
   <data name="MiKo_1400_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces</value>
@@ -1585,7 +1577,7 @@ Example:
     <value>Namespace names should be in plural</value>
   </data>
   <data name="MiKo_1401_Description" xml:space="preserve">
-    <value>Namespaces should not contain any language specific (technical) name, such as 'Interfaces', 'Exceptions' or 'Enums'.</value>
+    <value>Avoid including language-specific terms like 'Interfaces', 'Exceptions', or 'Enums' in namespace names. Namespaces should focus on grouping related functionalities, not the technical aspects of the code. This keeps them clear and more universal.</value>
   </data>
   <data name="MiKo_1401_MessageFormat" xml:space="preserve">
     <value>Do not use technical name '{0}' in namespace</value>
@@ -1594,17 +1586,16 @@ Example:
     <value>Namespaces should not contain technical language names</value>
   </data>
   <data name="MiKo_1402_Description" xml:space="preserve">
-    <value>Namespaces should not be named after WPF specific design patterns, such as 'Commands', 'Models', 'ViewModels' or 'Views'.
-Models are Entities. Commands, ViewModels and Views belong together and are UI specific parts.</value>
+    <value>Namespaces should not be named after WPF-specific design patterns like 'Commands', 'Models', 'ViewModels', or 'Views.' Models are entities, while commands, view models, and views are UI-specific components that belong together. Clear and descriptive names help keep the code organized and more understandable.</value>
   </data>
   <data name="MiKo_1402_MessageFormat" xml:space="preserve">
     <value>Do not use WPF design pattern name '{0}' in namespace</value>
   </data>
   <data name="MiKo_1402_Title" xml:space="preserve">
-    <value>Namespaces should not be named after WPF specific design patterns</value>
+    <value>Namespaces should not be named after WPF-specific design patterns</value>
   </data>
   <data name="MiKo_1403_Description" xml:space="preserve">
-    <value>To avoid redundancy and confused developers, namespaces should not be named after any parent namespace. Instead, it should be made more clear into which namespace a type belongs by choosing a proper name.</value>
+    <value>To prevent redundancy and confusion, avoid naming namespaces after parent namespaces. Instead, choose names that clearly indicate the namespace's purpose and the functionalities it contains. This helps developers easily understand and navigate the code structure.</value>
   </data>
   <data name="MiKo_1403_MessageFormat" xml:space="preserve">
     <value>Do not re-use '{0}' in namespace</value>
@@ -1613,7 +1604,7 @@ Models are Entities. Commands, ViewModels and Views belong together and are UI s
     <value>Namespaces should not be named after any of their parent namespaces</value>
   </data>
   <data name="MiKo_1404_Description" xml:space="preserve">
-    <value>Namespaces should not contain any unspecific name, such as 'Miscellaneous' or 'Utilities'.</value>
+    <value>Avoid using vague names like 'Miscellaneous' or 'Utilities' for namespaces. Instead, choose specific names that clearly describe the functionalitiesthey contain. This helps developers easily understand and navigate the code structure.</value>
   </data>
   <data name="MiKo_1404_MessageFormat" xml:space="preserve">
     <value>Do not use '{0}' in namespace</value>
@@ -1622,9 +1613,8 @@ Models are Entities. Commands, ViewModels and Views belong together and are UI s
     <value>Namespaces should not contain unspecific names</value>
   </data>
   <data name="MiKo_1405_Description" xml:space="preserve">
-    <value>Namespaces should be named after features, not deployment details.
-Most times, a Lib suffix only signals that the assembly is a DLL (dynamic link library). This information is not needed at all.
-It does not matter if it is a library or an executable, what matters is the functionality it contains/provides.</value>
+    <value>Namespaces should be named based on the features they provide, not deployment details.
+For example, using a 'Lib' suffix just indicates the assembly is a DLL, which is not helpful. Instead, focus on naming namespaces to reflect the functionality they offer, regardless of whether they're part of a library or an executable.</value>
   </data>
   <data name="MiKo_1405_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}' in namespace</value>
@@ -1633,7 +1623,7 @@ It does not matter if it is a library or an executable, what matters is the func
     <value>Namespaces should not contain 'Lib'</value>
   </data>
   <data name="MiKo_1406_Description" xml:space="preserve">
-    <value>To ease their finding, value converters should be placed and grouped in a specific namespace called 'Converters'.</value>
+    <value>Value converters should be placed in and grouped under a specific namespace called 'Converters' to make them easier to find. This keeps the code organized and more navigable.</value>
   </data>
   <data name="MiKo_1406_MessageFormat" xml:space="preserve">
     <value>Place in 'Converters' namespace</value>
@@ -1642,7 +1632,7 @@ It does not matter if it is a library or an executable, what matters is the func
     <value>Value converters should be placed in 'Converters' namespace</value>
   </data>
   <data name="MiKo_1407_Description" xml:space="preserve">
-    <value>A test should be located in the same namespace as the class it shall test.</value>
+    <value>A test should reside in the same namespace as the class it tests. This makes it easier to find and relate the test to the class, enhancing organization and clarity.</value>
   </data>
   <data name="MiKo_1407_MessageFormat" xml:space="preserve">
     <value>Do not use 'Test' in namespace</value>
@@ -1651,8 +1641,7 @@ It does not matter if it is a library or an executable, what matters is the func
     <value>Test namespaces should not contain 'Test'</value>
   </data>
   <data name="MiKo_1408_Description" xml:space="preserve">
-    <value>To ease usage, extension method classes should be placed in same namespace as the extended types.
-That allows an easy detection and use via IntelliSense.</value>
+    <value>To make usage easier, place extension method classes in the same namespace as the types they extend. This helps developers easily detect and use them with IntelliSense.</value>
   </data>
   <data name="MiKo_1408_MessageFormat" xml:space="preserve">
     <value>Place class in namespace '{1}'</value>
@@ -1661,7 +1650,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Extension methods should be placed in same namespace as the extended types</value>
   </data>
   <data name="MiKo_1409_Description" xml:space="preserve">
-    <value>Namespaces should consist of complete words and should therefore not have leading or trailing underscore(s).</value>
+    <value>Namespaces should be made up of full words without any leading or trailing underscores. This helps developers easily understand and navigate the code structure.</value>
   </data>
   <data name="MiKo_1409_MessageFormat" xml:space="preserve">
     <value>Name it '{1}' instead</value>
@@ -1673,7 +1662,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Fix malformed XML</value>
   </data>
   <data name="MiKo_2000_Description" xml:space="preserve">
-    <value>Documentation should be valid XML so that it can be generated as API documentation/IntelliSense to support the developers.</value>
+    <value>Documentation should be valid XML to generate API documentation and support IntelliSense. This helps developers understand and use the code better, ensuring the documentation is accurate and accessible.</value>
   </data>
   <data name="MiKo_2000_MessageFormat" xml:space="preserve">
     <value>Documentation is malformed (contains invalid characters, e.g. '&amp;', '&gt;', '&lt;')</value>
@@ -1685,7 +1674,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Start comment with 'Occurs '</value>
   </data>
   <data name="MiKo_2001_Description" xml:space="preserve">
-    <value>Events should be documented with 'Occurs ...' to indicate that events actually occur.</value>
+    <value>Events should be documented using the phrase 'Occurs...' to clearly indicate that they occur. This makes the documentation more precise.</value>
   </data>
   <data name="MiKo_2001_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -1697,7 +1686,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Apply 'Provides data for the &lt;see cref="TODO"/&gt; event.' comment</value>
   </data>
   <data name="MiKo_2002_Description" xml:space="preserve">
-    <value>To ease maintenance, classes that inherit from 'System.EventArgs' should be documented with 'Provides data for the &lt;see cref="XYZ" /&gt; event.' to indicate for which event they are valid.</value>
+    <value>To make maintenance easier, classes inheriting from 'System.EventArgs' should include documentation stating 'Provides data for the &lt;see cref="XYZ" /&gt; event.' This clarifies which event they relate to, ensuring the documentation is clear and helpful.</value>
   </data>
   <data name="MiKo_2002_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should follow pattern: '{1} ... {2}'</value>
@@ -1709,7 +1698,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Start comment with 'Handles the '</value>
   </data>
   <data name="MiKo_2003_Description" xml:space="preserve">
-    <value>Documentation of an event handler should have a default starting phrase that describes what event gets handled.</value>
+    <value>Documentation for an event handler should begin with a standard phrase that explains which event it handles.</value>
   </data>
   <data name="MiKo_2003_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -1721,7 +1710,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Fix comment of event handler parameter</value>
   </data>
   <data name="MiKo_2004_Description" xml:space="preserve">
-    <value>Event method parameters should define what exactly they are.</value>
+    <value>Event handler parameter names should adhere to the .NET Framework Design Guidelines for event handlers. They should clearly define their purpose, making the documentation straightforward and easy to understand.</value>
   </data>
   <data name="MiKo_2004_MessageFormat" xml:space="preserve">
     <value>Change documentation to: '{1}'</value>
@@ -1730,7 +1719,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Documentation of event handler parameter names should follow .NET Framework Design Guidelines for event handlers</value>
   </data>
   <data name="MiKo_2005_Description" xml:space="preserve">
-    <value>Documentation should not contain the term 'event arg'. Instead, it should contain the reference to the specific class, such as '&lt;see cref="XyzEventArgs" /&gt;'.</value>
+    <value>Documentation should avoid using 'event arg'. Instead, directly reference the specific class like this: '&lt;see cref="XyzEventArgs" /&gt;'. This approach provides clarity and allows easy navigation to the related event argument type.</value>
   </data>
   <data name="MiKo_2005_MessageFormat" xml:space="preserve">
     <value>Do not use term 'event arg'</value>
@@ -1742,7 +1731,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Apply standard comment to RoutedEvent</value>
   </data>
   <data name="MiKo_2006_Description" xml:space="preserve">
-    <value>Routed events should be documented in the same way as they are documented by the .NET Framework.</value>
+    <value>Routed events should follow the same documentation style as the .NET Framework. This consistency ensures clarity, making it easier for developers to understand and work with these events.</value>
   </data>
   <data name="MiKo_2006_MessageFormat" xml:space="preserve">
     <value>&lt;{1}&gt; should be: '{2}'</value>
@@ -1754,7 +1743,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Append sealed text to comment</value>
   </data>
   <data name="MiKo_2010_Description" xml:space="preserve">
-    <value>To ease their usage when it comes to inheritance, sealed classes should document the fact that they are sealed.</value>
+    <value>To simplify their use in inheritance scenarios, sealed classes should clearly document that they are sealed. This helps developers understand their constraints and usage better.</value>
   </data>
   <data name="MiKo_2010_MessageFormat" xml:space="preserve">
     <value>End &lt;summary&gt; with: '{1}'</value>
@@ -1766,7 +1755,7 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Remove sealed text to comment</value>
   </data>
   <data name="MiKo_2011_Description" xml:space="preserve">
-    <value>Unsealed classes should not report that they are sealed.</value>
+    <value>Unsealed classes should not mention being sealed since they are not. This keeps things clear and straightforward for developers.</value>
   </data>
   <data name="MiKo_2011_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not contain: '{1}'</value>
@@ -1778,8 +1767,9 @@ That allows an easy detection and use via IntelliSense.</value>
     <value>Fix meaningless phrase</value>
   </data>
   <data name="MiKo_2012_Description" xml:space="preserve">
-    <value>To ease development and maintenance, the &lt;summary&gt; documentation should shortly describe a type's responsibility from the user's point of view. It should not be described from the implementer's point of view, except for callback interfaces.
-So it should not start with or contain a meaningless phrase like 'Used to'. Instead, it should start with a phrase like 'Allows to ', 'Represents ' or 'Provides '.</value>
+    <value>To simplify development and maintenance, the &lt;summary&gt; documentation should briefly explain a type's responsibility from the user's perspective.
+Except for callback interfaces, it should avoid meaningless phrases like 'Used to'. Instead, start with phrases like 'Allows to', 'Represents', or 'Provides'.
+This approach keeps the documentation clear and user-focused.</value>
   </data>
   <data name="MiKo_2012_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not {1} meaningless phrase: '{2}'</value>
@@ -1791,7 +1781,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2013_Description" xml:space="preserve">
-    <value>To ease their usage, enums should specify what kind of values they define.</value>
+    <value>To make enums easier to use, they should clearly specify the types of values they define. This adds clarity and helps developers understand their purpose more quickly.</value>
   </data>
   <data name="MiKo_2013_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -1803,7 +1793,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Apply standard 'Dispose' comment</value>
   </data>
   <data name="MiKo_2014_Description" xml:space="preserve">
-    <value>Dispose methods should be documented in the same way as they are documented by the .NET Framework.</value>
+    <value>Dispose methods should follow the .NET Framework's documentation style. This ensures consistency and clarity, making it easier for developers to understand and implement disposal patterns correctly.</value>
   </data>
   <data name="MiKo_2014_MessageFormat" xml:space="preserve">
     <value>Change documentation to: '{1}'</value>
@@ -1815,7 +1805,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Replace term 'fire'</value>
   </data>
   <data name="MiKo_2015_Description" xml:space="preserve">
-    <value>The term 'Fire' is a negative term. Employees get fired (or guns), but not events or exceptions. Events get raised and exceptions get thrown.</value>
+    <value>The word 'Fire' has negative connotations, like firing employees or guns. It's not appropriate for events or exceptions. Instead, use 'Raise' for events and 'Throw' for exceptions, as it conveys a more neutral and accurate action.</value>
   </data>
   <data name="MiKo_2015_MessageFormat" xml:space="preserve">
     <value>Use {1} instead of {2} in documentation</value>
@@ -1827,7 +1817,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2016_Description" xml:space="preserve">
-    <value>Documentation for asynchronous methods should indicate that method is run asynchronously.</value>
+    <value>Documentation for asynchronous methods should state that the method runs asynchronously. Start with 'Asynchronously...' to clearly convey this. This ensures developers immediately understand the method's behavior.</value>
   </data>
   <data name="MiKo_2016_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -1839,7 +1829,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Apply standard comment to DependencyProperty</value>
   </data>
   <data name="MiKo_2017_Description" xml:space="preserve">
-    <value>Dependency properties should be documented in the same way as they are documented by the .NET Framework.</value>
+    <value>Dependency properties should follow the same documentation style used by the .NET Framework. This consistency ensures clarity and makes it easier for developers to understand and work with these properties.</value>
   </data>
   <data name="MiKo_2017_MessageFormat" xml:space="preserve">
     <value>&lt;{1}&gt; should be: '{2}'</value>
@@ -1851,7 +1841,8 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Start &lt;summary&gt; with '{0}'</value>
   </data>
   <data name="MiKo_2018_Description" xml:space="preserve">
-    <value>The terms 'Check' or 'Test' are ambiguous. If validation of parameters is meant, use something like 'Validates' or 'Verifies'. If a check for a specific state is meant, use 'Determines whether' instead.</value>
+    <value>Terms like 'Check' or 'Test' can be vague. When validating parameters, use 'Validates'. When verifying something, use 'Verifies'. If the method needs to determine some condition or situation, use 'Determines whether.'
+This ensures clarity and precision in your code.</value>
   </data>
   <data name="MiKo_2018_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with '{1}'</value>
@@ -1860,7 +1851,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Documentation should not use the ambiguous terms 'Check' or 'Test'</value>
   </data>
   <data name="MiKo_2019_Description" xml:space="preserve">
-    <value>&lt;summary&gt; documentation should start with a third person singular verb as it shall be a short description of the functionality that the class, property, etc. provides or represents.</value>
+    <value>&lt;summary&gt; documentation should always begin with a third person singular verb, such as "Provides". This concise description of the functionality that the class, property, etc. offers or represents ensures clarity and helps maintain a uniform documentation style.</value>
   </data>
   <data name="MiKo_2019_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with a third person singular verb</value>
@@ -1872,7 +1863,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Use &lt;inheritdoc/&gt;</value>
   </data>
   <data name="MiKo_2020_Description" xml:space="preserve">
-    <value>It does not make sense to use a &lt;summary&gt; documentation that only reference something else via &lt;see cref="..." /&gt; as IntelliSense does not show these descriptions. For such a scenario &lt;inheritdoc /&gt; should be used.</value>
+    <value>Using a &lt;summary&gt; documentation that solely references something else with &lt;see cref="..." /&gt; is not effective, since IntelliSense does not display these descriptions. For such cases, the &lt;inheritdoc /&gt; tag should be used, as it's specifically designed for this purpose. This ensures the documentation is properly shown in IntelliSense and makes it more useful for developers.</value>
   </data>
   <data name="MiKo_2020_MessageFormat" xml:space="preserve">
     <value>Use &lt;inheritdoc /&gt; instead</value>
@@ -1896,7 +1887,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Fix comment start of [out] parameter</value>
   </data>
   <data name="MiKo_2022_Description" xml:space="preserve">
-    <value>The documentation of [out] parameters should start with the success case.</value>
+    <value>For [out] parameter documentation, start with the success case, such as "On successful return, contains...". This approach aligns with the .NET framework documentation and ensures clarity for developers.</value>
   </data>
   <data name="MiKo_2022_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {1}</value>
@@ -1908,7 +1899,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Fix comment start of Boolean parameter</value>
   </data>
   <data name="MiKo_2023_Description" xml:space="preserve">
-    <value>The documentation of a Boolean as parameter should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
+    <value>For Boolean parameters, documentation should explicitly describe the 'true' case followed by the 'false' case. Use the format '&lt;see langword="true"/&gt; to indicate that ...; otherwise, &lt;see langword="false"/&gt;.'. This aligns with best practices and provides clarity for developers.</value>
   </data>
   <data name="MiKo_2023_MessageFormat" xml:space="preserve">
     <value>Documentation should follow pattern: '{1} ... {2}'</value>
@@ -1920,7 +1911,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Fix comment start of Enum parameter</value>
   </data>
   <data name="MiKo_2024_Description" xml:space="preserve">
-    <value>The documentation of Enum parameters should start with a phrase that specifies what will be done with the Enum.</value>
+    <value>The Enum parameter documentation should begin with a phrase specifying the action to be taken with the Enum. This ensures clarity about how the Enum will be used and what it represents.</value>
   </data>
   <data name="MiKo_2024_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {1}</value>
@@ -1932,7 +1923,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Fix comment start of CancellationToken</value>
   </data>
   <data name="MiKo_2025_Description" xml:space="preserve">
-    <value>The documentation of 'CancellationToken' parameters should start with a phrase that describes how it is used.</value>
+    <value>Documentation for 'CancellationToken' parameters should begin with a phrase that outlines its usage, like: 'The token to monitor for cancellation requests.' This keeps the documentation clear and consistent, aiding developers in understanding its purpose.</value>
   </data>
   <data name="MiKo_2025_MessageFormat" xml:space="preserve">
     <value>Start documentation with: {1}</value>
@@ -1941,7 +1932,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Documentation of 'CancellationToken' parameters should have a default starting phrase</value>
   </data>
   <data name="MiKo_2026_Description" xml:space="preserve">
-    <value>The documentation should not state that a parameter is unused although it is still in use.</value>
+    <value>Documentation must always be accurate. If a parameter is still in use, it should never be labeled as unused. Keeping documentation truthful and clear is crucial for effective maintenance and development.</value>
   </data>
   <data name="MiKo_2026_MessageFormat" xml:space="preserve">
     <value>Documentation lies about being unused</value>
@@ -1962,7 +1953,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Serialization constructor parameters shall be documented with a specific phrase</value>
   </data>
   <data name="MiKo_2028_Description" xml:space="preserve">
-    <value>The documentation of parameters should describe what they represent and what they are used for. Only stating the name of the parameter is simply not enough.</value>
+    <value>Documentation must go beyond just listing parameter names. It should clearly describe what the parameters represent and how they are used. Simply stating the parameter's name doesn't provide enough context or information. Accurate and detailed documentation makes code easier to understand and maintain.</value>
   </data>
   <data name="MiKo_2028_MessageFormat" xml:space="preserve">
     <value>Documentation should contain more than just the parameter name</value>
@@ -1974,7 +1965,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Remove 'cref' value from &lt;inheritdoc/&gt;</value>
   </data>
   <data name="MiKo_2029_Description" xml:space="preserve">
-    <value>Instead of faking an XML documentation by using &lt;inheritdoc&gt; with a 'cref' to itself, a well-written &lt;summary&gt; XML documentation should be used.</value>
+    <value>Instead of using &lt;inheritdoc&gt; with a 'cref' to itself, provide a clear and well-written &lt;summary&gt; XML documentation.</value>
   </data>
   <data name="MiKo_2029_MessageFormat" xml:space="preserve">
     <value>Do not use &lt;inheritdoc cref="{0}" /&gt;</value>
@@ -1983,7 +1974,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>&lt;inheritdoc&gt; documentation should not use a 'cref' to itself</value>
   </data>
   <data name="MiKo_2030_Description" xml:space="preserve">
-    <value>The documentation of a return value should have a default starting phrase that describes the returned value in more detail.</value>
+    <value>Documentation for a return value should start with a default phrase that provides a detailed description of what the returned value is. This approach helps clarify the purpose and use of the return value for developers.</value>
   </data>
   <data name="MiKo_2030_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -1995,7 +1986,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Fix return comment</value>
   </data>
   <data name="MiKo_2031_Description" xml:space="preserve">
-    <value>The documentation of a Task as return value should have a default (starting) phrase.</value>
+    <value>The documentation for a 'Task' return value should start with a phrase that describes what the task represents and what result data it provides. This helps developers quickly understand the purpose and output of the task.</value>
   </data>
   <data name="MiKo_2031_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -2007,7 +1998,7 @@ So it should not start with or contain a meaningless phrase like 'Used to'. Inst
     <value>Fix return comment</value>
   </data>
   <data name="MiKo_2032_Description" xml:space="preserve">
-    <value>The documentation of a Boolean as return value should have a specific phrase that first describes the 'true' case and then the 'false' case.</value>
+    <value>For Boolean return values, documentation should explicitly describe the 'true' case followed by the 'false' case. Use the format '&lt;see langword="true"/&gt; if ...; otherwise, &lt;see langword="false"/&gt;.'. This aligns with best practices, ensures clarity and helps developers understand the possible outcomes of the method.</value>
   </data>
   <data name="MiKo_2032_MessageFormat" xml:space="preserve">
     <value>&lt;{1}&gt; should follow pattern: '{2} ... {3}'</value>
