@@ -527,7 +527,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1031_Description" xml:space="preserve">
-    <value>Indicating that a type is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'User' instead of 'UserModel')</value>
+    <value>Using 'Model' as a suffix for entity types is unnecessary. Entities should just be named plainly without any suffixes. For example, use 'User' instead of 'UserModel'.</value>
   </data>
   <data name="MiKo_1031_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -539,7 +539,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1032_Description" xml:space="preserve">
-    <value>Indicating that a method deals with an entity by using 'Model' in its name does not make sense.</value>
+    <value>Using 'Model' in a method name to indicate it deals with an entity is unnecessary. Just name the method clearly without using 'Model'.</value>
   </data>
   <data name="MiKo_1032_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -551,7 +551,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1033_Description" xml:space="preserve">
-    <value>Indicating that a parameter is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'user' instead of 'userModel')</value>
+    <value>Adding 'Model' as a suffix to a parameter name is unnecessary. Just name the parameter plainly, like using 'user' instead of 'userModel'. This keeps it simple and clear.</value>
   </data>
   <data name="MiKo_1033_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -563,7 +563,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1034_Description" xml:space="preserve">
-    <value>Indicating that a field is an entity by using 'Model' as its suffix does not make sense. Entities should not be suffixed at all. (e.g. 'user' instead of 'userModel')</value>
+    <value>Using 'Model' as a suffix for field names is unnecessary. Just name the field plainly, like 'user' instead of 'userModel'. This keeps it simple and clear.</value>
   </data>
   <data name="MiKo_1034_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -575,7 +575,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1035_Description" xml:space="preserve">
-    <value>Indicating that a property deals with an entity by using 'Model' in its name does not make sense.</value>
+    <value>Using 'Model' in a property name to show it deals with an entity is unnecessary. Just name the property clearly without 'Model'.</value>
   </data>
   <data name="MiKo_1035_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -587,7 +587,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Model' indicator</value>
   </data>
   <data name="MiKo_1036_Description" xml:space="preserve">
-    <value>Indicating that an event deals with an entity by using 'Model' in its name does not make sense.</value>
+    <value>Using 'Model' in an event name to show it deals with an entity is unnecessary. Just name the event clearly without 'Model'.</value>
   </data>
   <data name="MiKo_1036_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -599,7 +599,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove type suffix</value>
   </data>
   <data name="MiKo_1037_Description" xml:space="preserve">
-    <value>Indicating that a type is an Enum by using 'Enum' as its suffix does not make sense. The same applies for types in general such as interfaces, classes, records and structs.</value>
+    <value>Using 'Enum' as a suffix to indicate a type an Enum is unnecessary. This also goes for suffixes in general, whether for interfaces, classes, records, or structs. Keeping names clear and straightforward without these suffixes makes the code cleaner and easier to understand.</value>
   </data>
   <data name="MiKo_1037_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -611,7 +611,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Suffix type with 'Extensions'</value>
   </data>
   <data name="MiKo_1038_Description" xml:space="preserve">
-    <value>To ease maintenance, the names of classes that contain extension methods should end with the same suffix.</value>
+    <value>To make maintenance easier, classes with extension methods should all end with the same suffix. This helps quickly identify their purpose and makes the code easier to work with.</value>
   </data>
   <data name="MiKo_1038_MessageFormat" xml:space="preserve">
     <value>End name with '{1}'</value>
@@ -623,7 +623,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Rename 'this' argument</value>
   </data>
   <data name="MiKo_1039_Description" xml:space="preserve">
-    <value>To ease maintenance, the 'this' parameter of extension methods should have a default name.</value>
+    <value>To simplify maintenance, the 'this' parameter in extension methods should always have a standard name. This makes the code consistent and easier to understand.</value>
   </data>
   <data name="MiKo_1039_MessageFormat" xml:space="preserve">
     <value>Name it {1}</value>
@@ -632,7 +632,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>The 'this' parameter of extension methods should have a default name</value>
   </data>
   <data name="MiKo_1040_Description" xml:space="preserve">
-    <value>Suffixes on parameter names (such as 'List') are noise and should be avoided.</value>
+    <value>Adding suffixes like 'List' to parameter names adds unnecessary clutter. It's best to avoid them for cleaner, more readable code.</value>
   </data>
   <data name="MiKo_1040_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -641,7 +641,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Parameters should not be suffixed with implementation details</value>
   </data>
   <data name="MiKo_1041_Description" xml:space="preserve">
-    <value>Suffixes on field names (such as 'List') are noise and should be avoided.</value>
+    <value>Adding suffixes like 'List' to field names adds unnecessary clutter. It's best to avoid them for cleaner, more readable code.</value>
   </data>
   <data name="MiKo_1041_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -653,7 +653,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Name it 'cancellationToken'</value>
   </data>
   <data name="MiKo_1042_Description" xml:space="preserve">
-    <value>To ease maintenance, and being consistent with the .NET Framework classes, 'CancellationToken' parameters should have a very specific name.</value>
+    <value>To simplify maintenance and align with .NET Framework standards, 'CancellationToken' parameters should be consistently named. This helps keep the code clear and consistent.</value>
   </data>
   <data name="MiKo_1042_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -665,7 +665,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Name it 'token'</value>
   </data>
   <data name="MiKo_1043_Description" xml:space="preserve">
-    <value>To ease maintenance, 'CancellationToken' variables should have a very specific name.</value>
+    <value>To simplify maintenance and align with .NET Framework standards, 'CancellationToken' variables should be consistently named. This helps keep the code clear and consistent.</value>
   </data>
   <data name="MiKo_1043_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -677,7 +677,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Append 'Command' suffix</value>
   </data>
   <data name="MiKo_1044_Description" xml:space="preserve">
-    <value>To ease maintenance, add the suffix 'Command'.</value>
+    <value>To simplify maintenance, always add the suffix 'Command' to commands. This makes it clear they are commands and keeps the code consistent.</value>
   </data>
   <data name="MiKo_1044_MessageFormat" xml:space="preserve">
     <value>Add '{1}' as suffix</value>
@@ -689,7 +689,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Command' suffix</value>
   </data>
   <data name="MiKo_1045_Description" xml:space="preserve">
-    <value>To ease maintenance, remove the suffix 'Command' as the method itself is invoked by a command.</value>
+    <value>To simplify maintenance, drop the 'Command' suffix since the method is already invoked as a command. Keeps things clean and clear.</value>
   </data>
   <data name="MiKo_1045_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -701,7 +701,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Append 'Async' suffix</value>
   </data>
   <data name="MiKo_1046_Description" xml:space="preserve">
-    <value>To ease maintenance, methods that follow the Task-based Asynchronous Pattern (TAP) should be suffixed with 'Async'.</value>
+    <value>To make maintenance easier, methods using the Task-based Asynchronous Pattern (TAP) should end with the suffix 'Async.' This helps clearly identify them as asynchronous methods.</value>
   </data>
   <data name="MiKo_1046_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
@@ -716,7 +716,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Remove 'Async' suffix</value>
   </data>
   <data name="MiKo_1047_Description" xml:space="preserve">
-    <value>To ease maintenance, methods that do not follow the Task-based Asynchronous Pattern (TAP) should not be suffixed with 'Async' as that would indicate that they would follow the pattern.</value>
+    <value>To simplify maintenance, do not add the 'Async' suffix to methods that do not follow the Task-based Asynchronous Pattern (TAP). Using 'Async' implies they do follow the pattern, which would be misleading.</value>
   </data>
   <data name="MiKo_1047_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/task-based-asynchronous-pattern-tap</value>
@@ -731,7 +731,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Append 'Converter' suffix</value>
   </data>
   <data name="MiKo_1048_Description" xml:space="preserve">
-    <value>To ease maintenance, the names of classes that are value converters should end with the same suffix.</value>
+    <value>To simplify maintenance, all class names for value converters should end with the suffix 'Converter.' This consistency helps quickly identify their role and purpose.</value>
   </data>
   <data name="MiKo_1048_MessageFormat" xml:space="preserve">
     <value>End name with '{1}'</value>
@@ -743,7 +743,7 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Replace requirement term</value>
   </data>
   <data name="MiKo_1049_Description" xml:space="preserve">
-    <value>Requirement terms such as 'Must', 'Need', 'Shall', 'Should', 'Will' or 'Would' within a name are not explicit enough. Instead, use a positive verb or an adjective like 'Is', 'Has', 'Can', etc.</value>
+    <value>Using terms like 'Must', 'Need', 'Shall', 'Should', 'Will', or 'Would' in names is not clear enough. Instead, go for positive verbs or adjectives like 'Is', 'Has', or 'Can.' These make the names more explicit and easier to understand.</value>
   </data>
   <data name="MiKo_1049_MessageFormat" xml:space="preserve">
     <value>Do not use '{1}' in name</value>
@@ -755,8 +755,8 @@ This naming convention helps ensure clarity and consistency in method functional
     <value>Rename return value</value>
   </data>
   <data name="MiKo_1050_Description" xml:space="preserve">
-    <value>Variables for return values should describe what data they contain and not what they technical are.
-So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</value>
+    <value>Return variables should clearly describe the data they hold, not their technical aspect.
+So, use meaningful names instead of vague ones like 'ret', 'retVal', or 'returnValue'. It makes the code more readable and understandable.</value>
   </data>
   <data name="MiKo_1050_MessageFormat" xml:space="preserve">
     <value>Use a more descriptive name than '{1}'</value>
@@ -768,7 +768,7 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
     <value>Name it 'callback'</value>
   </data>
   <data name="MiKo_1051_Description" xml:space="preserve">
-    <value>Suffixing delegate parameters with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
+    <value>Using the delegate type as a suffix for parameter names is redundant and unhelpful. Instead, use descriptive names like 'callback', 'filter', or 'map' to provide clearer context.</value>
   </data>
   <data name="MiKo_1051_MessageFormat" xml:space="preserve">
     <value>Use a better matching name instead</value>
@@ -780,7 +780,7 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
     <value>Name it 'callback'</value>
   </data>
   <data name="MiKo_1052_Description" xml:space="preserve">
-    <value>Suffixing delegate variables with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
+    <value>Using the delegate type as a suffix for variable names is redundant and unhelpful. Instead, use descriptive names like 'callback', 'filter', or 'map' to provide clearer context.</value>
   </data>
   <data name="MiKo_1052_MessageFormat" xml:space="preserve">
     <value>Use a better matching name instead</value>
@@ -792,7 +792,7 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
     <value>Rename delegate field</value>
   </data>
   <data name="MiKo_1053_Description" xml:space="preserve">
-    <value>Suffixing delegate fields with their type is repetitive and provides no value. A more meaningful name (such as 'callback', 'filter' or 'map') provides much more context.</value>
+    <value>Using the delegate type as a suffix for field names is redundant and unhelpful. Instead, use descriptive names like 'callback', 'filter', or 'map' to provide clearer context.</value>
   </data>
   <data name="MiKo_1053_MessageFormat" xml:space="preserve">
     <value>Use a better matching name instead</value>
@@ -804,8 +804,8 @@ So they should have better names than e.g. 'ret', 'retVal' or 'returnValue'.</va
     <value>Remove 'Utility' marker suffix</value>
   </data>
   <data name="MiKo_1054_Description" xml:space="preserve">
-    <value>Terms such as 'helper' or 'utility' are too generic and meaningless.
-Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad.</value>
+    <value>Names like 'helper' or 'utility' are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
+Instead, use specific names that describe their exact purpose, making the code easier to understand and maintain.</value>
   </data>
   <data name="MiKo_1054_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' from name</value>
@@ -817,7 +817,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>Rename dependency property</value>
   </data>
   <data name="MiKo_1055_Description" xml:space="preserve">
-    <value>To indicate that fields are the containers for specific dependency properties, those fields should be suffixed with 'Property' (similar as in the .NET Framework).</value>
+    <value>To show that fields are containers for specific dependency properties, add the suffix 'Property' to their names. This aligns with the naming conventions in the .NET Framework.</value>
   </data>
   <data name="MiKo_1055_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
@@ -829,7 +829,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>Dependency properties should be suffixed with 'Property' (as in the .NET Framework)</value>
   </data>
   <data name="MiKo_1056_Description" xml:space="preserve">
-    <value>To indicate that fields are the containers for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework).</value>
+    <value>To show that fields are containers for specific dependency properties, they should be prefixed with the property name. This aligns with the naming conventions in the .NET Framework.</value>
   </data>
   <data name="MiKo_1056_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/framework/wpf/advanced/how-to-implement-a-dependency-property</value>
@@ -844,7 +844,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>Rename dependency property key</value>
   </data>
   <data name="MiKo_1057_Description" xml:space="preserve">
-    <value>To indicate that fields are the keys for specific dependency properties, those fields should be suffixed with 'Key' (similar as in the .NET Framework).</value>
+    <value>To show that fields are keys for specific dependency properties, add the suffix 'Key' to their names. This aligns with the naming conventions in the .NET Framework.</value>
   </data>
   <data name="MiKo_1057_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
@@ -856,7 +856,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>Dependency property keys should be suffixed with 'Key' (as in the .NET Framework)</value>
   </data>
   <data name="MiKo_1058_Description" xml:space="preserve">
-    <value>To indicate that fields are the keys for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework).</value>
+    <value>To show that fields are keys for specific dependency properties, they should be prefixed with the property name. This aligns with the naming conventions in the .NET Framework.</value>
   </data>
   <data name="MiKo_1058_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/api/system.windows.dependencypropertykey</value>
@@ -871,8 +871,7 @@ Types that are named so do not follow the Single Responsibility Principle (SRP);
     <value>Remove 'Impl' marker suffix</value>
   </data>
   <data name="MiKo_1059_Description" xml:space="preserve">
-    <value>Terms such as 'Impl' or 'Implementation' are meaningless and provide no benefit.
-Types that are named so should be better named directly after the interface they implement, but without any 'Impl' marker.</value>
+    <value>Using 'Impl' or 'Implementation' in type names is unnecessary and unhelpful. It's better to name types directly after the interface they implement, without adding an 'Impl' marker. This keeps names clear and concise.</value>
   </data>
   <data name="MiKo_1059_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' from name</value>
@@ -884,13 +883,10 @@ Types that are named so should be better named directly after the interface they
     <value>Change to 'NotFound'</value>
   </data>
   <data name="MiKo_1060_Description" xml:space="preserve">
-    <value>Sometimes, developers try to report that an entity was not found.
+    <value>When developers need to indicate that an entity was not found, they might have a repository method like 'GetXyz' that returns an error code (e.g., null) or throws an exception if 'Xyz' does not exist.
+Naming the exception 'GetXyzFailedException' is unclear because it does not specify the reason for the failure. A better name would be 'XyzNotFoundException,' indicating that 'Xyz' was not found.
 
-For example, a repository is requested to return an entity 'Xyz' (e.g. via method 'GetXyz'). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
-
-The name of the exception is then sometimes 'GetXyzFailedException' which is not that clear (why did it fail?). A better name would be 'XyzNotFoundException' to indicate that 'Xyz' was not found.
-
-The same applies for 'XyzMissingException'. It is probably not missing (which means it should be actually there but is not); it is just not there and therefore cannot be found. So, 'XyzNotFoundException' would be a better, more precise name as well.</value>
+Similarly, using 'XyzMissingException' is also misleading. 'Missing' implies it should be there but is not, whereas 'not found' simply states it does not exist. Hence, 'XyzNotFoundException' is a clearer and more precise choice.</value>
   </data>
   <data name="MiKo_1060_MessageFormat" xml:space="preserve">
     <value>Consider to name it '{1}' instead</value>
@@ -902,11 +898,11 @@ The same applies for 'XyzMissingException'. It is probably not missing (which me
     <value>Rename out parameter</value>
   </data>
   <data name="MiKo_1061_Description" xml:space="preserve">
-    <value>If a 'TryXyz' method has an [out] parameter, that [out] parameter shall be named specifically because it is the actual result of the method. The method's return value only exists to indicate a success or failure of the operation.
+    <value>When a 'TryXyz' method includes an [out] parameter, name it specifically, as it's the actual result of the method. The return value only indicates success or failure:
+- For a 'Try' method, name the [out] parameter 'result'.
+- For a 'TryGet' method, name the [out] parameter based on the method's name, dropping the 'TryGet' prefix.
 
-- For a 'Try' method, that parameter shall be named 'result'.
-- For a 'TryGet' method, that parameter shall be named after the name of the method without the 'TryGet' prefix.
-   Example: For the 'TryGetMyValue' method the parameter shall be named 'myValue'.</value>
+For example, in the 'TryGetMyValue' method, the parameter should be named 'myValue'. This keeps names precise and clear.</value>
   </data>
   <data name="MiKo_1061_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -915,8 +911,8 @@ The same applies for 'XyzMissingException'. It is probably not missing (which me
     <value>The name of 'Try' method's [out] parameter should be specific</value>
   </data>
   <data name="MiKo_1062_Description" xml:space="preserve">
-    <value>Detection methods (properties or fields) such as 'Can', 'Has' or 'Contains' should consist only of a few words, such as 'HasConnection' or 'ContainsKey'.
-If they consist of more than those few words, these methods (properties or fields) are probably placed at the wrong place and violate the SRP.</value>
+    <value>Detection methods, properties, or fields like 'Can', 'Has', or 'Contains' should be concise, like 'HasConnection' or 'ContainsKey'.
+If their names are longer, it likely means they are misplaced and violate the Single Responsibility Principle (SRP).</value>
   </data>
   <data name="MiKo_1062_MessageFormat" xml:space="preserve">
     <value>Avoid name with more than {1} words</value>
@@ -928,9 +924,7 @@ If they consist of more than those few words, these methods (properties or field
     <value>Replace abbreviations in name</value>
   </data>
   <data name="MiKo_1063_Description" xml:space="preserve">
-    <value>Using abbreviations in names is bad practice.
-It makes it hard for every developer that is new to the code base to understand what is meant by the code.
-In addition, they distract the reader's attention as they have to translate the meaning each time.</value>
+    <value>Using abbreviations in names is bad practice. It makes it difficult for new developers to understand the code. Plus, abbreviations distract readers, as they have to constantly translate their meaning.</value>
   </data>
   <data name="MiKo_1063_MessageFormat" xml:space="preserve">
     <value>Use '{2}' instead of abbreviation '{1}'</value>
@@ -939,7 +933,7 @@ In addition, they distract the reader's attention as they have to translate the 
     <value>Do not use abbreviations in names</value>
   </data>
   <data name="MiKo_1064_Description" xml:space="preserve">
-    <value>To ease maintenance, parameter names should be based on the parameter's meaning rather than the parameter's type.</value>
+    <value>To make maintenance easier, base parameter names on their meaning, not their type. This keeps the code more intuitive and easier to understand.</value>
   </data>
   <data name="MiKo_1064_MessageFormat" xml:space="preserve">
     <value>Name parameter based on its meaning instead of its type</value>
@@ -951,8 +945,11 @@ In addition, they distract the reader's attention as they have to translate the 
     <value>Rename operator parameter</value>
   </data>
   <data name="MiKo_1065_Description" xml:space="preserve">
-    <value>Parameters of operator overloads should have default names if there is no meaning to the parameters.
-For binary operator overloads use the names 'left' and 'right', for unary operator overloads use the name 'value'.</value>
+    <value>According to the .NET Framework Design Guidelines for operator overloads, parameters should have standard names if they do not have specific meanings.
+- For binary operator overloads, use 'left' and 'right'.
+- For unary operator overloads, use 'value'.
+
+This ensures clarity and consistency in your code.</value>
   </data>
   <data name="MiKo_1065_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-parameters</value>
@@ -988,8 +985,7 @@ For binary operator overloads use the names 'left' and 'right', for unary operat
     <value>Methods should not contain 'Perform' in their names</value>
   </data>
   <data name="MiKo_1068_Description" xml:space="preserve">
-    <value>Workflows are a high-level construct and encapsulate functionality that belongs into the business layer.
-Hence, their methods should be named 'CanRun' or 'Run' (similar to commands where they are named 'CanExecute' and 'Execute').</value>
+    <value>Workflows, being high-level constructs within the business layer, should have methods named 'CanRun' or 'Run', much like commands that use 'CanExecute' and 'Execute'. This naming convention keeps things consistent and clear.</value>
   </data>
   <data name="MiKo_1068_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1010,7 +1006,8 @@ Hence, their methods should be named 'CanRun' or 'Run' (similar to commands wher
     <value>Rename variable into plural</value>
   </data>
   <data name="MiKo_1070_Description" xml:space="preserve">
-    <value>Local variables for collections (that is any which is an 'IEnumerable') should have names in plural form. Their names should describe the contents of the collection; and not the collection itself.</value>
+    <value>Local variables for collections (like those implementing 'IEnumerable') should have plural names that describe the contents, not the collection itself.
+For example, instead of naming a variable 'userCollection', name it 'users' to clearly indicate it holds multiple user entities.</value>
   </data>
   <data name="MiKo_1070_MessageFormat" xml:space="preserve">
     <value>Name it '{1}'</value>
@@ -1070,7 +1067,7 @@ Example:
     <value>Boolean fields should be named as statements and not as questions</value>
   </data>
   <data name="MiKo_1074_Description" xml:space="preserve">
-    <value>In case an object is used for synchronizing threads via lock statements, that object should be named with a suffix "Lock". So it's easy to spot whether an object is used as synchronization mechanism for a lock.</value>
+    <value>If an object is used for synchronizing threads with lock statements, add the suffix 'Lock' to its name. This makes it clear that the object is used as a synchronization mechanism.</value>
   </data>
   <data name="MiKo_1074_MessageFormat" xml:space="preserve">
     <value>Suffix field with 'Lock' because it is used as lock object</value>
@@ -1289,7 +1286,7 @@ Keep the passive suffixes for namespaces.</value>
 - 'Remove' means to take something away and set it aside, but it still exists.
 
 So, do not mix these terms in documentation and naming.
-For instance, do not name a method 'RemoveUser' if the documentation states it 'Deletes the user from the database.'</value>
+For instance, do not name a method 'RemoveUser' if the documentation states it 'Deletes the user from the database.' .</value>
   </data>
   <data name="MiKo_1095_MessageFormat" xml:space="preserve">
     <value>Choose wisely between 'Delete' and 'Remove'</value>

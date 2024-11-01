@@ -1274,7 +1274,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;User&apos; instead of &apos;UserModel&apos;).
+        ///   Looks up a localized string similar to Using &apos;Model&apos; as a suffix for entity types is unnecessary. Entities should just be named plainly without any suffixes. For example, use &apos;User&apos; instead of &apos;UserModel&apos;..
         /// </summary>
         internal static string MiKo_1031_Description {
             get {
@@ -1310,7 +1310,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a method deals with an entity by using &apos;Model&apos; in its name does not make sense..
+        ///   Looks up a localized string similar to Using &apos;Model&apos; in a method name to indicate it deals with an entity is unnecessary. Just name the method clearly without using &apos;Model&apos;..
         /// </summary>
         internal static string MiKo_1032_Description {
             get {
@@ -1346,7 +1346,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a parameter is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;user&apos; instead of &apos;userModel&apos;).
+        ///   Looks up a localized string similar to Adding &apos;Model&apos; as a suffix to a parameter name is unnecessary. Just name the parameter plainly, like using &apos;user&apos; instead of &apos;userModel&apos;. This keeps it simple and clear..
         /// </summary>
         internal static string MiKo_1033_Description {
             get {
@@ -1382,7 +1382,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a field is an entity by using &apos;Model&apos; as its suffix does not make sense. Entities should not be suffixed at all. (e.g. &apos;user&apos; instead of &apos;userModel&apos;).
+        ///   Looks up a localized string similar to Using &apos;Model&apos; as a suffix for field names is unnecessary. Just name the field plainly, like &apos;user&apos; instead of &apos;userModel&apos;. This keeps it simple and clear..
         /// </summary>
         internal static string MiKo_1034_Description {
             get {
@@ -1418,7 +1418,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a property deals with an entity by using &apos;Model&apos; in its name does not make sense..
+        ///   Looks up a localized string similar to Using &apos;Model&apos; in a property name to show it deals with an entity is unnecessary. Just name the property clearly without &apos;Model&apos;..
         /// </summary>
         internal static string MiKo_1035_Description {
             get {
@@ -1454,7 +1454,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that an event deals with an entity by using &apos;Model&apos; in its name does not make sense..
+        ///   Looks up a localized string similar to Using &apos;Model&apos; in an event name to show it deals with an entity is unnecessary. Just name the event clearly without &apos;Model&apos;..
         /// </summary>
         internal static string MiKo_1036_Description {
             get {
@@ -1490,7 +1490,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicating that a type is an Enum by using &apos;Enum&apos; as its suffix does not make sense. The same applies for types in general such as interfaces, classes, records and structs..
+        ///   Looks up a localized string similar to Using &apos;Enum&apos; as a suffix to indicate a type an Enum is unnecessary. This also goes for suffixes in general, whether for interfaces, classes, records, or structs. Keeping names clear and straightforward without these suffixes makes the code cleaner and easier to understand..
         /// </summary>
         internal static string MiKo_1037_Description {
             get {
@@ -1526,7 +1526,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the names of classes that contain extension methods should end with the same suffix..
+        ///   Looks up a localized string similar to To make maintenance easier, classes with extension methods should all end with the same suffix. This helps quickly identify their purpose and makes the code easier to work with..
         /// </summary>
         internal static string MiKo_1038_Description {
             get {
@@ -1562,7 +1562,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the &apos;this&apos; parameter of extension methods should have a default name..
+        ///   Looks up a localized string similar to To simplify maintenance, the &apos;this&apos; parameter in extension methods should always have a standard name. This makes the code consistent and easier to understand..
         /// </summary>
         internal static string MiKo_1039_Description {
             get {
@@ -1589,7 +1589,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixes on parameter names (such as &apos;List&apos;) are noise and should be avoided..
+        ///   Looks up a localized string similar to Adding suffixes like &apos;List&apos; to parameter names adds unnecessary clutter. It&apos;s best to avoid them for cleaner, more readable code..
         /// </summary>
         internal static string MiKo_1040_Description {
             get {
@@ -1616,7 +1616,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixes on field names (such as &apos;List&apos;) are noise and should be avoided..
+        ///   Looks up a localized string similar to Adding suffixes like &apos;List&apos; to field names adds unnecessary clutter. It&apos;s best to avoid them for cleaner, more readable code..
         /// </summary>
         internal static string MiKo_1041_Description {
             get {
@@ -1652,7 +1652,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, and being consistent with the .NET Framework classes, &apos;CancellationToken&apos; parameters should have a very specific name..
+        ///   Looks up a localized string similar to To simplify maintenance and align with .NET Framework standards, &apos;CancellationToken&apos; parameters should be consistently named. This helps keep the code clear and consistent..
         /// </summary>
         internal static string MiKo_1042_Description {
             get {
@@ -1688,7 +1688,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, &apos;CancellationToken&apos; variables should have a very specific name..
+        ///   Looks up a localized string similar to To simplify maintenance and align with .NET Framework standards, &apos;CancellationToken&apos; variables should be consistently named. This helps keep the code clear and consistent..
         /// </summary>
         internal static string MiKo_1043_Description {
             get {
@@ -1724,7 +1724,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, add the suffix &apos;Command&apos;..
+        ///   Looks up a localized string similar to To simplify maintenance, always add the suffix &apos;Command&apos; to commands. This makes it clear they are commands and keeps the code consistent..
         /// </summary>
         internal static string MiKo_1044_Description {
             get {
@@ -1760,7 +1760,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, remove the suffix &apos;Command&apos; as the method itself is invoked by a command..
+        ///   Looks up a localized string similar to To simplify maintenance, drop the &apos;Command&apos; suffix since the method is already invoked as a command. Keeps things clean and clear..
         /// </summary>
         internal static string MiKo_1045_Description {
             get {
@@ -1796,7 +1796,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, methods that follow the Task-based Asynchronous Pattern (TAP) should be suffixed with &apos;Async&apos;..
+        ///   Looks up a localized string similar to To make maintenance easier, methods using the Task-based Asynchronous Pattern (TAP) should end with the suffix &apos;Async.&apos; This helps clearly identify them as asynchronous methods..
         /// </summary>
         internal static string MiKo_1046_Description {
             get {
@@ -1841,7 +1841,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, methods that do not follow the Task-based Asynchronous Pattern (TAP) should not be suffixed with &apos;Async&apos; as that would indicate that they would follow the pattern..
+        ///   Looks up a localized string similar to To simplify maintenance, do not add the &apos;Async&apos; suffix to methods that do not follow the Task-based Asynchronous Pattern (TAP). Using &apos;Async&apos; implies they do follow the pattern, which would be misleading..
         /// </summary>
         internal static string MiKo_1047_Description {
             get {
@@ -1886,7 +1886,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, the names of classes that are value converters should end with the same suffix..
+        ///   Looks up a localized string similar to To simplify maintenance, all class names for value converters should end with the suffix &apos;Converter.&apos; This consistency helps quickly identify their role and purpose..
         /// </summary>
         internal static string MiKo_1048_Description {
             get {
@@ -1922,7 +1922,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requirement terms such as &apos;Must&apos;, &apos;Need&apos;, &apos;Shall&apos;, &apos;Should&apos;, &apos;Will&apos; or &apos;Would&apos; within a name are not explicit enough. Instead, use a positive verb or an adjective like &apos;Is&apos;, &apos;Has&apos;, &apos;Can&apos;, etc..
+        ///   Looks up a localized string similar to Using terms like &apos;Must&apos;, &apos;Need&apos;, &apos;Shall&apos;, &apos;Should&apos;, &apos;Will&apos;, or &apos;Would&apos; in names is not clear enough. Instead, go for positive verbs or adjectives like &apos;Is&apos;, &apos;Has&apos;, or &apos;Can.&apos; These make the names more explicit and easier to understand..
         /// </summary>
         internal static string MiKo_1049_Description {
             get {
@@ -1958,8 +1958,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variables for return values should describe what data they contain and not what they technical are.
-        ///So they should have better names than e.g. &apos;ret&apos;, &apos;retVal&apos; or &apos;returnValue&apos;..
+        ///   Looks up a localized string similar to Return variables should clearly describe the data they hold, not their technical aspect.
+        ///So, use meaningful names instead of vague ones like &apos;ret&apos;, &apos;retVal&apos;, or &apos;returnValue&apos;. It makes the code more readable and understandable..
         /// </summary>
         internal static string MiKo_1050_Description {
             get {
@@ -1995,7 +1995,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing delegate parameters with their type is repetitive and provides no value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        ///   Looks up a localized string similar to Using the delegate type as a suffix for parameter names is redundant and unhelpful. Instead, use descriptive names like &apos;callback&apos;, &apos;filter&apos;, or &apos;map&apos; to provide clearer context..
         /// </summary>
         internal static string MiKo_1051_Description {
             get {
@@ -2031,7 +2031,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing delegate variables with their type is repetitive and provides no value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        ///   Looks up a localized string similar to Using the delegate type as a suffix for variable names is redundant and unhelpful. Instead, use descriptive names like &apos;callback&apos;, &apos;filter&apos;, or &apos;map&apos; to provide clearer context..
         /// </summary>
         internal static string MiKo_1052_Description {
             get {
@@ -2067,7 +2067,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Suffixing delegate fields with their type is repetitive and provides no value. A more meaningful name (such as &apos;callback&apos;, &apos;filter&apos; or &apos;map&apos;) provides much more context..
+        ///   Looks up a localized string similar to Using the delegate type as a suffix for field names is redundant and unhelpful. Instead, use descriptive names like &apos;callback&apos;, &apos;filter&apos;, or &apos;map&apos; to provide clearer context..
         /// </summary>
         internal static string MiKo_1053_Description {
             get {
@@ -2103,8 +2103,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terms such as &apos;helper&apos; or &apos;utility&apos; are too generic and meaningless.
-        ///Types that are named so do not follow the Single Responsibility Principle (SRP); instead they have a scope that is much too broad..
+        ///   Looks up a localized string similar to Names like &apos;helper&apos; or &apos;utility&apos; are too vague and do not follow the Single Responsibility Principle (SRP). These types often end up having too broad a scope and do not clearly define what they do.
+        ///Instead, use specific names that describe their exact purpose, making the code easier to understand and maintain..
         /// </summary>
         internal static string MiKo_1054_Description {
             get {
@@ -2140,7 +2140,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate that fields are the containers for specific dependency properties, those fields should be suffixed with &apos;Property&apos; (similar as in the .NET Framework)..
+        ///   Looks up a localized string similar to To show that fields are containers for specific dependency properties, add the suffix &apos;Property&apos; to their names. This aligns with the naming conventions in the .NET Framework..
         /// </summary>
         internal static string MiKo_1055_Description {
             get {
@@ -2176,7 +2176,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate that fields are the containers for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework)..
+        ///   Looks up a localized string similar to To show that fields are containers for specific dependency properties, they should be prefixed with the property name. This aligns with the naming conventions in the .NET Framework..
         /// </summary>
         internal static string MiKo_1056_Description {
             get {
@@ -2221,7 +2221,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate that fields are the keys for specific dependency properties, those fields should be suffixed with &apos;Key&apos; (similar as in the .NET Framework)..
+        ///   Looks up a localized string similar to To show that fields are keys for specific dependency properties, add the suffix &apos;Key&apos; to their names. This aligns with the naming conventions in the .NET Framework..
         /// </summary>
         internal static string MiKo_1057_Description {
             get {
@@ -2257,7 +2257,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To indicate that fields are the keys for specific dependency properties, those fields should be prefixed with the name of the property (similar as in the .NET Framework)..
+        ///   Looks up a localized string similar to To show that fields are keys for specific dependency properties, they should be prefixed with the property name. This aligns with the naming conventions in the .NET Framework..
         /// </summary>
         internal static string MiKo_1058_Description {
             get {
@@ -2302,8 +2302,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Terms such as &apos;Impl&apos; or &apos;Implementation&apos; are meaningless and provide no benefit.
-        ///Types that are named so should be better named directly after the interface they implement, but without any &apos;Impl&apos; marker..
+        ///   Looks up a localized string similar to Using &apos;Impl&apos; or &apos;Implementation&apos; in type names is unnecessary and unhelpful. It&apos;s better to name types directly after the interface they implement, without adding an &apos;Impl&apos; marker. This keeps names clear and concise..
         /// </summary>
         internal static string MiKo_1059_Description {
             get {
@@ -2339,13 +2338,10 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sometimes, developers try to report that an entity was not found.
+        ///   Looks up a localized string similar to When developers need to indicate that an entity was not found, they might have a repository method like &apos;GetXyz&apos; that returns an error code (e.g., null) or throws an exception if &apos;Xyz&apos; does not exist.
+        ///Naming the exception &apos;GetXyzFailedException&apos; is unclear because it does not specify the reason for the failure. A better name would be &apos;XyzNotFoundException,&apos; indicating that &apos;Xyz&apos; was not found.
         ///
-        ///For example, a repository is requested to return an entity &apos;Xyz&apos; (e.g. via method &apos;GetXyz&apos;). In case that such entity does not exist, they either return an error code (such as null) or they throw an exception.
-        ///
-        ///The name of the exception is then sometimes &apos;GetXyzFailedException&apos; which is not that clear (why did it fail?). A better name would be &apos;XyzNotFoundException&apos; to indicate that &apos;Xyz&apos; was not found.
-        ///
-        ///The same applies for &apos;XyzMissin [rest of string was truncated]&quot;;.
+        ///Similarly, using &apos;XyzMissingException&apos; is also misleading. &apos;Missing&apos; implies it should be there but is not, whe [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MiKo_1060_Description {
             get {
@@ -2381,11 +2377,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If a &apos;TryXyz&apos; method has an [out] parameter, that [out] parameter shall be named specifically because it is the actual result of the method. The method&apos;s return value only exists to indicate a success or failure of the operation.
+        ///   Looks up a localized string similar to When a &apos;TryXyz&apos; method includes an [out] parameter, name it specifically, as it&apos;s the actual result of the method. The return value only indicates success or failure:
+        ///- For a &apos;Try&apos; method, name the [out] parameter &apos;result&apos;.
+        ///- For a &apos;TryGet&apos; method, name the [out] parameter based on the method&apos;s name, dropping the &apos;TryGet&apos; prefix.
         ///
-        ///- For a &apos;Try&apos; method, that parameter shall be named &apos;result&apos;.
-        ///- For a &apos;TryGet&apos; method, that parameter shall be named after the name of the method without the &apos;TryGet&apos; prefix.
-        ///   Example: For the &apos;TryGetMyValue&apos; method the parameter shall be named &apos;myValue&apos;..
+        ///For example, in the &apos;TryGetMyValue&apos; method, the parameter should be named &apos;myValue&apos;. This keeps names precise and clear..
         /// </summary>
         internal static string MiKo_1061_Description {
             get {
@@ -2412,8 +2408,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Detection methods (properties or fields) such as &apos;Can&apos;, &apos;Has&apos; or &apos;Contains&apos; should consist only of a few words, such as &apos;HasConnection&apos; or &apos;ContainsKey&apos;.
-        ///If they consist of more than those few words, these methods (properties or fields) are probably placed at the wrong place and violate the SRP..
+        ///   Looks up a localized string similar to Detection methods, properties, or fields like &apos;Can&apos;, &apos;Has&apos;, or &apos;Contains&apos; should be concise, like &apos;HasConnection&apos; or &apos;ContainsKey&apos;.
+        ///If their names are longer, it likely means they are misplaced and violate the Single Responsibility Principle (SRP)..
         /// </summary>
         internal static string MiKo_1062_Description {
             get {
@@ -2449,9 +2445,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using abbreviations in names is bad practice.
-        ///It makes it hard for every developer that is new to the code base to understand what is meant by the code.
-        ///In addition, they distract the reader&apos;s attention as they have to translate the meaning each time..
+        ///   Looks up a localized string similar to Using abbreviations in names is bad practice. It makes it difficult for new developers to understand the code. Plus, abbreviations distract readers, as they have to constantly translate their meaning..
         /// </summary>
         internal static string MiKo_1063_Description {
             get {
@@ -2478,7 +2472,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To ease maintenance, parameter names should be based on the parameter&apos;s meaning rather than the parameter&apos;s type..
+        ///   Looks up a localized string similar to To make maintenance easier, base parameter names on their meaning, not their type. This keeps the code more intuitive and easier to understand..
         /// </summary>
         internal static string MiKo_1064_Description {
             get {
@@ -2514,8 +2508,11 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameters of operator overloads should have default names if there is no meaning to the parameters.
-        ///For binary operator overloads use the names &apos;left&apos; and &apos;right&apos;, for unary operator overloads use the name &apos;value&apos;..
+        ///   Looks up a localized string similar to According to the .NET Framework Design Guidelines for operator overloads, parameters should have standard names if they do not have specific meanings.
+        ///- For binary operator overloads, use &apos;left&apos; and &apos;right&apos;.
+        ///- For unary operator overloads, use &apos;value&apos;.
+        ///
+        ///This ensures clarity and consistency in your code..
         /// </summary>
         internal static string MiKo_1065_Description {
             get {
@@ -2623,8 +2620,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workflows are a high-level construct and encapsulate functionality that belongs into the business layer.
-        ///Hence, their methods should be named &apos;CanRun&apos; or &apos;Run&apos; (similar to commands where they are named &apos;CanExecute&apos; and &apos;Execute&apos;)..
+        ///   Looks up a localized string similar to Workflows, being high-level constructs within the business layer, should have methods named &apos;CanRun&apos; or &apos;Run&apos;, much like commands that use &apos;CanExecute&apos; and &apos;Execute&apos;. This naming convention keeps things consistent and clear..
         /// </summary>
         internal static string MiKo_1068_Description {
             get {
@@ -2687,7 +2683,8 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Local variables for collections (that is any which is an &apos;IEnumerable&apos;) should have names in plural form. Their names should describe the contents of the collection; and not the collection itself..
+        ///   Looks up a localized string similar to Local variables for collections (like those implementing &apos;IEnumerable&apos;) should have plural names that describe the contents, not the collection itself.
+        ///For example, instead of naming a variable &apos;userCollection&apos;, name it &apos;users&apos; to clearly indicate it holds multiple user entities..
         /// </summary>
         internal static string MiKo_1070_Description {
             get {
@@ -2819,7 +2816,7 @@ namespace MiKoSolutions.Analyzers {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In case an object is used for synchronizing threads via lock statements, that object should be named with a suffix &quot;Lock&quot;. So it&apos;s easy to spot whether an object is used as synchronization mechanism for a lock..
+        ///   Looks up a localized string similar to If an object is used for synchronizing threads with lock statements, add the suffix &apos;Lock&apos; to its name. This makes it clear that the object is used as a synchronization mechanism..
         /// </summary>
         internal static string MiKo_1074_Description {
             get {
@@ -3464,7 +3461,7 @@ namespace MiKoSolutions.Analyzers {
         ///- &apos;Remove&apos; means to take something away and set it aside, but it still exists.
         ///
         ///So, do not mix these terms in documentation and naming.
-        ///For instance, do not name a method &apos;RemoveUser&apos; if the documentation states it &apos;Deletes the user from the database.&apos;.
+        ///For instance, do not name a method &apos;RemoveUser&apos; if the documentation states it &apos;Deletes the user from the database.&apos; ..
         /// </summary>
         internal static string MiKo_1095_Description {
             get {
