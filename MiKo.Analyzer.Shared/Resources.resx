@@ -2055,7 +2055,7 @@ This ensures clarity and precision in your code.</value>
     <value>Fix comment for no default value</value>
   </data>
   <data name="MiKo_2036_Description" xml:space="preserve">
-    <value>The documentation of Boolean or Enum properties shall end with a phrase that describes the value that is returned per default.</value>
+    <value>Boolean or Enum property documentation should conclude with a phrase detailing the default return value. This helps developers quickly understand the property's typical output.</value>
   </data>
   <data name="MiKo_2036_MessageFormat" xml:space="preserve">
     <value>End &lt;{1}&gt; with: '{2}'
@@ -2068,7 +2068,7 @@ Or with: '{3}'</value>
     <value>Apply standard comment to command property</value>
   </data>
   <data name="MiKo_2037_Description" xml:space="preserve">
-    <value>The documentation of a property that returns a command should start with a specific phrase that describes what command the property returns.</value>
+    <value>The documentation for a property that returns a command should begin with a phrase that clearly describes what the command does, making the documentation more helpful and precise for developers.</value>
   </data>
   <data name="MiKo_2037_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -2080,7 +2080,7 @@ Or with: '{3}'</value>
     <value>Apply standard comment to command</value>
   </data>
   <data name="MiKo_2038_Description" xml:space="preserve">
-    <value>The documentation of a command should start with a specific phrase that describes what the command does.</value>
+    <value>The documentation for a command should start with a standard phrase such as 'Represents a command that can...'. This clearly describes the command's functionality and ensures consistency and clarity for developers.</value>
   </data>
   <data name="MiKo_2038_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -2092,7 +2092,8 @@ Or with: '{3}'</value>
     <value>Apply standard extension methods comment to class</value>
   </data>
   <data name="MiKo_2039_Description" xml:space="preserve">
-    <value>The documentation of a class that contains extension methods should start with a specific phrase that describes what the class provides.</value>
+    <value>The documentation for a class that contains extension methods should begin with the phrase 'Provides a set of &lt;see langword="static"/&gt; methods for...'
+This format clearly describes the purpose of the class and its functionality, making the documentation straightforward and helpful for developers.</value>
   </data>
   <data name="MiKo_2039_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -2104,7 +2105,7 @@ Or with: '{3}'</value>
     <value>Use &lt;see langword="..."/&gt;</value>
   </data>
   <data name="MiKo_2040_Description" xml:space="preserve">
-    <value>To support other languages than C#, use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'.</value>
+    <value>To support other .NET languages beyond C#, documentation should use '&lt;see langword="..."/&gt;' instead of '&lt;c&gt;...&lt;/c&gt;'. This ensures that language-specific terms are accurately translated into the correct terminology for each language, making the codebase more inclusive and accessible to non-C# developers.</value>
   </data>
   <data name="MiKo_2040_MessageFormat" xml:space="preserve">
     <value>Use '{2}' instead of '{1}'</value>
@@ -2116,7 +2117,7 @@ Or with: '{3}'</value>
     <value>Place XML tag outside &lt;summary&gt;</value>
   </data>
   <data name="MiKo_2041_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; documentation should only contain a short summary description. Other documentation should be provided by the other XML tags in parallel to the &lt;summary&gt;.</value>
+    <value>The &lt;summary&gt; documentation should be concise and only contain a brief summary description. Other information should be included in the appropriate XML tags alongside the &lt;summary&gt;. This ensures clarity and organization in the documentation.</value>
   </data>
   <data name="MiKo_2041_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/recommended-tags-for-documentation-comments</value>
@@ -2131,7 +2132,7 @@ Or with: '{3}'</value>
     <value>Replace &lt;br/&gt; with &lt;para/&gt;</value>
   </data>
   <data name="MiKo_2042_Description" xml:space="preserve">
-    <value>The documentation should use the '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' or '&lt;p/&gt;' HTML tags.</value>
+    <value>Documentation should use the '&lt;para/&gt;' XML tags instead of '&lt;br/&gt;' or '&lt;p/&gt;' HTML tags. This ensures a consistent format, suitable for XML-based documentation tools and frameworks.</value>
   </data>
   <data name="MiKo_2042_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/para</value>
@@ -2146,7 +2147,8 @@ Or with: '{3}'</value>
     <value>Start &lt;summary&gt; with 'Encapsulates a method that '</value>
   </data>
   <data name="MiKo_2043_Description" xml:space="preserve">
-    <value>The documentation of a custom delegate should have a default starting phrase to indicate what the delegate encapsulates.</value>
+    <value>Custom delegate type documentation should start with 'Encapsulates a method that...'. This phrase is crucial because a delegate refers to either a static method or an instance method of a class.
+Declaring a delegate type sets a contract specifying the method signatures it can encapsulate, clarifying its purpose and usage for developers.</value>
   </data>
   <data name="MiKo_2043_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -2158,7 +2160,7 @@ Or with: '{3}'</value>
     <value>Use &lt;paramref&gt; tag for parameter</value>
   </data>
   <data name="MiKo_2044_Description" xml:space="preserve">
-    <value>Method parameters should be referenced via &lt;paramref name="..."/&gt; inside the documentation.</value>
+    <value>Method parameters should be referenced using &lt;paramref name="..."/&gt; in the documentation, not &lt;param name="..."/&gt; or plain text. This allows the documentation to update automatically if the parameter is renamed or deleted.</value>
   </data>
   <data name="MiKo_2044_MessageFormat" xml:space="preserve">
     <value>Fix incorrect parameter reference '{1}'</value>
@@ -2170,7 +2172,7 @@ Or with: '{3}'</value>
     <value>Fix parameter reference</value>
   </data>
   <data name="MiKo_2045_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; documentation should not reference method parameters as its only purpose is to give a brief description.</value>
+    <value>The &lt;summary&gt; documentation should not reference method parameters. Its sole purpose is to provide a brief overview. Including parameter details would be too specific for this high-level summary.</value>
   </data>
   <data name="MiKo_2045_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not contain parameter reference ' {0} '</value>
@@ -2215,7 +2217,8 @@ Or with: '{3}'</value>
     <value>Replace 'will be' with 'is'</value>
   </data>
   <data name="MiKo_2049_Description" xml:space="preserve">
-    <value>The term 'will be' is not explicit enough and it uses the wrong tense. Instead, a term such as 'is' gets to the point and uses present tense.</value>
+    <value>The term 'will be' is not specific enough and it uses the future tense, which is not accurate for describing the current behavior or state of the code. Using 'is' instead gets straight to the point and employs the present tense, accurately reflecting the current behavior.
+This practice ensures clarity and precision, making your code's behavior easier to understand.</value>
   </data>
   <data name="MiKo_2049_MessageFormat" xml:space="preserve">
     <value>Replace '{0}' with '{1}'</value>
@@ -2227,7 +2230,7 @@ Or with: '{3}'</value>
     <value>Apply standard exception comment</value>
   </data>
   <data name="MiKo_2050_Description" xml:space="preserve">
-    <value>The documentation of exceptions should follow the .NET Framework documentation.</value>
+    <value>Documentation for exceptions should follow the .NET Framework guidelines. This consistency ensures that the information is clear, precise, and familiar to developers, making it easier to understand and maintain.</value>
   </data>
   <data name="MiKo_2050_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with: '{2}'</value>
@@ -2239,7 +2242,7 @@ Or with: '{3}'</value>
     <value>Fix exception comment</value>
   </data>
   <data name="MiKo_2051_Description" xml:space="preserve">
-    <value>The documentation of a thrown exception should be a simple condition phrase, such as: 'The item is not available'.</value>
+    <value>When documenting a thrown exception, use a simple condition phrase like: 'The item is not available.' Avoid phrases like 'Thrown if' or 'throws if' since it's already clear that the exception is thrown under those conditions. This keeps the documentation concise and to the point.</value>
   </data>
   <data name="MiKo_2051_MessageFormat" xml:space="preserve">
     <value>Use condition form to document thrown exception</value>
@@ -2251,7 +2254,8 @@ Or with: '{3}'</value>
     <value>Fix exception comment</value>
   </data>
   <data name="MiKo_2052_Description" xml:space="preserve">
-    <value>The documentation of an ArgumentNullException being thrown should be a specific phrase.</value>
+    <value>When documenting an ArgumentNullException, use the specific phrase: '&lt;paramref name="value"/&gt; is &lt;see langword="null"/&gt;.'
+This approach ensures clarity and consistency, helping developers understand the condition under which the exception is thrown.</value>
   </data>
   <data name="MiKo_2052_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
@@ -2262,7 +2266,7 @@ Or with: '{3}'</value>
     <value>Throwing of ArgumentNullException should be documented using a default phrase</value>
   </data>
   <data name="MiKo_2053_Description" xml:space="preserve">
-    <value>The documentation of an ArgumentNullException should not refer to a value type parameter as that can never be null.</value>
+    <value>An ArgumentNullException should not be documented for value-type parameters as value types inherently cannot have a null value.</value>
   </data>
   <data name="MiKo_2053_MessageFormat" xml:space="preserve">
     <value>Remove '{2}' from &lt;exception cref="ArgumentNullException"/&gt; as '{1}' is a value type</value>
@@ -2274,7 +2278,8 @@ Or with: '{3}'</value>
     <value>Fix exception comment</value>
   </data>
   <data name="MiKo_2054_Description" xml:space="preserve">
-    <value>The documentation of an ArgumentException being thrown should have a specific starting phrase.</value>
+    <value>When documenting an ArgumentException being thrown, the documentation should start with the specific phrase: '&lt;paramref name="value"/&gt; is ...'.
+This approach ensures clarity and consistency, helping developers understand the condition under which the exception is thrown.</value>
   </data>
   <data name="MiKo_2054_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
@@ -2287,7 +2292,8 @@ Or with: '{3}'</value>
     <value>Fix exception comment</value>
   </data>
   <data name="MiKo_2055_Description" xml:space="preserve">
-    <value>The documentation of an ArgumentOutOfRangeException being thrown should have a specific starting phrase.</value>
+    <value>When documenting an ArgumentOutOfRangeException being thrown, the documentation should start with the specific phrase: '&lt;paramref name="value"/&gt; is ...'.
+This approach ensures clarity and consistency, helping developers understand under what condition the argument is considered out of range.</value>
   </data>
   <data name="MiKo_2055_MessageFormat" xml:space="preserve">
     <value>{1} should be something like:
@@ -2300,7 +2306,8 @@ Or with: '{3}'</value>
     <value>Apply default ending comment to documentation of thrown 'ObjectDisposedException'</value>
   </data>
   <data name="MiKo_2056_Description" xml:space="preserve">
-    <value>The documentation of an ObjectDisposedException being thrown should have a specific ending phrase.</value>
+    <value>When documenting an ObjectDisposedException being thrown, the documentation should end with the specific phrase "... has been disposed." If the class includes a 'Close' method, it should end with "... has been closed."
+This distinction clearly indicates the reason for the exception and helps developers understand the status of the object.</value>
   </data>
   <data name="MiKo_2056_MessageFormat" xml:space="preserve">
     <value>{1} should end with: '{2}'</value>
@@ -2312,7 +2319,7 @@ Or with: '{3}'</value>
     <value>Remove exception comment</value>
   </data>
   <data name="MiKo_2057_Description" xml:space="preserve">
-    <value>Types that do not inherit from 'IDisposable' cannot be disposed. Hence they shall not throw an ObjectDisposedException.</value>
+    <value>Types that do not inherit from 'IDisposable' cannot be disposed. Therefore, they should not document throwing an 'ObjectDisposedException'. This keeps the documentation accurate and logical.</value>
   </data>
   <data name="MiKo_2057_MessageFormat" xml:space="preserve">
     <value>Remove '{1}' because type does not inherit from 'IDisposable'</value>
@@ -2324,7 +2331,7 @@ Or with: '{3}'</value>
     <value>Consolidate exception documentation</value>
   </data>
   <data name="MiKo_2059_Description" xml:space="preserve">
-    <value>To ease reading, thrown exceptions should be documented only once and not multiple times. So the documentation of those exceptions should be consolidated.</value>
+    <value>To improve readability and maintenance, document thrown exceptions only once, consolidating them instead of listing multiple separate instances. This approach helps developers find specific information more easily and keeps the documentation clean and efficient.</value>
   </data>
   <data name="MiKo_2059_MessageFormat" xml:space="preserve">
     <value>Consolidate the documentation of &lt;exception cref='{1}'&gt;</value>
@@ -2348,8 +2355,7 @@ Or with: '{3}'</value>
     <value>Replace 'Return' in comment</value>
   </data>
   <data name="MiKo_2070_Description" xml:space="preserve">
-    <value>If a method comment starts with 'Returns', then it focuses on the return value but not on the purpose (responsibility) of the method.
-Instead, the documentation should describe what the method is intended to do.</value>
+    <value>If method documentation starts with 'Returns', it shifts focus to the return value rather than the method's purpose. Instead, describe the method's intended function, not what it returns. This ensures clarity about the method's primary responsibility.</value>
   </data>
   <data name="MiKo_2070_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with: '{1}'</value>
@@ -2358,7 +2364,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;summary&gt; documentation should not start with 'Returns'</value>
   </data>
   <data name="MiKo_2071_Description" xml:space="preserve">
-    <value>Enum types are no boolean values. Hence the documentation should not contain any phrase that would handle enums as if they were booleans (such as it would be the case in phrase 'indicates whether').</value>
+    <value>&lt;summary&gt; documentation for methods returning Enum types should avoid phrases meant for boolean types. Enum values are not booleans, so the documentation should not use terms like 'indicates whether', which imply a boolean context. This ensures the documentation accurately reflects the nature of the Enum type.</value>
   </data>
   <data name="MiKo_2071_MessageFormat" xml:space="preserve">
     <value>Do not use '{0}' in &lt;summary&gt;</value>
@@ -2370,7 +2376,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Start &lt;summary&gt; with 'Attempts to'</value>
   </data>
   <data name="MiKo_2072_Description" xml:space="preserve">
-    <value>'Try' methods attempt to achieve something. So their &lt;summary&gt; documentation should start with the phrase 'Attempts to '.</value>
+    <value>'Try' methods attempt to achieve something. Therefore, their &lt;summary&gt; documentation should start with 'Attempts to...' This clearly indicates the method's purpose and conveys its intent.</value>
   </data>
   <data name="MiKo_2072_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with 'Attempts to '</value>
@@ -2382,7 +2388,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Start &lt;summary&gt; with 'Determines whether'</value>
   </data>
   <data name="MiKo_2073_Description" xml:space="preserve">
-    <value>'Contain' methods attempt to determine if something exists inside something else. So their &lt;summary&gt; documentation should start with the phrase 'Determines whether '.</value>
+    <value>The &lt;summary&gt; documentation of 'Contain' methods should start with the phrase 'Determines whether...'. This is because they attempt to determine if something exists within something else. This phrase sets a clear expectation for the method's functionality.</value>
   </data>
   <data name="MiKo_2073_MessageFormat" xml:space="preserve">
     <value>Start &lt;summary&gt; with 'Determines whether'</value>
@@ -2394,7 +2400,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Fix comment of parameter</value>
   </data>
   <data name="MiKo_2074_Description" xml:space="preserve">
-    <value>'Contain' methods attempt to determine if the value of a given parameter exists inside something. So the &lt;param&gt; documentation of the given parameter should end with the phrase ' to seek.'.</value>
+    <value>The &lt;summary&gt; documentation of 'Contain' methods should end with the phrase ' to seek.'. This is because they attempt to determine if a given parameter's value exists within something. This phrasing clearly communicates the intent and functionality of the parameter within the method.</value>
   </data>
   <data name="MiKo_2074_MessageFormat" xml:space="preserve">
     <value>&lt;param name="{0}"&gt; should end with: '{1}'</value>
@@ -2427,7 +2433,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Documentation should document default values of optional parameters</value>
   </data>
   <data name="MiKo_2077_Description" xml:space="preserve">
-    <value>The summary documentation should be short. Code snippets most often act as examples, so they should be places in &lt;example&gt; instead of &lt;summary&gt;.</value>
+    <value>&lt;summary&gt; documentation should not include &lt;code&gt; snippets. The summary should be brief. Code snippets, which typically serve as examples, should be placed in the &lt;example&gt; section instead.</value>
   </data>
   <data name="MiKo_2077_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; should not contain &lt;code&gt;</value>
@@ -2436,7 +2442,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>&lt;summary&gt; documentation should not contain &lt;code&gt;</value>
   </data>
   <data name="MiKo_2078_Description" xml:space="preserve">
-    <value>Code snippets most often act as examples, so they normally contain source code. However, in case they contain plain XML, then they will not be converted into documentation so that the resulting online help (or IntelliSense) information will not show them at all.</value>
+    <value>&lt;code&gt; documentation should not include XML tags. Code snippets usually serve as examples and typically contain source code. If they contain plain XML, the XML won't be converted into documentation. Consequently, the resulting online help or IntelliSense will not display them.</value>
   </data>
   <data name="MiKo_2078_MessageFormat" xml:space="preserve">
     <value>&lt;code&gt; should not contain XML</value>
@@ -2448,7 +2454,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Remove obvious comment</value>
   </data>
   <data name="MiKo_2079_Description" xml:space="preserve">
-    <value>A comment simply stating the name of the property and that is get or set provides no value. Such obvious comments should be removed.</value>
+    <value>Comments that merely state the name of a property and that it gets or sets provide no meaningful information. Such redundant comments should be removed to keep the code clean and focused on more valuable insights. Clear and concise documentation improves overall readability and maintenance.</value>
   </data>
   <data name="MiKo_2079_MessageFormat" xml:space="preserve">
     <value>Comment is obvious and provides no value</value>
@@ -2472,7 +2478,7 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Append read-only text</value>
   </data>
   <data name="MiKo_2081_Description" xml:space="preserve">
-    <value>The documentation of a public-visible read-only field should indicate that it is read-only.</value>
+    <value>For public-visible read-only fields, the documentation should clearly state that the field is read-only. This detail informs developers about the field's immutability and intended usage.</value>
   </data>
   <data name="MiKo_2081_MessageFormat" xml:space="preserve">
     <value>End &lt;summary&gt; with: '{1}'</value>
@@ -2484,8 +2490,8 @@ Instead, the documentation should describe what the method is intended to do.</v
     <value>Fix enum member starting phrase</value>
   </data>
   <data name="MiKo_2082_Description" xml:space="preserve">
-    <value>The summary of an Enum member should not use any phrase that belongs to the summary of the Enum itself.
-Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the Enum member summary should describe the meaning of the member itself.</value>
+    <value>The &lt;summary&gt; documentation of an Enum member should avoid phrases used in the Enum's own summary - like 'Defines', 'Indicates', or 'Specifies.' Instead, it should focus on describing the meaning and purpose of the individual member, providing clear and specific details.
+This ensures the documentation is precise and informative, helping developers understand each member’s role and functionality.</value>
   </data>
   <data name="MiKo_2082_MessageFormat" xml:space="preserve">
     <value>Do not start &lt;summary&gt; with: '{0}'</value>
@@ -2497,7 +2503,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Apply standard comment</value>
   </data>
   <data name="MiKo_2090_Description" xml:space="preserve">
-    <value>To ease development and usage, the XML documentation for equality operators shall have a common default phrase.</value>
+    <value>For smoother development and usage, XML documentation for equality operators should use a standard default phrase, like in the .NET framework. This keeps things consistent and makes it easier for developers to understand and implement these operators correctly.</value>
   </data>
   <data name="MiKo_2090_MessageFormat" xml:space="preserve">
     <value>&lt;{1}&gt; should be: '{2}'</value>
@@ -2509,7 +2515,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Apply standard comment</value>
   </data>
   <data name="MiKo_2091_Description" xml:space="preserve">
-    <value>To ease development and usage, the XML documentation for inequality operators shall have a common default phrase.</value>
+    <value>For smoother development and usage, XML documentation for inequality operators should use a standard default phrase, like in the .NET framework. This keeps things consistent and makes it easier for developers to understand and implement these operators correctly.</value>
   </data>
   <data name="MiKo_2091_MessageFormat" xml:space="preserve">
     <value>&lt;{1}&gt; should be: '{2}'</value>
@@ -2521,7 +2527,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Start comment with '{0}'</value>
   </data>
   <data name="MiKo_2100_Description" xml:space="preserve">
-    <value>To ease usage, the example documentation should start with a phrase that shortly describes what the given example demonstrates.</value>
+    <value>To make example documentation more user-friendly, it should begin with a brief phrase that explains what the example demonstrates. This provides clarity and helps developers quickly understand the purpose of the example.</value>
   </data>
   <data name="MiKo_2100_MessageFormat" xml:space="preserve">
     <value>Start &lt;example&gt; with: '{1}'</value>
@@ -2533,7 +2539,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Surround sample code with '&lt;code&gt;'</value>
   </data>
   <data name="MiKo_2101_Description" xml:space="preserve">
-    <value>To ease reading, example documentation should place code samples inside &lt;code&gt; tags so that IntelliSense or any XML documentation tool can format them in a special way.</value>
+    <value>For better readability, example documentation should enclose code samples within &lt;code&gt; tags. This allows IntelliSense or any XML documentation tool to format them properly, making the examples easier to understand and visually distinct.</value>
   </data>
   <data name="MiKo_2101_MessageFormat" xml:space="preserve">
     <value>Place sample code in &lt;example&gt; inside '&lt;code&gt;' tags</value>
@@ -2545,7 +2551,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Use capitalized letter</value>
   </data>
   <data name="MiKo_2200_Description" xml:space="preserve">
-    <value>Documentation should start with a capitalized letter to have a full sentence.</value>
+    <value>Documentation should always start with a capitalized letter to form a complete sentence. This ensures clarity and professionalism, making the documentation easy to read and understand. Full sentences convey complete thoughts, which is essential for accurate and effective communication.</value>
   </data>
   <data name="MiKo_2200_MessageFormat" xml:space="preserve">
     <value>Start &lt;{1}&gt; with capitalized letter</value>
@@ -2554,7 +2560,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Use a capitalized letter to start the comment</value>
   </data>
   <data name="MiKo_2201_Description" xml:space="preserve">
-    <value>Documentation sentences should start with a capitalized letter to have a full sentence.</value>
+    <value>Sentences within documentation should always begin with a capitalized letter to form a complete sentence. This ensures clarity, readability, and professionalism, making the documentation easier to understand and more effective. Full sentences convey clear, complete thoughts, which is essential for precise communication.</value>
   </data>
   <data name="MiKo_2201_MessageFormat" xml:space="preserve">
     <value>Start the sentence(s) in &lt;{1}&gt; with capitalized letter</value>
@@ -2566,7 +2572,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Change 'id' into 'identifier'</value>
   </data>
   <data name="MiKo_2202_Description" xml:space="preserve">
-    <value>The XML documentation should not use the abbreviation 'id'. Instead, it should clearly document that this is an identifier. Hence, it should use the term 'identifier' instead.</value>
+    <value>XML documentation should avoid using the abbreviation 'id' and instead clearly state 'identifier' as they actually are identifiers. This ensures clarity and precision, making the documentation more understandable and accessible for developers.</value>
   </data>
   <data name="MiKo_2202_MessageFormat" xml:space="preserve">
     <value>Use 'identifier' instead of 'id'</value>
@@ -2578,7 +2584,7 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Change 'GUID' into 'unique identifier'</value>
   </data>
   <data name="MiKo_2203_Description" xml:space="preserve">
-    <value>The XML documentation should not use the abbreviation 'guid'. Instead, it should clearly document that this is an unique identifier. Hence, it should use the term 'unique identifier' instead.</value>
+    <value>XML documentation should avoid using the abbreviation 'guid' and instead clearly state 'unique identifier' as they actually are globally unique identifiers. This ensures clarity and precision, making the documentation more understandable and accessible for developers.</value>
   </data>
   <data name="MiKo_2203_MessageFormat" xml:space="preserve">
     <value>Use 'unique identifier' instead of 'guid'</value>
@@ -2590,8 +2596,8 @@ Such phrases are for example 'Defines', 'Indicates' or 'Specifies'. Instead, the
     <value>Use &lt;list&gt; to list items</value>
   </data>
   <data name="MiKo_2204_Description" xml:space="preserve">
-    <value>The XML documentation should use the &lt;list&gt; tag if items get enumerated. It should not use terms such as 1.), 2.) etc. directly.
-This is because IntelliSense or any XML documentation tool are not aware of such terms and therefore the comment will become strangely formatted and hard to read.</value>
+    <value>XML documentation should use the &lt;list&gt; tag for enumerating items. Avoid using terms like 1.), 2.), etc., directly because IntelliSense and XML documentation tools cannot recognize these and may format comments awkwardly.
+Using &lt;list&gt; allows IntelliSense to format content as tables, numbered lists, ordered lists, etc., making documentation clear and easy to read.</value>
   </data>
   <data name="MiKo_2204_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/list</value>
@@ -2603,8 +2609,7 @@ This is because IntelliSense or any XML documentation tool are not aware of such
     <value>Documentation should use &lt;list&gt; for enumerations</value>
   </data>
   <data name="MiKo_2205_Description" xml:space="preserve">
-    <value>The XML documentation should use the &lt;note&gt; tag to mark important information. It should not use terms such as 'Important' or 'Attention' directly.
-This is because XML documentation tools are aware of &lt;note&gt; and can format the information in a special way.</value>
+    <value>XML documentation should utilize the &lt;note&gt; tag for important information. Avoid using terms like 'Important' or 'Attention' directly. This approach allows XML documentation tools to recognize and format the information in a distinct and noticeable way, ensuring clarity and emphasis.</value>
   </data>
   <data name="MiKo_2205_MessageFormat" xml:space="preserve">
     <value>Use &lt;note&gt; for important information in documentation</value>
@@ -2613,7 +2618,7 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
     <value>Documentation should use &lt;note&gt; for important information</value>
   </data>
   <data name="MiKo_2206_Description" xml:space="preserve">
-    <value>The documentation should not use the term 'flag' which is often used to describe a boolean value. Instead, the documentation should be re-phrased so that the term is no longer necessary.</value>
+    <value>Documentation should avoid using the term 'flag' for boolean values. Instead, rephrase the documentation to eliminate the need for this term. This ensures clarity and precision, making it easier for developers to understand the context and purpose of the boolean value.</value>
   </data>
   <data name="MiKo_2206_MessageFormat" xml:space="preserve">
     <value>Remove '{0}' from documentation</value>
@@ -2622,8 +2627,7 @@ This is because XML documentation tools are aware of &lt;note&gt; and can format
     <value>Documentation should not use the term 'flag'</value>
   </data>
   <data name="MiKo_2207_Description" xml:space="preserve">
-    <value>The &lt;summary&gt; documentation shall be descriptive and short as its intent is to give a short overview about a functionality.
-More detailed information should be placed inside a &lt;remarks&gt; section.</value>
+    <value>The &lt;summary&gt; documentation should be brief and descriptive, providing an overview of the functionality. For more detailed information, use the &lt;remarks&gt; section. This keeps the summary concise and the documentation well-organized, making it easier for developers to understand.</value>
   </data>
   <data name="MiKo_2207_MessageFormat" xml:space="preserve">
     <value>&lt;summary&gt; is too long, use &lt;remarks&gt; section for all the details</value>
@@ -2635,8 +2639,7 @@ More detailed information should be placed inside a &lt;remarks&gt; section.</va
     <value>Remove 'an instance of'</value>
   </data>
   <data name="MiKo_2208_Description" xml:space="preserve">
-    <value>The documentation should use a more meaningful description than the phrase 'an instance of'.
-By having a more concrete description it makes it easier for a developer to understand the meaning.</value>
+    <value>Documentation should use a more meaningful description than 'an instance of'. A concrete description helps developers better understand the meaning. Clear and specific language enhances comprehension and usability.</value>
   </data>
   <data name="MiKo_2208_MessageFormat" xml:space="preserve">
     <value>Use a better description than '{0}'</value>
@@ -2660,7 +2663,7 @@ By having a more concrete description it makes it easier for a developer to unde
     <value>Change 'info' into 'information'</value>
   </data>
   <data name="MiKo_2210_Description" xml:space="preserve">
-    <value>The XML documentation should not use the abbreviation 'info'. Instead, it should clearly document that this is an information. Hence, it should use the term 'information' instead.</value>
+    <value>XML documentation should avoid the abbreviation 'info' and instead use 'information'. This practice ensures clarity and professionalism in documentation, making it easier for developers to understand and follow.</value>
   </data>
   <data name="MiKo_2210_MessageFormat" xml:space="preserve">
     <value>Use 'information' instead of 'info'</value>
@@ -2672,11 +2675,9 @@ By having a more concrete description it makes it easier for a developer to unde
     <value>Move remarks comment into summary</value>
   </data>
   <data name="MiKo_2211_Description" xml:space="preserve">
-    <value>Unfortunately, tools such as Sandcastle cannot handle &lt;remarks&gt; sections on enum members. The resulting output (CHM, HTML, ...) does not contain any Remarks section.
+    <value>Tools like Sandcastle cannot process &lt;remarks&gt; sections on enum members, meaning the resulting output (CHM, HTML, etc.) will not include these sections. Since developers often use HTML/CHM documentation when working with third-party frameworks, crucial information in the &lt;remarks&gt; section may be inaccessible.
 
-As developers may use the HTML/CHM version only when working with 3rd party frameworks, the information of the &lt;remarks&gt; section is typically not available to them.
-
-Hence, to provide them with all the information they need, the information should be placed inside the &lt;summary&gt; section.</value>
+To ensure developers have all the necessary information, it's best to place this information inside the &lt;summary&gt; section instead. This guarantees that all essential details are included in the output documentation.</value>
   </data>
   <data name="MiKo_2211_MessageFormat" xml:space="preserve">
     <value>Use &lt;summary&gt; instead of &lt;remarks&gt;</value>
@@ -2688,7 +2689,7 @@ Hence, to provide them with all the information they need, the information shoul
     <value>Change 'was not successful' to 'failed'</value>
   </data>
   <data name="MiKo_2212_Description" xml:space="preserve">
-    <value>To shorten documentation - and still be to the point - the documentation should use the phrase 'failed' instead of 'was not succesful'.</value>
+    <value>To make documentation concise and precise, use 'failed' instead of 'was not successful'. This keeps it brief and straight to the point, making it easier for developers to understand quickly.</value>
   </data>
   <data name="MiKo_2212_MessageFormat" xml:space="preserve">
     <value>Use 'failed' instead of 'was not successful'</value>
@@ -2712,9 +2713,8 @@ Hence, to provide them with all the information they need, the information shoul
     <value>Replace empty line with &lt;para/&gt;</value>
   </data>
   <data name="MiKo_2214_Description" xml:space="preserve">
-    <value>The documentation should not contain empty lines. Developers tend to use them when they write paragraphs.
-However, in the generated documentation (e.g. for IntelliSense) those empty lines are simply ignored, get removed and the text becomes quite dense.
-In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&gt; tag is intended to be used to mark paragraphs.</value>
+    <value>To avoid dense text in generated documentation (e.g., IntelliSense), empty lines should not be used. Developers often insert them to create paragraphs, but they get ignored and removed.
+Instead, use &lt;para&gt; tags, which are designed to mark paragraphs properly, ensuring the generated documentation remains clear and well-structured.</value>
   </data>
   <data name="MiKo_2214_MessageFormat" xml:space="preserve">
     <value>Replace empty line with &lt;para/&gt;</value>
@@ -2723,7 +2723,7 @@ In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&g
     <value>Documentation should not contain empty lines</value>
   </data>
   <data name="MiKo_2215_Description" xml:space="preserve">
-    <value>Sentences containing up to 15 words are most effective in terms of content and descriptiveness. Longer sentences are hard to read any may boring out readers.</value>
+    <value>Keep documentation sentences up to 15 words. Shorter sentences are clearer and more descriptive. Longer sentences can be hard to read and may bore readers. This approach ensures effective communication.</value>
   </data>
   <data name="MiKo_2215_MessageFormat" xml:space="preserve">
     <value>Shorten sentences to contain up to 15 words each</value>
@@ -2735,8 +2735,7 @@ In contrast, using the &lt;para&gt; tags avoids that situation as the &lt;para&g
     <value>Change &lt;param&gt; to &lt;paramref&gt;</value>
   </data>
   <data name="MiKo_2216_Description" xml:space="preserve">
-    <value>The &lt;param&gt; tag is used to describe parameters while the &lt;paramref&gt; tag gives you a way to indicate that a word in the code comments refers to a parameter.
-So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;remarks&gt; section, you should use the &lt;paramref&gt; tag.</value>
+    <value>The &lt;param&gt; tag is for describing parameters, whereas the &lt;paramref&gt; tag is used to indicate that a word in the code comments refers to a parameter. When referencing a parameter in sections like &lt;remarks&gt;, use the &lt;paramref&gt; tag to maintain clarity and proper documentation standards.</value>
   </data>
   <data name="MiKo_2216_MessageFormat" xml:space="preserve">
     <value>Use &lt;paramref&gt; instead of &lt;param&gt;</value>
@@ -2748,13 +2747,17 @@ So if you want to reference a parameter inside e.g. the &lt;summary&gt; or &lt;r
     <value>Fix '&lt;list&gt;'</value>
   </data>
   <data name="MiKo_2217_Description" xml:space="preserve">
-    <value>The documentation of a &lt;list&gt; is a little bit ambiguous.
-There are 3 types of lists: 'number', 'bullet' and 'table'. Only the 'table' can have a single &lt;listheader&gt; and multiple &lt;item&gt; entries, the others have only &lt;item&gt; entries.
+    <value>The documentation of a &lt;list&gt; can be ambiguous, as there are three types: 'number', 'bullet', and 'table'.
 
-For a 'table', each &lt;listheader&gt; and &lt;item&gt;s can contain either a single but optional &lt;term&gt; and a single required &lt;description&gt;, or multiple &lt;term&gt; entries.
-For a 'bullet' or 'number' list, each &lt;item&gt; can contain a single but optional &lt;term&gt; and a single required &lt;description&gt;.
+- Only 'table' lists can have a single &lt;listheader&gt; and multiple &lt;item&gt; entries. 'Number' and 'bullet' lists only have &lt;item&gt; entries.
 
-Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</value>
+- For 'table' lists, each &lt;listheader&gt; and &lt;item&gt; can contain either a single, optional &lt;term&gt; and a single, required &lt;description&gt;, or multiple &lt;term&gt; entries.
+
+- For 'bullet' or 'number' lists, each &lt;item&gt; can contain a single, optional &lt;term&gt; and a single, required &lt;description&gt;.
+
+- An &lt;item&gt; should never contain multiple &lt;description&gt; entries.
+
+This ensures your list documentation is clear and accurately structured.</value>
   </data>
   <data name="MiKo_2217_HelpLinkUri" xml:space="preserve">
     <value>http://www.blackwasp.co.uk/DocumentationLists.aspx</value>
@@ -2787,7 +2790,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Shorten term</value>
   </data>
   <data name="MiKo_2218_Description" xml:space="preserve">
-    <value>Terms such as 'that is used to' or 'which shall be used to' are simply bloated and should be shortened to the equivalent term 'to'.</value>
+    <value>Phrases like 'that is used to' or 'which shall be used to' are unnecessarily wordy. They should be shortened to the more concise term 'to'. This enhances readability and streamlines documentation, making it clearer and more direct for developers.</value>
   </data>
   <data name="MiKo_2218_MessageFormat" xml:space="preserve">
     <value>Replace '{0}' with '{1}'</value>
@@ -2796,11 +2799,13 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Documentation should use shorter terms instead of longer term 'used to/in/by'</value>
   </data>
   <data name="MiKo_2219_Description" xml:space="preserve">
-    <value>XML documentation is intended for other developers. It shall contain all the information that is important for them in a way that they can easily read and understand.
-- Ending a text with an exclamation mark is more difficult to spot than e.g. placing the text inside a &lt;note type="important"&gt; tag.
-   So ending texts with exclamation marks should be avoided.
-- Ending a text with a question mark shows that the whole sentence is a question.
-   However, documention should state and not question things - so question marks should be avoided as well.</value>
+    <value>XML documentation should be clear and comprehensive for developers. It must contain all important information in an easily readable and understandable format.
+
+- Avoid ending texts with exclamation marks; instead, use tags like &lt;note type="important"&gt; for emphasis.
+
+- Documentation should state facts, not question them. Therefore, avoid ending sentences with question marks.
+
+This ensures clarity and usability in your documentation, making it straightforward for developers to follow.</value>
   </data>
   <data name="MiKo_2219_MessageFormat" xml:space="preserve">
     <value>Do not use '{0}' in documentation</value>
@@ -2812,7 +2817,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Replace with 'to seek'</value>
   </data>
   <data name="MiKo_2220_Description" xml:space="preserve">
-    <value>Terms such as 'to look for', 'to inspect for' or 'to test for' all mean the same - to seek for something. Hence, they should be changed to the equivalent term 'to seek'.</value>
+    <value>Phrases like 'to look for', 'to inspect for', or 'to test for' all convey the same idea: to seek something. Therefore, they should be replaced with the term 'to seek'. This streamlines documentation, making it clearer and more concise for developers.</value>
   </data>
   <data name="MiKo_2220_MessageFormat" xml:space="preserve">
     <value>Use 'to seek' instead</value>
@@ -2821,7 +2826,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Documentation should use 'to seek' instead of 'to look for', 'to inspect for' or 'to test for'</value>
   </data>
   <data name="MiKo_2221_Description" xml:space="preserve">
-    <value>An empty documentation is a code smell. The developer created the empty XML documentation tag by intent but did not provide any documentation at all.</value>
+    <value>An empty documentation is a code smell. It indicates that the developer created the XML documentation tag intentionally but failed to provide any actual content. This suggests a potential oversight or lack of attention to detail. Proper documentation is crucial for code clarity and maintenance.</value>
   </data>
   <data name="MiKo_2221_MessageFormat" xml:space="preserve">
     <value>Provide a documentation for &lt;{1}/&gt;</value>
@@ -2833,7 +2838,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Change 'ident' into identification'</value>
   </data>
   <data name="MiKo_2222_Description" xml:space="preserve">
-    <value>The XML documentation should not use the abbreviation 'ident'. Instead, it should clearly document that this is an identification. Hence, it should use the term 'identification' instead.</value>
+    <value>XML documentation should avoid the abbreviation 'ident' and instead use the term 'identification'. This ensures clarity and precision, making the documentation more understandable and professional. Clear terminology helps prevent confusion and enhances readability for developers.</value>
   </data>
   <data name="MiKo_2222_MessageFormat" xml:space="preserve">
     <value>Use 'identification' instead of 'ident'</value>
@@ -2842,7 +2847,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Documentation should use the term 'identification' instead of 'ident'</value>
   </data>
   <data name="MiKo_2223_Description" xml:space="preserve">
-    <value>The XML documentation should link references (such as methods or types) via &lt;see cref="..."/&gt; instead of just having them as plain text. Doing so allows refactoring tools to adjust also those references during renames, thus preventing the documentation from mentioning no-longer-existing code.</value>
+    <value>XML documentation should link references like methods or types using &lt;see cref="..."/&gt; instead of plain text. This approach ensures refactoring tools can update these references during renames, preventing the documentation from pointing to non-existent code.</value>
   </data>
   <data name="MiKo_2223_MessageFormat" xml:space="preserve">
     <value>Use '&lt;see cref="{0}"/&gt;' instead</value>
@@ -2854,7 +2859,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Place on separate line</value>
   </data>
   <data name="MiKo_2224_Description" xml:space="preserve">
-    <value>To ease usage, XML documentation should have its XML tags and texts placed on separate lines.</value>
+    <value>To improve usability and readability, place XML tags and their corresponding texts on separate lines in your documentation. This formatting makes it easier for developers to read and navigate the documentation, ensuring clarity and better organization.</value>
   </data>
   <data name="MiKo_2224_MessageFormat" xml:space="preserve">
     <value>Place '{0}' on separate line</value>
@@ -2866,7 +2871,7 @@ Any &lt;item&gt; should never contain multiple &lt;description&gt; entries.</val
     <value>Place on same line</value>
   </data>
   <data name="MiKo_2225_Description" xml:space="preserve">
-    <value>The &lt;c&gt; tag allows developers to indicate that text within a description should be marked as code. However, the text should be a single line. To indicate multiple lines as code, the &lt;code&gt; tag has to be used.</value>
+    <value>Use the &lt;c&gt; tag to mark text within a description as code, but only for single lines. For multiple lines of code, you should use the &lt;code&gt; tag. This ensures the formatting is clear and the documentation remains organized and readable.</value>
   </data>
   <data name="MiKo_2225_HelpLinkUri" xml:space="preserve">
     <value>https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags#c</value>
